@@ -1,2 +1,2 @@
-# SAAD_Project
-Software Analysis And Design course project (ניתו"ץ)
+#   ADSS_Project
+Analysis & Design of Software Systems course project (ניתו"צ)

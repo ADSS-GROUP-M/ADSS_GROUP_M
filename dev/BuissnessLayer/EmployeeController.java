@@ -31,7 +31,7 @@ public class EmployeeController{
     public void fireEmployee(User requestFrom, int id){
         if(requestFrom.getIsHrManager()){
             for(Employee e: workingEmployees){
-                if(e.id == id){
+                if(e.getId() == id){
                     firedEmployees.add(e);
                     workingEmployees.remove(e);
                     return;

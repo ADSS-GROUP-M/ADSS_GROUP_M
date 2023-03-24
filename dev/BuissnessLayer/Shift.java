@@ -48,8 +48,17 @@ public class Shift {
         return shifts.get(date).get(br).get(st);
     }
 
-    public boolean checkLegality(Shift s){ // are all constraints of the shift are met?
-        throw new Exception("unimplemented");
+    public boolean checkLegality(){ // are all constraints of the shift are met?
+        for(Role r : neededRoles.keySet()){
+            int workersNeededForRole = neededRoles.get(r);
+            for(Employee e : this.employees.keySet()){
+                if(this.employees.get(e).contains(r))
+                    workersNeededForRole --;
+            }
+            if(workersNeededForRole>0)
+                return false; // not enough workers for every role needed in the shift
+        }
+        return true;
     }
 
     public void approve(){
@@ -78,7 +87,11 @@ public class Shift {
     }
 
     public List<Role> getRoles(Employee employee) {
-        return null;
+        return this.employees.get(employee);
+    }
+
+    public Object getBranch() {
+        return this.branch;
     }
 
 }

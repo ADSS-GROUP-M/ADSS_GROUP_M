@@ -14,11 +14,11 @@ public class User {
         this.password = pass;
         this.linkedEmployee = emp;
         this.isHrManager = hr;
-        empController  = EmployeeController.getInstance();
+        empController  = EmployeeController.getInstance(this);
     }
 
     public EmployeeController getEmployeeController(){
-
+        return empController;
     }
 
     public void linkToEmployee(int id){

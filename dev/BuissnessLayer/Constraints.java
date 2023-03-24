@@ -1,5 +1,6 @@
 package dev.BuissnessLayer;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import dev.BuissnessLayer.Shift.ShiftTime;
@@ -8,6 +9,7 @@ public class Constraints {
     //private List<Integer> unavailableWeekDays;
     private List<Role> availableRoles;
     private List<Branch> availableBranches;
+    private List<Date> unavailableDates;
     private final int MAX_WORKDAYS_A_WEEK = 6;
     private final int MAX_SHIFTS_A_DAY = 1;
     private Employee employee;
@@ -17,6 +19,7 @@ public class Constraints {
         availableRoles = new LinkedList<Role>();
         availableBranches = Branch.getAllBranches();
         this.employee = emp;
+        this.unavailableDates = new LinkedList<Date>();
     }
 
     public boolean checkScheduleLegality(Date from, Date until){
@@ -31,6 +34,8 @@ public class Constraints {
             for(Branch b: branches){
                 Shift sh1 = Shift.getInstance(ShiftTime.MORNING, current, b);
                 if(sh1.isEmployeeWorking(employee)){
+                    if(!b.isWorkingDay(current))
+                        return false; // registered to a shift when the branch is not working on this day
                     if(worksShiftTime)
                         return false;//employee scheduled to 2 shifts that happen simultaniously
                     else{
@@ -50,6 +55,8 @@ public class Constraints {
             for(Branch b:branches){
                 Shift sh2 = Shift.getInstance(ShiftTime.EVENING, current, b);
                 if(sh2.isEmployeeWorking(employee)){
+                    if(!b.isWorkingDay(current))
+                        return false; // registered to a shift when the branch is not working on this day
                     if(worksShiftTime)
                         return false;//employee scheduled to 2 shifts that happen simultaniously
                     else{
@@ -65,8 +72,11 @@ public class Constraints {
                     }
                 }
             }
-            if(isWorkingThisDay)
+            if(isWorkingThisDay){
                 workDaysAWeek ++;
+                if(this.unavailableDates.contains(current))
+                    return false; // working on a constrained date, either by self or by manager
+            }
             if(shiftsADay>this.MAX_SHIFTS_A_DAY)
                 return false;// more shifts a day than possible
             shiftsADay = 0;
@@ -79,5 +89,6 @@ public class Constraints {
         }
         if(workDaysAWeek>this.MAX_WORKDAYS_A_WEEK)
             return false; //too many work days a week
+        return true;
     }
 }

@@ -55,10 +55,15 @@ public class Date {
         return before && after;
     }
 
-    public Date getNextDay(){ //UNIMPLEMENTED
+    public Date getNextDay(){ //considers that dates 29.2 - 31.2 exist
         Calendar c = Calendar.getInstance();
-        if()
         c.set(this.YEAR,this.MONTH,this.DAY);
+        if(c.get(Calendar.DATE) == 30 && (c.get(Calendar.MONTH) == 4 || c.get(Calendar.MONTH) == 6 || c.get(Calendar.MONTH) == 9 || c.get(Calendar.MONTH) == 11))
+            return getInstance(this.YEAR, this.MONTH+1, 1);
+        else if (c.get(Calendar.DATE) == 31)
+            return getInstance(this.YEAR, this.MONTH+1, 1);
+        else
+            return getInstance(this.YEAR, this.MONTH, this.DAY+1);
     }
     
 }

@@ -65,5 +65,16 @@ public class Date {
         else
             return getInstance(this.YEAR, this.MONTH, this.DAY+1);
     }
+
+    public static Date getCurrentDate(){
+        Calendar c = calendar;
+        return Date.getInstance(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.YEAR));
+    }
+    public static Integer[] getCurrentTime(){
+        Integer hour = calendar.get(Calendar.HOUR_OF_DAY);
+        Integer minute = calendar.get(Calendar.MINUTE);
+        Integer[] arr = {hour,minute};
+        return arr;
+    }
     
 }

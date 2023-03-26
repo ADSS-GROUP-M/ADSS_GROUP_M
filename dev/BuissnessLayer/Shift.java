@@ -13,12 +13,14 @@ public class Shift {
     private Branch branch;
     private boolean isApproved; // approved by HR manager
     private HashMap<Employee,List<Role>> employees;
+    private int cancelCardApplies;
 
     private static HashMap<Date,HashMap<Branch,HashMap<ShiftTime,Shift>>> shifts;
 
     public enum ShiftTime{
         MORNING(),
         EVENING();
+
     }
     
     private Shift(ShiftTime st, Date date, Branch br)
@@ -33,6 +35,7 @@ public class Shift {
         this.branch = br;
         this.isApproved = false;
         this.employees = new HashMap<Employee,List<Role>>();
+        cancelCardApplies = 0;
     }
 
     public static Shift getInstance(ShiftTime st, Date date, Branch br){
@@ -90,8 +93,48 @@ public class Shift {
         return this.employees.get(employee);
     }
 
-    public Object getBranch() {
+    public Branch getBranch() {
         return this.branch;
     }
+
+    public void setNeededRoles(HashMap<Role,Integer> map){
+        this.neededRoles = map;
+    }
+
+    public HashMap<Role,Integer> getNeededRoles(){
+        return this.neededRoles;
+    }
+
+    public String toString(){
+        String desc = "";
+        String roles="UNFINISHED";
+        String isLegDesc = "";
+        String isVerDesc = "";
+        String employeesList = "";
+        
+        desc+="Date: "+this.date.toString() + "/nBranch: " + this.branch.toString()
+         +"/nShift Time: "+ this.shiftTime.toString() +"/nRoles: " + roles +"/nIs Legal: " + isLegDesc +
+          "/nIs verified by manager: " + isVerDesc +"/nEmployees: "+ employeesList;
+
+        return desc;
+    }
+    public void useCancelCard(){
+        this.cancelCardApplies++;
+    }
+    public int getTotalCancelCardApplications(){
+        return this.cancelCardApplies;
+    }
+    public Employee getShiftManager(){
+        for(Employee e: this.employees.keySet()){
+            for(Role r : this.employees.get(e)){
+                if(r == Role.SHIFT_MANAGER){
+                    return e;
+                }
+            }
+        }
+        return null;
+    }
+
+
 
 }

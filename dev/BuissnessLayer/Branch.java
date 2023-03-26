@@ -1,25 +1,43 @@
 package dev.BuissnessLayer;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-public enum Branch {
-    BRANCH1("Branch1"),
-    BRANCH2("Branch2"),
-    BRANCH3("Branch3"),
-    BRANCH4("Branch4"),
-    BRANCH5("Branch5"),
-    BRANCH6("Branch6"),
-    BRANCH7("Branch7"),
-    BRANCH8("Branch8"),
-    BRANCH9("Branch9");
+import dev.BuissnessLayer.Shift.ShiftTime;
 
-    private String name;
+public enum Branch {
+    BRANCH1(),
+    BRANCH2(),
+    BRANCH3(),
+    BRANCH4(),
+    BRANCH5(),
+    BRANCH6(),
+    BRANCH7(),
+    BRANCH8(),
+    BRANCH9();
+
+    private HashMap<ShiftTime,Integer[]> workingHours;
     private List<Date>  nonWorkingDays;
 
-    private Branch(String name){
-        this.name = name;
+    private Branch(){
         this.nonWorkingDays = new LinkedList<Date>();
+        this.workingHours = new HashMap<ShiftTime, Integer[]>();
+        Integer[] w1 = {8,16}, w2 = {16,24};
+        this.workingHours.put(ShiftTime.MORNING, w1);
+        this.workingHours.put(ShiftTime.EVENING, w2);
+    }
+
+    private Branch(int morningShiftStart,int morningShiftFinish, int eveningShiftStart, int eveningShiftFinish){
+        this.nonWorkingDays = new LinkedList<Date>();
+        this.workingHours = new HashMap<ShiftTime, Integer[]>();
+        Integer[] w1 = {morningShiftStart,morningShiftFinish}, w2 = {eveningShiftStart,eveningShiftFinish};
+        this.workingHours.put(ShiftTime.MORNING, w1);
+        this.workingHours.put(ShiftTime.EVENING, w2);
+    }
+
+    public Integer[] getWorkingHours(ShiftTime s){ // returns 2 slot array : {shift starting time, shift end time}
+        return this.workingHours.get(s);
     }
 
     public void addNonWorkingDay(Date d){

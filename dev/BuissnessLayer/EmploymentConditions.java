@@ -1,5 +1,5 @@
 package dev.BuissnessLayer;
 
-public enum EmploymentConditions {
+public enum EmploymentConditions {//בשם של כל תנאי אסור שיהיה רווח!
     PART_TIME;
 }

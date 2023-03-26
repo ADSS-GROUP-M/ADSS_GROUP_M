@@ -31,4 +31,29 @@ class Employee{
    public int getId() {
        return this.id;
    }
+
+   public boolean getIsFired(){
+      return isFired;
+   }
+
+   public void addUnavailableDate(Date d){
+      this.workingConstraints.addUnavailableDate(d);
+  }
+
+   public void setAvailableDate(Date d){
+      this.workingConstraints.setAvailableDate(d);
+   }
+   public int getSalary(){
+      return this.salary;
+   }
+   public void setSalary(int x){
+      this.salary = x;
+   }
+   public String toString(){
+      return "UNFINISHED";
+   }
+
+   public void calculateSalaryAutomatically() throws Exception{
+      throw new Exception("unimplented");
+   }
 }

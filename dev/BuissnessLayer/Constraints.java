@@ -91,4 +91,12 @@ public class Constraints {
             return false; //too many work days a week
         return true;
     }
+
+    public void addUnavailableDate(Date d){
+        this.unavailableDates.add(d);
+    }
+
+    public void setAvailableDate(Date d) {
+        this.unavailableDates.remove(d);
+    }
 }

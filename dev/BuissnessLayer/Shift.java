@@ -108,13 +108,15 @@ public class Shift {
     public String toString(){
         String desc = "";
         String roles="UNFINISHED";
-        String isLegDesc = "";
         String isVerDesc = "";
         String employeesList = "";
+        String legalityWarning = "";
+        if(!this.checkLegality())
+            legalityWarning = "WARNING! shift does'nt meet constraints!";
         
         desc+="Date: "+this.date.toString() + "/nBranch: " + this.branch.toString()
-         +"/nShift Time: "+ this.shiftTime.toString() +"/nRoles: " + roles +"/nIs Legal: " + isLegDesc +
-          "/nIs verified by manager: " + isVerDesc +"/nEmployees: "+ employeesList;
+         +"/nShift Time: "+ this.shiftTime.toString() +"/nRoles: " + roles +
+          "/nIs verified by manager: " + isVerDesc +"/nEmployees: "+ employeesList + "\n" + legalityWarning;
 
         return desc;
     }

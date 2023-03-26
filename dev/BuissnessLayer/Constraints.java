@@ -17,6 +17,7 @@ public class Constraints {
     public Constraints(Employee emp){
         //unavailableWeekDays = new LinkedList<Integer>();
         availableRoles = new LinkedList<Role>();
+        availableRoles.add(Role.GENERAL_WORKER);
         availableBranches = Branch.getAllBranches();
         this.employee = emp;
         this.unavailableDates = new LinkedList<Date>();

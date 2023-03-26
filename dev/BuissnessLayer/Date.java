@@ -76,5 +76,24 @@ public class Date {
         Integer[] arr = {hour,minute};
         return arr;
     }
+    public static  void setSystemTime(int year, int month, int day, int hour, int minute){
+        calendar.set(year, month, day, hour, minute);
+    }
+    /* 
+    public static Date[] getWeekDates(Date d){ 
+        Date[] fromUntil = new Date[2];
+        Calendar c = Calendar.getInstance();
+        int x = c.get(Calendar.DAY_OF_WEEK);
+        Date.getInstance(d.YEAR, d.MONTH, x)
+    }*/
+    public int getYear() {
+        return YEAR;
+    }
+    public int getMonth(){
+        return MONTH;
+    }
+    public int getDay(){
+        return DAY;
+    }
     
 }

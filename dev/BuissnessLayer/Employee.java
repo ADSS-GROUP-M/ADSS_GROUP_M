@@ -50,6 +50,10 @@ class Employee{
       this.salary = x;
    }
    public String toString(){
+      
+      String legalityWarning = "";
+        if(!this.workingConstraints.checkScheduleLegality(Date.getCurrentDate(), Date.getInstance(Date.getCurrentDate().getYear()+1, Date.getCurrentDate().getMonth(), Date.getCurrentDate().getDay())))
+            legalityWarning = "WARNING! shift does'nt meet constraints!";
       return "UNFINISHED";
    }
 

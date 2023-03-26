@@ -27,7 +27,7 @@ public class User {// this class manages authorization before accessing employee
         return empController;
     }
 
-    public void linkUserToEmployee(String username, int empId) throws Exception{
+    protected void linkUserToEmployee(String username, int empId) throws Exception{
         if(!this.isHrManager)
             throw new Exception("Only HR manager is authorized to do this");
         User u = this.usController.getUser(username);
@@ -82,6 +82,21 @@ public class User {// this class manages authorization before accessing employee
             throw new Exception("This user isn't authorized to do this.");
     }
 
+    protected String getSystemTime(){
+        Date d = Date.getCurrentDate();
+        Integer[] in = Date.getCurrentTime();
+        String desc = "";
+        desc = d.getYear() + "." + d.getMonth() + "." +d.getDay() +" "+in[0]+":"+in[1];
+        return desc;
+    }
+
+    protected void setSystemTime(int year, int month, int day, int hour ,int minute)throws Exception{
+        if(this.isHrManager)
+            Date.setSystemTime(year, month, day, hour, minute);
+        else
+            throw new Exception("This user is not authorized to do this");
+    }
+
     protected void signUpEmployeeToShift(int empId,int year, int month, int day, String branchName, String shiftTime, String role) throws Exception{ // employee to shift
         if(!this.isHrManager && (this.linkedEmployee == null  ||this.linkedEmployee.getId() != empId))
             throw new Exception("You are not authorized to do it. You cant schedule shifts of other employees if you are not HR manager.");
@@ -101,7 +116,7 @@ public class User {// this class manages authorization before accessing employee
 
     protected void setEmployeeSalary(int empId, int x) throws Exception{
         if(this.linkedEmployee == null && !this.isHrManager)
-            throw new Exception("You are not authorized to do it. You cant schedule shifts of other employees if you are not HR manager.");
+            throw new Exception("You are not authorized to do it.");
         if(this.isHrManager){
             this.empController.setEmployeeSalary(empId,x);
         }else
@@ -110,14 +125,19 @@ public class User {// this class manages authorization before accessing employee
 
     protected String employeeDescription(int empId) throws Exception{
         if(this.linkedEmployee == null && !this.isHrManager)
-            throw new Exception("You are not authorized to do it. You cant schedule shifts of other employees if you are not HR manager.");
+            throw new Exception("You are not authorized to view this information.");
         if(this.isHrManager || this.linkedEmployee.getId() == empId)
             return this.empController.getEmployeeDescription(empId) +"/nIs Manager: "+this.isHrManager;
         else
             throw new Exception("Unauthorized to access this information");
     }
 
-    public void applyCancelCardNow() throws Exception{
+    protected String shiftDescription(int year, int month, int day, String branch, String shiftTime) throws Exception{
+        return this.empController.getShiftDescription(year, month, day, branch, shiftTime);
+
+    }
+
+    protected void applyCancelCardNow() throws Exception{
         if(this.linkedEmployee != null && this.isCurrentShiftManager())
             this.empController.applyCancelCardNow(this.linkedEmployee.getId());
         else

@@ -1,10 +1,10 @@
-package dev.BuissnessLayer;
+package dev.BusinessLayer;
 
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-import dev.BuissnessLayer.Shift.ShiftTime;
+import dev.BusinessLayer.Shift.ShiftTime;
 
 public enum Branch {
     BRANCH1(),

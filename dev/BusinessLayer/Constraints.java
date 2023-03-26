@@ -1,9 +1,9 @@
-package dev.BuissnessLayer;
+package dev.BusinessLayer;
 
 import java.util.LinkedList;
 import java.util.List;
 
-import dev.BuissnessLayer.Shift.ShiftTime;
+import dev.BusinessLayer.Shift.ShiftTime;
 
 public class Constraints {
     //private List<Integer> unavailableWeekDays;

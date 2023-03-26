@@ -1,8 +1,8 @@
-package dev.BuissnessLayer;
+package dev.BusinessLayer;
 
 import java.util.*;
 
-import dev.BuissnessLayer.Shift.ShiftTime;
+import dev.BusinessLayer.Shift.ShiftTime;
 
 public class EmployeeController{
 

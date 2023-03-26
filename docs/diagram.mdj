@@ -63,7 +63,7 @@
 											"top": 310,
 											"width": 1831,
 											"height": 13,
-											"text": "Backend"
+											"text": "BusinessLayer"
 										},
 										{
 											"_type": "LabelView",
@@ -182,9 +182,9 @@
 											"font": "Arial;13;0",
 											"left": 1168,
 											"top": 848,
-											"width": 96.0908203125,
+											"width": 131.599609375,
 											"height": 13,
-											"text": "(from Backend)"
+											"text": "(from BusinessLayer)"
 										},
 										{
 											"_type": "LabelView",
@@ -513,9 +513,9 @@
 											"font": "Arial;13;0",
 											"left": 880,
 											"top": 1136,
-											"width": 96.0908203125,
+											"width": 131.599609375,
 											"height": 13,
-											"text": "(from Backend)"
+											"text": "(from BusinessLayer)"
 										},
 										{
 											"_type": "LabelView",
@@ -1039,9 +1039,9 @@
 											"font": "Arial;13;0",
 											"left": 992,
 											"top": 1152,
-											"width": 96.0908203125,
+											"width": 131.599609375,
 											"height": 13,
-											"text": "(from Backend)"
+											"text": "(from BusinessLayer)"
 										},
 										{
 											"_type": "LabelView",
@@ -1285,9 +1285,9 @@
 											"font": "Arial;13;0",
 											"left": 912,
 											"top": 1152,
-											"width": 96.0908203125,
+											"width": 131.599609375,
 											"height": 13,
-											"text": "(from Backend)"
+											"text": "(from BusinessLayer)"
 										},
 										{
 											"_type": "LabelView",
@@ -2069,9 +2069,9 @@
 											"font": "Arial;13;0",
 											"left": 896,
 											"top": 1104,
-											"width": 96.0908203125,
+											"width": 131.599609375,
 											"height": 13,
-											"text": "(from Backend)"
+											"text": "(from BusinessLayer)"
 										},
 										{
 											"_type": "LabelView",
@@ -2575,9 +2575,9 @@
 											"font": "Arial;13;0",
 											"left": -1040,
 											"top": 208,
-											"width": 96.0908203125,
+											"width": 131.599609375,
 											"height": 13,
-											"text": "(from Backend)"
+											"text": "(from BusinessLayer)"
 										},
 										{
 											"_type": "LabelView",
@@ -2840,9 +2840,9 @@
 											"font": "Arial;13;0",
 											"left": 544,
 											"top": 640,
-											"width": 96.0908203125,
+											"width": 131.599609375,
 											"height": 13,
-											"text": "(from Backend)"
+											"text": "(from BusinessLayer)"
 										},
 										{
 											"_type": "LabelView",
@@ -5294,9 +5294,9 @@
 											"font": "Arial;13;0",
 											"left": -408,
 											"top": 120,
-											"width": 88.86083984375,
+											"width": 131.599609375,
 											"height": 13,
-											"text": "(from Backend)"
+											"text": "(from BusinessLayer)"
 										},
 										{
 											"_type": "LabelView",
@@ -6325,7 +6325,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
 					},
-					"name": "Backend",
+					"name": "BusinessLayer",
 					"ownedElements": [
 						{
 							"_type": "UMLClass",

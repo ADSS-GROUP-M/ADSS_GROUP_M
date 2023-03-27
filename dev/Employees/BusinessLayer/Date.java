@@ -1,4 +1,5 @@
 package dev.BusinessLayer;
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
@@ -9,7 +10,7 @@ public class Date {
     private final int MONTH;
     private final int DAY;
 
-    private static List<Date> allInstances;
+    private static List<LocalDate> allInstances;
 
     private static Calendar calendar;
 
@@ -22,18 +23,17 @@ public class Date {
             calendar = Calendar.getInstance();
         
     }
-    public static Date getInstance(int year, int month, int day)
+    public static LocalDate getInstance(LocalDate date)
     {
         if(allInstances == null)
             allInstances = new LinkedList<Date>();
 
-        for (Date d: allInstances){
-            if(d.YEAR == year && d.MONTH == month && d.DAY == day)
+        for (LocalDate d: allInstances){
+            if(d.getYear() == date.getYear() && d.getMonth() == date.getMonth() && d.getDayOfWeek() == date.getDayOfWeek())
                 return d;
         }
-        Date d = new Date(year,month,day);
-        allInstances.add(d);
-        return d;
+        allInstances.add(date);
+        return date;
     }
 
     public int getWeekday(){
@@ -55,20 +55,20 @@ public class Date {
         return before && after;
     }
 
-    public Date getNextDay(){ //considers that dates 29.2 - 31.2 exist
-        Calendar c = Calendar.getInstance();
-        c.set(this.YEAR,this.MONTH,this.DAY);
-        if(c.get(Calendar.DATE) == 30 && (c.get(Calendar.MONTH) == 4 || c.get(Calendar.MONTH) == 6 || c.get(Calendar.MONTH) == 9 || c.get(Calendar.MONTH) == 11))
-            return getInstance(this.YEAR, this.MONTH+1, 1);
-        else if (c.get(Calendar.DATE) == 31)
-            return getInstance(this.YEAR, this.MONTH+1, 1);
-        else
-            return getInstance(this.YEAR, this.MONTH, this.DAY+1);
-    }
+    //public Date getNextDay(){ //considers that dates 29.2 - 31.2 exist
+    //    Calendar c = Calendar.getInstance();
+    //    c.set(this.YEAR,this.MONTH,this.DAY);
+    //    if(c.get(Calendar.DATE) == 30 && (c.get(Calendar.MONTH) == 4 || c.get(Calendar.MONTH) == 6 || c.get(Calendar.MONTH) == 9 || c.get(Calendar.MONTH) == 11))
+    //        return getInstance(this.YEAR, this.MONTH+1, 1);
+    //    else if (c.get(Calendar.DATE) == 31)
+    //        return getInstance(this.YEAR, this.MONTH+1, 1);
+    //    else
+    //        return getInstance(this.YEAR, this.MONTH, this.DAY+1);
+    //}
 
-    public static Date getCurrentDate(){
+    public static LocalDate getCurrentDate(){
         Calendar c = calendar;
-        return Date.getInstance(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.YEAR));
+        return Date.getInstance(LocalDate.of(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.YEAR)));
     }
     public static Integer[] getCurrentTime(){
         Integer hour = calendar.get(Calendar.HOUR_OF_DAY);
@@ -80,7 +80,7 @@ public class Date {
         calendar.set(year, month, day, hour, minute);
     }
 
-    public static Date[] getWeekDates(Date d){ 
+    public static Date[] getWeekDates(LocalDate d){
         Date[] fromUntil = new Date[2];
         Calendar cal = Calendar.getInstance();
 

@@ -1,6 +1,4 @@
-package dev.BusinessLayer;
-
-import java.util.*;
+package dev.Employees.BusinessLayer;
 
 class BankDetails{//DATA TYPE
     private int bankNumber;

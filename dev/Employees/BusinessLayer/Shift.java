@@ -1,29 +1,27 @@
 package dev.BusinessLayer;
 
+import java.time.LocalDate;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 public class Shift {
 
     private ShiftTime shiftTime;
-    private Date date;
+    private LocalDate date;
     private HashMap<Role,Integer> neededRoles;
     private Branch branch;
     private boolean isApproved; // approved by HR manager
     private HashMap<Employee,List<Role>> employees;
     private int cancelCardApplies;
 
-    private static HashMap<Date,HashMap<Branch,HashMap<ShiftTime,Shift>>> shifts;
+    private static HashMap<LocalDate,HashMap<Branch,HashMap<ShiftTime,Shift>>> shifts;
 
     public enum ShiftTime{
         MORNING(),
         EVENING();
-
     }
     
-    private Shift(ShiftTime st, Date date, Branch br)
+    private Shift(ShiftTime st, LocalDate date, Branch br)
     {
         this.shiftTime = st;
         this.date = date;
@@ -38,13 +36,13 @@ public class Shift {
         cancelCardApplies = 0;
     }
 
-    public static Shift getInstance(ShiftTime st, Date date, Branch br){
+    public static Shift getInstance(ShiftTime st, LocalDate date, Branch br){
         if(shifts == null)
-            shifts = new HashMap<Date,HashMap<Branch,HashMap<ShiftTime,Shift>>>();
+            shifts = new HashMap<>();
         if(!shifts.containsKey(date))
-            shifts.put(date, new HashMap<Branch,HashMap<ShiftTime,Shift>>());
+            shifts.put(date, new HashMap<>());
         if(!shifts.get(date).containsKey(br))
-            shifts.get(date).put(br, new HashMap<ShiftTime,Shift>());
+            shifts.get(date).put(br, new HashMap<>());
         if(!shifts.get(date).get(br).containsKey(st))
             shifts.get(date).get(br).put(st, new Shift(st,date,br));
 
@@ -76,7 +74,7 @@ public class Shift {
         return isApproved;
     }
 
-    public boolean registerEmployee(Date d , ShiftTime st, Branch br, Employee e, List<Role> roles){
+    public boolean registerEmployee(ShiftTime st, LocalDate d, Branch br, Employee e, List<Role> roles){
         Date[] week = Date.getWeekDates(d);
         Shift s = getInstance(st, d, br);
         s.employees.put(e, roles);

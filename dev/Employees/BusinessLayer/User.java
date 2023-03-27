@@ -1,5 +1,7 @@
-package dev.BusinessLayer;
+package dev.Employees.BusinessLayer;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 public class User {// this class manages authorization before accessing employee controller
@@ -8,7 +10,8 @@ public class User {// this class manages authorization before accessing employee
     private String password;
     private Employee linkedEmployee;
     private boolean isHrManager;
-    private EmployeeController empController;
+    boolean loggedIn;
+    private EmployeesController empController;
     private UserController usController;
 
     public User(UserController uc, String name, String pass, Employee emp, boolean hr){
@@ -16,14 +19,32 @@ public class User {// this class manages authorization before accessing employee
         this.password = pass;
         this.linkedEmployee = emp;
         this.isHrManager = hr;
-        empController  = EmployeeController.getInstance(this);
+        this.loggedIn = false;
+        empController  = EmployeesController.getInstance(this);
         usController = uc;
     }
-    protected String getPassword(){
-        return this.password;
+
+    public boolean login(String password) {
+        if (this.password == password)
+            loggedIn = true;
+        return loggedIn;
     }
 
-    protected EmployeeController getEmployeeController(){
+    public void logout() throws Exception {
+        if (!loggedIn)
+            throw new Exception("The user is already logged out.");
+        loggedIn = false;
+    }
+
+    public boolean isLoggedIn() {
+        return this.loggedIn;
+    }
+
+    protected boolean checkPassword(String password){
+        return this.password == password;
+    }
+
+    protected EmployeesController getEmployeeController(){
         return empController;
     }
 
@@ -48,25 +69,24 @@ public class User {// this class manages authorization before accessing employee
 		return this.isHrManager;
 	}
 
-    protected String[] recruitEmployeeAndNewUser(String name, int id, int bankNumber, int branchNumber,  List<EmploymentConditions> ec, int employmentYear, int employmentMonth, int employmentDay) throws Exception{ // returns User details for new employee
+    public String[] recruitEmployeeAndNewUser(String name, int id, int bankNumber, int branchNumber,  List<EmploymentConditions> employmentConditions, LocalDate employmentDate) throws Exception { // returns User details for new employee
         if(this.getIsHrManager()){
             BankDetails bd = new BankDetails(bankNumber, branchNumber);
-            Date employmentDate = Date.getInstance(employmentYear, employmentMonth, employmentDay);
-           this.empController.recruitEmployee(name, id, bd,ec, employmentDate);
+           this.empController.recruitEmployee(name, id, bd, employmentConditions, employmentDate);
            Employee e = this.empController.getEmployee(id);
            String[] userDetails = new String[2];
            userDetails[0] = Integer.toString(id);
            userDetails[1] = Integer.toString((int)(Math.random()*100000000));
            if(userDetails[1].length() > 4)
                 userDetails[1] =  userDetails[1].substring(0, 4);
-           this.usController.register(userDetails[0],userDetails[1], e);
+           this.usController.createUser(userDetails[0],userDetails[1], e);
             return userDetails;
         } 
         else
             throw new Exception("This user isn't authorized to do this.");
     }
 
-    protected void recruitEmployeeWithoutUser(String name, int id, BankDetails bd, List<EmploymentConditions> ec, Date employmentDate) throws Exception{ // returns User details for new employee
+    protected void recruitEmployeeWithoutUser(String name, int id, BankDetails bd, List<EmploymentConditions> ec, LocalDate employmentDate) throws Exception{ // returns User details for new employee
         if(this.getIsHrManager()){
            this.empController.recruitEmployee(name, id, bd,ec, employmentDate);
         } 
@@ -83,10 +103,10 @@ public class User {// this class manages authorization before accessing employee
     }
 
     protected String getSystemTime(){
-        Date d = Date.getCurrentDate();
+        LocalDate d = Date.getCurrentDate();
         Integer[] in = Date.getCurrentTime();
         String desc = "";
-        desc = d.getYear() + "." + d.getMonth() + "." +d.getDay() +" "+in[0]+":"+in[1];
+        desc = d.getYear() + "." + d.getMonth() + "." +d.getDayOfWeek() +" "+in[0]+":"+in[1];
         return desc;
     }
 
@@ -97,11 +117,11 @@ public class User {// this class manages authorization before accessing employee
             throw new Exception("This user is not authorized to do this");
     }
 
-    protected void signUpEmployeeToShift(int empId,int year, int month, int day, String branchName, String shiftTime, String role) throws Exception{ // employee to shift
+    public void signUpEmployeeToShift(int empId, String shiftTime, LocalDate shiftDate, String branchName, String role) throws Exception{ // employee to shift
         if(this.linkedEmployee == null  ||this.linkedEmployee.getId() != empId)
             throw new Exception("You are not authorized to do it. You cant schedule shifts of other employees if you are not HR manager.");
         else
-            this.empController.signUpEmployeeToShift(empId, year, month, day, branchName, shiftTime, role);
+            this.empController.signUpEmployeeToShift(empId, shiftTime, shiftDate, branchName, role);
 
     }
 

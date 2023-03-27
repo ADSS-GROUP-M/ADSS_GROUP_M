@@ -1,26 +1,26 @@
-package dev.BusinessLayer;
+package dev.Employees.BusinessLayer;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.*;
 
-import dev.BusinessLayer.Shift.ShiftTime;
 
-public class EmployeeController{
+public class EmployeesController {
 
     private List<Employee> employees;
-    private static EmployeeController instance;
 
-    private EmployeeController(){
+    private EmployeesController(){
         employees = new LinkedList<Employee>();
     }
 
-    public static EmployeeController getInstance(User requestFrom)
+    public static EmployeesController getInstance(User requestFrom)
     {
         if(instance == null)
-            instance = new EmployeeController();
+            instance = new EmployeesController();
         return instance;
     }
 
-    public void recruitEmployee(String name, int id, BankDetails bd, List<EmploymentConditions> ec, Date employmentDate) {
+    public void recruitEmployee(String name, int id, BankDetails bd, List<EmploymentConditions> ec, LocalDate employmentDate) {
             Employee emp = new Employee(name,id,bd,ec, employmentDate);
             this.employees.add(emp);
             return;
@@ -28,7 +28,6 @@ public class EmployeeController{
     }
 
     public void fireEmployee(int empId) throws Exception{
-
         for(Employee e: employees){
                 if(e.getId() == empId){
                     e.setIsFired(true);
@@ -38,26 +37,24 @@ public class EmployeeController{
         throw new Exception("Employee is not found");    
     }
 
-    public void signUpEmployeeToShift(int empId,int year, int month, int day, String branchName, String shiftTime, String role)throws Exception{// in a branch
-        Date da = this.getDate(year, month, day);
-        Branch br = this.stringToBranch(branchName);
-        ShiftTime st = this.stringToShiftTime(shiftTime);
-        Employee emp = this.getEmployee(empId);
-        if(emp.getIsFired())
+    public void signUpEmployeeToShift(int empId, String shiftTimeString, LocalDate shiftDate, String branchName, String role)throws Exception{// in a branch
+        Branch branch = this.stringToBranch(branchName);
+        ShiftTime shiftTime = stringToShiftTime(shiftTimeString);
+        Employee employee = this.getEmployee(empId);
+        if(employee.getIsFired())
             throw new Exception("cant do this, this employee is fired!");
-        Role rl = this.stringToRole(role);
-        List<Role> rls = new LinkedList<Role>();
-        rls.add(rl);
-        Shift shift = this.getShift(st, da, br);
-        if(!shift.registerEmployee(da, st, br, emp, rls))
+        Role r = this.stringToRole(role);
+        List<Role> roles = new LinkedList<Role>();
+        roles.add(r);
+        Shift shift = this.getShift(shiftTime, shiftDate, branch);
+        if(!shift.registerEmployee(shiftTime, shiftDate, branch, employee, roles))
             throw new Exception("Failed registering to shift, due to illegal scheduling");
     }
 
-    public void setRequiredRolesInAShift(int year, int month, int day, String branchName, String shiftTime, String roles) throws Exception{ // roles format example: "1 cashier,4 general worker"
-        Date da = this.getDate(year, month, day);
+    public void setRequiredRolesInAShift(LocalDate shiftDate, String branchName, String shiftTime, String roles) throws Exception{ // roles format example: "1 cashier,4 general worker"
         Branch br = this.stringToBranch(branchName);
         ShiftTime st = this.stringToShiftTime(shiftTime);
-        Shift s = this.getShift(st, da, br);
+        Shift s = this.getShift(st, shiftDate, br);
         String[] splitted = roles.split(",", -1);
         HashMap<Role,Integer> rolesMap = new HashMap<Role,Integer>();
         for(String str: splitted){
@@ -69,11 +66,10 @@ public class EmployeeController{
         s.setNeededRoles(rolesMap);
     }
 
-    public String getShiftDescription(int year, int month, int day, String branchName, String shiftTime) throws Exception{
-        Date da = this.getDate(year, month, day);
+    public String getShiftDescription(LocalDate shiftDate, String branchName, String shiftTime) throws Exception{
         Branch br = this.stringToBranch(branchName);
         ShiftTime st = this.stringToShiftTime(shiftTime);
-        Shift s = this.getShift(st, da, br);
+        Shift s = this.getShift(st, shiftDate, br);
 
         String desc = "";
         desc+=s.toString();
@@ -84,7 +80,7 @@ public class EmployeeController{
         Employee emp = this.getEmployee(empId);
         if(emp.getIsFired())
             throw new Exception("employee is fired, cant do this");
-        Date d = this.getDate(year, month, day);
+        LocalDate d = this.getDate(year, month, day);
         emp.addUnavailableDate(d);  
     }
 
@@ -92,13 +88,13 @@ public class EmployeeController{
         Employee emp = this.getEmployee(empId);
         if(emp.getIsFired())
             throw new Exception("employee is fired, cant do this");
-        Date d = this.getDate(year, month, day);
+        LocalDate d = this.getDate(year, month, day);
         emp.setAvailableDate(d);  
     }
 
     public void applyCancelCardNow(int applicationByEmpId) throws Exception{
         Employee e = this.getEmployee(applicationByEmpId);
-        Date d = Date.getCurrentDate();
+        LocalDate d = LocalDate.now();
         for(Branch b: Branch.getAllBranches()){
             Integer[] mor = b.getWorkingHours(ShiftTime.MORNING);
             Integer[] eve = b.getWorkingHours(ShiftTime.EVENING);
@@ -163,13 +159,13 @@ public class EmployeeController{
         return st;
     }
 
-    private Date getDate(int year, int month, int day) throws Exception{
-       Date d = Date.getInstance(year, month, day);
+    private LocalDate getDate(int year, int month, int day) throws Exception{
+       LocalDate d = Date.getInstance(LocalDate.of(year,month,day));
        if(d == null)
           throw new Exception("invalid date!");
         return d;
     }
-    private Shift getShift(ShiftTime st, Date da, Branch br) throws Exception{
+    private Shift getShift(ShiftTime st, LocalDate da, Branch br) throws Exception{
         Shift s = Shift.getInstance(st, da, br);
         if(s==null)
             throw new Exception("invalid shift");

@@ -1,10 +1,11 @@
 package dev.BusinessLayer;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-import dev.BusinessLayer.Shift.ShiftTime;
+import dev.Employees.BusinessLayer.Shift.ShiftTime;
 
 public enum Branch {
     BRANCH1(),
@@ -18,7 +19,7 @@ public enum Branch {
     BRANCH9();
 
     private HashMap<ShiftTime,Integer[]> workingHours;
-    private List<Date>  nonWorkingDays;
+    private List<LocalDate>  nonWorkingDays;
 
     private Branch(){
         this.nonWorkingDays = new LinkedList<Date>();
@@ -40,12 +41,12 @@ public enum Branch {
         return this.workingHours.get(s);
     }
 
-    public void addNonWorkingDay(Date d){
+    public void addNonWorkingDay(LocalDate d){
         this.nonWorkingDays.add(d);
     }
 
-    public boolean isWorkingDay(Date date){
-        for(Date d : this.nonWorkingDays){
+    public boolean isWorkingDay(LocalDate date){
+        for(LocalDate d : this.nonWorkingDays){
             if(d == date)
                 return false;
         }

@@ -1,8 +1,8 @@
 package dev.BusinessLayer;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.*;
-import java.util.Calendar;
-import java.util.HashMap;
 import java.util.LinkedList;
 
 import dev.BusinessLayer.Shift.ShiftTime;
@@ -13,7 +13,7 @@ class Employee{
    private BankDetails bankAccount;
    private int salary;
    private List<EmploymentConditions> empConditions;
-   private Date employmentDate;
+   private LocalDate employmentDate;
    private Constraints workingConstraints;
    private boolean isFired;
 
@@ -21,7 +21,7 @@ class Employee{
       //private List<Integer> unavailableWeekDays;
       private List<Role> availableRoles;
       private List<Branch> availableBranches;
-      private List<Date> unavailableDates;
+      private List<LocalDate> unavailableDates;
       private final int MAX_WORKDAYS_A_WEEK = 6;
       private final int MAX_SHIFTS_A_DAY = 1;
       private Employee employee;
@@ -35,13 +35,13 @@ class Employee{
           this.unavailableDates = new LinkedList<Date>();
       }
   
-      public boolean checkScheduleLegality(Date from, Date until){
+      public boolean checkScheduleLegality(LocalDate from, LocalDate until){
           List<Branch> branches = Branch.getAllBranches();
           int workDaysAWeek = 0;
           int shiftsADay = 0;
   
-          Date current = from;
-          while(current.betweenDates(from, until)){
+          LocalDate current = from;
+          while(current.isAfter(from) && current.isBefore(until)){
               boolean worksShiftTime = false;
               boolean isWorkingThisDay = false;
               for(Branch b: branches){
@@ -93,19 +93,19 @@ class Employee{
               if(shiftsADay>this.MAX_SHIFTS_A_DAY)
                   return false;// more shifts a day than possible
               shiftsADay = 0;
-              if(current.getWeekday() == 7){
+              if(current.getDayOfWeek() == DayOfWeek.SATURDAY){
                   if(workDaysAWeek>this.MAX_WORKDAYS_A_WEEK)
                       return false; //too many work days a week
                   workDaysAWeek = 0;
               }
-              current = current.getNextDay();
+              current = current.plusDays(1);
           }
           if(workDaysAWeek>this.MAX_WORKDAYS_A_WEEK)
               return false; //too many work days a week
           return true;
       }
   
-      public void addUnavailableDate(Date d){
+      public void addUnavailableDate(LocalDate d){
           this.unavailableDates.add(d);
       }
   
@@ -116,7 +116,7 @@ class Employee{
 
   
 
-   public Employee(String name, int id, BankDetails bd, List<EmploymentConditions> ec, Date employmentDate){
+   public Employee(String name, int id, BankDetails bd, List<EmploymentConditions> ec, LocalDate employmentDate){
       this.name = name;
       this.id = id;
       this.bankAccount = bd;
@@ -135,7 +135,7 @@ class Employee{
       return isFired;
    }
 
-   public void addUnavailableDate(Date d){
+   public void addUnavailableDate(LocalDate d){
       this.workingConstraints.addUnavailableDate(d);
   }
 
@@ -154,11 +154,11 @@ class Employee{
    public String toString(){
       
       String legalityWarning = "";
-        if(!this.workingConstraints.checkScheduleLegality(Date.getCurrentDate(), Date.getInstance(Date.getCurrentDate().getYear()+1, Date.getCurrentDate().getMonth(), Date.getCurrentDate().getDay())))
+        if(!this.workingConstraints.checkScheduleLegality(LocalDate.now(), Date.getInstance(LocalDate.now().plusYears(1))))
             legalityWarning = "WARNING! shift does'nt meet constraints!";
       return "UNFINISHED";
    }
-   public boolean checkLegality(Date a, Date b){
+   public boolean checkLegality(LocalDate a, LocalDate b){
       return this.workingConstraints.checkScheduleLegality(a,b);
    }
 

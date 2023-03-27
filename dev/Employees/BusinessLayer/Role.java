@@ -1,4 +1,4 @@
-package dev.BusinessLayer;
+package dev.Employees.BusinessLayer;
 
 public enum Role {
     CASHIER(),

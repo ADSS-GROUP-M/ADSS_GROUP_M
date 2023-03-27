@@ -6,13 +6,11 @@ import dev.BusinessLayer.Shift.ShiftTime;
 
 public class EmployeeController{
 
-    private List<Employee> workingEmployees;
-    private List<Employee> firedEmployees;
+    private List<Employee> employees;
     private static EmployeeController instance;
 
     private EmployeeController(){
-        workingEmployees = new LinkedList<Employee>();
-        firedEmployees = new LinkedList<Employee>();
+        employees = new LinkedList<Employee>();
     }
 
     public static EmployeeController getInstance(User requestFrom)
@@ -22,23 +20,22 @@ public class EmployeeController{
         return instance;
     }
 
-    public void recruitEmployee(String name, int id, BankDetails bd, int salary, List<EmploymentConditions> ec, Date employmentDate) {
-            Employee emp = new Employee(name,id,bd,salary,ec, employmentDate);
-            this.workingEmployees.add(emp);
+    public void recruitEmployee(String name, int id, BankDetails bd, List<EmploymentConditions> ec, Date employmentDate) {
+            Employee emp = new Employee(name,id,bd,ec, employmentDate);
+            this.employees.add(emp);
             return;
         
     }
 
     public void fireEmployee(int empId) throws Exception{
 
-        for(Employee e: workingEmployees){
+        for(Employee e: employees){
                 if(e.getId() == empId){
-                    firedEmployees.add(e);
-                    workingEmployees.remove(e);
+                    e.setIsFired(true);
                     return;
                 }
         }
-        throw new Exception("Employee is not found or already fired");    
+        throw new Exception("Employee is not found");    
     }
 
     public void signUpEmployeeToShift(int empId,int year, int month, int day, String branchName, String shiftTime, String role)throws Exception{// in a branch
@@ -52,7 +49,8 @@ public class EmployeeController{
         List<Role> rls = new LinkedList<Role>();
         rls.add(rl);
         Shift shift = this.getShift(st, da, br);
-        shift.registerEmployee(da, st, br, emp, rls);
+        if(!shift.registerEmployee(da, st, br, emp, rls))
+            throw new Exception("Failed registering to shift, due to illegal scheduling");
     }
 
     public void setRequiredRolesInAShift(int year, int month, int day, String branchName, String shiftTime, String roles) throws Exception{ // roles format example: "1 cashier,4 general worker"
@@ -136,11 +134,7 @@ public class EmployeeController{
     }
 
     public Employee getEmployee(int id) throws Exception{
-        for(Employee e: this.workingEmployees){
-            if(e.getId() == id)
-                return e;
-        }
-        for(Employee e: this.firedEmployees){
+        for(Employee e: this.employees){
             if(e.getId() == id)
                 return e;
         }

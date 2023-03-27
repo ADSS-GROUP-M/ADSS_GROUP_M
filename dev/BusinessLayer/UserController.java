@@ -6,7 +6,7 @@ import javax.lang.model.util.ElementScanner14;
 
 public class UserController{
 
-    private static HashMap<Integer,User> users;
+    private HashMap<Integer,User> users;
     private static UserController instance;
 
     private UserController(){
@@ -18,7 +18,6 @@ public class UserController{
         if(instance == null){
             instance = new UserController();
             instance.registerManager("admin123", "123", null);
-            
         }
         return instance;
     }
@@ -77,7 +76,7 @@ public class UserController{
     }
 
     /*
-     * recruit_employee command: "recruit_employee (private name) (last name) (id) (bank number) (branch number) (salary) [(employmentCondition1),(employmentCondition2),...,(employmentConditionN)] (employmentYear) (employmentMonth) (employmentDay) "
+     * recruit_employee command: "recruit_employee (private name) (last name) (id) (bank number) (branch number) (salary) [(employmentCondition1),(employmentCondition2),...,(employmentConditionN)] (employmentYear) (employmentMonth) (employmentDay)"
      * login command: "login (username) (password)"
      * logout command: "logout"
      * sign up to shift command: "register to shift (empId) (branch_name) (shift_time) (year) (month) (day) (role)"
@@ -101,19 +100,18 @@ public class UserController{
             int id = Integer.parseInt(splitted[3]);
             int bankNumber = Integer.parseInt(splitted[4]);
             int branchNumber = Integer.parseInt(splitted[5]);
-            int salary = Integer.parseInt(splitted[6]);
             List<EmploymentConditions> ec = new LinkedList<>();
-            if(!splitted[7].equals("none")){
-                String[] conditions = splitted[7].split(",", -1);
+            if(!splitted[6].equals("none")){
+                String[] conditions = splitted[6].split(",", -1);
                 for(String str : conditions){
                     ec.add(EmploymentConditions.valueOf(str));
                 }
             }
-            int employmentYear = Integer.parseInt(splitted[8]);
-            int employmentMonth = Integer.parseInt(splitted[9]);
-            int employmentDay = Integer.parseInt(splitted[10]);
+            int employmentYear = Integer.parseInt(splitted[7]);
+            int employmentMonth = Integer.parseInt(splitted[8]);
+            int employmentDay = Integer.parseInt(splitted[9]);
 
-            String[] userDetails = u.recruitEmployeeAndNewUser(name, id,bankNumber,branchNumber,salary,ec,employmentYear,employmentMonth,employmentDay);
+            String[] userDetails = u.recruitEmployeeAndNewUser(name, id,bankNumber,branchNumber,ec,employmentYear,employmentMonth,employmentDay);
             response = "Employee registered. User details for the new employee: \n username: " + userDetails[0] + " password: "+userDetails[1];
         }
         else if(splitted.length == 1 && splitted[0].equals("logout")){

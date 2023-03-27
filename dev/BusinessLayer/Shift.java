@@ -76,9 +76,15 @@ public class Shift {
         return isApproved;
     }
 
-    public void registerEmployee(Date d , ShiftTime st, Branch br, Employee e, List<Role> roles){
+    public boolean registerEmployee(Date d , ShiftTime st, Branch br, Employee e, List<Role> roles){
+        Date[] week = Date.getWeekDates(d);
         Shift s = getInstance(st, d, br);
         s.employees.put(e, roles);
+        if(!e.checkLegality(week[0],week[1])){
+            s.employees.remove(e);
+            return false;
+        }
+        return true;
     }
 
     public boolean isEmployeeWorking(Employee emp){

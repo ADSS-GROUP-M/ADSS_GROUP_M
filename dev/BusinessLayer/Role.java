@@ -4,6 +4,9 @@ public enum Role {
     CASHIER(),
     STOREKEEPER(), //מחסנאי
     SHIFT_MANAGER(),
-    GENERAL_WORKER();
+    GENERAL_WORKER(),
+    SECURITY(),
+    STEWARD(),//סדרן
+    CLEANER();//מנקה
 
 }

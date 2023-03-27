@@ -79,13 +79,23 @@ public class Date {
     public static  void setSystemTime(int year, int month, int day, int hour, int minute){
         calendar.set(year, month, day, hour, minute);
     }
-    /* 
+
     public static Date[] getWeekDates(Date d){ 
         Date[] fromUntil = new Date[2];
-        Calendar c = Calendar.getInstance();
-        int x = c.get(Calendar.DAY_OF_WEEK);
-        Date.getInstance(d.YEAR, d.MONTH, x)
-    }*/
+        Calendar cal = Calendar.getInstance();
+
+        cal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+        // calculate monday week ago (moves cal 7 days back)
+        cal.add(Calendar.DATE, 0);
+        java.util.Date sunday = cal.getTime();
+
+        // calculate sunday last week (moves cal 6 days fwd)
+        cal.add(Calendar.DATE, 7);
+        java.util.Date nextsunday = cal.getTime();
+        fromUntil[0] = Date.getInstance(sunday.getYear(), sunday.getMonth()+1, sunday.getDate());
+        fromUntil[1] = Date.getInstance(nextsunday.getYear(), nextsunday.getMonth()+1, nextsunday.getDate());
+        return fromUntil;
+    }
     public int getYear() {
         return YEAR;
     }

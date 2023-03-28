@@ -42,17 +42,19 @@ public class Date {
         return c.get(Calendar.DAY_OF_WEEK);
     }
 
-    public boolean betweenDates(Date from, Date until){ //including edges, should unit test
-        boolean after = false;
-        boolean before = false;
-        Calendar c = Calendar.getInstance();
-        Calendar compare = Calendar.getInstance();
-        c.set(this.YEAR,this.MONTH,this.DAY);
-        compare.set(until.YEAR,until.MONTH,until.DAY+1,0,0);
-        before = c.before(compare);
-        compare.set(from.YEAR,from.MONTH,from.DAY-1,23,59,59);
-        after = c.after(compare);
-        return before && after;
+    public boolean betweenDates(LocalDate from, LocalDate until) { //including edges, should unit test
+        LocalDate current = LocalDate.of(YEAR,MONTH,DAY);
+        return current.equals(from) || current.equals(until) || (current.isAfter(from) && current.isAfter(until));
+        //boolean after = false;
+        //boolean before = false;
+        //Calendar c = Calendar.getInstance();
+        //Calendar compare = Calendar.getInstance();
+        //c.set(this.YEAR,this.MONTH,this.DAY);
+        //compare.set(until.YEAR,until.MONTH,until.DAY+1,0,0);
+        //before = c.before(compare);
+        //compare.set(from.YEAR,from.MONTH,from.DAY-1,23,59,59);
+        //after = c.after(compare);
+        //return before && after;
     }
 
     //public Date getNextDay(){ //considers that dates 29.2 - 31.2 exist

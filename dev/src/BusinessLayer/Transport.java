@@ -1,5 +1,6 @@
 package BusinessLayer;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -25,5 +26,9 @@ public class Transport {
         this.scheduledTime = scheduledTime;
 //        this.weight = weight;
     }
+    public int getId() {
+        return id;
+    }
+
 
 }

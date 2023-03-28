@@ -1,4 +1,4 @@
-package dev.BusinessLayer;
+package dev.BusinessLayer.Employees;
 
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -25,14 +25,14 @@ public class Shift {
     {
         this.shiftTime = st;
         this.date = date;
-        neededRoles = new HashMap<Role,Integer>();
+        neededRoles = new HashMap<>();
         neededRoles.put(Role.CASHIER,1);
         neededRoles.put(Role.GENERAL_WORKER,1);
         neededRoles.put(Role.SHIFT_MANAGER,1);
         neededRoles.put(Role.STOREKEEPER,1);
         this.branch = br;
         this.isApproved = false;
-        this.employees = new HashMap<Employee,List<Role>>();
+        this.employees = new HashMap<>();
         cancelCardApplies = 0;
     }
 
@@ -75,7 +75,7 @@ public class Shift {
     }
 
     public boolean registerEmployee(ShiftTime st, LocalDate d, Branch br, Employee e, List<Role> roles){
-        Date[] week = Date.getWeekDates(d);
+        LocalDate[] week = Date.getWeekDates(d);
         Shift s = getInstance(st, d, br);
         s.employees.put(e, roles);
         if(!e.checkLegality(week[0],week[1])){
@@ -116,7 +116,7 @@ public class Shift {
         String employeesList = "";
         String legalityWarning = "";
         if(!this.checkLegality())
-            legalityWarning = "WARNING! shift does'nt meet constraints!";
+            legalityWarning = "WARNING! shift doesn't meet constraints!";
         
         desc+="Date: "+this.date.toString() + "/nBranch: " + this.branch.toString()
          +"/nShift Time: "+ this.shiftTime.toString() +"/nRoles: " + roles +

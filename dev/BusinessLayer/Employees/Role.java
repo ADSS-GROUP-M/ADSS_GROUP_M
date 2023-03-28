@@ -1,4 +1,4 @@
-package dev.Employees.BusinessLayer;
+package dev.BusinessLayer.Employees;
 
 public enum Role {
     CASHIER(),
@@ -7,6 +7,6 @@ public enum Role {
     GENERAL_WORKER(),
     SECURITY(),
     STEWARD(),//סדרן
-    CLEANER();//מנקה
+    CLEANER()//מנקה
 
 }

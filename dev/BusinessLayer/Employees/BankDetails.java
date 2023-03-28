@@ -1,4 +1,4 @@
-package dev.Employees.BusinessLayer;
+package dev.BusinessLayer.Employees;
 
 class BankDetails{//DATA TYPE
     private int bankNumber;

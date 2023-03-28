@@ -1,7 +1,7 @@
-package dev.BusinessLayer;
+package dev.BusinessLayer.Employees;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.LinkedList;
 import java.util.List;
 
 
@@ -26,7 +26,7 @@ public class Date {
     public static LocalDate getInstance(LocalDate date)
     {
         if(allInstances == null)
-            allInstances = new LinkedList<Date>();
+            allInstances = new ArrayList<>();
 
         for (LocalDate d: allInstances){
             if(d.getYear() == date.getYear() && d.getMonth() == date.getMonth() && d.getDayOfWeek() == date.getDayOfWeek())
@@ -80,8 +80,8 @@ public class Date {
         calendar.set(year, month, day, hour, minute);
     }
 
-    public static Date[] getWeekDates(LocalDate d){
-        Date[] fromUntil = new Date[2];
+    public static LocalDate[] getWeekDates(LocalDate d){
+        LocalDate[] fromUntil = new LocalDate[2];
         Calendar cal = Calendar.getInstance();
 
         cal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
@@ -92,8 +92,8 @@ public class Date {
         // calculate sunday last week (moves cal 6 days fwd)
         cal.add(Calendar.DATE, 7);
         java.util.Date nextsunday = cal.getTime();
-        fromUntil[0] = Date.getInstance(sunday.getYear(), sunday.getMonth()+1, sunday.getDate());
-        fromUntil[1] = Date.getInstance(nextsunday.getYear(), nextsunday.getMonth()+1, nextsunday.getDate());
+        fromUntil[0] = Date.getInstance(LocalDate.of(sunday.getYear(), sunday.getMonth()+1, sunday.getDate()));
+        fromUntil[1] = Date.getInstance(LocalDate.of(nextsunday.getYear(), nextsunday.getMonth()+1, nextsunday.getDate()));
         return fromUntil;
     }
     public int getYear() {

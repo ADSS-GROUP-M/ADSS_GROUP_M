@@ -1,28 +1,29 @@
-package dev.Employees.ServiceLayer;
+package dev.ServiceLayer;
 
-import dev.Employees.BusinessLayer.*;
+import dev.BusinessLayer.Employees.EmployeesController;
+import dev.BusinessLayer.Employees.EmploymentConditions;
+import dev.BusinessLayer.Employees.User;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
 
 public class EmployeesService {
     private static EmployeesService instance;
     private static UserService userService;
-    private EmployeesController employeeController;
+    private EmployeesController employeesController;
 
     private EmployeesService() {
         userService = UserService.getInstance();
-        employeeController = EmployeesController.getInstance();
+        employeesController = EmployeesController.getInstance();
     }
 
-    public EmployeesService getInstance() {
+    public static EmployeesService getInstance() {
         if (instance == null)
             instance = new EmployeesService();
         return instance;
     }
 
-    public Response<String> recruitEmployee(String username, String firstName, String lastName, int id, int bankNumber, int branchNumber, List<EmploymentConditions> employmentConditions, LocalDate employmentDate) {
+    public Response<String> recruitEmployee(String username, String firstName, String lastName, String id, int bankNumber, int branchNumber, List<EmploymentConditions> employmentConditions, LocalDate employmentDate) {
         Response<User> userResponse = userService.getUser(username);
         if (userResponse.errorOccurred())
             return Response.createErrorResponse(userResponse.getErrorMessage());
@@ -36,7 +37,7 @@ public class EmployeesService {
         }
     }
 
-    public Response<boolean> registerShift(String username, int empId, String branchName, String shiftTime, LocalDate shiftDate, String role) {
+    public Response<Boolean> registerShift(String username, String empId, String branchName, String shiftTime, LocalDate shiftDate, String role) {
         Response<User> userResponse = userService.getUser(username);
         if (userResponse.errorOccurred())
             return Response.createErrorResponse(userResponse.getErrorMessage());

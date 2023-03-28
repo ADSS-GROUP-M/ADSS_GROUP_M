@@ -1,11 +1,12 @@
-package dev.BusinessLayer;
+package dev.BusinessLayer.Employees;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-import dev.Employees.BusinessLayer.Shift.ShiftTime;
+import dev.BusinessLayer.Employees.Shift.ShiftTime;
 
 public enum Branch {
     BRANCH1(),
@@ -22,7 +23,7 @@ public enum Branch {
     private List<LocalDate>  nonWorkingDays;
 
     private Branch(){
-        this.nonWorkingDays = new LinkedList<Date>();
+        this.nonWorkingDays = new ArrayList<>();
         this.workingHours = new HashMap<ShiftTime, Integer[]>();
         Integer[] w1 = {8,16}, w2 = {16,24};
         this.workingHours.put(ShiftTime.MORNING, w1);
@@ -30,7 +31,7 @@ public enum Branch {
     }
 
     private Branch(int morningShiftStart,int morningShiftFinish, int eveningShiftStart, int eveningShiftFinish){
-        this.nonWorkingDays = new LinkedList<Date>();
+        this.nonWorkingDays = new LinkedList<>();
         this.workingHours = new HashMap<ShiftTime, Integer[]>();
         Integer[] w1 = {morningShiftStart,morningShiftFinish}, w2 = {eveningShiftStart,eveningShiftFinish};
         this.workingHours.put(ShiftTime.MORNING, w1);

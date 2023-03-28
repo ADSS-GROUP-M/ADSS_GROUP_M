@@ -1,50 +1,43 @@
-package dev.Employees.BusinessLayer;
+package dev.BusinessLayer.Employees;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.*;
 
+import dev.BusinessLayer.Employees.Shift.ShiftTime;
 
 public class EmployeesController {
 
-    private List<Employee> employees;
+    private Map<String,Employee> employees;
+    private static EmployeesController instance;
 
     private EmployeesController(){
-        employees = new LinkedList<Employee>();
+        employees = new HashMap<>();
     }
 
-    public static EmployeesController getInstance(User requestFrom)
-    {
+    public static EmployeesController getInstance() {
         if(instance == null)
             instance = new EmployeesController();
         return instance;
     }
 
-    public void recruitEmployee(String name, int id, BankDetails bd, List<EmploymentConditions> ec, LocalDate employmentDate) {
+    public void recruitEmployee(String name, String id, BankDetails bd, List<EmploymentConditions> ec, LocalDate employmentDate) {
             Employee emp = new Employee(name,id,bd,ec, employmentDate);
-            this.employees.add(emp);
-            return;
-        
+            this.employees.put(id, emp);
     }
 
-    public void fireEmployee(int empId) throws Exception{
-        for(Employee e: employees){
-                if(e.getId() == empId){
-                    e.setIsFired(true);
-                    return;
-                }
-        }
-        throw new Exception("Employee is not found");    
+    public void fireEmployee(String empId) throws Exception {
+        Employee e = this.getEmployee(empId);
+        e.setIsFired(true);
     }
 
-    public void signUpEmployeeToShift(int empId, String shiftTimeString, LocalDate shiftDate, String branchName, String role)throws Exception{// in a branch
+    public void signUpEmployeeToShift(String empId, String shiftTimeString, LocalDate shiftDate, String branchName, String role)throws Exception{// in a branch
         Branch branch = this.stringToBranch(branchName);
         ShiftTime shiftTime = stringToShiftTime(shiftTimeString);
         Employee employee = this.getEmployee(empId);
         if(employee.getIsFired())
             throw new Exception("cant do this, this employee is fired!");
         Role r = this.stringToRole(role);
-        List<Role> roles = new LinkedList<Role>();
+        List<Role> roles = new ArrayList<>();
         roles.add(r);
         Shift shift = this.getShift(shiftTime, shiftDate, branch);
         if(!shift.registerEmployee(shiftTime, shiftDate, branch, employee, roles))
@@ -56,7 +49,7 @@ public class EmployeesController {
         ShiftTime st = this.stringToShiftTime(shiftTime);
         Shift s = this.getShift(st, shiftDate, br);
         String[] splitted = roles.split(",", -1);
-        HashMap<Role,Integer> rolesMap = new HashMap<Role,Integer>();
+        HashMap<Role,Integer> rolesMap = new HashMap<>();
         for(String str: splitted){
             String[] numToRole = str.split(" ", 2);
             Role curRole = this.stringToRole(numToRole[1]);
@@ -76,7 +69,7 @@ public class EmployeesController {
         return desc;
     }
 
-    public void setUnavailableDate(int empId, int year, int month, int day) throws Exception{
+    public void setUnavailableDate(String empId, int year, int month, int day) throws Exception{
         Employee emp = this.getEmployee(empId);
         if(emp.getIsFired())
             throw new Exception("employee is fired, cant do this");
@@ -84,7 +77,7 @@ public class EmployeesController {
         emp.addUnavailableDate(d);  
     }
 
-    public void setAvailableDate(int empId, int year, int month, int day) throws Exception{
+    public void setAvailableDate(String empId, int year, int month, int day) throws Exception{
         Employee emp = this.getEmployee(empId);
         if(emp.getIsFired())
             throw new Exception("employee is fired, cant do this");
@@ -92,7 +85,7 @@ public class EmployeesController {
         emp.setAvailableDate(d);  
     }
 
-    public void applyCancelCardNow(int applicationByEmpId) throws Exception{
+    public void applyCancelCardNow(String applicationByEmpId) throws Exception{
         Employee e = this.getEmployee(applicationByEmpId);
         LocalDate d = LocalDate.now();
         for(Branch b: Branch.getAllBranches()){
@@ -119,23 +112,20 @@ public class EmployeesController {
         throw new Exception("unfinished functionality");
     }
 
-    public void setEmployeeSalary(int empId, int x) throws Exception{
+    public void setEmployeeSalary(String empId, int x) throws Exception{
         Employee e = this.getEmployee(empId);
         e.setSalary(x);
     }
 
-    public String getEmployeeDescription(int empId) throws Exception{
+    public String getEmployeeDescription(String empId) throws Exception{
         Employee e = this.getEmployee(empId);
         return e.toString();
     }
 
-    public Employee getEmployee(int id) throws Exception{
-        for(Employee e: this.employees){
-            if(e.getId() == id)
-                return e;
-        }
-        throw new Exception("Employee not found");
-    
+    public Employee getEmployee(String id) throws Exception{
+        if (!employees.containsKey(id))
+            throw new Exception("The given employee ID wasn't found in the system.");
+        return employees.get(id);
     }
 
     private Branch stringToBranch(String br) throws Exception{

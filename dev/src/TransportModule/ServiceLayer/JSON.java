@@ -1,13 +1,7 @@
 package TransportModule.ServiceLayer;
 
-import TransportModule.BusinessLayer.ItemList;
-import TransportModule.BusinessLayer.Site;
 import com.google.gson.*;
-import com.google.gson.reflect.TypeToken;
-
-import java.lang.reflect.Type;
 import java.time.LocalDateTime;
-import java.util.HashMap;
 
 public class JSON {
 

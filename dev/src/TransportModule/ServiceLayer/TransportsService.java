@@ -21,41 +21,44 @@ public class TransportsService {
      *{
      *   "id": 1,
      *   "source": {
-     *     "TransportZone": "source",
+     *     "TransportZone": "Zone1",
      *     "Address": "source-address",
-     *     "phoneNumber": "contact",
-     *     "contactName": "loading"
+     *     "phoneNumber": "054-6666666",
+     *     "contactName": "moshe",
+     *     "siteType": "LOGISTICAL_CENTER"
      *   },
      *   "destinations": [
      *     {
-     *       "TransportZone": "source",
+     *       "TransportZone": "Zone1",
      *       "Address": "source-address",
-     *       "phoneNumber": "contact",
-     *       "contactName": "loading"
+     *       "phoneNumber": "054-6666666",
+     *       "contactName": "moshe",
+     *       "siteType": "LOGISTICAL_CENTER"
      *     }
      *   ],
      *   "itemLists": [
      *     [
      *       {
-     *         "TransportZone": "destination",
+     *         "TransportZone": "Zone1",
      *         "Address": "destination-address",
-     *         "phoneNumber": "contact",
-     *         "contactName": "unloading"
+     *         "phoneNumber": "054-7777777",
+     *         "contactName": "yossi",
+     *         "siteType": "BRANCH"
      *       },
      *       {
      *         "id": 1,
-     *         "items": {
-     *           "item2": 2,
-     *           "item1": 1,
-     *           "item3": 3
+     *         "loadingItems": {
+     *           "itemToLoad": 5
+     *         },
+     *         "unloadingItems": {
+     *           "itemToUnload": 7
      *         }
      *       }
      *     ]
      *   ],
      *   "truckId": 1,
      *   "driverId": 1,
-     *   "scheduledDate": "1977-01-01",
-     *   "leavingTime": "14:00",
+     *   "scheduledTime": "1977-01-01T12:24",
      *   "weight": 0
      * }
      * </pre>
@@ -115,14 +118,16 @@ public class TransportsService {
     }
 
     public static void main (String[] args){
-        Site source = new Site("source", "source-address", "contact", "loading");
-        Site destination = new Site("destination", "destination-address", "contact", "unloading");
+        Site source = new Site("Zone1", "source-address", "054-6666666", "moshe", Site.SiteType.LOGISTICAL_CENTER);
+        Site destination = new Site("Zone1", "destination-address", "054-7777777", "yossi", Site.SiteType.BRANCH);
         LinkedList<Site> sites = new LinkedList<>();
         sites.add(source);
         LocalDateTime dateTime = LocalDateTime.of(1977,1,1,12,24);
-        HashMap<String,Integer> items = new HashMap<>();
-        items.put("item", 5);
-        ItemList itemList = new ItemList(1,items);
+        HashMap<String,Integer> items1 = new HashMap<>();
+        items1.put("itemToLoad", 5);
+        HashMap<String,Integer> items2 = new HashMap<>();
+        items2.put("itemToUnload", 7);
+        ItemList itemList = new ItemList(1,items1,items2);
         HashMap<Site,ItemList> siteItems = new HashMap<>();
         siteItems.put(destination, itemList);
         Transport t = new Transport(1,source,sites,siteItems,1,1,dateTime);

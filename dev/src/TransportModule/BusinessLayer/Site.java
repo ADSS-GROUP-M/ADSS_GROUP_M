@@ -4,16 +4,24 @@ import java.util.Objects;
 
 public class Site {
 
-    private String TransportZone;
-    private String Address;
-    private String phoneNumber;
-    private String contactName;
+    public enum SiteType{
+        BRANCH,
+        LOGISTICAL_CENTER,
+        SUPPLIER
+    }
 
-    public Site(String TransportZone, String Address, String phoneNumber, String contactName){
+    private final String TransportZone;
+    private final String Address;
+    private final String phoneNumber;
+    private final String contactName;
+    private final SiteType siteType;
+
+    public Site(String TransportZone, String Address, String phoneNumber, String contactName, SiteType siteType){
         this.TransportZone = TransportZone;
         this.Address = Address;
         this.phoneNumber = phoneNumber;
         this.contactName = contactName;
+        this.siteType = siteType;
     }
 
     @Override
@@ -43,5 +51,9 @@ public class Site {
 
     public String getContactName() {
         return contactName;
+    }
+
+    public SiteType getSiteType() {
+        return siteType;
     }
 }

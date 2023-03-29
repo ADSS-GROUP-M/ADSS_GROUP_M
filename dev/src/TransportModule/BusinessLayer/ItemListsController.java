@@ -12,8 +12,8 @@ public class ItemListsController {
         itemLists = new TreeMap<>();
         idCounter = 0; // this will have to be restored from the DB in the future
     }
-    public ItemList createItemList(HashMap<String, Integer> items){
-        ItemList itemList = new ItemList(idCounter++, items);
+    public ItemList createItemList(HashMap<String, Integer> loadingItems, HashMap<String, Integer> unloadingItems){
+        ItemList itemList = new ItemList(idCounter++, loadingItems, unloadingItems);
         itemLists.put(itemList.getId(), itemList);
         return itemList;
     }

@@ -4,12 +4,15 @@ import java.util.HashMap;
 import java.util.Objects;
 
 public class ItemList {
-    private int id;
-    private HashMap<String, Integer> items;
 
-    public ItemList(int id, HashMap<String, Integer> items){
+    private int id;
+    private HashMap<String, Integer> loadingItems;
+    private HashMap<String, Integer> unloadingItems;
+
+    public ItemList(int id, HashMap<String, Integer> load,HashMap<String, Integer> unload){
         this.id = id;
-        this.items = items;
+        this.loadingItems = load;
+        this.unloadingItems = unload;
     }
 
     public static ItemList parse(int i, String json){
@@ -20,8 +23,12 @@ public class ItemList {
         return id;
     }
 
-    public HashMap<String, Integer> getItems() {
-        return items;
+    public HashMap<String, Integer> getLoadingItems() {
+        return loadingItems;
+    }
+
+    public HashMap<String, Integer> getUnloadingItems() {
+        return unloadingItems;
     }
 
     @Override

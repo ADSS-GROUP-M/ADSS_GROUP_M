@@ -6,9 +6,9 @@ import java.io.IOException;
 
 public class ModuleManagementService {
 
-    private TrucksController trucksController;
-    private DriversController driversController;
-    private SitesController sitesController;
+    private final TrucksController trucksController;
+    private final DriversController driversController;
+    private final SitesController sitesController;
 
     public ModuleManagementService(){
         trucksController = BusinessFactory.getInstance().getTrucksController();

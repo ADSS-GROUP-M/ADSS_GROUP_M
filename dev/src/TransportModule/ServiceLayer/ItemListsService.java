@@ -5,7 +5,7 @@ import TransportModule.BusinessLayer.ItemList;
 import TransportModule.BusinessLayer.ItemListsController;
 
 public class ItemListsService {
-    private ItemListsController itemListsController;
+    private final ItemListsController itemListsController;
 
     public ItemListsService(){
         itemListsController = BusinessFactory.getInstance().getItemListsController();

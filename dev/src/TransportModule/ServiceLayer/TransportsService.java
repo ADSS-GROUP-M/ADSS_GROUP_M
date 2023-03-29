@@ -7,7 +7,7 @@ import java.util.LinkedList;
 
 public class TransportsService {
 
-    private TransportsController tc;
+    private final TransportsController tc;
 
     public TransportsService(){
         tc = BusinessFactory.getInstance().getTransportsController();

@@ -1,4 +1,4 @@
-package BusinessLayer;
+package TransportModule.BusinessLayer;
 
 public class Driver {
     private final int id;

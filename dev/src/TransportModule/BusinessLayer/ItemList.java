@@ -1,4 +1,4 @@
-package BusinessLayer;
+package TransportModule.BusinessLayer;
 
 import java.util.HashMap;
 
@@ -11,7 +11,7 @@ public class ItemList {
         this.items = items;
     }
 
-    public static ItemList parse(String json){
+    public static ItemList parse(int i, String json){
         return null;
     }
 

@@ -11,10 +11,10 @@ public class DriversController {
         drivers = new TreeMap<>();
     }
 
-    public Driver createDriver(int id, String name, String licenseType){
-        Driver driver = new Driver(id,name,licenseType);
-        drivers.put(id,driver);
-        return driver;
+    public void addDriver(Driver driver) throws IOException{
+        if (drivers.containsKey(driver.getId()) == false)
+            drivers.put(driver.getId(), driver);
+        else throw new IOException("Driver already exists");
     }
 
     public  Driver getDriver(int id) throws Exception {

@@ -54,4 +54,10 @@ public class TransportsController {
         return list;
     }
 
+    private boolean isTransportValid(Transport transport) throws IOException{
+        int weight = transport.getWeight();
+
+
+    }
+
 }

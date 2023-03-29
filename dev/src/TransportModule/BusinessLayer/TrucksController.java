@@ -1,19 +1,21 @@
 package TransportModule.BusinessLayer;
 
 import java.io.IOException;
+import java.util.LinkedList;
 import java.util.TreeMap;
 
 public class TrucksController {
+
     TreeMap<Integer,Truck> trucks;
 
     public TrucksController(){
         trucks = new TreeMap<>();
     }
 
-    public Truck createTruck(int id,String model, int baseWeight,int maxWeight){
-        Truck truck = new Truck(id,model,baseWeight, maxWeight);
-        trucks.put(id,truck);
-        return truck;
+    public void addTruck(Truck truck) throws IOException {
+        if (trucks.containsKey(truck.getId()) == false)
+            trucks.put(truck.getId(), truck);
+        else throw new IOException("Truck already exists");
     }
 
     public Truck removeTruck(int id) throws IOException {
@@ -34,6 +36,13 @@ public class TrucksController {
             throw new IOException("Truck not found");
 
         trucks.put(id, newTruck);
+    }
+
+    public LinkedList<Truck> getAllTrucks(){
+        LinkedList<Truck> trucksList = new LinkedList<>();
+        for(Truck truck : trucks.values())
+            trucksList.add(truck);
+        return trucksList;
     }
 
 }

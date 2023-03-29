@@ -17,12 +17,7 @@ public class TransportsController {
     }
 
     public void addTransport(Transport transport)throws IOException{
-
-        //TODO: check if the transport is valid before adding it to the system
-        // **
-        // **
-        // **
-        // **
+        validateTransport(transport);
 
         transports.put(idCounter++, transport);
     }
@@ -44,6 +39,8 @@ public class TransportsController {
         if(transports.containsKey(id) == false)
             throw new IOException("Transport not found");
 
+        validateTransport(newTransport);
+
         transports.put(id, newTransport);
     }
 
@@ -54,10 +51,12 @@ public class TransportsController {
         return list;
     }
 
-    private boolean isTransportValid(Transport transport) throws IOException{
+    private void validateTransport(Transport transport) throws IOException{
         int weight = transport.getWeight();
-
-
+        TrucksController tc = BusinessFactory.getInstance().getTrucksController();
+        Truck truck = tc.getTruck(transport.getTruckId());
+        if (truck.getMaxWeight() < weight)
+            throw new IOException("The truck's maximum weight has been exceeded");
     }
 
 }

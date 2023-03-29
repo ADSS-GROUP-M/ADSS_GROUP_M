@@ -31,6 +31,6 @@ public class Response<T> {
     }
     
     public String getJson(){
-        return JsonSerializer.serialize(this);
+        return JSON.serialize(this);
     }
 }

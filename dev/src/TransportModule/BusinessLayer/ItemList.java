@@ -1,6 +1,7 @@
 package TransportModule.BusinessLayer;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 public class ItemList {
     private int id;
@@ -21,5 +22,18 @@ public class ItemList {
 
     public HashMap<String, Integer> getItems() {
         return items;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ItemList itemList = (ItemList) o;
+        return id == itemList.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

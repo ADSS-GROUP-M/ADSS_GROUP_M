@@ -6,11 +6,10 @@ public class BusinessFactory {
 
     private final TransportsController transportsController;
     private final SitesController sitesController;
-
     private final DriversController driversController;
-
     private final TrucksController trucksController;
     private final ItemListsController itemListsController;
+
     private BusinessFactory(){
         transportsController = new TransportsController();
         sitesController = new SitesController();

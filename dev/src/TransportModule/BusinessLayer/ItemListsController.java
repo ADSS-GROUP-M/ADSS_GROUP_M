@@ -2,6 +2,7 @@ package TransportModule.BusinessLayer;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.TreeMap;
 public class ItemListsController {
 
@@ -12,11 +13,13 @@ public class ItemListsController {
         itemLists = new TreeMap<>();
         idCounter = 0; // this will have to be restored from the DB in the future
     }
-    public ItemList createItemList(HashMap<String, Integer> loadingItems, HashMap<String, Integer> unloadingItems){
-        ItemList itemList = new ItemList(idCounter++, loadingItems, unloadingItems);
-        itemLists.put(itemList.getId(), itemList);
-        return itemList;
+    public void addItemList(ItemList itemList) throws IOException{
+        if(itemLists.containsKey(itemList.getId()) == true)
+            throw new IOException("Item list already exists");
+
+        itemLists.put(idCounter++, itemList);
     }
+
     public ItemList createItemList(String json){
         ItemList itemList = ItemList.parse(idCounter++,json);
         itemLists.put(itemList.getId(), itemList);
@@ -29,6 +32,7 @@ public class ItemListsController {
 
         return itemLists.get(id);
     }
+
     public ItemList removeItemList(int id) throws IOException {
         if (itemLists.containsKey(id) == false)
             throw new IOException("Item list not found");
@@ -42,5 +46,10 @@ public class ItemListsController {
         itemLists.put(id, newItemList);
     }
 
-
+    public LinkedList<ItemList> getAllItemLists() {
+        LinkedList<ItemList> list = new LinkedList<>();
+        for (ItemList i : itemLists.values())
+            list.add(i);
+        return list;
+    }
 }

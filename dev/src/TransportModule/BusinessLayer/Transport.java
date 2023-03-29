@@ -15,7 +15,7 @@ public class Transport {
     private int weight;
 
     public Transport(int id, Site source, LinkedList<Site> destinations, HashMap<Site,ItemList> itemLists,
-                     int truckId, int driverId, LocalDateTime scheduledTime/*, int weight*/){
+                     int truckId, int driverId, LocalDateTime scheduledTime, int weight){
         this.id = id;
         this.source = source;
         this.destinations = destinations;
@@ -23,7 +23,12 @@ public class Transport {
         this.truckId = truckId;
         this.driverId = driverId;
         this.scheduledTime = scheduledTime;
-//        this.weight = weight;
+        this.weight = weight;
+    }
+
+    public Transport(int id, Site source, LinkedList<Site> destinations, HashMap<Site,ItemList> itemLists,
+                     int truckId, int driverId, LocalDateTime scheduledTime){
+        this(id, source, destinations, itemLists, truckId, driverId, scheduledTime, 0);
     }
 
     public int getId() {
@@ -58,31 +63,4 @@ public class Transport {
         return weight;
     }
 
-    public void setSource(Site source) {
-        this.source = source;
-    }
-
-    public void setDestinations(LinkedList<Site> destinations) {
-        this.destinations = destinations;
-    }
-
-    public void setItemLists(HashMap<Site, ItemList> itemLists) {
-        this.itemLists = itemLists;
-    }
-
-    public void setTruckId(int truckId) {
-        this.truckId = truckId;
-    }
-
-    public void setDriverId(int driverId) {
-        this.driverId = driverId;
-    }
-
-    public void setScheduledTime(LocalDateTime scheduledTime) {
-        this.scheduledTime = scheduledTime;
-    }
-
-    public void setWeight(int weight) {
-        this.weight = weight;
-    }
 }

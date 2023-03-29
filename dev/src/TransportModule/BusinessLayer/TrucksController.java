@@ -1,39 +1,39 @@
 package TransportModule.BusinessLayer;
-import java.util.TreeSet;
+
+import java.io.IOException;
+import java.util.TreeMap;
+
 public class TrucksController {
-    TreeSet <Truck> trucks;
+    TreeMap<Integer,Truck> trucks;
+
     public TrucksController(){
-        trucks = new TreeSet<>();
+        trucks = new TreeMap<>();
     }
+
     public Truck createTruck(int id,String model, int baseWeight,int maxWeight){
         Truck truck = new Truck(id,model,baseWeight, maxWeight);
-        trucks.add(truck);
+        trucks.put(id,truck);
         return truck;
     }
-    public Truck removeTruck(int id) throws Exception {
-        Truck truck = getTruck(id);
-        if (truck != null) {
-            Truck removedTruck = truck;
-            trucks.remove(truck);
-            return removedTruck;
-        }
-        throw new Exception("Truck not found");
+
+    public Truck removeTruck(int id) throws IOException {
+        if (trucks.containsKey(id) == false)
+            throw new IOException("Truck not found");
+
+        return trucks.remove(id);
     }
-    public Truck getTruck(int id){
-        for (Truck truck : trucks) {
-            if (truck.getId() == id) {
-                return truck;
-            }
-        }
-       return null;
+    public Truck getTruck(int id) throws IOException {
+        if (trucks.containsKey(id) == false)
+            throw new IOException("Truck not found");
+
+        return trucks.get(id);
     }
-    public boolean updateTruck(int id, Truck newTruck){
-        Truck truck = getTruck(id);
-        if (truck != null) {
-            trucks.remove(truck);
-            trucks.add(newTruck);
-            return true;
-        }
-        return false;
+
+    public void updateTruck(int id, Truck newTruck) throws IOException{
+        if(trucks.containsKey(id) == false)
+            throw new IOException("Truck not found");
+
+        trucks.put(id, newTruck);
     }
+
 }

@@ -1,40 +1,47 @@
 package TransportModule.BusinessLayer;
-import java.util.TreeSet;
+
+import java.io.IOException;
+import java.util.LinkedList;
+import java.util.TreeMap;
+
 public class SitesController {
-    TreeSet <Site> sites;
+    TreeMap<String,Site> sites;
+
     public SitesController(){
-        sites = new TreeSet<>();
+        sites = new TreeMap<>();
     }
+
     public Site createSite(String transportZone, String address, String phoneNumber, String contactName){
         Site site = new Site(transportZone, address, phoneNumber, contactName);
-        sites.add(site);
+        sites.put(address,site);
         return site;
     }
-    public Site removeSite(String address) throws Exception {
-        Site site = getSite(address);
-        if (site != null) {
-            Site removedSite = site;
-            sites.remove(site);
-            return removedSite;
-        }
-        throw new Exception("Site not found");
+
+    public Site removeSite(String address) throws IOException {
+        if (sites.containsKey(address) == false)
+            throw new IOException("Site not found");
+
+        return sites.remove(address);
     }
-    public Site getSite(String address){
-        for (Site site : sites) {
-            if (site.getAddress().equals(address)) {
-                return site;
-            }
-        }
-        return null;
+    public Site getSite(String address) throws IOException {
+        if (sites.containsKey(address) == false)
+            throw new IOException("Site not found");
+
+        return sites.get(address);
     }
-    public boolean updateSite(String address, Site newSite){
-        Site site = getSite(address);
-        if (site != null) {
-            sites.remove(site);
-            sites.add(newSite);
-            return true;
-        }
-        return false;
+
+    public void updateSite(String address, Site newSite) throws IOException{
+        if(sites.containsKey(address) == false)
+            throw new IOException("Site not found");
+
+        sites.put(address, newSite);
+    }
+
+    public LinkedList<Site> getAllSites(){
+        LinkedList<Site> sitesList = new LinkedList<>();
+        for(Site site : sites.values())
+            sitesList.add(site);
+        return sitesList;
     }
 
 }

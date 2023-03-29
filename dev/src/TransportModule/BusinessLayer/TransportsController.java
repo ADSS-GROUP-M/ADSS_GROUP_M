@@ -42,4 +42,11 @@ public class TransportsController {
         transports.put(id, newTransport);
     }
 
+    public LinkedList<Transport> getAllTransports(){
+        LinkedList<Transport> list = new LinkedList<>();
+        for (Transport t : transports.values())
+            list.add(t);
+        return list;
+    }
+
 }

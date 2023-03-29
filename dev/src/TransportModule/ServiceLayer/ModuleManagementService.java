@@ -20,6 +20,10 @@ public class ModuleManagementService {
         return "";
     }
 
+    public String getAllDrivers(){
+        return "";
+    }
+
     public String addTruck(String json){
         return "";
     }
@@ -36,6 +40,10 @@ public class ModuleManagementService {
         return "";
     }
 
+    public String getAllTrucks(){
+        return "";
+    }
+
     public String addSite(String json){
         return "";
     }
@@ -49,6 +57,10 @@ public class ModuleManagementService {
     }
 
     public String getSite(String json){
+        return "";
+    }
+
+    public String getAllSites(){
         return "";
     }
 

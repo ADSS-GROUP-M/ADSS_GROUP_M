@@ -3,7 +3,7 @@ package TransportModule.BusinessLayer;
 import java.util.HashMap;
 import java.util.Objects;
 
-public class iteItemList {
+public class ItemList {
 
     private int id;
     private HashMap<String, Integer> loadingItems;

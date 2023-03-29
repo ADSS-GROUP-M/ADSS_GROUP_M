@@ -11,7 +11,10 @@ public class SitesController {
         sites = new TreeMap<>();
     }
 
-    public Site createSite(String transportZone, String address, String phoneNumber, String contactName){
+    public Site createSite(String transportZone, String address, String phoneNumber, String contactName) throws IOException {
+        if(sites.containsKey(address))
+            throw new IOException("Site already exists");
+
         Site site = new Site(transportZone, address, phoneNumber, contactName);
         sites.put(address,site);
         return site;

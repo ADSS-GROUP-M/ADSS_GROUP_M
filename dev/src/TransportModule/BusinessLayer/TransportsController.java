@@ -17,13 +17,15 @@ public class TransportsController {
     }
 
     public void addTransport(Transport transport)throws IOException{
+
+        //TODO: check if the transport is valid before adding it to the system
+        // **
+        // **
+        // **
+        // **
+
         transports.put(idCounter++, transport);
     }
-//    public Transport createTransport(Site source, LinkedList<Site> destinations, HashMap<Site,ItemList> itemList, int truckID, int DriverID, LocalDateTime date/* int Weight*/){
-//        Transport transport = new Transport(idCounter++, source, destinations, itemList, truckID, DriverID, date/*, Weight*/);
-//        transports.put(transport.getId(), transport);
-//        return transport;
-//    }
 
     public Transport getTransport(int id) throws IOException {
         if (transports.containsKey(id) == false)

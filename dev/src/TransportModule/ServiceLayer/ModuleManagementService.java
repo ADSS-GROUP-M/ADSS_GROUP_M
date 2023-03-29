@@ -11,9 +11,9 @@ public class ModuleManagementService {
     private SitesController sitesController;
 
     public ModuleManagementService(){
-        trucksController = new TrucksController();
-        driversController = new DriversController();
-        sitesController = new SitesController();
+        trucksController = BusinessFactory.getInstance().getTrucksController();
+        driversController = BusinessFactory.getInstance().getDriversController();
+        sitesController = BusinessFactory.getInstance().getSitesController();
     }
 
     public String addDriver(String json){

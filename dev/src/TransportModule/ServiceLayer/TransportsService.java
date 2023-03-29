@@ -10,7 +10,7 @@ public class TransportsService {
     private TransportsController tc;
 
     public TransportsService(){
-        tc = new TransportsController();
+        tc = BusinessFactory.getInstance().getTransportsController();
     }
 
     /**

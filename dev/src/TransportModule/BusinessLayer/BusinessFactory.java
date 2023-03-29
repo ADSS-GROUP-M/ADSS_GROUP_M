@@ -1,13 +1,23 @@
-package TransportModule.ServiceLayer;
+package TransportModule.BusinessLayer;
 
-import TransportModule.BusinessLayer.*;
+public class BusinessFactory {
 
-public class ServiceFactory {
+    private static BusinessFactory instance = null;
 
-    private static ServiceFactory instance = null;
-    
     private final TransportsController transportsController;
     private final SitesController sitesController;
+
+    private final DriversController driversController;
+
+    private final TrucksController trucksController;
+    private final ItemListsController itemListsController;
+    private BusinessFactory(){
+        transportsController = new TransportsController();
+        sitesController = new SitesController();
+        driversController = new DriversController();
+        trucksController = new TrucksController();
+        itemListsController = new ItemListsController();
+    }
 
     public TransportsController getTransportsController() {
         return transportsController;
@@ -29,21 +39,9 @@ public class ServiceFactory {
         return itemListsController;
     }
 
-    private final DriversController driversController;
-    private final TrucksController trucksController;
-    private final ItemListsController itemListsController;
-
-    private ServiceFactory(){
-        transportsController = new TransportsController();
-        sitesController = new SitesController();
-        driversController = new DriversController();
-        trucksController = new TrucksController();
-        itemListsController = new ItemListsController();
-    }
-
-    public static ServiceFactory getInstance(){
+    public static BusinessFactory getInstance(){
         if(instance == null){
-            instance = new ServiceFactory();
+            instance = new BusinessFactory();
         }
         return instance;
     }

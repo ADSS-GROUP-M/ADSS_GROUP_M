@@ -149,17 +149,17 @@ class JSONTest {
         siteItems.put(destination, itemList);
         Transport t2 = new Transport(1,source,sites,siteItems,1,1,dateTime);
 
-        assertEquals(t2.getId(), t.getId());
-        assertEquals(t2.getSource(), t.getSource());
-        assertEquals(t2.getDestinations().get(0), t.getDestinations().get(0));
-        assertEquals(t2.getDestinations().get(0).getSiteType(), t.getDestinations().get(0).getSiteType());
-        HashMap<Site, ItemList> siteItems2 = t.getItemLists();
-        assertEquals(siteItems2.get(destination).getId(), siteItems.get(destination).getId());
-        assertEquals(siteItems2.get(destination).getLoadingItems().get("itemToLoad"), siteItems.get(destination).getLoadingItems().get("itemToLoad"));
-        assertEquals(siteItems2.get(destination).getUnloadingItems().get("itemToUnload"), siteItems.get(destination).getUnloadingItems().get("itemToUnload"));
-        assertEquals(t2.getTruckId(), t.getTruckId());
-        assertEquals(t2.getDriverId(), t.getDriverId());
-        assertEquals(t2.getScheduledTime(), t.getScheduledTime());
-        assertEquals(t2.getWeight(), t.getWeight());
+        assertEquals(t2.id(), t.id());
+        assertEquals(t2.source(), t.source());
+        assertEquals(t2.destinations().get(0), t.destinations().get(0));
+        assertEquals(t2.destinations().get(0).siteType(), t.destinations().get(0).siteType());
+        HashMap<Site, ItemList> siteItems2 = t.itemLists();
+        assertEquals(siteItems2.get(destination).id(), siteItems.get(destination).id());
+        assertEquals(siteItems2.get(destination).unload().get("itemToLoad"), siteItems.get(destination).load().get("itemToLoad"));
+        assertEquals(siteItems2.get(destination).load().get("itemToUnload"), siteItems.get(destination).unload().get("itemToUnload"));
+        assertEquals(t2.id(), t.id());
+        assertEquals(t2.id(), t.id());
+        assertEquals(t2.scheduledTime(), t.scheduledTime());
+        assertEquals(t2.weight(), t.weight());
     }
 }

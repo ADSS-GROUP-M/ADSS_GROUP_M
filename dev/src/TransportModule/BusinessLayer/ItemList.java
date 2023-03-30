@@ -3,32 +3,11 @@ package TransportModule.BusinessLayer;
 import java.util.HashMap;
 import java.util.Objects;
 
-public class ItemList {
-
-    private int id;
-    private HashMap<String, Integer> loadingItems;
-    private HashMap<String, Integer> unloadingItems;
-
-    public ItemList(int id, HashMap<String, Integer> load,HashMap<String, Integer> unload){
-        this.id = id;
-        this.loadingItems = load;
-        this.unloadingItems = unload;
-    }
+public record ItemList (int id, HashMap<String, Integer> load,HashMap<String, Integer> unload) {
 
     public static ItemList parse(int i, String json){
+        //TODO: implement
         return null;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public HashMap<String, Integer> getLoadingItems() {
-        return loadingItems;
-    }
-
-    public HashMap<String, Integer> getUnloadingItems() {
-        return unloadingItems;
     }
 
     @Override

@@ -48,10 +48,10 @@ public class ItemListsManagement {
         System.out.println("=========================================");
         System.out.println("Item list ID: "+itemListIdCounter);
         System.out.println("Enter items details:");
-        System.out.println("To finish adding items, enter \"done\" in the item name");
+        System.out.println("To finish adding items, enter \"done!\" in the item name");
         while(true){
             String item = getString("Item name: ");
-            if(item.equalsIgnoreCase("done")){
+            if(item.equalsIgnoreCase("done!")){
                 break;
             }
             int quantity = getInt("Quantity: ");

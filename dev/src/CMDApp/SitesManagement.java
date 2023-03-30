@@ -96,12 +96,53 @@ public class SitesManagement {
     }
 
     private static void removeSite() {
+        while (true) {
+            System.out.println("=========================================");
+            System.out.println("Select site to remove:");
+            int siteId = pickSite(true);
+            if (siteId == -1) return;
+
+            //TODO: code for removing site
+
+            System.out.println("\nSite removed successfully!");
+        }
     }
 
     private static void getSite() {
+        while(true) {
+            System.out.println("=========================================");
+            System.out.println("Select site to view:");
+            //TODO: code for getting site
+
+            int siteId = pickSite(true);
+            if(siteId == -1) return;
+            System.out.println("=========================================");
+            System.out.println("Site details:");
+            System.out.println("Shipping zone: " + shippingZones[siteId]);
+            System.out.println("Address: " + sites[siteId]);
+            System.out.println("Contact name: " + sites[siteId]);
+            System.out.println("Contact phone: " + sites[siteId]);
+            System.out.println("=========================================");
+            System.out.println("Press enter to return to previous menu");
+            getString();
+        }
     }
 
     private static void getAllSites() {
+        System.out.println("=========================================");
+        System.out.println("All sites:");
+        //TODO: code for getting all sites
+
+        for(int i = 0; i < sites.length; i++){
+            System.out.println("Site " + i + ":");
+            System.out.println("Shipping zone: " + shippingZones[i]);
+            System.out.println("Address: " + sites[i]);
+            System.out.println("Contact name: " + sites[i]);
+            System.out.println("Contact phone: " + sites[i]);
+            System.out.println("-----------------------------------------");
+        }
+        System.out.println("Press enter to return to previous menu");
+        getString();
     }
 
 }

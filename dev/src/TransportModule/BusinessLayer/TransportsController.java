@@ -1,6 +1,7 @@
 package TransportModule.BusinessLayer;
 
 import TransportModule.BusinessLayer.Records.Transport;
+import TransportModule.BusinessLayer.Records.Truck;
 
 import java.io.IOException;
 import java.util.LinkedList;

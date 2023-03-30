@@ -1,12 +1,13 @@
 package TransportModule.BusinessLayer;
 
+import TransportModule.BusinessLayer.Records.ItemList;
+
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.TreeMap;
 public class ItemListsController {
 
-    private TreeMap<Integer,ItemList> itemLists;
+    private TreeMap<Integer, ItemList> itemLists;
     private int idCounter;
 
     public ItemListsController(){

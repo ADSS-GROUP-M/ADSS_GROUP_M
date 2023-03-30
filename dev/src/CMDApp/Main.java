@@ -37,7 +37,7 @@ public class Main {
 
         }
     }
-    
+
     private static void manageResources() {
         while(true){
             System.out.println("=========================================");
@@ -131,6 +131,14 @@ public class Main {
     private static int getOption() {
         System.out.print(">> ");
         int option = scanner.nextInt();
+        return option;
+    }
+    private static String getString(){
+        return getString("");
+    }
+    private static String getString(String defaultStr) {
+        System.out.print(">> ");
+        String option = scanner.next();
         return option;
     }
 

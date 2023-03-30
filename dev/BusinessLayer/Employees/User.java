@@ -1,6 +1,7 @@
 package dev.BusinessLayer.Employees;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 public class User {// this class manages authorization before accessing employee controller
@@ -68,7 +69,7 @@ public class User {// this class manages authorization before accessing employee
 		return this.isHrManager;
 	}
 
-    public String[] recruitEmployeeAndNewUser(String name, String id, int bankNumber, int branchNumber,  List<EmploymentConditions> employmentConditions, LocalDate employmentDate) throws Exception { // returns User details for new employee
+    public String[] recruitEmployeeAndNewUser(String name, String id, int bankNumber, int branchNumber,  List<String> employmentConditions, LocalDate employmentDate) throws Exception { // returns User details for new employee
         if(this.getIsHrManager()){
             BankDetails bd = new BankDetails(bankNumber, branchNumber);
            this.empController.recruitEmployee(name, id, bd, employmentConditions, employmentDate);
@@ -85,7 +86,7 @@ public class User {// this class manages authorization before accessing employee
             throw new Exception("This user isn't authorized to do this.");
     }
 
-    protected void recruitEmployeeWithoutUser(String name, String id, BankDetails bd, List<EmploymentConditions> ec, LocalDate employmentDate) throws Exception{ // returns User details for new employee
+    protected void recruitEmployeeWithoutUser(String name, String id, BankDetails bd, List<String> ec, LocalDate employmentDate) throws Exception{ // returns User details for new employee
         if(this.getIsHrManager()){
            this.empController.recruitEmployee(name, id, bd,ec, employmentDate);
         } 
@@ -102,19 +103,19 @@ public class User {// this class manages authorization before accessing employee
     }
 
     protected String getSystemTime(){
-        LocalDate d = Date.getCurrentDate();
-        Integer[] in = Date.getCurrentTime();
+        LocalDate d = LocalDate.now();
+        Integer[] in = new Integer[]{LocalTime.now().getHour(),LocalTime.now().getMinute()};
         String desc = "";
         desc = d.getYear() + "." + d.getMonth() + "." +d.getDayOfWeek() +" "+in[0]+":"+in[1];
         return desc;
     }
 
-    protected void setSystemTime(int year, int month, int day, int hour ,int minute)throws Exception{
-        if(this.isHrManager)
-            Date.setSystemTime(year, month, day, hour, minute);
-        else
-            throw new Exception("This user is not authorized to do this");
-    }
+//    protected void setSystemTime(int year, int month, int day, int hour ,int minute)throws Exception{
+//        if(this.isHrManager)
+//            Date.setSystemTime(year, month, day, hour, minute);
+//        else
+//            throw new Exception("This user is not authorized to do this");
+//    }
 
     public void signUpEmployeeToShift(String empId, String shiftTime, LocalDate shiftDate, String branchName, String role) throws Exception{ // employee to shift
         if(this.linkedEmployee == null  || !this.linkedEmployee.getId().equals(empId))

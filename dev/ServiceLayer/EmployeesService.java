@@ -23,14 +23,14 @@ public class EmployeesService {
         return instance;
     }
 
-    public Response<String> recruitEmployee(String username, String firstName, String lastName, String id, int bankNumber, int branchNumber, List<EmploymentConditions> employmentConditions, LocalDate employmentDate) {
+    public Response<String> recruitEmployee(String username, String firstName, String lastName, String id, int bankNumber, int branchNumber, List<String> employmentConditions, LocalDate employmentDate) {
         Response<User> userResponse = userService.getUser(username);
         if (userResponse.errorOccurred())
             return Response.createErrorResponse(userResponse.getErrorMessage());
         User user = userResponse.getReturnValue();
         try {
             String[] userDetails = user.recruitEmployeeAndNewUser(firstName + " " + lastName, id, bankNumber, branchNumber, employmentConditions, employmentDate);
-            String response = "Employee registered. User details for the new employee: \n username: " + userDetails[0] + " password: " + userDetails[1];
+            String response = "Employee registered. User details for the new employee: \nUsername: " + userDetails[0] + " Password: " + userDetails[1];
             return new Response<>(response);
         } catch (Exception e) {
             return Response.createErrorResponse(e.getMessage());

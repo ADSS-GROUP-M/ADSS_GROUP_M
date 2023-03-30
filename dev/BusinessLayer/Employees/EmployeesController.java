@@ -1,6 +1,7 @@
 package dev.BusinessLayer.Employees;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.*;
 
 import dev.BusinessLayer.Employees.Shift.ShiftTime;
@@ -20,7 +21,7 @@ public class EmployeesController {
         return instance;
     }
 
-    public void recruitEmployee(String name, String id, BankDetails bd, List<EmploymentConditions> ec, LocalDate employmentDate) {
+    public void recruitEmployee(String name, String id, BankDetails bd, List<String> ec, LocalDate employmentDate) {
             Employee emp = new Employee(name,id,bd,ec, employmentDate);
             this.employees.put(id, emp);
     }
@@ -91,7 +92,7 @@ public class EmployeesController {
         for(Branch b: Branch.getAllBranches()){
             Integer[] mor = b.getWorkingHours(ShiftTime.MORNING);
             Integer[] eve = b.getWorkingHours(ShiftTime.EVENING);
-            Integer[] cur = Date.getCurrentTime();
+            Integer[] cur = new Integer[]{LocalTime.now().getHour(), LocalTime.now().getMinute()};
             ShiftTime st = null;
             if(cur[0]>=mor[0] && cur[0]<mor[1])
                 st = ShiftTime.MORNING;
@@ -150,7 +151,7 @@ public class EmployeesController {
     }
 
     private LocalDate getDate(int year, int month, int day) throws Exception{
-       LocalDate d = Date.getInstance(LocalDate.of(year,month,day));
+       LocalDate d = LocalDate.of(year,month,day);
        if(d == null)
           throw new Exception("invalid date!");
         return d;

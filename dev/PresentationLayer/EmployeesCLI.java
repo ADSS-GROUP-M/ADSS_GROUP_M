@@ -1,6 +1,7 @@
 package dev.PresentationLayer;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.*;
 
 import dev.BusinessLayer.Employees.EmploymentConditions;
@@ -13,7 +14,7 @@ public class EmployeesCLI {
     private static UserService userService;
     private static EmployeesService employeesService;
     private static String loggedUsername;
-    private static final String DATE_PATTERN = "DD/MM/YYYY";
+    private static final String DATE_PATTERN = "d/M/yyyy";
 
     private static void initialize() {
         scanner = new Scanner(System.in);
@@ -34,7 +35,6 @@ public class EmployeesCLI {
      */
     public static void main(String[] args) {
         initialize();
-        boolean loggedIn = false;
         boolean finish = false;
         System.out.println("Welcome to the Employees CLI, please log in to the system. (Usage: `login <username> <password>`)");
         while (!finish) {
@@ -47,7 +47,7 @@ public class EmployeesCLI {
                 output = "Exiting CLI.";
                 finish = true;
             }
-            else if (!loggedIn) {
+            else if (loggedUsername == null) {
                 if (!command[0].equals("login"))
                     output = "You must log in to the system before using it. (Usage: `login <username> <password>`)";
                 else if (command.length != 3)
@@ -59,12 +59,13 @@ public class EmployeesCLI {
                     else if (response.getReturnValue() == true) {
                         output = "Login successful.";
                         loggedUsername = command[1];
-                        loggedIn = true;
                     }
                     else
                         output = "Login failed.";
                 }
             }
+            else if (command[0].equals("login"))
+                output = "You are already logged in to the system.";
             else if (command[0].equals("logout") && command.length == 1) {
                 Response<Boolean> response = userService.logout(loggedUsername);
                 if (response.errorOccurred())
@@ -84,11 +85,11 @@ public class EmployeesCLI {
                     int bankNumber = Integer.parseInt(command[4]);
                     int branchNumber = Integer.parseInt(command[5]);
                     LocalDate employmentDate = LocalDate.parse(command[7], DateTimeFormatter.ofPattern(DATE_PATTERN));
-                    List<EmploymentConditions> employmentConditions = new ArrayList<>();
+                    List<String> employmentConditions = new ArrayList<>();
                     if (!command[6].toLowerCase().equals("none")) {
                         String[] conditions = command[6].split(",", -1);
                         for (String str : conditions) {
-                            employmentConditions.add(EmploymentConditions.valueOf(str));
+                            employmentConditions.add(str);
                         }
                     }
 
@@ -100,6 +101,8 @@ public class EmployeesCLI {
 
                 } catch (NumberFormatException e) {
                     output = "Invalid input, expected an integer value. " + e.getMessage();
+                } catch (DateTimeParseException e) {
+                    output = "Invalid input, expected a date in the form " + DATE_PATTERN + ".";
                 }
             }
             else if (command[0].equals("register_shift") && command.length == 6) {

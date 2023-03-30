@@ -11,7 +11,7 @@ class Employee{
    private String id;
    private BankDetails bankAccount;
    private int salary;
-   private List<EmploymentConditions> empConditions;
+   private List<String> empConditions;
    private LocalDate employmentDate;
    private Constraints workingConstraints;
    private boolean isFired;
@@ -115,7 +115,7 @@ class Employee{
 
   
 
-   public Employee(String name, String id, BankDetails bd, List<EmploymentConditions> ec, LocalDate employmentDate){
+   public Employee(String name, String id, BankDetails bd, List<String> ec, LocalDate employmentDate){
       this.name = name;
       this.id = id;
       this.bankAccount = bd;
@@ -153,7 +153,7 @@ class Employee{
    public String toString(){
       
       String legalityWarning = "";
-        if(!this.workingConstraints.checkScheduleLegality(LocalDate.now(), Date.getInstance(LocalDate.now().plusYears(1))))
+        if(!this.workingConstraints.checkScheduleLegality(LocalDate.now(), LocalDate.now().plusYears(1)))
             legalityWarning = "WARNING! shift does'nt meet constraints!";
       return "UNFINISHED";
    }

@@ -1,12 +1,14 @@
 package TransportModule.BusinessLayer;
 
+import TransportModule.BusinessLayer.Records.Truck;
+
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.TreeMap;
 
 public class TrucksController {
 
-    TreeMap<Integer,Truck> trucks;
+    TreeMap<Integer, Truck> trucks;
 
     public TrucksController(){
         trucks = new TreeMap<>();

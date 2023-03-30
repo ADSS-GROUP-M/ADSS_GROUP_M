@@ -1,8 +1,8 @@
 package TransportModuleTest.ServiceLayerTest;
 
-import TransportModule.BusinessLayer.ItemList;
-import TransportModule.BusinessLayer.Site;
-import TransportModule.BusinessLayer.Transport;
+import TransportModule.BusinessLayer.Records.ItemList;
+import TransportModule.BusinessLayer.Records.Site;
+import TransportModule.BusinessLayer.Records.Transport;
 import TransportModule.ServiceLayer.JSON;
 
 import java.time.LocalDateTime;

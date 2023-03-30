@@ -1,6 +1,6 @@
 package TransportModule.ServiceLayer;
 
-import TransportModule.BusinessLayer.ItemList;
+import TransportModule.BusinessLayer.Records.ItemList;
 import TransportModule.BusinessLayer.ItemListsController;
 
 public class ItemListsService {

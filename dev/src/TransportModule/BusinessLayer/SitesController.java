@@ -1,11 +1,13 @@
 package TransportModule.BusinessLayer;
 
+import TransportModule.BusinessLayer.Records.Site;
+
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.TreeMap;
 
 public class SitesController {
-    TreeMap<String,Site> sites;
+    TreeMap<String, Site> sites;
 
     public SitesController(){
         sites = new TreeMap<>();

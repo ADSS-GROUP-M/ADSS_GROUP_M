@@ -1,4 +1,4 @@
-package TransportModule.BusinessLayer;
+package CMDApp.Records;
 
 import java.util.HashMap;
 import java.util.Objects;

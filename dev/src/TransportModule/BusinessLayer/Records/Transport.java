@@ -1,4 +1,4 @@
-package TransportModule.BusinessLayer;
+package TransportModule.BusinessLayer.Records;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;

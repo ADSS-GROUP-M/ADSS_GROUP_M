@@ -2,8 +2,7 @@ package CMDApp;
 
 import java.util.HashMap;
 
-import static CMDApp.Main.getInt;
-import static CMDApp.Main.getString;
+import static CMDApp.Main.*;
 
 public class ItemListsManagement {
 
@@ -45,7 +44,23 @@ public class ItemListsManagement {
     }
 
     private static void createItemList() {
+        HashMap<String,Integer> items = new HashMap<>();
+        System.out.println("=========================================");
+        System.out.println("Item list ID: "+itemListIdCounter);
+        System.out.println("Enter items details:");
+        System.out.println("To finish adding items, enter \"done\" in the item name");
+        while(true){
+            String item = getString("Item name: ");
+            if(item.equalsIgnoreCase("done")){
+                break;
+            }
+            int quantity = getInt("Quantity: ");
+            items.put(item,quantity);
+        }
+        //TODO: code for adding item list
 
+        System.out.println("\nItem list added successfully!");
+        itemListIdCounter++;
     }
 
     private static void updateItemList() {

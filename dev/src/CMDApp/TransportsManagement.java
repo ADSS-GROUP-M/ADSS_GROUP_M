@@ -50,26 +50,44 @@ public class TransportsManagement {
     }
 
     private static void createTransport() {
+
         System.out.println("=========================================");
         System.out.println("Transport ID: "+transportIdCounter);
         System.out.println("Enter transport details:");
+
+        // date/time
+        LocalDate departureDate = LocalDate.parse(getString("Departure date (format: yyyy-mm-dd): "));
+        LocalTime departureTime = LocalTime.parse(getString("Departure time (format: hh:mm): "));
+
+        // driver
+        System.out.println("Driver: ");
+        String driver = drivers[pickDriver(false)];
+
+        // truck
+        System.out.println("Truck: ");
+        String truck = trucks[pickTruck(false)];
+
+        // source
         System.out.println("Source: ");
         String source = sites[pickSite(false)];
+
+        //========== destinations and items lists ================|
         int destinationId = 1;
         LinkedList<String> destinations = new LinkedList<>();
-        LinkedList<HashMap<String,Integer>> itemsList = new LinkedList<>();
-        System.out.println("=========================================");
+        LinkedList<Integer> itemsList = new LinkedList<>();
+        System.out.println("Pick destinations and items lists:");
         while(true){
             System.out.println("Destination number "+destinationId+": ");
             int option = pickSite(true);
             if(option == -1) break;
             int listId = getInt("Items list id: ");
-            //TODO: code for adding items list
+            itemsList.add(listId);
             destinations.add(sites[option]);
             destinationId++;
         }
-        LocalDate departureDate = LocalDate.parse(getString("Departure date (format: yyyy-mm-dd): "));
-        LocalTime departureTime = LocalTime.parse(getString("Departure time (format: hh:mm): "));
+        //========================================================|
+
+        //weight
         int truckWeight = getInt("Truck weight: ");
 
         //TODO: code for adding transport

@@ -14,6 +14,7 @@ public class Main {
     static ModuleFactory factory = ModuleFactory.getInstance();
     static Scanner scanner = new Scanner(System.in);
     static int transportIdCounter = 1;
+    static int itemListIdCounter = 1;
     static String[] shippingZones = {"North", "South", "East", "West"};
     static String[] sites = {"Site1", "Site2", "Site3", "Site4"};
     static String[] drivers = {"Driver1", "Driver2", "Driver3", "Driver4"};
@@ -27,8 +28,8 @@ public class Main {
             System.out.println("Welcome to the Transport Module!");
             System.out.println("Please select an option:");
             System.out.println("1. Manage transports");
-            System.out.println("2. Manage transport module resources");
-            System.out.println("3. Manage item lists");
+            System.out.println("2. Manage item lists");
+            System.out.println("3. Manage transport module resources");
             System.out.println("4. Exit");
             int option = getInt();
             switch (option){
@@ -36,10 +37,10 @@ public class Main {
                     manageTransports();
                     break;
                 case 2:
-                    manageResources();
+                    manageItemLists();
                     break;
                 case 3:
-                    manageItemLists();
+                    manageResources();
                     break;
                 case 4:
                     System.exit(0);
@@ -122,6 +123,38 @@ public class Main {
             return pickSite(allowDone);
         }
         if(allowDone && option == sites.length) return -1;
+        return option;
+    }
+
+    static int pickDriver(boolean allowDone) {
+        int i = 1;
+        for(String driver : drivers){
+            System.out.println((i++)+". "+driver);
+        }
+        if(allowDone) System.out.println(i+". Done");
+        int option = getInt()-1;
+        if( (allowDone && (option < 0 || option > drivers.length))
+                || (!allowDone && (option < 0 || option > drivers.length-1))){
+            System.out.println("Invalid option!");
+            return pickDriver(allowDone);
+        }
+        if(allowDone && option == drivers.length) return -1;
+        return option;
+    }
+
+    static int pickTruck(boolean allowDone) {
+        int i = 1;
+        for(String truck : trucks){
+            System.out.println((i++)+". "+truck);
+        }
+        if(allowDone) System.out.println(i+". Done");
+        int option = getInt()-1;
+        if( (allowDone && (option < 0 || option > trucks.length))
+                || (!allowDone && (option < 0 || option > trucks.length-1))){
+            System.out.println("Invalid option!");
+            return pickTruck(allowDone);
+        }
+        if(allowDone && option == trucks.length) return -1;
         return option;
     }
 }

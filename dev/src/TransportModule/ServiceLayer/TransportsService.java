@@ -9,8 +9,8 @@ public class TransportsService {
 
     private final TransportsController tc;
 
-    public TransportsService(){
-        tc = BusinessFactory.getInstance().getTransportsController();
+    public TransportsService(TransportsController tc, ItemListsController itemListsController){
+        this.tc = tc;
     }
 
     /**

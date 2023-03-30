@@ -4,16 +4,16 @@ import TransportModule.BusinessLayer.*;
 
 import java.io.IOException;
 
-public class ModuleManagementService {
+public class ResourceManagementService {
 
-    private final TrucksController trucksController;
-    private final DriversController driversController;
     private final SitesController sitesController;
+    private final DriversController driversController;
+    private final TrucksController trucksController;
 
-    public ModuleManagementService(){
-        trucksController = BusinessFactory.getInstance().getTrucksController();
-        driversController = BusinessFactory.getInstance().getDriversController();
-        sitesController = BusinessFactory.getInstance().getSitesController();
+    public ResourceManagementService(SitesController sitesController, DriversController driversController, TrucksController trucksController) {
+        this.sitesController = sitesController;
+        this.driversController = driversController;
+        this.trucksController = trucksController;
     }
 
     public String addDriver(String json){

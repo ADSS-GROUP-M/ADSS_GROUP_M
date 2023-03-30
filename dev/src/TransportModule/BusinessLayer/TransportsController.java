@@ -8,10 +8,11 @@ import java.util.TreeMap;
 
 public class TransportsController {
 
+    private TrucksController tc;
     private TreeMap<Integer,Transport> transports;
     private int idCounter;
 
-    public TransportsController(){
+    public TransportsController(TrucksController tc){
         transports = new TreeMap<>();
         idCounter = 0; // this will have to be restored from the DB in the future
     }
@@ -53,10 +54,8 @@ public class TransportsController {
 
     private void validateTransport(Transport transport) throws IOException{
         int weight = transport.getWeight();
-        TrucksController tc = BusinessFactory.getInstance().getTrucksController();
         Truck truck = tc.getTruck(transport.getTruckId());
         if (truck.getMaxWeight() < weight)
             throw new IOException("The truck's maximum weight has been exceeded");
     }
-
 }

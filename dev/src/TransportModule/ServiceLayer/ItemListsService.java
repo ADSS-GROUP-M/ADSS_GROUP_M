@@ -1,20 +1,19 @@
 package TransportModule.ServiceLayer;
 
-import TransportModule.BusinessLayer.BusinessFactory;
 import TransportModule.BusinessLayer.ItemList;
 import TransportModule.BusinessLayer.ItemListsController;
 
 public class ItemListsService {
-    private final ItemListsController itemListsController;
+    private final ItemListsController ilc;
 
-    public ItemListsService(){
-        itemListsController = BusinessFactory.getInstance().getItemListsController();
+    public ItemListsService(ItemListsController ilc){
+        this.ilc = ilc;
     }
 
     public String addItemList(String json){
         ItemList itemList = JSON.deserialize(json, ItemList.class);
         try{
-            itemListsController.addItemList(itemList);
+            ilc.addItemList(itemList);
         }catch(Exception e){
             return new Response(e.getMessage(), false).getJson();
         }
@@ -24,7 +23,7 @@ public class ItemListsService {
     public String removeItemList(String json){
         ItemList itemList = JSON.deserialize(json, ItemList.class);
         try{
-            itemListsController.removeItemList(itemList.getId());
+            ilc.removeItemList(itemList.getId());
         }catch(Exception e){
             return new Response(e.getMessage(), false).getJson();
         }
@@ -34,7 +33,7 @@ public class ItemListsService {
     public String updateItemList(String json){
         ItemList itemList = JSON.deserialize(json, ItemList.class);
         try{
-            itemListsController.updateItemList(itemList.getId(), itemList);
+            ilc.updateItemList(itemList.getId(), itemList);
         }catch(Exception e){
             return new Response(e.getMessage(), false).getJson();
         }
@@ -44,7 +43,7 @@ public class ItemListsService {
     public String getItemList(String json){
         ItemList itemList = JSON.deserialize(json, ItemList.class);
         try{
-            itemList = itemListsController.getItemList(itemList.getId());
+            itemList = ilc.getItemList(itemList.getId());
         }catch(Exception e){
             return new Response(e.getMessage(), false).getJson();
         }
@@ -52,7 +51,7 @@ public class ItemListsService {
     }
 
     public String getAllItemLists(){
-        return new Response("Item lists found successfully", true, itemListsController.getAllItemLists()).getJson();
+        return new Response("Item lists found successfully", true, ilc.getAllItemLists()).getJson();
     }
 
 }

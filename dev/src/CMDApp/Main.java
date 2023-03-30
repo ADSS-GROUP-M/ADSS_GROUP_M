@@ -26,7 +26,8 @@ public class Main {
             System.out.println("Please select an option:");
             System.out.println("1. Manage transports");
             System.out.println("2. Manage transport module resources");
-            System.out.println("3. Exit");
+            System.out.println("3. Manage item lists");
+            System.out.println("4. Exit");
             int option = getInt();
             switch (option){
                 case 1:
@@ -36,6 +37,9 @@ public class Main {
                     manageResources();
                     break;
                 case 3:
+                    manageItemLists();
+                    break;
+                case 4:
                     System.exit(0);
                     break;
                 default:
@@ -44,6 +48,63 @@ public class Main {
             }
 
         }
+    }
+
+    private static void manageItemLists() {
+        while(true){
+            System.out.println("=========================================");
+            System.out.println("Item lists management");
+            System.out.println("Please select an option:");
+            System.out.println("1. Create new item list");
+            System.out.println("2. Update item list");
+            System.out.println("3. Remove item list");
+            System.out.println("4. View full item list information");
+            System.out.println("5. View all item lists");
+            System.out.println("6. Return to previous menu");
+            int option = getInt();
+            switch (option){
+                case 1:
+                    createItemList();
+                    break;
+                case 2:
+                    updateItemList();
+                    break;
+                case 3:
+                    removeItemList();
+                    break;
+                case 4:
+                    viewItemList();
+                    break;
+                case 5:
+                    viewAllItemLists();
+                    break;
+                case 6:
+                    return;
+                default:
+                    System.out.println("Invalid option!");
+                    continue;
+            }
+        }
+    }
+
+    private static void createItemList() {
+        
+    }
+
+    private static void updateItemList() {
+
+    }
+
+    private static void removeItemList() {
+
+    }
+
+    private static void viewItemList() {
+
+    }
+
+    private static void viewAllItemLists() {
+
     }
 
     private static void manageResources() {

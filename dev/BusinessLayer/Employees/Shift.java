@@ -1,5 +1,7 @@
 package dev.BusinessLayer.Employees;
 
+import dev.Utils.DateUtils;
+
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
@@ -75,7 +77,7 @@ public class Shift {
     }
 
     public boolean registerEmployee(ShiftTime st, LocalDate d, Branch br, Employee e, List<Role> roles){
-        LocalDate[] week = Date.getWeekDates(d);
+        LocalDate[] week = DateUtils.getWeekDates(d);
         Shift s = getInstance(st, d, br);
         s.employees.put(e, roles);
         if(!e.checkLegality(week[0],week[1])){

@@ -5,7 +5,7 @@ import java.util.Calendar;
 import java.util.List;
 
 
-public class Date {
+public class Date { // This class is deprecated, The implementation has moved to use java's LocalDate, and our DateUtils class for one static method (getWeekDays)
     private final int YEAR;
     private final int MONTH;
     private final int DAY;

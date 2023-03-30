@@ -12,8 +12,8 @@ public class SitesController {
     }
 
     public void addSite(Site site) throws IOException {
-        if (sites.containsKey(site.getAddress()) == false)
-            sites.put(site.getAddress(), site);
+        if (sites.containsKey(site.address()) == false)
+            sites.put(site.address(), site);
         else throw new IOException("Site already exists");
     }
 

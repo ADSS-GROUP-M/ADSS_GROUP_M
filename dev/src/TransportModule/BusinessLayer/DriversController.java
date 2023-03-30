@@ -12,8 +12,8 @@ public class DriversController {
     }
 
     public void addDriver(Driver driver) throws IOException{
-        if (drivers.containsKey(driver.getId()) == false)
-            drivers.put(driver.getId(), driver);
+        if (drivers.containsKey(driver.id()) == false)
+            drivers.put(driver.id(), driver);
         else throw new IOException("Driver already exists");
     }
 

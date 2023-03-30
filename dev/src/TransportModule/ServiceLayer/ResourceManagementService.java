@@ -29,7 +29,7 @@ public class ResourceManagementService {
     public String removeDriver(String json){
         Driver driver = JSON.deserialize(json, Driver.class);
         try{
-            driversController.removeDriver(driver.getId());
+            driversController.removeDriver(driver.id());
         }catch(IOException e){
             return new Response(e.getMessage(), false).getJson();
         }
@@ -39,7 +39,7 @@ public class ResourceManagementService {
     public String updateDriver(String json){
         Driver driver = JSON.deserialize(json, Driver.class);
         try{
-            driversController.updateDriver(driver.getId(), driver);
+            driversController.updateDriver(driver.id(), driver);
         }catch(IOException e){
             return new Response(e.getMessage(), false).getJson();
         }
@@ -49,7 +49,7 @@ public class ResourceManagementService {
     public String getDriver(String json){
         Driver driver = JSON.deserialize(json, Driver.class);
         try{
-            driver = driversController.getDriver(driver.getId());
+            driver = driversController.getDriver(driver.id());
         }catch(Exception e){
             return new Response(e.getMessage(), false).getJson();
         }
@@ -73,7 +73,7 @@ public class ResourceManagementService {
     public String removeTruck(String json){
         Truck truck = JSON.deserialize(json, Truck.class);
         try{
-            trucksController.removeTruck(truck.getId());
+            trucksController.removeTruck(truck.id());
         }catch(IOException e){
             return new Response(e.getMessage(), false).getJson();
         }
@@ -83,7 +83,7 @@ public class ResourceManagementService {
     public String updateTruck(String json){
         Truck truck = JSON.deserialize(json, Truck.class);
         try{
-            trucksController.updateTruck(truck.getId(), truck);
+            trucksController.updateTruck(truck.id(), truck);
         }catch(IOException e){
             return new Response(e.getMessage(), false).getJson();
         }
@@ -93,7 +93,7 @@ public class ResourceManagementService {
     public String getTruck(String json){
         Truck truck = JSON.deserialize(json, Truck.class);
         try{
-            truck = trucksController.getTruck(truck.getId());
+            truck = trucksController.getTruck(truck.id());
         }catch(Exception e){
             return new Response(e.getMessage(), false).getJson();
         }
@@ -117,7 +117,7 @@ public class ResourceManagementService {
     public String removeSite(String json){
         Site site = JSON.deserialize(json, Site.class);
         try{
-            sitesController.removeSite(site.getAddress());
+            sitesController.removeSite(site.address());
         }catch(IOException e){
             return new Response(e.getMessage(), false).getJson();
         }
@@ -127,7 +127,7 @@ public class ResourceManagementService {
     public String updateSite(String json){
         Site site = JSON.deserialize(json, Site.class);
         try{
-            sitesController.updateSite(site.getAddress(), site);
+            sitesController.updateSite(site.address(), site);
         }catch(IOException e){
             return new Response(e.getMessage(), false).getJson();
         }
@@ -137,7 +137,7 @@ public class ResourceManagementService {
     public String getSite(String json){
         Site site = JSON.deserialize(json, Site.class);
         try{
-            site = sitesController.getSite(site.getAddress());
+            site = sitesController.getSite(site.address());
         }catch(Exception e){
             return new Response(e.getMessage(), false).getJson();
         }

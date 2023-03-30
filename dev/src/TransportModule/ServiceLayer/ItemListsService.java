@@ -23,7 +23,7 @@ public class ItemListsService {
     public String removeItemList(String json){
         ItemList itemList = JSON.deserialize(json, ItemList.class);
         try{
-            ilc.removeItemList(itemList.getId());
+            ilc.removeItemList(itemList.id());
         }catch(Exception e){
             return new Response(e.getMessage(), false).getJson();
         }
@@ -33,7 +33,7 @@ public class ItemListsService {
     public String updateItemList(String json){
         ItemList itemList = JSON.deserialize(json, ItemList.class);
         try{
-            ilc.updateItemList(itemList.getId(), itemList);
+            ilc.updateItemList(itemList.id(), itemList);
         }catch(Exception e){
             return new Response(e.getMessage(), false).getJson();
         }
@@ -43,7 +43,7 @@ public class ItemListsService {
     public String getItemList(String json){
         ItemList itemList = JSON.deserialize(json, ItemList.class);
         try{
-            itemList = ilc.getItemList(itemList.getId());
+            itemList = ilc.getItemList(itemList.id());
         }catch(Exception e){
             return new Response(e.getMessage(), false).getJson();
         }

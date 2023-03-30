@@ -13,8 +13,8 @@ public class TrucksController {
     }
 
     public void addTruck(Truck truck) throws IOException {
-        if (trucks.containsKey(truck.getId()) == false)
-            trucks.put(truck.getId(), truck);
+        if (trucks.containsKey(truck.id()) == false)
+            trucks.put(truck.id(), truck);
         else throw new IOException("Truck already exists");
     }
 

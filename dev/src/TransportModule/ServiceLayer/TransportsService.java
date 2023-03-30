@@ -79,7 +79,7 @@ public class TransportsService {
         Transport transport = JSON.deserialize(json, Transport.class);
         try
         {
-            tc.updateTransport(transport.getId(), transport);
+            tc.updateTransport(transport.id(), transport);
         }
         catch(IOException e){
             return new Response<String>(e.getMessage(), false, "").getJson();
@@ -91,7 +91,7 @@ public class TransportsService {
         Transport transport = JSON.deserialize(json, Transport.class);
         try
         {
-            tc.removeTransport(transport.getId());
+            tc.removeTransport(transport.id());
         }
         catch(IOException e){
             return new Response<String>(e.getMessage(), false, "").getJson();
@@ -103,7 +103,7 @@ public class TransportsService {
         Transport transport = JSON.deserialize(json, Transport.class);
         try
         {
-            transport = tc.getTransport(transport.getId());
+            transport = tc.getTransport(transport.id());
         }
         catch(IOException e){
             return new Response<String>(e.getMessage(), false, "").getJson();

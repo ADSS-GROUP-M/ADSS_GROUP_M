@@ -1,5 +1,6 @@
 package CMDApp;
 
+import TransportModule.BusinessLayer.Records.ItemList;
 import TransportModule.ServiceLayer.*;
 import java.util.*;
 
@@ -19,6 +20,7 @@ public class Main {
     static String[] sites = {"Site1", "Site2", "Site3", "Site4"};
     static String[] drivers = {"Driver1", "Driver2", "Driver3", "Driver4"};
     static String[] trucks = {"Truck1", "Truck2", "Truck3", "Truck4"};
+    static ItemList itemList1 = new ItemList(itemListIdCounter++, new HashMap<>(Map.of("item1", 10, "item2", 20, "item3", 30)), new HashMap<>(Map.of("item4", 10, "item5", 20, "item6", 30)));
 
 
     public static void main(String[] args) {

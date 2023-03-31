@@ -87,24 +87,41 @@ public class SitesManagement {
                         String contactPhone = getString("Contact phone: ");
                         break;
                     case 5:
-                        break;
+                        return;
                 }
-
                 //TODO: code for updating site
+                System.out.println("\nSite updated successfully!");
+                break;
             }
         }
     }
 
     private static void removeSite() {
-        while (true) {
+        while(true) {
             System.out.println("=========================================");
             System.out.println("Select site to remove:");
             int siteId = pickSite(true);
             if (siteId == -1) return;
-
-            //TODO: code for removing site
-
-            System.out.println("\nSite removed successfully!");
+            System.out.println("=========================================");
+            System.out.println("Site details:");
+            System.out.println("Shipping zone: " + shippingZones[siteId]);
+            System.out.println("Address: " + sites[siteId]);
+            System.out.println("Contact name: " + sites[siteId]);
+            System.out.println("Contact phone: " + sites[siteId]);
+            System.out.println("=========================================");
+            System.out.println("Are you sure you want to remove this site? (y/n)");
+            String option = getString();
+            switch (option) {
+                case "y":
+                    //TODO: code for removing site
+                    System.out.println("\nSite removed successfully!");
+                    break;
+                case "n":
+                    break;
+                default:
+                    System.out.println("Invalid option!");
+                    continue;
+            }
         }
     }
 

@@ -1,18 +1,17 @@
 package CMDApp;
 
-import CMDApp.Records.Site;
-import CMDApp.Records.ItemList;
-import CMDApp.Records.Transport;
-import CMDApp.Records.Truck;
+import CMDApp.Records.*;
 import TransportModule.ServiceLayer.ModuleFactory;
 
 import java.time.LocalDateTime;
 import java.util.*;
 
+import static CMDApp.DriversManagement.fetchDrivers;
 import static CMDApp.DriversManagement.manageDrivers;
 import static CMDApp.ItemListsManagement.manageItemLists;
 import static CMDApp.SitesManagement.manageSites;
 import static CMDApp.TransportsManagement.manageTransports;
+import static CMDApp.TrucksManagement.fetchTrucks;
 import static CMDApp.TrucksManagement.manageTrucks;
 
 public class Main {
@@ -23,8 +22,8 @@ public class Main {
     static int itemListIdCounter = 1;
     static String[] shippingZones = {"North", "South", "East", "West"};
     static String[] sites = {"Site1", "Site2", "Site3", "Site4"};
-    static String[] drivers = {"Driver1", "Driver2", "Driver3", "Driver4"};
-    static String[] trucks = {"Truck1", "Truck2", "Truck3", "Truck4"};
+//    static String[] drivers = {"Driver1", "Driver2", "Driver3", "Driver4"};
+//    static String[] trucks = {"Truck1", "Truck2", "Truck3", "Truck4"};
     static ItemList itemList1 = new ItemList(
             itemListIdCounter++,
             new HashMap<>(Map.of("item1", 10, "item2", 20, "item3", 30)),
@@ -47,6 +46,16 @@ public class Main {
             LocalDateTime.of(2021, 1, 1, 1, 1)
     );
 
+
+
+    static HashMap<Integer, Driver> drivers = null;
+    {
+        fetchDrivers();
+    }
+    static HashMap<Integer, Truck> trucks = null;
+    {
+        fetchTrucks();
+    }
 
     public static void main(String[] args) {
 
@@ -109,10 +118,10 @@ public class Main {
         }
     }
 
+
     //==========================================================================|
     //============================== HELPER METHODS ============================|
     //==========================================================================|
-
     static int getInt(){
         return getInt(">> ");
     }
@@ -155,34 +164,40 @@ public class Main {
 
     static int pickDriver(boolean allowDone) {
         int i = 1;
-        for(String driver : drivers){
-            System.out.println((i++)+". "+driver);
+        Driver[] driverArray = new Driver[drivers.size()];
+        for(Driver driver : drivers.values()){
+            System.out.println((i)+". "+driver.name()+", license type: "+driver.licenseType());
+            driverArray[i-1] = driver;
+            i++;
         }
         if(allowDone) System.out.println(i+". Done");
         int option = getInt()-1;
-        if( (allowDone && (option < 0 || option > drivers.length))
-                || (!allowDone && (option < 0 || option > drivers.length-1))){
+        if( (allowDone && (option < 0 || option > drivers.size()))
+                || (!allowDone && (option < 0 || option > drivers.size()-1))){
             System.out.println("Invalid option!");
             return pickDriver(allowDone);
         }
-        if(allowDone && option == drivers.length) return -1;
-        return option;
+        if(allowDone && option == drivers.size()) return -1;
+        return driverArray[option].id();
     }
 
     static int pickTruck(boolean allowDone) {
         int i = 1;
-        for(String truck : trucks){
-            System.out.println((i++)+". "+truck);
+        Truck[] truckArray = new Truck[trucks.size()];
+        for(Truck truck : trucks.values()){
+            System.out.println((i)+". "+"License plate: "+truck.id()+"model: "+truck.model()+", max weight: "+truck.maxWeight());
+            truckArray[i-1] = truck;
+            i++;
         }
         if(allowDone) System.out.println(i+". Done");
         int option = getInt()-1;
-        if( (allowDone && (option < 0 || option > trucks.length))
-                || (!allowDone && (option < 0 || option > trucks.length-1))){
+        if( (allowDone && (option < 0 || option > trucks.size()))
+                || (!allowDone && (option < 0 || option > trucks.size()-1))){
             System.out.println("Invalid option!");
             return pickTruck(allowDone);
         }
-        if(allowDone && option == trucks.length) return -1;
-        return option;
+        if(allowDone && option == trucks.size()) return -1;
+        return truckArray[option].id();
     }
 }
 

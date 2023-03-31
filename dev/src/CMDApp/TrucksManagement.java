@@ -135,4 +135,7 @@ public class TrucksManagement {
 
     }
 
+    static void fetchTrucks() {
+    }
+
 }

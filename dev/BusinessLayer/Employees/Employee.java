@@ -40,7 +40,7 @@ class Employee{
           int shiftsADay = 0;
   
           LocalDate current = from;
-          while(current.isAfter(from) && current.isBefore(until)){
+          while(current.equals(from) || (current.isAfter(from) && current.isBefore(until))){
               boolean worksShiftTime = false;
               boolean isWorkingThisDay = false;
               for(Branch b: branches){

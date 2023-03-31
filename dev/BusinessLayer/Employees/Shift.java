@@ -128,6 +128,7 @@ public class Shift {
     }
     public void useCancelCard(){
         this.cancelCardApplies++;
+        // Save the cancelled product
     }
     public int getTotalCancelCardApplications(){
         return this.cancelCardApplies;

@@ -1,7 +1,12 @@
 package CMDApp;
 
-import TransportModule.BusinessLayer.Records.ItemList;
-import TransportModule.ServiceLayer.*;
+import CMDApp.Records.Site;
+import CMDApp.Records.ItemList;
+import CMDApp.Records.Transport;
+import CMDApp.Records.Truck;
+import TransportModule.ServiceLayer.ModuleFactory;
+
+import java.time.LocalDateTime;
 import java.util.*;
 
 import static CMDApp.DriversManagement.manageDrivers;
@@ -20,7 +25,27 @@ public class Main {
     static String[] sites = {"Site1", "Site2", "Site3", "Site4"};
     static String[] drivers = {"Driver1", "Driver2", "Driver3", "Driver4"};
     static String[] trucks = {"Truck1", "Truck2", "Truck3", "Truck4"};
-    static ItemList itemList1 = new ItemList(itemListIdCounter++, new HashMap<>(Map.of("item1", 10, "item2", 20, "item3", 30)), new HashMap<>(Map.of("item4", 10, "item5", 20, "item6", 30)));
+    static ItemList itemList1 = new ItemList(
+            itemListIdCounter++,
+            new HashMap<>(Map.of("item1", 10, "item2", 20, "item3", 30)),
+            new HashMap<>(Map.of("item4", 10, "item5", 20, "item6", 30))
+    );
+    static Site site = new Site("North", "backstreet","121251251","moshe",Site.SiteType.BRANCH);
+    static Truck truck = new Truck(1,"A",1000,5000);
+    static HashMap<Site,ItemList> hm = new HashMap<>();
+    {
+        hm.put(site,itemList1);
+    }
+
+    static Transport transport1 = new Transport(
+            1,
+            site,
+            new LinkedList<>(Arrays.asList(site)),
+            hm,
+            1,
+            1,
+            LocalDateTime.of(2021, 1, 1, 1, 1)
+    );
 
 
     public static void main(String[] args) {

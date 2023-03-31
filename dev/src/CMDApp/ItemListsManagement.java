@@ -1,6 +1,6 @@
 package CMDApp;
 
-import TransportModule.BusinessLayer.Records.ItemList;
+import CMDApp.Records.ItemList;
 
 import java.util.HashMap;
 

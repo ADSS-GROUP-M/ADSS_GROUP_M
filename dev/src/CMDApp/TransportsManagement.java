@@ -1,8 +1,10 @@
 package CMDApp;
 
+import CMDApp.Records.Transport;
+import jdk.swing.interop.SwingInterOpUtils;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Scanner;
 
@@ -96,9 +98,96 @@ public class TransportsManagement {
     }
 
     private static void updateTransport() {
+        while(true) {
+            System.out.println("=========================================");
+            System.out.println("Select transport to update:");
+            int transportId = getInt("Transport ID: ");
+            if(transportId == -1) return;
+            //TODO: code for fetching transport
+            Transport transport = transport1;
+            printTransportDetails(transport);
+            System.out.println("=========================================");
+            System.out.println("Please select an option:");
+            System.out.println("1. Update date");
+            System.out.println("2. Update time");
+            System.out.println("3. Update driver");
+            System.out.println("4. Update truck");
+            System.out.println("5. Update source");
+            System.out.println("6. Update destinations");
+            System.out.println("7. Update weight");
+            System.out.println("8. Return to previous menu");
+            int option = getInt();
+            switch (option) {
+                case 1:
+                    //TODO: code for updating date
+                    break;
+                case 2:
+                    //TODO: code for updating time
+                    break;
+                case 3:
+                    //TODO: code for updating driver
+                    break;
+                case 4:
+                    //TODO: code for updating truck
+                    break;
+                case 5:
+                    //TODO: code for updating source
+                    break;
+                case 6:
+                    //TODO: code for updating destinations
+                    break;
+                case 7:
+                    //TODO: code for updating weight
+                    break;
+                case 8:
+                    return;
+                default:
+                    System.out.println("Invalid option!");
+                    continue;
+            }
+            //TODO: code for updating transport
+            System.out.println("\nTransport updated successfully!");
+        }
+    }
+
+    private static void printTransportDetails(Transport transport) {
+        System.out.println("Transport details:");
+        System.out.println("Date: "+ transport.scheduledTime().toLocalDate());
+        System.out.println("Time: "+ transport.scheduledTime().toLocalTime());
+        System.out.println("DriverId: "+ transport.driverId());
+        System.out.println("TruckId: "+ transport.truckId());
+        System.out.println("Source: "+ transport.source());
+        System.out.println("Destinations: ");
+        for(int i = 0; i< transport.destinations().size(); i++){
+            System.out.println("   "+ transport.destinations().get(i) + " (items list id: "+ transport.itemLists().get(i)+")");
+        }
+        System.out.println("Weight: "+ transport.weight());
     }
 
     private static void deleteTransport() {
+        while(true) {
+            System.out.println("=========================================");
+            System.out.println("Select transport to delete:");
+            int transportId = getInt("Transport ID: ");
+            if (transportId == -1) return;
+            //TODO: code for fetching transport
+            Transport transport = transport1;
+            printTransportDetails(transport);
+            System.out.println("=========================================");
+            System.out.println("Are you sure you want to delete this transport? (y/n)");
+            String option = getString();
+            switch (option) {
+                case "y":
+                    //TODO: code for deleting transport
+                    System.out.println("\nTransport deleted successfully!");
+                    break;
+                case "n":
+                    break;
+                default:
+                    System.out.println("Invalid option!");
+                    continue;
+            }
+        }
     }
 
     private static void viewTransport() {

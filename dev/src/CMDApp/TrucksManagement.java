@@ -1,7 +1,6 @@
 package CMDApp;
 
 import static CMDApp.Main.*;
-import static CMDApp.Main.drivers;
 
 public class TrucksManagement {
     static void manageTrucks() {

@@ -1,7 +1,6 @@
 package CMDApp;
 
 import static CMDApp.Main.*;
-import static CMDApp.Main.sites;
 
 public class DriversManagement {
     static void manageDrivers() {

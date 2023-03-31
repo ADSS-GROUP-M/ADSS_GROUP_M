@@ -24,6 +24,7 @@ public class EmployeesCLI {
 
         // Data Initialization
         userService.createManagerUser("admin123", "123");
+        //employeesService.createBranch("admin123", "1");
     }
 
     /* Valid commands list:

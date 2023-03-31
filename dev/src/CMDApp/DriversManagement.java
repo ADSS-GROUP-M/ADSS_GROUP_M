@@ -103,7 +103,7 @@ public class DriversManagement {
             System.out.println("=========================================");
             System.out.println("Are you sure you want to remove this driver? (y/n)");
             String option = getString();
-            switch(option){
+            switch(option) {
                 case "y":
                     //TODO: code for removing driver
                     System.out.println("\nDriver removed successfully!");
@@ -113,7 +113,9 @@ public class DriversManagement {
                 default:
                     System.out.println("Invalid option!");
                     continue;
+            }
         }
+
     }
 
     private static void getDriver() {

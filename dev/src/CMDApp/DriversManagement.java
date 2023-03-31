@@ -1,8 +1,17 @@
 package CMDApp;
 
+import CMDApp.Records.Driver;
+import TransportModule.ServiceLayer.ResourceManagementService;
+
+import java.io.ByteArrayInputStream;
+import java.util.Scanner;
+
 import static CMDApp.Main.*;
 
 public class DriversManagement {
+
+    static ResourceManagementService rms = factory.getModuleManagementService();
+
     static void manageDrivers() {
         while (true) {
             System.out.println("=========================================");
@@ -46,9 +55,11 @@ public class DriversManagement {
         int id = getInt("Employee ID: ");
         String fullName = getString("Name: ");
         String licenseType = getString("License type: ");
-        //TODO: code for adding driver
-
-        System.out.println("\nDriver added successfully!");
+        Driver newDriver = new Driver(id, fullName, licenseType);
+        String json = JSON.serialize(newDriver);
+        String responseJson = rms.addDriver(json);
+        Response<String> response = JSON.deserialize(responseJson, Response.class);
+        System.out.println("\n"+response.getMessage());
     }
 
     private static void updateDriver() {

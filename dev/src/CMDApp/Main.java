@@ -30,7 +30,7 @@ public class Main {
             new HashMap<>(Map.of("item4", 10, "item5", 20, "item6", 30))
     );
     static Site site = new Site("North", "backstreet","121251251","moshe",Site.SiteType.BRANCH);
-    static Truck truck = new Truck(1,"A",1000,5000);
+    static Truck truck = new Truck("1","A",1000,5000);
     static HashMap<Site,ItemList> hm = new HashMap<>();
     {
         hm.put(site,itemList1);
@@ -52,7 +52,7 @@ public class Main {
     {
         fetchDrivers();
     }
-    static HashMap<Integer, Truck> trucks = null;
+    static HashMap<String, Truck> trucks = null;
     {
         fetchTrucks();
     }
@@ -181,7 +181,7 @@ public class Main {
         return driverArray[option].id();
     }
 
-    static int pickTruck(boolean allowDone) {
+    static String pickTruck(boolean allowDone) {
         int i = 1;
         Truck[] truckArray = new Truck[trucks.size()];
         for(Truck truck : trucks.values()){
@@ -196,7 +196,7 @@ public class Main {
             System.out.println("Invalid option!");
             return pickTruck(allowDone);
         }
-        if(allowDone && option == trucks.size()) return -1;
+        if(allowDone && option == trucks.size()) return null;
         return truckArray[option].id();
     }
 }

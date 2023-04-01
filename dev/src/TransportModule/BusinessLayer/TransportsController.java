@@ -55,7 +55,7 @@ public class TransportsController {
 
     private void validateTransport(Transport transport) throws IOException{
         int weight = transport.weight();
-        Truck truck = tc.getTruck(transport.id());
+        Truck truck = tc.getTruck(transport.truckId());
         if (truck.maxWeight() < weight)
             throw new IOException("The truck's maximum weight has been exceeded");
     }

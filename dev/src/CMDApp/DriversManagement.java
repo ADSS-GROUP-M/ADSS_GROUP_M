@@ -105,6 +105,7 @@ public class DriversManagement {
         String json = JSON.serialize(updatedDriver);
         String responseJson = rms.updateDriver(json);
         Response<String> response = JSON.deserialize(responseJson, Response.class);
+        if(response.isSuccess()) drivers.put(id, updatedDriver);
         System.out.println("\n"+response.getMessage());
     }
 
@@ -126,6 +127,7 @@ public class DriversManagement {
                     String json = JSON.serialize(driver);
                     String responseJson = rms.removeDriver(json);
                     Response<String> response = JSON.deserialize(responseJson, Response.class);
+                    if(response.isSuccess()) drivers.remove(driverId);
                     System.out.println("\n"+response.getMessage());
                     break;
                 case "n":
@@ -141,10 +143,10 @@ public class DriversManagement {
     private static void getDriver() {
         while(true){
             System.out.println("=========================================");
-            System.out.println("Select driver to view:");
-            fetchDrivers();
-            int driverId = pickDriver(true);
+            System.out.println("Enter employee ID of driver to view (enter '-1' to return to previous menu):");
+            int driverId = getInt("Employee ID: ");
             if(driverId == -1) return;
+            fetchDrivers();
             Driver driver = drivers.get(driverId);
             System.out.println("=========================================");
             System.out.println("Driver details:");

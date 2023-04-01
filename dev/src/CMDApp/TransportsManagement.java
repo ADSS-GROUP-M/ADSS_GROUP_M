@@ -63,11 +63,11 @@ public class TransportsManagement {
 
         // driver
         System.out.println("Driver: ");
-        String driver = drivers[pickDriver(false)];
+        int driverID = pickDriver(false);
 
         // truck
         System.out.println("Truck: ");
-        String truck = trucks[pickTruck(false)];
+        String truckId = pickTruck(false);
 
         // source
         System.out.println("Source: ");

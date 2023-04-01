@@ -8,7 +8,7 @@ import java.util.TreeMap;
 
 public class TrucksController {
 
-    TreeMap<Integer, Truck> trucks;
+    TreeMap<String, Truck> trucks;
 
     public TrucksController(){
         trucks = new TreeMap<>();
@@ -20,20 +20,20 @@ public class TrucksController {
         else throw new IOException("Truck already exists");
     }
 
-    public Truck removeTruck(int id) throws IOException {
+    public Truck removeTruck(String id) throws IOException {
         if (trucks.containsKey(id) == false)
             throw new IOException("Truck not found");
 
         return trucks.remove(id);
     }
-    public Truck getTruck(int id) throws IOException {
+    public Truck getTruck(String id) throws IOException {
         if (trucks.containsKey(id) == false)
             throw new IOException("Truck not found");
 
         return trucks.get(id);
     }
 
-    public void updateTruck(int id, Truck newTruck) throws IOException{
+    public void updateTruck(String id, Truck newTruck) throws IOException{
         if(trucks.containsKey(id) == false)
             throw new IOException("Truck not found");
 

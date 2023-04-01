@@ -3,9 +3,6 @@ package CMDApp;
 import CMDApp.Records.Driver;
 import TransportModule.ServiceLayer.ResourceManagementService;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-
 import static CMDApp.Main.*;
 
 public class DriversManagement {
@@ -67,10 +64,8 @@ public class DriversManagement {
         while (true) {
             System.out.println("=========================================");
             System.out.println("Select driver to update:");
-            fetchDrivers();
-            int driverId = pickDriver(true);
-            if (driverId == -1) return;
-            Driver driver = drivers.get(driverId);
+            Driver driver = pickDriver(true);
+            if (driver == null) return;
             while (true) {
                 System.out.println("=========================================");
                 printDriverDetails(driver);
@@ -113,9 +108,8 @@ public class DriversManagement {
         while(true) {
             System.out.println("=========================================");
             System.out.println("Select driver to remove:");
-            int driverId = pickDriver(true);
-            if(driverId == -1) return;
-            Driver driver = drivers.get(driverId);
+            Driver driver = pickDriver(true);
+            if(driver == null) return;
             System.out.println("=========================================");
             System.out.println("Driver details:");
             printDriverDetails(driver);
@@ -127,7 +121,7 @@ public class DriversManagement {
                     String json = JSON.serialize(driver);
                     String responseJson = rms.removeDriver(json);
                     Response<String> response = JSON.deserialize(responseJson, Response.class);
-                    if(response.isSuccess()) drivers.remove(driverId);
+                    if(response.isSuccess()) drivers.remove(driver);
                     System.out.println("\n"+response.getMessage());
                     break;
                 case "n":
@@ -146,7 +140,6 @@ public class DriversManagement {
             System.out.println("Enter employee ID of driver to view (enter '-1' to return to previous menu):");
             int driverId = getInt("Employee ID: ");
             if(driverId == -1) return;
-            fetchDrivers();
             Driver driver = drivers.get(driverId);
             System.out.println("=========================================");
             System.out.println("Driver details:");
@@ -160,7 +153,6 @@ public class DriversManagement {
     private static void getAllDrivers() {
         System.out.println("=========================================");
         System.out.println("All drivers:");
-        fetchDrivers();
         for(Driver driver : drivers.values()){
             System.out.println("-----------------------------------------");
             printDriverDetails(driver);
@@ -173,15 +165,5 @@ public class DriversManagement {
         System.out.println("Employee ID: " + driver.id());
         System.out.println("Name: " + driver.name());
         System.out.println("License type: " + driver.licenseType());
-    }
-
-    static void fetchDrivers() {
-        String json = rms.getAllDrivers();
-        Response<LinkedList<Driver>> response = JSON.deserialize(json, Response.class);
-        HashMap<Integer, Driver> driverMap = new HashMap<>();
-        for(Driver driver : response.getData()){
-            driverMap.put(driver.id(), driver);
-        }
-        drivers = driverMap;
     }
 }

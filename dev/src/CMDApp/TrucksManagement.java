@@ -1,11 +1,7 @@
 package CMDApp;
 
-import CMDApp.Records.Driver;
 import CMDApp.Records.Truck;
 import TransportModule.ServiceLayer.ResourceManagementService;
-
-import java.util.HashMap;
-import java.util.LinkedList;
 
 import static CMDApp.Main.*;
 
@@ -69,9 +65,9 @@ public class TrucksManagement {
         while(true) {
             System.out.println("=========================================");
             System.out.println("Select truck to update:");
-            String truckId = pickTruck(true);
-            if (truckId == null) return;
-            Truck truck = trucks.get(truckId);
+            Truck truck = pickTruck(true);
+            if (truck == null) return;
+
             while(true) {
                 System.out.println("=========================================");
                 System.out.println("Truck details:");
@@ -112,9 +108,8 @@ public class TrucksManagement {
         while(true) {
             System.out.println("=========================================");
             System.out.println("Select truck to remove:");
-            String truckId = pickTruck(true);
-            if (truckId == null) return;
-            Truck truck = trucks.get(truckId);
+            Truck truck = pickTruck(true);
+            if (truck == null) return;
             System.out.println("=========================================");
             System.out.println("Truck details:");
             printTruckDetails(truck);
@@ -144,7 +139,6 @@ public class TrucksManagement {
             System.out.println("Enter license plate of truck to view ('cancel!' to return to previous menu):");
             String truckId = getString("License plate: ");
             if (truckId.equalsIgnoreCase("cancel!")) return;
-            fetchTrucks();
             Truck truck = trucks.get(truckId);
             System.out.println("=========================================");
             System.out.println("Truck details:");
@@ -159,23 +153,12 @@ public class TrucksManagement {
     private static void getAllTrucks() {
         System.out.println("=========================================");
         System.out.println("All trucks:");
-        fetchTrucks();
         for (Truck truck : trucks.values()) {
             printTruckDetails(truck);
             System.out.println("-----------------------------------------");
         }
         System.out.println("Enter 'done!' to return to previous menu");
         getString();
-    }
-
-    static void fetchTrucks() {
-        String json = rms.getAllTrucks();
-        Response<LinkedList<Truck>> response = JSON.deserialize(json, Response.class);
-        HashMap<String, Truck> truckMap = new HashMap<>();
-        for(Truck truck : response.getData()){
-            truckMap.put(truck.id(), truck);
-        }
-        trucks = truckMap;
     }
 
     private static void printTruckDetails(Truck truck) {

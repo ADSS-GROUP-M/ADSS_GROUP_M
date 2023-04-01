@@ -1,17 +1,21 @@
 package CMDApp;
 
+import CMDApp.Records.ItemList;
+import CMDApp.Records.Site;
 import CMDApp.Records.Transport;
+import TransportModule.ServiceLayer.TransportsService;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.Scanner;
 
 import static CMDApp.Main.*;
 
 public class TransportsManagement {
 
-    private static Scanner scanner = new Scanner(System.in);
+    private static TransportsService ts = factory.getTransportsService();
 
     static void manageTransports() {
         while(true){
@@ -59,31 +63,32 @@ public class TransportsManagement {
         // date/time
         LocalDate departureDate = LocalDate.parse(getString("Departure date (format: yyyy-mm-dd): "));
         LocalTime departureTime = LocalTime.parse(getString("Departure time (format: hh:mm): "));
+        LocalDateTime departureDateTime = LocalDateTime.of(departureDate, departureTime);
 
         // driver
         System.out.println("Driver: ");
-        int driverID = pickDriver(false);
+        int driverID = pickDriver(false).id();
 
         // truck
         System.out.println("Truck: ");
-        String truckId = pickTruck(false);
+        String truckId = pickTruck(false).id();
 
         // source
         System.out.println("Source: ");
-        String source = sites[pickSite(false)];
+        Site source = pickSite(false);
 
         //========== destinations and items lists ================|
         int destinationId = 1;
-        LinkedList<String> destinations = new LinkedList<>();
-        LinkedList<Integer> itemsList = new LinkedList<>();
+        LinkedList<Site> destinations = new LinkedList<>();
+        HashMap<Site, ItemList> itemsList = new HashMap<>();
         System.out.println("Pick destinations and items lists:");
         while(true){
             System.out.println("Destination number "+destinationId+": ");
-            int option = pickSite(true);
-            if(option == -1) break;
+            Site site = pickSite(true);
+            if(site == null) break;
             int listId = getInt("Items list id: ");
-            itemsList.add(listId);
-            destinations.add(sites[option]);
+            itemsList.put(site, itemLists.get(listId));
+            destinations.add(site);
             destinationId++;
         }
         //========================================================|
@@ -91,19 +96,33 @@ public class TransportsManagement {
         //weight
         int truckWeight = getInt("Truck weight: ");
 
-        //TODO: code for adding transport
-        transportIdCounter++;
-        System.out.println("\nTransport added successfully!");
+        Transport newTransport = new Transport(
+                transportIdCounter,
+                source,
+                destinations,
+                itemsList,
+                truckId,
+                driverID,
+                departureDateTime,
+                truckWeight
+        );
+
+        String json = JSON.serialize(newTransport);
+        String responseJson = ts.createTransport(json);
+        Response<String> response = JSON.deserialize(responseJson, Response.class);
+        if(response.isSuccess()){
+            transports.put(transportIdCounter, newTransport);
+            transportIdCounter++;
+        }
+        System.out.println("\n"+response.getMessage());
     }
 
     private static void updateTransport() {
         while(true) {
             System.out.println("=========================================");
             System.out.println("Select transport to update:");
-            int transportId = getInt("Transport ID: ");
-            if(transportId == -1) return;
-            //TODO: code for fetching transport
-            Transport transport = transport1;
+            Transport transport = getTransport();
+            if(transport == null) return;
             printTransportDetails(transport);
             System.out.println("=========================================");
             System.out.println("Please select an option:");
@@ -118,25 +137,88 @@ public class TransportsManagement {
             int option = getInt();
             switch (option) {
                 case 1:
-                    //TODO: code for updating date
+                    LocalDate departureDate = LocalDate.parse(getString("Departure date (format: yyyy-mm-dd): "));
+                    LocalDateTime departureDateTime = LocalDateTime.of(departureDate, transport.scheduledTime().toLocalTime());
+                    updateTransportHelperMethod(
+                            transport.id(),
+                            transport.source(),
+                            transport.destinations(),
+                            transport.itemLists(),
+                            transport.truckId(),
+                            transport.driverId(),
+                            departureDateTime,
+                            transport.weight()
+                    );
                     break;
                 case 2:
-                    //TODO: code for updating time
+                    LocalTime departureTime = LocalTime.parse(getString("Departure time (format: hh:mm): "));
+                    departureDateTime = LocalDateTime.of(transport.scheduledTime().toLocalDate(), departureTime);
+                    updateTransportHelperMethod(
+                            transport.id(),
+                            transport.source(),
+                            transport.destinations(),
+                            transport.itemLists(),
+                            transport.truckId(),
+                            transport.driverId(),
+                            departureDateTime,
+                            transport.weight()
+                    );
                     break;
                 case 3:
-                    //TODO: code for updating driver
+                    int driverID = pickDriver(false).id();
+                    updateTransportHelperMethod(
+                            transport.id(),
+                            transport.source(),
+                            transport.destinations(),
+                            transport.itemLists(),
+                            transport.truckId(),
+                            driverID,
+                            transport.scheduledTime(),
+                            transport.weight()
+                    );
                     break;
                 case 4:
-                    //TODO: code for updating truck
+                    String truckId = pickTruck(false).id();
+                    updateTransportHelperMethod(
+                            transport.id(),
+                            transport.source(),
+                            transport.destinations(),
+                            transport.itemLists(),
+                            truckId,
+                            transport.driverId(),
+                            transport.scheduledTime(),
+                            transport.weight()
+                    );
                     break;
                 case 5:
-                    //TODO: code for updating source
+                    Site source = pickSite(false);
+                    updateTransportHelperMethod(
+                            transport.id(),
+                            source,
+                            transport.destinations(),
+                            transport.itemLists(),
+                            transport.truckId(),
+                            transport.driverId(),
+                            transport.scheduledTime(),
+                            transport.weight()
+                    );
                     break;
                 case 6:
-                    //TODO: code for updating destinations
+                    //TODO: support updating destinations
+                    System.out.println("currently not supported");
                     break;
                 case 7:
-                    //TODO: code for updating weight
+                    int truckWeight = getInt("Truck weight: ");
+                    updateTransportHelperMethod(
+                            transport.id(),
+                            transport.source(),
+                            transport.destinations(),
+                            transport.itemLists(),
+                            transport.truckId(),
+                            transport.driverId(),
+                            transport.scheduledTime(),
+                            truckWeight
+                    );
                     break;
                 case 8:
                     return;
@@ -144,26 +226,25 @@ public class TransportsManagement {
                     System.out.println("Invalid option!");
                     continue;
             }
-            //TODO: code for updating transport
-            System.out.println("\nTransport updated successfully!");
+            break;
         }
     }
 
     private static void deleteTransport() {
         while(true) {
             System.out.println("=========================================");
-            System.out.println("Select transport to delete:");
-            int transportId = getInt("Transport ID: ");
-            if (transportId == -1) return;
-            //TODO: code for fetching transport
-            Transport transport = transport1;
+            Transport transport = getTransport();
+            if(transport == null) return;
             printTransportDetails(transport);
             System.out.println("=========================================");
             System.out.println("Are you sure you want to delete this transport? (y/n)");
             String option = getString();
             switch (option) {
                 case "y":
-                    //TODO: code for deleting transport
+                    String json = JSON.serialize(transport);
+                    String responseJson = ts.removeTransport(json);
+                    Response<String> response = JSON.deserialize(responseJson, Response.class);
+                    if(response.isSuccess()) transports.remove(transport.id());
                     System.out.println("\nTransport deleted successfully!");
                     break;
                 case "n":
@@ -176,9 +257,22 @@ public class TransportsManagement {
     }
 
     private static void viewTransport() {
+        System.out.println("=========================================");
+        Transport transport = getTransport();
+        if(transport == null) return;
+        printTransportDetails(transport);
+        System.out.println("\nEnter 'done!' to return to previous menu");
     }
 
     private static void viewAllTransports() {
+        System.out.println("=========================================");
+        System.out.println("All transports:");
+        for(Transport transport : transports.values()){
+            printTransportDetails(transport);
+            System.out.println("-----------------------------------------");
+        }
+        System.out.println("\nEnter 'done!' to return to previous menu");
+        getString();
     }
 
     private static void printTransportDetails(Transport transport) {
@@ -193,5 +287,37 @@ public class TransportsManagement {
             System.out.println("   "+ transport.destinations().get(i) + " (items list id: "+ transport.itemLists().get(i)+")");
         }
         System.out.println("Weight: "+ transport.weight());
+    }
+
+    private static void updateTransportHelperMethod(int id, Site source, LinkedList<Site> destinations, HashMap<Site, ItemList> itemLists, String truckId, int driverId, LocalDateTime departureDateTime, int weight) {
+        Transport newTransport = new Transport(
+                id,
+                source,
+                destinations,
+                itemLists,
+                truckId,
+                driverId,
+                departureDateTime,
+                weight
+        );
+
+        String json = JSON.serialize(newTransport);
+        String responseJson = ts.updateTransport(json);
+        Response<String> response = JSON.deserialize(responseJson, Response.class);
+        if(response.isSuccess()){
+            transports.put(id, newTransport);
+        }
+        System.out.println("\n"+response.getMessage());
+    }
+
+    private static Transport getTransport() {
+        System.out.println("Enter transport ID (enter '-1' to return to previous menu): ");
+        int transportId = getInt("Transport ID: ");
+        if(transportId == -1) return null;
+        if(transports.containsKey(transportId) == false) {
+            System.out.println("Transport with ID "+transportId+" does not exist!");
+            return null;
+        }
+        return transports.get(transportId);
     }
 }

@@ -1,11 +1,7 @@
 package CMDApp;
 
 import CMDApp.Records.Site;
-import CMDApp.Records.Truck;
 import TransportModule.ServiceLayer.ResourceManagementService;
-
-import java.util.HashMap;
-import java.util.LinkedList;
 
 import static CMDApp.Main.*;
 
@@ -86,10 +82,8 @@ public class SitesManagement {
         while(true) {
             System.out.println("=========================================");
             System.out.println("Select site to update:");
-            fetchSites();
-            String siteId = pickSite(true);
-            if(siteId == null) return;
-            Site site = sites.get(siteId);
+            Site site = pickSite(true);
+            if(site == null) return;
             while(true) {
                 System.out.println("=========================================");
                 System.out.println("Site details:");
@@ -144,10 +138,8 @@ public class SitesManagement {
         while(true) {
             System.out.println("=========================================");
             System.out.println("Select site to remove:");
-            fetchSites();
-            String siteId = pickSite(true);
-            if (siteId == null) return;
-            Site site = sites.get(siteId);
+            Site site = pickSite(true);
+            if (site == null) return;
             System.out.println("=========================================");
             System.out.println("Site details:");
             printSiteDetails(site);
@@ -156,9 +148,10 @@ public class SitesManagement {
             String option = getString();
             switch (option) {
                 case "y":
-                    String responseJson = rms.removeSite(siteId);
+                    String json = JSON.serialize(site);
+                    String responseJson = rms.removeSite(json);
                     Response<String> response = JSON.deserialize(responseJson, Response.class);
-                    if(response.isSuccess()) sites.remove(siteId);
+                    if(response.isSuccess()) sites.remove(site);
                     System.out.println("\n"+response.getMessage());
                     break;
                 case "n":
@@ -174,7 +167,6 @@ public class SitesManagement {
         while(true) {
             System.out.println("=========================================");
             System.out.println("Enter address of site to view (enter 'cancel!' to return to previous menu):");
-            fetchSites();
             String siteId = getString("Address: ");
             if(siteId.equals("cancel!")) return;
             if(sites.containsKey(siteId) == false) {
@@ -194,23 +186,12 @@ public class SitesManagement {
     private static void getAllSites() {
         System.out.println("=========================================");
         System.out.println("All sites:");
-        fetchSites();
         for(Site site : sites.values()) {
             printSiteDetails(site);
             System.out.println("-----------------------------------------");
         }
         System.out.println("Press enter to return to previous menu");
         getString();
-    }
-
-    static void fetchSites() {
-        String json = rms.getAllSites();
-        Response<LinkedList<Site>> response = JSON.deserialize(json, Response.class);
-        HashMap<String, Site> siteMap = new HashMap<>();
-        for(Site site : response.getData()){
-            siteMap.put(site.address(), site);
-        }
-        sites = siteMap;
     }
 
     private static void printSiteDetails(Site site) {

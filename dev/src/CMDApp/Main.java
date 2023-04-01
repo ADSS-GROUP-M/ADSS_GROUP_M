@@ -3,72 +3,40 @@ package CMDApp;
 import CMDApp.Records.*;
 import TransportModule.ServiceLayer.ModuleFactory;
 
-import java.time.LocalDateTime;
-import java.util.*;
+import java.util.HashMap;
+import java.util.InputMismatchException;
+import java.util.LinkedList;
+import java.util.Scanner;
 
-import static CMDApp.DriversManagement.fetchDrivers;
 import static CMDApp.DriversManagement.manageDrivers;
-import static CMDApp.ItemListsManagement.fetchItemLists;
 import static CMDApp.ItemListsManagement.manageItemLists;
-import static CMDApp.SitesManagement.fetchSites;
 import static CMDApp.SitesManagement.manageSites;
 import static CMDApp.TransportsManagement.manageTransports;
-import static CMDApp.TrucksManagement.fetchTrucks;
 import static CMDApp.TrucksManagement.manageTrucks;
 
 public class Main {
 
     static ModuleFactory factory = ModuleFactory.getInstance();
     static Scanner scanner = new Scanner(System.in);
+
     static int transportIdCounter = 1;
     static int itemListIdCounter = 1;
-//    static String[] shippingZones = {"North", "South", "East", "West"};
-//    static String[] sites = {"Site1", "Site2", "Site3", "Site4"};
-//    static String[] drivers = {"Driver1", "Driver2", "Driver3", "Driver4"};
-//    static String[] trucks = {"Truck1", "Truck2", "Truck3", "Truck4"};
-    static ItemList itemList1 = new ItemList(
-            itemListIdCounter++,
-            new HashMap<>(Map.of("item1", 10, "item2", 20, "item3", 30)),
-            new HashMap<>(Map.of("item4", 10, "item5", 20, "item6", 30))
-    );
-    static Site site = new Site("North", "backstreet","121251251","moshe",Site.SiteType.BRANCH);
-    static Truck truck = new Truck("1","A",1000,5000);
-    static HashMap<Site,ItemList> hm = new HashMap<>();
-    {
-        hm.put(site,itemList1);
-    }
-
-    static Transport transport1 = new Transport(
-            1,
-            site,
-            new LinkedList<>(Arrays.asList(site)),
-            hm,
-            1,
-            1,
-            LocalDateTime.of(2021, 1, 1, 1, 1)
-    );
-
-
-
     static HashMap<Integer, Driver> drivers = null;
-    {
-        fetchDrivers();
-    }
     static HashMap<String, Truck> trucks = null;
-    {
-        fetchTrucks();
-    }
     static HashMap<String,Site> sites = null;
-    {
-        fetchSites();
-    }
     static HashMap<Integer,ItemList> itemLists = null;
-    {
-        fetchItemLists();
-    }
+    static HashMap<Integer, Transport> transports = null;
 
     public static void main(String[] args) {
+        fetchDrivers();
+        fetchTrucks();
+        fetchSites();
+        fetchItemLists();
+        fetchTransports();
+        mainMenu();
+    }
 
+    private static void mainMenu() {
         while(true){
             System.out.println("=========================================");
             System.out.println("Welcome to the Transport Module!");
@@ -156,7 +124,7 @@ public class Main {
         return scanner.next();
     }
 
-    static String pickSite(boolean allowDone) {
+    static Site pickSite(boolean allowDone) {
         int i = 1;
         Site[] siteArray = new Site[sites.size()];
         for(Site site : sites.values()){
@@ -172,10 +140,10 @@ public class Main {
             return pickSite(allowDone);
         }
         if(allowDone && option == sites.size()) return null;
-        return siteArray[option].address();
+        return siteArray[option];
     }
 
-    static int pickDriver(boolean allowDone) {
+    static Driver pickDriver(boolean allowDone) {
         int i = 1;
         Driver[] driverArray = new Driver[drivers.size()];
         for(Driver driver : drivers.values()){
@@ -190,11 +158,11 @@ public class Main {
             System.out.println("Invalid option!");
             return pickDriver(allowDone);
         }
-        if(allowDone && option == drivers.size()) return -1;
-        return driverArray[option].id();
+        if(allowDone && option == drivers.size()) return null;
+        return driverArray[option];
     }
 
-    static String pickTruck(boolean allowDone) {
+    static Truck pickTruck(boolean allowDone) {
         int i = 1;
         Truck[] truckArray = new Truck[trucks.size()];
         for(Truck truck : trucks.values()){
@@ -210,7 +178,51 @@ public class Main {
             return pickTruck(allowDone);
         }
         if(allowDone && option == trucks.size()) return null;
-        return truckArray[option].id();
+        return truckArray[option];
+    }
+
+    static void fetchTrucks() {
+        String json = factory.getResourceManagementService().getAllTrucks();
+        Response<LinkedList<Truck>> response = JSON.deserialize(json, Response.class);
+        HashMap<String, Truck> truckMap = new HashMap<>();
+        for(Truck truck : response.getData()){
+            truckMap.put(truck.id(), truck);
+        }
+        trucks = truckMap;
+    }
+
+    static void fetchDrivers() {
+        String json = factory.getResourceManagementService().getAllDrivers();
+        Response<LinkedList<Driver>> response = JSON.deserialize(json, Response.class);
+        HashMap<Integer, Driver> driverMap = new HashMap<>();
+        for(Driver driver : response.getData()){
+            driverMap.put(driver.id(), driver);
+        }
+        drivers = driverMap;
+    }
+
+    static void fetchSites() {
+        String json = factory.getResourceManagementService().getAllSites();
+        Response<LinkedList<Site>> response = JSON.deserialize(json, Response.class);
+        HashMap<String, Site> siteMap = new HashMap<>();
+        for(Site site : response.getData()){
+            siteMap.put(site.address(), site);
+        }
+        sites = siteMap;
+    }
+
+    static void fetchItemLists() {
+        String json = factory.getItemListsService().getAllItemLists();
+        Response<LinkedList<ItemList>> response = JSON.deserialize(json, Response.class);
+        HashMap<Integer, ItemList> listMap = new HashMap<>();
+        for(ItemList list : response.getData()){
+            listMap.put(list.id(), list);
+        }
+        itemLists = listMap;
+    }
+
+    static void fetchTransports() {
+
     }
 }
 

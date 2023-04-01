@@ -4,7 +4,6 @@ import CMDApp.Records.ItemList;
 import TransportModule.ServiceLayer.ItemListsService;
 
 import java.util.HashMap;
-import java.util.LinkedList;
 
 import static CMDApp.Main.*;
 
@@ -71,7 +70,6 @@ public class ItemListsManagement {
     private static void updateItemList() {
         while (true) {
             System.out.println("=========================================");
-            fetchItemLists();
             Integer id = getListID();
             if (id == null) continue;
 
@@ -101,7 +99,6 @@ public class ItemListsManagement {
     private static void removeItemList() {
         while (true) {
             System.out.println("=========================================");
-            fetchItemLists();
             Integer id = getListID();
             if (id == null) continue;
             ItemList list = itemLists.get(id);
@@ -129,7 +126,6 @@ public class ItemListsManagement {
     private static void viewItemList() {
         System.out.println("=========================================");
         System.out.println("Select item list to view:");
-        fetchItemLists();
         Integer id = getListID();
         if (id == null) return;
         ItemList list = itemLists.get(id);
@@ -141,24 +137,12 @@ public class ItemListsManagement {
     private static void viewAllItemLists() {
         System.out.println("=========================================");
         System.out.println("All item lists:");
-        fetchItemLists();
-        ItemList[] itemLists = {itemList1};
-        for (ItemList list : itemLists) {
+        for (ItemList list : itemLists.values()) {
             System.out.println("-----------------------------------------");
             printItemList(list);
         }
         System.out.println("\nPress enter to return to previous menu");
         getString();
-    }
-
-    static void fetchItemLists() {
-        String json = ils.getAllItemLists();
-        Response<LinkedList<ItemList>> response = JSON.deserialize(json, Response.class);
-        HashMap<Integer, ItemList> listMap = new HashMap<>();
-        for(ItemList list : response.getData()){
-            listMap.put(list.id(), list);
-        }
-        itemLists = listMap;
     }
 
     private static void itemEditor(HashMap<String,Integer> items) {
@@ -180,7 +164,7 @@ public class ItemListsManagement {
     }
 
     private static Integer getListID() {
-        System.out.println("Enter item list ID to remove (enter '-1' to return to the previous menu): ");
+        System.out.println("Enter item list ID (enter '-1' to return to the previous menu): ");
         int id = getInt("Item list ID: ");
         if (id == -1) return null;
         if(itemLists.containsKey(id) == false){

@@ -52,7 +52,15 @@ public class TrucksManagement {
         String licensePlate = getLine("License plate: ");
         String model = getLine("Model: ");
         int baseWeight = getInt("Base weight: ");
+        if(baseWeight <= 0) {
+            System.out.println("Invalid base weight!");
+            return;
+        }
         int maxWeight = getInt("Max weight: ");
+        if(maxWeight <= 0) {
+            System.out.println("Invalid max weight!");
+            return;
+        }
         Truck newTruck = new Truck(licensePlate, model, baseWeight, maxWeight);
         String json = JSON.serialize(newTruck);
         String responseJson = rms.addTruck(json);
@@ -81,10 +89,18 @@ public class TrucksManagement {
                 switch (option) {
                     case 1:
                         int baseWeight = getInt("Base weight: ");
+                        if(baseWeight <= 0) {
+                            System.out.println("Invalid base weight!");
+                            continue;
+                        }
                         updateTruckHelperMethod(truck.id(), truck.model(), baseWeight, truck.maxWeight());
                         break;
                     case 2:
                         int maxWeight = getInt("Max weight: ");
+                        if(maxWeight <= 0) {
+                            System.out.println("Invalid max weight!");
+                            continue;
+                        }
                         updateTruckHelperMethod(truck.id(), truck.model(), truck.baseWeight(), maxWeight);
                         break;
                     case 3:

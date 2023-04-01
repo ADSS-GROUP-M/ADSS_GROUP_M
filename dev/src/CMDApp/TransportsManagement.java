@@ -165,6 +165,7 @@ public class TransportsManagement {
                     );
                     break;
                 case 3:
+                    System.out.println("Select driver: ");
                     int driverID = pickDriver(false).id();
                     updateTransportHelperMethod(
                             transport.id(),
@@ -178,6 +179,7 @@ public class TransportsManagement {
                     );
                     break;
                 case 4:
+                    System.out.println("Select truck: ");
                     String truckId = pickTruck(false).id();
                     updateTransportHelperMethod(
                             transport.id(),
@@ -191,6 +193,7 @@ public class TransportsManagement {
                     );
                     break;
                 case 5:
+                    System.out.println("Select source: ");
                     Site source = pickSite(false);
                     updateTransportHelperMethod(
                             transport.id(),

@@ -117,6 +117,7 @@ public class Main {
             option = scanner.nextInt();
         }catch(InputMismatchException e){
             scanner = new Scanner(System.in);
+            return 0;
         }
         scanner.nextLine();
         return option;
@@ -184,7 +185,7 @@ public class Main {
         int i = 1;
         Truck[] truckArray = new Truck[trucks.size()];
         for(Truck truck : trucks.values()){
-            System.out.println((i)+". "+"License plate: "+truck.id()+"model: "+truck.model()+", max weight: "+truck.maxWeight());
+            System.out.println((i)+". "+"License plate: "+truck.id()+", model: "+truck.model()+", max weight: "+truck.maxWeight());
             truckArray[i-1] = truck;
             i++;
         }
@@ -254,7 +255,7 @@ public class Main {
         transports = transportMap;
     }
 
-    private static void generateData() {
+    public static void generateData() {
 
         //!!!!!!!!!!!!! CHAT GPT IS KING !!!!!!!!!!!
 

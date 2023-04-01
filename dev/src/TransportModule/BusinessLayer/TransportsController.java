@@ -15,14 +15,14 @@ public class TransportsController {
 
     public TransportsController(TrucksController tc){
         transports = new TreeMap<>();
-        idCounter = 0; // this will have to be restored from the DB in the future
+        idCounter = 0; // currently not in use. this will have to be restored from the DB in the future
         this.tc = tc;
     }
 
     public void addTransport(Transport transport)throws IOException{
         validateTransport(transport);
 
-        transports.put(idCounter++, transport);
+        transports.put(transport.id(), transport);
     }
 
     public Transport getTransport(int id) throws IOException {
@@ -59,5 +59,7 @@ public class TransportsController {
         Truck truck = tc.getTruck(transport.truckId());
         if (truck.maxWeight() < weight)
             throw new IOException("The truck's maximum weight has been exceeded");
+
+        //TODO: DRIVER VALIDATION
     }
 }

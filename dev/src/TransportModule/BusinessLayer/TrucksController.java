@@ -15,9 +15,13 @@ public class TrucksController {
     }
 
     public void addTruck(Truck truck) throws IOException {
-        if (trucks.containsKey(truck.id()) == false)
-            trucks.put(truck.id(), truck);
-        else throw new IOException("Truck already exists");
+        if (trucks.containsKey(truck.id()) == true)
+            throw new IOException("Truck already exists");
+
+        if(truck.baseWeight() > truck.maxWeight())
+            throw new IOException("Truck base weight is bigger than max weight");
+
+        trucks.put(truck.id(), truck);
     }
 
     public Truck removeTruck(String id) throws IOException {
@@ -36,6 +40,8 @@ public class TrucksController {
     public void updateTruck(String id, Truck newTruck) throws IOException{
         if(trucks.containsKey(id) == false)
             throw new IOException("Truck not found");
+        if(newTruck.baseWeight() > newTruck.maxWeight())
+            throw new IOException("Truck base weight is bigger than max weight");
 
         trucks.put(id, newTruck);
     }

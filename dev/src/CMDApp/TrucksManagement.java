@@ -49,8 +49,8 @@ public class TrucksManagement {
     private static void createTruck() {
         System.out.println("=========================================");
         System.out.println("Enter truck details:");
-        String licensePlate = getString("License plate: ");
-        String model = getString("Model: ");
+        String licensePlate = getLine("License plate: ");
+        String model = getLine("Model: ");
         int baseWeight = getInt("Base weight: ");
         int maxWeight = getInt("Max weight: ");
         Truck newTruck = new Truck(licensePlate, model, baseWeight, maxWeight);
@@ -115,7 +115,7 @@ public class TrucksManagement {
             printTruckDetails(truck);
             System.out.println("=========================================");
             System.out.println("Are you sure you want to remove this truck? (y/n)");
-            String option = getString();
+            String option = getLine();
             switch(option){
                 case "y":
                     String json = JSON.serialize(truck);
@@ -136,15 +136,15 @@ public class TrucksManagement {
     private static void getTruck() {
         while(true) {
             System.out.println("=========================================");
-            String truckId = getString("Enter license plate of truck to view ('cancel!' to return to previous menu): ");
-            if (truckId.equalsIgnoreCase("cancel!")) return;
+            String truckId = getLine("Enter license plate of truck to view ('done!' to return to previous menu): ");
+            if (truckId.equalsIgnoreCase("done!")) return;
             Truck truck = trucks.get(truckId);
             System.out.println("=========================================");
             System.out.println("Truck details:");
             printTruckDetails(truck);
             System.out.println("=========================================");
             System.out.println("\nEnter 'done!' to return to previous menu");
-            String option = getString();
+            String option = getLine();
         }
 
     }
@@ -157,7 +157,7 @@ public class TrucksManagement {
             System.out.println("-----------------------------------------");
         }
         System.out.println("Enter 'done!' to return to previous menu");
-        getString();
+        getLine();
     }
 
     private static void printTruckDetails(Truck truck) {

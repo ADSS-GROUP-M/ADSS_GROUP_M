@@ -49,10 +49,10 @@ public class SitesManagement {
     private static void createSite() {
         System.out.println("=========================================");
         System.out.println("Enter site details:");
-        String transportZone = getString("Transport zone: ");
-        String address = getString("Address: ");
-        String contactPhone = getString("Contact phone: ");
-        String contactName = getString("Contact name: ");
+        String transportZone = getLine("Transport zone: ");
+        String address = getLine("Address: ");
+        String contactPhone = getLine("Contact phone: ");
+        String contactName = getLine("Contact name: ");
         System.out.println("Site type: ");
         System.out.println("1. Logistical center");
         System.out.println("2. Branch");
@@ -96,7 +96,7 @@ public class SitesManagement {
                 int option = getInt();
                 switch (option) {
                     case 1:
-                        String contactName = getString("Contact name: ");
+                        String contactName = getLine("Contact name: ");
                         updateSiteHelperMethod(site.transportZone(),
                                 site.address(),
                                 site.phoneNumber(),
@@ -105,7 +105,7 @@ public class SitesManagement {
                         );
                         break;
                     case 2:
-                        String contactPhone = getString("Contact phone: ");
+                        String contactPhone = getLine("Contact phone: ");
                         updateSiteHelperMethod(
                                 site.transportZone(),
                                 site.address(),
@@ -145,13 +145,13 @@ public class SitesManagement {
             printSiteDetails(site);
             System.out.println("=========================================");
             System.out.println("Are you sure you want to remove this site? (y/n)");
-            String option = getString();
+            String option = getLine();
             switch (option) {
                 case "y":
                     String json = JSON.serialize(site);
                     String responseJson = rms.removeSite(json);
                     Response<String> response = JSON.deserialize(responseJson, Response.class);
-                    if(response.isSuccess()) sites.remove(site);
+                    if(response.isSuccess()) sites.remove(site.address());
                     System.out.println("\n"+response.getMessage());
                     break;
                 case "n":
@@ -166,8 +166,8 @@ public class SitesManagement {
     private static void getSite() {
         while(true) {
             System.out.println("=========================================");
-            String siteId = getString("Enter address of site to view (enter 'cancel!' to return to previous menu): ");
-            if(siteId.equals("cancel!")) return;
+            String siteId = getLine("Enter address of site to view (enter 'done!' to return to previous menu): ");
+            if(siteId.equals("done!")) return;
             if(sites.containsKey(siteId) == false) {
                 System.out.println("Site not found!");
                 continue;
@@ -178,7 +178,7 @@ public class SitesManagement {
             printSiteDetails(site);
             System.out.println("=========================================");
             System.out.println("Enter 'done!' to return to previous menu");
-            getString();
+            getLine();
         }
     }
 
@@ -189,8 +189,8 @@ public class SitesManagement {
             printSiteDetails(site);
             System.out.println("-----------------------------------------");
         }
-        System.out.println("Press enter to return to previous menu");
-        getString();
+        System.out.println("\nEnter 'done!' to return to previous menu");
+        getLine();
     }
 
     private static void printSiteDetails(Site site) {

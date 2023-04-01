@@ -50,8 +50,8 @@ public class DriversManagement {
         System.out.println("=========================================");
         System.out.println("Enter driver details:");
         int id = getInt("Employee ID: ");
-        String fullName = getString("Name: ");
-        String licenseType = getString("License type: ");
+        String fullName = getLine("Name: ");
+        String licenseType = getLine("License type: ");
         Driver newDriver = new Driver(id, fullName, licenseType);
         String json = JSON.serialize(newDriver);
         String responseJson = rms.addDriver(json);
@@ -77,11 +77,11 @@ public class DriversManagement {
                 int option = getInt();
                 switch (option) {
                     case 1:
-                        String name = getString("Name: ");
+                        String name = getLine("Name: ");
                         updateDriverHelperMethod(driver.id(), name, driver.licenseType());
                         break;
                     case 2:
-                        String licenseType = getString("License type: ");
+                        String licenseType = getLine("License type: ");
                         updateDriverHelperMethod(driver.id(), driver.name(), licenseType);
                         break;
                     case 3:
@@ -115,13 +115,13 @@ public class DriversManagement {
             printDriverDetails(driver);
             System.out.println("=========================================");
             System.out.println("Are you sure you want to remove this driver? (y/n)");
-            String option = getString();
+            String option = getLine();
             switch(option) {
                 case "y":
                     String json = JSON.serialize(driver);
                     String responseJson = rms.removeDriver(json);
                     Response<String> response = JSON.deserialize(responseJson, Response.class);
-                    if(response.isSuccess()) drivers.remove(driver);
+                    if(response.isSuccess()) drivers.remove(driver.id());
                     System.out.println("\n"+response.getMessage());
                     break;
                 case "n":
@@ -144,8 +144,8 @@ public class DriversManagement {
             System.out.println("Driver details:");
             printDriverDetails(driver);
             System.out.println("=========================================");
-            System.out.println("\nEnter 'done' to return to previous menu");
-            getString();
+            System.out.println("\nEnter 'done!' to return to previous menu");
+            getLine();
         }
     }
 
@@ -156,8 +156,8 @@ public class DriversManagement {
             System.out.println("-----------------------------------------");
             printDriverDetails(driver);
         }
-        System.out.println("\nEnter 'done' to return to previous menu");
-        getString();
+        System.out.println("\nEnter 'done!' to return to previous menu");
+        getLine();
     }
 
     private static void printDriverDetails(Driver driver) {

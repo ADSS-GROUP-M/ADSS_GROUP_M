@@ -118,16 +118,28 @@ public class Main {
         }catch(InputMismatchException e){
             scanner = new Scanner(System.in);
         }
+        scanner.nextLine();
         return option;
     }
 
-    static String getString(){
-        return getString(">> ");
+    static String getLine(){
+        return getLine(">> ");
     }
 
-    static String getString(String prefix) {
+    static String getLine(String prefix) {
         if(prefix != "") System.out.print(prefix);
-        return scanner.next();
+        return scanner.nextLine().toLowerCase();
+    }
+
+    static String getWord(){
+        return getWord(">> ");
+    }
+
+    static String getWord(String prefix) {
+        if(prefix != "") System.out.print(prefix);
+        String str = scanner.next().toLowerCase();
+        scanner.nextLine();
+        return str;
     }
 
     static Site pickSite(boolean allowDone) {
@@ -247,25 +259,26 @@ public class Main {
         //!!!!!!!!!!!!! CHAT GPT IS KING !!!!!!!!!!!
 
         // generate sites with random data:
-        Site site1 = new Site("Zone A", "123 Main St", "(555) 123-4567", "John Smith", Site.SiteType.BRANCH);
-        Site site2 = new Site("Zone B", "456 Oak Ave", "(555) 234-5678", "Jane Doe", Site.SiteType.LOGISTICAL_CENTER);
-        Site site3 = new Site("Zone C", "789 Elm St", "(555) 345-6789", "Bob Johnson", Site.SiteType.SUPPLIER);
-        Site site4 = new Site("Zone D", "246 Maple St", "(555) 456-7890", "Mary Jones", Site.SiteType.BRANCH);
-        Site site5 = new Site("Zone E", "369 Pine Ave", "(555) 567-8901", "Tom Smith", Site.SiteType.LOGISTICAL_CENTER);
+        Site site1 = new Site("zone a", "123 main st", "(555) 123-4567", "john smith", Site.SiteType.BRANCH);
+        Site site2 = new Site("zone b", "456 oak ave", "(555) 234-5678", "jane doe", Site.SiteType.LOGISTICAL_CENTER);
+        Site site3 = new Site("zone c", "789 elm st", "(555) 345-6789", "bob johnson", Site.SiteType.SUPPLIER);
+        Site site4 = new Site("zone d", "246 maple st", "(555) 456-7890", "mary jones", Site.SiteType.BRANCH);
+        Site site5 = new Site("zone e", "369 pine ave", "(555) 567-8901", "tom smith", Site.SiteType.LOGISTICAL_CENTER);
 
         // generate drivers with random data:
-        Driver driver1 = new Driver(1234, "Megan Smith", "Class B");
-        Driver driver2 = new Driver(5678, "John Doe", "Class C");
-        Driver driver3 = new Driver(9012, "Emily Chen", "Class A");
-        Driver driver4 = new Driver(3456, "David Lee", "Class B");
-        Driver driver5 = new Driver(7890, "Sarah Kim", "Class C");
+        Driver driver1 = new Driver(1234, "megan smith", "class b");
+        Driver driver2 = new Driver(5678, "john doe", "class c");
+        Driver driver3 = new Driver(9012, "emily chen", "class a");
+        Driver driver4 = new Driver(3456, "david lee", "class b");
+        Driver driver5 = new Driver(7890, "sarah kim", "class c");
 
         // generate trucks with random data:
-        Truck truck1 = new Truck("ABC123", "Ford", 1500, 10000);
-        Truck truck2 = new Truck("DEF456", "Chevy", 2000, 15000);
-        Truck truck3 = new Truck("GHI789", "Toyota", 2500, 20000);
-        Truck truck4 = new Truck("JKL012", "Honda", 3000, 25000);
-        Truck truck5 = new Truck("MNO345", "Nissan", 3500, 30000);
+        Truck truck1 = new Truck("abc123", "ford", 1500, 10000);
+        Truck truck2 = new Truck("def456", "chevy", 2000, 15000);
+        Truck truck3 = new Truck("ghi789", "toyota", 2500, 20000);
+        Truck truck4 = new Truck("jkl012", "honda", 3000, 25000);
+        Truck truck5 = new Truck("mno345", "nissan", 3500, 30000);
+
 
         ResourceManagementService rms = factory.getResourceManagementService();
         rms.addDriver(JSON.serialize(driver1));
@@ -287,62 +300,62 @@ public class Main {
 
         // generate item lists with random data:
         HashMap<String, Integer> load1 = new HashMap<>();
-        load1.put("Shirts", 20);
-        load1.put("Pants", 15);
-        load1.put("Socks", 30);
+        load1.put("shirts", 20);
+        load1.put("pants", 15);
+        load1.put("socks", 30);
 
         HashMap<String, Integer> unload1 = new HashMap<>();
-        unload1.put("Jackets", 10);
-        unload1.put("Hats", 5);
-        unload1.put("Gloves", 20);
+        unload1.put("jackets", 10);
+        unload1.put("hats", 5);
+        unload1.put("gloves", 20);
 
         ItemList itemList1 = new ItemList(1001, load1, unload1);
 
         HashMap<String, Integer> load2 = new HashMap<>();
-        load2.put("Pencils", 50);
-        load2.put("Notebooks", 20);
-        load2.put("Erasers", 30);
+        load2.put("pencils", 50);
+        load2.put("notebooks", 20);
+        load2.put("erasers", 30);
 
         HashMap<String, Integer> unload2 = new HashMap<>();
-        unload2.put("Pens", 40);
-        unload2.put("Markers", 15);
-        unload2.put("Highlighters", 25);
+        unload2.put("pens", 40);
+        unload2.put("markers", 15);
+        unload2.put("highlighters", 25);
 
         ItemList itemList2 = new ItemList(1002, load2, unload2);
 
         HashMap<String, Integer> load3 = new HashMap<>();
-        load3.put("Laptops", 5);
-        load3.put("Tablets", 10);
-        load3.put("Smartphones", 20);
+        load3.put("laptops", 5);
+        load3.put("tablets", 10);
+        load3.put("smartphones", 20);
 
         HashMap<String, Integer> unload3 = new HashMap<>();
-        unload3.put("Desktops", 8);
-        unload3.put("Monitors", 12);
-        unload3.put("Printers", 6);
+        unload3.put("desktops", 8);
+        unload3.put("monitors", 12);
+        unload3.put("printers", 6);
 
         ItemList itemList3 = new ItemList(1003, load3, unload3);
 
         HashMap<String, Integer> load4 = new HashMap<>();
-        load4.put("Carrots", 15);
-        load4.put("Broccoli", 10);
-        load4.put("Celery", 20);
+        load4.put("carrots", 15);
+        load4.put("broccoli", 10);
+        load4.put("celery", 20);
 
         HashMap<String, Integer> unload4 = new HashMap<>();
-        unload4.put("Tomatoes", 12);
-        unload4.put("Peppers", 8);
-        unload4.put("Cucumbers", 18);
+        unload4.put("tomatoes", 12);
+        unload4.put("peppers", 8);
+        unload4.put("cucumbers", 18);
 
         ItemList itemList4 = new ItemList(1004, load4, unload4);
 
         HashMap<String, Integer> load5 = new HashMap<>();
-        load5.put("Screws", 500);
-        load5.put("Nails", 1000);
-        load5.put("Bolts", 750);
+        load5.put("screws", 500);
+        load5.put("nails", 1000);
+        load5.put("bolts", 750);
 
         HashMap<String, Integer> unload5 = new HashMap<>();
-        unload5.put("Washers", 800);
-        unload5.put("Anchors", 600);
-        unload5.put("Clamps", 900);
+        unload5.put("washers", 800);
+        unload5.put("anchors", 600);
+        unload5.put("clamps", 900);
 
         ItemList itemList5 = new ItemList(1005, load5, unload5);
 

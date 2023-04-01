@@ -71,7 +71,7 @@ public class ItemListsManagement {
         while (true) {
             System.out.println("=========================================");
             Integer id = getListID();
-            if (id == null) continue;
+            if (id == null) return;
 
             ItemList oldList = itemLists.get(id);
             ItemList newList = new ItemList(id, oldList.load(), oldList.unload());
@@ -105,7 +105,7 @@ public class ItemListsManagement {
             ItemList list = itemLists.get(id);
             printItemList(list);
             System.out.println("Are you sure you want to remove this item list? (y/n)");
-            String option = getString();
+            String option = getLine();
             switch(option){
                 case "y":
                     String json = JSON.serialize(list);
@@ -132,7 +132,7 @@ public class ItemListsManagement {
         ItemList list = itemLists.get(id);
         printItemList(list);
         System.out.println("\nEnter 'done!' to return to previous menu");
-        getString();
+        getLine();
     }
 
     private static void viewAllItemLists() {
@@ -143,19 +143,28 @@ public class ItemListsManagement {
             printItemList(list);
         }
         System.out.println("\nEnter 'done!' to return to previous menu");
-        getString();
+        getWord();
     }
 
     private static void itemEditor(HashMap<String,Integer> items) {
         System.out.println("\nTo remove items from the list enter the item name and 0 in the quantity");
         System.out.println("To finish adding items, enter \"done!\" in the item name");
         while (true) {
-            String item = getString("<Item name> <Quantity>: ").toLowerCase();
-            if(item.equalsIgnoreCase("done!")){
+            String itemQuantity = getLine("<Item name> <Quantity>: ").toLowerCase();
+
+            if(itemQuantity.equalsIgnoreCase("done!")){
                 break;
             }
-            int quantity = getInt("");
-            if(quantity == 0) {
+
+            String[] itemQuantityArray = itemQuantity.split(" ");
+            String item = "";
+            for(int i = 0; i < itemQuantityArray.length-1; i++){
+                item += itemQuantityArray[i];
+                if(i != itemQuantityArray.length-2) item += " ";
+            }
+            int quantity = Integer.parseInt(itemQuantityArray[itemQuantityArray.length-1]);
+
+            if(quantity <= 0) {
                 items.remove(item);
             }
             else {

@@ -4,7 +4,6 @@ import CMDApp.Records.ItemList;
 import CMDApp.Records.Site;
 import CMDApp.Records.Transport;
 import TransportModule.ServiceLayer.TransportsService;
-import jdk.swing.interop.SwingInterOpUtils;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -62,8 +61,8 @@ public class TransportsManagement {
         System.out.println("Enter transport details:");
 
         // date/time
-        LocalDate departureDate = LocalDate.parse(getString("Departure date (format: yyyy-mm-dd): "));
-        LocalTime departureTime = LocalTime.parse(getString("Departure time (format: hh:mm): "));
+        LocalDate departureDate = LocalDate.parse(getLine("Departure date (format: yyyy-mm-dd): "));
+        LocalTime departureTime = LocalTime.parse(getLine("Departure time (format: hh:mm): "));
         LocalDateTime departureDateTime = LocalDateTime.of(departureDate, departureTime);
 
         // driver
@@ -138,7 +137,7 @@ public class TransportsManagement {
             int option = getInt();
             switch (option) {
                 case 1:
-                    LocalDate departureDate = LocalDate.parse(getString("Departure date (format: yyyy-mm-dd): "));
+                    LocalDate departureDate = LocalDate.parse(getLine("Departure date (format: yyyy-mm-dd): "));
                     LocalDateTime departureDateTime = LocalDateTime.of(departureDate, transport.scheduledTime().toLocalTime());
                     updateTransportHelperMethod(
                             transport.id(),
@@ -152,7 +151,7 @@ public class TransportsManagement {
                     );
                     break;
                 case 2:
-                    LocalTime departureTime = LocalTime.parse(getString("Departure time (format: hh:mm): "));
+                    LocalTime departureTime = LocalTime.parse(getLine("Departure time (format: hh:mm): "));
                     departureDateTime = LocalDateTime.of(transport.scheduledTime().toLocalDate(), departureTime);
                     updateTransportHelperMethod(
                             transport.id(),
@@ -239,7 +238,7 @@ public class TransportsManagement {
             printTransportDetails(transport);
             System.out.println("=========================================");
             System.out.println("Are you sure you want to delete this transport? (y/n)");
-            String option = getString();
+            String option = getLine();
             switch (option) {
                 case "y":
                     String json = JSON.serialize(transport);
@@ -273,7 +272,7 @@ public class TransportsManagement {
             System.out.println("-----------------------------------------");
         }
         System.out.println("\nEnter 'done!' to return to previous menu");
-        getString();
+        getLine();
     }
 
     private static void printTransportDetails(Transport transport) {

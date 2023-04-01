@@ -71,7 +71,6 @@ public class ItemListsManagement {
     private static void updateItemList() {
         while (true) {
             System.out.println("=========================================");
-            System.out.println("Enter item list ID to update (enter '-1' to return to the previous menu): ");
             fetchItemLists();
             Integer id = getListID();
             if (id == null) continue;
@@ -102,52 +101,51 @@ public class ItemListsManagement {
     private static void removeItemList() {
         while (true) {
             System.out.println("=========================================");
-            System.out.println("Select item list to remove:");
+            fetchItemLists();
             Integer id = getListID();
-
-            //TODO: code for fetching item list and confirming removal
-
-            //TODO: code for removing item list
-
-            System.out.println("\nItem list removed successfully!");
+            if (id == null) continue;
+            ItemList list = itemLists.get(id);
+            printItemList(list);
+            System.out.println("Are you sure you want to remove this item list? (y/n)");
+            String option = getString();
+            switch(option){
+                case "y":
+                    String json = JSON.serialize(list);
+                    String responseJson = ils.removeItemList(json);
+                    Response<String> response = JSON.deserialize(responseJson, Response.class);
+                    if(response.isSuccess()) itemLists.remove(id);
+                    System.out.println("\n"+response.getMessage());
+                    break;
+                case "n":
+                    break;
+                default:
+                    System.out.println("Invalid option!");
+                    continue;
+            }
+            break;
         }
     }
 
     private static void viewItemList() {
         System.out.println("=========================================");
         System.out.println("Select item list to view:");
+        fetchItemLists();
         Integer id = getListID();
-        //TODO: code for fetching item list
-        ItemList list = itemList1;
-        System.out.println("\nItems loading list:");
-        for (String key : list.load().keySet()) {
-            System.out.println("  "+key + " : " + list.load().get(key));
-        }
-        System.out.println("\nItems unloading list:");
-        for (String key : list.unload().keySet()) {
-            System.out.println("  "+key + " : " + list.unload().get(key));
-        }
-        System.out.println("\nPress enter to return to previous menu");
+        if (id == null) return;
+        ItemList list = itemLists.get(id);
+        printItemList(list);
+        System.out.println("\nEnter 'done!' to return to previous menu");
         getString();
     }
 
     private static void viewAllItemLists() {
         System.out.println("=========================================");
         System.out.println("All item lists:");
-        //TODO: code for fetching all item lists
+        fetchItemLists();
         ItemList[] itemLists = {itemList1};
         for (ItemList list : itemLists) {
             System.out.println("-----------------------------------------");
-            System.out.println("Item list ID: " + list.id());
-            System.out.println("Items loading list:");
-            for (String key : list.load().keySet()) {
-                System.out.println("  "+key + " : " + list.load().get(key));
-            }
-            System.out.println("Items unloading list:");
-            for (String key : list.unload().keySet()) {
-                System.out.println("  "+key + " : " + list.unload().get(key));
-            }
-            System.out.println();
+            printItemList(list);
         }
         System.out.println("\nPress enter to return to previous menu");
         getString();
@@ -182,6 +180,7 @@ public class ItemListsManagement {
     }
 
     private static Integer getListID() {
+        System.out.println("Enter item list ID to remove (enter '-1' to return to the previous menu): ");
         int id = getInt("Item list ID: ");
         if (id == -1) return null;
         if(itemLists.containsKey(id) == false){
@@ -189,5 +188,17 @@ public class ItemListsManagement {
             return null;
         }
         return id;
+    }
+
+    private static void printItemList(ItemList list) {
+        System.out.println("Item list ID: " + list.id());
+        System.out.println("Items loading list:");
+        for (String key : list.load().keySet()) {
+            System.out.println("  "+key + " : " + list.load().get(key));
+        }
+        System.out.println("Items unloading list:");
+        for (String key : list.unload().keySet()) {
+            System.out.println("  " + key + " : " + list.unload().get(key));
+        }
     }
 }

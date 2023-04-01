@@ -8,6 +8,7 @@ import java.util.*;
 
 import static CMDApp.DriversManagement.fetchDrivers;
 import static CMDApp.DriversManagement.manageDrivers;
+import static CMDApp.ItemListsManagement.fetchItemLists;
 import static CMDApp.ItemListsManagement.manageItemLists;
 import static CMDApp.SitesManagement.fetchSites;
 import static CMDApp.SitesManagement.manageSites;
@@ -60,6 +61,10 @@ public class Main {
     static HashMap<String,Site> sites = null;
     {
         fetchSites();
+    }
+    static HashMap<Integer,ItemList> itemLists = null;
+    {
+        fetchItemLists();
     }
 
     public static void main(String[] args) {
@@ -132,7 +137,7 @@ public class Main {
     }
 
     static int getInt(String prefix){
-        System.out.print(prefix);
+        if(prefix != "") System.out.print(prefix);
         int option = 0;
         try{
             option = scanner.nextInt();
@@ -147,7 +152,7 @@ public class Main {
     }
 
     static String getString(String prefix) {
-        System.out.print(prefix);
+        if(prefix != "") System.out.print(prefix);
         return scanner.next();
     }
 

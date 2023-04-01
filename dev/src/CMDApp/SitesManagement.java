@@ -174,8 +174,13 @@ public class SitesManagement {
         while(true) {
             System.out.println("=========================================");
             System.out.println("Enter address of site to view (enter 'cancel!' to return to previous menu):");
+            fetchSites();
             String siteId = getString("Address: ");
             if(siteId.equals("cancel!")) return;
+            if(sites.containsKey(siteId) == false) {
+                System.out.println("Site not found!");
+                continue;
+            }
             Site site = sites.get(siteId);
             System.out.println("=========================================");
             System.out.println("Site details:");

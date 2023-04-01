@@ -1,12 +1,16 @@
 package CMDApp;
 
 import CMDApp.Records.ItemList;
+import TransportModule.ServiceLayer.ItemListsService;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 
 import static CMDApp.Main.*;
 
 public class ItemListsManagement {
+
+    static ItemListsService ils = factory.getItemListsService();
 
     static void manageItemLists() {
         while(true){
@@ -49,73 +53,49 @@ public class ItemListsManagement {
         System.out.println("=========================================");
         System.out.println("Item list ID: "+itemListIdCounter);
         System.out.println("Enter items details:");
-        System.out.println("To finish adding items, enter \"done!\" in the item name");
-        HashMap<String,Integer> items = new HashMap<>();
-        while(true){
-            String item = getString("Item name: ").toLowerCase();
-            if(item.equalsIgnoreCase("done!")){
-                break;
-            }
-            int quantity = getInt("Quantity: ");
-            items.put(item,quantity);
+        ItemList list = new ItemList(itemListIdCounter, new HashMap<>(), new HashMap<>());
+        System.out.println("\nItem loading list:");
+        itemEditor(list.load());
+        System.out.println("\nItem unloading list:");
+        itemEditor(list.unload());
+        String json = JSON.serialize(list);
+        String responseJson = ils.addItemList(json);
+        Response<String> response = JSON.deserialize(responseJson, Response.class);
+        if(response.isSuccess()) {
+            itemLists.put(itemListIdCounter,list);
+            itemListIdCounter++;
         }
-        //TODO: code for adding item list
-
-        System.out.println("\nItem list added successfully!");
-        itemListIdCounter++;
+        System.out.println("\n"+response.getMessage());
     }
 
     private static void updateItemList() {
         while (true) {
             System.out.println("=========================================");
-            System.out.println("Select item list to update:");
-            int id = getInt("Item list ID: ");
-            //TODO: code for fetching item list
-            ItemList list = itemList1;
-            System.out.println("\nTo remove items from the list enter the item name and 0 in the quantity");
-            System.out.println("To finish updating items enter \"done!\" in the item name");
+            System.out.println("Enter item list ID to update (enter '-1' to return to the previous menu): ");
+            fetchItemLists();
+            Integer id = getListID();
+            if (id == null) continue;
 
+            ItemList list = itemLists.get(id);
 
-            //loading item list
+            //unloading item list
             System.out.println("\nItem unloading list:");
             for (String key  : list.load().keySet()){
                 System.out.println("  "+key+" : "+list.load().get(key));
             }
-            while (true) {
-                String item = getString("\nItem name: ");
-                if(item.equalsIgnoreCase("done!")){
-                    break;
-                }
-                int quantity = getInt("Quantity: ");
-                if(quantity == 0) {
-                    list.load().remove(item);
-                }
-                else {
-                    list.load().put(item,quantity);
-                }
-            }
+            itemEditor(list.load());
 
-            //unloading item list
+            //loading item list
             System.out.println("\nItem loading list:");
             for (String key  : list.unload().keySet()){
                 System.out.println("  "+key+" : "+list.unload().get(key));
             }
-            while (true) {
-                String item = getString("\nItem name: ");
-                if(item.equalsIgnoreCase("done!")){
-
-                    //TODO: code for updating item list
-                    System.out.println("\nItem list updated successfully!");
-                    return;
-                }
-                int quantity = getInt("Quantity: ");
-                if(quantity == 0) {
-                    list.unload().remove(item);
-                }
-                else {
-                    list.unload().put(item,quantity);
-                }
-            }
+            itemEditor(list.unload());
+            String json = JSON.serialize(list);
+            String responseJson = ils.updateItemList(json);
+            Response<String> response = JSON.deserialize(responseJson, Response.class);
+            if(response.isSuccess()) itemLists.put(id,list);
+            System.out.println("\n"+response.getMessage());
         }
     }
 
@@ -123,7 +103,7 @@ public class ItemListsManagement {
         while (true) {
             System.out.println("=========================================");
             System.out.println("Select item list to remove:");
-            int id = getInt("Item list ID: ");
+            Integer id = getListID();
 
             //TODO: code for fetching item list and confirming removal
 
@@ -136,10 +116,7 @@ public class ItemListsManagement {
     private static void viewItemList() {
         System.out.println("=========================================");
         System.out.println("Select item list to view:");
-        int id = getInt("Item list ID: ");
-        if(id == -1){
-            return;
-        }
+        Integer id = getListID();
         //TODO: code for fetching item list
         ItemList list = itemList1;
         System.out.println("\nItems loading list:");
@@ -174,5 +151,43 @@ public class ItemListsManagement {
         }
         System.out.println("\nPress enter to return to previous menu");
         getString();
+    }
+
+    static void fetchItemLists() {
+        String json = ils.getAllItemLists();
+        Response<LinkedList<ItemList>> response = JSON.deserialize(json, Response.class);
+        HashMap<Integer, ItemList> listMap = new HashMap<>();
+        for(ItemList list : response.getData()){
+            listMap.put(list.id(), list);
+        }
+        itemLists = listMap;
+    }
+
+    private static void itemEditor(HashMap<String,Integer> items) {
+        System.out.println("\nTo remove items from the list enter the item name and 0 in the quantity");
+        System.out.println("To finish adding items, enter \"done!\" in the item name");
+        while (true) {
+            String item = getString("<Item name> <Quantity>: ").toLowerCase();
+            if(item.equalsIgnoreCase("done!")){
+                break;
+            }
+            int quantity = getInt("");
+            if(quantity == 0) {
+                items.remove(item);
+            }
+            else {
+                items.put(item,quantity);
+            }
+        }
+    }
+
+    private static Integer getListID() {
+        int id = getInt("Item list ID: ");
+        if (id == -1) return null;
+        if(itemLists.containsKey(id) == false){
+            System.out.println("Invalid item list ID!");
+            return null;
+        }
+        return id;
     }
 }

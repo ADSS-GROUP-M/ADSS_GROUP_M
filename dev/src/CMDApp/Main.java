@@ -5,7 +5,10 @@ import TransportModule.ServiceLayer.ItemListsService;
 import TransportModule.ServiceLayer.ModuleFactory;
 import TransportModule.ServiceLayer.ResourceManagementService;
 import TransportModule.ServiceLayer.TransportsService;
+import com.google.gson.internal.LinkedTreeMap;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -29,13 +32,13 @@ public class Main {
     static HashMap<Integer, Transport> transports = null;
 
     public static void main(String[] args) {
-//        fetchDrivers();
-//        fetchTrucks();
-//        fetchSites();
-//        fetchItemLists();
-//        fetchTransports();
-
         generateData();
+
+        fetchDrivers();
+        fetchTrucks();
+        fetchSites();
+        fetchItemLists();
+        fetchTransports();
 
         mainMenu();
     }
@@ -187,7 +190,8 @@ public class Main {
 
     static void fetchTrucks() {
         String json = factory.getResourceManagementService().getAllTrucks();
-        Response<LinkedList<Truck>> response = JSON.deserialize(json, Response.class);
+        Type type = new TypeToken<Response<LinkedList<Truck>>>(){}.getType();
+        Response<LinkedList<Truck>> response = JSON.deserialize(json, type);
         HashMap<String, Truck> truckMap = new HashMap<>();
         for(Truck truck : response.getData()){
             truckMap.put(truck.id(), truck);
@@ -197,9 +201,10 @@ public class Main {
 
     static void fetchDrivers() {
         String json = factory.getResourceManagementService().getAllDrivers();
-        Response<LinkedList<Driver>> response = JSON.deserialize(json, Response.class);
+        Type type = new TypeToken<Response<LinkedList<Driver>>>(){}.getType();
+        Response<LinkedList<Driver>> response = JSON.deserialize(json, type);
         HashMap<Integer, Driver> driverMap = new HashMap<>();
-        for(Driver driver : response.getData()){
+        for(var driver : response.getData()){
             driverMap.put(driver.id(), driver);
         }
         drivers = driverMap;
@@ -207,7 +212,8 @@ public class Main {
 
     static void fetchSites() {
         String json = factory.getResourceManagementService().getAllSites();
-        Response<LinkedList<Site>> response = JSON.deserialize(json, Response.class);
+        Type type = new TypeToken<Response<LinkedList<Site>>>(){}.getType();
+        Response<LinkedList<Site>> response = JSON.deserialize(json, type);
         HashMap<String, Site> siteMap = new HashMap<>();
         for(Site site : response.getData()){
             siteMap.put(site.address(), site);
@@ -217,7 +223,8 @@ public class Main {
 
     static void fetchItemLists() {
         String json = factory.getItemListsService().getAllItemLists();
-        Response<LinkedList<ItemList>> response = JSON.deserialize(json, Response.class);
+        Type type = new TypeToken<Response<LinkedList<ItemList>>>(){}.getType();
+        Response<LinkedList<ItemList>> response = JSON.deserialize(json, type);
         HashMap<Integer, ItemList> listMap = new HashMap<>();
         for(ItemList list : response.getData()){
             listMap.put(list.id(), list);
@@ -227,7 +234,8 @@ public class Main {
 
     static void fetchTransports() {
         String json = factory.getTransportsService().getAllTransports();
-        Response<LinkedList<Transport>> response = JSON.deserialize(json, Response.class);
+        Type type = new TypeToken<Response<LinkedList<Transport>>>(){}.getType();
+        Response<LinkedList<Transport>> response = JSON.deserialize(json, type);
         HashMap<Integer, Transport> transportMap = new HashMap<>();
         for(Transport transport : response.getData()){
             transportMap.put(transport.id(), transport);
@@ -347,7 +355,6 @@ public class Main {
         ils.addItemList(JSON.serialize(itemList5));
 
         // Randomly generated transports
-        // Randomly generated transports
         Transport transport1 = new Transport(
                 2001,
                 site1,
@@ -359,7 +366,7 @@ public class Main {
                 truck1.id(),
                 driver1.id(),
                 LocalDateTime.of(2023, 4, 5, 8, 30),
-                15000
+                truck1.maxWeight()
         );
 
         Transport transport2 = new Transport(
@@ -373,7 +380,7 @@ public class Main {
                 truck2.id(),
                 driver2.id(),
                 LocalDateTime.of(2023, 4, 7, 12, 0),
-                20000
+                truck2.maxWeight()
         );
 
         Transport transport3 = new Transport(
@@ -387,7 +394,7 @@ public class Main {
                 truck3.id(),
                 driver3.id(),
                 LocalDateTime.of(2023, 4, 10, 9, 30),
-                30000
+                truck3.maxWeight()
         );
 
         Transport transport4 = new Transport(
@@ -402,7 +409,7 @@ public class Main {
                 truck4.id(),
                 driver4.id(),
                 LocalDateTime.of(2023, 4, 12, 14, 0),
-                25000
+                truck4.maxWeight()
         );
 
         Transport transport5 = new Transport(
@@ -415,7 +422,7 @@ public class Main {
                 truck5.id(),
                 driver5.id(),
                 LocalDateTime.of(2023, 4, 15, 10, 0),
-                18000
+                truck5.maxWeight()
         );
 
         TransportsService ts = factory.getTransportsService();

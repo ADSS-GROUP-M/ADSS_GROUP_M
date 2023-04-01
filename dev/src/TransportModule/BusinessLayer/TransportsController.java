@@ -16,6 +16,7 @@ public class TransportsController {
     public TransportsController(TrucksController tc){
         transports = new TreeMap<>();
         idCounter = 0; // this will have to be restored from the DB in the future
+        this.tc = tc;
     }
 
     public void addTransport(Transport transport)throws IOException{

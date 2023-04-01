@@ -137,8 +137,7 @@ public class DriversManagement {
     private static void getDriver() {
         while(true){
             System.out.println("=========================================");
-            System.out.println("Enter employee ID of driver to view (enter '-1' to return to previous menu):");
-            int driverId = getInt("Employee ID: ");
+            int driverId = getInt("Enter employee ID of driver to view (enter '-1' to return to previous menu): ");
             if(driverId == -1) return;
             Driver driver = drivers.get(driverId);
             System.out.println("=========================================");

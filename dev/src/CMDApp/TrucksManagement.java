@@ -136,8 +136,7 @@ public class TrucksManagement {
     private static void getTruck() {
         while(true) {
             System.out.println("=========================================");
-            System.out.println("Enter license plate of truck to view ('cancel!' to return to previous menu):");
-            String truckId = getString("License plate: ");
+            String truckId = getString("Enter license plate of truck to view ('cancel!' to return to previous menu): ");
             if (truckId.equalsIgnoreCase("cancel!")) return;
             Truck truck = trucks.get(truckId);
             System.out.println("=========================================");

@@ -166,8 +166,7 @@ public class SitesManagement {
     private static void getSite() {
         while(true) {
             System.out.println("=========================================");
-            System.out.println("Enter address of site to view (enter 'cancel!' to return to previous menu):");
-            String siteId = getString("Address: ");
+            String siteId = getString("Enter address of site to view (enter 'cancel!' to return to previous menu): ");
             if(siteId.equals("cancel!")) return;
             if(sites.containsKey(siteId) == false) {
                 System.out.println("Site not found!");

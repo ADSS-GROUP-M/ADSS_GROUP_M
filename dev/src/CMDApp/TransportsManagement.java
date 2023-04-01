@@ -4,6 +4,7 @@ import CMDApp.Records.ItemList;
 import CMDApp.Records.Site;
 import CMDApp.Records.Transport;
 import TransportModule.ServiceLayer.TransportsService;
+import jdk.swing.interop.SwingInterOpUtils;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -276,15 +277,15 @@ public class TransportsManagement {
     }
 
     private static void printTransportDetails(Transport transport) {
-        System.out.println("Transport details:");
+        System.out.println("Transport id: "+ transport.id());
         System.out.println("Date: "+ transport.scheduledTime().toLocalDate());
         System.out.println("Time: "+ transport.scheduledTime().toLocalTime());
         System.out.println("DriverId: "+ transport.driverId());
         System.out.println("TruckId: "+ transport.truckId());
         System.out.println("Source: "+ transport.source());
         System.out.println("Destinations: ");
-        for(int i = 0; i< transport.destinations().size(); i++){
-            System.out.println("   "+ transport.destinations().get(i) + " (items list id: "+ transport.itemLists().get(i)+")");
+        for(Site destination : transport.destinations()){
+            System.out.println("   "+ destination + " (items list id: "+ transport.itemLists().get(destination).id()+")");
         }
         System.out.println("Weight: "+ transport.weight());
     }
@@ -311,8 +312,7 @@ public class TransportsManagement {
     }
 
     private static Transport getTransport() {
-        System.out.println("Enter transport ID (enter '-1' to return to previous menu): ");
-        int transportId = getInt("Transport ID: ");
+        int transportId = getInt("Enter transport ID (enter '-1' to return to previous menu): ");
         if(transportId == -1) return null;
         if(transports.containsKey(transportId) == false) {
             System.out.println("Transport with ID "+transportId+" does not exist!");

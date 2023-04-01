@@ -141,7 +141,7 @@ public class ItemListsManagement {
             System.out.println("-----------------------------------------");
             printItemList(list);
         }
-        System.out.println("\nPress enter to return to previous menu");
+        System.out.println("\nEnter 'done!' to return to previous menu");
         getString();
     }
 
@@ -164,8 +164,8 @@ public class ItemListsManagement {
     }
 
     private static Integer getListID() {
-        System.out.println("Enter item list ID (enter '-1' to return to the previous menu): ");
-        int id = getInt("Item list ID: ");
+        System.out.println();
+        int id = getInt("Enter item list ID (enter '-1' to return to the previous menu): ");
         if (id == -1) return null;
         if(itemLists.containsKey(id) == false){
             System.out.println("Invalid item list ID!");

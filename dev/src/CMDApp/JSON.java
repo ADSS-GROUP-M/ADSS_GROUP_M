@@ -1,7 +1,10 @@
 package CMDApp;
 
+import CMDApp.Records.Driver;
 import com.google.gson.*;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.time.LocalDateTime;
 
 public class JSON {
@@ -30,6 +33,10 @@ public class JSON {
 
     public static <T> T deserialize(String json, Class<T> classOfT) {
         return gson.fromJson(json, classOfT);
+    }
+
+    public static <T> T deserialize(String json, Type TypeOfT) {
+        return gson.fromJson(json, TypeOfT);
     }
 }
 

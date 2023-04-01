@@ -5,6 +5,10 @@ import java.util.Objects;
 
 public record ItemList (int id, HashMap<String, Integer> load,HashMap<String, Integer> unload) {
 
+    public ItemList(int id){
+        this(id, new HashMap<>(), new HashMap<>());
+    }
+
     public static ItemList parse(int i, String json){
         //TODO: implement
         return null;

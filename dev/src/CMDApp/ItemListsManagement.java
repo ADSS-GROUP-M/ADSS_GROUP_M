@@ -73,25 +73,26 @@ public class ItemListsManagement {
             Integer id = getListID();
             if (id == null) continue;
 
-            ItemList list = itemLists.get(id);
+            ItemList oldList = itemLists.get(id);
+            ItemList newList = new ItemList(id, oldList.load(), oldList.unload());
 
             //unloading item list
             System.out.println("\nItem unloading list:");
-            for (String key  : list.load().keySet()){
-                System.out.println("  "+key+" : "+list.load().get(key));
+            for (String key  : newList.load().keySet()){
+                System.out.println("  "+key+" : "+newList.load().get(key));
             }
-            itemEditor(list.load());
+            itemEditor(newList.load());
 
             //loading item list
             System.out.println("\nItem loading list:");
-            for (String key  : list.unload().keySet()){
-                System.out.println("  "+key+" : "+list.unload().get(key));
+            for (String key  : newList.unload().keySet()){
+                System.out.println("  "+key+" : "+newList.unload().get(key));
             }
-            itemEditor(list.unload());
-            String json = JSON.serialize(list);
+            itemEditor(newList.unload());
+            String json = JSON.serialize(newList);
             String responseJson = ils.updateItemList(json);
             Response<String> response = JSON.deserialize(responseJson, Response.class);
-            if(response.isSuccess()) itemLists.put(id,list);
+            if(response.isSuccess()) itemLists.put(id,newList);
             System.out.println("\n"+response.getMessage());
         }
     }

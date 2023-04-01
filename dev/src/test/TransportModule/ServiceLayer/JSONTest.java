@@ -1,4 +1,4 @@
-package TransportModuleTest.ServiceLayerTest;
+package TransportModule.ServiceLayer;
 
 import TransportModule.BusinessLayer.Records.ItemList;
 import TransportModule.BusinessLayer.Records.Site;
@@ -37,7 +37,6 @@ class JSONTest {
         HashMap<Site,ItemList> siteItems = new HashMap<>();
         siteItems.put(destination, itemList);
         Transport t = new Transport(1,source,sites,siteItems,"1",1,dateTime);
-        String json = JSON.serialize(t);
         String output = JSON.serialize(t);
         String expected = """
                  {

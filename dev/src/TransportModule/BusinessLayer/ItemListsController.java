@@ -12,13 +12,14 @@ public class ItemListsController {
 
     public ItemListsController(){
         itemLists = new TreeMap<>();
-        idCounter = 0; // this will have to be restored from the DB in the future
+        idCounter = 1; // currently not in use.
+                // this will have to be restored from the DB in the future.
     }
     public void addItemList(ItemList itemList) throws IOException{
         if(itemLists.containsKey(itemList.id()) == true)
             throw new IOException("Item list already exists");
 
-        itemLists.put(idCounter++, itemList);
+        itemLists.put(itemList.id(), itemList);
     }
 
     public ItemList createItemList(String json){

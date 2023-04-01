@@ -150,20 +150,6 @@ public class TransportsManagement {
         }
     }
 
-    private static void printTransportDetails(Transport transport) {
-        System.out.println("Transport details:");
-        System.out.println("Date: "+ transport.scheduledTime().toLocalDate());
-        System.out.println("Time: "+ transport.scheduledTime().toLocalTime());
-        System.out.println("DriverId: "+ transport.driverId());
-        System.out.println("TruckId: "+ transport.truckId());
-        System.out.println("Source: "+ transport.source());
-        System.out.println("Destinations: ");
-        for(int i = 0; i< transport.destinations().size(); i++){
-            System.out.println("   "+ transport.destinations().get(i) + " (items list id: "+ transport.itemLists().get(i)+")");
-        }
-        System.out.println("Weight: "+ transport.weight());
-    }
-
     private static void deleteTransport() {
         while(true) {
             System.out.println("=========================================");
@@ -194,5 +180,19 @@ public class TransportsManagement {
     }
 
     private static void viewAllTransports() {
+    }
+
+    private static void printTransportDetails(Transport transport) {
+        System.out.println("Transport details:");
+        System.out.println("Date: "+ transport.scheduledTime().toLocalDate());
+        System.out.println("Time: "+ transport.scheduledTime().toLocalTime());
+        System.out.println("DriverId: "+ transport.driverId());
+        System.out.println("TruckId: "+ transport.truckId());
+        System.out.println("Source: "+ transport.source());
+        System.out.println("Destinations: ");
+        for(int i = 0; i< transport.destinations().size(); i++){
+            System.out.println("   "+ transport.destinations().get(i) + " (items list id: "+ transport.itemLists().get(i)+")");
+        }
+        System.out.println("Weight: "+ transport.weight());
     }
 }

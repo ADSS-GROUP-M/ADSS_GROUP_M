@@ -46,11 +46,11 @@ public class ItemListsManagement {
     }
 
     private static void createItemList() {
-        HashMap<String,Integer> items = new HashMap<>();
         System.out.println("=========================================");
         System.out.println("Item list ID: "+itemListIdCounter);
         System.out.println("Enter items details:");
         System.out.println("To finish adding items, enter \"done!\" in the item name");
+        HashMap<String,Integer> items = new HashMap<>();
         while(true){
             String item = getString("Item name: ").toLowerCase();
             if(item.equalsIgnoreCase("done!")){

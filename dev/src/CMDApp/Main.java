@@ -9,6 +9,7 @@ import java.util.*;
 import static CMDApp.DriversManagement.fetchDrivers;
 import static CMDApp.DriversManagement.manageDrivers;
 import static CMDApp.ItemListsManagement.manageItemLists;
+import static CMDApp.SitesManagement.fetchSites;
 import static CMDApp.SitesManagement.manageSites;
 import static CMDApp.TransportsManagement.manageTransports;
 import static CMDApp.TrucksManagement.fetchTrucks;
@@ -20,8 +21,8 @@ public class Main {
     static Scanner scanner = new Scanner(System.in);
     static int transportIdCounter = 1;
     static int itemListIdCounter = 1;
-    static String[] shippingZones = {"North", "South", "East", "West"};
-    static String[] sites = {"Site1", "Site2", "Site3", "Site4"};
+//    static String[] shippingZones = {"North", "South", "East", "West"};
+//    static String[] sites = {"Site1", "Site2", "Site3", "Site4"};
 //    static String[] drivers = {"Driver1", "Driver2", "Driver3", "Driver4"};
 //    static String[] trucks = {"Truck1", "Truck2", "Truck3", "Truck4"};
     static ItemList itemList1 = new ItemList(
@@ -55,6 +56,10 @@ public class Main {
     static HashMap<String, Truck> trucks = null;
     {
         fetchTrucks();
+    }
+    static HashMap<String,Site> sites = null;
+    {
+        fetchSites();
     }
 
     public static void main(String[] args) {
@@ -146,20 +151,23 @@ public class Main {
         return scanner.next();
     }
 
-    static int pickSite(boolean allowDone) {
+    static String pickSite(boolean allowDone) {
         int i = 1;
-        for(String site : sites){
-            System.out.println((i++)+". "+site);
+        Site[] siteArray = new Site[sites.size()];
+        for(Site site : sites.values()){
+            System.out.println((i)+". Transport zone: "+site.transportZone()+", address: "+site.address());
+            siteArray[i-1] = site;
+            i++;
         }
         if(allowDone) System.out.println(i+". Done");
         int option = getInt()-1;
-        if( (allowDone && (option < 0 || option > sites.length))
-                || (!allowDone && (option < 0 || option > sites.length-1))){
+        if( (allowDone && (option < 0 || option > sites.size()))
+                || (!allowDone && (option < 0 || option > sites.size()-1))){
             System.out.println("Invalid option!");
             return pickSite(allowDone);
         }
-        if(allowDone && option == sites.length) return -1;
-        return option;
+        if(allowDone && option == sites.size()) return null;
+        return siteArray[option].address();
     }
 
     static int pickDriver(boolean allowDone) {

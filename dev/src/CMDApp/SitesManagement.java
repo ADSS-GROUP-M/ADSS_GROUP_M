@@ -1,8 +1,18 @@
 package CMDApp;
 
+import CMDApp.Records.Site;
+import CMDApp.Records.Truck;
+import TransportModule.ServiceLayer.ResourceManagementService;
+
+import java.util.HashMap;
+import java.util.LinkedList;
+
 import static CMDApp.Main.*;
 
 public class SitesManagement {
+
+    static ResourceManagementService rms = factory.getResourceManagementService();
+
     static void manageSites() {
         while(true){
             System.out.println("=========================================");
@@ -43,78 +53,113 @@ public class SitesManagement {
     private static void createSite() {
         System.out.println("=========================================");
         System.out.println("Enter site details:");
-        String shippingZone = getString("Shipping zone: ");
+        String transportZone = getString("Transport zone: ");
         String address = getString("Address: ");
         String contactPhone = getString("Contact phone: ");
         String contactName = getString("Contact name: ");
-        //TODO: code for adding site
-
-        System.out.println("\nSite added successfully!");
+        System.out.println("Site type: ");
+        System.out.println("1. Logistical center");
+        System.out.println("2. Branch");
+        System.out.println("3. Supplier");
+        int siteType = getInt();
+        Site.SiteType type = null;
+        switch (siteType){
+            case 1:
+                type = Site.SiteType.LOGISTICAL_CENTER;
+                break;
+            case 2:
+                type = Site.SiteType.BRANCH;
+                break;
+            case 3:
+                type = Site.SiteType.SUPPLIER;
+                break;
+        }
+        Site newSite = new Site(transportZone, address, contactPhone, contactName, type);
+        String json = JSON.serialize(newSite);
+        String responseJson = rms.addSite(json);
+        Response<String> response = JSON.deserialize(responseJson, Response.class);
+        if(response.isSuccess()) sites.put(newSite.address(), newSite);
+        System.out.println("\n"+response.getMessage());
     }
 
     private static void updateSite() {
         while(true) {
             System.out.println("=========================================");
             System.out.println("Select site to update:");
-            int siteId = pickSite(true);
-            if(siteId == -1) return;
+            fetchSites();
+            String siteId = pickSite(true);
+            if(siteId == null) return;
+            Site site = sites.get(siteId);
             while(true) {
                 System.out.println("=========================================");
                 System.out.println("Site details:");
-                System.out.println("Shipping zone: " + shippingZones[siteId]);
-                System.out.println("Address: " + sites[siteId]);
-                System.out.println("Contact name: " + sites[siteId]);
-                System.out.println("Contact phone: " + sites[siteId]);
+                printSiteDetails(site);
                 System.out.println("=========================================");
                 System.out.println("Please select an option:");
-                System.out.println("1. Update shipping zone");
-                System.out.println("2. Update address");
-                System.out.println("3. Update contact name");
-                System.out.println("4. Update contact phone");
-                System.out.println("5. Return to previous menu");
+                System.out.println("1. Update contact name");
+                System.out.println("2. Update contact phone");
+                System.out.println("3. Return to previous menu");
                 int option = getInt();
                 switch (option) {
                     case 1:
-                        String shippingZone = getString("Shipping zone: ");
+                        String contactName = getString("Contact name: ");
+                        updateSiteHelperMethod(site.transportZone(),
+                                site.address(),
+                                site.phoneNumber(),
+                                contactName,
+                                site.siteType()
+                        );
                         break;
                     case 2:
-                        String address = getString("Address: ");
+                        String contactPhone = getString("Contact phone: ");
+                        updateSiteHelperMethod(
+                                site.transportZone(),
+                                site.address(),
+                                contactPhone,
+                                site.contactName(),
+                                site.siteType()
+                        );
                         break;
                     case 3:
-                        String contactName = getString("Contact name: ");
-                        break;
-                    case 4:
-                        String contactPhone = getString("Contact phone: ");
-                        break;
-                    case 5:
                         return;
+                    default:
+                        System.out.println("Invalid option!");
+                        continue;
                 }
-                //TODO: code for updating site
-                System.out.println("\nSite updated successfully!");
                 break;
             }
         }
+    }
+
+    private static void updateSiteHelperMethod(String transportZone, String address, String phoneNumber, String contactName, Site.SiteType siteType) {
+        Site newSite = new Site(transportZone, address, phoneNumber, contactName, siteType);
+        String json = JSON.serialize(newSite);
+        String responseJson = rms.updateSite(json);
+        Response<String> response = JSON.deserialize(responseJson, Response.class);
+        if(response.isSuccess()) sites.put(newSite.address(), newSite);
+        System.out.println("\n"+response.getMessage());
     }
 
     private static void removeSite() {
         while(true) {
             System.out.println("=========================================");
             System.out.println("Select site to remove:");
-            int siteId = pickSite(true);
-            if (siteId == -1) return;
+            fetchSites();
+            String siteId = pickSite(true);
+            if (siteId == null) return;
+            Site site = sites.get(siteId);
             System.out.println("=========================================");
             System.out.println("Site details:");
-            System.out.println("Shipping zone: " + shippingZones[siteId]);
-            System.out.println("Address: " + sites[siteId]);
-            System.out.println("Contact name: " + sites[siteId]);
-            System.out.println("Contact phone: " + sites[siteId]);
+            printSiteDetails(site);
             System.out.println("=========================================");
             System.out.println("Are you sure you want to remove this site? (y/n)");
             String option = getString();
             switch (option) {
                 case "y":
-                    //TODO: code for removing site
-                    System.out.println("\nSite removed successfully!");
+                    String responseJson = rms.removeSite(siteId);
+                    Response<String> response = JSON.deserialize(responseJson, Response.class);
+                    if(response.isSuccess()) sites.remove(siteId);
+                    System.out.println("\n"+response.getMessage());
                     break;
                 case "n":
                     break;
@@ -128,19 +173,15 @@ public class SitesManagement {
     private static void getSite() {
         while(true) {
             System.out.println("=========================================");
-            System.out.println("Select site to view:");
-            //TODO: code for getting site
-
-            int siteId = pickSite(true);
-            if(siteId == -1) return;
+            System.out.println("Enter address of site to view (enter 'cancel!' to return to previous menu):");
+            String siteId = getString("Address: ");
+            if(siteId.equals("cancel!")) return;
+            Site site = sites.get(siteId);
             System.out.println("=========================================");
             System.out.println("Site details:");
-            System.out.println("Shipping zone: " + shippingZones[siteId]);
-            System.out.println("Address: " + sites[siteId]);
-            System.out.println("Contact name: " + sites[siteId]);
-            System.out.println("Contact phone: " + sites[siteId]);
+            printSiteDetails(site);
             System.out.println("=========================================");
-            System.out.println("Press enter to return to previous menu");
+            System.out.println("Enter 'done!' to return to previous menu");
             getString();
         }
     }
@@ -148,18 +189,30 @@ public class SitesManagement {
     private static void getAllSites() {
         System.out.println("=========================================");
         System.out.println("All sites:");
-        //TODO: code for getting all sites
-
-        for(int i = 0; i < sites.length; i++){
-            System.out.println("Site " + i + ":");
-            System.out.println("Shipping zone: " + shippingZones[i]);
-            System.out.println("Address: " + sites[i]);
-            System.out.println("Contact name: " + sites[i]);
-            System.out.println("Contact phone: " + sites[i]);
+        fetchSites();
+        for(Site site : sites.values()) {
+            printSiteDetails(site);
             System.out.println("-----------------------------------------");
         }
         System.out.println("Press enter to return to previous menu");
         getString();
+    }
+
+    static void fetchSites() {
+        String json = rms.getAllSites();
+        Response<LinkedList<Site>> response = JSON.deserialize(json, Response.class);
+        HashMap<String, Site> siteMap = new HashMap<>();
+        for(Site site : response.getData()){
+            siteMap.put(site.address(), site);
+        }
+        sites = siteMap;
+    }
+
+    private static void printSiteDetails(Site site) {
+        System.out.println("Transport zone: " + site.transportZone());
+        System.out.println("Address: " + site.address());
+        System.out.println("Phone number: " + site.phoneNumber());
+        System.out.println("Contact name: " + site.contactName());
     }
 
 }

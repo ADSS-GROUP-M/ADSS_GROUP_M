@@ -1,8 +1,14 @@
 package CMDApp;
 
+import CMDApp.Records.Truck;
+import TransportModule.ServiceLayer.ResourceManagementService;
+
 import static CMDApp.Main.*;
 
 public class TrucksManagement {
+
+    static ResourceManagementService rms = factory.getResourceManagementService();
+
     static void manageTrucks() {
         while(true){
             System.out.println("=========================================");
@@ -47,7 +53,10 @@ public class TrucksManagement {
         String model = getString("Model: ");
         int baseWeight = getInt("Base weight: ");
         int maxWeight = getInt("Max weight: ");
-        //TODO: code for adding truck
+        Truck newTruck = new Truck(licensePlate, model, baseWeight, maxWeight);
+        String json = JSON.serialize(newTruck);
+        String responseJson = rms.addTruck(json);
+        Truck truck = JSON.deserialize(responseJson, Truck.class);
 
         System.out.println("\nTruck added successfully!");
     }
@@ -58,14 +67,11 @@ public class TrucksManagement {
             System.out.println("Select truck to update:");
             int truckId = pickTruck(true);
             if (truckId == -1) return;
-            String truck = trucks[truckId];
+            Truck truck = trucks.get(truckId);
             while(true) {
                 System.out.println("=========================================");
                 System.out.println("Truck details:");
-                System.out.println("License plate: " + truck);
-                System.out.println("Model: " + truck);
-                System.out.println("Base weight: " + truck);
-                System.out.println("Max weight: " + truck);
+                printTruckDetails(truck);
                 System.out.println("=========================================");
                 System.out.println("Please select an option:");
                 System.out.println("1. Update license plate");
@@ -106,10 +112,7 @@ public class TrucksManagement {
             String truck = trucks[truckId];
             System.out.println("=========================================");
             System.out.println("Truck details:");
-            System.out.println("License plate: " + truck);
-            System.out.println("Model: " + truck);
-            System.out.println("Base weight: " + truck);
-            System.out.println("Max weight: " + truck);
+            printTruckDetails(truck);
             System.out.println("=========================================");
             System.out.println("Are you sure you want to remove this truck? (y/n)");
             String option = getString();
@@ -136,6 +139,13 @@ public class TrucksManagement {
     }
 
     static void fetchTrucks() {
+    }
+
+    private static void printTruckDetails(Truck truck) {
+        System.out.println("License plate: " + truck.id());
+        System.out.println("Model: " + truck.model());
+        System.out.println("Base weight: " + truck.baseWeight());
+        System.out.println("Max weight: " + truck.maxWeight());
     }
 
 }

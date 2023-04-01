@@ -2,7 +2,7 @@ package TransportModule.BusinessLayer.Records;
 
 import java.util.Objects;
 
-public record Truck (int id, String model, int baseWeight, int maxWeight){
+public record Truck (String id, String model, int baseWeight, int maxWeight){
 
     @Override
     public boolean equals(Object o) {

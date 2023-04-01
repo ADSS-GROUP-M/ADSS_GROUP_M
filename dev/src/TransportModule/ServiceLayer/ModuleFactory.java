@@ -6,7 +6,7 @@ public class ModuleFactory {
     private static ModuleFactory instance = null;
 
     private final TransportsService transportsService;
-    private final ResourceManagementService moduleManagementService;
+    private final ResourceManagementService resourceManagementService;
     private final ItemListsService itemListsService;
 
     private ModuleFactory(){
@@ -18,7 +18,7 @@ public class ModuleFactory {
         TransportsController transportsController = new TransportsController(trucksController);
 
         transportsService = new TransportsService(transportsController,itemListsController);
-        moduleManagementService = new ResourceManagementService(sitesController, driversController, trucksController);
+        resourceManagementService = new ResourceManagementService(sitesController, driversController, trucksController);
         itemListsService = new ItemListsService(itemListsController);
     }
 
@@ -26,8 +26,8 @@ public class ModuleFactory {
         return transportsService;
     }
 
-    public ResourceManagementService getModuleManagementService() {
-        return moduleManagementService;
+    public ResourceManagementService getResourceManagementService() {
+        return resourceManagementService;
     }
 
     public ItemListsService getItemListsService() {

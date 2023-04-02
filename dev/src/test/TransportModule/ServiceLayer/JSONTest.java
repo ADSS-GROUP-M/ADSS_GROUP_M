@@ -42,16 +42,16 @@ class JSONTest {
                  {
                    "id": 1,
                    "source": {
-                     "TransportZone": "Zone1",
-                     "Address": "source-address",
+                     "transportZone": "Zone1",
+                     "address": "source-address",
                      "phoneNumber": "054-6666666",
                      "contactName": "moshe",
                      "siteType": "LOGISTICAL_CENTER"
                    },
                    "destinations": [
                      {
-                       "TransportZone": "Zone1",
-                       "Address": "source-address",
+                       "transportZone": "Zone1",
+                       "address": "source-address",
                        "phoneNumber": "054-6666666",
                        "contactName": "moshe",
                        "siteType": "LOGISTICAL_CENTER"
@@ -60,24 +60,24 @@ class JSONTest {
                    "itemLists": [
                      [
                        {
-                         "TransportZone": "Zone1",
-                         "Address": "destination-address",
+                         "transportZone": "Zone1",
+                         "address": "destination-address",
                          "phoneNumber": "054-7777777",
                          "contactName": "yossi",
                          "siteType": "BRANCH"
                        },
                        {
                          "id": 1,
-                         "loadingItems": {
+                         "load": {
                            "itemToLoad": 5
                          },
-                         "unloadingItems": {
+                         "unload": {
                            "itemToUnload": 7
                          }
                        }
                      ]
                    ],
-                   "truckId": 1,
+                   "truckId": "1",
                    "driverId": 1,
                    "scheduledTime": "1977-01-01T12:24",
                    "weight": 0
@@ -92,16 +92,16 @@ class JSONTest {
                 {
                    "id": 1,
                    "source": {
-                     "TransportZone": "Zone1",
-                     "Address": "source-address",
+                     "transportZone": "Zone1",
+                     "address": "source-address",
                      "phoneNumber": "054-6666666",
                      "contactName": "moshe",
                      "siteType": "LOGISTICAL_CENTER"
                    },
                    "destinations": [
                      {
-                       "TransportZone": "Zone1",
-                       "Address": "source-address",
+                       "transportZone": "Zone1",
+                       "address": "source-address",
                        "phoneNumber": "054-6666666",
                        "contactName": "moshe",
                        "siteType": "LOGISTICAL_CENTER"
@@ -110,18 +110,18 @@ class JSONTest {
                    "itemLists": [
                      [
                        {
-                         "TransportZone": "Zone1",
-                         "Address": "destination-address",
+                         "transportZone": "Zone1",
+                         "address": "destination-address",
                          "phoneNumber": "054-7777777",
                          "contactName": "yossi",
                          "siteType": "BRANCH"
                        },
                        {
-                         "id": 1,
-                         "loadingItems": {
+                         "id": "1",
+                         "load": {
                            "itemToLoad": 5
                          },
-                         "unloadingItems": {
+                         "unload": {
                            "itemToUnload": 7
                          }
                        }
@@ -154,8 +154,8 @@ class JSONTest {
         assertEquals(t2.destinations().get(0).siteType(), t.destinations().get(0).siteType());
         HashMap<Site, ItemList> siteItems2 = t.itemLists();
         assertEquals(siteItems2.get(destination).id(), siteItems.get(destination).id());
-        assertEquals(siteItems2.get(destination).unload().get("itemToLoad"), siteItems.get(destination).load().get("itemToLoad"));
-        assertEquals(siteItems2.get(destination).load().get("itemToUnload"), siteItems.get(destination).unload().get("itemToUnload"));
+        assertEquals(siteItems2.get(destination).load().get("itemToLoad"), siteItems.get(destination).load().get("itemToLoad"));
+        assertEquals(siteItems2.get(destination).unload().get("itemToUnload"), siteItems.get(destination).unload().get("itemToUnload"));
         assertEquals(t2.id(), t.id());
         assertEquals(t2.id(), t.id());
         assertEquals(t2.scheduledTime(), t.scheduledTime());

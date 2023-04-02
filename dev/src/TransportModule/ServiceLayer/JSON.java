@@ -29,10 +29,6 @@ public class JSON {
         return gson.toJson(obj);
     }
 
-    public static <T> T deserialize(String json, Class<T> classOfT) {
-        return gson.fromJson(json, classOfT);
-    }
-
     public static <T> T deserialize(String json, Type TypeOfT) {
         return gson.fromJson(json, TypeOfT);
     }

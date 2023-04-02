@@ -121,8 +121,7 @@ public class SitesManagement {
         Site newSite = new Site(transportZone, address, phoneNumber, contactName, siteType);
         String json = JSON.serialize(newSite);
         String responseJson = rms.updateSite(json);
-        Type type = new TypeToken<Response<String>>(){}.getType();
-        Response<String> response = JSON.deserialize(responseJson, Response.class);
+        Response<String> response = JSON.<Response<String>>deserialize(responseJson, Response.class);
         if(response.isSuccess()) sites.put(newSite.address(), newSite);
         System.out.println("\n"+response.getMessage());
     }

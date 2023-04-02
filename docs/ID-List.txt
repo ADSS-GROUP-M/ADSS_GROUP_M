@@ -1,2 +1,23 @@
+<<<<<<< HEAD
+## Max and Gal:
+
+208850529 - Max
+211564265 - Gal
+
+## Amit and Or:
+
+208671990 - Amit
+207161605 - Or
+
+## Yuval and Hila:
+
+319071239 - Yuval Roth
+206519118 - Hila Elbaz
+
+
+## Elay and Yossi:
+
+=======
 324988880 - Elay Dadon - איליי דדון
 325294429 - Yosef Avraham Hadad - יוסף אברהם חדד
+>>>>>>> 4392e3914ecd36a4a0177f6e37cc3be5755f0eb9

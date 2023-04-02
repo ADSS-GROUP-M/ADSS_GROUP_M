@@ -57,7 +57,7 @@ public class Main {
                 case 2 -> manageItemLists();
                 case 3 -> manageResources();
                 case 4 -> System.exit(0);
-                default -> System.out.println("Invalid option!");
+                default -> System.out.println("\nInvalid option!");
             }
 
         }
@@ -80,7 +80,7 @@ public class Main {
                 case 4 -> {
                     return;
                 }
-                default -> System.out.println("Invalid option!");
+                default -> System.out.println("\nInvalid option!");
             }
         }
     }
@@ -138,7 +138,7 @@ public class Main {
         int option = getInt()-1;
         if( (allowDone && (option < 0 || option > sites.size()))
                 || (!allowDone && (option < 0 || option > sites.size()-1))){
-            System.out.println("Invalid option!");
+            System.out.println("\nInvalid option!");
             return pickSite(allowDone);
         }
         if(allowDone && option == sites.size()) return null;
@@ -157,7 +157,7 @@ public class Main {
         int option = getInt()-1;
         if( (allowDone && (option < 0 || option > drivers.size()))
                 || (!allowDone && (option < 0 || option > drivers.size()-1))){
-            System.out.println("Invalid option!");
+            System.out.println("\nInvalid option!");
             return pickDriver(allowDone);
         }
         if(allowDone && option == drivers.size()) return null;
@@ -176,7 +176,7 @@ public class Main {
         int option = getInt()-1;
         if( (allowDone && (option < 0 || option > trucks.size()))
                 || (!allowDone && (option < 0 || option > trucks.size()-1))){
-            System.out.println("Invalid option!");
+            System.out.println("\nInvalid option!");
             return pickTruck(allowDone);
         }
         if(allowDone && option == trucks.size()) return null;

@@ -32,7 +32,7 @@ public class ItemListsManagement {
                 case 6 -> {
                     return;
                 }
-                default -> System.out.println("Invalid option!");
+                default -> System.out.println("\nInvalid option!");
             }
         }
     }
@@ -104,7 +104,7 @@ public class ItemListsManagement {
                     System.out.println("\n"+response.getMessage());
                 }
                 case "n" ->{}
-                default -> System.out.println("Invalid option!");
+                default -> System.out.println("\nInvalid option!");
             }
             break;
         }

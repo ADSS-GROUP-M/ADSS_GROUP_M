@@ -30,7 +30,7 @@ public class DriversManagement {
                 case 6 -> {
                     return;
                 }
-                default -> System.out.println("Invalid option!");
+                default -> System.out.println("\nInvalid option!");
             }
         }
     }
@@ -77,7 +77,7 @@ public class DriversManagement {
                         return;
                     }
                     default -> {
-                        System.out.println("Invalid option!");
+                        System.out.println("\nInvalid option!");
                         continue;
                     }
                 }
@@ -116,7 +116,7 @@ public class DriversManagement {
                     System.out.println("\n"+response.getMessage());
                 }
                 case "n" ->{}
-                default -> System.out.println("Invalid option!");
+                default -> System.out.println("\nInvalid option!");
             }
         }
 

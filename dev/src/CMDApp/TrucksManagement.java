@@ -30,7 +30,7 @@ public class TrucksManagement {
                 case 6 -> {
                     return;
                 }
-                default -> System.out.println("Invalid option!");
+                default -> System.out.println("\nInvalid option!");
             }
         }
     }
@@ -135,7 +135,7 @@ public class TrucksManagement {
                     System.out.println("\n"+response.getMessage());
                 }
                 case "n"->{}
-                default-> System.out.println("Invalid option!");
+                default-> System.out.println("\nInvalid option!");
             }
         }
     }
@@ -163,7 +163,7 @@ public class TrucksManagement {
             printTruckDetails(truck);
             System.out.println("-----------------------------------------");
         }
-        System.out.println("Enter 'done!' to return to previous menu");
+        System.out.println("\nEnter 'done!' to return to previous menu");
         getLine();
     }
 

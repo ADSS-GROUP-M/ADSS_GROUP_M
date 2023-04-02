@@ -2,6 +2,9 @@ package CMDApp;
 
 import CMDApp.Records.Site;
 import TransportModule.ServiceLayer.ResourceManagementService;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
 
 import static CMDApp.Main.*;
 
@@ -30,7 +33,7 @@ public class SitesManagement {
                 case 6 -> {
                     return;
                 }
-                default -> System.out.println("Invalid option!");
+                default -> System.out.println("\nInvalid option!");
             }
         }
     }
@@ -105,7 +108,7 @@ public class SitesManagement {
                         return;
                     }
                     default -> {
-                        System.out.println("Invalid option!");
+                        System.out.println("\nInvalid option!");
                         continue;
                     }
                 }
@@ -118,6 +121,7 @@ public class SitesManagement {
         Site newSite = new Site(transportZone, address, phoneNumber, contactName, siteType);
         String json = JSON.serialize(newSite);
         String responseJson = rms.updateSite(json);
+        Type type = new TypeToken<Response<String>>(){}.getType();
         Response<String> response = JSON.deserialize(responseJson, Response.class);
         if(response.isSuccess()) sites.put(newSite.address(), newSite);
         System.out.println("\n"+response.getMessage());
@@ -144,7 +148,7 @@ public class SitesManagement {
                     System.out.println("\n"+response.getMessage());
                 }
                 case "n"-> {}
-                default -> System.out.println("Invalid option!");
+                default -> System.out.println("\nInvalid option!");
             }
         }
     }

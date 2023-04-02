@@ -38,7 +38,7 @@ public class TransportsManagement {
                 case 6 -> {
                     return;
                 }
-                default -> System.out.println("Invalid option!");
+                default -> System.out.println("\nInvalid option!");
             }
         }
     }
@@ -215,7 +215,7 @@ public class TransportsManagement {
                 case 8:
                     return;
                 default:
-                    System.out.println("Invalid option!");
+                    System.out.println("\nInvalid option!");
                     continue;
             }
             break;
@@ -240,7 +240,7 @@ public class TransportsManagement {
                     System.out.println("\nTransport deleted successfully!");
                 }
                 case "n"-> {}
-                default -> System.out.println("Invalid option!");
+                default -> System.out.println("\nInvalid option!");
             }
         }
     }

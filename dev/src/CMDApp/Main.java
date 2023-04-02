@@ -14,6 +14,7 @@ import java.util.*;
 import static CMDApp.DriversManagement.manageDrivers;
 import static CMDApp.ItemListsManagement.manageItemLists;
 import static CMDApp.SitesManagement.manageSites;
+import static CMDApp.SitesManagement.printSiteDetails;
 import static CMDApp.TransportsManagement.manageTransports;
 import static CMDApp.TrucksManagement.manageTrucks;
 
@@ -130,7 +131,9 @@ public class Main {
         int i = 1;
         Site[] siteArray = new Site[sites.size()];
         for(Site site : sites.values()){
-            System.out.println((i)+". Transport zone: "+site.transportZone()+", address: "+site.address());
+            System.out.print(i+".");
+            System.out.println(" Transport zone: "+site.transportZone());
+            System.out.println("   address:        "+site.address());
             siteArray[i-1] = site;
             i++;
         }
@@ -149,7 +152,9 @@ public class Main {
         int i = 1;
         Driver[] driverArray = new Driver[drivers.size()];
         for(Driver driver : drivers.values()){
-            System.out.println((i)+". "+driver.name()+", license type: "+driver.licenseType());
+            System.out.print(i+".");
+            System.out.println(" name:         "+driver.name());
+            System.out.println("   license type: "+driver.licenseType());
             driverArray[i-1] = driver;
             i++;
         }
@@ -168,7 +173,10 @@ public class Main {
         int i = 1;
         Truck[] truckArray = new Truck[trucks.size()];
         for(Truck truck : trucks.values()){
-            System.out.println((i)+". "+"License plate: "+truck.id()+", model: "+truck.model()+", max weight: "+truck.maxWeight());
+//            System.out.println((i)+". "+"License plate: "+truck.id()+", model: "+truck.model()+", max weight: "+truck.maxWeight());
+            System.out.print(i+".");
+            System.out.println(" license plate: "+truck.id());
+            System.out.println("   model:         "+truck.model());
             truckArray[i-1] = truck;
             i++;
         }

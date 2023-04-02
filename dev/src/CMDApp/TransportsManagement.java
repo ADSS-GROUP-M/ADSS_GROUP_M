@@ -266,16 +266,16 @@ public class TransportsManagement {
 
     private static void printTransportDetails(Transport transport) {
         System.out.println("Transport id: "+ transport.id());
-        System.out.println("Date: "+ transport.scheduledTime().toLocalDate());
-        System.out.println("Time: "+ transport.scheduledTime().toLocalTime());
-        System.out.println("DriverId: "+ transport.driverId());
-        System.out.println("TruckId: "+ transport.truckId());
-        System.out.println("Source: "+ transport.source());
+        System.out.println("Date:         "+ transport.scheduledTime().toLocalDate());
+        System.out.println("Time:         "+ transport.scheduledTime().toLocalTime());
+        System.out.println("DriverId:     "+ transport.driverId());
+        System.out.println("TruckId:      "+ transport.truckId());
+        System.out.println("Weight:       "+ transport.weight());
+        System.out.println("Source:       "+ transport.source());
         System.out.println("Destinations: ");
         for(Site destination : transport.destinations()){
             System.out.println("   "+ destination + " (items list id: "+ transport.itemLists().get(destination).id()+")");
         }
-        System.out.println("Weight: "+ transport.weight());
     }
 
     private static void updateTransportHelperMethod(int id, Site source, LinkedList<Site> destinations, HashMap<Site, ItemList> itemLists, String truckId, int driverId, LocalDateTime departureDateTime, int weight) {

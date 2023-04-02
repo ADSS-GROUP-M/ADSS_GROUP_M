@@ -149,8 +149,8 @@ public class DriversManagement {
     }
 
     private static void printDriverDetails(Driver driver) {
-        System.out.println("Employee ID: " + driver.id());
-        System.out.println("Name: " + driver.name());
+        System.out.println("Employee ID:  " + driver.id());
+        System.out.println("Name:         " + driver.name());
         System.out.println("License type: " + driver.licenseType());
     }
 }

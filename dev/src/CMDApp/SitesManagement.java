@@ -2,9 +2,6 @@ package CMDApp;
 
 import CMDApp.Records.Site;
 import TransportModule.ServiceLayer.ResourceManagementService;
-import com.google.gson.reflect.TypeToken;
-
-import java.lang.reflect.Type;
 
 import static CMDApp.Main.*;
 
@@ -182,11 +179,11 @@ public class SitesManagement {
         getLine();
     }
 
-    private static void printSiteDetails(Site site) {
+    static void printSiteDetails(Site site) {
         System.out.println("Transport zone: " + site.transportZone());
-        System.out.println("Address: " + site.address());
-        System.out.println("Phone number: " + site.phoneNumber());
-        System.out.println("Contact name: " + site.contactName());
+        System.out.println("Address:        " + site.address());
+        System.out.println("Phone number:   " + site.phoneNumber());
+        System.out.println("Contact name:   " + site.contactName());
     }
 
 }

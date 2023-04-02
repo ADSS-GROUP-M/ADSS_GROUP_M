@@ -21,27 +21,16 @@ public class SitesManagement {
             System.out.println("5. View all sites");
             System.out.println("6. Return to previous menu");
             int option = getInt();
-            switch (option){
-                case 1:
-                    createSite();
-                    break;
-                case 2:
-                    updateSite();
-                    break;
-                case 3:
-                    removeSite();
-                    break;
-                case 4:
-                    getSite();
-                    break;
-                case 5:
-                    getAllSites();
-                    break;
-                case 6:
+            switch (option) {
+                case 1 -> createSite();
+                case 2 -> updateSite();
+                case 3 -> removeSite();
+                case 4 -> getSite();
+                case 5 -> getAllSites();
+                case 6 -> {
                     return;
-                default:
-                    System.out.println("Invalid option!");
-                    continue;
+                }
+                default -> System.out.println("Invalid option!");
             }
         }
     }
@@ -58,17 +47,15 @@ public class SitesManagement {
         System.out.println("2. Branch");
         System.out.println("3. Supplier");
         int siteType = getInt();
-        Site.SiteType type = null;
-        switch (siteType){
-            case 1:
-                type = Site.SiteType.LOGISTICAL_CENTER;
-                break;
-            case 2:
-                type = Site.SiteType.BRANCH;
-                break;
-            case 3:
-                type = Site.SiteType.SUPPLIER;
-                break;
+        Site.SiteType type;
+        switch (siteType) {
+            case 1 -> type = Site.SiteType.LOGISTICAL_CENTER;
+            case 2 -> type = Site.SiteType.BRANCH;
+            case 3 -> type = Site.SiteType.SUPPLIER;
+            default -> {
+                System.out.println("\nInvalid option!");
+                return;
+            }
         }
         Site newSite = new Site(transportZone, address, contactPhone, contactName, type);
         String json = JSON.serialize(newSite);
@@ -95,7 +82,7 @@ public class SitesManagement {
                 System.out.println("3. Return to previous menu");
                 int option = getInt();
                 switch (option) {
-                    case 1:
+                    case 1 -> {
                         String contactName = getLine("Contact name: ");
                         updateSiteHelperMethod(site.transportZone(),
                                 site.address(),
@@ -103,8 +90,8 @@ public class SitesManagement {
                                 contactName,
                                 site.siteType()
                         );
-                        break;
-                    case 2:
+                    }
+                    case 2 -> {
                         String contactPhone = getLine("Contact phone: ");
                         updateSiteHelperMethod(
                                 site.transportZone(),
@@ -113,12 +100,14 @@ public class SitesManagement {
                                 site.contactName(),
                                 site.siteType()
                         );
-                        break;
-                    case 3:
+                    }
+                    case 3 -> {
                         return;
-                    default:
+                    }
+                    default -> {
                         System.out.println("Invalid option!");
                         continue;
+                    }
                 }
                 break;
             }
@@ -147,18 +136,15 @@ public class SitesManagement {
             System.out.println("Are you sure you want to remove this site? (y/n)");
             String option = getLine();
             switch (option) {
-                case "y":
+                case "y"-> {
                     String json = JSON.serialize(site);
                     String responseJson = rms.removeSite(json);
                     Response<String> response = JSON.deserialize(responseJson, Response.class);
                     if(response.isSuccess()) sites.remove(site.address());
                     System.out.println("\n"+response.getMessage());
-                    break;
-                case "n":
-                    break;
-                default:
-                    System.out.println("Invalid option!");
-                    continue;
+                }
+                case "n"-> {}
+                default -> System.out.println("Invalid option!");
             }
         }
     }

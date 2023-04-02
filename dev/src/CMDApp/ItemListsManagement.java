@@ -23,27 +23,16 @@ public class ItemListsManagement {
             System.out.println("5. View all item lists");
             System.out.println("6. Return to previous menu");
             int option = getInt();
-            switch (option){
-                case 1:
-                    createItemList();
-                    break;
-                case 2:
-                    updateItemList();
-                    break;
-                case 3:
-                    removeItemList();
-                    break;
-                case 4:
-                    viewItemList();
-                    break;
-                case 5:
-                    viewAllItemLists();
-                    break;
-                case 6:
+            switch (option) {
+                case 1 -> createItemList();
+                case 2 -> updateItemList();
+                case 3 -> removeItemList();
+                case 4 -> viewItemList();
+                case 5 -> viewAllItemLists();
+                case 6 -> {
                     return;
-                default:
-                    System.out.println("Invalid option!");
-                    continue;
+                }
+                default -> System.out.println("Invalid option!");
             }
         }
     }
@@ -107,18 +96,15 @@ public class ItemListsManagement {
             System.out.println("Are you sure you want to remove this item list? (y/n)");
             String option = getLine();
             switch(option){
-                case "y":
+                case "y" ->{
                     String json = JSON.serialize(list);
                     String responseJson = ils.removeItemList(json);
                     Response<String> response = JSON.deserialize(responseJson, Response.class);
                     if(response.isSuccess()) itemLists.remove(id);
                     System.out.println("\n"+response.getMessage());
-                    break;
-                case "n":
-                    break;
-                default:
-                    System.out.println("Invalid option!");
-                    continue;
+                }
+                case "n" ->{}
+                default -> System.out.println("Invalid option!");
             }
             break;
         }

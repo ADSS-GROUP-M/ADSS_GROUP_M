@@ -21,27 +21,16 @@ public class TrucksManagement {
             System.out.println("5. View all trucks");
             System.out.println("6. Return to previous menu");
             int option = getInt();
-            switch (option){
-                case 1:
-                    createTruck();
-                    break;
-                case 2:
-                    updateTruck();
-                    break;
-                case 3:
-                    removeTruck();
-                    break;
-                case 4:
-                    getTruck();
-                    break;
-                case 5:
-                    getAllTrucks();
-                    break;
-                case 6:
+            switch (option) {
+                case 1 -> createTruck();
+                case 2 -> updateTruck();
+                case 3 -> removeTruck();
+                case 4 -> getTruck();
+                case 5 -> getAllTrucks();
+                case 6 -> {
                     return;
-                default:
-                    System.out.println("Invalid option!");
-                    continue;
+                }
+                default -> System.out.println("Invalid option!");
             }
         }
     }
@@ -87,24 +76,29 @@ public class TrucksManagement {
                 System.out.println("3. Return to previous menu");
                 int option = getInt();
                 switch (option) {
-                    case 1:
+                    case 1 -> {
                         int baseWeight = getInt("Base weight: ");
-                        if(baseWeight <= 0) {
+                        if (baseWeight <= 0) {
                             System.out.println("Invalid base weight!");
                             continue;
                         }
                         updateTruckHelperMethod(truck.id(), truck.model(), baseWeight, truck.maxWeight());
-                        break;
-                    case 2:
+                    }
+                    case 2 -> {
                         int maxWeight = getInt("Max weight: ");
-                        if(maxWeight <= 0) {
+                        if (maxWeight <= 0) {
                             System.out.println("Invalid max weight!");
                             continue;
                         }
                         updateTruckHelperMethod(truck.id(), truck.model(), truck.baseWeight(), maxWeight);
-                        break;
-                    case 3:
+                    }
+                    case 3 -> {
                         return;
+                    }
+                    default->{
+                        System.out.println("\nInvalid option!");
+                        continue;
+                    }
                 }
                 break;
             }
@@ -133,18 +127,15 @@ public class TrucksManagement {
             System.out.println("Are you sure you want to remove this truck? (y/n)");
             String option = getLine();
             switch(option){
-                case "y":
+                case "y"->{
                     String json = JSON.serialize(truck);
                     String responseJson = rms.removeTruck(json);
                     Response<String> response = JSON.deserialize(responseJson, Response.class);
                     if(response.isSuccess()) trucks.remove(truck.id());
                     System.out.println("\n"+response.getMessage());
-                    break;
-                case "n":
-                    break;
-                default:
-                    System.out.println("Invalid option!");
-                    continue;
+                }
+                case "n"->{}
+                default-> System.out.println("Invalid option!");
             }
         }
     }

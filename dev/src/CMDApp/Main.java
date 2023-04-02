@@ -52,22 +52,12 @@ public class Main {
             System.out.println("3. Manage transport module resources");
             System.out.println("4. Exit");
             int option = getInt();
-            switch (option){
-                case 1:
-                    manageTransports();
-                    break;
-                case 2:
-                    manageItemLists();
-                    break;
-                case 3:
-                    manageResources();
-                    break;
-                case 4:
-                    System.exit(0);
-                    break;
-                default:
-                    System.out.println("Invalid option!");
-                    continue;
+            switch (option) {
+                case 1 -> manageTransports();
+                case 2 -> manageItemLists();
+                case 3 -> manageResources();
+                case 4 -> System.exit(0);
+                default -> System.out.println("Invalid option!");
             }
 
         }
@@ -83,21 +73,14 @@ public class Main {
             System.out.println("3. Manage trucks");
             System.out.println("4. Return to main menu");
             int option = getInt();
-            switch (option){
-                case 1:
-                    manageSites();
-                    break;
-                case 2:
-                    manageDrivers();
-                    break;
-                case 3:
-                    manageTrucks();
-                    break;
-                case 4:
+            switch (option) {
+                case 1 -> manageSites();
+                case 2 -> manageDrivers();
+                case 3 -> manageTrucks();
+                case 4 -> {
                     return;
-                default:
-                    System.out.println("Invalid option!");
-                    continue;
+                }
+                default -> System.out.println("Invalid option!");
             }
         }
     }

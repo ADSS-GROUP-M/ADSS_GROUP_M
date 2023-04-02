@@ -29,27 +29,16 @@ public class TransportsManagement {
             System.out.println("5. View all transports");
             System.out.println("6. Return to main menu");
             int option = getInt();
-            switch (option){
-                case 1:
-                    createTransport();
-                    break;
-                case 2:
-                    updateTransport();
-                    break;
-                case 3:
-                    deleteTransport();
-                    break;
-                case 4:
-                    viewTransport();
-                    break;
-                case 5:
-                    viewAllTransports();
-                    break;
-                case 6:
+            switch (option) {
+                case 1 -> createTransport();
+                case 2 -> updateTransport();
+                case 3 -> deleteTransport();
+                case 4 -> viewTransport();
+                case 5 -> viewAllTransports();
+                case 6 -> {
                     return;
-                default:
-                    System.out.println("Invalid option!");
-                    continue;
+                }
+                default -> System.out.println("Invalid option!");
             }
         }
     }
@@ -243,18 +232,15 @@ public class TransportsManagement {
             System.out.println("Are you sure you want to delete this transport? (y/n)");
             String option = getLine();
             switch (option) {
-                case "y":
+                case "y" -> {
                     String json = JSON.serialize(transport);
                     String responseJson = ts.removeTransport(json);
                     Response<String> response = JSON.deserialize(responseJson, Response.class);
-                    if(response.isSuccess()) transports.remove(transport.id());
+                    if (response.isSuccess()) transports.remove(transport.id());
                     System.out.println("\nTransport deleted successfully!");
-                    break;
-                case "n":
-                    break;
-                default:
-                    System.out.println("Invalid option!");
-                    continue;
+                }
+                case "n"-> {}
+                default -> System.out.println("Invalid option!");
             }
         }
     }

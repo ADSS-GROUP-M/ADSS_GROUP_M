@@ -22,26 +22,15 @@ public class DriversManagement {
             System.out.println("6. Return to previous menu");
             int option = getInt();
             switch (option) {
-                case 1:
-                    createDriver();
-                    break;
-                case 2:
-                    updateDriver();
-                    break;
-                case 3:
-                    removeDriver();
-                    break;
-                case 4:
-                    getDriver();
-                    break;
-                case 5:
-                    getAllDrivers();
-                    break;
-                case 6:
+                case 1 -> createDriver();
+                case 2 -> updateDriver();
+                case 3 -> removeDriver();
+                case 4 -> getDriver();
+                case 5 -> getAllDrivers();
+                case 6 -> {
                     return;
-                default:
-                    System.out.println("Invalid option!");
-                    continue;
+                }
+                default -> System.out.println("Invalid option!");
             }
         }
     }
@@ -76,19 +65,21 @@ public class DriversManagement {
                 System.out.println("3. Return to previous menu");
                 int option = getInt();
                 switch (option) {
-                    case 1:
+                    case 1 -> {
                         String name = getLine("Name: ");
                         updateDriverHelperMethod(driver.id(), name, driver.licenseType());
-                        break;
-                    case 2:
+                    }
+                    case 2 -> {
                         String licenseType = getLine("License type: ");
                         updateDriverHelperMethod(driver.id(), driver.name(), licenseType);
-                        break;
-                    case 3:
+                    }
+                    case 3 -> {
                         return;
-                    default:
+                    }
+                    default -> {
                         System.out.println("Invalid option!");
                         continue;
+                    }
                 }
                 break;
             }
@@ -117,18 +108,15 @@ public class DriversManagement {
             System.out.println("Are you sure you want to remove this driver? (y/n)");
             String option = getLine();
             switch(option) {
-                case "y":
+                case "y" ->{
                     String json = JSON.serialize(driver);
                     String responseJson = rms.removeDriver(json);
                     Response<String> response = JSON.deserialize(responseJson, Response.class);
                     if(response.isSuccess()) drivers.remove(driver.id());
                     System.out.println("\n"+response.getMessage());
-                    break;
-                case "n":
-                    break;
-                default:
-                    System.out.println("Invalid option!");
-                    continue;
+                }
+                case "n" ->{}
+                default -> System.out.println("Invalid option!");
             }
         }
 

@@ -15,7 +15,7 @@ public class ModuleFactory {
         ItemListsController itemListsController = new ItemListsController();
         SitesController sitesController = new SitesController();
         DriversController driversController = new DriversController();
-        TransportsController transportsController = new TransportsController(trucksController);
+        TransportsController transportsController = new TransportsController(trucksController,driversController);
 
         transportsService = new TransportsService(transportsController,itemListsController);
         resourceManagementService = new ResourceManagementService(sitesController, driversController, trucksController);

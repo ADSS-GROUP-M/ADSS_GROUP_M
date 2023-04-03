@@ -6,9 +6,13 @@
   <component name="ChangeListManager">
     <list default="true" id="1434043d-893c-4e8d-b539-bf4e37d98820" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/CMDApp/ItemListsManagement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/CMDApp/ItemListsManagement.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/CMDApp/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/CMDApp/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/CMDApp/TransportsManagement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/CMDApp/TransportsManagement.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/CMDApp/Records/Driver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/CMDApp/Records/Driver.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/CMDApp/Records/Truck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/CMDApp/Records/Truck.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/TransportModule/BusinessLayer/DriversController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/TransportModule/BusinessLayer/DriversController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/TransportModule/BusinessLayer/Records/Driver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/TransportModule/BusinessLayer/Records/Driver.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/TransportModule/BusinessLayer/Records/Truck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/TransportModule/BusinessLayer/Records/Truck.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/TransportModule/BusinessLayer/TransportsController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/TransportModule/BusinessLayer/TransportsController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/TransportModule/ServiceLayer/ModuleFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/TransportModule/ServiceLayer/ModuleFactory.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

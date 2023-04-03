@@ -2,8 +2,13 @@ package TransportModule.BusinessLayer.Records;
 
 import java.util.Objects;
 
-public record Truck (String id, String model, int baseWeight, int maxWeight){
+public record Truck (String id, String model, int baseWeight, int maxWeight, CoolingCapacity coolingCapacity){
 
+    public enum CoolingCapacity{
+        NONE,
+        COLD,
+        FROZEN
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

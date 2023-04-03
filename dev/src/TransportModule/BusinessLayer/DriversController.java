@@ -19,9 +19,9 @@ public class DriversController {
         else throw new IOException("Driver already exists");
     }
 
-    public  Driver getDriver(int id) throws Exception {
+    public  Driver getDriver(int id) throws IOException {
         if (drivers.containsKey(id) == false)
-            throw new Exception("Driver not found");
+            throw new IOException("Driver not found");
 
         return drivers.get(id);
     }

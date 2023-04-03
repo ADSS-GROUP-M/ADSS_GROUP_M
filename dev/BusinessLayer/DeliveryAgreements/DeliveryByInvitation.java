@@ -9,4 +9,8 @@ public class DeliveryByInvitation extends DeliveryAgreement{
         super(havaTransport);
         this.numberOfDays = numberOfDays;
     }
+
+    public void setNumberOfDays(int numberOfDays) {
+        this.numberOfDays = numberOfDays;
+    }
 }

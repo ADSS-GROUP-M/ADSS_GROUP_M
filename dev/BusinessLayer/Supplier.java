@@ -82,4 +82,8 @@ public class Supplier {
     public String getBnNumber(){
         return bnNumber;
     }
+
+    public List<Order> getOrderHistory(){
+        return orderHistory;
+    }
 }

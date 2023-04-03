@@ -4,6 +4,7 @@ import CMDApp.Records.Truck;
 import TransportModule.ServiceLayer.ResourceManagementService;
 
 import static CMDApp.Main.*;
+import static TransportModule.BusinessLayer.Records.Truck.CoolingCapacity.*;
 
 public class TrucksManagement {
 
@@ -42,20 +43,36 @@ public class TrucksManagement {
         String model = getLine("Model: ");
         int baseWeight = getInt("Base weight: ");
         if(baseWeight <= 0) {
-            System.out.println("Invalid base weight!");
+            System.out.println("\nInvalid base weight!");
             return;
         }
         int maxWeight = getInt("Max weight: ");
         if(maxWeight <= 0) {
-            System.out.println("Invalid max weight!");
+            System.out.println("\nInvalid max weight!");
             return;
         }
-        Truck newTruck = new Truck(licensePlate, model, baseWeight, maxWeight);
+        Truck.CoolingCapacity coolingCapacity = pickCoolingCapacity();
+
+        Truck newTruck = new Truck(licensePlate, model, baseWeight, maxWeight,coolingCapacity);
         String json = JSON.serialize(newTruck);
         String responseJson = rms.addTruck(json);
         Response<String> response = JSON.deserialize(responseJson, Response.class);
         if(response.isSuccess()) trucks.put(licensePlate, newTruck);
         System.out.println("\n"+response.getMessage());
+    }
+
+
+    private static Truck.CoolingCapacity pickCoolingCapacity() {
+
+        for (int i = 0; i < Truck.CoolingCapacity.values().length; i++) {
+            System.out.println(i + ". " + Truck.CoolingCapacity.values()[i]);
+        }
+        int option = getInt();
+        if (option < 0 || option >= Truck.CoolingCapacity.values().length) {
+            System.out.println("\nInvalid cooling capacity!");
+            return null;
+        }
+        return Truck.CoolingCapacity.values()[option];
     }
 
     private static void updateTruck() {
@@ -73,26 +90,31 @@ public class TrucksManagement {
                 System.out.println("Please select an option:");
                 System.out.println("1. Update base weight");
                 System.out.println("2. Update max weight");
-                System.out.println("3. Return to previous menu");
+                System.out.println("3. Update cooling capacity");
+                System.out.println("4. Return to previous menu");
                 int option = getInt();
                 switch (option) {
                     case 1 -> {
                         int baseWeight = getInt("Base weight: ");
                         if (baseWeight <= 0) {
-                            System.out.println("Invalid base weight!");
+                            System.out.println("\nInvalid base weight!");
                             continue;
                         }
-                        updateTruckHelperMethod(truck.id(), truck.model(), baseWeight, truck.maxWeight());
+                        updateTruckHelperMethod(truck.id(), truck.model(), baseWeight, truck.maxWeight(),truck.coolingCapacity());
                     }
                     case 2 -> {
                         int maxWeight = getInt("Max weight: ");
                         if (maxWeight <= 0) {
-                            System.out.println("Invalid max weight!");
+                            System.out.println("\nInvalid max weight!");
                             continue;
                         }
-                        updateTruckHelperMethod(truck.id(), truck.model(), truck.baseWeight(), maxWeight);
+                        updateTruckHelperMethod(truck.id(), truck.model(), truck.baseWeight(), maxWeight,truck.coolingCapacity());
                     }
                     case 3 -> {
+                        Truck.CoolingCapacity coolingCapacity = pickCoolingCapacity();
+                        updateTruckHelperMethod(truck.id(), truck.model(), truck.baseWeight(), truck.maxWeight(),coolingCapacity);
+                    }
+                    case 4 -> {
                         return;
                     }
                     default->{
@@ -105,8 +127,8 @@ public class TrucksManagement {
         }
     }
 
-    private static void updateTruckHelperMethod(String licensePlate, String model, int baseWeight, int maxWeight){
-        Truck newTruck = new Truck(licensePlate, model, baseWeight, maxWeight);
+    private static void updateTruckHelperMethod(String licensePlate, String model, int baseWeight, int maxWeight, Truck.CoolingCapacity coolingCapacity){
+        Truck newTruck = new Truck(licensePlate, model, baseWeight, maxWeight,coolingCapacity);
         String json = JSON.serialize(newTruck);
         String responseJson = rms.updateTruck(json);
         Response<String> response = JSON.deserialize(responseJson, Response.class);

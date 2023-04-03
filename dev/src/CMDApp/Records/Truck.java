@@ -4,7 +4,7 @@ import java.util.Objects;
 
 public record Truck (String id, String model, int baseWeight, int maxWeight, CoolingCapacity coolingCapacity){
 
-    enum CoolingCapacity{
+    public enum CoolingCapacity{
         NONE,
         COLD,
         FROZEN

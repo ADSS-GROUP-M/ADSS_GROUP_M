@@ -5,12 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1434043d-893c-4e8d-b539-bf4e37d98820" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/CMDApp/DriversManagement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/CMDApp/DriversManagement.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/CMDApp/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/CMDApp/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/CMDApp/Records/Driver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/CMDApp/Records/Driver.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/CMDApp/Records/Truck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/CMDApp/Records/Truck.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/CMDApp/TrucksManagement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/CMDApp/TrucksManagement.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/TransportModule/BusinessLayer/TransportsController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/TransportModule/BusinessLayer/TransportsController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,21 +23,21 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Downloaded.Files.Path.Enabled&quot;: &quot;false&quot;,
-    &quot;Repository.Attach.Annotations&quot;: &quot;false&quot;,
-    &quot;Repository.Attach.JavaDocs&quot;: &quot;false&quot;,
-    &quot;Repository.Attach.Sources&quot;: &quot;false&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;Transport__Module__319071239__206519118&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Downloaded.Files.Path.Enabled": "false",
+    "Repository.Attach.Annotations": "false",
+    "Repository.Attach.JavaDocs": "false",
+    "Repository.Attach.Sources": "false",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "Merging Transport__Module__319071239__206519118",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2"
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected="Application.Main">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="CMDApp.Main" />

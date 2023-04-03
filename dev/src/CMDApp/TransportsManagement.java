@@ -54,13 +54,13 @@ public class TransportsManagement {
         LocalTime departureTime = LocalTime.parse(getLine("Departure time (format: hh:mm): "));
         LocalDateTime departureDateTime = LocalDateTime.of(departureDate, departureTime);
 
-        // driver
-        System.out.println("Driver: ");
-        int driverID = pickDriver(false).id();
-
         // truck
         System.out.println("Truck: ");
         String truckId = pickTruck(false).id();
+
+        // driver
+        System.out.println("Driver: ");
+        int driverID = pickDriver(false).id();
 
         // source
         System.out.println("Source: ");
@@ -321,7 +321,8 @@ public class TransportsManagement {
             if(site == null) break;
             int listId = getInt("Items list id: ");
             if (itemLists.containsKey(listId) == false) {
-                System.out.println("Items list with ID " + listId + " does not exist!");
+                System.out.println("\nItems list with ID " + listId + " does not exist!");
+                System.out.println();
                 continue;
             }
             itemsList.put(site, itemLists.get(listId));

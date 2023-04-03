@@ -179,7 +179,6 @@ public class Main {
         int i = 1;
         Truck[] truckArray = new Truck[trucks.size()];
         for(Truck truck : trucks.values()){
-//            System.out.println((i)+". "+"License plate: "+truck.id()+", model: "+truck.model()+", max weight: "+truck.maxWeight());
             System.out.print(i+".");
             System.out.println(" license plate: "+truck.id());
             System.out.println("   model:         "+truck.model());

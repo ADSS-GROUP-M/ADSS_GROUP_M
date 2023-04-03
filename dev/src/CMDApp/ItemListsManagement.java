@@ -90,7 +90,7 @@ public class ItemListsManagement {
         while (true) {
             System.out.println("=========================================");
             Integer id = getListID();
-            if (id == null) continue;
+            if (id == null) return;
             ItemList list = itemLists.get(id);
             printItemList(list);
             System.out.println("Are you sure you want to remove this item list? (y/n)");

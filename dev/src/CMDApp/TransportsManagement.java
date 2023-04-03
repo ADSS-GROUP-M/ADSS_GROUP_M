@@ -66,21 +66,10 @@ public class TransportsManagement {
         System.out.println("Source: ");
         Site source = pickSite(false);
 
-        //========== destinations and items lists ================|
-        int destinationId = 1;
+        // destinations and items lists
         LinkedList<Site> destinations = new LinkedList<>();
         HashMap<Site, ItemList> itemsList = new HashMap<>();
-        System.out.println("Pick destinations and items lists:");
-        while(true){
-            System.out.println("Destination number "+destinationId+": ");
-            Site site = pickSite(true);
-            if(site == null) break;
-            int listId = getInt("Items list id: ");
-            itemsList.put(site, itemLists.get(listId));
-            destinations.add(site);
-            destinationId++;
-        }
-        //========================================================|
+        destinationsMaker(destinations, itemsList);
 
         //weight
         int truckWeight = getInt("Truck weight: ");
@@ -196,9 +185,20 @@ public class TransportsManagement {
                     );
                 }
                 case 6 ->{
-                    //TODO: support updating destinations
-                    destinationsEditor(transport);
-                    System.out.println("currently not supported");
+                    System.out.println("Select new destinations and item lists: ");
+                    HashMap<Site, ItemList> itemsList = new HashMap<>();
+                    LinkedList<Site> destinations = new LinkedList<>();
+                    destinationsMaker(destinations, itemsList);
+                    updateTransportHelperMethod(
+                            transport.id(),
+                            transport.source(),
+                            destinations,
+                            itemsList,
+                            transport.truckId(),
+                            transport.driverId(),
+                            transport.scheduledTime(),
+                            transport.weight()
+                    );
                 }
                 case 7 -> {
                     int truckWeight = getInt("Truck weight: ");
@@ -312,7 +312,17 @@ public class TransportsManagement {
         return transports.get(transportId);
     }
 
-    private static void destinationsEditor(Transport transport) {
-
+    private static void destinationsMaker(LinkedList<Site> destinations, HashMap<Site, ItemList> itemsList) {
+        int destinationId = 1;
+        System.out.println("Pick destinations and items lists:");
+        while(true){
+            System.out.println("Destination number "+destinationId+": ");
+            Site site = pickSite(true);
+            if(site == null) break;
+            int listId = getInt("Items list id: ");
+            itemsList.put(site, itemLists.get(listId));
+            destinations.add(site);
+            destinationId++;
+        }
     }
 }

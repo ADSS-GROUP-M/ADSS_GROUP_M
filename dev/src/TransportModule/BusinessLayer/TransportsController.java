@@ -101,7 +101,7 @@ public class TransportsController {
                             " is not permitted to drive this truck";
             throwException = true;
         }
-
+        
         if(throwException) throw new IOException(toThrow);
     }
 }

@@ -190,10 +190,10 @@ public class TrucksManagement {
     }
 
     private static void printTruckDetails(Truck truck) {
-        System.out.println("License plate: " + truck.id());
-        System.out.println("Model:         " + truck.model());
-        System.out.println("Base weight:   " + truck.baseWeight());
-        System.out.println("Max weight:    " + truck.maxWeight());
+        System.out.println("License plate:    " + truck.id());
+        System.out.println("Model:            " + truck.model());
+        System.out.println("Base weight:      " + truck.baseWeight());
+        System.out.println("Max weight:       " + truck.maxWeight());
         System.out.println("Cooling capacity: " + truck.coolingCapacity());
     }
 

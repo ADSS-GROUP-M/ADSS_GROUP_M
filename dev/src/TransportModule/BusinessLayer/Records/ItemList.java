@@ -9,11 +9,6 @@ public record ItemList (int id, HashMap<String, Integer> load,HashMap<String, In
         this(id, new HashMap<>(), new HashMap<>());
     }
 
-    public static ItemList parse(int i, String json){
-        //TODO: implement
-        return null;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

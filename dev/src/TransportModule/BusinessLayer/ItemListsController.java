@@ -22,12 +22,6 @@ public class ItemListsController {
         itemLists.put(itemList.id(), itemList);
     }
 
-    public ItemList createItemList(String json){
-        ItemList itemList = ItemList.parse(idCounter++,json);
-        itemLists.put(itemList.id(), itemList);
-        return itemList;
-    }
-
     public ItemList getItemList(int id) throws IOException{
         if(itemLists.containsKey(id) == false)
             throw new IOException("Item list not found");

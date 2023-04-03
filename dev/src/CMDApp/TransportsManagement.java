@@ -15,7 +15,7 @@ import static CMDApp.Main.*;
 
 public class TransportsManagement {
 
-    private static TransportsService ts = factory.getTransportsService();
+    private static final TransportsService ts = factory.getTransportsService();
 
     static void manageTransports() {
         while(true){
@@ -125,7 +125,7 @@ public class TransportsManagement {
             System.out.println("8. Return to previous menu");
             int option = getInt();
             switch (option) {
-                case 1:
+                case 1 -> {
                     LocalDate departureDate = LocalDate.parse(getLine("Departure date (format: yyyy-mm-dd): "));
                     LocalDateTime departureDateTime = LocalDateTime.of(departureDate, transport.scheduledTime().toLocalTime());
                     updateTransportHelperMethod(
@@ -138,10 +138,10 @@ public class TransportsManagement {
                             departureDateTime,
                             transport.weight()
                     );
-                    break;
-                case 2:
+                }
+                case 2 -> {
                     LocalTime departureTime = LocalTime.parse(getLine("Departure time (format: hh:mm): "));
-                    departureDateTime = LocalDateTime.of(transport.scheduledTime().toLocalDate(), departureTime);
+                    LocalDateTime departureDateTime = LocalDateTime.of(transport.scheduledTime().toLocalDate(), departureTime);
                     updateTransportHelperMethod(
                             transport.id(),
                             transport.source(),
@@ -152,8 +152,8 @@ public class TransportsManagement {
                             departureDateTime,
                             transport.weight()
                     );
-                    break;
-                case 3:
+                }
+                case 3 -> {
                     System.out.println("Select driver: ");
                     int driverID = pickDriver(false).id();
                     updateTransportHelperMethod(
@@ -166,8 +166,8 @@ public class TransportsManagement {
                             transport.scheduledTime(),
                             transport.weight()
                     );
-                    break;
-                case 4:
+                }
+                case 4 -> {
                     System.out.println("Select truck: ");
                     String truckId = pickTruck(false).id();
                     updateTransportHelperMethod(
@@ -180,8 +180,8 @@ public class TransportsManagement {
                             transport.scheduledTime(),
                             transport.weight()
                     );
-                    break;
-                case 5:
+                }
+                case 5 -> {
                     System.out.println("Select source: ");
                     Site source = pickSite(false);
                     updateTransportHelperMethod(
@@ -194,12 +194,12 @@ public class TransportsManagement {
                             transport.scheduledTime(),
                             transport.weight()
                     );
-                    break;
-                case 6:
+                }
+                case 6 ->
                     //TODO: support updating destinations
-                    System.out.println("currently not supported");
-                    break;
-                case 7:
+                        destinationsEditor(transport);
+                        System.out.println("currently not supported");
+                case 7 -> {
                     int truckWeight = getInt("Truck weight: ");
                     updateTransportHelperMethod(
                             transport.id(),
@@ -211,12 +211,14 @@ public class TransportsManagement {
                             transport.scheduledTime(),
                             truckWeight
                     );
-                    break;
-                case 8:
+                }
+                case 8 -> {
                     return;
-                default:
+                }
+                default -> {
                     System.out.println("\nInvalid option!");
                     continue;
+                }
             }
             break;
         }
@@ -307,5 +309,9 @@ public class TransportsManagement {
             return null;
         }
         return transports.get(transportId);
+    }
+
+    private static void destinationsEditor(Transport transport) {
+        
     }
 }

@@ -6,4 +6,5 @@ public abstract class DeliveryAgreement {
     public DeliveryAgreement(boolean havaTransport){
         this.havaTransport = havaTransport;
     }
+    public void setHavaTransport(boolean havaTransport){this.havaTransport = havaTransport;}
 }

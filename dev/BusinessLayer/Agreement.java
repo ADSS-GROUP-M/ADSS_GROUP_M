@@ -21,6 +21,14 @@ public class Agreement {
         this.deliveryAgreement = deliveryAgreement;
     }
 
+    public DeliveryAgreement getDeliveryAgreement() {
+        return deliveryAgreement;
+    }
+
+    public void setDeliveryAgreement(DeliveryAgreement deliveryAgreement){
+        this.deliveryAgreement = deliveryAgreement;
+    }
+
     public void addProduct(Product product){
         products.put(product.getId(), product);
     }
@@ -31,6 +39,10 @@ public class Agreement {
 
     public BillOfQuantities getBillOfQuantities(){
         return billOfQuantities;
+    }
+
+    public void setBillOfQuantities(BillOfQuantities billOfQuantities) {
+        this.billOfQuantities = billOfQuantities;
     }
 
     public void setPaymentMethod(String paymentMethod) {

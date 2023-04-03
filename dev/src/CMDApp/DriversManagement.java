@@ -40,7 +40,9 @@ public class DriversManagement {
         System.out.println("Enter driver details:");
         int id = getInt("Employee ID: ");
         String fullName = getLine("Name: ");
-        String licenseType = getLine("License type: ");
+        System.out.println("License type: ");
+        Driver.LicenseType licenseType = pickLicenseType();
+        if (licenseType == null) return;
         Driver newDriver = new Driver(id, fullName, licenseType);
         String json = JSON.serialize(newDriver);
         String responseJson = rms.addDriver(json);
@@ -70,7 +72,8 @@ public class DriversManagement {
                         updateDriverHelperMethod(driver.id(), name, driver.licenseType());
                     }
                     case 2 -> {
-                        String licenseType = getLine("License type: ");
+                        System.out.println("License type: ");
+                        Driver.LicenseType licenseType = pickLicenseType();
                         updateDriverHelperMethod(driver.id(), driver.name(), licenseType);
                     }
                     case 3 -> {
@@ -86,7 +89,7 @@ public class DriversManagement {
         }
     }
 
-    private static void updateDriverHelperMethod(int id, String name, String licenseType) {
+    private static void updateDriverHelperMethod(int id, String name, Driver.LicenseType licenseType) {
         Driver updatedDriver = new Driver(id, name, licenseType);
         String json = JSON.serialize(updatedDriver);
         String responseJson = rms.updateDriver(json);
@@ -152,5 +155,17 @@ public class DriversManagement {
         System.out.println("Employee ID:  " + driver.id());
         System.out.println("Name:         " + driver.name());
         System.out.println("License type: " + driver.licenseType());
+    }
+
+    private static Driver.LicenseType pickLicenseType() {
+        for (int i = 0; i < Driver.LicenseType.values().length; i++) {
+            System.out.println(i + ". " + Driver.LicenseType.values()[i]);
+        }
+        int option = getInt();
+        if (option < 0 || option >= Driver.LicenseType.values().length) {
+            System.out.println("Invalid license type!");
+            return null;
+        }
+        return Driver.LicenseType.values()[option];
     }
 }

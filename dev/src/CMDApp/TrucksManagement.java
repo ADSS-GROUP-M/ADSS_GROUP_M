@@ -172,6 +172,7 @@ public class TrucksManagement {
         System.out.println("Model:         " + truck.model());
         System.out.println("Base weight:   " + truck.baseWeight());
         System.out.println("Max weight:    " + truck.maxWeight());
+        System.out.println("Cooling capacity: " + truck.coolingCapacity());
     }
 
 }

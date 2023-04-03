@@ -320,6 +320,10 @@ public class TransportsManagement {
             Site site = pickSite(true);
             if(site == null) break;
             int listId = getInt("Items list id: ");
+            if (itemLists.containsKey(listId) == false) {
+                System.out.println("Items list with ID " + listId + " does not exist!");
+                continue;
+            }
             itemsList.put(site, itemLists.get(listId));
             destinations.add(site);
             destinationId++;

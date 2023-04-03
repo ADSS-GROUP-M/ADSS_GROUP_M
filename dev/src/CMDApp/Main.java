@@ -183,7 +183,7 @@ public class Main {
         for(Truck truck : trucks.values()){
             System.out.print(i+".");
             System.out.println(" license plate:    "+truck.id());
-            System.out.println("   model:           "+truck.model());
+            System.out.println("   model:            "+truck.model());
             System.out.println("   max weight:       "+truck.maxWeight());
             System.out.println("   cooling capacity: "+truck.coolingCapacity());
             truckArray[i-1] = truck;

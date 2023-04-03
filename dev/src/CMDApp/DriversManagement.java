@@ -158,7 +158,7 @@ public class DriversManagement {
     }
 
     private static Driver.LicenseType pickLicenseType() {
-        for (int i = 0; i <= Driver.LicenseType.values().length; i++) {
+        for (int i = 0; i < Driver.LicenseType.values().length; i++) {
             System.out.println((i+1) + ". " + Driver.LicenseType.values()[i]);
         }
         int option = getInt()-1;

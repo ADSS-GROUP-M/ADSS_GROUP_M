@@ -23,8 +23,8 @@ class TransportsServiceTest {
     void setUp() {
         Site site1 = new Site("zone a", "123 main st", "(555) 123-4567", "john smith", Site.SiteType.BRANCH);
         Site site2 = new Site("zone b", "456 oak ave", "(555) 234-5678", "jane doe", Site.SiteType.LOGISTICAL_CENTER);
-        Driver driver1 = new Driver(1234, "megan smith", "class b");
-        Truck truck1 = new Truck("abc123", "ford", 1500, 10000);
+        Driver driver1 = new Driver(1234, "megan smith", Driver.LicenseType.C3);
+        Truck truck1 = new Truck("abc123", "ford", 1500, 10000, Truck.CoolingCapacity.FROZEN);
         HashMap<String, Integer> load1 = new HashMap<>();
         load1.put("shirts", 20);
         load1.put("pants", 15);

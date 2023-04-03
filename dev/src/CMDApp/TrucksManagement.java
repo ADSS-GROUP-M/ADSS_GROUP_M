@@ -64,10 +64,12 @@ public class TrucksManagement {
 
     private static Truck.CoolingCapacity pickCoolingCapacity() {
 
+        System.out.println("Pick cooling capacity:");
+
         for (int i = 0; i < Truck.CoolingCapacity.values().length; i++) {
-            System.out.println(i + ". " + Truck.CoolingCapacity.values()[i]);
+            System.out.println((i+1) + ". " + Truck.CoolingCapacity.values()[i]);
         }
-        int option = getInt();
+        int option = getInt()-1;
         if (option < 0 || option >= Truck.CoolingCapacity.values().length) {
             System.out.println("\nInvalid cooling capacity!");
             return null;

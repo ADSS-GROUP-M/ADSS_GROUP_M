@@ -14,7 +14,6 @@ import java.util.*;
 import static CMDApp.DriversManagement.manageDrivers;
 import static CMDApp.ItemListsManagement.manageItemLists;
 import static CMDApp.SitesManagement.manageSites;
-import static CMDApp.SitesManagement.printSiteDetails;
 import static CMDApp.TransportsManagement.manageTransports;
 import static CMDApp.TrucksManagement.manageTrucks;
 
@@ -419,7 +418,7 @@ public class Main {
         Transport transport5 = new Transport(
                 2005,
                 site5,
-                new LinkedList<>(Arrays.asList(site4)),
+                new LinkedList<>(List.of(site4)),
                 new HashMap<>() {{
                     put(site4, itemList2);
                 }},

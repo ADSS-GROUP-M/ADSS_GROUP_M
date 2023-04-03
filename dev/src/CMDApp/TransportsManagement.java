@@ -195,10 +195,11 @@ public class TransportsManagement {
                             transport.weight()
                     );
                 }
-                case 6 ->
+                case 6 ->{
                     //TODO: support updating destinations
-                        destinationsEditor(transport);
-                        System.out.println("currently not supported");
+                    destinationsEditor(transport);
+                    System.out.println("currently not supported");
+                }
                 case 7 -> {
                     int truckWeight = getInt("Truck weight: ");
                     updateTransportHelperMethod(
@@ -312,6 +313,6 @@ public class TransportsManagement {
     }
 
     private static void destinationsEditor(Transport transport) {
-        
+
     }
 }

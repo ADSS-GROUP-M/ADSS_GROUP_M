@@ -6,39 +6,29 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-import dev.BusinessLayer.Employees.Shift.ShiftTime;
+import dev.BusinessLayer.Employees.Shift.ShiftType;
 
-public enum Branch {
-    BRANCH1(),
-    BRANCH2(),
-    BRANCH3(),
-    BRANCH4(),
-    BRANCH5(),
-    BRANCH6(),
-    BRANCH7(),
-    BRANCH8(),
-    BRANCH9();
-
-    private HashMap<ShiftTime,Integer[]> workingHours;
+public class Branch {
+    private HashMap<ShiftType,Integer[]> workingHours;
     private List<LocalDate>  nonWorkingDays;
 
-    private Branch(){
+    public Branch(){
         this.nonWorkingDays = new ArrayList<>();
-        this.workingHours = new HashMap<ShiftTime, Integer[]>();
+        this.workingHours = new HashMap<ShiftType, Integer[]>();
         Integer[] w1 = {8,16}, w2 = {16,24};
-        this.workingHours.put(ShiftTime.MORNING, w1);
-        this.workingHours.put(ShiftTime.EVENING, w2);
+        this.workingHours.put(ShiftType.Morning, w1);
+        this.workingHours.put(ShiftType.Evening, w2);
     }
 
-    private Branch(int morningShiftStart,int morningShiftFinish, int eveningShiftStart, int eveningShiftFinish){
+    public Branch(int morningShiftStart,int morningShiftFinish, int eveningShiftStart, int eveningShiftFinish){
         this.nonWorkingDays = new LinkedList<>();
-        this.workingHours = new HashMap<ShiftTime, Integer[]>();
+        this.workingHours = new HashMap<ShiftType, Integer[]>();
         Integer[] w1 = {morningShiftStart,morningShiftFinish}, w2 = {eveningShiftStart,eveningShiftFinish};
-        this.workingHours.put(ShiftTime.MORNING, w1);
-        this.workingHours.put(ShiftTime.EVENING, w2);
+        this.workingHours.put(ShiftType.Morning, w1);
+        this.workingHours.put(ShiftType.Evening, w2);
     }
 
-    public Integer[] getWorkingHours(ShiftTime s){ // returns 2 slot array : {shift starting time, shift end time}
+    public Integer[] getWorkingHours(ShiftType s){ // returns 2 slot array : {shift starting time, shift end time}
         return this.workingHours.get(s);
     }
 
@@ -52,13 +42,5 @@ public enum Branch {
                 return false;
         }
         return true;
-    }
-
-    public static List<Branch> getAllBranches(){
-        List<Branch> b = new LinkedList<Branch>();
-        for( Branch br : Branch.values()){
-            b.add(br);
-        }
-        return b;
     }
 }

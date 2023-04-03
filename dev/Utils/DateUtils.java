@@ -1,9 +1,14 @@
 package dev.Utils;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Calendar;
 
 public class DateUtils {
+    public static final String DATE_PATTERN = "d/M/yyyy";
+    public static final DateTimeFormatter DateFormat = DateTimeFormatter.ofPattern(DATE_PATTERN);
+
     public static LocalDate[] getWeekDates(LocalDate d){
         LocalDate[] fromUntil = new LocalDate[2];
         Calendar cal = Calendar.getInstance();
@@ -19,5 +24,18 @@ public class DateUtils {
         fromUntil[0] = LocalDate.of(sunday.getYear(), sunday.getMonth()+1, sunday.getDate());
         fromUntil[1] = LocalDate.of(nextsunday.getYear(), nextsunday.getMonth()+1, nextsunday.getDate());
         return fromUntil;
+    }
+
+    public static boolean validDate(String dateInput) {
+        try {
+            LocalDate.parse(dateInput);
+            return true;
+        } catch (Exception ignore) {
+            return false;
+        }
+    }
+
+    public static LocalDate parse(String dateInput) throws DateTimeParseException {
+        return LocalDate.parse(dateInput,DateFormat);
     }
 }

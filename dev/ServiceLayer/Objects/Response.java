@@ -1,4 +1,4 @@
-package dev.ServiceLayer;
+package dev.ServiceLayer.Objects;
 
 public class Response<T> {
     private T returnValue;
@@ -19,8 +19,8 @@ public class Response<T> {
         this.errorMessage = errorMessage;
     }
 
-    public static Response createErrorResponse(String errorMessage) {
-        return new Response(null, errorMessage);
+    public static <T> Response<T> createErrorResponse(String errorMessage) {
+        return new Response<>(null, errorMessage);
     }
 
     public T getReturnValue() {

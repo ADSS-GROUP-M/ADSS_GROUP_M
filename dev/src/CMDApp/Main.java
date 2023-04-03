@@ -13,6 +13,8 @@ import java.util.*;
 
 import static CMDApp.DriversManagement.manageDrivers;
 import static CMDApp.ItemListsManagement.manageItemLists;
+import static CMDApp.Records.Driver.LicenseType.*;
+import static CMDApp.Records.Truck.CoolingCapacity.*;
 import static CMDApp.SitesManagement.manageSites;
 import static CMDApp.TransportsManagement.manageTransports;
 import static CMDApp.TrucksManagement.manageTrucks;
@@ -265,18 +267,18 @@ public class Main {
         Site site5 = new Site("zone e", "369 pine ave", "(555) 567-8901", "tom smith", Site.SiteType.LOGISTICAL_CENTER);
 
         // generate drivers with random data:
-        Driver driver1 = new Driver(1234, "megan smith", "class b");
-        Driver driver2 = new Driver(5678, "john doe", "class c");
-        Driver driver3 = new Driver(9012, "emily chen", "class a");
-        Driver driver4 = new Driver(3456, "david lee", "class b");
-        Driver driver5 = new Driver(7890, "sarah kim", "class c");
+        Driver driver1 = new Driver(1234, "megan smith", A1);
+        Driver driver2 = new Driver(5678, "john doe", B2);
+        Driver driver3 = new Driver(9012, "emily chen",C2);
+        Driver driver4 = new Driver(3456, "david lee", C3);
+        Driver driver5 = new Driver(7890, "sarah kim", C3);
 
         // generate trucks with random data:
-        Truck truck1 = new Truck("abc123", "ford", 1500, 10000);
-        Truck truck2 = new Truck("def456", "chevy", 2000, 15000);
-        Truck truck3 = new Truck("ghi789", "toyota", 2500, 20000);
-        Truck truck4 = new Truck("jkl012", "honda", 3000, 25000);
-        Truck truck5 = new Truck("mno345", "nissan", 3500, 30000);
+        Truck truck1 = new Truck("abc123", "ford", 1500, 10000,NONE);
+        Truck truck2 = new Truck("def456", "chevy", 2000, 15000,COLD);
+        Truck truck3 = new Truck("ghi789", "toyota", 2500, 20000,COLD);
+        Truck truck4 = new Truck("jkl012", "honda", 3000, 25000,FROZEN);
+        Truck truck5 = new Truck("mno345", "nissan", 3500, 30000,FROZEN);
 
 
         ResourceManagementService rms = factory.getResourceManagementService();

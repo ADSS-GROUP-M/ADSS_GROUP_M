@@ -18,4 +18,8 @@ public class SupplierController {
     public Supplier getSupplier(String bnNumber){
         return suppliers.stream().filter(supplier -> supplier.getBnNumber().equals(bnNumber)).collect(Collectors.toList()).get(0);
     }
+
+    public List<Supplier> getSuppliers(){
+        return suppliers;
+    }
 }

@@ -2,6 +2,8 @@ package BusinessLayer;
 
 import BusinessLayer.DeliveryAgreements.DeliveryAgreement;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,6 +18,7 @@ public class Agreement {
 
     public Agreement(String paymentMethod, List<Product> productsList, DeliveryAgreement deliveryAgreement){
         this.paymentMethod = paymentMethod;
+        products = new HashMap<>();
         for (Product p : productsList)
             products.put(p.getId(), p);
         this.deliveryAgreement = deliveryAgreement;

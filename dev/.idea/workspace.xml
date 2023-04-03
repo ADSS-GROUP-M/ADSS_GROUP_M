@@ -2,14 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e454f93c-4ee8-4f4b-9a14-eaaf36aa303c" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BusinessLayer/Agreement.java" beforeDir="false" afterPath="$PROJECT_DIR$/BusinessLayer/Agreement.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BusinessLayer/BillOfQuantities.java" beforeDir="false" afterPath="$PROJECT_DIR$/BusinessLayer/BillOfQuantities.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BusinessLayer/DeliveryAgreements/DeliveryAgreement.java" beforeDir="false" afterPath="$PROJECT_DIR$/BusinessLayer/DeliveryAgreements/DeliveryAgreement.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BusinessLayer/DeliveryAgreements/DeliveryByInvitation.java" beforeDir="false" afterPath="$PROJECT_DIR$/BusinessLayer/DeliveryAgreements/DeliveryByInvitation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BusinessLayer/DeliveryAgreements/DeliveryFixedDays.java" beforeDir="false" afterPath="$PROJECT_DIR$/BusinessLayer/DeliveryAgreements/DeliveryFixedDays.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BusinessLayer/Supplier.java" beforeDir="false" afterPath="$PROJECT_DIR$/BusinessLayer/Supplier.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BusinessLayer/SupplierController.java" beforeDir="false" afterPath="$PROJECT_DIR$/BusinessLayer/SupplierController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BusinessLayer/SystemController.java" beforeDir="false" afterPath="$PROJECT_DIR$/BusinessLayer/SystemController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -78,7 +73,7 @@
       <workItem from="1680438006576" duration="12448000" />
       <workItem from="1680468003859" duration="62000" />
       <workItem from="1680511359414" duration="167000" />
-      <workItem from="1680511529805" duration="8840000" />
+      <workItem from="1680511529805" duration="12696000" />
     </task>
     <servers />
   </component>

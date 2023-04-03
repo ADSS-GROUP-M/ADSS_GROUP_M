@@ -19,8 +19,4 @@ public class SystemController {
         supplierController.addSupplier(name,bnNumber,bankAccount,paymentMethod,fields, contactsInfo, productList, deliveryAgreement);
     }
 
-    public void order(Map<Product, Integer> products){
-        Order order = new Order(products);
-
-    }
 }

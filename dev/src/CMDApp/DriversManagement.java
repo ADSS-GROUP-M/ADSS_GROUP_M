@@ -158,10 +158,10 @@ public class DriversManagement {
     }
 
     private static Driver.LicenseType pickLicenseType() {
-        for (int i = 0; i < Driver.LicenseType.values().length; i++) {
-            System.out.println(i + ". " + Driver.LicenseType.values()[i]);
+        for (int i = 0; i <= Driver.LicenseType.values().length; i++) {
+            System.out.println((i+1) + ". " + Driver.LicenseType.values()[i]);
         }
-        int option = getInt();
+        int option = getInt()-1;
         if (option < 0 || option >= Driver.LicenseType.values().length) {
             System.out.println("Invalid license type!");
             return null;

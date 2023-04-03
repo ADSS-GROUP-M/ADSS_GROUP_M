@@ -11,6 +11,10 @@ public record Transport (int id, Site source, LinkedList<Site> destinations, Has
                      String truckId, int driverId, LocalDateTime scheduledTime){
         this(id, source, destinations, itemLists, truckId, driverId, scheduledTime, 0);
     }
+
+    public static Transport getLookupObject(int id){
+        return new Transport(id, null, null, null, null, 0, null, 0);
+    }
 }
 
 

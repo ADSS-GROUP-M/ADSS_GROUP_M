@@ -61,7 +61,7 @@ class ItemListsServiceTest {
         itemList1.unload().put("Jackets", 15);
         String json = JSON.serialize(itemList1);
         String responseJson = ils.updateItemList(json);
-        Response response = JSON.deserialize(responseJson, Response.class);
+        Response<String> response = JSON.deserialize(responseJson, Response.class);
         if(response.isSuccess() == false) fail("Failed to update item list");
         String updatedResponseJson = ils.getItemList(json);
         Type type = new TypeToken<Response<ItemList>>(){}.getType();

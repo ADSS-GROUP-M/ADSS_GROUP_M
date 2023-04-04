@@ -64,6 +64,7 @@ public class TransportsController {
         // used to return information about all the errors
         String toThrow = "";
         boolean throwException = false;
+        Throwable cause = null;
         //==================================================
 
         // weight validation
@@ -71,6 +72,7 @@ public class TransportsController {
         if (truck.maxWeight() < weight) {
             toThrow += "The truck's maximum weight has been exceeded";
             throwException = true;
+            cause = new Throwable("weight");
         }
 
         // truck - driver validation
@@ -78,12 +80,18 @@ public class TransportsController {
         String[] driverLicense = driver.licenseType().name().split("");
 
         if(driverLicense[0].compareToIgnoreCase(requiredLicense[0]) < 0 ||  driverLicense[1].compareToIgnoreCase(requiredLicense[1]) < 0) {
-            if(throwException) toThrow += "\n";
+            if(throwException){
+                toThrow += "\n";
+                cause = new Throwable(cause.getMessage()+",license");
+            }
+            else{
+                cause = new Throwable("license");
+            }
             toThrow += "A driver with license type "+driver.licenseType()+
                             " is not permitted to drive this truck";
             throwException = true;
-        }
 
-        if(throwException) throw new IOException(toThrow);
+        }
+        if(throwException) throw new IOException(toThrow,cause);
     }
 }

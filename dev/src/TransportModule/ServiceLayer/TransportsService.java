@@ -72,9 +72,9 @@ public class TransportsService {
             tc.addTransport(transport);
         }
         catch(IOException e){
-            return new Response<String>(e.getMessage(), false, "").getJson();
+            return new Response<>(e.getMessage(), false, e.getCause().getMessage()).getJson();
         }
-        return new Response<String>("Transport created successfully",true, "").getJson();
+        return new Response<>("Transport created successfully",true, "").getJson();
     }
 
     public String updateTransport(String json){
@@ -84,9 +84,9 @@ public class TransportsService {
             tc.updateTransport(transport.id(), transport);
         }
         catch(IOException e){
-            return new Response<String>(e.getMessage(), false, "").getJson();
+            return new Response<>(e.getMessage(), false, e.getCause().getMessage()).getJson();
         }
-        return new Response<String>("Transport updated successfully",true, "").getJson();
+        return new Response<>("Transport updated successfully",true, "").getJson();
     }
 
     public String removeTransport(String json){
@@ -96,9 +96,9 @@ public class TransportsService {
             tc.removeTransport(transport.id());
         }
         catch(IOException e){
-            return new Response<String>(e.getMessage(), false, "").getJson();
+            return new Response<>(e.getMessage(), false, e.getCause().getMessage()).getJson();
         }
-        return new Response<String>("Transport removed successfully",true, "").getJson();
+        return new Response<>("Transport removed successfully",true, "").getJson();
     }
 
     public String getTransport(String json){
@@ -108,12 +108,12 @@ public class TransportsService {
             transport = tc.getTransport(transport.id());
         }
         catch(IOException e){
-            return new Response<String>(e.getMessage(), false, "").getJson();
+            return new Response<>(e.getMessage(), false, e.getCause().getMessage()).getJson();
         }
-        return new Response<Transport>("Transport found successfully",true, transport).getJson();
+        return new Response<>("Transport found successfully",true, transport).getJson();
     }
 
     public String getAllTransports(){
-        return new Response<LinkedList<Transport>>("All Transports found successfully",true, tc.getAllTransports()).getJson();
+        return new Response<>("All Transports found successfully",true, tc.getAllTransports()).getJson();
     }
 }

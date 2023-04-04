@@ -85,14 +85,71 @@ public class TransportsManagement {
                 truckWeight
         );
 
-        String json = JSON.serialize(newTransport);
-        String responseJson = ts.createTransport(json);
-        Response<String> response = JSON.deserialize(responseJson, Response.class);
-        if(response.isSuccess()){
-            transports.put(transportIdCounter, newTransport);
-            transportIdCounter++;
+        Response<String> response = createTransportHelperMethod(newTransport);
+
+        if(response.isSuccess() == false){
+            pickAnOptionIfFail(newTransport, response);
         }
-        System.out.println("\n"+response.getMessage());
+    }
+
+    private static void pickAnOptionIfFail(Transport newTransport, Response<String> response) {
+        String[] errors = response.getData().split(",");
+        if(errors[0].equalsIgnoreCase("weight")){
+            while(true){
+                System.out.println("current weight: "+newTransport.weight());
+                System.out.println("Select one of the following options:");
+                System.out.println("1. Pick new truck and driver");
+                System.out.println("2. Pick new destinations and item lists");
+                System.out.println("3. Cancel and return to previous menu");
+                int option = getInt();
+                switch (option) {
+                    case 1 -> {
+                        System.out.println("Truck: ");
+                        String truckId = pickTruck(false).id();
+                        System.out.println("Driver: ");
+                        int driverID = pickDriver(false).id();
+                        Response<String> response2 = createTransportHelperMethod(
+                                new Transport(
+                                        newTransport.id(),
+                                        newTransport.source(),
+                                        newTransport.destinations(),
+                                        newTransport.itemLists(),
+                                        truckId,
+                                        driverID,
+                                        newTransport.scheduledTime(),
+                                        newTransport.weight()
+                                )
+                        );
+                        if(response2.isSuccess()) return;
+                    }
+                    case 2 -> {
+                        LinkedList<Site> destinations = new LinkedList<>();
+                        HashMap<Site, ItemList> itemsList = new HashMap<>();
+                        destinationsMaker(destinations, itemsList);
+                        System.out.println("New weight :");
+                        int weight = getInt();
+                        Response<String> response2 = createTransportHelperMethod(
+                                new Transport(
+                                        newTransport.id(),
+                                        newTransport.source(),
+                                        destinations,
+                                        itemsList,
+                                        newTransport.truckId(),
+                                        newTransport.driverId(),
+                                        newTransport.scheduledTime(),
+                                        weight
+                                )
+                        );
+                        if(response2.isSuccess()) return;
+                    }
+                    case 3 -> {
+                        System.out.println("Transport creation cancelled");
+                        return;
+                    }
+                    default -> System.out.println("\nInvalid option!");
+                }
+            }
+        }
     }
 
     private static void updateTransport() {
@@ -281,7 +338,7 @@ public class TransportsManagement {
         }
     }
 
-    private static void updateTransportHelperMethod(int id, Site source, LinkedList<Site> destinations, HashMap<Site, ItemList> itemLists, String truckId, int driverId, LocalDateTime departureDateTime, int weight) {
+    private static Response<String> updateTransportHelperMethod(int id, Site source, LinkedList<Site> destinations, HashMap<Site, ItemList> itemLists, String truckId, int driverId, LocalDateTime departureDateTime, int weight) {
         Transport newTransport = new Transport(
                 id,
                 source,
@@ -300,6 +357,7 @@ public class TransportsManagement {
             transports.put(id, newTransport);
         }
         System.out.println("\n"+response.getMessage());
+        return response;
     }
 
     private static Transport getTransport() {
@@ -329,5 +387,20 @@ public class TransportsManagement {
             destinations.add(site);
             destinationId++;
         }
+    }
+
+    private static Response<String> createTransportHelperMethod(Transport newTransport) {
+
+        // send to server
+        String json = JSON.serialize(newTransport);
+        String responseJson = ts.createTransport(json);
+        Response<String> response = JSON.deserialize(responseJson, Response.class);
+        System.out.println("\n"+response.getMessage());
+
+        if(response.isSuccess()){
+            transports.put(transportIdCounter, newTransport);
+            transportIdCounter++;
+        }
+        return response;
     }
 }

@@ -210,4 +210,9 @@ public class ShiftsController {
         Shift shift = getShift(branchId, shiftDate, shiftType);
         shift.approve();
     }
+
+    public void applyCancelCard(String branchId, LocalDate shiftDate, ShiftType shiftType, String employeeId, String productId) throws Exception {
+        Shift shift = getShift(branchId, shiftDate, shiftType);
+        shift.useCancelCard(employeeId, productId);
+    }
 }

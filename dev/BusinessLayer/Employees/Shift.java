@@ -1,6 +1,7 @@
 package dev.BusinessLayer.Employees;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -13,7 +14,7 @@ public class Shift {
     private Map<Role, Integer> neededRoles;
     private Map<Role, List<Employee>> shiftRequests;
     private Map<Role, List<Employee>> shiftWorkers;
-    private int cancelCardApplies;
+    private List<String> cancelCardApplies;
 
     public enum ShiftType {
         Morning,
@@ -31,7 +32,7 @@ public class Shift {
         this.isApproved = false;
         this.shiftRequests = new HashMap<>();
         this.shiftWorkers = new HashMap<>();
-        this.cancelCardApplies = 0;
+        this.cancelCardApplies = new ArrayList<>();
     }
 
     public boolean checkLegality() { // are all constraints of the shift are met?
@@ -163,11 +164,12 @@ public class Shift {
     }
 
     public void useCancelCard(String cancellingEmployeeId, String productId){
-        this.cancelCardApplies++;
+        // TODO: Save each card apply in an object, to make it easier at the next steps when we need to save it in the database
+        this.cancelCardApplies.add(cancellingEmployeeId + " " + productId + " " + LocalDateTime.now());
         // Save the cancelled product
     }
 
-    public int getTotalCancelCardApplications(){
+    public List<String> getCancelCardApplications(){
         return this.cancelCardApplies;
     }
 

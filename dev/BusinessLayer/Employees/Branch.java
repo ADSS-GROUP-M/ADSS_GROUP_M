@@ -1,6 +1,7 @@
 package dev.BusinessLayer.Employees;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -9,23 +10,39 @@ import java.util.List;
 import dev.BusinessLayer.Employees.Shift.ShiftType;
 
 public class Branch {
-    private HashMap<ShiftType,Integer[]> workingHours;
+    private LocalTime morningStart;
+    private LocalTime morningEnd;
+    private LocalTime eveningStart;
+    private LocalTime eveningEnd;
 
-    public Branch(){
-        this.workingHours = new HashMap<ShiftType, Integer[]>();
-        Integer[] w1 = {8,16}, w2 = {16,24};
-        this.workingHours.put(ShiftType.Morning, w1);
-        this.workingHours.put(ShiftType.Evening, w2);
+    public Branch() {
+        // Default values of branch working hours
+        morningStart = LocalTime.of(8,0);
+        morningEnd = LocalTime.of(16,0);
+        eveningStart = LocalTime.of(16,0);
+        eveningEnd = LocalTime.of(24,0);
     }
 
     public Branch(int morningShiftStart,int morningShiftFinish, int eveningShiftStart, int eveningShiftFinish){
-        this.workingHours = new HashMap<ShiftType, Integer[]>();
-        Integer[] w1 = {morningShiftStart,morningShiftFinish}, w2 = {eveningShiftStart,eveningShiftFinish};
-        this.workingHours.put(ShiftType.Morning, w1);
-        this.workingHours.put(ShiftType.Evening, w2);
+        morningStart = LocalTime.of(morningShiftStart, 0);
+        morningEnd = LocalTime.of(morningShiftFinish, 0);
+        eveningStart = LocalTime.of(eveningShiftStart, 0);
+        eveningEnd = LocalTime.of(eveningShiftFinish, 0);
     }
 
-    public Integer[] getWorkingHours(ShiftType s){ // returns 2 slot array : {shift starting time, shift end time}
-        return this.workingHours.get(s);
+    public LocalTime getMorningStart() {
+        return this.morningStart;
+    }
+
+    public LocalTime getMorningEnd() {
+        return morningEnd;
+    }
+
+    public LocalTime getEveningStart() {
+        return eveningStart;
+    }
+
+    public LocalTime getEveningEnd() {
+        return eveningEnd;
     }
 }

@@ -114,6 +114,18 @@ public class EmployeesService {
         }
     }
 
+    public Response<Boolean> deleteShift(String actorUsername, String branchId, LocalDate shiftDate, SShiftType shiftType) {
+        Response<Boolean> authResponse = userService.isAuthorized(actorUsername, Authorization.HRManager);
+        if (authResponse.errorOccurred())
+            return Response.createErrorResponse(authResponse.getErrorMessage());
+        try {
+            shiftsController.deleteShift(branchId, shiftDate, ShiftType.valueOf(shiftType.toString()));
+            return new Response<>(true);
+        } catch (Exception e) {
+            return Response.createErrorResponse(e.getMessage());
+        }
+    }
+
     public Response<Boolean> setShiftNeededAmount(String actorUsername, String branchId, LocalDate shiftDate, SShiftType shiftType, String role, int amount) {
         Response<Boolean> authResponse = userService.isAuthorized(actorUsername, Authorization.HRManager);
         if (authResponse.errorOccurred())
@@ -218,6 +230,54 @@ public class EmployeesService {
             return Response.createErrorResponse(authResponse.getErrorMessage());
         try {
             shiftsController.applyCancelCard(branchId, shiftDate, ShiftType.valueOf(shiftType.toString()),actorUsername, productId);
+            return new Response<>(true);
+        } catch (Exception e) {
+            return Response.createErrorResponse(e.getMessage());
+        }
+    }
+
+    public Response<Boolean> updateEmployeeSalary(String actorUsername, String employeeId, double hourlySalaryRate, double salaryBonus){
+        Response<Boolean> authResponse = userService.isAuthorized(actorUsername, Authorization.ShiftManager);
+        if (authResponse.errorOccurred())
+            return Response.createErrorResponse(authResponse.getErrorMessage());
+        try {
+            employeesController.updateEmployeeSalary(employeeId, hourlySalaryRate, salaryBonus);
+            return new Response<>(true);
+        } catch (Exception e) {
+            return Response.createErrorResponse(e.getMessage());
+        }
+    }
+
+    public Response<Boolean> updateBankDetails(String actorUsername, String employeeId, String bankDetails){
+        Response<Boolean> authResponse = userService.isAuthorized(actorUsername, Authorization.ShiftManager);
+        if (authResponse.errorOccurred())
+            return Response.createErrorResponse(authResponse.getErrorMessage());
+        try {
+            employeesController.updateEmployeeBankDetails(employeeId, bankDetails);
+            return new Response<>(true);
+        } catch (Exception e) {
+            return Response.createErrorResponse(e.getMessage());
+        }
+    }
+
+    public Response<Boolean> updateEmployeeEmploymentConditions(String actorUsername, String employeeId, String employmentConditions){
+        Response<Boolean> authResponse = userService.isAuthorized(actorUsername, Authorization.ShiftManager);
+        if (authResponse.errorOccurred())
+            return Response.createErrorResponse(authResponse.getErrorMessage());
+        try {
+            employeesController.updateEmployeeEmploymentConditions(employeeId, employmentConditions);
+            return new Response<>(true);
+        } catch (Exception e) {
+            return Response.createErrorResponse(e.getMessage());
+        }
+    }
+
+    public Response<Boolean> updateEmployeeDetails(String actorUsername, String employeeId, String details){
+        Response<Boolean> authResponse = userService.isAuthorized(actorUsername, Authorization.ShiftManager);
+        if (authResponse.errorOccurred())
+            return Response.createErrorResponse(authResponse.getErrorMessage());
+        try {
+            employeesController.updateEmployeeDetails(employeeId, details);
             return new Response<>(true);
         } catch (Exception e) {
             return Response.createErrorResponse(e.getMessage());

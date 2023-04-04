@@ -100,6 +100,11 @@ public class ShiftsController {
         }
     }
 
+    public void deleteShift(String branchId, LocalDate shiftDate, ShiftType shiftType) throws Exception {
+        Shift shift = getShift(branchId, shiftDate, shiftType);
+        getShiftDay(getShiftBranch(branchId),shiftDate).remove(shiftType,shift);
+    }
+
     public List<Shift[]> getWeekShifts(String branchId, LocalDate weekStart) {
         // Get dates until the end of the week
         List<LocalDate> dates = weekStart.datesUntil(weekStart.with(next(DayOfWeek.SUNDAY))).toList();

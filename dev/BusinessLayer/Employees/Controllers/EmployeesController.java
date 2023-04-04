@@ -74,8 +74,31 @@ public class EmployeesController {
 
     public void recruitEmployee(String branchId, String fullName, String employeeId, String bankDetails, double hourlyRate, LocalDate employmentDate, String employmentConditions, String details) throws Exception {
         Branch branch = getBranch(branchId);
+        if(this.employees.get(branch).containsKey(employeeId))
+            throw new Exception("This employee id already exists in the system.");
         Employee employee = new Employee(fullName, employeeId, hourlyRate, bankDetails, employmentDate, employmentConditions, details);
         this.employees.get(branch).put(employeeId, employee);
+    }
+
+    public void updateEmployeeSalary(String employeeId, double hourlySalaryRate, double salaryBonus) throws Exception {
+        Employee employee = getEmployee(employeeId);
+        employee.setHourlySalaryRate(hourlySalaryRate);
+        employee.setSalaryBonus(salaryBonus);
+    }
+
+    public void updateEmployeeBankDetails(String employeeId, String bankDetails) throws Exception {
+        Employee employee = getEmployee(employeeId);
+        employee.setBankDetails(bankDetails);
+    }
+
+    public void updateEmployeeEmploymentConditions(String employeeId, String employmentConditions) throws Exception {
+        Employee employee = getEmployee(employeeId);
+        employee.setEmploymentConditions(employmentConditions);
+    }
+
+    public void updateEmployeeDetails(String employeeId, String details) throws Exception {
+        Employee employee = getEmployee(employeeId);
+        employee.setDetails(details);
     }
 
     public void certifyEmployee(String employeeId, Role role) throws Exception {

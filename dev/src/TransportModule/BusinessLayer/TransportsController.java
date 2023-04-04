@@ -74,28 +74,10 @@ public class TransportsController {
         }
 
         // truck - driver validation
-        Truck.CoolingCapacity coolingCapacity = truck.coolingCapacity();
+        String[] requiredLicense = truck.requiredLicense().split("");
+        String[] driverLicense = driver.licenseType().name().split("");
 
-        // {weight, cooling capacity}
-        int[] requiredLicense = switch(coolingCapacity) {
-            case NONE -> {
-                if(weight <= 10000) yield new int[]{10000,1};
-                else if (weight > 10000 && weight <= 20000) yield new int[]{20000,1};
-                else yield new int[]{30000,1};
-            }
-            case COLD -> {
-                if(weight <= 10000) yield new int[]{10000,2};
-                else if (weight > 10000 && weight <= 20000) yield new int[]{20000,2};
-                else yield new int[]{30000,2};
-            }
-            case FROZEN -> {
-                if(weight <= 10000) yield new int[]{10000,3};
-                else if (weight > 10000 && weight <= 20000) yield new int[]{20000,3};
-                else yield new int[]{30000,3};
-            }
-        };
-
-        if(weight < requiredLicense[0] || requiredLicense[1] < coolingCapacity.ordinal()+1){
+        if(driverLicense[0].compareToIgnoreCase(requiredLicense[0]) < 0 ||  driverLicense[1].compareToIgnoreCase(requiredLicense[1]) < 0) {
             if(throwException) toThrow += "\n";
             toThrow += "A driver with license type "+driver.licenseType()+
                             " is not permitted to drive this truck";

@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TransportsServiceTest {
 
-    Transport transport = null;
+    private Transport transport;
 
     @BeforeEach
     void setUp() {
@@ -62,7 +62,7 @@ class TransportsServiceTest {
 
     @AfterEach
     void tearDown() {
-        transport = null;
+        ModuleFactory.tearDownForTests();
     }
 
     @Test

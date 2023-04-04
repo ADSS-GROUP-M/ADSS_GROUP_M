@@ -40,4 +40,8 @@ public class ModuleFactory {
         }
         return instance;
     }
+
+    public static void tearDownForTests(){
+        instance = null;
+    }
 }

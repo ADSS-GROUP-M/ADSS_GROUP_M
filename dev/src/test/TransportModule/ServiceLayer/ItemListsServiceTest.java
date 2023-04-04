@@ -2,6 +2,7 @@ package TransportModule.ServiceLayer;
 
 import TransportModule.BusinessLayer.Records.ItemList;
 import com.google.gson.reflect.TypeToken;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -15,6 +16,7 @@ class ItemListsServiceTest {
 
     ItemList itemList1;
     ItemList itemList2;
+    private ItemListsService ils;
 
     @BeforeEach
     void setUp() {
@@ -42,14 +44,18 @@ class ItemListsServiceTest {
 
         itemList2 = new ItemList(1002, load2, unload2);
 
-        ItemListsService ils = ModuleFactory.getInstance().getItemListsService();
+        ils = ModuleFactory.getInstance().getItemListsService();
         ils.addItemList(JSON.serialize(itemList1));
         ils.addItemList(JSON.serialize(itemList2));
     }
 
+    @AfterEach
+    void tearDown() {
+        ModuleFactory.tearDownForTests();
+    }
+
     @Test
     void addItemList() {
-        ItemListsService ils = ModuleFactory.getInstance().getItemListsService();
         HashMap<String, Integer> load3 = new HashMap<>();
         load3.put("Cups", 50);
         load3.put("Plates", 20);
@@ -80,7 +86,6 @@ class ItemListsServiceTest {
 
     @Test
     void updateItemList() {
-        ItemListsService ils = ModuleFactory.getInstance().getItemListsService();
         itemList1.load().put("Shirts", 25);
         itemList1.unload().put("Jackets", 15);
         String json = JSON.serialize(itemList1);

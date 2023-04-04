@@ -128,17 +128,10 @@ public class Main {
         return str;
     }
 
-    static Site pickSite(boolean allowDone) {
-        return pickSite(allowDone, sites.values());
-    }
-
-    static Site pickSite(boolean allowDone, Collection<Site> sites) {
-        return pickSite(allowDone, sites,"");
-    }
-    private static Site pickSite(boolean allowDone, Collection<Site> sites, String ignored) {
+        static Site pickSite(boolean allowDone) {
         int i = 1;
         Site[] siteArray = new Site[sites.size()];
-        for(Site site : sites/*.values()*/){
+        for(Site site : sites.values()){
             System.out.print(i+".");
             System.out.println(" Transport zone: "+site.transportZone());
             System.out.println("   address:        "+site.address());
@@ -150,7 +143,7 @@ public class Main {
         if( (allowDone && (option < 0 || option > sites.size()))
                 || (!allowDone && (option < 0 || option > sites.size()-1))){
             System.out.println("\nInvalid option!");
-            return pickSite(allowDone, sites);
+            return pickSite(allowDone);
         }
         if(allowDone && option == sites.size()) return null;
         return siteArray[option];

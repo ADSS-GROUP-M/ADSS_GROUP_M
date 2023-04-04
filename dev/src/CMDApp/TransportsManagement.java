@@ -338,7 +338,7 @@ public class TransportsManagement {
         }
     }
 
-    private static Response<String> updateTransportHelperMethod(int id, Site source, LinkedList<Site> destinations, HashMap<Site, ItemList> itemLists, String truckId, int driverId, LocalDateTime departureDateTime, int weight) {
+    private static void updateTransportHelperMethod(int id, Site source, LinkedList<Site> destinations, HashMap<Site, ItemList> itemLists, String truckId, int driverId, LocalDateTime departureDateTime, int weight) {
         Transport newTransport = new Transport(
                 id,
                 source,
@@ -357,7 +357,6 @@ public class TransportsManagement {
             transports.put(id, newTransport);
         }
         System.out.println("\n"+response.getMessage());
-        return response;
     }
 
     private static Transport getTransport() {

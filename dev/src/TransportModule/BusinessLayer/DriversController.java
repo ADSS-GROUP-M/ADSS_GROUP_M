@@ -16,6 +16,7 @@ public class DriversController {
     public void addDriver(Driver driver) throws IOException{
         if (drivers.containsKey(driver.id()) == false)
             drivers.put(driver.id(), driver);
+
         else throw new IOException("Driver already exists");
     }
 
@@ -45,8 +46,8 @@ public class DriversController {
         LinkedList<Driver> driversList = new LinkedList<>();
         for(Driver driver : drivers.values())
             driversList.add(driver);
-        return driversList;
 
+        return driversList;
     }
 
 }

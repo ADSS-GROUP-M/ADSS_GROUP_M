@@ -50,4 +50,16 @@ public class SShift {
             result += roleRequests.getKey() + ": " + roleRequests.getValue().stream().map(SEmployee::getId).collect(Collectors.joining(",")) + "\n";
         return result;
     }
+
+    public String toString() {
+        String result = shiftDate.toString() + " " + shiftType.toString() + ":\n";
+        result += "Requests:\n";
+        for(Map.Entry<String, List<SEmployee>> roleRequests : shiftRequests.entrySet())
+            result += roleRequests.getKey() + ": " + roleRequests.getValue().stream().map(SEmployee::getId).collect(Collectors.joining(",")) + "\n";
+        result += "Workers:\n";
+        for(Map.Entry<String, List<SEmployee>> roleWorkers : shiftWorkers.entrySet())
+            result += roleWorkers.getKey() + ": " + roleWorkers.getValue().stream().map(SEmployee::getId).collect(Collectors.joining(",")) + "\n";
+        result += "isApproved: " + isApproved + "\n";
+        return result;
+    }
 }

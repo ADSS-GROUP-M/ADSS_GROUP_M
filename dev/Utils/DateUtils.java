@@ -3,6 +3,7 @@ package dev.Utils;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.time.temporal.ChronoField;
 import java.util.Calendar;
 
 public class DateUtils {
@@ -28,11 +29,15 @@ public class DateUtils {
 
     public static boolean validDate(String dateInput) {
         try {
-            LocalDate.parse(dateInput);
+            parse(dateInput);
             return true;
         } catch (Exception ignore) {
             return false;
         }
+    }
+
+    public static int getWeekNumber(LocalDate date) {
+        return date.get(ChronoField.ALIGNED_WEEK_OF_YEAR);
     }
 
     public static LocalDate parse(String dateInput) throws DateTimeParseException {

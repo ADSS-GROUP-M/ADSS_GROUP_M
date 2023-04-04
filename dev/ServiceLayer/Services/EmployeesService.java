@@ -44,8 +44,8 @@ public class EmployeesService {
             }
             // TODO: Add initial employees data
             employeesController.recruitEmployee("1","Moshe Biton", "111","Hapoalim 12 230", 50, LocalDate.of(2023,2,2),"Employment Conditions Test", "More details about Moshe");
-            employeesController.certifyEmployee("1","111",Role.ShiftManager);
-            employeesController.certifyEmployee("1","111",Role.Storekeeper);
+            employeesController.certifyEmployee("111",Role.ShiftManager);
+            employeesController.certifyEmployee("111",Role.Storekeeper);
             userService.createUser("admin123","111","1234");
         } catch (Exception ignore) {}
     }
@@ -70,12 +70,12 @@ public class EmployeesService {
         }
     }
 
-    public Response<Boolean> certifyEmployee(String actorUsername, String branchId, String employeeId, String role) {
+    public Response<Boolean> certifyEmployee(String actorUsername, String employeeId, String role) {
         Response<Boolean> authResponse = userService.isAuthorized(actorUsername, Authorization.HRManager);
         if (authResponse.errorOccurred())
             return Response.createErrorResponse(authResponse.getErrorMessage());
         try {
-            employeesController.certifyEmployee(branchId, employeeId, Role.valueOf(role));
+            employeesController.certifyEmployee(employeeId, Role.valueOf(role));
             return new Response<>(true);
         } catch (Exception e) {
             return Response.createErrorResponse(e.getMessage());

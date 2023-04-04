@@ -78,6 +78,14 @@ public class Shift {
         return false;
     }
 
+    public boolean isEmployeeRequesting(Employee employee){
+        for(List<Employee> employeesByRole : this.shiftRequests.values()){
+            if(employeesByRole.contains(employee))
+                return true;
+        }
+        return false;
+    }
+
     //public List<Role> getRoles(Employee employee) {
     //    return this.employees.get(employee);
     //}

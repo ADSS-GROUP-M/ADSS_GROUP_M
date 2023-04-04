@@ -91,7 +91,7 @@ public class BackendController {
             else {
                 boolean succeeded = response.getReturnValue();
                 if (succeeded)
-                    return null;
+                    return "Requested the shift registration successfully.";
                 else
                     return "Could not register to the shift.";
             }

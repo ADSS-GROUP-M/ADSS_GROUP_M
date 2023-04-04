@@ -78,7 +78,7 @@ public class EmployeeMenuVM {
                     }
             }
             if (!found)
-                result = "There are no shifts planned for you in the next week.";
+                result = "There aren't any approved shifts planned for you.";
             return result;
         } catch (Exception e) {
             return "Error: " + e.getMessage();

@@ -78,8 +78,8 @@ public class EmployeesController {
         this.employees.get(branch).put(employeeId, employee);
     }
 
-    public void certifyEmployee(String branchId, String employeeId, Role role) throws Exception {
-        Employee employee = getEmployee(branchId, employeeId);
+    public void certifyEmployee(String employeeId, Role role) throws Exception {
+        Employee employee = getEmployee(employeeId);
         employee.addRole(role);
     }
 

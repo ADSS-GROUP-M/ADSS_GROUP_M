@@ -20,7 +20,7 @@ public class EmployeeMenu implements Menu {
     public void printCommands() {
         System.out.println();
         System.out.println("1. `logout` - Logout command");
-        System.out.println("2. `request_shift <branch_id> <shift_time> <shift_date: DD/MM/YYYY> <role>` - Request shift command");
+        System.out.println("2. `request_shift <branch_id> <shift_type: Morning/Evening> <shift_date: DD/MM/YYYY> <role>` - Request shift command");
         System.out.println("3. `week_shifts <branch_id>` - Show next week's shifts in the branch"); // Shows the approved weekly shifts, or only the weekly structure if they aren't approved yet
         System.out.println("4. `week_shifts <branch_id> <week_start: DD/MM/YYYY>` - Show the week shifts in the branch");
         System.out.println("5. `my_shifts` - Show my shifts");

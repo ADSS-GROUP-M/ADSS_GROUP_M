@@ -5,6 +5,7 @@ import dev.Utils.DateUtils;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class HRManagerMenu implements Menu {
@@ -135,19 +136,10 @@ public class HRManagerMenu implements Menu {
             System.out.println("Please enter which role (Cashier/Storekeeper/ShiftManager/GeneralWorker/Driver):");
             String role = scanner.nextLine();
 
-            System.out.println("Please enter the need amount of employees in this role:");
-            String amountInput = scanner.nextLine();
-            int amount;
-            do {
-                try {
-                    amount = Integer.parseInt(amountInput);
-                    break;
-                } catch (NumberFormatException e) {
-                    System.out.println("Invalid input, expected an integer amount of employees.");
-                    amountInput = scanner.nextLine();
-                }
-            } while (true);
-            output = hrManagerMenuVM.setShiftNeededAmount(branchId, shiftDate, shiftType, role, amount);
+            System.out.println("Please enter the employee ids for this role: `<id1> <id2> <id3> ...`");
+            String idsInput = scanner.nextLine();
+            String[] employeeIds = idsInput.split(" ", -1);
+            output = hrManagerMenuVM.setShiftEmployees(branchId, shiftDate, shiftType, role, Arrays.stream(employeeIds).toList());
         }
         else if (command[0].equals("week_shifts") && command.length == 2) {
             String branchId = command[1];

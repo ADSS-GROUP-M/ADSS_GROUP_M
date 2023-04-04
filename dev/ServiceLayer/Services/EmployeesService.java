@@ -283,4 +283,14 @@ public class EmployeesService {
             return Response.createErrorResponse(e.getMessage());
         }
     }
+
+    public Response<Boolean> reportShiftActivity(String actorUsername, String branchId, LocalDate shiftDate, SShiftType shiftType, String activity) {
+        // TODO: Possibly need to check the actor authorization
+        try {
+            shiftsController.reportShiftActivity(branchId, shiftDate, ShiftType.valueOf(shiftType.toString()), actorUsername, activity);
+            return new Response<>(true);
+        } catch (Exception e) {
+            return Response.createErrorResponse(e.getMessage());
+        }
+    }
 }

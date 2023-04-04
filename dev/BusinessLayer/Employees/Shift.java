@@ -12,6 +12,7 @@ public class Shift {
     private Map<Role, List<Employee>> shiftRequests;
     private Map<Role, List<Employee>> shiftWorkers;
     private List<String> cancelCardApplies;
+    private List<String> shiftActivities;
 
     public enum ShiftType {
         Morning,
@@ -202,8 +203,17 @@ public class Shift {
         // Save the cancelled product
     }
 
+    public void reportActivity(String reportingEmployee, String activity) {
+        this.shiftActivities.add(activity); // TODO: Possibly need to save the reported activities in a table in the database at the next milestone.
+        // Save the reported activity
+    }
+
     public List<String> getCancelCardApplications(){
         return this.cancelCardApplies;
+    }
+
+    public List<String> getShiftActivities(){
+        return this.shiftActivities;
     }
 
     public Employee getShiftManager(){

@@ -229,4 +229,9 @@ public class ShiftsController {
         Shift shift = getShift(branchId, shiftDate, shiftType);
         shift.useCancelCard(employeeId, productId);
     }
+
+    public void reportShiftActivity(String branchId, LocalDate shiftDate, ShiftType shiftType, String reportingEmployeeId, String activity) throws Exception {
+        Shift shift = getShift(branchId, shiftDate, shiftType);
+        shift.reportActivity(reportingEmployeeId, activity);
+    }
 }

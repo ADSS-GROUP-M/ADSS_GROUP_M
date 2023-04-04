@@ -133,9 +133,18 @@ public class ShiftsController {
             throw new Exception("Invalid shift request, the employee is already working in this shift.");
         if (shift.isEmployeeRequesting(employee))
             throw new Exception("Invalid shift request, the employee has already requested to work in this shift.");
+        if (employeeRequestedInDate(employee, shiftDate))
+            throw new Exception("Invalid shift request, the employee has already requested to work in this day.");
         if (numEmployeeShiftRequestsInWeek(employee, shift.getShiftDate()) >= 6 && !employeeRequestedInDate(employee,shift.getShiftDate()))
             throw new Exception("Invalid shift request, the employee has already requested to work in 6 days of this week.");
         shift.addShiftRequest(role, employee);
+    }
+
+    public void cancelShiftRequest(Employee employee, String branchId, LocalDate shiftDate, ShiftType shiftType, Role role) throws Exception {
+        Shift shift = getShift(branchId, shiftDate, shiftType);
+        if (!shift.isEmployeeRequestingForRole(employee, role))
+            throw new Exception("Invalid shift request, the employee hasn't requested to work in this shift and this role.");
+        shift.removeShiftRequest(role, employee);
     }
 
     private List<Shift> employeeShiftRequestsInWeek(Employee employee, LocalDate dayInWeek) {

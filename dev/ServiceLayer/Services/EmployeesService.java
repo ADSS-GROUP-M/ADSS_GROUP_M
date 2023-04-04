@@ -92,6 +92,16 @@ public class EmployeesService {
         }
     }
 
+    public Response<Boolean> cancelShiftRequest(String actorUsername, String branchId, LocalDate shiftDate, SShiftType shiftType, String role) {
+        try {
+            Employee employee = employeesController.getEmployee(branchId, actorUsername);
+            shiftsController.cancelShiftRequest(employee, branchId, shiftDate, ShiftType.valueOf(shiftType.toString()), Role.valueOf(role));
+            return new Response<>(true);
+        } catch (Exception e) {
+            return Response.createErrorResponse(e.getMessage());
+        }
+    }
+
     public Response<Boolean> createWeekShifts(String actorUsername, String branchId, LocalDate weekStart) {
         Response<Boolean> authResponse = userService.isAuthorized(actorUsername, Authorization.HRManager);
         if (authResponse.errorOccurred())

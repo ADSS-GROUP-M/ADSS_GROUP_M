@@ -2,10 +2,7 @@ package dev.BusinessLayer.Employees;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Shift {
     private LocalDate shiftDate;
@@ -40,7 +37,35 @@ public class Shift {
             if (!shiftWorkers.containsKey(role) || shiftWorkers.get(role).size() < neededRoles.get(role))
                 return false;
         }
-        return true;
+        // Checks if any employee is signed to work in two different roles at the same shift. (According to the requirements, he should be able to request it, but it isn't legal as the final shift configuration)
+        List<Employee> duplicateEmployees = getDuplicateEmployees();
+        return duplicateEmployees.isEmpty();
+    }
+
+    private String getLegalityProblems() {
+        String result = "";
+        for(Role role : neededRoles.keySet()){
+            if (!shiftWorkers.containsKey(role) || shiftWorkers.get(role).size() < neededRoles.get(role))
+                result += "There are only " + shiftWorkers.get(role).size() + " / " + neededRoles.get(role) + " employees in the role " + role + "\n";
+        }
+        for(Employee employee : getDuplicateEmployees()) {
+            result += "The employee " + employee.getId() + " is assigned to multiple roles in this shift.\n";
+        }
+        return result;
+    }
+
+    private List<Employee> getDuplicateEmployees() {
+        Set<Employee> employees = new HashSet<>();
+        Set<Employee> duplicateEmployees = new HashSet<>();
+        for(List<Employee> roleWorkers : shiftWorkers.values()) {
+            for (Employee employee : roleWorkers) {
+                if (employees.contains(employee))
+                    duplicateEmployees.add(employee);
+                else
+                    employees.add(employee);
+            }
+        }
+        return duplicateEmployees.stream().toList();
     }
 
     public void approve() throws Exception {
@@ -48,7 +73,7 @@ public class Shift {
             throw new Exception("This shift is already approved.");
         this.isApproved = true;
         if (!this.checkLegality())
-            throw new Exception("Shift approved, but notice that the shift constraints are not met!");
+            throw new Exception("Shift approved, but notice that the shift constraints are not met! " + getLegalityProblems());
     }
 
     public void disapprove(){
@@ -120,6 +145,14 @@ public class Shift {
         if (!this.shiftRequests.containsKey(role))
             this.shiftRequests.put(role, new ArrayList<>());
         this.shiftRequests.get(role).add(employee);
+    }
+
+    public void removeShiftRequest(Role role, Employee employee) throws Exception {
+        if (!this.shiftRequests.containsKey(role))
+            throw new Exception("Invalid shift cancellation request, the given role doesn't have any shift requests in this shift.");
+        if (!this.shiftRequests.get(role).contains(employee))
+            throw new Exception("Invalid shift cancellation request, the given employee didn't have a request for this role in this shift.");
+        this.shiftRequests.get(role).remove(employee);
     }
 
     public void addShiftWorker(Role role, Employee employee) throws Exception {

@@ -207,4 +207,16 @@ public class BackendController {
         else
             return "Certified employee successfully.";
     }
+
+    public String approveShift(String branchId, LocalDate shiftDate, String shiftType) {
+        try {
+            Response<Boolean> response = employeesService.approveShift(loggedUsername, branchId, shiftDate, SShiftType.valueOf(shiftType));
+            if (response.errorOccurred())
+                return response.getErrorMessage();
+            else
+                return "Approved shift successfully.";
+        } catch (IllegalArgumentException e) {
+            return "Invalid ShiftType value, expected `Morning` or `Evening`.";
+        }
+    }
 }

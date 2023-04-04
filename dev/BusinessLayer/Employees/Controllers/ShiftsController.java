@@ -205,4 +205,9 @@ public class ShiftsController {
         }
         return result;
     }
+
+    public void approveShift(String branchId, LocalDate shiftDate, ShiftType shiftType) throws Exception {
+        Shift shift = getShift(branchId, shiftDate, shiftType);
+        shift.approve();
+    }
 }

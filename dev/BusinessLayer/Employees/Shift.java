@@ -34,21 +34,20 @@ public class Shift {
         this.cancelCardApplies = 0;
     }
 
-    //public boolean checkLegality(){ // are all constraints of the shift are met?
-    //    for(Role r : neededRoles.keySet()){
-    //        int workersNeededForRole = neededRoles.get(r);
-    //        for(Employee e : this.shiftWorkers.keySet()){
-    //            if(this.shiftWorkers.get(e).contains(r))
-    //                workersNeededForRole --;
-    //        }
-    //        if(workersNeededForRole>0)
-    //            return false; // not enough workers for every role needed in the shift
-    //    }
-    //    return true;
-    //}
+    public boolean checkLegality() { // are all constraints of the shift are met?
+        for(Role role : neededRoles.keySet()){
+            if (!shiftWorkers.containsKey(role) || shiftWorkers.get(role).size() < neededRoles.get(role))
+                return false;
+        }
+        return true;
+    }
 
-    public void approve(){
+    public void approve() throws Exception {
+        if (this.isApproved)
+            throw new Exception("This shift is already approved.");
         this.isApproved = true;
+        if (!this.checkLegality())
+            throw new Exception("Shift approved, but notice that the shift constraints are not met!");
     }
 
     public void disapprove(){
@@ -86,6 +85,12 @@ public class Shift {
         return false;
     }
 
+    public boolean isEmployeeRequestingForRole(Employee employee, Role role) {
+        if (!this.shiftRequests.containsKey(role))
+            return false;
+        return this.shiftRequests.get(role).contains(employee);
+    }
+
     //public List<Role> getRoles(Employee employee) {
     //    return this.employees.get(employee);
     //}
@@ -118,7 +123,9 @@ public class Shift {
 
     public void addShiftWorker(Role role, Employee employee) throws Exception {
         if (!this.neededRoles.containsKey(role))
-            throw new Exception("Invalid shift request, the role " + role + " is not needed in the shift.");
+            throw new Exception("Invalid shift employee addition, the role " + role + " is not needed in the shift.");
+        if (!isEmployeeRequestingForRole(employee, role))
+            throw new Exception("Invalid shift employee addition, the employee did not request for this shift in this role.");
         if (!this.shiftWorkers.containsKey(role))
             this.shiftWorkers.put(role, new ArrayList<>());
         this.shiftWorkers.get(role).add(employee);

@@ -128,4 +128,8 @@ public class HRManagerMenuVM {
     public String certifyEmployee(String employeeId, String role) {
         return backendController.certifyEmployee(employeeId, role);
     }
+
+    public String approveShift(String branchId, LocalDate shiftDate, String shiftType) {
+        return backendController.approveShift(branchId, shiftDate, shiftType);
+    }
 }

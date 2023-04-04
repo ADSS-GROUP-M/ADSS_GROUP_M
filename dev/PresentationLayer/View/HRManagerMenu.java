@@ -30,6 +30,7 @@ public class HRManagerMenu implements Menu {
         System.out.println("8. `week_shifts <branch_id>` - Show next week shifts");
         System.out.println("9. `week_shifts <branch_id> <week_start: DD/MM/YYYY>` - Show weekly shifts");
         System.out.println("10. `certify <employee_id> <role>` - Certify employee to the given role");
+        System.out.println("11. `approve_shift <branch_id> <shift_date: DD/MM/YYYY> <shift_type: Morning/Evening>` - Approve the specified shift");
         System.out.println("11. `exit` - Exit command");
     }
 
@@ -156,10 +157,16 @@ public class HRManagerMenu implements Menu {
             }
         }
         else if (command[0].equals("certify") && command.length == 3) {
+            String employeeId = command[1];
+            String role = command[2];
+            output = hrManagerMenuVM.certifyEmployee(employeeId, role);
+        }
+        else if (command[0].equals("approve_shift") && command.length == 4) {
             try {
-                String employeeId = command[1];
-                String role = command[2];
-                output = hrManagerMenuVM.certifyEmployee(employeeId, role);
+                String branchId = command[1];
+                LocalDate shiftDate = DateUtils.parse(command[2]);
+                String shiftType = command[3];
+                output = hrManagerMenuVM.approveShift(branchId, shiftDate, shiftType);
             } catch (DateTimeParseException e) {
                 output = "Invalid input, expected a date in the form " + DateUtils.DATE_PATTERN + ".";
             }

@@ -169,7 +169,10 @@ public class EmployeesService {
             for(Shift[] shifts : employeeShifts) {
                 SShift[] serviceShifts = new SShift[shifts.length];
                 for (int i = 0; i < shifts.length; i++)
-                    serviceShifts[i] = new SShift(shifts[i]);
+                    if (shifts[i] == null)
+                        serviceShifts[i] = null;
+                    else
+                        serviceShifts[i] = new SShift(shifts[i]);
                 result.add(serviceShifts);
             }
             return new Response<>(result);
@@ -182,6 +185,18 @@ public class EmployeesService {
         try {
             Employee employee = employeesController.getEmployee(actorUsername);
             return new Response<>(new SEmployee(employee));
+        } catch (Exception e) {
+            return Response.createErrorResponse(e.getMessage());
+        }
+    }
+
+    public Response<Boolean> approveShift(String actorUsername, String branchId, LocalDate shiftDate, SShiftType shiftType) {
+        Response<Boolean> authResponse = userService.isAuthorized(actorUsername, Authorization.HRManager);
+        if (authResponse.errorOccurred())
+            return Response.createErrorResponse(authResponse.getErrorMessage());
+        try {
+            shiftsController.approveShift(branchId,shiftDate, ShiftType.valueOf(shiftType.toString()));
+            return new Response<>(true);
         } catch (Exception e) {
             return Response.createErrorResponse(e.getMessage());
         }

@@ -162,7 +162,7 @@ public class Shift {
         return desc;
     }
 
-    public void useCancelCard(){
+    public void useCancelCard(String cancellingEmployeeId, String productId){
         this.cancelCardApplies++;
         // Save the cancelled product
     }

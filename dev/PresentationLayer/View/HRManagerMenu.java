@@ -31,7 +31,7 @@ public class HRManagerMenu implements Menu {
         System.out.println("9. `week_shifts <branch_id> <week_start: DD/MM/YYYY>` - Show weekly shifts");
         System.out.println("10. `certify <employee_id> <role>` - Certify employee to the given role");
         System.out.println("11. `approve_shift <branch_id> <shift_date: DD/MM/YYYY> <shift_type: Morning/Evening>` - Approve the specified shift");
-        System.out.println("11. `exit` - Exit command");
+        System.out.println("12. `exit` - Exit command");
     }
 
     public Menu run() {

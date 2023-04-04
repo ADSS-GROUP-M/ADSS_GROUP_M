@@ -10,14 +10,8 @@ public record Site (String transportZone, String address, String phoneNumber, St
         SUPPLIER
     }
 
-    @Override
-    public String toString(){
-        return "Trn. zone: " + transportZone +
-                " | Address: " + address +
-                " | Phone: " + phoneNumber +
-                " | Contact: " + contactName +
-                " | Type: " + siteType;
-
+    public static Site getLookupObject(String address){
+        return new Site(null, address, null, null, null);
     }
 
     @Override

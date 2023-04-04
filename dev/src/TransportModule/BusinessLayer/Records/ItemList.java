@@ -5,8 +5,8 @@ import java.util.Objects;
 
 public record ItemList (int id, HashMap<String, Integer> load,HashMap<String, Integer> unload) {
 
-    public ItemList(int id){
-        this(id, new HashMap<>(), new HashMap<>());
+    public static ItemList getLookupObject(int id){
+        return new ItemList(id,null,null);
     }
 
     @Override

@@ -8,6 +8,10 @@ public record Driver (int id, String name, LicenseType licenseType){
         A1,A2,A3,B1,B2,B3,C1,C2,C3
     }
 
+    public static Driver getLookupObject(int id){
+        return new Driver(id, null, null);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

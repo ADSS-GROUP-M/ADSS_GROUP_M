@@ -49,10 +49,33 @@ class ItemListsServiceTest {
 
     @Test
     void addItemList() {
+        ItemListsService ils = ModuleFactory.getInstance().getItemListsService();
+        HashMap<String, Integer> load3 = new HashMap<>();
+        load3.put("Cups", 50);
+        load3.put("Plates", 20);
+        load3.put("Forks", 30);
+
+        HashMap<String, Integer> unload3 = new HashMap<>();
+        unload3.put("Knives", 40);
+        unload3.put("Spoons", 15);
+        unload3.put("Napkins", 25);
+
+        ItemList itemList3 = new ItemList(1003, load3, unload3);
+        String json = JSON.serialize(itemList3);
+        String responseJson = ils.addItemList(json);
+        Response<String> response = JSON.deserialize(responseJson, Response.class);
+        if(response.isSuccess() == false) fail("Failed to add item list");
+        String addedResponseJson = ils.getItemList(json);
+        Type type = new TypeToken<Response<ItemList>>(){}.getType();
+        Response<ItemList> addedResponse = JSON.deserialize(addedResponseJson, type);
+        ItemList addedItemList = addedResponse.getData();
+        assertEquals(itemList3.load(), addedItemList.load());
+        assertEquals(itemList3.unload(), addedItemList.unload());
     }
 
     @Test
     void removeItemList() {
+
     }
 
     @Test

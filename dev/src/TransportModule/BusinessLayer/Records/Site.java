@@ -10,6 +10,10 @@ public record Site (String transportZone, String address, String phoneNumber, St
         SUPPLIER
     }
 
+    public static Site getLookupObject(String address){
+        return new Site(null, address, null, null, null);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

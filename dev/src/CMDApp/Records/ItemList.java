@@ -5,6 +5,10 @@ import java.util.Objects;
 
 public record ItemList (int id, HashMap<String, Integer> load,HashMap<String, Integer> unload) {
 
+    public static ItemList getLookupObject(int id){
+        return new ItemList(id,null,null);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

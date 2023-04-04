@@ -4,8 +4,8 @@ import java.util.Objects;
 
 public record Truck (String id, String model, int baseWeight, int maxWeight, CoolingCapacity coolingCapacity){
 
-    public static final int MAX_WEIGHT_A_TIER = 10000;
-    public static final int MAX_WEIGHT_B_TIER = 20000;
+    private static final int MAX_WEIGHT_A_TIER = 10000;
+    private static final int MAX_WEIGHT_B_TIER = 20000;
 
     public enum CoolingCapacity{
         NONE,
@@ -14,24 +14,26 @@ public record Truck (String id, String model, int baseWeight, int maxWeight, Coo
     }
 
     public String requiredLicense() {
-        return switch(coolingCapacity) {
-            case NONE -> {
-                if(maxWeight <= MAX_WEIGHT_A_TIER) yield "A1";
-                else if (maxWeight <= MAX_WEIGHT_B_TIER) yield "B1";
-                else yield "C1";
-            }
-            case COLD -> {
-                if(maxWeight <= MAX_WEIGHT_A_TIER) yield "A2";
-                else if (maxWeight <= MAX_WEIGHT_B_TIER) yield "B2";
-                else yield "C2";
-            }
-            case FROZEN -> {
-                if(maxWeight <= MAX_WEIGHT_A_TIER) yield "A3";
-                else if (maxWeight <= MAX_WEIGHT_B_TIER) yield "B3";
-                else yield "C3";
-            }
-        };
+        String license = "";
+        if (maxWeight <= MAX_WEIGHT_A_TIER) {
+            license += "A";
+        } else if (maxWeight <= MAX_WEIGHT_B_TIER) {
+            license += "B";
+        } else {
+            license += "C";
+        }
+        switch (coolingCapacity) {
+            case NONE -> license += "1";
+            case COLD -> license += "2";
+            case FROZEN -> license += "3";
+        }
+        return license;
     }
+
+    public static Truck getLookupObject(String id){
+        return new Truck(id, null, 0, 0, null);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

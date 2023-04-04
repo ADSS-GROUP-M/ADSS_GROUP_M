@@ -106,6 +106,11 @@ public class EmployeesController {
         employee.addRole(role);
     }
 
+    public void uncertifyEmployee(String employeeId, Role role) throws Exception {
+        Employee employee = getEmployee(employeeId);
+        employee.removeRole(role);
+    }
+
     //public void fireEmployee(String empId) throws Exception {
     //    Employee e = this.getEmployee(empId);
     //    //e.setIsFired(true);

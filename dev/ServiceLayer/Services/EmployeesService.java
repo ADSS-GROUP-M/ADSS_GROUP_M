@@ -82,6 +82,18 @@ public class EmployeesService {
         }
     }
 
+    public Response<Boolean> uncertifyEmployee(String actorUsername, String employeeId, String role) {
+        Response<Boolean> authResponse = userService.isAuthorized(actorUsername, Authorization.HRManager);
+        if (authResponse.errorOccurred())
+            return Response.createErrorResponse(authResponse.getErrorMessage());
+        try {
+            employeesController.uncertifyEmployee(employeeId, Role.valueOf(role));
+            return new Response<>(true);
+        } catch (Exception e) {
+            return Response.createErrorResponse(e.getMessage());
+        }
+    }
+
     public Response<Boolean> requestShift(String actorUsername, String branchId, LocalDate shiftDate, SShiftType shiftType, String role) {
         try {
             Employee employee = employeesController.getEmployee(branchId, actorUsername);

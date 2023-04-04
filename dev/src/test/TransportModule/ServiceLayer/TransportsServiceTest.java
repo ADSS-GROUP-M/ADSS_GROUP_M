@@ -12,8 +12,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class TransportsServiceTest {
 
@@ -171,13 +170,51 @@ class TransportsServiceTest {
 
     @Test
     void removeTransport() {
+        String json = ModuleFactory.getInstance()
+                .getTransportsService()
+                .removeTransport(
+                        JSON.serialize(Transport.getLookupObject(transport.id()))
+                );
+        Response<String> response = JSON.deserialize(json, Response.class);
+        assertTrue(response.isSuccess());
+        String updatedJson = ModuleFactory.getInstance()
+                .getTransportsService()
+                .getTransport(
+                        JSON.serialize(Transport.getLookupObject(transport.id()))
+                );
+        Type type = new TypeToken<Response<Transport>>(){}.getType();
+        Response<Transport> updatedResponse = JSON.deserialize(updatedJson, type);
+        assertFalse(updatedResponse.isSuccess());
     }
 
     @Test
     void getTransport() {
+        String json = ModuleFactory.getInstance()
+                .getTransportsService()
+                .getTransport(
+                        JSON.serialize(Transport.getLookupObject(transport.id()))
+                );
+        Type type = new TypeToken<Response<Transport>>(){}.getType();
+        Response<Transport> response = JSON.deserialize(json, type);
+        Transport TransportReceived = response.getData();
+        assertEquals(transport.id(), TransportReceived.id());
+        assertEquals(transport.source(), TransportReceived.source());
+        assertEquals(transport.destinations(), TransportReceived.destinations());
+        assertEquals(transport.itemLists(), TransportReceived.itemLists());
+        assertEquals(transport.truckId(), TransportReceived.truckId());
+        assertEquals(transport.driverId(), TransportReceived.driverId());
+        assertEquals(transport.scheduledTime(), TransportReceived.scheduledTime());
+        assertEquals(transport.weight(), TransportReceived.weight());
     }
 
     @Test
     void getAllTransports() {
+        String json = ModuleFactory.getInstance()
+                .getTransportsService()
+                .getAllTransports();
+        Type type = new TypeToken<Response<List<Transport>>>(){}.getType();
+        Response<List<Transport>> response = JSON.deserialize(json, type);
+        List<Transport> updatedTransports = response.getData();
+        assertTrue(updatedTransports.contains(transport));
     }
 }

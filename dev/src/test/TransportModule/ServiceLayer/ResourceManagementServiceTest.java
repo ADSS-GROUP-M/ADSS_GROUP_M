@@ -106,7 +106,7 @@ import static org.junit.jupiter.api.Assertions.*;
         Type type = new TypeToken<Response<LinkedList<Driver>>>(){}.getType();
         Response<LinkedList<Driver>> response = JSON.deserialize(responseJson,type);
         assertTrue(response.isSuccess());
-        assertEquals(22, response.getData().size());
+        assertEquals(21, response.getData().size());
     }
 
     @Test
@@ -174,7 +174,7 @@ import static org.junit.jupiter.api.Assertions.*;
         Type type = new TypeToken<Response<LinkedList<Truck>>>(){}.getType();
         Response<LinkedList<Truck>> response = JSON.deserialize(responseJson,type);
         assertTrue(response.isSuccess());
-        assertEquals(22, response.getData().size());
+        assertEquals(21, response.getData().size());
     }
 
     @Test
@@ -207,7 +207,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
     @Test
     void updateSite() {
-        Site siteUpdate = new Site(site.address(), "new address", "123456","new bob", Site.SiteType.BRANCH);
+        Site siteUpdate = new Site(site.transportZone(), site.address(), "123456981251","new bob", Site.SiteType.BRANCH);
 
         String json1 = rms.updateSite(JSON.serialize(siteUpdate));
         Response<String> response1 = JSON.deserialize(json1, responseSiteType);
@@ -247,6 +247,6 @@ import static org.junit.jupiter.api.Assertions.*;
         Type type = new TypeToken<Response<LinkedList<Site>>>(){}.getType();
         Response<LinkedList<Site>> response = JSON.deserialize(responseJson,type);
         assertTrue(response.isSuccess());
-        assertEquals(22, response.getData().size());
+        assertEquals(21, response.getData().size());
     }
 }

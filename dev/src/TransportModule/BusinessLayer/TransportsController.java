@@ -8,11 +8,16 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.TreeMap;
 
+/**
+ * The TransportsController class is responsible for managing and controlling transport objects.
+ * It provides methods to add, remove, update, and retrieve transport objects, as well as validate
+ * transport objects before adding or updating them.
+ */
 public class TransportsController {
 
-    private TrucksController tc;
-    private DriversController dc;
-    private TreeMap<Integer, Transport> transports;
+    private final TrucksController tc;
+    private final DriversController dc;
+    private final TreeMap<Integer, Transport> transports;
     private int idCounter;
 
     public TransportsController(TrucksController tc, DriversController dc){
@@ -22,12 +27,25 @@ public class TransportsController {
         this.dc = dc;
     }
 
+    /**
+     * Adds a transport object to the TransportsController.
+     *
+     * @param transport The transport object to add.
+     * @throws IOException If the transport object is invalid or if a transport with the same ID already exists.
+     */
     public void addTransport(Transport transport)throws IOException{
         validateTransport(transport);
 
         transports.put(transport.id(), transport);
     }
 
+    /**
+     * Retrieves a transport object with the given ID from the TransportsController.
+     *
+     * @param id The ID of the transport object to retrieve.
+     * @return The transport object with the given ID.
+     * @throws IOException If a transport with the given ID is not found.
+     */
     public Transport getTransport(int id) throws IOException {
         if (transports.containsKey(id) == false)
             throw new IOException("Transport not found");
@@ -35,12 +53,26 @@ public class TransportsController {
         return transports.get(id);
     }
 
-    public Transport removeTransport(int id) throws IOException {
+    /**
+     * Removes a transport object with the given ID from the TransportsController.
+     *
+     * @param id The ID of the transport object to remove.
+     * @throws IOException If a transport with the given ID is not found.
+     */
+    public void removeTransport(int id) throws IOException {
         if (transports.containsKey(id) == false)
             throw new IOException("Transport not found");
 
-        return transports.remove(id);
+        transports.remove(id);
     }
+
+    /**
+     * Updates a transport object with the given ID in the TransportsController.
+     *
+     * @param id The ID of the transport object to update.
+     * @param newTransport The updated transport object.
+     * @throws IOException If the newTransport object is invalid or if a transport with the given ID is not found.
+     */
     public void updateTransport(int id, Transport newTransport) throws IOException{
         if(transports.containsKey(id) == false)
             throw new IOException("Transport not found");
@@ -50,29 +82,37 @@ public class TransportsController {
         transports.put(id, newTransport);
     }
 
+    /**
+     * Retrieves a list of all transport objects in the TransportsController.
+     *
+     * @return A list of all transport objects.
+     */
     public LinkedList<Transport> getAllTransports(){
-        LinkedList<Transport> list = new LinkedList<>();
-        for (Transport t : transports.values())
-            list.add(t);
-        return list;
+        return new LinkedList<>(transports.values());
     }
 
+    /**
+     * Validates a transport object before adding or updating it in the TransportsController.
+     *
+     * @param transport The transport object to validate.
+     * @throws IOException If the transport object is invalid.
+     */
     private void validateTransport(Transport transport) throws IOException{
         Truck truck = tc.getTruck(transport.truckId());
         Driver driver = dc.getDriver(transport.driverId());
 
         // used to return information about all the errors
-        String toThrow = "";
+        String message = "";
+        String cause = "";
         boolean throwException = false;
-        Throwable cause = null;
         //==================================================
 
         // weight validation
         int weight = transport.weight();
         if (truck.maxWeight() < weight) {
-            toThrow += "The truck's maximum weight has been exceeded";
+            message += "The truck's maximum weight has been exceeded";
+            cause = "weight";
             throwException = true;
-            cause = new Throwable("weight");
         }
 
         // truck - driver validation
@@ -81,17 +121,15 @@ public class TransportsController {
 
         if(driverLicense[0].compareToIgnoreCase(requiredLicense[0]) < 0 ||  driverLicense[1].compareToIgnoreCase(requiredLicense[1]) < 0) {
             if(throwException){
-                toThrow += "\n";
-                cause = new Throwable(cause.getMessage()+",license");
+                message += "\n";
+                cause += ",";
             }
-            else{
-                cause = new Throwable("license");
-            }
-            toThrow += "A driver with license type "+driver.licenseType()+
+            cause += "license";
+            message += "A driver with license type "+driver.licenseType()+
                             " is not permitted to drive this truck";
             throwException = true;
 
         }
-        if(throwException) throw new IOException(toThrow,cause);
+        if(throwException) throw new IOException(message,new Throwable(cause));
     }
 }

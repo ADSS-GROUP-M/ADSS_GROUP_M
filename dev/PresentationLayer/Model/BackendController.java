@@ -198,4 +198,13 @@ public class BackendController {
         else
             return response.getReturnValue();
     }
+
+
+    public String certifyEmployee(String employeeId, String role) {
+        Response<Boolean> response = employeesService.certifyEmployee(loggedUsername, employeeId, role);
+        if (response.errorOccurred())
+            return response.getErrorMessage();
+        else
+            return "Certified employee successfully.";
+    }
 }

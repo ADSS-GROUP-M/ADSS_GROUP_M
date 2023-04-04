@@ -29,7 +29,8 @@ public class HRManagerMenu implements Menu {
         System.out.println("7. `update_shift_employees <branch_id> <week_start: DD/MM/YYYY>` - Update another week's shift needed amount by role");
         System.out.println("8. `week_shifts <branch_id>` - Show next week shifts");
         System.out.println("9. `week_shifts <branch_id> <week_start: DD/MM/YYYY>` - Show weekly shifts");
-        System.out.println("10. `exit` - Exit command");
+        System.out.println("10. `certify <employee_id> <role>` - Certify employee to the given role");
+        System.out.println("11. `exit` - Exit command");
     }
 
     public Menu run() {
@@ -150,6 +151,15 @@ public class HRManagerMenu implements Menu {
                 String branchId = command[1];
                 LocalDate weekStart = DateUtils.parse(command[2]);
                 output = hrManagerMenuVM.getWeekShifts(branchId, weekStart);
+            } catch (DateTimeParseException e) {
+                output = "Invalid input, expected a date in the form " + DateUtils.DATE_PATTERN + ".";
+            }
+        }
+        else if (command[0].equals("certify") && command.length == 3) {
+            try {
+                String employeeId = command[1];
+                String role = command[2];
+                output = hrManagerMenuVM.certifyEmployee(employeeId, role);
             } catch (DateTimeParseException e) {
                 output = "Invalid input, expected a date in the form " + DateUtils.DATE_PATTERN + ".";
             }

@@ -124,4 +124,8 @@ public class HRManagerMenuVM {
     public String setShiftEmployees(String branchId, LocalDate shiftDate, String shiftType, String role, List<String> employeeIds) {
         return backendController.setShiftEmployees(branchId, shiftDate, shiftType, role, employeeIds);
     }
+
+    public String certifyEmployee(String employeeId, String role) {
+        return backendController.certifyEmployee(employeeId, role);
+    }
 }

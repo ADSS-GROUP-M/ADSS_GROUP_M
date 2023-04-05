@@ -37,4 +37,11 @@ public class Product {
         return id;
     }
 
+    public double getPrice() {
+        return price;
+    }
+
+    public int getNumberOfUnits() {
+        return numberOfUnits;
+    }
 }

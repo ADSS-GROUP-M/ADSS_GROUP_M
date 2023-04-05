@@ -6,11 +6,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.RecursiveTask;
 
 public class Agreement {
     private String paymentMethod;
     /***
-     * products on the agreement - maps between product's id to the product
+     * products on the agreement - maps between product's id to the product and its amount
      */
     private Map<Integer, Product> products;
     private BillOfQuantities billOfQuantities;
@@ -19,11 +20,18 @@ public class Agreement {
     public Agreement(String paymentMethod, List<Product> productsList, DeliveryAgreement deliveryAgreement){
         this.paymentMethod = paymentMethod;
         products = new HashMap<>();
-        for (Product p : productsList)
-            products.put(p.getId(), p);
+//        for (Product p : productsList)
+//            products.put(p.getId(), p);
         this.deliveryAgreement = deliveryAgreement;
     }
 
+    public Map<Integer, Product> getProducts() {
+        return products;
+    }
+
+    public Product getProduct(int productId){
+        return products.get(productId);
+    }
     public DeliveryAgreement getDeliveryAgreement() {
         return deliveryAgreement;
     }
@@ -32,7 +40,7 @@ public class Agreement {
         this.deliveryAgreement = deliveryAgreement;
     }
 
-    public void addProduct(Product product){
+    public void addProduct(Product product, int amount){
         products.put(product.getId(), product);
     }
 
@@ -51,4 +59,6 @@ public class Agreement {
     public void setPaymentMethod(String paymentMethod) {
         this.paymentMethod = paymentMethod;
     }
+
+
 }

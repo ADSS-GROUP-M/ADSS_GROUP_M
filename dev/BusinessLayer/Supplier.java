@@ -58,8 +58,8 @@ public class Supplier {
         return agreement;
     }
 
-    public void addProduct(Product product){
-        agreement.addProduct(product);
+    public void addProduct(Product product, int amount){
+        agreement.addProduct(product, amount);
     }
 
     public void setPaymentMethod(String paymentMethod){

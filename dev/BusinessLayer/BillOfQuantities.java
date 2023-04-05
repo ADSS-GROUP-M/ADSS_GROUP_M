@@ -17,7 +17,7 @@ public class BillOfQuantities {
     /***
      * discount to be applied on the total order after per-product discounts - T is the price before and R is the price after
      */
-    private Function<Double, Double> discountOnAmountOfProducts;
+    private Function<Integer, Function<Double, Double>> discountOnAmountOfProducts;
     /**
      * indicates the order of the discounts - true if amount-discount before total-payment-discount, false otherwise
      */
@@ -55,6 +55,8 @@ public class BillOfQuantities {
     }
 
     public double getProductPriceAfterDiscount(int productId, int amount, double price){
+        if(!productsDiscounts.containsKey(productId))
+            return price;
         Discount discount = null;
         for(int amountCheck : productsDiscounts.get(productId).keySet())
             if(amountCheck <= amount)
@@ -64,11 +66,28 @@ public class BillOfQuantities {
         return price;
     }
 
+    public double getPriceAfterDiscounts(int amount, double priceBefore){
+        double price = priceBefore;
+        if(amountBeforeTotal){
+            if(discountOnAmountOfProducts != null)
+                price = discountOnAmountOfProducts.apply(amount).apply(priceBefore);
+            if(discountOnTotalOrder != null)
+                price = discountOnTotalOrder.apply(price);
+        }
+        else{
+            if(discountOnTotalOrder != null)
+                price = discountOnTotalOrder.apply(price);
+            if(discountOnAmountOfProducts != null)
+                price = discountOnAmountOfProducts.apply(amount).apply(priceBefore);
+        }
+        return price;
+    }
+
     public void setDiscountOnAmountOfProducts(int amountOfProductsForDiscount, double price, Discount discount){
-        discountOnAmountOfProducts = (Double amountOfProducts) ->{
+        discountOnAmountOfProducts = (Integer amountOfProducts) ->{
             if(amountOfProducts >= amountOfProductsForDiscount)
-                return discount.applyDiscount(price);
-            return price;
+                return (Double priceBefore) -> discount.applyDiscount(priceBefore);
+            return (Double priceBefore) -> priceBefore;
         };
     }
 

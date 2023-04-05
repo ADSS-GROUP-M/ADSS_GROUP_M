@@ -2,6 +2,7 @@ package BusinessLayer;
 
 import BusinessLayer.DeliveryAgreements.DeliveryAgreement;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -19,7 +20,10 @@ public class SupplierController {
         return suppliers.stream().filter(supplier -> supplier.getBnNumber().equals(bnNumber)).collect(Collectors.toList()).get(0);
     }
 
-    public List<Supplier> getSuppliers(){
-        return suppliers;
+    public List<Supplier> getCopyOfSuppliers(){
+        return new LinkedList<>(suppliers);
     }
+
+
+
 }

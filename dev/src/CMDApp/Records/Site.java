@@ -15,6 +15,16 @@ public record Site (String transportZone, String address, String phoneNumber, St
     }
 
     @Override
+    public String toString(){
+        return "Trn. zone: " + transportZone +
+                " | Address: " + address +
+                " | Phone: " + phoneNumber +
+                " | Contact: " + contactName +
+                " | Type: " + siteType;
+
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

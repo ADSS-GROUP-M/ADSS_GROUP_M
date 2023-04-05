@@ -1,5 +1,6 @@
 package dev.Utils;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -13,17 +14,20 @@ public class DateUtils {
     public static LocalDate[] getWeekDates(LocalDate d){
         LocalDate[] fromUntil = new LocalDate[2];
         Calendar cal = Calendar.getInstance();
-
-        cal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+        
+        cal.setTime(Date.valueOf(d));
+        int dayDifference = Calendar.SUNDAY - cal.get(Calendar.DAY_OF_WEEK);
+        cal.add(Calendar.DAY_OF_YEAR, dayDifference);
+        //cal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
         // calculate monday week ago (moves cal 7 days back)
-        cal.add(Calendar.DATE, 0);
         java.util.Date sunday = cal.getTime();
 
         // calculate sunday last week (moves cal 6 days fwd)
-        cal.add(Calendar.DATE, 7);
+        //cal.add(Calendar.DAY_OF_MONTH, 7);
+        cal.set(sunday.getYear(),sunday.getMonth(),sunday.getDate()+7);
         java.util.Date nextsunday = cal.getTime();
-        fromUntil[0] = LocalDate.of(sunday.getYear(), sunday.getMonth()+1, sunday.getDate());
-        fromUntil[1] = LocalDate.of(nextsunday.getYear(), nextsunday.getMonth()+1, nextsunday.getDate());
+        fromUntil[0] = LocalDate.of(sunday.getYear()+1900, sunday.getMonth()+1, sunday.getDate());
+        fromUntil[1] = LocalDate.of(d.getYear()+1900, nextsunday.getMonth()+1, nextsunday.getDate());
         return fromUntil;
     }
 

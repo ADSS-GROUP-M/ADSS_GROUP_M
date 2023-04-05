@@ -53,6 +53,7 @@ public class SchedulingTests {
         LocalDate employmentDater = LocalDate.of(2023, 1, 1);
         String employmentConditioner = "slave";
         String detailer = "nothing";
+        int counter = 0;
         for(int i=0; i<30;i++){
         usernames[i] = usernamer;
         passwords[i] = passworder;
@@ -70,21 +71,30 @@ public class SchedulingTests {
             empService.recruitEmployee(admin.getUsername(),fullnames[i], branches[i], usernames[i],bankDetails[i], hourlyRates[i], employmentDates[i],employmentConditions[i], details[i]);
         users[i] = userService.getUser(usernames[i]).getReturnValue();
         users[i].login(passwords[i]);
-        usernamer = Integer.toString(Integer.parseInt(usernamer)+1);
-        passworder = Integer.toString(Integer.parseInt(passworder)+1);
-        if(i>=10)
-            brancher = "2";
-        if(i>=20)
-            brancher = "3";
 
-        if(i<10)
-            userService.authorizeUser(adminUsername, usernames[i], Authorization.ShiftManager.name());
-        else if(i>=10 && i<20)
-            userService.authorizeUser(adminUsername, usernames[i], Authorization.Cashier.name());
-        else if(i>=20 && i<=25)
-            userService.authorizeUser(adminUsername, usernames[i], Authorization.Storekeeper.name());
-        
+        counter++;        
+        usernamer = Integer.toString(counter);
+        passworder = Integer.toString(counter);
+      
+        if(i>=10)
+            brancher = "1";
+        if(i>=20)
+            brancher = "1";
+        Response<Boolean> ans = null;
+        if(i<10){
+            ans = userService.authorizeUser(adminUsername, usernames[i], Authorization.ShiftManager.name());
+            empService.certifyEmployee(adminUsername, usernames[i], Role.ShiftManager.name());
         }
+        else if(i>=10 && i<20){
+            userService.authorizeUser(adminUsername, usernames[i], Authorization.Cashier.name());
+            empService.certifyEmployee(adminUsername, usernames[i], Role.Cashier.name());
+        }
+        else if(i>=20 && i<=25){
+            userService.authorizeUser(adminUsername, usernames[i], Authorization.Storekeeper.name());
+            empService.certifyEmployee(adminUsername, usernames[i], Role.Storekeeper.name());
+        }
+        
+    }
         
     }
     // 0-9 shiftmanager, 10-19 cashier, 20-25 storekeeper
@@ -92,17 +102,25 @@ public class SchedulingTests {
     public void test_scheduling() {
         try {
             
-            LocalDate[] week = DateUtils.getWeekDates(LocalDate.of(2024,2, 15));
+            LocalDate[] week = DateUtils.getWeekDates(LocalDate.of(2023,4, 9));
             Response<Boolean> ans = empService.createWeekShifts(adminUsername, "1", week[0]);
             assertFalse(ans.getErrorMessage(), ans.errorOccurred());
-            empService.setShiftNeededAmount(adminUsername, "1", week[0], SShiftType.Morning, "Cashier", 2);
-            empService.setShiftNeededAmount(adminUsername, "1", week[0], SShiftType.Morning, "Storekeeper", 1);
-            empService.requestShift(usernames[0],"1" , week[0], SShiftType.Morning, Role.ShiftManager.name());
-            empService.requestShift(usernames[10],"1" , week[0], SShiftType.Morning, Role.Cashier.name());
-            empService.requestShift(usernames[11],"1" , week[0], SShiftType.Morning, Role.Cashier.name());
-            empService.requestShift(usernames[11],"1" , week[0], SShiftType.Morning, Role.Cashier.name()); // done twice intentionally
-            empService.requestShift(usernames[20],"1" , week[0], SShiftType.Morning, Role.Storekeeper.name());
-            empService.requestShift(usernames[21],"1" , week[0], SShiftType.Morning, Role.GeneralWorker.name());
+            ans = empService.setShiftNeededAmount(adminUsername, "1", week[0], SShiftType.Morning, Role.Cashier.name(), 2);
+            assertFalse(ans.getErrorMessage(), ans.errorOccurred());
+            ans =empService.setShiftNeededAmount(adminUsername, "1", week[0], SShiftType.Morning, Role.Storekeeper.name(), 1);
+            assertFalse(ans.getErrorMessage(), ans.errorOccurred());
+            ans = empService.requestShift(usernames[0],"1" , week[0], SShiftType.Morning, Role.ShiftManager.name());
+            assertFalse(ans.getErrorMessage(), ans.errorOccurred());
+            ans = empService.requestShift(usernames[10],"1" , week[0], SShiftType.Morning, Role.Cashier.name());
+            assertFalse(ans.getErrorMessage(), ans.errorOccurred());
+            ans = empService.requestShift(usernames[11],"1" , week[0], SShiftType.Morning, Role.Cashier.name());
+            assertFalse(ans.getErrorMessage(), ans.errorOccurred());
+            ans = empService.requestShift(usernames[11],"1" , week[0], SShiftType.Morning, Role.Cashier.name()); // done twice intentionally
+           // assertFalse(ans.getErrorMessage(), ans.errorOccurred());
+            ans = empService.requestShift(usernames[20],"1" , week[0], SShiftType.Morning, Role.Storekeeper.name());
+            assertFalse(ans.getErrorMessage(), ans.errorOccurred());
+            ans = empService.requestShift(usernames[21],"1" , week[0], SShiftType.Morning, Role.GeneralWorker.name());
+            assertFalse(ans.getErrorMessage(), ans.errorOccurred());
             Response<List<SShift[]>> ans2 = empService.getWeekShifts(adminUsername, "1",week[0]);
             boolean foundShift = false;
             SShift theShift = null;
@@ -111,11 +129,18 @@ public class SchedulingTests {
                     if(shift.getShiftDate().isEqual(week[0]) &&  shift.getShiftType() == SShiftType.Morning){
                         theShift = shift;
                         foundShift = true;
-                        assertTrue( shift.getShiftRequestsEmployees(Role.Cashier.name()).contains(empService.getEmployee(usernames[10]).getReturnValue()));
-                        assertTrue( shift.getShiftRequestsEmployees(Role.Cashier.name()).contains(empService.getEmployee(usernames[11]).getReturnValue()));
-                        assertTrue( shift.getShiftRequestsEmployees(Role.ShiftManager.name()).contains(empService.getEmployee(usernames[0]).getReturnValue()));
-                        assertTrue( shift.getShiftRequestsEmployees(Role.Storekeeper.name()).contains(empService.getEmployee(usernames[20]).getReturnValue()));
-                        assertTrue( shift.getShiftRequestsEmployees(Role.GeneralWorker.name()).contains(empService.getEmployee(usernames[21]).getReturnValue()));
+                        boolean foundEmployee1 = false, foundEmployee2 = false;
+                        for(SEmployee se: shift.getShiftRequestsEmployees(Role.Cashier.name()) ){
+                            if(se.getId().equals( empService.getEmployee(usernames[10]).getReturnValue().getId()))
+                                foundEmployee1 = true;
+                            if(se.getId().equals( empService.getEmployee(usernames[11]).getReturnValue().getId()))
+                                foundEmployee2 = true;
+                        }
+                        assertTrue(foundEmployee1 && foundEmployee2);
+                        
+                        assertTrue( shift.getShiftRequestsEmployees(Role.ShiftManager.name()).get(0).getId().equals(empService.getEmployee(usernames[0]).getReturnValue().getId()));
+                        assertTrue( shift.getShiftRequestsEmployees(Role.Storekeeper.name()).get(0).getId().equals(empService.getEmployee(usernames[20]).getReturnValue().getId()));
+                        assertTrue( shift.getShiftRequestsEmployees(Role.GeneralWorker.name()).get(0).getId().equals(empService.getEmployee(usernames[21]).getReturnValue().getId()));
 
                     }
                 }
@@ -127,7 +152,9 @@ public class SchedulingTests {
             ans = empService.setShiftEmployees(adminUsername, "1", week[0], SShiftType.Morning,Role.GeneralWorker.name(),employeesToIds(theShift.getShiftRequestsEmployees(Role.GeneralWorker.name())));
             ans = empService.approveShift(adminUsername, "1", week[0], SShiftType.Morning);
             assertFalse(ans.getErrorMessage(), ans.errorOccurred());
-            empService.setShiftNeededAmount(adminUsername, "1", week[0], SShiftType.Morning, "Cashier", 3);
+            ans = empService.setShiftNeededAmount(adminUsername, "1", week[0], SShiftType.Morning, "Cashier", 3);
+            assertFalse(ans.getErrorMessage(), ans.errorOccurred());
+            ans = empService.approveShift(adminUsername, "1", week[0], SShiftType.Morning);
             assertTrue(ans.getErrorMessage(), ans.errorOccurred());
         } catch (Exception ignore) { ignore.printStackTrace(); Assert.fail("failed");}
     }

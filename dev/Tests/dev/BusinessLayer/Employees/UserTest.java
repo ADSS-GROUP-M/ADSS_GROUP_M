@@ -116,4 +116,12 @@ public class UserTest {
         assertTrue(user.isAuthorized(Authorization.HRManager));
         assertFalse(user.isAuthorized(Authorization.Cashier));
     }
+
+    @Test
+    public void authorize_ShiftManager() {
+        user.authorize(Authorization.Storekeeper);
+        assertTrue(user.isAuthorized(Authorization.Storekeeper));
+        assertTrue(user.isAuthorized(Authorization.HRManager));
+        assertFalse(user.isAuthorized(Authorization.Cashier));
+    }
 }

@@ -7,13 +7,14 @@ import dev.ServiceLayer.Services.UserService;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
 
 import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.Assert.*;
 
-public class Tests {
+public class RecruitAndUserCreationTests {
     private UserService userService;
     private EmployeesService empService;
     private User admin;
@@ -43,10 +44,10 @@ public class Tests {
             Response<Boolean> ans = empService.recruitEmployee(admin.getUsername(),"Max T","2", "555","Hapoalim 12 231", 50, LocalDate.of(2023,2,2),"Employment Conditions Test", "about me");
             assertTrue(ans.getErrorMessage(),ans.getErrorMessage() == null);
             ans = empService.recruitEmployee(admin.getUsername(),"ab T","2", "555","Hapoalim 12 211", 50, LocalDate.of(2023,2,2),"Employment Conditions Test", "about me");
-            assertFalse(ans.getErrorMessage() == null); // existing employee with same ID
+            assertFalse(ans.getErrorMessage(),ans.getErrorMessage() == null); // existing employee with same ID
             ans = empService.recruitEmployee(username2,"ab T","2", "575","Hapoalim 12 211", 50, LocalDate.of(2023,2,2),"Employment Conditions Test", "about me");
-            assertFalse(ans.getErrorMessage() == null); //unauthorized personnel
-        } catch (Exception ignore) { Assert.fail("failed");}
+            assertFalse(ans.getErrorMessage(),ans.getErrorMessage() == null); //unauthorized personnel
+        } catch (Exception ignore) { ignore.printStackTrace(); Assert.fail("failed");}
     }
 
     @Test

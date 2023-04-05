@@ -31,6 +31,22 @@ public class SShift {
         this.isApproved = shift.getIsApproved();
     }
 
+    public List<SEmployee> getShiftRequestsEmployees(String role){
+        return this.shiftRequests.get(role);
+    }
+
+    public List<SEmployee> getShiftWorkersEmployees(String role){
+        return this.shiftWorkers.get(role);
+    }
+
+    public LocalDate getShiftDate(){
+        return this.shiftDate;
+    }
+    
+    public SShiftType getShiftType(){
+        return this.shiftType;
+    }
+
     public boolean isApproved() {
         return isApproved;
     }

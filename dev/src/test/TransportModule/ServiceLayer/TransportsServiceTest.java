@@ -17,12 +17,13 @@ import static org.junit.jupiter.api.Assertions.*;
 class TransportsServiceTest {
 
     private Transport transport;
+    private TransportsService ts;
 
     @BeforeEach
     void setUp() {
         Site site1 = new Site("zone a", "123 main st", "(555) 123-4567", "john smith", Site.SiteType.BRANCH);
         Site site2 = new Site("zone b", "456 oak ave", "(555) 234-5678", "jane doe", Site.SiteType.LOGISTICAL_CENTER);
-        Driver driver1 = new Driver(1234, "megan smith", Driver.LicenseType.C3);
+        Driver driver1 = new Driver(123, "megan smith", Driver.LicenseType.C3);
         Truck truck1 = new Truck("abc123", "ford", 1500, 10000, Truck.CoolingCapacity.FROZEN);
         HashMap<String, Integer> load1 = new HashMap<>();
         load1.put("shirts", 20);
@@ -46,7 +47,7 @@ class TransportsServiceTest {
         HashMap<Site,ItemList> hm = new HashMap<>();
         hm.put(site2, itemList1);
 
-        TransportsService ts = ModuleFactory.getInstance().getTransportsService();
+        ts = ModuleFactory.getInstance().getTransportsService();
         transport = new Transport(
                 1,
                 site1,
@@ -189,8 +190,7 @@ class TransportsServiceTest {
 
     @Test
     void getTransport() {
-        String json = ModuleFactory.getInstance()
-                .getTransportsService()
+        String json = ts
                 .getTransport(
                         JSON.serialize(Transport.getLookupObject(transport.id()))
                 );
@@ -216,5 +216,74 @@ class TransportsServiceTest {
         Response<List<Transport>> response = JSON.deserialize(json, type);
         List<Transport> updatedTransports = response.getData();
         assertTrue(updatedTransports.contains(transport));
+    }
+
+    @Test
+    void createTransportWithTooMuchWeight(){
+        Truck truck1 = new Truck("abcd1234", "ford", 1500, 10000, Truck.CoolingCapacity.FROZEN);
+        ResourceManagementService rms = ModuleFactory.getInstance().getResourceManagementService();
+        rms.addTruck(JSON.serialize(truck1));
+
+        Transport newTransport = new Transport(
+                50,
+                Site.getLookupObject("address"),
+                new LinkedList<>(),
+                new HashMap<>(),
+                "abcd1234",
+                123,
+                LocalDateTime.of(2020, 1, 1, 0, 0),
+                30000
+        );
+        String json = ts.createTransport(JSON.serialize(newTransport));
+        Response<String> response = JSON.deserialize(json, Response.class);
+        assertFalse(response.isSuccess());
+        assertEquals(response.getData(),"weight");
+    }
+
+    @Test
+    void createTransportWithBadLicense(){
+        Driver driver = new Driver(12345,"name", Driver.LicenseType.A1);
+        Truck truck1 = new Truck("abcd1234", "ford", 1500, 15000, Truck.CoolingCapacity.FROZEN);
+        ResourceManagementService rms = ModuleFactory.getInstance().getResourceManagementService();
+        rms.addDriver(JSON.serialize(driver));
+        rms.addTruck(JSON.serialize(truck1));
+
+        Transport newTransport = new Transport(
+                50,
+                Site.getLookupObject("address"),
+                new LinkedList<>(),
+                new HashMap<>(),
+                "abcd1234",
+                12345,
+                LocalDateTime.of(2020, 1, 1, 0, 0),
+                10000
+        );
+        String json = ts.createTransport(JSON.serialize(newTransport));
+        Response<String> response = JSON.deserialize(json, Response.class);
+        assertFalse(response.isSuccess());
+        assertEquals(response.getData(),"license");
+    }
+    @Test
+    void createTransportWithBadLicenseAndTooMuchWeight(){
+        Driver driver = new Driver(12345,"name", Driver.LicenseType.A1);
+        Truck truck1 = new Truck("abcd1234", "ford", 1500, 15000, Truck.CoolingCapacity.FROZEN);
+        ResourceManagementService rms = ModuleFactory.getInstance().getResourceManagementService();
+        rms.addDriver(JSON.serialize(driver));
+        rms.addTruck(JSON.serialize(truck1));
+
+        Transport newTransport = new Transport(
+                50,
+                Site.getLookupObject("address"),
+                new LinkedList<>(),
+                new HashMap<>(),
+                "abcd1234",
+                12345,
+                LocalDateTime.of(2020, 1, 1, 0, 0),
+                30000
+        );
+        String json = ts.createTransport(JSON.serialize(newTransport));
+        Response<String> response = JSON.deserialize(json, Response.class);
+        assertFalse(response.isSuccess());
+        assertEquals(response.getData(),"weight,license");
     }
 }

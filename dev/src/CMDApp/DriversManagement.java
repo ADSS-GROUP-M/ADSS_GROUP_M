@@ -3,13 +3,19 @@ package CMDApp;
 import CMDApp.Records.Driver;
 import TransportModule.ServiceLayer.ResourceManagementService;
 
-import static CMDApp.Main.*;
-
 public class DriversManagement {
 
-    static ResourceManagementService rms = factory.getResourceManagementService();
+    private final Main main;
+    private final AppData appData;
+    ResourceManagementService rms;
 
-    static void manageDrivers() {
+    public DriversManagement(Main main, AppData appData, ResourceManagementService rms) {
+        this.main = main;
+        this.appData = appData;
+        this.rms = rms;
+    }
+
+    void manageDrivers() {
         while (true) {
             System.out.println("=========================================");
             System.out.println("Drivers management");
@@ -20,7 +26,7 @@ public class DriversManagement {
             System.out.println("4. View full driver information");
             System.out.println("5. View all drivers");
             System.out.println("6. Return to previous menu");
-            int option = getInt();
+            int option = main.getInt();
             switch (option) {
                 case 1 -> createDriver();
                 case 2 -> updateDriver();
@@ -35,11 +41,11 @@ public class DriversManagement {
         }
     }
 
-    private static void createDriver() {
+    private void createDriver() {
         System.out.println("=========================================");
         System.out.println("Enter driver details:");
-        int id = getInt("Employee ID: ");
-        String fullName = getLine("Name: ");
+        int id = main.getInt("Employee ID: ");
+        String fullName = main.getLine("Name: ");
         System.out.println("License type: ");
         Driver.LicenseType licenseType = pickLicenseType();
         if (licenseType == null) return;
@@ -47,15 +53,15 @@ public class DriversManagement {
         String json = JSON.serialize(newDriver);
         String responseJson = rms.addDriver(json);
         Response<String> response = JSON.deserialize(responseJson, Response.class);
-        if(response.isSuccess()) drivers.put(id, newDriver);
+        if(response.isSuccess()) appData.drivers().put(id, newDriver);
         System.out.println("\n"+response.getMessage());
     }
 
-    private static void updateDriver() {
+    private void updateDriver() {
         while (true) {
             System.out.println("=========================================");
             System.out.println("Select driver to update:");
-            Driver driver = pickDriver(true);
+            Driver driver = main.pickDriver(true);
             if (driver == null) return;
             while (true) {
                 System.out.println("=========================================");
@@ -65,10 +71,10 @@ public class DriversManagement {
                 System.out.println("1. Update name");
                 System.out.println("2. Update license type");
                 System.out.println("3. Return to previous menu");
-                int option = getInt();
+                int option = main.getInt();
                 switch (option) {
                     case 1 -> {
-                        String name = getLine("Name: ");
+                        String name = main.getLine("Name: ");
                         updateDriverHelperMethod(driver.id(), name, driver.licenseType());
                     }
                     case 2 -> {
@@ -89,33 +95,33 @@ public class DriversManagement {
         }
     }
 
-    private static void updateDriverHelperMethod(int id, String name, Driver.LicenseType licenseType) {
+    private void updateDriverHelperMethod(int id, String name, Driver.LicenseType licenseType) {
         Driver updatedDriver = new Driver(id, name, licenseType);
         String json = JSON.serialize(updatedDriver);
         String responseJson = rms.updateDriver(json);
         Response<String> response = JSON.deserialize(responseJson, Response.class);
-        if(response.isSuccess()) drivers.put(id, updatedDriver);
+        if(response.isSuccess()) appData.drivers().put(id, updatedDriver);
         System.out.println("\n"+response.getMessage());
     }
 
-    private static void removeDriver() {
+    private void removeDriver() {
         while(true) {
             System.out.println("=========================================");
             System.out.println("Select driver to remove:");
-            Driver driver = pickDriver(true);
+            Driver driver = main.pickDriver(true);
             if(driver == null) return;
             System.out.println("=========================================");
             System.out.println("Driver details:");
             printDriverDetails(driver);
             System.out.println("=========================================");
             System.out.println("Are you sure you want to remove this driver? (y/n)");
-            String option = getLine();
+            String option = main.getLine();
             switch(option) {
                 case "y" ->{
                     String json = JSON.serialize(driver);
                     String responseJson = rms.removeDriver(json);
                     Response<String> response = JSON.deserialize(responseJson, Response.class);
-                    if(response.isSuccess()) drivers.remove(driver.id());
+                    if(response.isSuccess()) appData.drivers().remove(driver.id());
                     System.out.println("\n"+response.getMessage());
                 }
                 case "n" ->{}
@@ -125,43 +131,43 @@ public class DriversManagement {
 
     }
 
-    private static void getDriver() {
+    private void getDriver() {
         while(true){
             System.out.println("=========================================");
-            int driverId = getInt("Enter employee ID of driver to view (enter '-1' to return to previous menu): ");
+            int driverId = main.getInt("Enter employee ID of driver to view (enter '-1' to return to previous menu): ");
             if(driverId == -1) return;
-            Driver driver = drivers.get(driverId);
+            Driver driver = appData.drivers().get(driverId);
             System.out.println("=========================================");
             System.out.println("Driver details:");
             printDriverDetails(driver);
             System.out.println("=========================================");
             System.out.println("\nEnter 'done!' to return to previous menu");
-            getLine();
+            main.getLine();
         }
     }
 
-    private static void getAllDrivers() {
+    private void getAllDrivers() {
         System.out.println("=========================================");
         System.out.println("All drivers:");
-        for(Driver driver : drivers.values()){
+        for(Driver driver : appData.drivers().values()){
             System.out.println("-----------------------------------------");
             printDriverDetails(driver);
         }
         System.out.println("\nEnter 'done!' to return to previous menu");
-        getLine();
+        main.getLine();
     }
 
-    private static void printDriverDetails(Driver driver) {
+    private void printDriverDetails(Driver driver) {
         System.out.println("Employee ID:  " + driver.id());
         System.out.println("Name:         " + driver.name());
         System.out.println("License type: " + driver.licenseType());
     }
 
-    private static Driver.LicenseType pickLicenseType() {
+    private Driver.LicenseType pickLicenseType() {
         for (int i = 0; i < Driver.LicenseType.values().length; i++) {
             System.out.println((i+1) + ". " + Driver.LicenseType.values()[i]);
         }
-        int option = getInt()-1;
+        int option = main.getInt()-1;
         if (option < 0 || option >= Driver.LicenseType.values().length) {
             System.out.println("Invalid license type!");
             return null;

@@ -24,6 +24,7 @@ public class Main {
     static ModuleFactory factory = ModuleFactory.getInstance();
     static Scanner scanner = new Scanner(System.in);
 
+    static boolean dataGenerated = false;
     static int transportIdCounter = 1;
     static int itemListIdCounter = 1;
     static HashMap<Integer, Driver> drivers = null;
@@ -33,14 +34,11 @@ public class Main {
     static HashMap<Integer, Transport> transports = null;
 
     public static void main(String[] args) {
-        generateData();
-
-        fetchDrivers();
-        fetchTrucks();
-        fetchSites();
-        fetchItemLists();
-        fetchTransports();
-
+        drivers = new HashMap<>();
+        trucks = new HashMap<>();
+        sites = new HashMap<>();
+        itemLists = new HashMap<>();
+        transports = new HashMap<>();
         mainMenu();
     }
 
@@ -52,13 +50,27 @@ public class Main {
             System.out.println("1. Manage transports");
             System.out.println("2. Manage item lists");
             System.out.println("3. Manage transport module resources");
-            System.out.println("4. Exit");
+            System.out.println("4. Generate data");
+            System.out.println("5. Exit");
             int option = getInt();
             switch (option) {
                 case 1 -> manageTransports();
                 case 2 -> manageItemLists();
                 case 3 -> manageResources();
-                case 4 -> System.exit(0);
+                case 4 -> {
+                    if(dataGenerated) System.out.println("\nData already generated!");
+                    else{
+                        generateData();
+                        fetchDrivers();
+                        fetchTrucks();
+                        fetchSites();
+                        fetchItemLists();
+                        fetchTransports();
+                        dataGenerated = true;
+                        System.out.println("\nData generated successfully!");
+                    }
+                }
+                case 5 -> System.exit(0);
                 default -> System.out.println("\nInvalid option!");
             }
 

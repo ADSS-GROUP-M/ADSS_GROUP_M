@@ -20,7 +20,7 @@ public class Branch {
         morningStart = LocalTime.of(8,0);
         morningEnd = LocalTime.of(16,0);
         eveningStart = LocalTime.of(16,0);
-        eveningEnd = LocalTime.of(24,0);
+        eveningEnd = LocalTime.of(22,0);
     }
 
     public Branch(int morningShiftStart,int morningShiftFinish, int eveningShiftStart, int eveningShiftFinish){

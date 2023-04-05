@@ -35,7 +35,7 @@ class JSONTest {
         ItemList itemList = new ItemList(1,items1,items2);
         HashMap<Site,ItemList> siteItems = new HashMap<>();
         siteItems.put(destination, itemList);
-        Transport t = new Transport(1,source,sites,siteItems,"1",1,dateTime);
+        Transport t = new Transport(1,source,sites,siteItems,"1",1,dateTime,0);
         String output = JSON.serialize(t);
         String expected = """
                  {
@@ -145,7 +145,7 @@ class JSONTest {
         ItemList itemList = new ItemList(1,items1,items2);
         HashMap<Site,ItemList> siteItems = new HashMap<>();
         siteItems.put(destination, itemList);
-        Transport t2 = new Transport(1,source,sites,siteItems,"1",1,dateTime);
+        Transport t2 = new Transport(1,source,sites,siteItems,"1",1,dateTime,0);
 
         assertEquals(t2.id(), t.id());
         assertEquals(t2.source(), t.source());

@@ -184,6 +184,7 @@ public class SitesManagement {
         System.out.println("Address:        " + site.address());
         System.out.println("Phone number:   " + site.phoneNumber());
         System.out.println("Contact name:   " + site.contactName());
+        System.out.println("Site type:      " + site.siteType());
     }
 
 }

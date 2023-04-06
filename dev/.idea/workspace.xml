@@ -1,16 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e454f93c-4ee8-4f4b-9a14-eaaf36aa303c" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/BusinessLayer/Pair.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BusinessLayer/Agreement.java" beforeDir="false" afterPath="$PROJECT_DIR$/BusinessLayer/Agreement.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BusinessLayer/Order.java" beforeDir="false" afterPath="$PROJECT_DIR$/BusinessLayer/Order.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BusinessLayer/OrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/BusinessLayer/OrderController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BusinessLayer/Product.java" beforeDir="false" afterPath="$PROJECT_DIR$/BusinessLayer/Product.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BusinessLayer/ProductAmountPair.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BusinessLayer/Supplier.java" beforeDir="false" afterPath="$PROJECT_DIR$/BusinessLayer/Supplier.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BusinessLayer/SupplierController.java" beforeDir="false" afterPath="$PROJECT_DIR$/BusinessLayer/SupplierController.java" afterDir="false" />
+    <list default="true" id="e454f93c-4ee8-4f4b-9a14-eaaf36aa303c" name="Changes" comment="commit to move to another functionality">
       <change beforePath="$PROJECT_DIR$/BusinessLayer/SystemController.java" beforeDir="false" afterPath="$PROJECT_DIR$/BusinessLayer/SystemController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -123,7 +114,14 @@
       <option name="project" value="LOCAL" />
       <updated>1680693870968</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="commit to move to another functionality">
+      <created>1680811222544</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1680811222544</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -160,6 +158,7 @@
       <path value="$PROJECT_DIR$" />
     </ignored-roots>
     <MESSAGE value="done with order functionality - moving to the ability to print the order etc" />
-    <option name="LAST_COMMIT_MESSAGE" value="done with order functionality - moving to the ability to print the order etc" />
+    <MESSAGE value="commit to move to another functionality" />
+    <option name="LAST_COMMIT_MESSAGE" value="commit to move to another functionality" />
   </component>
 </project>

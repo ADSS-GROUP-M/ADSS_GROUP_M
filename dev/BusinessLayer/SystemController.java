@@ -84,7 +84,7 @@ public class SystemController {
         supplierController.getSupplier(bnNumber).addProduct(name, productId, catalogNumber, price, numberOfUnits);
     }
 
-    
+
 
 
 

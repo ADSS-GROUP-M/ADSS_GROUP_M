@@ -12,9 +12,9 @@ public class Supplier {
     private String paymentMethod;
     private List<String> fields;
     /***
-     * maps between the name of the contact person and his contact info - email, phone number, etc
+     * maps between the name of the contact person and his contact info - email, phone number
      */
-    private Map<String,List<String>> contactsInfo;
+    private Map<String,Pair<String, String>> contactsInfo;
     /***
      * the agreement with the supplier
      */
@@ -24,7 +24,7 @@ public class Supplier {
      */
     private List<Order> orderHistory;
     public Supplier(String name, String bnNumber, String bankAccount, String paymentMethod,
-                    List<String> fields, Map<String, List<String>> contactsInfo,
+                    List<String> fields, Map<String,Pair<String, String>> contactsInfo,
                     List<Product> productList, DeliveryAgreement deliveryAgreement){
         this.name = name;
         this.bnNumber = bnNumber;
@@ -50,16 +50,25 @@ public class Supplier {
     public void removeContactInfo(String contactsName) {
         contactsInfo.remove(contactsName);
     }
-    public void addContactInfo(String contactName, List<String> contactInfo){
-        this.contactsInfo.put(contactName, contactInfo);
+    public void addContactInfo(String contactName, String email, String phoneNumber){
+        this.contactsInfo.put(contactName, new Pair<>(email, phoneNumber));
     }
+
+    public void setContactsEmail(String contactName, String email){
+        contactsInfo.get(contactName).setFirst(email);
+    }
+    public void setContactsPhoneNumber(String contactName, String phoneNumber){
+        contactsInfo.get(contactName).setSecond(phoneNumber);
+    }
+
+
 
     public Agreement getAgreement() {
         return agreement;
     }
 
-    public void addProduct(Product product, int amount){
-        agreement.addProduct(product, amount);
+    public void addProduct(String name, int productId, String catalogNumber, double price, int numberOfUnits){
+        agreement.addProduct(new Product(name, productId, catalogNumber, price, numberOfUnits));
     }
 
     public void setPaymentMethod(String paymentMethod){

@@ -1,6 +1,8 @@
 package BusinessLayer;
 
 import BusinessLayer.DeliveryAgreements.DeliveryAgreement;
+import BusinessLayer.DeliveryAgreements.DeliveryByInvitation;
+import BusinessLayer.DeliveryAgreements.DeliveryFixedDays;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,11 +38,15 @@ public class Agreement {
         return deliveryAgreement;
     }
 
-    public void setDeliveryAgreement(DeliveryAgreement deliveryAgreement){
-        this.deliveryAgreement = deliveryAgreement;
+    public void setFixedDeliveryAgreement(boolean haveTransport, List<Integer> days){
+        this.deliveryAgreement = new DeliveryFixedDays(haveTransport, days);
     }
 
-    public void addProduct(Product product, int amount){
+    public void setByInvitationDeliveryAgreement(boolean haveTransport, int numOfDays){
+        deliveryAgreement = new DeliveryByInvitation(haveTransport, numOfDays);
+    }
+
+    public void addProduct(Product product){
         products.put(product.getId(), product);
     }
 

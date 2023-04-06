@@ -1,5 +1,6 @@
 package BusinessLayer;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class Order {
@@ -10,6 +11,14 @@ public class Order {
 
     public Order(Map<Integer, Integer> products){
         this.products = products;
+    }
+
+    public Order(){
+        products = new HashMap<>();
+    }
+
+    public void addProduct(Integer productId, int amount){
+        products.put(productId, amount);
     }
 
     public Map<Integer, Integer> getProducts() {

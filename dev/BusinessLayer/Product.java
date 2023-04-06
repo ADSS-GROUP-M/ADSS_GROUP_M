@@ -21,6 +21,7 @@ public class Product {
         this.numberOfUnits = numberOfUnits;
     }
 
+
     public void setCatalogNumber(String catalogNumber){
         this.catalogNumber = catalogNumber;
     }
@@ -29,7 +30,7 @@ public class Product {
         this.numberOfUnits = numberOfUnits;
     }
 
-    private void setPrice(double price){
+    public void setPrice(double price){
         this.price = price;
     }
 
@@ -43,5 +44,21 @@ public class Product {
 
     public int getNumberOfUnits() {
         return numberOfUnits;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getCatalogNumber() {
+        return catalogNumber;
     }
 }

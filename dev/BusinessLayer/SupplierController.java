@@ -8,22 +8,32 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class SupplierController {
-    private List<Supplier> suppliers;
+    /***
+     * maps between supplier's bn number to the supplier
+     */
+    private Map<String, Supplier> suppliers;
 
     public void addSupplier(String name, String bnNumber, String bankAccount, String paymentMethod,
-                            List<String> fields, Map<String, List<String>> contactsInfo,
+                            List<String> fields, Map<String,Pair<String, String>> contactsInfo,
                             List<Product> productList, DeliveryAgreement deliveryAgreement){
-        suppliers.add(new Supplier(name,bnNumber,bankAccount,paymentMethod,fields, contactsInfo, productList, deliveryAgreement));
+        suppliers.put(bnNumber ,new Supplier(name,bnNumber,bankAccount,paymentMethod,fields, contactsInfo, productList, deliveryAgreement));
+    }
+
+    public void addSupplier(String bnNumber, Supplier supplier){
+        suppliers.put(bnNumber, supplier);
     }
 
     public Supplier getSupplier(String bnNumber){
-        return suppliers.stream().filter(supplier -> supplier.getBnNumber().equals(bnNumber)).collect(Collectors.toList()).get(0);
+        return suppliers.get(bnNumber);
     }
 
     public List<Supplier> getCopyOfSuppliers(){
-        return new LinkedList<>(suppliers);
+        return new LinkedList<>(suppliers.values());
     }
 
+    public void removeSupplier(String bnNumber){
+        suppliers.remove(bnNumber);
+    }
 
 
 }

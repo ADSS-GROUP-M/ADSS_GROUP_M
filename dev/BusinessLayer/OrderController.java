@@ -6,26 +6,26 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+
+
+
 public class OrderController {
-    private SupplierController supplierController;
 
-    public OrderController(SupplierController supplierController) {
-        this.supplierController = supplierController;
-    }
-
-    public void order(Map<Integer, Integer> order){
-        Map<Supplier, List<Integer>> orderPerSupplier = divideOrder(order, new LinkedList<>(), supplierController.getCopyOfSuppliers());
-        for(Map.Entry<Supplier, List<Integer>> suppliersOrder : orderPerSupplier.entrySet()){
+    public Map<Supplier, Pair<List<Integer>, Double>> order(Map<Integer, Integer> order, List<Supplier> suppliers){
+        Map<Supplier, Pair<List<Integer>, Double>> orderPerSupplier = divideOrder(order, new LinkedList<>(), suppliers);
+        for(Map.Entry<Supplier, Pair<List<Integer>, Double>> suppliersOrder : orderPerSupplier.entrySet()){
             Supplier supplier = suppliersOrder.getKey();
-            List<Integer> products = suppliersOrder.getValue();
-            Map<Integer, Integer> o = new HashMap<>();
+            List<Integer> products = suppliersOrder.getValue().getFirst();
+            Double price = suppliersOrder.getValue().getSecond();
+            Order o = new Order();
             for (Integer productId : products)
-                o.put(productId, order.get(productId));
-            supplier.addOrder(new Order(o));
+                o.addProduct(productId, order.get(productId));
+            supplier.addOrder(o);
         }
+        return orderPerSupplier;
     }
 
-    private Map<Supplier, List<Integer>> divideOrder(Map<Integer, Integer> order, List<Integer> alreadySupplied, List<Supplier> suppliersToUse){
+    private Map<Supplier, Pair<List<Integer>, Double>> divideOrder(Map<Integer, Integer> order, List<Integer> alreadySupplied, List<Supplier> suppliersToUse){
         Map<Supplier, List<Integer>> suppliersCanSupply = mapSuppliersToProducts(order, alreadySupplied, suppliersToUse);
         Supplier maxCanBeOrderedSupplier = suppliersCanSupply.keySet().stream().reduce(suppliersToUse.get(0) ,(acc, s) ->
                 suppliersCanSupply.get(acc).size() > suppliersCanSupply.get(s).size() ? acc : s);
@@ -44,8 +44,8 @@ public class OrderController {
         for(Integer productId: maxProductsCanBeSupplied)
             alreadySupplied.add(productId);
         suppliersToUse.remove(cheapest);
-        Map<Supplier, List<Integer>> res = divideOrder(order, alreadySupplied, suppliersToUse);
-        res.put(cheapest, maxProductsCanBeSupplied);
+        Map<Supplier, Pair<List<Integer>, Double>> res = divideOrder(order, alreadySupplied, suppliersToUse);
+        res.put(cheapest, new Pair<>(maxProductsCanBeSupplied, cheapestPrice));
         return res;
     }
 

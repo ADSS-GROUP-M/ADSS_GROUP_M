@@ -99,7 +99,7 @@ public class EmployeeServiceTests {
     }
     // 0-9 shiftmanager, 10-19 cashier, 20-25 storekeeper
     @Test
-    public void situation1() {
+    public void situation1() { // 
         try {
             
             LocalDate[] week = DateUtils.getWeekDates(LocalDate.of(2023,4, 9));
@@ -195,6 +195,95 @@ public class EmployeeServiceTests {
         assertFalse(ans.getErrorMessage(), ans.errorOccurred());
         ans = empService.applyCancelCard(usernames[10], "1", date, SShiftType.Morning,"something");
         assertTrue(ans.getErrorMessage(), ans.errorOccurred()); // uncertified employee
+    }
+    @Test
+    // checking illegal requests: 
+    // requesting shifts that dont exist,
+    // employee illegal shift requests,
+    // deleting a shift an recreate it, 
+    // recruiting existing employee,
+    
+    public void situation3(){
+        LocalDate[] dates = DateUtils.getWeekDates(LocalDate.of(2023, 4, 6));
+        LocalDate[] week = DateUtils.getConsequtiveDates(dates[0],dates[1]);
+        Response<Boolean> ans;
+        String newUsername = "777";
+        ans = userService.createUser(admin.getUsername(), newUsername, "123");
+        ans = empService.recruitEmployee(admin.getUsername(),"abc", "2", newUsername,"Nothin 123 11", 30, week[0],"Nothing", "about");
+        assertFalse(ans.getErrorMessage(),ans.errorOccurred());
+        ans = empService.recruitEmployee(admin.getUsername(),"abc", "2", newUsername,"Nothin 123 11", 30, week[0],"Nothing", "about");
+        assertTrue(ans.getErrorMessage(),ans.errorOccurred()); //recruiting same employee to same branch again
+        ans = empService.recruitEmployee(admin.getUsername(),"abc", "1", newUsername,"Nothin 123 11", 30, week[0],"Nothing", "about");
+        assertFalse(ans.getErrorMessage(),ans.errorOccurred()); //recruiting same employee to different branch
+        ans = userService.login(newUsername, "123");
+        ans = empService.requestShift(newUsername,"1" , week[0], SShiftType.Morning, Role.GeneralWorker.name());
+        assertTrue(ans.getErrorMessage(),ans.errorOccurred()); // shift doesnt exist, therefore should fail
+
+        ans = empService.createWeekShifts(adminUsername, "1", week[0]);
+        ans = empService.createWeekShifts(adminUsername, "2", week[0]);
+        for(LocalDate date: week){ // set up needs for shifts
+            ans = empService.setShiftNeededAmount(adminUsername, "1", date, SShiftType.Morning, Role.Cashier.name(), 1);
+            assertFalse(ans.getErrorMessage(), ans.errorOccurred());
+            ans = empService.setShiftNeededAmount(adminUsername, "1", date, SShiftType.Morning, Role.ShiftManager.name(), 1);
+            assertFalse(ans.getErrorMessage(), ans.errorOccurred());
+            ans = empService.setShiftNeededAmount(adminUsername, "1", date, SShiftType.Morning, Role.Storekeeper.name(), 0);
+            assertFalse(ans.getErrorMessage(), ans.errorOccurred());
+            ans = empService.setShiftNeededAmount(adminUsername, "1", date, SShiftType.Morning, Role.GeneralWorker.name(), 0);
+            assertFalse(ans.getErrorMessage(), ans.errorOccurred());
+            ans = empService.setShiftNeededAmount(adminUsername, "1", date, SShiftType.Morning, Role.Steward.name(), 1);
+            assertFalse(ans.getErrorMessage(), ans.errorOccurred());
+            ans = empService.setShiftNeededAmount(adminUsername, "2", date, SShiftType.Morning, Role.ShiftManager.name(), 1);
+            assertFalse(ans.getErrorMessage(), ans.errorOccurred());
+            ans = empService.setShiftNeededAmount(adminUsername, "2", date, SShiftType.Morning, Role.Storekeeper.name(), 0);
+            assertFalse(ans.getErrorMessage(), ans.errorOccurred());
+            ans = empService.setShiftNeededAmount(adminUsername, "2", date, SShiftType.Morning, Role.GeneralWorker.name(), 0);
+            assertFalse(ans.getErrorMessage(), ans.errorOccurred());
+        }// branch1 - manager,cashier,steward branch2 - shiftmanager, cashier
+        ans = empService.requestShift(newUsername, "1", week[0], SShiftType.Morning, Role.Steward.name());
+        assertTrue(ans.getErrorMessage(), ans.errorOccurred()); // uncertified to be steward
+        ans = empService.certifyEmployee(adminUsername, newUsername, Role.Steward.name());
+        ans = empService.certifyEmployee(adminUsername, newUsername, Role.Cashier.name());
+        ans = empService.requestShift(newUsername, "1", week[0], SShiftType.Morning, Role.Steward.name());
+        assertFalse(ans.getErrorMessage(), ans.errorOccurred());
+
+        ans = empService.requestShift(newUsername, "2", week[0], SShiftType.Morning, Role.Steward.name());
+        assertTrue(ans.getErrorMessage(), ans.errorOccurred()); // cannot sign up to paraller shifts in different branches
+
+        ans = empService.requestShift(newUsername, "2", week[0], SShiftType.Evening, Role.Steward.name());
+        assertTrue(ans.getErrorMessage(), ans.errorOccurred()); // cannot sign up to 2 shifts a day
+
+        ans = empService.requestShift(newUsername, "1", week[1], SShiftType.Morning, Role.Steward.name());
+        assertFalse(ans.getErrorMessage(), ans.errorOccurred());
+        ans = empService.requestShift(newUsername, "1", week[2], SShiftType.Morning, Role.Steward.name());
+        assertFalse(ans.getErrorMessage(), ans.errorOccurred());
+        ans = empService.requestShift(newUsername, "1", week[3], SShiftType.Morning, Role.Steward.name());
+        assertFalse(ans.getErrorMessage(), ans.errorOccurred());
+        ans = empService.requestShift(newUsername, "1", week[4], SShiftType.Morning, Role.Steward.name());
+        assertFalse(ans.getErrorMessage(), ans.errorOccurred());
+        ans = empService.requestShift(newUsername, "2", week[5], SShiftType.Evening, Role.Cashier.name());
+        assertFalse(ans.getErrorMessage(), ans.errorOccurred());
+
+        ans = empService.requestShift(newUsername, "2", week[6], SShiftType.Evening, Role.Cashier.name());
+        assertTrue(ans.getErrorMessage(), ans.errorOccurred()); //cannot sign up to 7 shifts a week
+
+        List<String> ids = new LinkedList<>();
+        ans = empService.requestShift(usernames[0], "1", week[0], SShiftType.Morning, Role.ShiftManager.name());
+        ans = empService.requestShift(usernames[10], "1", week[0], SShiftType.Morning, Role.Cashier.name());
+        ans = empService.cancelShiftRequest(usernames[10], "1", week[0], SShiftType.Morning, Role.Cashier.name());
+        assertFalse(ans.getErrorMessage(),ans.errorOccurred());
+        ids.add(newUsername);
+        ans = empService.setShiftEmployees(adminUsername, "1", week[0], SShiftType.Morning, Role.Steward.name(),ids);
+        assertFalse(ans.getErrorMessage(), ans.errorOccurred());
+        ids.remove(newUsername);
+        ids.add(usernames[0]);
+        ans = empService.setShiftEmployees(adminUsername, "1", week[0], SShiftType.Morning, Role.ShiftManager.name(),ids);
+        assertFalse(ans.getErrorMessage(), ans.errorOccurred());
+        ids.remove(usernames[0]);
+        ids.add(usernames[10]);
+        ans = empService.setShiftEmployees(adminUsername, "1", week[0], SShiftType.Morning, Role.Cashier.name(),ids);
+        assertTrue(ans.getErrorMessage(), ans.errorOccurred()); // the request was removed by the usernames[10], so the manager cant set him to the shift
+        ans = empService.approveShift(adminUsername, "1",week[0],SShiftType.Morning);
+        assertTrue(ans.getErrorMessage(),ans.errorOccurred()); // cashier is missing, approving shift should make a warning.
     }
 
 }

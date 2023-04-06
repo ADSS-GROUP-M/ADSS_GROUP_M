@@ -6,6 +6,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoField;
 import java.util.Calendar;
+import java.util.List;
 
 public class DateUtils {
     public static final String DATE_PATTERN = "d/M/yyyy";
@@ -24,10 +25,10 @@ public class DateUtils {
 
         // calculate sunday last week (moves cal 6 days fwd)
         //cal.add(Calendar.DAY_OF_MONTH, 7);
-        cal.set(sunday.getYear(),sunday.getMonth(),sunday.getDate()+7);
+        cal.set(sunday.getYear()+1900,sunday.getMonth(),sunday.getDate()+7);
         java.util.Date nextsunday = cal.getTime();
         fromUntil[0] = LocalDate.of(sunday.getYear()+1900, sunday.getMonth()+1, sunday.getDate());
-        fromUntil[1] = LocalDate.of(d.getYear()+1900, nextsunday.getMonth()+1, nextsunday.getDate());
+        fromUntil[1] = LocalDate.of(nextsunday.getYear()+1900, nextsunday.getMonth()+1, nextsunday.getDate());
         return fromUntil;
     }
 
@@ -38,6 +39,16 @@ public class DateUtils {
         } catch (Exception ignore) {
             return false;
         }
+    }
+    public static LocalDate[] getConsequtiveDates(LocalDate from, LocalDate until){
+        List<LocalDate> x = from.datesUntil(until).toList();
+        LocalDate[] dates = new LocalDate[x.size()];
+        int i = 0;
+        for(Object date : x ){
+            dates[i] = ((LocalDate)date);
+            i++;
+        }
+        return dates;
     }
 
     public static int getWeekNumber(LocalDate date) {

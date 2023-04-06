@@ -99,7 +99,7 @@ public class EmployeeServiceTests {
     }
     // 0-9 shiftmanager, 10-19 cashier, 20-25 storekeeper
     @Test
-    public void test_scheduling() {
+    public void situation1() {
         try {
             
             LocalDate[] week = DateUtils.getWeekDates(LocalDate.of(2023,4, 9));
@@ -164,6 +164,37 @@ public class EmployeeServiceTests {
             li.add(emp.getId());
         }
         return li;
+    }
+    @Test
+    public void situation2(){ // test cancel card, create shift, set shift needed roles, set employees to work and approve.
+        LocalDate date = LocalDate.now();
+        Response<Boolean> ans = empService.applyCancelCard(usernames[0], "1", date, SShiftType.Morning, "something");
+        assertTrue(ans.getErrorMessage(), ans.errorOccurred());// a shift manager that is not signed up to this shift
+        empService.createWeekShifts(adminUsername, "1", DateUtils.getWeekDates(date)[0]);
+        ans = empService.setShiftNeededAmount(adminUsername, "1", date, SShiftType.Morning, Role.Cashier.name(), 1);
+        assertFalse(ans.getErrorMessage(), ans.errorOccurred());
+        ans = empService.setShiftNeededAmount(adminUsername, "1", date, SShiftType.Morning, Role.ShiftManager.name(), 1);
+        assertFalse(ans.getErrorMessage(), ans.errorOccurred());
+        ans = empService.setShiftNeededAmount(adminUsername, "1", date, SShiftType.Morning, Role.Storekeeper.name(), 0);
+        assertFalse(ans.getErrorMessage(), ans.errorOccurred());
+        ans = empService.setShiftNeededAmount(adminUsername, "1", date, SShiftType.Morning, Role.GeneralWorker.name(), 0);
+        assertFalse(ans.getErrorMessage(), ans.errorOccurred());
+        empService.requestShift(usernames[0], "1", date, SShiftType.Morning, Role.ShiftManager.name());
+        ans = empService.requestShift(usernames[10], "1", date, SShiftType.Morning, Role.Cashier.name());
+        assertFalse(ans.getErrorMessage(), ans.errorOccurred());
+        List<String> li = new LinkedList<>(), li2 = new LinkedList<>();
+        li.add(usernames[0]);
+        ans = empService.setShiftEmployees(adminUsername, "1", date, SShiftType.Morning, Role.ShiftManager.name(), li);
+        assertFalse(ans.getErrorMessage(), ans.errorOccurred());
+        li2.add(usernames[10]);
+        ans = empService.setShiftEmployees(adminUsername, "1", date, SShiftType.Morning, Role.Cashier.name(), li2);
+        assertFalse(ans.getErrorMessage(),ans.errorOccurred());
+        ans = empService.approveShift(adminUsername,"1", date, SShiftType.Morning);
+        assertFalse(ans.getErrorMessage(), ans.errorOccurred());
+        ans = empService.applyCancelCard(usernames[0], "1", date, SShiftType.Morning,"something");
+        assertFalse(ans.getErrorMessage(), ans.errorOccurred());
+        ans = empService.applyCancelCard(usernames[10], "1", date, SShiftType.Morning,"something");
+        assertTrue(ans.getErrorMessage(), ans.errorOccurred()); // uncertified employee
     }
 
 }

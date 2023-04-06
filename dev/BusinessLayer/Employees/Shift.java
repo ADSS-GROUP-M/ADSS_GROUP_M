@@ -133,7 +133,10 @@ public class Shift {
     }
 
     public void setNeededRole(Role role, Integer amount){
-        this.neededRoles.put(role, amount);
+        if(amount > 0)
+            this.neededRoles.put(role, amount);
+        else if(amount == 0)// the lack of this condition caused bugs while checking legality when a role is set to amount=0
+            this.neededRoles.remove(role); 
     }
 
     public Map<Role,Integer> getNeededRoles(){

@@ -3,6 +3,7 @@ package BusinessLayer;
 import BusinessLayer.DeliveryAgreements.DeliveryAgreement;
 import BusinessLayer.DeliveryAgreements.DeliveryByInvitation;
 import BusinessLayer.DeliveryAgreements.DeliveryFixedDays;
+import BusinessLayer.Discounts.Discount;
 
 import java.util.List;
 import java.util.Map;
@@ -84,8 +85,62 @@ public class SystemController {
         supplierController.getSupplier(bnNumber).addProduct(name, productId, catalogNumber, price, numberOfUnits);
     }
 
+    public void setProductDiscount(String bnNumber, int productId, int amount, Discount discount){
+        supplierController.getSupplier(bnNumber).getAgreement().getBillOfQuantities().addProductDiscount(productId, amount, discount);
+    }
+    public void removeProductDiscount(String bnNumber, int productId, int amount){
+        supplierController.getSupplier(bnNumber).getAgreement().getBillOfQuantities().removeProductDiscount(productId, amount);
+    }
+    public void removeProductDiscount(String bnNumber, int productId){
+        supplierController.getSupplier(bnNumber).getAgreement().getBillOfQuantities().removeProductDiscount(productId);
+    }
 
+    public void removeDiscountOnTotalOrder(String bnNumber){
+        supplierController.getSupplier(bnNumber).getAgreement().getBillOfQuantities().removeDiscountOnTotalOrder();
+    }
 
+    public void setDiscountOnTotalOrder(String bnNumber, double priceToActivateDiscount, Discount discount){
+        supplierController.getSupplier(bnNumber).getAgreement().getBillOfQuantities().setDiscountOnTotalOrder(priceToActivateDiscount, discount);
+    }
+
+    public void setOrderOfDiscounts(String bnNumber, boolean amountBeforeTotal){
+        supplierController.getSupplier(bnNumber).getAgreement().getBillOfQuantities().setOrderOfDiscounts(amountBeforeTotal);
+    }
+
+    public void setProductsDiscounts(String bnNumber, Map<Integer, Map<Integer, Discount>> productsDiscounts){
+        supplierController.getSupplier(bnNumber).getAgreement().getBillOfQuantities().setProductsDiscounts(productsDiscounts);
+    }
+
+    public void setDiscountOnAmountOfProducts(String bnNumber, int amountOfProductsForDiscount, double price, Discount discount){
+        supplierController.getSupplier(bnNumber).getAgreement().getBillOfQuantities().setDiscountOnAmountOfProducts(amountOfProductsForDiscount, price, discount);
+    }
+
+    public void removeDiscountOnAmountOfProducts(String bnNumber){
+        supplierController.getSupplier(bnNumber).getAgreement().getBillOfQuantities().removeDiscountOnAmountOfProducts();
+    }
+
+    public void getOrderHistory(String bnNumber){
+        supplierController.getSupplier(bnNumber).getOrderHistory();
+    }
+
+    public void addField(String bnNumber, String field){
+        supplierController.getSupplier(bnNumber).addField(field);
+    }
+
+    public void removeField(String bnNumber, String field){
+        supplierController.getSupplier(bnNumber).removeField(field);
+    }
+
+    public void getCatalogNumber(String bnNumber, int productId){
+        supplierController.getSupplier(bnNumber).getAgreement().getProduct(productId).getCatalogNumber();
+    }
+
+    public void getDeliveryAgreement(String bnNumber){
+        supplierController.getSupplier(bnNumber).getAgreement().getDeliveryAgreement();
+    }
+    public void removeProduct(String bnNumber, Integer productId){
+        supplierController.getSupplier(bnNumber).getAgreement().removeProduct(productId);
+    }
 
 
 

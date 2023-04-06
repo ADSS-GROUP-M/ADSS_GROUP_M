@@ -34,6 +34,12 @@ public class Supplier {
         this.contactsInfo = contactsInfo;
         agreement = new Agreement(paymentMethod, productList, deliveryAgreement);
     }
+    public Supplier(String name, String bnNumber, String bankAccount, String paymentMethod,
+                    List<String> fields, Map<String,Pair<String, String>> contactsInfo,
+                    List<Product> productList, DeliveryAgreement deliveryAgreement, BillOfQuantities billOfQuantities){
+        this(name, bnNumber, bankAccount, paymentMethod, fields, contactsInfo, productList, deliveryAgreement);
+        agreement = new Agreement(paymentMethod, productList, deliveryAgreement, billOfQuantities);
+    }
 
     public void setName(String name){
         this.name = name;

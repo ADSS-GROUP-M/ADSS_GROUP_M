@@ -50,6 +50,10 @@ public class BillOfQuantities {
             productsDiscounts.get(productId).remove(amount);
     }
 
+    public void removeProductDiscount(int productId){
+        productsDiscounts.remove(productId);
+    }
+
     public void setProductsDiscounts(Map<Integer, Map<Integer, Discount>> productsDiscounts) {
         this.productsDiscounts = productsDiscounts;
     }

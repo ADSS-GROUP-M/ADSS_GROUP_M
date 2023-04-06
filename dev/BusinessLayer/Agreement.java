@@ -27,6 +27,11 @@ public class Agreement {
         this.deliveryAgreement = deliveryAgreement;
     }
 
+    public Agreement(String paymentMethod, List<Product> productsList, DeliveryAgreement deliveryAgreement, BillOfQuantities billOfQuantities){
+        this(paymentMethod, productsList, deliveryAgreement);
+        this.billOfQuantities = billOfQuantities;
+    }
+
     public Map<Integer, Product> getProducts() {
         return products;
     }

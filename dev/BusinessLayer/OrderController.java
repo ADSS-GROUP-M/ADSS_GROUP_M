@@ -10,7 +10,12 @@ import java.util.stream.Collectors;
 
 
 public class OrderController {
-
+    /***
+     *
+     * @param order maps between productId to the amount to be ordered
+     * @param suppliers all available suppliers
+     * @return map between supplier to
+     */
     public Map<Supplier, Pair<List<Integer>, Double>> order(Map<Integer, Integer> order, List<Supplier> suppliers){
         Map<Supplier, Pair<List<Integer>, Double>> orderPerSupplier = divideOrder(order, new LinkedList<>(), suppliers);
         for(Map.Entry<Supplier, Pair<List<Integer>, Double>> suppliersOrder : orderPerSupplier.entrySet()){
@@ -25,7 +30,11 @@ public class OrderController {
         return orderPerSupplier;
     }
 
+
+
     private Map<Supplier, Pair<List<Integer>, Double>> divideOrder(Map<Integer, Integer> order, List<Integer> alreadySupplied, List<Supplier> suppliersToUse){
+        if(suppliersToUse.size() == 0 | alreadySupplied.size() == order.size())
+            return new HashMap<>();
         Map<Supplier, List<Integer>> suppliersCanSupply = mapSuppliersToProducts(order, alreadySupplied, suppliersToUse);
         Supplier maxCanBeOrderedSupplier = suppliersCanSupply.keySet().stream().reduce(suppliersToUse.get(0) ,(acc, s) ->
                 suppliersCanSupply.get(acc).size() > suppliersCanSupply.get(s).size() ? acc : s);

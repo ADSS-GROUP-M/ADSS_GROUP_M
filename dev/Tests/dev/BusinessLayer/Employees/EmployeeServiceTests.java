@@ -19,7 +19,7 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
-public class SchedulingTests {
+public class EmployeeServiceTests {
     private UserService userService;
     private EmployeesService empService;
     private User admin;

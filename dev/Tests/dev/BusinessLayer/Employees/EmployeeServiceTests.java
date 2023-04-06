@@ -211,10 +211,9 @@ public class EmployeeServiceTests {
         ans = userService.createUser(admin.getUsername(), newUsername, "123");
         ans = empService.recruitEmployee(admin.getUsername(),"abc", "2", newUsername,"Nothin 123 11", 30, week[0],"Nothing", "about");
         assertFalse(ans.getErrorMessage(),ans.errorOccurred());
-        ans = empService.recruitEmployee(admin.getUsername(),"abc", "2", newUsername,"Nothin 123 11", 30, week[0],"Nothing", "about");
-        assertTrue(ans.getErrorMessage(),ans.errorOccurred()); //recruiting same employee to same branch again
         ans = empService.recruitEmployee(admin.getUsername(),"abc", "1", newUsername,"Nothin 123 11", 30, week[0],"Nothing", "about");
-        assertFalse(ans.getErrorMessage(),ans.errorOccurred()); //recruiting same employee to different branch
+        assertTrue(ans.getErrorMessage(),ans.errorOccurred()); //recruiting same employee to different branch
+        ans = empService.addEmployeeToBranch(adminUsername, newUsername, "1");
         ans = userService.login(newUsername, "123");
         ans = empService.requestShift(newUsername,"1" , week[0], SShiftType.Morning, Role.GeneralWorker.name());
         assertTrue(ans.getErrorMessage(),ans.errorOccurred()); // shift doesnt exist, therefore should fail

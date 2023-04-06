@@ -8,8 +8,8 @@ import dev.BusinessLayer.Employees.Employee;
 import dev.BusinessLayer.Employees.Role;
 
 public class EmployeesController {
-    private Map<String, Branch> branches;
-    private Map<Branch,Map<String, Employee>> employees;
+    private Map<String, Branch> branches; //BranchID to branch
+    private Map<Branch,Map<String, Employee>> employees; // branch to <employeeID to Employee>
     private static EmployeesController instance;
     private ShiftsController shiftsController;
 
@@ -73,12 +73,24 @@ public class EmployeesController {
     }
 
     public void recruitEmployee(String branchId, String fullName, String employeeId, String bankDetails, double hourlyRate, LocalDate employmentDate, String employmentConditions, String details) throws Exception {
+        for(Branch b: this.branches.values()){
+            if(this.employees.get(b).containsKey(employeeId))
+                throw new Exception("This employee id already exists in the system.");
+        }
         Branch branch = getBranch(branchId);
-        if(this.employees.get(branch).containsKey(employeeId))
-            throw new Exception("This employee id already exists in the system.");
         Employee employee = new Employee(fullName, employeeId, hourlyRate, bankDetails, employmentDate, employmentConditions, details);
         this.employees.get(branch).put(employeeId, employee);
         this.certifyEmployee(employee.getId(), Role.GeneralWorker);
+    }
+    
+    public void addEmployeeToBranch(String branchId, String employeeId) throws Exception{
+        Employee e = this.getEmployee(employeeId);
+        Branch b = getBranch(branchId);
+        if(e==null)
+            throw new Exception("This employee is not in the system.");
+        if(this.employees.get(b).containsKey(employeeId))
+            throw new Exception("This employee already belongs to this branch.");
+        this.employees.get(b).put(employeeId,e);
     }
 
     public void updateEmployeeSalary(String employeeId, double hourlySalaryRate, double salaryBonus) throws Exception {

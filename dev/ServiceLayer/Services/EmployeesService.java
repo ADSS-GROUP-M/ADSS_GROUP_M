@@ -72,6 +72,20 @@ public class EmployeesService {
         }
     }
 
+    public Response<Boolean> addEmployeeToBranch(String actorUsername, String employeeId, String branchId){
+        Response<Boolean> authResponse = userService.isAuthorized(actorUsername, Authorization.HRManager);
+        if (authResponse.errorOccurred())
+            return Response.createErrorResponse(authResponse.getErrorMessage());
+        else if(authResponse.getReturnValue() == false)
+            return Response.createErrorResponse("User isn't authorized to do this");
+        try {
+            employeesController.addEmployeeToBranch(branchId, employeeId);
+            return new Response<>(true);
+        } catch (Exception e) {
+            return Response.createErrorResponse(e.getMessage());
+        }
+    }
+
     public Response<Boolean> certifyEmployee(String actorUsername, String employeeId, String role) {
         Response<Boolean> authResponse = userService.isAuthorized(actorUsername, Authorization.HRManager);
         if (authResponse.errorOccurred())
@@ -107,7 +121,7 @@ public class EmployeesService {
             return new Response<>(true);
         } catch (Exception e) {
             return Response.createErrorResponse(e.getMessage());
-        }
+       }
     }
 
     public Response<Boolean> cancelShiftRequest(String actorUsername, String branchId, LocalDate shiftDate, SShiftType shiftType, String role) {

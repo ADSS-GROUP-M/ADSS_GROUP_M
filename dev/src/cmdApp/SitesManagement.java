@@ -5,12 +5,10 @@ import transportModule.serviceLayer.ResourceManagementService;
 
 public class SitesManagement {
 
-    private final Main utils;
     private final AppData appData;
     private final ResourceManagementService rms;
 
-    public SitesManagement(Main utils, AppData appData, ResourceManagementService rms) {
-        this.utils = utils;
+    public SitesManagement(AppData appData, ResourceManagementService rms) {
         this.appData = appData;
         this.rms = rms;
     }
@@ -26,7 +24,7 @@ public class SitesManagement {
             System.out.println("4. View full site information");
             System.out.println("5. View all sites");
             System.out.println("6. Return to previous menu");
-            int option = utils.getInt();
+            int option = appData.readInt();
             switch (option) {
                 case 1 -> createSite();
                 case 2 -> updateSite();
@@ -44,15 +42,15 @@ public class SitesManagement {
     private void createSite() {
         System.out.println("=========================================");
         System.out.println("Enter site details:");
-        String transportZone = utils.getLine("Transport zone: ");
-        String address = utils.getLine("Address: ");
-        String contactPhone = utils.getLine("Contact phone: ");
-        String contactName = utils.getLine("Contact name: ");
+        String transportZone = appData.readLine("Transport zone: ");
+        String address = appData.readLine("Address: ");
+        String contactPhone = appData.readLine("Contact phone: ");
+        String contactName = appData.readLine("Contact name: ");
         System.out.println("Site type: ");
         System.out.println("1. Logistical center");
         System.out.println("2. Branch");
         System.out.println("3. Supplier");
-        int siteType = utils.getInt();
+        int siteType = appData.readInt();
         Site.SiteType type;
         switch (siteType) {
             case 1 -> type = Site.SiteType.LOGISTICAL_CENTER;
@@ -75,7 +73,7 @@ public class SitesManagement {
         while(true) {
             System.out.println("=========================================");
             System.out.println("Select site to update:");
-            Site site = utils.pickSite(true);
+            Site site = appData.pickSite(true);
             if(site == null) return;
             while(true) {
                 System.out.println("=========================================");
@@ -86,10 +84,10 @@ public class SitesManagement {
                 System.out.println("1. Update contact name");
                 System.out.println("2. Update contact phone");
                 System.out.println("3. Return to previous menu");
-                int option = utils.getInt();
+                int option = appData.readInt();
                 switch (option) {
                     case 1 -> {
-                        String contactName = utils.getLine("Contact name: ");
+                        String contactName = appData.readLine("Contact name: ");
                         updateSiteHelperMethod(site.transportZone(),
                                 site.address(),
                                 site.phoneNumber(),
@@ -98,7 +96,7 @@ public class SitesManagement {
                         );
                     }
                     case 2 -> {
-                        String contactPhone = utils.getLine("Contact phone: ");
+                        String contactPhone = appData.readLine("Contact phone: ");
                         updateSiteHelperMethod(
                                 site.transportZone(),
                                 site.address(),
@@ -133,14 +131,14 @@ public class SitesManagement {
         while(true) {
             System.out.println("=========================================");
             System.out.println("Select site to remove:");
-            Site site = utils.pickSite(true);
+            Site site = appData.pickSite(true);
             if (site == null) return;
             System.out.println("=========================================");
             System.out.println("Site details:");
             printSiteDetails(site);
             System.out.println("=========================================");
             System.out.println("Are you sure you want to remove this site? (y/n)");
-            String option = utils.getLine();
+            String option = appData.readLine();
             switch (option) {
                 case "y"-> {
                     String json = JSON.serialize(site);
@@ -158,7 +156,7 @@ public class SitesManagement {
     private void getSite() {
         while(true) {
             System.out.println("=========================================");
-            String siteId = utils.getLine("Enter address of site to view (enter 'done!' to return to previous menu): ");
+            String siteId = appData.readLine("Enter address of site to view (enter 'done!' to return to previous menu): ");
             if(siteId.equals("done!")) return;
             if(appData.sites().containsKey(siteId) == false) {
                 System.out.println("Site not found!");
@@ -170,7 +168,7 @@ public class SitesManagement {
             printSiteDetails(site);
             System.out.println("=========================================");
             System.out.println("Enter 'done!' to return to previous menu");
-            utils.getLine();
+            appData.readLine();
         }
     }
 
@@ -182,7 +180,7 @@ public class SitesManagement {
             System.out.println("-----------------------------------------");
         }
         System.out.println("\nEnter 'done!' to return to previous menu");
-        utils.getLine();
+        appData.readLine();
     }
 
     void printSiteDetails(Site site) {

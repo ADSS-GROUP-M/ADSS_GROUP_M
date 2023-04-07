@@ -9,15 +9,14 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 import static cmdApp.records.Driver.LicenseType.*;
 import static cmdApp.records.Truck.CoolingCapacity.*;
 
 public class AppData {
+
+    static Scanner scanner = new Scanner(System.in);
 
     static boolean dataGenerated = false;
     private final HashMap<Integer, Driver> drivers;
@@ -25,8 +24,14 @@ public class AppData {
     private final HashMap<String, Site> sites;
     private final HashMap<Integer, ItemList> itemLists;
     private final HashMap<Integer, Transport> transports;
+    private final ResourceManagementService rms;
+    private final ItemListsService ils;
+    private final TransportsService ts;
 
-    public AppData(){
+    public AppData(ResourceManagementService rms, ItemListsService ils, TransportsService ts){
+        this.rms = rms;
+        this.ils = ils;
+        this.ts = ts;
         drivers = new HashMap<>();
         trucks = new HashMap<>();
         sites = new HashMap<>();
@@ -69,9 +74,8 @@ public class AppData {
         System.out.println("\nData generated successfully!");
     }
 
-
-    void fetchTrucks() {
-        String json = ModuleFactory.getInstance().getResourceManagementService().getAllTrucks();
+    private void fetchTrucks() {
+        String json = rms.getAllTrucks();
         Type type = new TypeToken<Response<LinkedList<Truck>>>(){}.getType();
         Response<LinkedList<Truck>> response = JSON.deserialize(json, type);
         for(Truck truck : response.getData()){
@@ -79,8 +83,8 @@ public class AppData {
         }
     }
 
-    void fetchDrivers() {
-        String json = ModuleFactory.getInstance().getResourceManagementService().getAllDrivers();
+    private void fetchDrivers() {
+        String json = rms.getAllDrivers();
         Type type = new TypeToken<Response<LinkedList<Driver>>>(){}.getType();
         Response<LinkedList<Driver>> response = JSON.deserialize(json, type);
         for(var driver : response.getData()){
@@ -88,8 +92,8 @@ public class AppData {
         }
     }
 
-    void fetchSites() {
-        String json = ModuleFactory.getInstance().getResourceManagementService().getAllSites();
+    private void fetchSites() {
+        String json = rms.getAllSites();
         Type type = new TypeToken<Response<LinkedList<Site>>>(){}.getType();
         Response<LinkedList<Site>> response = JSON.deserialize(json, type);
         for(Site site : response.getData()){
@@ -97,8 +101,8 @@ public class AppData {
         }
     }
 
-    void fetchItemLists() {
-        String json = ModuleFactory.getInstance().getItemListsService().getAllItemLists();
+    private void fetchItemLists() {
+        String json = ils.getAllItemLists();
         Type type = new TypeToken<Response<LinkedList<ItemList>>>(){}.getType();
         Response<LinkedList<ItemList>> response = JSON.deserialize(json, type);
         for(ItemList list : response.getData()){
@@ -106,8 +110,8 @@ public class AppData {
         }
     }
 
-    void fetchTransports() {
-        String json = ModuleFactory.getInstance().getTransportsService().getAllTransports();
+    private void fetchTransports() {
+        String json = ts.getAllTransports();
         Type type = new TypeToken<Response<LinkedList<Transport>>>(){}.getType();
         Response<LinkedList<Transport>> response = JSON.deserialize(json, type);
         for(Transport transport : response.getData()){
@@ -140,8 +144,6 @@ public class AppData {
         Truck truck4 = new Truck("jkl012", "honda", 3000, 25000,FROZEN);
         Truck truck5 = new Truck("mno345", "nissan", 3500, 30000,FROZEN);
 
-
-        ResourceManagementService rms = ModuleFactory.getInstance().getResourceManagementService();
         rms.addDriver(JSON.serialize(driver1));
         rms.addDriver(JSON.serialize(driver2));
         rms.addDriver(JSON.serialize(driver3));
@@ -157,7 +159,6 @@ public class AppData {
         rms.addSite(JSON.serialize(site3));
         rms.addSite(JSON.serialize(site4));
         rms.addSite(JSON.serialize(site5));
-
 
         // generate item lists with random data:
         HashMap<String, Integer> load1 = new HashMap<>();
@@ -220,7 +221,6 @@ public class AppData {
 
         ItemList itemList5 = new ItemList(1005, load5, unload5);
 
-        ItemListsService ils = ModuleFactory.getInstance().getItemListsService();
         ils.addItemList(JSON.serialize(itemList1));
         ils.addItemList(JSON.serialize(itemList2));
         ils.addItemList(JSON.serialize(itemList3));
@@ -298,12 +298,116 @@ public class AppData {
                 truck5.maxWeight()
         );
 
-        TransportsService ts = ModuleFactory.getInstance().getTransportsService();
         ts.createTransport(JSON.serialize(transport1));
         ts.createTransport(JSON.serialize(transport2));
         ts.createTransport(JSON.serialize(transport3));
         ts.createTransport(JSON.serialize(transport4));
         ts.createTransport(JSON.serialize(transport5));
 
+    }
+
+    //==========================================================================|
+    //============================== HELPER METHODS ============================|
+    //==========================================================================|
+
+    int readInt(){
+        return readInt(">> ");
+    }
+    int readInt(String prefix){
+        if(prefix.equals("") == false) System.out.print(prefix);
+        int option;
+        try{
+            option = scanner.nextInt();
+        }catch(InputMismatchException e){
+            scanner = new Scanner(System.in);
+            return 0;
+        }
+        scanner.nextLine();
+        return option;
+    }
+
+    String readLine(){
+        return readLine(">> ");
+    }
+
+    String readLine(String prefix) {
+        if(prefix.equals("") == false) System.out.print(prefix);
+        return scanner.nextLine().toLowerCase();
+    }
+
+    String readWord(){
+        return readWord(">> ");
+    }
+
+    String readWord(String prefix) {
+        if(prefix.equals("") == false) System.out.print(prefix);
+        String str = scanner.next().toLowerCase();
+        scanner.nextLine();
+        return str;
+    }
+
+    Site pickSite(boolean allowDone) {
+        int i = 1;
+        Site[] siteArray = new Site[sites.size()];
+        for(Site site : sites.values()){
+            System.out.print(i+".");
+            System.out.println(" Transport zone: "+site.transportZone());
+            System.out.println("   address:        "+site.address());
+            siteArray[i-1] = site;
+            i++;
+        }
+        if(allowDone) System.out.println(i+". Done");
+        int option = readInt()-1;
+        if( (allowDone && (option < 0 || option > sites.size()))
+                || (!allowDone && (option < 0 || option > sites.size()-1))){
+            System.out.println("\nInvalid option!");
+            return pickSite(allowDone);
+        }
+        if(allowDone && option == sites.size()) return null;
+        return siteArray[option];
+    }
+
+    Driver pickDriver(boolean allowDone) {
+        int i = 1;
+        Driver[] driverArray = new Driver[drivers.size()];
+        for(Driver driver : drivers.values()){
+            System.out.print(i+".");
+            System.out.println(" name:         "+driver.name());
+            System.out.println("   license type: "+driver.licenseType());
+            driverArray[i-1] = driver;
+            i++;
+        }
+        if(allowDone) System.out.println(i+". Done");
+        int option = readInt()-1;
+        if( (allowDone && (option < 0 || option > drivers.size()))
+                || (!allowDone && (option < 0 || option > drivers.size()-1))){
+            System.out.println("\nInvalid option!");
+            return pickDriver(allowDone);
+        }
+        if(allowDone && option == drivers.size()) return null;
+        return driverArray[option];
+    }
+
+    Truck pickTruck(boolean allowDone) {
+        int i = 1;
+        Truck[] truckArray = new Truck[trucks.size()];
+        for(Truck truck : trucks.values()){
+            System.out.print(i+".");
+            System.out.println(" license plate:    "+truck.id());
+            System.out.println("   model:            "+truck.model());
+            System.out.println("   max weight:       "+truck.maxWeight());
+            System.out.println("   cooling capacity: "+truck.coolingCapacity());
+            truckArray[i-1] = truck;
+            i++;
+        }
+        if(allowDone) System.out.println(i+". Done");
+        int option = readInt()-1;
+        if( (allowDone && (option < 0 || option > trucks.size()))
+                || (!allowDone && (option < 0 || option > trucks.size()-1))){
+            System.out.println("\nInvalid option!");
+            return pickTruck(allowDone);
+        }
+        if(allowDone && option == trucks.size()) return null;
+        return truckArray[option];
     }
 }

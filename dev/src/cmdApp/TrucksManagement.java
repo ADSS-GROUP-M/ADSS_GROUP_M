@@ -5,12 +5,10 @@ import transportModule.serviceLayer.ResourceManagementService;
 
 public class TrucksManagement {
 
-    private final Main utils;
     private final AppData appData;
     private final ResourceManagementService rms;
 
-    public TrucksManagement(Main utils, AppData appData, ResourceManagementService rms) {
-        this.utils = utils;
+    public TrucksManagement(AppData appData, ResourceManagementService rms) {
         this.appData = appData;
         this.rms = rms;
     }
@@ -26,7 +24,7 @@ public class TrucksManagement {
             System.out.println("4. View full truck information");
             System.out.println("5. View all trucks");
             System.out.println("6. Return to previous menu");
-            int option = utils.getInt();
+            int option = appData.readInt();
             switch (option) {
                 case 1 -> createTruck();
                 case 2 -> updateTruck();
@@ -44,14 +42,14 @@ public class TrucksManagement {
     private void createTruck() {
         System.out.println("=========================================");
         System.out.println("Enter truck details:");
-        String licensePlate = utils.getLine("License plate: ");
-        String model = utils.getLine("Model: ");
-        int baseWeight = utils.getInt("Base weight: ");
+        String licensePlate = appData.readLine("License plate: ");
+        String model = appData.readLine("Model: ");
+        int baseWeight = appData.readInt("Base weight: ");
         if(baseWeight <= 0) {
             System.out.println("\nInvalid base weight!");
             return;
         }
-        int maxWeight = utils.getInt("Max weight: ");
+        int maxWeight = appData.readInt("Max weight: ");
         if(maxWeight <= 0) {
             System.out.println("\nInvalid max weight!");
             return;
@@ -74,7 +72,7 @@ public class TrucksManagement {
         for (int i = 0; i < Truck.CoolingCapacity.values().length; i++) {
             System.out.println((i+1) + ". " + Truck.CoolingCapacity.values()[i]);
         }
-        int option = utils.getInt()-1;
+        int option = appData.readInt()-1;
         if (option < 0 || option >= Truck.CoolingCapacity.values().length) {
             System.out.println("\nInvalid cooling capacity!");
             return null;
@@ -86,7 +84,7 @@ public class TrucksManagement {
         while(true) {
             System.out.println("=========================================");
             System.out.println("Select truck to update:");
-            Truck truck = utils.pickTruck(true);
+            Truck truck = appData.pickTruck(true);
             if (truck == null) return;
 
             while(true) {
@@ -99,10 +97,10 @@ public class TrucksManagement {
                 System.out.println("2. Update max weight");
                 System.out.println("3. Update cooling capacity");
                 System.out.println("4. Return to previous menu");
-                int option = utils.getInt();
+                int option = appData.readInt();
                 switch (option) {
                     case 1 -> {
-                        int baseWeight = utils.getInt("Base weight: ");
+                        int baseWeight = appData.readInt("Base weight: ");
                         if (baseWeight <= 0) {
                             System.out.println("\nInvalid base weight!");
                             continue;
@@ -110,7 +108,7 @@ public class TrucksManagement {
                         updateTruckHelperMethod(truck.id(), truck.model(), baseWeight, truck.maxWeight(),truck.coolingCapacity());
                     }
                     case 2 -> {
-                        int maxWeight = utils.getInt("Max weight: ");
+                        int maxWeight = appData.readInt("Max weight: ");
                         if (maxWeight <= 0) {
                             System.out.println("\nInvalid max weight!");
                             continue;
@@ -147,14 +145,14 @@ public class TrucksManagement {
         while(true) {
             System.out.println("=========================================");
             System.out.println("Select truck to remove:");
-            Truck truck = utils.pickTruck(true);
+            Truck truck = appData.pickTruck(true);
             if (truck == null) return;
             System.out.println("=========================================");
             System.out.println("Truck details:");
             printTruckDetails(truck);
             System.out.println("=========================================");
             System.out.println("Are you sure you want to remove this truck? (y/n)");
-            String option = utils.getLine();
+            String option = appData.readLine();
             switch(option){
                 case "y"->{
                     String json = JSON.serialize(truck);
@@ -172,7 +170,7 @@ public class TrucksManagement {
     private void getTruck() {
         while(true) {
             System.out.println("=========================================");
-            String truckId = utils.getLine("Enter license plate of truck to view ('done!' to return to previous menu): ");
+            String truckId = appData.readLine("Enter license plate of truck to view ('done!' to return to previous menu): ");
             if (truckId.equalsIgnoreCase("done!")) return;
             Truck truck = appData.trucks().get(truckId);
             System.out.println("=========================================");
@@ -180,7 +178,7 @@ public class TrucksManagement {
             printTruckDetails(truck);
             System.out.println("=========================================");
             System.out.println("\nEnter 'done!' to return to previous menu");
-            utils.getLine();
+            appData.readLine();
         }
 
     }
@@ -193,7 +191,7 @@ public class TrucksManagement {
             System.out.println("-----------------------------------------");
         }
         System.out.println("\nEnter 'done!' to return to previous menu");
-        utils.getLine();
+        appData.readLine();
     }
 
     private void printTruckDetails(Truck truck) {

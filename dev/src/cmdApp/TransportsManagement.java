@@ -15,11 +15,9 @@ public class TransportsManagement {
 
     private final AppData appData;
     private final TransportsService ts;
-    private final Main utils;
     private int transportIdCounter = 1;
 
-    public TransportsManagement(Main utils, AppData appData, TransportsService ts) {
-        this.utils = utils;
+    public TransportsManagement(AppData appData, TransportsService ts) {
         this.appData = appData;
         this.ts = ts;
     }
@@ -35,7 +33,7 @@ public class TransportsManagement {
             System.out.println("4. View full transport information");
             System.out.println("5. View all transports");
             System.out.println("6. Return to main menu");
-            int option = utils.getInt();
+            int option = appData.readInt();
             switch (option) {
                 case 1 -> createTransport();
                 case 2 -> updateTransport();
@@ -57,21 +55,21 @@ public class TransportsManagement {
         System.out.println("Enter transport details:");
 
         // date/time
-        LocalDate departureDate = LocalDate.parse(utils.getLine("Departure date (format: yyyy-mm-dd): "));
-        LocalTime departureTime = LocalTime.parse(utils.getLine("Departure time (format: hh:mm): "));
+        LocalDate departureDate = LocalDate.parse(appData.readLine("Departure date (format: yyyy-mm-dd): "));
+        LocalTime departureTime = LocalTime.parse(appData.readLine("Departure time (format: hh:mm): "));
         LocalDateTime departureDateTime = LocalDateTime.of(departureDate, departureTime);
 
         // truck
         System.out.println("Truck: ");
-        String truckId = utils.pickTruck(false).id();
+        String truckId = appData.pickTruck(false).id();
 
         // driver
         System.out.println("Driver: ");
-        int driverID = utils.pickDriver(false).id();
+        int driverID = appData.pickDriver(false).id();
 
         // source
         System.out.println("Source: ");
-        Site source = utils.pickSite(false);
+        Site source = appData.pickSite(false);
 
         // destinations and items lists
         LinkedList<Site> destinations = new LinkedList<>();
@@ -79,7 +77,7 @@ public class TransportsManagement {
         destinationsMaker(destinations, itemsList);
 
         //weight
-        int truckWeight = utils.getInt("Truck weight: ");
+        int truckWeight = appData.readInt("Truck weight: ");
 
         Transport newTransport = new Transport(
                 transportIdCounter,
@@ -108,13 +106,13 @@ public class TransportsManagement {
                 System.out.println("1. Pick new truck and driver");
                 System.out.println("2. Pick new destinations and item lists");
                 System.out.println("3. Cancel and return to previous menu");
-                int option = utils.getInt();
+                int option = appData.readInt();
                 switch (option) {
                     case 1 -> {
                         System.out.println("Truck: ");
-                        String truckId = utils.pickTruck(false).id();
+                        String truckId = appData.pickTruck(false).id();
                         System.out.println("Driver: ");
-                        int driverID = utils.pickDriver(false).id();
+                        int driverID = appData.pickDriver(false).id();
                         Response<String> response2 = createTransportHelperMethod(
                                 new Transport(
                                         newTransport.id(),
@@ -134,7 +132,7 @@ public class TransportsManagement {
                         HashMap<Site, ItemList> itemsList = new HashMap<>();
                         destinationsMaker(destinations, itemsList);
                         System.out.println("New weight :");
-                        int weight = utils.getInt();
+                        int weight = appData.readInt();
                         Response<String> response2 = createTransportHelperMethod(
                                 new Transport(
                                         newTransport.id(),
@@ -176,10 +174,10 @@ public class TransportsManagement {
             System.out.println("6. Update destinations");
             System.out.println("7. Update weight");
             System.out.println("8. Return to previous menu");
-            int option = utils.getInt();
+            int option = appData.readInt();
             switch (option) {
                 case 1 -> {
-                    LocalDate departureDate = LocalDate.parse(utils.getLine("Departure date (format: yyyy-mm-dd): "));
+                    LocalDate departureDate = LocalDate.parse(appData.readLine("Departure date (format: yyyy-mm-dd): "));
                     LocalDateTime departureDateTime = LocalDateTime.of(departureDate, transport.scheduledTime().toLocalTime());
                     updateTransportHelperMethod(
                             transport.id(),
@@ -193,7 +191,7 @@ public class TransportsManagement {
                     );
                 }
                 case 2 -> {
-                    LocalTime departureTime = LocalTime.parse(utils.getLine("Departure time (format: hh:mm): "));
+                    LocalTime departureTime = LocalTime.parse(appData.readLine("Departure time (format: hh:mm): "));
                     LocalDateTime departureDateTime = LocalDateTime.of(transport.scheduledTime().toLocalDate(), departureTime);
                     updateTransportHelperMethod(
                             transport.id(),
@@ -208,7 +206,7 @@ public class TransportsManagement {
                 }
                 case 3 -> {
                     System.out.println("Select driver: ");
-                    int driverID = utils.pickDriver(false).id();
+                    int driverID = appData.pickDriver(false).id();
                     updateTransportHelperMethod(
                             transport.id(),
                             transport.source(),
@@ -222,7 +220,7 @@ public class TransportsManagement {
                 }
                 case 4 -> {
                     System.out.println("Select truck: ");
-                    String truckId = utils.pickTruck(false).id();
+                    String truckId = appData.pickTruck(false).id();
                     updateTransportHelperMethod(
                             transport.id(),
                             transport.source(),
@@ -236,7 +234,7 @@ public class TransportsManagement {
                 }
                 case 5 -> {
                     System.out.println("Select source: ");
-                    Site source = utils.pickSite(false);
+                    Site source = appData.pickSite(false);
                     updateTransportHelperMethod(
                             transport.id(),
                             source,
@@ -265,7 +263,7 @@ public class TransportsManagement {
                     );
                 }
                 case 7 -> {
-                    int truckWeight = utils.getInt("Truck weight: ");
+                    int truckWeight = appData.readInt("Truck weight: ");
                     updateTransportHelperMethod(
                             transport.id(),
                             transport.source(),
@@ -297,7 +295,7 @@ public class TransportsManagement {
             printTransportDetails(transport);
             System.out.println("=========================================");
             System.out.println("Are you sure you want to delete this transport? (y/n)");
-            String option = utils.getLine();
+            String option = appData.readLine();
             switch (option) {
                 case "y" -> {
                     String json = JSON.serialize(transport);
@@ -328,7 +326,7 @@ public class TransportsManagement {
             System.out.println("-----------------------------------------");
         }
         System.out.println("\nEnter 'done!' to return to previous menu");
-        utils.getLine();
+        appData.readLine();
     }
 
     private void printTransportDetails(Transport transport) {
@@ -367,7 +365,7 @@ public class TransportsManagement {
     }
 
     private Transport getTransport() {
-        int transportId = utils.getInt("Enter transport ID (enter '-1' to return to previous menu): ");
+        int transportId = appData.readInt("Enter transport ID (enter '-1' to return to previous menu): ");
         if(transportId == -1) return null;
         if(appData.transports().containsKey(transportId) == false) {
             System.out.println("Transport with ID "+transportId+" does not exist!");
@@ -381,9 +379,9 @@ public class TransportsManagement {
         System.out.println("Pick destinations and items lists:");
         while(true){
             System.out.println("Destination number "+destinationId+": ");
-            Site site = utils.pickSite(true);
+            Site site = appData.pickSite(true);
             if(site == null) break;
-            int listId = utils.getInt("Items list id: ");
+            int listId = appData.readInt("Items list id: ");
             if (appData.itemLists().containsKey(listId) == false) {
                 System.out.println("\nItems list with ID " + listId + " does not exist!");
                 System.out.println();

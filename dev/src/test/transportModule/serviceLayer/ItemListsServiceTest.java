@@ -20,7 +20,7 @@ class ItemListsServiceTest {
 
     @BeforeEach
     void setUp() {
-        ils = ModuleFactory.getInstance().getItemListsService();
+        ils = new ModuleFactory().getItemListsService();
 
         HashMap<String, Integer> load1 = new HashMap<>();
         load1.put("Shirts", 20);
@@ -39,7 +39,7 @@ class ItemListsServiceTest {
 
     @AfterEach
     void tearDown() {
-        ModuleFactory.tearDownForTests();
+
     }
 
     @Test

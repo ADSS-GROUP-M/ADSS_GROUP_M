@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
     @BeforeEach
     void setUp() {
-        rms = ModuleFactory.getInstance().getResourceManagementService();
+        rms = new ModuleFactory().getResourceManagementService();
 
         //add drivers
         driver = new Driver(123456789,"John", Driver.LicenseType.C3);
@@ -44,7 +44,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
     @AfterEach
     void tearDown() {
-        ModuleFactory.tearDownForTests();
+
     }
 
     @Test

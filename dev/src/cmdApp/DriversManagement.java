@@ -5,12 +5,10 @@ import transportModule.serviceLayer.ResourceManagementService;
 
 public class DriversManagement {
 
-    private final Main utils;
     private final AppData appData;
     private final ResourceManagementService rms;
 
-    public DriversManagement(Main utils, AppData appData, ResourceManagementService rms) {
-        this.utils = utils;
+    public DriversManagement(AppData appData, ResourceManagementService rms) {
         this.appData = appData;
         this.rms = rms;
     }
@@ -26,7 +24,7 @@ public class DriversManagement {
             System.out.println("4. View full driver information");
             System.out.println("5. View all drivers");
             System.out.println("6. Return to previous menu");
-            int option = utils.getInt();
+            int option = appData.readInt();
             switch (option) {
                 case 1 -> createDriver();
                 case 2 -> updateDriver();
@@ -44,8 +42,8 @@ public class DriversManagement {
     private void createDriver() {
         System.out.println("=========================================");
         System.out.println("Enter driver details:");
-        int id = utils.getInt("Employee ID: ");
-        String fullName = utils.getLine("Name: ");
+        int id = appData.readInt("Employee ID: ");
+        String fullName = appData.readLine("Name: ");
         System.out.println("License type: ");
         Driver.LicenseType licenseType = pickLicenseType();
         if (licenseType == null) return;
@@ -61,7 +59,7 @@ public class DriversManagement {
         while (true) {
             System.out.println("=========================================");
             System.out.println("Select driver to update:");
-            Driver driver = utils.pickDriver(true);
+            Driver driver = appData.pickDriver(true);
             if (driver == null) return;
             while (true) {
                 System.out.println("=========================================");
@@ -71,10 +69,10 @@ public class DriversManagement {
                 System.out.println("1. Update name");
                 System.out.println("2. Update license type");
                 System.out.println("3. Return to previous menu");
-                int option = utils.getInt();
+                int option = appData.readInt();
                 switch (option) {
                     case 1 -> {
-                        String name = utils.getLine("Name: ");
+                        String name = appData.readLine("Name: ");
                         updateDriverHelperMethod(driver.id(), name, driver.licenseType());
                     }
                     case 2 -> {
@@ -108,14 +106,14 @@ public class DriversManagement {
         while(true) {
             System.out.println("=========================================");
             System.out.println("Select driver to remove:");
-            Driver driver = utils.pickDriver(true);
+            Driver driver = appData.pickDriver(true);
             if(driver == null) return;
             System.out.println("=========================================");
             System.out.println("Driver details:");
             printDriverDetails(driver);
             System.out.println("=========================================");
             System.out.println("Are you sure you want to remove this driver? (y/n)");
-            String option = utils.getLine();
+            String option = appData.readLine();
             switch(option) {
                 case "y" ->{
                     String json = JSON.serialize(driver);
@@ -134,7 +132,7 @@ public class DriversManagement {
     private void getDriver() {
         while(true){
             System.out.println("=========================================");
-            int driverId = utils.getInt("Enter employee ID of driver to view (enter '-1' to return to previous menu): ");
+            int driverId = appData.readInt("Enter employee ID of driver to view (enter '-1' to return to previous menu): ");
             if(driverId == -1) return;
             Driver driver = appData.drivers().get(driverId);
             System.out.println("=========================================");
@@ -142,7 +140,7 @@ public class DriversManagement {
             printDriverDetails(driver);
             System.out.println("=========================================");
             System.out.println("\nEnter 'done!' to return to previous menu");
-            utils.getLine();
+            appData.readLine();
         }
     }
 
@@ -154,7 +152,7 @@ public class DriversManagement {
             printDriverDetails(driver);
         }
         System.out.println("\nEnter 'done!' to return to previous menu");
-        utils.getLine();
+        appData.readLine();
     }
 
     private void printDriverDetails(Driver driver) {
@@ -167,7 +165,7 @@ public class DriversManagement {
         for (int i = 0; i < Driver.LicenseType.values().length; i++) {
             System.out.println((i+1) + ". " + Driver.LicenseType.values()[i]);
         }
-        int option = utils.getInt()-1;
+        int option = appData.readInt()-1;
         if (option < 0 || option >= Driver.LicenseType.values().length) {
             System.out.println("Invalid license type!");
             return null;

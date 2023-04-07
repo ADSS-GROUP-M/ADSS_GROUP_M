@@ -7,14 +7,11 @@ import java.util.HashMap;
 
 public class ItemListsManagement {
 
-    private final Main utils;
     private final AppData appData;
     private final ItemListsService ils;
-
     private int itemListIdCounter = 1;
 
-    ItemListsManagement(Main utils, AppData appData, ItemListsService ils){
-        this.utils = utils;
+    ItemListsManagement(AppData appData, ItemListsService ils){
         this.appData = appData;
         this.ils = ils;
     }
@@ -30,7 +27,7 @@ public class ItemListsManagement {
             System.out.println("4. View full item list information");
             System.out.println("5. View all item lists");
             System.out.println("6. Return to previous menu");
-            int option = utils.getInt();
+            int option = appData.readInt();
             switch (option) {
                 case 1 -> createItemList();
                 case 2 -> updateItemList();
@@ -102,7 +99,7 @@ public class ItemListsManagement {
             ItemList list = appData.itemLists().get(id);
             printItemList(list);
             System.out.println("Are you sure you want to remove this item list? (y/n)");
-            String option = utils.getLine();
+            String option = appData.readLine();
             switch(option){
                 case "y" ->{
                     String json = JSON.serialize(list);
@@ -127,7 +124,7 @@ public class ItemListsManagement {
         ItemList list = appData.itemLists().get(id);
         printItemList(list);
         System.out.println("\nEnter 'done!' to return to previous menu");
-        utils.getLine();
+        appData.readLine();
     }
 
     private void viewAllItemLists() {
@@ -138,14 +135,14 @@ public class ItemListsManagement {
             printItemList(list);
         }
         System.out.println("\nEnter 'done!' to return to previous menu");
-        utils.getWord();
+        appData.readWord();
     }
 
     private void itemEditor(HashMap<String,Integer> items) {
         System.out.println("\nTo remove items from the list enter the item name and 0 in the quantity");
         System.out.println("To finish adding items, enter \"done!\" in the item name");
         while (true) {
-            String itemQuantity = utils.getLine("<Item name> <Quantity>: ").toLowerCase();
+            String itemQuantity = appData.readLine("<Item name> <Quantity>: ").toLowerCase();
 
             if(itemQuantity.equalsIgnoreCase("done!")){
                 break;
@@ -170,7 +167,7 @@ public class ItemListsManagement {
 
     private Integer getListID() {
         System.out.println();
-        int id = utils.getInt("Enter item list ID (enter '-1' to return to the previous menu): ");
+        int id = appData.readInt("Enter item list ID (enter '-1' to return to the previous menu): ");
         if (id == -1) return null;
         if(appData.itemLists().containsKey(id) == false){
             System.out.println("Item list with ID "+id+" does not exist!");

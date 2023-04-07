@@ -19,8 +19,16 @@ class TransportsServiceTest {
     private Transport transport;
     private TransportsService ts;
 
+    private ItemListsService ils;
+    private ResourceManagementService rms;
+
     @BeforeEach
     void setUp() {
+        ModuleFactory mf = new ModuleFactory();
+        ts = mf.getTransportsService();
+        ils = mf.getItemListsService();
+        rms = mf.getResourceManagementService();
+
         Site site1 = new Site("zone a", "123 main st", "(555) 123-4567", "john smith", Site.SiteType.BRANCH);
         Site site2 = new Site("zone b", "456 oak ave", "(555) 234-5678", "jane doe", Site.SiteType.LOGISTICAL_CENTER);
         Driver driver1 = new Driver(123, "megan smith", Driver.LicenseType.C3);
@@ -35,10 +43,8 @@ class TransportsServiceTest {
         unload1.put("gloves", 20);
         ItemList itemList1 = new ItemList(1001, load1, unload1);
 
-        ItemListsService ils = ModuleFactory.getInstance().getItemListsService();
         ils.addItemList(JSON.serialize(itemList1));
 
-        ResourceManagementService rms = ModuleFactory.getInstance().getResourceManagementService();
         rms.addDriver(JSON.serialize(driver1));
         rms.addTruck(JSON.serialize(truck1));
         rms.addSite(JSON.serialize(site1));
@@ -47,7 +53,6 @@ class TransportsServiceTest {
         HashMap<Site,ItemList> hm = new HashMap<>();
         hm.put(site2, itemList1);
 
-        ts = ModuleFactory.getInstance().getTransportsService();
         transport = new Transport(
                 1,
                 site1,
@@ -63,7 +68,7 @@ class TransportsServiceTest {
 
     @AfterEach
     void tearDown() {
-        ModuleFactory.tearDownForTests();
+
     }
 
     @Test
@@ -85,7 +90,6 @@ class TransportsServiceTest {
         Site destination = new Site("zone a", "123 main st", "(555) 123-4567", "john smith", Site.SiteType.BRANCH);
         hm.put(destination, itemList);
         LinkedList<Site> destinations = new LinkedList<>(List.of(destination));
-        TransportsService ts = ModuleFactory.getInstance().getTransportsService();
         Transport newTransport = new Transport(
                 50,
                 source,
@@ -99,8 +103,7 @@ class TransportsServiceTest {
         String json = ts.createTransport(JSON.serialize(newTransport));
         Response<String> response = JSON.deserialize(json, Response.class);
         assertTrue(response.isSuccess());
-        String updatedJson = ModuleFactory.getInstance()
-                .getTransportsService()
+        String updatedJson = ts
                 .getTransport(
                         JSON.serialize(Transport.getLookupObject(newTransport.id()))
                 );
@@ -137,7 +140,6 @@ class TransportsServiceTest {
         Site destination = new Site("zone a", "123 main st", "(555) 123-4567", "john smith", Site.SiteType.BRANCH);
         hm.put(destination, itemList);
         LinkedList<Site> destinations = new LinkedList<>(List.of(destination));
-        TransportsService ts = ModuleFactory.getInstance().getTransportsService();
         Transport newTransport = new Transport(
                 1,
                 source,
@@ -151,8 +153,7 @@ class TransportsServiceTest {
         String json = ts.updateTransport(JSON.serialize(newTransport));
         Response<String> response = JSON.deserialize(json, Response.class);
         assertTrue(response.isSuccess());
-        String updatedJson = ModuleFactory.getInstance()
-                .getTransportsService()
+        String updatedJson = ts
                 .getTransport(
                         JSON.serialize(Transport.getLookupObject(newTransport.id()))
                 );
@@ -171,15 +172,13 @@ class TransportsServiceTest {
 
     @Test
     void removeTransport() {
-        String json = ModuleFactory.getInstance()
-                .getTransportsService()
+        String json = ts
                 .removeTransport(
                         JSON.serialize(Transport.getLookupObject(transport.id()))
                 );
         Response<String> response = JSON.deserialize(json, Response.class);
         assertTrue(response.isSuccess());
-        String updatedJson = ModuleFactory.getInstance()
-                .getTransportsService()
+        String updatedJson = ts
                 .getTransport(
                         JSON.serialize(Transport.getLookupObject(transport.id()))
                 );
@@ -209,8 +208,7 @@ class TransportsServiceTest {
 
     @Test
     void getAllTransports() {
-        String json = ModuleFactory.getInstance()
-                .getTransportsService()
+        String json = ts
                 .getAllTransports();
         Type type = new TypeToken<Response<List<Transport>>>(){}.getType();
         Response<List<Transport>> response = JSON.deserialize(json, type);
@@ -221,7 +219,6 @@ class TransportsServiceTest {
     @Test
     void createTransportWithTooMuchWeight(){
         Truck truck1 = new Truck("abcd1234", "ford", 1500, 10000, Truck.CoolingCapacity.FROZEN);
-        ResourceManagementService rms = ModuleFactory.getInstance().getResourceManagementService();
         rms.addTruck(JSON.serialize(truck1));
 
         Transport newTransport = new Transport(
@@ -244,7 +241,6 @@ class TransportsServiceTest {
     void createTransportWithBadLicense(){
         Driver driver = new Driver(12345,"name", Driver.LicenseType.A1);
         Truck truck1 = new Truck("abcd1234", "ford", 1500, 15000, Truck.CoolingCapacity.FROZEN);
-        ResourceManagementService rms = ModuleFactory.getInstance().getResourceManagementService();
         rms.addDriver(JSON.serialize(driver));
         rms.addTruck(JSON.serialize(truck1));
 
@@ -267,7 +263,6 @@ class TransportsServiceTest {
     void createTransportWithBadLicenseAndTooMuchWeight(){
         Driver driver = new Driver(12345,"name", Driver.LicenseType.A1);
         Truck truck1 = new Truck("abcd1234", "ford", 1500, 15000, Truck.CoolingCapacity.FROZEN);
-        ResourceManagementService rms = ModuleFactory.getInstance().getResourceManagementService();
         rms.addDriver(JSON.serialize(driver));
         rms.addTruck(JSON.serialize(truck1));
 

@@ -2106,7 +2106,7 @@
 							},
 							"name": "truckID",
 							"visibility": "private",
-							"value": "4354"
+							"value": "6754"
 						},
 						{
 							"_type": "UMLSlot",
@@ -2712,7 +2712,6 @@
 							},
 							"name": "licenseType",
 							"visibility": "private",
-							"type": "",
 							"value": "\"C3\""
 						}
 					]
@@ -2736,7 +2735,6 @@
 							},
 							"name": "id",
 							"visibility": "private",
-							"type": "",
 							"value": "4354"
 						},
 						{
@@ -2774,13 +2772,11 @@
 						},
 						{
 							"_type": "UMLSlot",
-							"_id": "AAAAAAGHXeCyAU/FQsc=",
+							"_id": "AAAAAAGHXfLWvveQP04=",
 							"_parent": {
 								"$ref": "AAAAAAGHLllU6hTgd2g="
 							},
 							"name": "coolingCapacity",
-							"visibility": "private",
-							"type": "",
 							"value": "COLD"
 						}
 					]
@@ -3190,7 +3186,8 @@
 							},
 							"name": "Trucks",
 							"visibility": "private",
-							"value": "holds the truck that is in the system according to id"
+							"type": "",
+							"value": "holds the 2 trucks that is in the system according to id"
 						}
 					]
 				},
@@ -4094,7 +4091,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
 					},
-					"name": "cmdTruck",
+					"name": "cmdTruck4354",
 					"classifier": {
 						"$ref": "AAAAAAGHKkE6j1CvHHE="
 					}
@@ -4379,7 +4376,7 @@
 											"top": 746,
 											"width": 231,
 											"height": 13,
-											"text": "-truckID = 4354",
+											"text": "-truckID = 6754",
 											"horizontalAlignment": 0
 										},
 										{
@@ -4676,8 +4673,8 @@
 											},
 											"visible": false,
 											"font": "Arial;13;0",
-											"left": 1408,
-											"top": 652,
+											"left": 1600,
+											"top": 636,
 											"height": 13
 										},
 										{
@@ -4687,8 +4684,8 @@
 												"$ref": "AAAAAAGHLllU6hTjOCk="
 											},
 											"font": "Arial;13;1",
-											"left": 1157,
-											"top": 631,
+											"left": 1253,
+											"top": 623,
 											"width": 150.2998046875,
 											"height": 13,
 											"underline": true,
@@ -4702,8 +4699,8 @@
 											},
 											"visible": false,
 											"font": "Arial;13;0",
-											"left": 1408,
-											"top": 652,
+											"left": 1600,
+											"top": 636,
 											"width": 73.67724609375,
 											"height": 13,
 											"text": "(from Model)"
@@ -4716,15 +4713,15 @@
 											},
 											"visible": false,
 											"font": "Arial;13;0",
-											"left": 1408,
-											"top": 652,
+											"left": 1600,
+											"top": 636,
 											"height": 13,
 											"horizontalAlignment": 1
 										}
 									],
 									"font": "Arial;13;0",
-									"left": 1152,
-									"top": 624,
+									"left": 1248,
+									"top": 616,
 									"width": 160.2998046875,
 									"height": 25,
 									"stereotypeLabel": {
@@ -4760,8 +4757,8 @@
 												"$ref": "AAAAAAGHLmhmomZhfzE="
 											},
 											"font": "Arial;13;0",
-											"left": 1157,
-											"top": 654,
+											"left": 1253,
+											"top": 646,
 											"width": 150.2998046875,
 											"height": 13,
 											"text": "-id = 4354",
@@ -4777,8 +4774,8 @@
 												"$ref": "AAAAAAGHLmisX2qqUjQ="
 											},
 											"font": "Arial;13;0",
-											"left": 1157,
-											"top": 669,
+											"left": 1253,
+											"top": 661,
 											"width": 150.2998046875,
 											"height": 13,
 											"text": "-model = Toyota",
@@ -4794,8 +4791,8 @@
 												"$ref": "AAAAAAGHLmkq2XEDDlo="
 											},
 											"font": "Arial;13;0",
-											"left": 1157,
-											"top": 684,
+											"left": 1253,
+											"top": 676,
 											"width": 150.2998046875,
 											"height": 13,
 											"text": "-baseWeight = 1.5 Tone",
@@ -4811,8 +4808,8 @@
 												"$ref": "AAAAAAGHLmmr5XUrHhM="
 											},
 											"font": "Arial;13;0",
-											"left": 1157,
-											"top": 699,
+											"left": 1253,
+											"top": 691,
 											"width": 150.2998046875,
 											"height": 13,
 											"text": "-maxWeight = 4 Tone",
@@ -4820,33 +4817,33 @@
 										},
 										{
 											"_type": "UMLSlotView",
-											"_id": "AAAAAAGHXeCyIE/Imvg=",
+											"_id": "AAAAAAGHXfLWyfeTN8I=",
 											"_parent": {
 												"$ref": "AAAAAAGHLllU6xTogoU="
 											},
 											"model": {
-												"$ref": "AAAAAAGHXeCyAU/FQsc="
+												"$ref": "AAAAAAGHXfLWvveQP04="
 											},
 											"font": "Arial;13;0",
-											"left": 1157,
-											"top": 714,
+											"left": 1253,
+											"top": 706,
 											"width": 150.2998046875,
 											"height": 13,
-											"text": "-coolingCapacity = COLD",
+											"text": "+coolingCapacity = COLD",
 											"horizontalAlignment": 0
 										}
 									],
 									"font": "Arial;13;0",
-									"left": 1152,
-									"top": 649,
+									"left": 1248,
+									"top": 641,
 									"width": 160.2998046875,
 									"height": 83
 								}
 							],
 							"font": "Arial;13;0",
 							"containerChangeable": true,
-							"left": 1152,
-							"top": 624,
+							"left": 1248,
+							"top": 616,
 							"width": 160.2998046875,
 							"height": 108,
 							"nameCompartment": {
@@ -5944,7 +5941,7 @@
 											"top": 558,
 											"width": 366.20263671875,
 											"height": 13,
-											"text": "-Trucks = holds the truck that is in the system according to id",
+											"text": "-Trucks = holds the 2 trucks that is in the system according to id",
 											"horizontalAlignment": 0
 										}
 									],
@@ -8571,11 +8568,11 @@
 								"$ref": "AAAAAAFF+qBtyKM79qY="
 							},
 							"font": "Arial;13;0",
-							"left": 560,
+							"left": 552,
 							"top": 488,
 							"width": 101.76806640625,
 							"height": 40,
-							"text": "\naddTaransport()"
+							"text": "\nupdateTaransport()"
 						},
 						{
 							"_type": "FreelineEdgeView",
@@ -8597,9 +8594,9 @@
 							"font": "Arial;13;0",
 							"left": 600,
 							"top": 632,
-							"width": 95.49658203125,
+							"width": 113.568359375,
 							"height": 25,
-							"text": "addTransport()"
+							"text": "updateTransport()"
 						},
 						{
 							"_type": "FreelineEdgeView",
@@ -8632,7 +8629,8 @@
 							},
 							"font": "Arial;13;0",
 							"lineStyle": 1,
-							"points": "1232:576;1232:624"
+							"points": "1232:576;1296:616",
+							"headEndStyle": 1
 						},
 						{
 							"_type": "UMLTextView",
@@ -8641,8 +8639,8 @@
 								"$ref": "AAAAAAFF+qBtyKM79qY="
 							},
 							"font": "Arial;13;0",
-							"left": 1232,
-							"top": 584,
+							"left": 1224,
+							"top": 592,
 							"width": 60,
 							"height": 25,
 							"text": "holds"
@@ -9149,7 +9147,7 @@
 											"visible": false,
 											"font": "Arial;13;0",
 											"left": 272,
-											"top": 32,
+											"top": -16,
 											"height": 13
 										},
 										{
@@ -9160,7 +9158,7 @@
 											},
 											"font": "Arial;13;1",
 											"left": 1293,
-											"top": 215,
+											"top": 191,
 											"width": 109.8271484375,
 											"height": 13,
 											"underline": true,
@@ -9175,7 +9173,7 @@
 											"visible": false,
 											"font": "Arial;13;0",
 											"left": 272,
-											"top": 32,
+											"top": -16,
 											"width": 73.67724609375,
 											"height": 13,
 											"text": "(from Model)"
@@ -9189,14 +9187,14 @@
 											"visible": false,
 											"font": "Arial;13;0",
 											"left": 272,
-											"top": 32,
+											"top": -16,
 											"height": 13,
 											"horizontalAlignment": 1
 										}
 									],
 									"font": "Arial;13;0",
 									"left": 1288,
-									"top": 208,
+									"top": 184,
 									"width": 119.8271484375,
 									"height": 25,
 									"stereotypeLabel": {
@@ -9224,7 +9222,7 @@
 									"visible": false,
 									"font": "Arial;13;0",
 									"left": 136,
-									"top": 16,
+									"top": -8,
 									"width": 10,
 									"height": 10
 								}
@@ -9232,7 +9230,7 @@
 							"font": "Arial;13;0",
 							"containerChangeable": true,
 							"left": 1288,
-							"top": 208,
+							"top": 184,
 							"width": 119.8271484375,
 							"height": 25,
 							"nameCompartment": {
@@ -9283,10 +9281,10 @@
 											"font": "Arial;13;1",
 											"left": 1293,
 											"top": 255,
-											"width": 104.0380859375,
+											"width": 132.9580078125,
 											"height": 13,
 											"underline": true,
-											"text": "cmdTruck: Truck"
+											"text": "cmdTruck4354: Truck"
 										},
 										{
 											"_type": "LabelView",
@@ -9319,7 +9317,7 @@
 									"font": "Arial;13;0",
 									"left": 1288,
 									"top": 248,
-									"width": 114.0380859375,
+									"width": 142.9580078125,
 									"height": 25,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAGHW/b6QrGr+nU="
@@ -9355,7 +9353,7 @@
 							"containerChangeable": true,
 							"left": 1288,
 							"top": 248,
-							"width": 114.0380859375,
+							"width": 142.9580078125,
 							"height": 25,
 							"nameCompartment": {
 								"$ref": "AAAAAAGHW/b6QrGqjc8="
@@ -9392,8 +9390,8 @@
 											},
 											"visible": false,
 											"font": "Arial;13;0",
-											"left": 256,
-											"top": -32,
+											"left": 240,
+											"top": -16,
 											"height": 13
 										},
 										{
@@ -9403,8 +9401,8 @@
 												"$ref": "AAAAAAGHW/c3K7PA8xk="
 											},
 											"font": "Arial;13;1",
-											"left": 1101,
-											"top": 215,
+											"left": 1093,
+											"top": 223,
 											"width": 126.42626953125,
 											"height": 13,
 											"underline": true,
@@ -9418,8 +9416,8 @@
 											},
 											"visible": false,
 											"font": "Arial;13;0",
-											"left": 256,
-											"top": -32,
+											"left": 240,
+											"top": -16,
 											"width": 73.67724609375,
 											"height": 13,
 											"text": "(from Model)"
@@ -9432,15 +9430,15 @@
 											},
 											"visible": false,
 											"font": "Arial;13;0",
-											"left": 256,
-											"top": -32,
+											"left": 240,
+											"top": -16,
 											"height": 13,
 											"horizontalAlignment": 1
 										}
 									],
 									"font": "Arial;13;0",
-									"left": 1096,
-									"top": 208,
+									"left": 1088,
+									"top": 216,
 									"width": 136.42626953125,
 									"height": 25,
 									"stereotypeLabel": {
@@ -9467,16 +9465,16 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": 128,
-									"top": -16,
+									"left": 120,
+									"top": -8,
 									"width": 10,
 									"height": 10
 								}
 							],
 							"font": "Arial;13;0",
 							"containerChangeable": true,
-							"left": 1096,
-							"top": 208,
+							"left": 1088,
+							"top": 216,
 							"width": 136.42626953125,
 							"height": 25,
 							"nameCompartment": {
@@ -9878,7 +9876,7 @@
 							},
 							"font": "Arial;13;0",
 							"lineStyle": 1,
-							"points": "1232:216;1288:216",
+							"points": "1224:232;1280:232",
 							"headEndStyle": 1,
 							"tailEndStyle": 1
 						},
@@ -10768,9 +10766,9 @@
 							"font": "Arial;13;0",
 							"left": 552,
 							"top": 384,
-							"width": 109.9375,
+							"width": 113.568359375,
 							"height": 25,
-							"text": "createTransport()"
+							"text": "updateTransport()"
 						},
 						{
 							"_type": "FreelineEdgeView",
@@ -11217,6 +11215,440 @@
 							"font": "Arial;13;0",
 							"points": "1248:344;1272:344;1272:360;1288:360",
 							"headEndStyle": 1
+						},
+						{
+							"_type": "UMLObjectView",
+							"_id": "AAAAAAGHXedq9Pcbino=",
+							"_parent": {
+								"$ref": "AAAAAAFF+qBtyKM79qY="
+							},
+							"model": {
+								"$ref": "AAAAAAGHXedq8/cZa20="
+							},
+							"subViews": [
+								{
+									"_type": "UMLNameCompartmentView",
+									"_id": "AAAAAAGHXedq9Pcc2JY=",
+									"_parent": {
+										"$ref": "AAAAAAGHXedq9Pcbino="
+									},
+									"model": {
+										"$ref": "AAAAAAGHXedq8/cZa20="
+									},
+									"subViews": [
+										{
+											"_type": "LabelView",
+											"_id": "AAAAAAGHXedq9Pcdmcg=",
+											"_parent": {
+												"$ref": "AAAAAAGHXedq9Pcc2JY="
+											},
+											"visible": false,
+											"font": "Arial;13;0",
+											"left": -128,
+											"top": -336,
+											"height": 13
+										},
+										{
+											"_type": "LabelView",
+											"_id": "AAAAAAGHXedq9fceFDM=",
+											"_parent": {
+												"$ref": "AAAAAAGHXedq9Pcc2JY="
+											},
+											"font": "Arial;13;1",
+											"left": 1293,
+											"top": 223,
+											"width": 132.9580078125,
+											"height": 13,
+											"underline": true,
+											"text": "cmdTruck6754: Truck"
+										},
+										{
+											"_type": "LabelView",
+											"_id": "AAAAAAGHXedq9fcf8S4=",
+											"_parent": {
+												"$ref": "AAAAAAGHXedq9Pcc2JY="
+											},
+											"visible": false,
+											"font": "Arial;13;0",
+											"left": -128,
+											"top": -336,
+											"width": 73.67724609375,
+											"height": 13,
+											"text": "(from Model)"
+										},
+										{
+											"_type": "LabelView",
+											"_id": "AAAAAAGHXedq9fcgeco=",
+											"_parent": {
+												"$ref": "AAAAAAGHXedq9Pcc2JY="
+											},
+											"visible": false,
+											"font": "Arial;13;0",
+											"left": -128,
+											"top": -336,
+											"height": 13,
+											"horizontalAlignment": 1
+										}
+									],
+									"font": "Arial;13;0",
+									"left": 1288,
+									"top": 216,
+									"width": 142.9580078125,
+									"height": 25,
+									"stereotypeLabel": {
+										"$ref": "AAAAAAGHXedq9Pcdmcg="
+									},
+									"nameLabel": {
+										"$ref": "AAAAAAGHXedq9fceFDM="
+									},
+									"namespaceLabel": {
+										"$ref": "AAAAAAGHXedq9fcf8S4="
+									},
+									"propertyLabel": {
+										"$ref": "AAAAAAGHXedq9fcgeco="
+									}
+								},
+								{
+									"_type": "UMLSlotCompartmentView",
+									"_id": "AAAAAAGHXedq9fchXSk=",
+									"_parent": {
+										"$ref": "AAAAAAGHXedq9Pcbino="
+									},
+									"model": {
+										"$ref": "AAAAAAGHXedq8/cZa20="
+									},
+									"visible": false,
+									"font": "Arial;13;0",
+									"left": -64,
+									"top": -168,
+									"width": 10,
+									"height": 10
+								}
+							],
+							"font": "Arial;13;0",
+							"containerChangeable": true,
+							"left": 1288,
+							"top": 216,
+							"width": 142.9580078125,
+							"height": 25,
+							"nameCompartment": {
+								"$ref": "AAAAAAGHXedq9Pcc2JY="
+							},
+							"slotCompartment": {
+								"$ref": "AAAAAAGHXedq9fchXSk="
+							}
+						},
+						{
+							"_type": "FreelineEdgeView",
+							"_id": "AAAAAAGHXeiCIPc/yMc=",
+							"_parent": {
+								"$ref": "AAAAAAFF+qBtyKM79qY="
+							},
+							"font": "Arial;13;0",
+							"lineStyle": 1,
+							"points": "1248:192;1289:192",
+							"headEndStyle": 1
+						},
+						{
+							"_type": "UMLObjectView",
+							"_id": "AAAAAAGHXfFRgfdWWDw=",
+							"_parent": {
+								"$ref": "AAAAAAFF+qBtyKM79qY="
+							},
+							"model": {
+								"$ref": "AAAAAAGHXfFRgfdUsPQ="
+							},
+							"subViews": [
+								{
+									"_type": "UMLNameCompartmentView",
+									"_id": "AAAAAAGHXfFRgfdXpcY=",
+									"_parent": {
+										"$ref": "AAAAAAGHXfFRgfdWWDw="
+									},
+									"model": {
+										"$ref": "AAAAAAGHXfFRgfdUsPQ="
+									},
+									"subViews": [
+										{
+											"_type": "LabelView",
+											"_id": "AAAAAAGHXfFRgfdYMm4=",
+											"_parent": {
+												"$ref": "AAAAAAGHXfFRgfdXpcY="
+											},
+											"visible": false,
+											"font": "Arial;13;0",
+											"left": -96,
+											"top": -32,
+											"height": 13
+										},
+										{
+											"_type": "LabelView",
+											"_id": "AAAAAAGHXfFRgfdZ1/8=",
+											"_parent": {
+												"$ref": "AAAAAAGHXfFRgfdXpcY="
+											},
+											"font": "Arial;13;1",
+											"left": 1069,
+											"top": 623,
+											"width": 150.2998046875,
+											"height": 13,
+											"underline": true,
+											"text": "Mazda type 2: Truck"
+										},
+										{
+											"_type": "LabelView",
+											"_id": "AAAAAAGHXfFRgfdaj5w=",
+											"_parent": {
+												"$ref": "AAAAAAGHXfFRgfdXpcY="
+											},
+											"visible": false,
+											"font": "Arial;13;0",
+											"left": -96,
+											"top": -32,
+											"width": 73.67724609375,
+											"height": 13,
+											"text": "(from Model)"
+										},
+										{
+											"_type": "LabelView",
+											"_id": "AAAAAAGHXfFRgfdbKk4=",
+											"_parent": {
+												"$ref": "AAAAAAGHXfFRgfdXpcY="
+											},
+											"visible": false,
+											"font": "Arial;13;0",
+											"left": -96,
+											"top": -32,
+											"height": 13,
+											"horizontalAlignment": 1
+										}
+									],
+									"font": "Arial;13;0",
+									"left": 1064,
+									"top": 616,
+									"width": 160.2998046875,
+									"height": 25,
+									"stereotypeLabel": {
+										"$ref": "AAAAAAGHXfFRgfdYMm4="
+									},
+									"nameLabel": {
+										"$ref": "AAAAAAGHXfFRgfdZ1/8="
+									},
+									"namespaceLabel": {
+										"$ref": "AAAAAAGHXfFRgfdaj5w="
+									},
+									"propertyLabel": {
+										"$ref": "AAAAAAGHXfFRgfdbKk4="
+									}
+								},
+								{
+									"_type": "UMLSlotCompartmentView",
+									"_id": "AAAAAAGHXfFRgfdcXUA=",
+									"_parent": {
+										"$ref": "AAAAAAGHXfFRgfdWWDw="
+									},
+									"model": {
+										"$ref": "AAAAAAGHXfFRgfdUsPQ="
+									},
+									"subViews": [
+										{
+											"_type": "UMLSlotView",
+											"_id": "AAAAAAGHXfHP7/d2DBM=",
+											"_parent": {
+												"$ref": "AAAAAAGHXfFRgfdcXUA="
+											},
+											"model": {
+												"$ref": "AAAAAAGHXfHP2/dzI10="
+											},
+											"font": "Arial;13;0",
+											"left": 1069,
+											"top": 646,
+											"width": 150.2998046875,
+											"height": 13,
+											"text": "+id = 6754",
+											"horizontalAlignment": 0
+										},
+										{
+											"_type": "UMLSlotView",
+											"_id": "AAAAAAGHXfHU9fd8Izs=",
+											"_parent": {
+												"$ref": "AAAAAAGHXfFRgfdcXUA="
+											},
+											"model": {
+												"$ref": "AAAAAAGHXfHU5fd5VUE="
+											},
+											"font": "Arial;13;0",
+											"left": 1069,
+											"top": 661,
+											"width": 150.2998046875,
+											"height": 13,
+											"text": "+model = Mazda",
+											"horizontalAlignment": 0
+										},
+										{
+											"_type": "UMLSlotView",
+											"_id": "AAAAAAGHXfHZOfeCaOg=",
+											"_parent": {
+												"$ref": "AAAAAAGHXfFRgfdcXUA="
+											},
+											"model": {
+												"$ref": "AAAAAAGHXfHZKfd/h2E="
+											},
+											"font": "Arial;13;0",
+											"left": 1069,
+											"top": 676,
+											"width": 150.2998046875,
+											"height": 13,
+											"text": "+baseWeight = 1 Tone",
+											"horizontalAlignment": 0
+										},
+										{
+											"_type": "UMLSlotView",
+											"_id": "AAAAAAGHXfHcjPeIvI0=",
+											"_parent": {
+												"$ref": "AAAAAAGHXfFRgfdcXUA="
+											},
+											"model": {
+												"$ref": "AAAAAAGHXfHcfPeF9hs="
+											},
+											"font": "Arial;13;0",
+											"left": 1069,
+											"top": 691,
+											"width": 150.2998046875,
+											"height": 13,
+											"text": "+maxWeight = 3.7 Tone",
+											"horizontalAlignment": 0
+										},
+										{
+											"_type": "UMLSlotView",
+											"_id": "AAAAAAGHXfMRm/eagTs=",
+											"_parent": {
+												"$ref": "AAAAAAGHXfFRgfdcXUA="
+											},
+											"model": {
+												"$ref": "AAAAAAGHXfMRjPeXZHI="
+											},
+											"font": "Arial;13;0",
+											"left": 1069,
+											"top": 706,
+											"width": 150.2998046875,
+											"height": 13,
+											"text": "+coolingCapacity = COLD",
+											"horizontalAlignment": 0
+										}
+									],
+									"font": "Arial;13;0",
+									"left": 1064,
+									"top": 641,
+									"width": 160.2998046875,
+									"height": 83
+								}
+							],
+							"font": "Arial;13;0",
+							"containerChangeable": true,
+							"left": 1064,
+							"top": 616,
+							"width": 160.2998046875,
+							"height": 108,
+							"nameCompartment": {
+								"$ref": "AAAAAAGHXfFRgfdXpcY="
+							},
+							"slotCompartment": {
+								"$ref": "AAAAAAGHXfFRgfdcXUA="
+							}
+						},
+						{
+							"_type": "FreelineEdgeView",
+							"_id": "AAAAAAGHXfOdMPekX9c=",
+							"_parent": {
+								"$ref": "AAAAAAFF+qBtyKM79qY="
+							},
+							"font": "Arial;13;0",
+							"lineStyle": 1,
+							"points": "1232:576;1149:615",
+							"headEndStyle": 1
+						},
+						{
+							"_type": "UMLTextView",
+							"_id": "AAAAAAGHXfPA1PeqeRk=",
+							"_parent": {
+								"$ref": "AAAAAAFF+qBtyKM79qY="
+							},
+							"font": "Arial;13;0",
+							"left": 1120,
+							"top": 592,
+							"width": 60,
+							"height": 25,
+							"text": "holds"
+						}
+					]
+				},
+				{
+					"_type": "UMLObject",
+					"_id": "AAAAAAGHXedq8/cZa20=",
+					"_parent": {
+						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
+					},
+					"name": "cmdTruck6754",
+					"classifier": {
+						"$ref": "AAAAAAGHKkE6j1CvHHE="
+					}
+				},
+				{
+					"_type": "UMLObject",
+					"_id": "AAAAAAGHXfFRgfdUsPQ=",
+					"_parent": {
+						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
+					},
+					"name": "Mazda type 2",
+					"classifier": {
+						"$ref": "AAAAAAGHKkE6j1CvHHE="
+					},
+					"slots": [
+						{
+							"_type": "UMLSlot",
+							"_id": "AAAAAAGHXfHP2/dzI10=",
+							"_parent": {
+								"$ref": "AAAAAAGHXfFRgfdUsPQ="
+							},
+							"name": "id",
+							"value": "6754"
+						},
+						{
+							"_type": "UMLSlot",
+							"_id": "AAAAAAGHXfHU5fd5VUE=",
+							"_parent": {
+								"$ref": "AAAAAAGHXfFRgfdUsPQ="
+							},
+							"name": "model",
+							"value": "Mazda"
+						},
+						{
+							"_type": "UMLSlot",
+							"_id": "AAAAAAGHXfHZKfd/h2E=",
+							"_parent": {
+								"$ref": "AAAAAAGHXfFRgfdUsPQ="
+							},
+							"name": "baseWeight",
+							"value": "1 Tone"
+						},
+						{
+							"_type": "UMLSlot",
+							"_id": "AAAAAAGHXfHcfPeF9hs=",
+							"_parent": {
+								"$ref": "AAAAAAGHXfFRgfdUsPQ="
+							},
+							"name": "maxWeight",
+							"value": "3.7 Tone"
+						},
+						{
+							"_type": "UMLSlot",
+							"_id": "AAAAAAGHXfMRjPeXZHI=",
+							"_parent": {
+								"$ref": "AAAAAAGHXfFRgfdUsPQ="
+							},
+							"name": "coolingCapacity",
+							"value": "COLD"
 						}
 					]
 				}

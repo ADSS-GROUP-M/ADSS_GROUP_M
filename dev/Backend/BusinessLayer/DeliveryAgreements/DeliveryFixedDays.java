@@ -1,4 +1,4 @@
-package BusinessLayer.DeliveryAgreements;
+package Backend.BusinessLayer.DeliveryAgreements;
 
 import java.util.List;
 

@@ -1,6 +1,7 @@
-package BusinessLayer;
+package Backend.BusinessLayer;
 
-import BusinessLayer.DeliveryAgreements.DeliveryAgreement;
+import Backend.BankAccount;
+import Backend.BusinessLayer.DeliveryAgreements.DeliveryAgreement;
 
 import java.util.List;
 import java.util.Map;
@@ -8,7 +9,7 @@ import java.util.Map;
 public class Supplier {
     private String name;
     public String bnNumber;
-    private String bankAccount;
+    private BankAccount bankAccount;
     private String paymentMethod;
     private List<String> fields;
     /***
@@ -23,7 +24,7 @@ public class Supplier {
      * all the orders that have been ordered from the supplier
      */
     private List<Order> orderHistory;
-    public Supplier(String name, String bnNumber, String bankAccount, String paymentMethod,
+    public Supplier(String name, String bnNumber, BankAccount bankAccount, String paymentMethod,
                     List<String> fields, Map<String,Pair<String, String>> contactsInfo,
                     List<Product> productList, DeliveryAgreement deliveryAgreement){
         this.name = name;
@@ -34,7 +35,7 @@ public class Supplier {
         this.contactsInfo = contactsInfo;
         agreement = new Agreement(paymentMethod, productList, deliveryAgreement);
     }
-    public Supplier(String name, String bnNumber, String bankAccount, String paymentMethod,
+    public Supplier(String name, String bnNumber, BankAccount bankAccount, String paymentMethod,
                     List<String> fields, Map<String,Pair<String, String>> contactsInfo,
                     List<Product> productList, DeliveryAgreement deliveryAgreement, BillOfQuantities billOfQuantities){
         this(name, bnNumber, bankAccount, paymentMethod, fields, contactsInfo, productList, deliveryAgreement);
@@ -45,7 +46,7 @@ public class Supplier {
         this.name = name;
     }
 
-    public void setBankAccount(String bankAccount) {
+    public void setBankAccount(BankAccount bankAccount) {
         this.bankAccount = bankAccount;
     }
 
@@ -73,8 +74,8 @@ public class Supplier {
         return agreement;
     }
 
-    public void addProduct(String name, int productId, String catalogNumber, double price, int numberOfUnits){
-        agreement.addProduct(new Product(name, productId, catalogNumber, price, numberOfUnits));
+    public void addProduct(String name, String catalogNumber, double price, int numberOfUnits){
+        agreement.addProduct(new Product(name, catalogNumber, price, numberOfUnits));
     }
 
     public void setPaymentMethod(String paymentMethod){

@@ -1,13 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e454f93c-4ee8-4f4b-9a14-eaaf36aa303c" name="Changes" comment="commit to move to another functionality">
+    <list default="true" id="e454f93c-4ee8-4f4b-9a14-eaaf36aa303c" name="Changes" comment="almost finish - trying another order functionality">
+      <change afterPath="$PROJECT_DIR$/Backend/BankAccount.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/BusinessLayer/OrderController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/ServiceLayer/OrderService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/ServiceLayer/Response.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PresentationLayer/Response.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PresentationLayer/UI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/code.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/code.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BusinessLayer/Agreement.java" beforeDir="false" afterPath="$PROJECT_DIR$/BusinessLayer/Agreement.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BusinessLayer/BillOfQuantities.java" beforeDir="false" afterPath="$PROJECT_DIR$/BusinessLayer/BillOfQuantities.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BusinessLayer/OrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/BusinessLayer/OrderController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BusinessLayer/Supplier.java" beforeDir="false" afterPath="$PROJECT_DIR$/BusinessLayer/Supplier.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BusinessLayer/SystemController.java" beforeDir="false" afterPath="$PROJECT_DIR$/BusinessLayer/SystemController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BusinessLayer/Agreement.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/BusinessLayer/Agreement.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BusinessLayer/BillOfQuantities.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/BusinessLayer/BillOfQuantities.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BusinessLayer/DeliveryAgreements/DeliveryAgreement.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/BusinessLayer/DeliveryAgreements/DeliveryAgreement.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BusinessLayer/DeliveryAgreements/DeliveryByInvitation.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/BusinessLayer/DeliveryAgreements/DeliveryByInvitation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BusinessLayer/DeliveryAgreements/DeliveryFixedDays.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/BusinessLayer/DeliveryAgreements/DeliveryFixedDays.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BusinessLayer/Discounts/CashDiscount.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/BusinessLayer/Discounts/CashDiscount.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BusinessLayer/Discounts/Discount.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/BusinessLayer/Discounts/Discount.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BusinessLayer/Discounts/PercentageDiscount.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/BusinessLayer/Discounts/PercentageDiscount.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BusinessLayer/Order.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/BusinessLayer/Order.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BusinessLayer/OrderController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/BusinessLayer/Pair.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/BusinessLayer/Pair.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BusinessLayer/Product.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/BusinessLayer/Product.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BusinessLayer/Supplier.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/BusinessLayer/Supplier.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BusinessLayer/SupplierController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/BusinessLayer/SupplierController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BusinessLayer/SystemController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/ServiceLayer/SupplierService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,7 +42,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$/.." value="orderRequirment" />
+        <entry key="$PROJECT_DIR$/.." value="master" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
@@ -39,22 +56,26 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;19&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;project.propVCSSupport.DirectoryMappings&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "jdk.selected.JAVA_MODULE": "19",
+    "last_opened_file_path": "C:/Users/yossi/OneDrive/שולחן העבודה/ניתוצ/Assignment1/Assignment1/dev/gson-2.10.1.jar",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "settings.editor.selected.configurable": "project.propVCSSupport.DirectoryMappings"
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected="Application.SupplierController">
     <configuration name="BillOfQuantities" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="BusinessLayer.BillOfQuantities" />
+      <option name="MAIN_CLASS_NAME" value="Backend.BusinessLayer.BillOfQuantities" />
       <module name="code" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="BusinessLayer.*" />
+          <option name="PATTERN" value="Backend.BusinessLayer.ServiceLayer.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -63,11 +84,11 @@
       </method>
     </configuration>
     <configuration name="OrderController" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="BusinessLayer.OrderController" />
+      <option name="MAIN_CLASS_NAME" value="Backend.BusinessLayer.OrderController" />
       <module name="code" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="BusinessLayer.*" />
+          <option name="PATTERN" value="Backend.BusinessLayer.ServiceLayer.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -76,11 +97,11 @@
       </method>
     </configuration>
     <configuration name="SupplierController" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="BusinessLayer.SupplierController" />
+      <option name="MAIN_CLASS_NAME" value="Backend.BusinessLayer.SupplierController" />
       <module name="code" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="BusinessLayer.*" />
+          <option name="PATTERN" value="Backend.BusinessLayer.ServiceLayer.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -93,8 +114,8 @@
         <item itemvalue="Application.SupplierController" />
         <item itemvalue="Application.OrderController" />
         <item itemvalue="Application.BillOfQuantities" />
-        <item itemvalue="Application.BillOfQuantities" />
-        <item itemvalue="Application.BillOfQuantities" />
+        <item itemvalue="Application.SupplierController" />
+        <item itemvalue="Application.OrderController" />
       </list>
     </recent_temporary>
   </component>

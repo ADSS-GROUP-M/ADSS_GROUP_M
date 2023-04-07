@@ -1,4 +1,4 @@
-package BusinessLayer.Discounts;
+package Backend.BusinessLayer.Discounts;
 
 public class CashDiscount extends Discount {
     private double amountOfDiscount;

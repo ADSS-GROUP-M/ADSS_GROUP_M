@@ -1,6 +1,6 @@
-package BusinessLayer;
+package Backend.BusinessLayer;
 
-import BusinessLayer.Discounts.Discount;
+import Backend.BusinessLayer.Discounts.Discount;
 
 import java.util.*;
 import java.util.function.Function;
@@ -87,7 +87,7 @@ public class BillOfQuantities {
         return price;
     }
 
-    public void setDiscountOnAmountOfProducts(int amountOfProductsForDiscount, double price, Discount discount){
+    public void setDiscountOnAmountOfProducts(int amountOfProductsForDiscount, Discount discount){
         discountOnAmountOfProducts = (Integer amountOfProducts) ->{
             if(amountOfProducts >= amountOfProductsForDiscount)
                 return (Double priceBefore) -> discount.applyDiscount(priceBefore);

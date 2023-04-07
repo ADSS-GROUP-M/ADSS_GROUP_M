@@ -1,11 +1,11 @@
-package BusinessLayer;
+package Backend.BusinessLayer;
 
-import BusinessLayer.DeliveryAgreements.DeliveryAgreement;
+import Backend.BankAccount;
+import Backend.BusinessLayer.DeliveryAgreements.DeliveryAgreement;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class SupplierController {
     /***
@@ -13,7 +13,7 @@ public class SupplierController {
      */
     private Map<String, Supplier> suppliers;
 
-    public void addSupplier(String name, String bnNumber, String bankAccount, String paymentMethod,
+    public void addSupplier(String name, String bnNumber, BankAccount bankAccount, String paymentMethod,
                             List<String> fields, Map<String,Pair<String, String>> contactsInfo,
                             List<Product> productList, DeliveryAgreement deliveryAgreement){
         suppliers.put(bnNumber ,new Supplier(name,bnNumber,bankAccount,paymentMethod,fields, contactsInfo, productList, deliveryAgreement));
@@ -24,6 +24,8 @@ public class SupplierController {
     }
 
     public Supplier getSupplier(String bnNumber){
+        if(!suppliers.containsKey(bnNumber))
+            throw new RuntimeException("there is no supplier with bn number: " + bnNumber);
         return suppliers.get(bnNumber);
     }
 
@@ -32,7 +34,8 @@ public class SupplierController {
     }
 
     public void removeSupplier(String bnNumber){
-        suppliers.remove(bnNumber);
+        if(suppliers.remove(bnNumber) == null)
+            throw new RuntimeException("there is no supplier with bn number: " + bnNumber);
     }
 
 

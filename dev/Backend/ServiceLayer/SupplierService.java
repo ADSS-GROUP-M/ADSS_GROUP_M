@@ -1,45 +1,67 @@
-package BusinessLayer;
+package Backend.ServiceLayer;
 
-import BusinessLayer.DeliveryAgreements.DeliveryAgreement;
-import BusinessLayer.DeliveryAgreements.DeliveryByInvitation;
-import BusinessLayer.DeliveryAgreements.DeliveryFixedDays;
-import BusinessLayer.Discounts.Discount;
+import Backend.BankAccount;
+import Backend.BusinessLayer.DeliveryAgreements.DeliveryAgreement;
+import Backend.BusinessLayer.Discounts.Discount;
+import Backend.BusinessLayer.Pair;
+import Backend.BusinessLayer.Product;
+import Backend.BusinessLayer.Supplier;
+import Backend.BusinessLayer.SupplierController;
+import com.google.gson.Gson;
 
 import java.util.List;
 import java.util.Map;
 
-/***
- * controls the system functionality
- */
-public class SystemController {
+public class SupplierService {
     private SupplierController supplierController;
-    private OrderController orderController;
-    public SystemController(){
+    private Gson gson;
+
+    public SupplierService(){
         supplierController = new SupplierController();
-        orderController = new OrderController();
+        gson = new Gson();
     }
-    public void addSupplier(String name, String bnNumber, String bankAccount, String paymentMethod,
-                            List<String> fields, Map<String,Pair<String, String>> contactsInfo,
+
+    public String addSupplier(String name, String bnNumber, BankAccount bankAccount, String paymentMethod,
+                            List<String> fields, Map<String, Pair<String, String>> contactsInfo,
                             List<Product> productList, DeliveryAgreement deliveryAgreement){
         supplierController.addSupplier(name,bnNumber,bankAccount,paymentMethod,fields, contactsInfo, productList, deliveryAgreement);
+        return gson.toJson(new Response<>("new Supplier Registered!", false));
     }
 
-    public void order(Map<Integer, Integer> order){
-        orderController.order(order, supplierController.getCopyOfSuppliers());
+    public String removeSupplier(String bnNumber){
+        try {
+            supplierController.removeSupplier(bnNumber);
+            return gson.toJson(new Response<>("supplier was removed", false));
+        }
+        catch (Exception e){
+            return gson.toJson(new Response<>(e.getMessage(), true));
+        }
     }
 
-    public void setSupplierName(String bnNumber, String name){
-        supplierController.getSupplier(bnNumber).setName(name);
+    public String setSupplierName(String bnNumber, String name){
+        try {
+            supplierController.getSupplier(bnNumber).setName(name);
+            return gson.toJson(new Response<String>("supplier's name is set!", false));
+        }
+        catch (Exception e){
+            return gson.toJson(new Response<>(e.getMessage(), true));
+        }
     }
 
-    public void setSupplierBnNumber(String bnNumber, String newBnNumber){
-        Supplier supplier = supplierController.getSupplier(bnNumber);
-        supplierController.removeSupplier(bnNumber);
-        supplier.setBnNumber(newBnNumber);
-        supplierController.addSupplier(bnNumber, supplier);
+    public String setSupplierBnNumber(String bnNumber, String newBnNumber){
+        try {
+            Supplier supplier = supplierController.getSupplier(bnNumber);
+            supplierController.removeSupplier(bnNumber);
+            supplier.setBnNumber(newBnNumber);
+            supplierController.addSupplier(bnNumber, supplier);
+            return gson.toJson(new Response<String>("supplier's bn number is set!", false));
+        }
+        catch (Exception e){
+            return gson.toJson(new Response<>(e.getMessage(), true));
+        }
     }
 
-    public void setSupplierBankAccount(String bnNumber, String bankAccount){
+    public void setSupplierBankAccount(String bnNumber, BankAccount bankAccount){
         supplierController.getSupplier(bnNumber).setBankAccount(bankAccount);
     }
 
@@ -81,8 +103,8 @@ public class SystemController {
         supplierController.getSupplier(bnNumber).getAgreement().getProduct(productId).setNumberOfUnits(amount);
     }
 
-    public void addProduct(String bnNumber, String name, int productId, String catalogNumber, double price, int numberOfUnits){
-        supplierController.getSupplier(bnNumber).addProduct(name, productId, catalogNumber, price, numberOfUnits);
+    public void addProduct(String bnNumber, String name, String catalogNumber, double price, int numberOfUnits){
+        supplierController.getSupplier(bnNumber).addProduct(name, catalogNumber, price, numberOfUnits);
     }
 
     public void setProductDiscount(String bnNumber, int productId, int amount, Discount discount){
@@ -111,8 +133,8 @@ public class SystemController {
         supplierController.getSupplier(bnNumber).getAgreement().getBillOfQuantities().setProductsDiscounts(productsDiscounts);
     }
 
-    public void setDiscountOnAmountOfProducts(String bnNumber, int amountOfProductsForDiscount, double price, Discount discount){
-        supplierController.getSupplier(bnNumber).getAgreement().getBillOfQuantities().setDiscountOnAmountOfProducts(amountOfProductsForDiscount, price, discount);
+    public void setDiscountOnAmountOfProducts(String bnNumber, int amountOfProductsForDiscount, Discount discount){
+        supplierController.getSupplier(bnNumber).getAgreement().getBillOfQuantities().setDiscountOnAmountOfProducts(amountOfProductsForDiscount, discount);
     }
 
     public void removeDiscountOnAmountOfProducts(String bnNumber){
@@ -141,7 +163,4 @@ public class SystemController {
     public void removeProduct(String bnNumber, Integer productId){
         supplierController.getSupplier(bnNumber).getAgreement().removeProduct(productId);
     }
-
-
-
 }

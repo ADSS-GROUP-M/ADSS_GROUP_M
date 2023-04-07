@@ -1,4 +1,4 @@
-package BusinessLayer;
+package Backend.BusinessLayer;
 
 public class Pair<T,E> {
     private T first;
@@ -7,6 +7,9 @@ public class Pair<T,E> {
     public Pair(T first, E second) {
         this.first = first;
         this.second = second;
+    }
+
+    public Pair() {
     }
 
     public T getFirst() {

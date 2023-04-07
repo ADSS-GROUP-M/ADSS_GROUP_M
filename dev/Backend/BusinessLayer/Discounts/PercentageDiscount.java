@@ -1,6 +1,4 @@
-package BusinessLayer.Discounts;
-
-import BusinessLayer.Discounts.Discount;
+package Backend.BusinessLayer.Discounts;
 
 public class PercentageDiscount extends Discount {
     private double percentage;

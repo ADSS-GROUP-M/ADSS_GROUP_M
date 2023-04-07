@@ -1,14 +1,12 @@
-package BusinessLayer;
+package Backend.BusinessLayer;
 
-import BusinessLayer.DeliveryAgreements.DeliveryAgreement;
-import BusinessLayer.DeliveryAgreements.DeliveryByInvitation;
-import BusinessLayer.DeliveryAgreements.DeliveryFixedDays;
+import Backend.BusinessLayer.DeliveryAgreements.DeliveryAgreement;
+import Backend.BusinessLayer.DeliveryAgreements.DeliveryByInvitation;
+import Backend.BusinessLayer.DeliveryAgreements.DeliveryFixedDays;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.RecursiveTask;
 
 public class Agreement {
     private String paymentMethod;

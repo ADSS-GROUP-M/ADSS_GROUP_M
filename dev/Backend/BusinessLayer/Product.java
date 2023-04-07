@@ -1,4 +1,9 @@
-package BusinessLayer;
+package Backend.BusinessLayer;
+
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 public class Product {
     private String name;
@@ -12,10 +17,18 @@ public class Product {
     private String catalogNumber;
     private double price;
     private int numberOfUnits;
+    /***
+     * for making a unique id for same products
+     */
+    private static Map<String, Integer> productsExist = new HashMap<>();
+    private static int idCounter = 0;
 
-    public Product(String name, int id, String catalogNumber, double price, int numberOfUnits){
+    public Product(String name,String catalogNumber, double price, int numberOfUnits){
         this.catalogNumber = catalogNumber;
-        this.id = id;
+        if(productsExist.containsKey(name))
+            id = productsExist.get(name);
+        else
+            productsExist.put(name, id = idCounter++);
         this.name = name;
         this.price = price;
         this.numberOfUnits = numberOfUnits;

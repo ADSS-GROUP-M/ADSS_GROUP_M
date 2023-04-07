@@ -6,6 +6,7 @@ import transportModule.serviceLayer.ResourceManagementService;
 public class DriversManagement {
 
     private final AppData appData;
+
     private final ResourceManagementService rms;
 
     public DriversManagement(AppData appData, ResourceManagementService rms) {
@@ -29,8 +30,8 @@ public class DriversManagement {
                 case 1 -> createDriver();
                 case 2 -> updateDriver();
                 case 3 -> removeDriver();
-                case 4 -> getDriver();
-                case 5 -> getAllDrivers();
+                case 4 -> viewDriver();
+                case 5 -> viewAllDrivers();
                 case 6 -> {
                     return;
                 }
@@ -129,7 +130,7 @@ public class DriversManagement {
 
     }
 
-    private void getDriver() {
+    private void viewDriver() {
         while(true){
             System.out.println("=========================================");
             int driverId = appData.readInt("Enter employee ID of driver to view (enter '-1' to return to previous menu): ");
@@ -144,7 +145,7 @@ public class DriversManagement {
         }
     }
 
-    private void getAllDrivers() {
+    private void viewAllDrivers() {
         System.out.println("=========================================");
         System.out.println("All drivers:");
         for(Driver driver : appData.drivers().values()){

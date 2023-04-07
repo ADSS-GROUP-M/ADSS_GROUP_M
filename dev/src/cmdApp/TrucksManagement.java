@@ -29,8 +29,8 @@ public class TrucksManagement {
                 case 1 -> createTruck();
                 case 2 -> updateTruck();
                 case 3 -> removeTruck();
-                case 4 -> getTruck();
-                case 5 -> getAllTrucks();
+                case 4 -> viewTruck();
+                case 5 -> viewAllTrucks();
                 case 6 -> {
                     return;
                 }
@@ -167,7 +167,7 @@ public class TrucksManagement {
         }
     }
 
-    private void getTruck() {
+    private void viewTruck() {
         while(true) {
             System.out.println("=========================================");
             String truckId = appData.readLine("Enter license plate of truck to view ('done!' to return to previous menu): ");
@@ -183,7 +183,7 @@ public class TrucksManagement {
 
     }
 
-    private void getAllTrucks() {
+    private void viewAllTrucks() {
         System.out.println("=========================================");
         System.out.println("All trucks:");
         for (Truck truck : appData.trucks().values()) {

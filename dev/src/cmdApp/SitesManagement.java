@@ -29,8 +29,8 @@ public class SitesManagement {
                 case 1 -> createSite();
                 case 2 -> updateSite();
                 case 3 -> removeSite();
-                case 4 -> getSite();
-                case 5 -> getAllSites();
+                case 4 -> viewSite();
+                case 5 -> viewAllSites();
                 case 6 -> {
                     return;
                 }
@@ -153,7 +153,7 @@ public class SitesManagement {
         }
     }
 
-    private void getSite() {
+    private void viewSite() {
         while(true) {
             System.out.println("=========================================");
             String siteId = appData.readLine("Enter address of site to view (enter 'done!' to return to previous menu): ");
@@ -172,7 +172,7 @@ public class SitesManagement {
         }
     }
 
-    private void getAllSites() {
+    private void viewAllSites() {
         System.out.println("=========================================");
         System.out.println("All sites:");
         for(Site site : appData.sites().values()) {

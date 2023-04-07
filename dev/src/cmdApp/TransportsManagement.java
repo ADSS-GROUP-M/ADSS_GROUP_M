@@ -37,7 +37,7 @@ public class TransportsManagement {
             switch (option) {
                 case 1 -> createTransport();
                 case 2 -> updateTransport();
-                case 3 -> deleteTransport();
+                case 3 -> removeTransport();
                 case 4 -> viewTransport();
                 case 5 -> viewAllTransports();
                 case 6 -> {
@@ -287,7 +287,7 @@ public class TransportsManagement {
         }
     }
 
-    private void deleteTransport() {
+    private void removeTransport() {
         while(true) {
             System.out.println("=========================================");
             Transport transport = getTransport();

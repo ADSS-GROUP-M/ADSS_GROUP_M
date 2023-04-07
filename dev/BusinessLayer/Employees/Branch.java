@@ -45,4 +45,10 @@ public class Branch {
     public LocalTime getEveningEnd() {
         return eveningEnd;
     }
+    public void setWorkingHours(LocalTime mFrom, LocalTime mUntil,LocalTime eFrom, LocalTime eUntil){
+        this.morningStart = mFrom;
+        this.morningEnd = mUntil;
+        this.eveningStart = eFrom;
+        this.eveningEnd = eUntil;
+    }
 }

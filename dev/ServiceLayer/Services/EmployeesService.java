@@ -10,6 +10,7 @@ import dev.ServiceLayer.Objects.SShiftType;
 import dev.BusinessLayer.Employees.Shift.ShiftType;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,7 +72,7 @@ public class EmployeesService {
             return Response.createErrorResponse(e.getMessage());
         }
     }
-
+    // TODO: Implement in presentation layer. High priority!
     public Response<Boolean> addEmployeeToBranch(String actorUsername, String employeeId, String branchId){
         Response<Boolean> authResponse = userService.isAuthorized(actorUsername, Authorization.HRManager);
         if (authResponse.errorOccurred())
@@ -342,6 +343,20 @@ public class EmployeesService {
         // TODO: Possibly need to check the actor authorization
         try {
             shiftsController.reportShiftActivity(branchId, shiftDate, ShiftType.valueOf(shiftType.toString()), actorUsername, activity);
+            return new Response<>(true);
+        } catch (Exception e) {
+            return Response.createErrorResponse(e.getMessage());
+        }
+    }
+    //TODO:Implement in presentation
+    public Response<Boolean> updateBranchWorkingHours(String actorUsername , String branchId, LocalTime morningStart, LocalTime morningEnd, LocalTime eveningStart, LocalTime eveningEnd){
+        Response<Boolean> authResponse = userService.isAuthorized(actorUsername, Authorization.HRManager);
+        if (authResponse.errorOccurred())
+            return Response.createErrorResponse(authResponse.getErrorMessage());
+        else if(authResponse.getReturnValue() == false)
+            return Response.createErrorResponse("User isn't authorized to do this");
+        try {
+            employeesController.updateBranchWorkingHours(branchId, morningStart, morningEnd, eveningStart, eveningEnd);
             return new Response<>(true);
         } catch (Exception e) {
             return Response.createErrorResponse(e.getMessage());

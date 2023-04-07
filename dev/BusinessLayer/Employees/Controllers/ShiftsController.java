@@ -19,7 +19,7 @@ import java.util.stream.Stream;
 
 public class ShiftsController {
     private static ShiftsController instance;
-    private Map<String, Map<LocalDate, Map<ShiftType,Shift>>> shifts;
+    private Map<String, Map<LocalDate, Map<ShiftType,Shift>>> shifts; // branchID to <Date to <ShiftTime to Shift>>
 
     private ShiftsController() {
         this.shifts = new HashMap<>();

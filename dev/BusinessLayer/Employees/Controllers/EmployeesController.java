@@ -1,6 +1,7 @@
 package dev.BusinessLayer.Employees.Controllers;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.*;
 
 import dev.BusinessLayer.Employees.Branch;
@@ -122,6 +123,10 @@ public class EmployeesController {
     public void uncertifyEmployee(String employeeId, Role role) throws Exception {
         Employee employee = getEmployee(employeeId);
         employee.removeRole(role);
+    }
+
+    public void updateBranchWorkingHours(String branchId, LocalTime morningStart, LocalTime morningEnd, LocalTime eveningStart, LocalTime eveningEnd){
+        this.branches.get(branchId).setWorkingHours(morningStart, morningEnd, eveningStart, eveningEnd);
     }
 
     //public void fireEmployee(String empId) throws Exception {

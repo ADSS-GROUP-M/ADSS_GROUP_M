@@ -4,6 +4,7 @@ import dev.PresentationLayer.ViewModel.HRManagerMenuVM;
 import dev.Utils.DateUtils;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
 import java.util.Arrays;
 import java.util.Scanner;
@@ -30,8 +31,15 @@ public class HRManagerMenu implements Menu {
         System.out.println("8. `week_shifts <branch_id>` - Show next week shifts");
         System.out.println("9. `week_shifts <branch_id> <week_start: DD/MM/YYYY>` - Show weekly shifts");
         System.out.println("10. `certify <employee_id> <role>` - Certify employee to the given role");
-        System.out.println("11. `approve_shift <branch_id> <shift_date: DD/MM/YYYY> <shift_type: Morning/Evening>` - Approve the specified shift");
-        System.out.println("12. `exit` - Exit command");
+        System.out.println("11. `uncertify <employee_id> <role>` - Removes the employee's certification of the given role");
+        System.out.println("12. `approve_shift <branch_id> <shift_date: DD/MM/YYYY> <shift_type: Morning/Evening>` - Approve the specified shift");
+        System.out.println("13. `add_employee_to_branch <employee_id> <branch_id>` - Adds an existing employee to a branch");
+        System.out.println("14. `delete_shift <branch_id> <shift_date: DD/MM/YYYY> <shift_type: Morning/Evening>` Deletes the specified shift");
+        System.out.println("15. `create_branch <branch_id>` - Creates a new branch with the given branch id");
+        System.out.println("16. `update_branch_hours <branch_id> <morning_start> <morning_end> <evening_start> <evening_end>` - Updates the branch's working hours");
+        System.out.println("17. `update_employee <employee_id>` - Updates an existing employee's details");
+        System.out.println("18. `authorize <username> <authorization>` - Authorizes an existing user to the given authorization");
+        System.out.println("19. `exit` - Exit command");
     }
 
     public Menu run() {
@@ -161,6 +169,11 @@ public class HRManagerMenu implements Menu {
             String role = command[2];
             output = hrManagerMenuVM.certifyEmployee(employeeId, role);
         }
+        else if (command[0].equals("uncertify") && command.length == 3) {
+            String employeeId = command[1];
+            String role = command[2];
+            output = hrManagerMenuVM.uncertifyEmployee(employeeId, role);
+        }
         else if (command[0].equals("approve_shift") && command.length == 4) {
             try {
                 String branchId = command[1];
@@ -170,6 +183,84 @@ public class HRManagerMenu implements Menu {
             } catch (DateTimeParseException e) {
                 output = "Invalid input, expected a date in the form " + DateUtils.DATE_PATTERN + ".";
             }
+        }
+        else if (command[0].equals("add_employee_to_branch") && command.length == 3) {
+            String employeeId = command[1];
+            String branchId = command[2];
+            output = hrManagerMenuVM.addEmployeeToBranch(employeeId, branchId);
+        }
+        else if (command[0].equals("delete_shift") && command.length == 4) {
+            try {
+                String branchId = command[1];
+                LocalDate shiftDate = DateUtils.parse(command[2]);
+                String shiftType = command[3];
+                output = hrManagerMenuVM.deleteShift(branchId, shiftDate, shiftType);
+            } catch (DateTimeParseException e) {
+                output = "Invalid input, expected a date in the form " + DateUtils.DATE_PATTERN + ".";
+            }
+        }
+        else if (command[0].equals("create_branch") && command.length == 2) {
+            String branchId = command[1];
+            output = hrManagerMenuVM.createBranch(branchId);
+        }
+        else if (command[0].equals("update_branch_hours") && command.length == 6) {
+            try {
+                String branchId = command[1];
+                LocalTime morningStart = LocalTime.parse(command[2]);
+                LocalTime morningEnd = LocalTime.parse(command[3]);
+                LocalTime eveningStart = LocalTime.parse(command[4]);
+                LocalTime eveningEnd = LocalTime.parse(command[5]);
+                output = hrManagerMenuVM.updateBranchWorkingHours(branchId, morningStart, morningEnd, eveningStart, eveningEnd);
+            } catch (DateTimeParseException e) {
+                output = "Invalid input, expected a time in the form HH:MM.";
+            }
+        }
+        else if (command[0].equals("update_employee") && command.length == 2) {
+            String employeeId = command[1];
+            System.out.println("Please choose which detail to update:");
+            System.out.println("1. Salary");
+            System.out.println("2. Bank Details");
+            System.out.println("3. Employment Conditions");
+            System.out.println("4. Optional Details");
+            String detailsInput = scanner.nextLine();
+            switch (detailsInput) {
+                case "1": // Salary
+                    String hourlyRateString = "", salaryBonusString = "";
+                    try {
+                        System.out.println("Please enter the updated employee's hourly rate:");
+                        hourlyRateString = scanner.nextLine();
+                        System.out.println("Please enter the updated employee's salary bonus:");
+                        salaryBonusString = scanner.nextLine();
+                        double hourlySalaryRate = Double.parseDouble(hourlyRateString);
+                        double salaryBonus = Double.parseDouble(salaryBonusString);
+                        output = hrManagerMenuVM.updateEmployeeSalary(employeeId, hourlySalaryRate, salaryBonus);
+                    } catch (NumberFormatException e) {
+                        output = "Invalid input, expected only decimal numbers, but received: " + hourlyRateString + " " + salaryBonusString +  " try again.";
+                    }
+                    break;
+                case "2": // Bank Details
+                    System.out.println("Please enter the updated employee's bank details:");
+                    String bankDetails = scanner.nextLine();
+                    output = hrManagerMenuVM.updateEmployeeBankDetails(employeeId, bankDetails);
+                    break;
+                case "3": // Employment Conditions
+                    System.out.println("Please enter the updated employee's employment conditions:");
+                    String employmentConditions = scanner.nextLine();
+                    output = hrManagerMenuVM.updateEmployeeEmploymentConditions(employeeId, employmentConditions);
+                    break;
+                case "4": // Optional Details
+                    System.out.println("Please enter the updated employee's optional details:");
+                    String details = scanner.nextLine();
+                    output = hrManagerMenuVM.updateEmployeeDetails(employeeId, details);
+                    break;
+                default:
+                    output = "Invalid input, expected a number between 1 and 4, try again.";
+            }
+        }
+        else if (command[0].equals("authorize") && command.length == 3) {
+            String username = command[1];
+            String authorization = command[2];
+            output = hrManagerMenuVM.authorizeUser(username, authorization);
         }
         else
             output = "Invalid command was given, try again.";

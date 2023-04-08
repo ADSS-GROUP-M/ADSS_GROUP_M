@@ -72,7 +72,7 @@ public class EmployeesService {
             return Response.createErrorResponse(e.getMessage());
         }
     }
-    // TODO: Implement in presentation layer. High priority!
+
     public Response<Boolean> addEmployeeToBranch(String actorUsername, String employeeId, String branchId){
         Response<Boolean> authResponse = userService.isAuthorized(actorUsername, Authorization.HRManager);
         if (authResponse.errorOccurred())
@@ -283,7 +283,7 @@ public class EmployeesService {
         }
     }
 
-    public Response<Boolean> updateEmployeeSalary(String actorUsername, String employeeId, double hourlySalaryRate, double salaryBonus){
+    public Response<Boolean> updateEmployeeSalary(String actorUsername, String employeeId, double hourlySalaryRate, double salaryBonus) {
         Response<Boolean> authResponse = userService.isAuthorized(actorUsername, Authorization.ShiftManager);
         if (authResponse.errorOccurred())
             return Response.createErrorResponse(authResponse.getErrorMessage());
@@ -297,7 +297,7 @@ public class EmployeesService {
         }
     }
 
-    public Response<Boolean> updateBankDetails(String actorUsername, String employeeId, String bankDetails){
+    public Response<Boolean> updateEmployeeBankDetails(String actorUsername, String employeeId, String bankDetails){
         Response<Boolean> authResponse = userService.isAuthorized(actorUsername, Authorization.ShiftManager);
         if (authResponse.errorOccurred())
             return Response.createErrorResponse(authResponse.getErrorMessage());
@@ -348,7 +348,7 @@ public class EmployeesService {
             return Response.createErrorResponse(e.getMessage());
         }
     }
-    //TODO:Implement in presentation
+
     public Response<Boolean> updateBranchWorkingHours(String actorUsername , String branchId, LocalTime morningStart, LocalTime morningEnd, LocalTime eveningStart, LocalTime eveningEnd){
         Response<Boolean> authResponse = userService.isAuthorized(actorUsername, Authorization.HRManager);
         if (authResponse.errorOccurred())

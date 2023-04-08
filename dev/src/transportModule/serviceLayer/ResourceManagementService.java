@@ -26,7 +26,7 @@ public class ResourceManagementService {
         try{
             driversController.addDriver(driver);
         }catch(IOException e){
-            return new Response<>(e.getMessage(), false).getJson();
+            return Response.getErrorResponse(e).getJson();
         }
         return new Response<>("Driver added successfully", true).getJson();
     }
@@ -36,7 +36,7 @@ public class ResourceManagementService {
         try{
             driversController.removeDriver(driver.id());
         }catch(IOException e){
-            return new Response<>(e.getMessage(), false).getJson();
+            return Response.getErrorResponse(e).getJson();
         }
         return new Response<>("Driver removed successfully", true).getJson();
     }
@@ -46,7 +46,7 @@ public class ResourceManagementService {
         try{
             driversController.updateDriver(driver.id(), driver);
         }catch(IOException e){
-            return new Response<>(e.getMessage(), false).getJson();
+            return Response.getErrorResponse(e).getJson();
         }
         return new Response<>("Driver updated successfully", true).getJson();
     }
@@ -56,7 +56,7 @@ public class ResourceManagementService {
         try{
             driver = driversController.getDriver(driver.id());
         }catch(Exception e){
-            return new Response<>(e.getMessage(), false).getJson();
+            return Response.getErrorResponse(e).getJson();
         }
         return new Response<>("Driver found successfully", true, driver).getJson();
     }
@@ -70,7 +70,7 @@ public class ResourceManagementService {
         try{
             trucksController.addTruck(truck);
         }catch(IOException e){
-            return new Response<>(e.getMessage(), false).getJson();
+            return Response.getErrorResponse(e).getJson();
         }
         return new Response<>("Truck added successfully", true).getJson();
     }
@@ -80,7 +80,7 @@ public class ResourceManagementService {
         try{
             trucksController.removeTruck(truck.id());
         }catch(IOException e){
-            return new Response<>(e.getMessage(), false).getJson();
+            return Response.getErrorResponse(e).getJson();
         }
         return new Response<>("Truck removed successfully", true).getJson();
     }
@@ -90,7 +90,7 @@ public class ResourceManagementService {
         try{
             trucksController.updateTruck(truck.id(), truck);
         }catch(IOException e){
-            return new Response<>(e.getMessage(), false).getJson();
+            return Response.getErrorResponse(e).getJson();
         }
         return new Response<>("Truck updated successfully", true).getJson();
     }
@@ -100,7 +100,7 @@ public class ResourceManagementService {
         try{
             truck = trucksController.getTruck(truck.id());
         }catch(Exception e){
-            return new Response<>(e.getMessage(), false).getJson();
+            return Response.getErrorResponse(e).getJson();
         }
         return new Response<>("Truck found successfully", true, truck).getJson();
     }
@@ -114,7 +114,7 @@ public class ResourceManagementService {
         try{
             sitesController.addSite(site);
         }catch(IOException e){
-            return new Response<>(e.getMessage(), false).getJson();
+            return Response.getErrorResponse(e).getJson();
         }
         return new Response<>("Site added successfully", true).getJson();
     }
@@ -124,7 +124,7 @@ public class ResourceManagementService {
         try{
             sitesController.removeSite(site.address());
         }catch(IOException e){
-            return new Response<>(e.getMessage(), false).getJson();
+            return Response.getErrorResponse(e).getJson();
         }
         return new Response<>("Site removed successfully", true).getJson();
     }
@@ -134,7 +134,7 @@ public class ResourceManagementService {
         try{
             sitesController.updateSite(site.address(), site);
         }catch(IOException e){
-            return new Response<>(e.getMessage(), false).getJson();
+            return Response.getErrorResponse(e).getJson();
         }
         return new Response<>("Site updated successfully", true).getJson();
     }
@@ -144,7 +144,7 @@ public class ResourceManagementService {
         try{
             site = sitesController.getSite(site.address());
         }catch(Exception e){
-            return new Response<>(e.getMessage(), false).getJson();
+            return Response.getErrorResponse(e).getJson();
         }
         return new Response<>("Site found successfully", true, site).getJson();
     }

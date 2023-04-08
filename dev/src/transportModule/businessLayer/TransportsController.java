@@ -98,6 +98,7 @@ public class TransportsController {
      * @throws IOException If the transport object is invalid.
      */
     private void validateTransport(Transport transport) throws IOException{
+
         Truck truck = tc.getTruck(transport.truckId());
         Driver driver = dc.getDriver(transport.driverId());
 

@@ -100,6 +100,15 @@ public class TransportsManagement {
     }
 
     private void pickAnOptionIfFail(Transport newTransport, Response<String> response) {
+
+        /**
+         * Known bug: if you insert a weight that is too big for the heaviest truck, you will be asked to pick a new truck and driver.
+         * However, if you pick a new truck and driver, the weight will still be too big for the truck.
+         * And then the new truck and driver will not be updated and you also wouldn't be able to pick a new destination list
+         * and it turns into an endless loop. We decided it's an edge case that we won't fix at this moment because you
+         * can work around it by cancelling the creation of the transport and start over.
+         */
+
         String[] errors = response.getData().split(",");
         if(errors[0].equalsIgnoreCase("weight")){
             while(true){

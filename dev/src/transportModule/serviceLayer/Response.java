@@ -33,4 +33,13 @@ public class Response<T> {
     public String getJson(){
         return JSON.serialize(this);
     }
+
+    public static Response<String> getErrorResponse(Exception e){
+        if(e.getCause() != null){
+            return new Response<>(e.getMessage(), false, e.getCause().getMessage());
+        }
+        else {
+            return new Response<>(e.getMessage(), false);
+        }
+    }
 }

@@ -71,7 +71,7 @@ public class TransportsService {
             tc.addTransport(transport);
         }
         catch(IOException e){
-            return new Response<>(e.getMessage(), false, e.getCause().getMessage()).getJson();
+            return Response.getErrorResponse(e).getJson();
         }
         return new Response<>("Transport created successfully",true, "").getJson();
     }
@@ -83,7 +83,7 @@ public class TransportsService {
             tc.updateTransport(transport.id(), transport);
         }
         catch(IOException e){
-            return new Response<>(e.getMessage(), false, "").getJson();
+            return Response.getErrorResponse(e).getJson();
         }
         return new Response<>("Transport updated successfully",true, "").getJson();
     }
@@ -95,7 +95,7 @@ public class TransportsService {
             tc.removeTransport(transport.id());
         }
         catch(IOException e){
-            return new Response<>(e.getMessage(), false).getJson();
+            return Response.getErrorResponse(e).getJson();
         }
         return new Response<>("Transport removed successfully",true, "").getJson();
     }
@@ -107,7 +107,7 @@ public class TransportsService {
             transport = tc.getTransport(transport.id());
         }
         catch(IOException e){
-            return new Response<>(e.getMessage(), false).getJson();
+            return Response.getErrorResponse(e).getJson();
         }
         return new Response<>("Transport found successfully",true, transport).getJson();
     }

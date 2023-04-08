@@ -15,7 +15,7 @@ public class ItemListsService {
         try{
             ilc.addItemList(itemList);
         }catch(Exception e){
-            return new Response<>(e.getMessage(), false).getJson();
+            return Response.getErrorResponse(e).getJson();
         }
         return new Response<>("Item list added successfully", true).getJson();
     }
@@ -25,7 +25,7 @@ public class ItemListsService {
         try{
             ilc.removeItemList(itemList.id());
         }catch(Exception e){
-            return new Response<>(e.getMessage(), false).getJson();
+            return Response.getErrorResponse(e).getJson();
         }
         return new Response<>("Item list removed successfully", true).getJson();
     }
@@ -35,7 +35,7 @@ public class ItemListsService {
         try{
             ilc.updateItemList(itemList.id(), itemList);
         }catch(Exception e){
-            return new Response<>(e.getMessage(), false).getJson();
+            return Response.getErrorResponse(e).getJson();
         }
         return new Response<>("Item list updated successfully", true).getJson();
     }
@@ -45,7 +45,7 @@ public class ItemListsService {
         try{
             itemList = ilc.getItemList(itemList.id());
         }catch(Exception e){
-            return new Response<>(e.getMessage(), false).getJson();
+            return Response.getErrorResponse(e).getJson();
         }
         return new Response<>("Item list found successfully", true, itemList).getJson();
     }

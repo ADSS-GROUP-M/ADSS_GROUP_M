@@ -96,7 +96,7 @@ class TransportsServiceTest {
                 destinations,
                 hm,
                 "abc123",
-                1234,
+                123,
                 LocalDateTime.of(2020, 1, 1, 0, 0),
                 2000
         );
@@ -146,7 +146,7 @@ class TransportsServiceTest {
                 destinations,
                 hm,
                 "abc123",
-                1234,
+                123,
                 LocalDateTime.of(2020, 1, 1, 0, 0),
                 2000
         );

@@ -50,6 +50,8 @@ public class TransportsManagement {
 
     private void createTransport() {
 
+        if (verifyDataAvailability()) return;
+
         System.out.println("=========================================");
         System.out.println("Transport ID: "+transportIdCounter);
         System.out.println("Enter transport details:");
@@ -406,5 +408,32 @@ public class TransportsManagement {
             transportIdCounter++;
         }
         return response;
+    }
+
+    private boolean verifyDataAvailability() {
+
+        boolean isMissingData = false;
+        StringBuilder errorMessage = new StringBuilder("\nData not found for ");
+
+        if(appData.trucks().isEmpty()){
+            errorMessage.append("trucks");
+            isMissingData = true;
+        }
+        if(appData.drivers().isEmpty()){
+            if(isMissingData) errorMessage.append(", ");
+            errorMessage.append("drivers");
+            isMissingData = true;
+        }
+        if(appData.sites().isEmpty()){
+            if(isMissingData) errorMessage.append(", ");
+            errorMessage.append("sites");
+            isMissingData = true;
+        }
+
+        if(isMissingData) {
+            errorMessage.append("\nAborting.....\n");
+            System.out.println(errorMessage);
+        }
+        return isMissingData;
     }
 }

@@ -284,7 +284,7 @@ public class EmployeesService {
     }
 
     public Response<Boolean> updateEmployeeSalary(String actorUsername, String employeeId, double hourlySalaryRate, double salaryBonus) {
-        Response<Boolean> authResponse = userService.isAuthorized(actorUsername, Authorization.ShiftManager);
+        Response<Boolean> authResponse = userService.isAuthorized(actorUsername, Authorization.HRManager);
         if (authResponse.errorOccurred())
             return Response.createErrorResponse(authResponse.getErrorMessage());
         else if(authResponse.getReturnValue() == false)
@@ -298,7 +298,7 @@ public class EmployeesService {
     }
 
     public Response<Boolean> updateEmployeeBankDetails(String actorUsername, String employeeId, String bankDetails){
-        Response<Boolean> authResponse = userService.isAuthorized(actorUsername, Authorization.ShiftManager);
+        Response<Boolean> authResponse = userService.isAuthorized(actorUsername, Authorization.HRManager);
         if (authResponse.errorOccurred())
             return Response.createErrorResponse(authResponse.getErrorMessage());
         else if(authResponse.getReturnValue() == false)
@@ -312,7 +312,7 @@ public class EmployeesService {
     }
 
     public Response<Boolean> updateEmployeeEmploymentConditions(String actorUsername, String employeeId, String employmentConditions){
-        Response<Boolean> authResponse = userService.isAuthorized(actorUsername, Authorization.ShiftManager);
+        Response<Boolean> authResponse = userService.isAuthorized(actorUsername, Authorization.HRManager);
         if (authResponse.errorOccurred())
             return Response.createErrorResponse(authResponse.getErrorMessage());
         else if(authResponse.getReturnValue() == false)
@@ -326,7 +326,7 @@ public class EmployeesService {
     }
 
     public Response<Boolean> updateEmployeeDetails(String actorUsername, String employeeId, String details){
-        Response<Boolean> authResponse = userService.isAuthorized(actorUsername, Authorization.ShiftManager);
+        Response<Boolean> authResponse = userService.isAuthorized(actorUsername, Authorization.HRManager);
         if (authResponse.errorOccurred())
             return Response.createErrorResponse(authResponse.getErrorMessage());
         else if(authResponse.getReturnValue() == false)

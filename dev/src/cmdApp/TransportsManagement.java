@@ -96,73 +96,61 @@ public class TransportsManagement {
         Response<String> response = createTransportHelperMethod(newTransport);
 
         if(response.isSuccess() == false){
-            pickAnOptionIfFail(newTransport, response);
+            pickAnOptionIfFail(newTransport);
         }
     }
 
-    private void pickAnOptionIfFail(Transport newTransport, Response<String> response) {
-
+    private void pickAnOptionIfFail(Transport newTransport) {
         while(true){
-            String[] errors = response.getData().split(",");
-
-            if(Arrays.stream(errors).anyMatch("license"::equalsIgnoreCase)){
-                System.out.println("Cancelling transport creation due to invalid driver");
-                return;
-            }
-
-            if(Arrays.stream(errors).anyMatch("weight"::equalsIgnoreCase)){
-                System.out.println("current weight: "+newTransport.weight());
-                System.out.println("Select one of the following options:");
-                System.out.println("1. Pick new truck and driver");
-                System.out.println("2. Pick new destinations and item lists");
-                System.out.println("3. Cancel and return to previous menu");
-                int option = appData.readInt();
-                switch (option) {
-                    case 1 -> {
-                        System.out.println("Truck: ");
-                        String truckId = appData.pickTruck(false).id();
-                        System.out.println("Driver: ");
-                        int driverID = appData.pickDriver(false).id();
-                        newTransport = new Transport(
-                                newTransport.id(),
-                                newTransport.source(),
-                                newTransport.destinations(),
-                                newTransport.itemLists(),
-                                truckId,
-                                driverID,
-                                newTransport.scheduledTime(),
-                                newTransport.weight()
-                        );
-                        Response<String> response2 = createTransportHelperMethod(newTransport);
-                        if(response2.isSuccess()) return;
-                        response = response2;
-                    }
-                    case 2 -> {
-                        LinkedList<Site> destinations = new LinkedList<>();
-                        HashMap<Site, ItemList> itemsList = new HashMap<>();
-                        destinationsMaker(destinations, itemsList);
-                        System.out.println("New weight :");
-                        int weight = appData.readInt();
-                        newTransport = new Transport(
-                                newTransport.id(),
-                                newTransport.source(),
-                                destinations,
-                                itemsList,
-                                newTransport.truckId(),
-                                newTransport.driverId(),
-                                newTransport.scheduledTime(),
-                                weight
-                        );
-                        Response<String> response2 = createTransportHelperMethod(newTransport);
-                        if(response2.isSuccess()) return;
-                        response = response2;
-                    }
-                    case 3 -> {
-                        System.out.println("Transport creation cancelled");
-                        return;
-                    }
-                    default -> System.out.println("\nInvalid option!");
+            System.out.println("current weight: "+newTransport.weight());
+            System.out.println("Select one of the following options:");
+            System.out.println("1. Pick new truck and driver");
+            System.out.println("2. Pick new destinations and item lists");
+            System.out.println("3. Cancel and return to previous menu");
+            int option = appData.readInt();
+            switch (option) {
+                case 1 -> {
+                    System.out.println("Truck: ");
+                    String truckId = appData.pickTruck(false).id();
+                    System.out.println("Driver: ");
+                    int driverID = appData.pickDriver(false).id();
+                    newTransport = new Transport(
+                            newTransport.id(),
+                            newTransport.source(),
+                            newTransport.destinations(),
+                            newTransport.itemLists(),
+                            truckId,
+                            driverID,
+                            newTransport.scheduledTime(),
+                            newTransport.weight()
+                    );
+                    Response<String> response2 = createTransportHelperMethod(newTransport);
+                    if(response2.isSuccess()) return;
                 }
+                case 2 -> {
+                    LinkedList<Site> destinations = new LinkedList<>();
+                    HashMap<Site, ItemList> itemsList = new HashMap<>();
+                    destinationsMaker(destinations, itemsList);
+                    System.out.println("New weight :");
+                    int weight = appData.readInt();
+                    newTransport = new Transport(
+                            newTransport.id(),
+                            newTransport.source(),
+                            destinations,
+                            itemsList,
+                            newTransport.truckId(),
+                            newTransport.driverId(),
+                            newTransport.scheduledTime(),
+                            weight
+                    );
+                    Response<String> response2 = createTransportHelperMethod(newTransport);
+                    if(response2.isSuccess()) return;
+                }
+                case 3 -> {
+                    System.out.println("Transport creation cancelled");
+                    return;
+                }
+                default -> System.out.println("\nInvalid option!");
             }
         }
     }

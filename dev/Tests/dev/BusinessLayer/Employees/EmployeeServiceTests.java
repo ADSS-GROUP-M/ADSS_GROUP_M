@@ -283,6 +283,32 @@ public class EmployeeServiceTests {
         assertTrue(ans.getErrorMessage(), ans.errorOccurred()); // the request was removed by the usernames[10], so the manager cant set him to the shift
         ans = empService.approveShift(adminUsername, "1",week[0],SShiftType.Morning);
         assertTrue(ans.getErrorMessage(),ans.errorOccurred()); // cashier is missing, approving shift should make a warning.
+        Response<List<SShift[]>> ans2 = empService.getEmployeeShifts(newUsername);
+        Response<List<SShift[]>> ans3 = empService.getEmployeeShifts(usernames[0]);
+        Response<List<SShift[]>> ans4 = empService.getEmployeeShifts(usernames[10]);
+        boolean flag1=false,flag2=false,flag3=false;
+        for(SShift[] shi : ans2.getReturnValue()){
+            if(shi[0].getShiftDate().equals(week[0]) && shi[0].getShiftType() == SShiftType.Morning){// branch also needs to be checked, but code doesnt allow
+              for(SEmployee sEmployee: shi[0].getShiftWorkersEmployees(Role.Steward.name()) ){
+                if(sEmployee.getId().equals(newUsername))
+                    flag1 = true;
+              }
+              for(SEmployee sEmployee: shi[0].getShiftWorkersEmployees(Role.ShiftManager.name()) ){
+                if(sEmployee.getId().equals(usernames[0]))
+                    flag2 = true;
+              }
+              try{
+              for(SEmployee sEmployee: shi[0].getShiftWorkersEmployees(Role.Cashier.name()) ){
+                if(sEmployee.getId().equals(usernames[10]))
+                    flag3 = true;
+              }
+              }catch(Exception ignore){}
+            }
+
+        }
+        assertTrue(flag1);// checking existance of employees in the approved shift, without the third worker (shouldnt be there)
+        assertTrue(flag2);
+        assertFalse(flag3);
     }
 
 }

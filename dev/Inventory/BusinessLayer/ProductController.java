@@ -1,47 +1,96 @@
 package dev.Inventory.BusinessLayer;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class ProductController {
-    Map<String, List<ProductType>> productTypes;
+
+    Map<String, Map<Integer,ProductType>> productTypes;
 
     //should create as singleton?
     public ProductController(){
-        this.productTypes = new HashMap<String, List<ProductType>>();
+        this.productTypes = new HashMap<String, Map<Integer,ProductType>>();
     }
 
+    private Boolean checkIfProductTypeExist(String branch, int productTypeID){
+        if(productTypes.containsKey(branch)){
+            Map<Integer,ProductType> branchProductsType = productTypes.get(branch);
+            if(branchProductsType.containsKey(productTypeID)){
+                return true;
+            }
+            else {throw new RuntimeException("ProductType does not exist, please create the ProductType first");}
+        }
+        else{
+            throw new RuntimeException("brunch does not exist, please create the ProductType in order to continue");
+        }
+    }
     // Add new product
-    public void createProduct(int productID, int productTypeID, String branch) {
-        //TODO: need to implement
+    public void createProduct(int productID, int productTypeID, String branch, int supplierID, int supplierPrice, String location) {
+        if(checkIfProductTypeExist(branch,productTypeID))
+            productTypes.get(branch).get(productTypeID).addProduct(productID,supplierID,supplierPrice,location);
     }
     // Add new product type
-    public void createProductType(int productTypeID, String branch){
-        //TODO: need to implement
+    public void createProductType(int productTypeID, String branch, String name, String manufacture, int storeAmount, int warehouseAmount, double originalSupplierPrice, double originalStorePrice){
+        if(!productTypes.containsKey(branch)){
+            productTypes.put(branch, new HashMap<Integer,ProductType>());
+        }
+        ProductType newProductType = new ProductType(productTypeID,name,manufacture,storeAmount,warehouseAmount,originalSupplierPrice,originalStorePrice, branch);
+        productTypes.get(branch).put(productTypeID,newProductType);
     }
+
+    public void updateProduct(int productID, int productTypeID, String branch) {
+        if(checkIfProductTypeExist(branch,productID)){
+            //TODO
+        }
+    }
+    // remove product type
+    public void updateProductType(int productTypeID, String branch){
+        if(checkIfProductTypeExist(branch,productTypeID)){
+            //TODO
+        }
+    }
+
     // update products to defective
-    public void updateDefectiveProduct(int typeID, List<Integer> productsID, String branch){
-        //TODO: need to implement
+    public void updateDefectiveProduct(int productTypeID, List<Integer> productsID, String branch){
+        if(checkIfProductTypeExist(branch,productTypeID)){
+            ProductType productType = productTypes.get(branch).get(productTypeID);
+            productType.updateDefective(productsID);
+        }
     }
     // update products status to sold
-    public void updateSoldProduct(int typeID, List<Integer> productsID, String branch){
-        //TODO: need to implement
+    public void updateSoldProduct(int productTypeID, List<Integer> productsID, String branch){
+        if(checkIfProductTypeExist(branch,productTypeID)){
+            ProductType productType = productTypes.get(branch).get(productTypeID);
+            productType.updateSold(productsID);
+        }
     }
     public void updateDiscount(int typeID, int discount, LocalDateTime startDate,LocalDateTime endDate, String branch){
         //TODO: need to implement
     }
-    public void updateProductNotificationMin(int typeID, int newVal, String branch){
-        //TODO: need to implement
+    public void updateProductNotificationMin(int productTypeID, int newVal, String branch){
+        if(checkIfProductTypeExist(branch,productTypeID)){
+            ProductType productType = productTypes.get(branch).get(productTypeID);
+            productType.updateNotificationMin(newVal);
+        }
     }
-    public double getProductPrice(int typeID, String branch){
+    public double getProductPrice(int productTypeID, String branch){
         //TODO: need to implement
         throw new RuntimeException();
     }
     public List<Product> getDefectiveProducts(LocalDateTime startDate, LocalDateTime endDate, String branch){
-        //TODO: need to implement
-        throw new RuntimeException();
+        List<Product> defectiveList = new ArrayList<Product>();
+        if(productTypes.containsKey(branch)) {
+            Map<Integer, ProductType> branchProductsType = productTypes.get(branch);
+            for (ProductType productType: branchProductsType.values())
+                productType.getDefectiveProducts(defectiveList);
+        }
+        else{
+                throw new RuntimeException("brunch does not exist, please create the ProductType in order to continue");
+            }
+        return defectiveList;
     }
 
     public List<Product> getInventoryShortages(LocalDateTime startDate, LocalDateTime endDate, String branch){

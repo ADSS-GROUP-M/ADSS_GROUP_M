@@ -2,29 +2,27 @@ package dev.Inventory.BusinessLayer;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class CategoryController {
-    public List<Category> categories;
+    public Map<String,Category> categories;
+    public Map<String,List<CategoryDiscount>> categoriesDiscount;
 
     //should be singleton?
     public CategoryController(){
-        this.categories = new ArrayList<Category>();
+        this.categories = new HashMap<String,Category>();
+//        this.categoriesDiscount = new HashMap<S>();
     }
 
     //should type be enum? subC or Category
     public void createCategory(String name, String type){
-        //TODO: need to implement
-        throw new RuntimeException();
+        if(!categories.containsKey(name))
+            categories.put(name,new Category(name,type));
     }
 
-    //should we remove category? >> if yes we need to update alk products that related to this category
-    public void removeCategory(String name, String type){
-        //TODO: need to implement
-        throw new RuntimeException();
-    }
-
-    public void updateDiscount(String name, int discount, LocalDateTime startDate, LocalDateTime endDate){
+    public void updateDiscountPerCategory(String name, int discount, LocalDateTime startDate, LocalDateTime endDate){
         //TODO: need to implement
         throw new RuntimeException();
     }

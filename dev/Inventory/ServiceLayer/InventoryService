@@ -1,36 +1,36 @@
 package dev.Inventory.BusinessLayer;
-package dev.Inventory.ServiceLayer.JSON;
+package dev.Inventory.ServiceLayer.Response;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class InventoryService {
-    public JSON getInventoryShorages(jsn json){
+public class InventoryService : MainManu {
+    public Response getInventoryShorages(){
 
     }
 
-    public JSON addProduct(jsn json){
+    public Response addProduct(String ProductTypeID, String ProductID, String name, int manufacturer, double supplier_price, double store_price){
 
     }
 
-    public JSON removeProduct(jsn json){
+    public Response removeProduct(String json){
 
     }
 
-    public JSON updateProduct(jsn json){
+    public Response updateProduct(String json){
 
     }
 
-    public JSON getStockProductsDetailed(jsn json){
+    public Response getStockProductsDetailed(String json){
 
     }
 
-    public JSON getStockProduct(jsn json){
+    public Response getStockProduct(String json){
 
     }
 
-    public JSON getDefectiveProducts(jsn json){
+    public Response getDefectiveProducts(String json){
 
     }
 }

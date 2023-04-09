@@ -8,6 +8,7 @@ import transportModule.serviceLayer.TransportsService;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -95,75 +96,61 @@ public class TransportsManagement {
         Response<String> response = createTransportHelperMethod(newTransport);
 
         if(response.isSuccess() == false){
-            pickAnOptionIfFail(newTransport, response);
+            pickAnOptionIfFail(newTransport);
         }
     }
 
-    private void pickAnOptionIfFail(Transport newTransport, Response<String> response) {
-
-        /**
-         * Known bug: if you insert a weight that is too big for the heaviest truck, you will be asked to pick a new truck and driver.
-         * However, if you pick a new truck and driver, the weight will still be too big for the truck.
-         * And then the new truck and driver will not be updated and you also wouldn't be able to pick a new destination list
-         * and it turns into an endless loop. We decided it's an edge case that we won't fix at this moment because you
-         * can work around it by cancelling the creation of the transport and start over.
-         */
-
-        String[] errors = response.getData().split(",");
-        if(errors[0].equalsIgnoreCase("weight")){
-            while(true){
-                System.out.println("current weight: "+newTransport.weight());
-                System.out.println("Select one of the following options:");
-                System.out.println("1. Pick new truck and driver");
-                System.out.println("2. Pick new destinations and item lists");
-                System.out.println("3. Cancel and return to previous menu");
-                int option = appData.readInt();
-                switch (option) {
-                    case 1 -> {
-                        System.out.println("Truck: ");
-                        String truckId = appData.pickTruck(false).id();
-                        System.out.println("Driver: ");
-                        int driverID = appData.pickDriver(false).id();
-                        Response<String> response2 = createTransportHelperMethod(
-                                new Transport(
-                                        newTransport.id(),
-                                        newTransport.source(),
-                                        newTransport.destinations(),
-                                        newTransport.itemLists(),
-                                        truckId,
-                                        driverID,
-                                        newTransport.scheduledTime(),
-                                        newTransport.weight()
-                                )
-                        );
-                        if(response2.isSuccess()) return;
-                    }
-                    case 2 -> {
-                        LinkedList<Site> destinations = new LinkedList<>();
-                        HashMap<Site, ItemList> itemsList = new HashMap<>();
-                        destinationsMaker(destinations, itemsList);
-                        System.out.println("New weight :");
-                        int weight = appData.readInt();
-                        Response<String> response2 = createTransportHelperMethod(
-                                new Transport(
-                                        newTransport.id(),
-                                        newTransport.source(),
-                                        destinations,
-                                        itemsList,
-                                        newTransport.truckId(),
-                                        newTransport.driverId(),
-                                        newTransport.scheduledTime(),
-                                        weight
-                                )
-                        );
-                        if(response2.isSuccess()) return;
-                    }
-                    case 3 -> {
-                        System.out.println("Transport creation cancelled");
-                        return;
-                    }
-                    default -> System.out.println("\nInvalid option!");
+    private void pickAnOptionIfFail(Transport newTransport) {
+        while(true){
+            System.out.println("current weight: "+newTransport.weight());
+            System.out.println("Select one of the following options:");
+            System.out.println("1. Pick new truck and driver");
+            System.out.println("2. Pick new destinations and item lists");
+            System.out.println("3. Cancel and return to previous menu");
+            int option = appData.readInt();
+            switch (option) {
+                case 1 -> {
+                    System.out.println("Truck: ");
+                    String truckId = appData.pickTruck(false).id();
+                    System.out.println("Driver: ");
+                    int driverID = appData.pickDriver(false).id();
+                    newTransport = new Transport(
+                            newTransport.id(),
+                            newTransport.source(),
+                            newTransport.destinations(),
+                            newTransport.itemLists(),
+                            truckId,
+                            driverID,
+                            newTransport.scheduledTime(),
+                            newTransport.weight()
+                    );
+                    Response<String> response2 = createTransportHelperMethod(newTransport);
+                    if(response2.isSuccess()) return;
                 }
+                case 2 -> {
+                    LinkedList<Site> destinations = new LinkedList<>();
+                    HashMap<Site, ItemList> itemsList = new HashMap<>();
+                    destinationsMaker(destinations, itemsList);
+                    System.out.println("New weight :");
+                    int weight = appData.readInt();
+                    newTransport = new Transport(
+                            newTransport.id(),
+                            newTransport.source(),
+                            destinations,
+                            itemsList,
+                            newTransport.truckId(),
+                            newTransport.driverId(),
+                            newTransport.scheduledTime(),
+                            weight
+                    );
+                    Response<String> response2 = createTransportHelperMethod(newTransport);
+                    if(response2.isSuccess()) return;
+                }
+                case 3 -> {
+                    System.out.println("Transport creation cancelled");
+                    return;
+                }
+                default -> System.out.println("\nInvalid option!");
             }
         }
     }

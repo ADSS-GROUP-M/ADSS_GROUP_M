@@ -13,15 +13,18 @@ public class DiscountCategoryController {
     //Map<branch,Map<productTypeID, List<ProductStoreDiscount>>>
     public Map<String, Map<Integer,List<ProductStoreDiscount>>> storeDiscounts;
 
-//    public Map<String, List<CategoryDiscount>> categoryDiscount;
     public Map<String,Map<String,Category>> categoriesPerBranch;
 
-    //should be singleton
-    public DiscountCategoryController() {
+    //create the controller as Singleton
+    private static DiscountCategoryController discountCategoryController = null;
+    private DiscountCategoryController() {
         this.storeDiscounts = new HashMap<String, Map<Integer,List<ProductStoreDiscount>>>();
         this.supplierDiscount = new HashMap<String, Map<Integer,List<ProductDiscountSupplier>>>();
-//        this.categoryDiscount = new HashMap<String, List<CategoryDiscount>>();
-        this.categoriesPerBranch = new HashMap<String, Map<String,Category>>();
+        this.categoriesPerBranch = new HashMap<String, Map<String,Category>>();}
+    public static DiscountCategoryController DiscountCategoryController(){
+        if(discountCategoryController == null)
+            discountCategoryController = new DiscountCategoryController();
+        return discountCategoryController;
     }
 
     private Boolean checkIfBranchExistStoreDiscount(String branch){

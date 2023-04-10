@@ -10,9 +10,14 @@ public class ProductController {
 
     Map<String, Map<Integer,ProductType>> productTypes;
 
-    //should create as singleton?
-    public ProductController(){
-        this.productTypes = new HashMap<String, Map<Integer,ProductType>>();
+    //create the controller as Singleton
+    private static ProductController productController = null;
+    private ProductController() {this.productTypes = new HashMap<String, Map<Integer,ProductType>>();}
+
+    public static ProductController ProductController(){
+        if(productController == null)
+            productController = new ProductController();
+        return productController;
     }
 
     private Boolean checkIfProductTypeExist(String branch, int productTypeID){

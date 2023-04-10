@@ -13,9 +13,6 @@ public class InventoryService {
         categoryController = DiscountCategoryController.DiscountCategoryController();
     }
 
-//    public Response getInventoryShortages(){
-//
-//    }
 
     public Response addProductType(int ProductTypeID, String name, String manufacturer, double supplier_price, double store_price, String branch, int storeAmount, int warehouseAmount){
         try {
@@ -93,11 +90,11 @@ public class InventoryService {
         }
     }
 
-//    public Response getStockProductsDetailed(){
-//
+//    public Response getStockProductsByCategory(){
+//        categoryController.getProductsPerCategory()
 //    }
-//
-//    public Response getStockProduct(String json){
+
+//    public Response getInventoryShortages(){
 //
 //    }
 //

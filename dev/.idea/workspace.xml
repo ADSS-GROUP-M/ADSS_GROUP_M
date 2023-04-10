@@ -1,33 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e454f93c-4ee8-4f4b-9a14-eaaf36aa303c" name="Changes" comment="added products that can be ordered only by dividing to several suppliers functionality and started ui">
-      <change afterPath="$PROJECT_DIR$/PresentationLayer/DeliveryAgreements/DeliveryAgreement.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PresentationLayer/DeliveryAgreements/DeliveryByInvitation.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PresentationLayer/DeliveryAgreements/DeliveryFixedDays.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PresentationLayer/Discounts/CashDiscount.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PresentationLayer/Discounts/Discount.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PresentationLayer/Discounts/PercentageDiscount.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PresentationLayer/Main.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PresentationLayer/Order.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/code.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/code.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/BankAccount.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/BusinessLayer/BankAccount.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/BusinessLayer/Agreement.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/BusinessLayer/Agreement.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/BusinessLayer/BillOfQuantities.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/BusinessLayer/BillOfQuantities.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/BusinessLayer/DeliveryAgreements/DeliveryAgreement.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/BusinessLayer/DeliveryAgreements/DeliveryAgreement.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/BusinessLayer/DeliveryAgreements/DeliveryByInvitation.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/BusinessLayer/DeliveryAgreements/DeliveryByInvitation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/BusinessLayer/DeliveryAgreements/DeliveryFixedDays.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/BusinessLayer/DeliveryAgreements/DeliveryFixedDays.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/BusinessLayer/Discounts/CashDiscount.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/BusinessLayer/Discounts/CashDiscount.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/BusinessLayer/Discounts/PercentageDiscount.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/BusinessLayer/Discounts/PercentageDiscount.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/BusinessLayer/OrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/BusinessLayer/OrderController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/BusinessLayer/Product.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/BusinessLayer/Product.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/BusinessLayer/Supplier.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/BusinessLayer/Supplier.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/BusinessLayer/SupplierController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/BusinessLayer/SupplierController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/ServiceLayer/OrderService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/ServiceLayer/OrderService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/ServiceLayer/SupplierService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/ServiceLayer/SupplierService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PresentationLayer/UI.java" beforeDir="false" afterPath="$PROJECT_DIR$/PresentationLayer/UI.java" afterDir="false" />
-    </list>
+    <list default="true" id="e454f93c-4ee8-4f4b-9a14-eaaf36aa303c" name="Changes" comment="finish ui and tests" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -74,6 +48,7 @@
     "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5": "",
     "jdk.selected.JAVA_MODULE": "19",
     "last_opened_file_path": "C:/Users/yossi/OneDrive/שולחן העבודה/ניתוצ/Assignment1/Assignment1/dev/PresentationLayer",
+    "nodejs_package_manager_path": "npm",
     "project.structure.last.edited": "Modules",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.2",
@@ -219,7 +194,14 @@
       <option name="project" value="LOCAL" />
       <updated>1680880637709</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="finish ui and tests">
+      <created>1681121958493</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1681121958493</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -258,7 +240,8 @@
     <MESSAGE value="done with order functionality - moving to the ability to print the order etc" />
     <MESSAGE value="commit to move to another functionality" />
     <MESSAGE value="added products that can be ordered only by dividing to several suppliers functionality and started ui" />
-    <option name="LAST_COMMIT_MESSAGE" value="added products that can be ordered only by dividing to several suppliers functionality and started ui" />
+    <MESSAGE value="finish ui and tests" />
+    <option name="LAST_COMMIT_MESSAGE" value="finish ui and tests" />
   </component>
   <component name="XDebuggerManager">
     <pin-to-top-manager>

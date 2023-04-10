@@ -1,9 +1,11 @@
 package transportModule.frontend.cmdApp;
 
 import transportModule.backend.serviceLayer.TransportsService;
-import transportModule.frontend.cmdApp.records.ItemList;
-import transportModule.frontend.cmdApp.records.Site;
-import transportModule.frontend.cmdApp.records.Transport;
+import transportModule.records.ItemList;
+import transportModule.records.Site;
+import transportModule.records.Transport;
+import utils.JSON;
+import utils.Response;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -92,7 +94,7 @@ public class TransportsManagement {
                 truckWeight
         );
 
-        Response<String> response = createTransportHelperMethod(newTransport);
+        Response response = createTransportHelperMethod(newTransport);
 
         if(response.isSuccess() == false){
             pickAnOptionIfFail(newTransport);
@@ -123,7 +125,7 @@ public class TransportsManagement {
                             newTransport.scheduledTime(),
                             newTransport.weight()
                     );
-                    Response<String> response2 = createTransportHelperMethod(newTransport);
+                    Response response2 = createTransportHelperMethod(newTransport);
                     if(response2.isSuccess()) return;
                 }
                 case 2 -> {
@@ -142,7 +144,7 @@ public class TransportsManagement {
                             newTransport.scheduledTime(),
                             weight
                     );
-                    Response<String> response2 = createTransportHelperMethod(newTransport);
+                    Response response2 = createTransportHelperMethod(newTransport);
                     if(response2.isSuccess()) return;
                 }
                 case 3 -> {
@@ -297,7 +299,7 @@ public class TransportsManagement {
                 case "y" -> {
                     String json = JSON.serialize(transport);
                     String responseJson = ts.removeTransport(json);
-                    Response<String> response = JSON.deserialize(responseJson, Response.class);
+                    Response response = JSON.deserialize(responseJson, Response.class);
                     if (response.isSuccess()) appData.transports().remove(transport.id());
                     System.out.println("\nTransport deleted successfully!");
                 }
@@ -354,7 +356,7 @@ public class TransportsManagement {
 
         String json = JSON.serialize(newTransport);
         String responseJson = ts.updateTransport(json);
-        Response<String> response = JSON.deserialize(responseJson, Response.class);
+        Response response = JSON.deserialize(responseJson, Response.class);
         if(response.isSuccess()){
             appData.transports().put(id, newTransport);
         }
@@ -390,12 +392,12 @@ public class TransportsManagement {
         }
     }
 
-    private Response<String> createTransportHelperMethod(Transport newTransport) {
+    private Response createTransportHelperMethod(Transport newTransport) {
 
         // send to server
         String json = JSON.serialize(newTransport);
         String responseJson = ts.createTransport(json);
-        Response<String> response = JSON.deserialize(responseJson, Response.class);
+        Response response = JSON.deserialize(responseJson, Response.class);
         System.out.println("\n"+response.getMessage());
 
         if(response.isSuccess()){

@@ -1,6 +1,6 @@
 package transportModule.backend.businessLayer;
 
-import transportModule.backend.businessLayer.records.Site;
+import transportModule.records.Site;
 
 import java.io.IOException;
 import java.util.LinkedList;

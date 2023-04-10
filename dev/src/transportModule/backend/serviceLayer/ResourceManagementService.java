@@ -3,9 +3,11 @@ package transportModule.backend.serviceLayer;
 import transportModule.backend.businessLayer.DriversController;
 import transportModule.backend.businessLayer.SitesController;
 import transportModule.backend.businessLayer.TrucksController;
-import transportModule.backend.businessLayer.records.Driver;
-import transportModule.backend.businessLayer.records.Site;
-import transportModule.backend.businessLayer.records.Truck;
+import transportModule.records.Driver;
+import transportModule.records.Site;
+import transportModule.records.Truck;
+import utils.JSON;
+import utils.Response;
 
 import java.io.IOException;
 
@@ -26,9 +28,9 @@ public class ResourceManagementService {
         try{
             driversController.addDriver(driver);
         }catch(IOException e){
-            return Response.getErrorResponse(e).getJson();
+            return Response.getErrorResponse(e).toJson();
         }
-        return new Response<>("Driver added successfully", true).getJson();
+        return new Response("Driver added successfully", true).toJson();
     }
 
     public String removeDriver(String json){
@@ -36,9 +38,9 @@ public class ResourceManagementService {
         try{
             driversController.removeDriver(driver.id());
         }catch(IOException e){
-            return Response.getErrorResponse(e).getJson();
+            return Response.getErrorResponse(e).toJson();
         }
-        return new Response<>("Driver removed successfully", true).getJson();
+        return new Response("Driver removed successfully", true).toJson();
     }
 
     public String updateDriver(String json){
@@ -46,9 +48,9 @@ public class ResourceManagementService {
         try{
             driversController.updateDriver(driver.id(), driver);
         }catch(IOException e){
-            return Response.getErrorResponse(e).getJson();
+            return Response.getErrorResponse(e).toJson();
         }
-        return new Response<>("Driver updated successfully", true).getJson();
+        return new Response("Driver updated successfully", true).toJson();
     }
 
     public String getDriver(String json){
@@ -56,13 +58,13 @@ public class ResourceManagementService {
         try{
             driver = driversController.getDriver(driver.id());
         }catch(Exception e){
-            return Response.getErrorResponse(e).getJson();
+            return Response.getErrorResponse(e).toJson();
         }
-        return new Response<>("Driver found successfully", true, driver).getJson();
+        return new Response("Driver found successfully", true, driver).toJson();
     }
 
     public String getAllDrivers(){
-        return new Response<>("Drivers found successfully", true, driversController.getAllDrivers()).getJson();
+        return new Response("Drivers found successfully", true, driversController.getAllDrivers()).toJson();
     }
 
     public String addTruck(String json){
@@ -70,9 +72,9 @@ public class ResourceManagementService {
         try{
             trucksController.addTruck(truck);
         }catch(IOException e){
-            return Response.getErrorResponse(e).getJson();
+            return Response.getErrorResponse(e).toJson();
         }
-        return new Response<>("Truck added successfully", true).getJson();
+        return new Response("Truck added successfully", true).toJson();
     }
 
     public String removeTruck(String json){
@@ -80,9 +82,9 @@ public class ResourceManagementService {
         try{
             trucksController.removeTruck(truck.id());
         }catch(IOException e){
-            return Response.getErrorResponse(e).getJson();
+            return Response.getErrorResponse(e).toJson();
         }
-        return new Response<>("Truck removed successfully", true).getJson();
+        return new Response("Truck removed successfully", true).toJson();
     }
 
     public String updateTruck(String json){
@@ -90,9 +92,9 @@ public class ResourceManagementService {
         try{
             trucksController.updateTruck(truck.id(), truck);
         }catch(IOException e){
-            return Response.getErrorResponse(e).getJson();
+            return Response.getErrorResponse(e).toJson();
         }
-        return new Response<>("Truck updated successfully", true).getJson();
+        return new Response("Truck updated successfully", true).toJson();
     }
 
     public String getTruck(String json){
@@ -100,13 +102,13 @@ public class ResourceManagementService {
         try{
             truck = trucksController.getTruck(truck.id());
         }catch(Exception e){
-            return Response.getErrorResponse(e).getJson();
+            return Response.getErrorResponse(e).toJson();
         }
-        return new Response<>("Truck found successfully", true, truck).getJson();
+        return new Response("Truck found successfully", true, truck).toJson();
     }
 
     public String getAllTrucks(){
-        return new Response<>("Trucks found successfully", true, trucksController.getAllTrucks()).getJson();
+        return new Response("Trucks found successfully", true, trucksController.getAllTrucks()).toJson();
     }
 
     public String addSite(String json){
@@ -114,9 +116,9 @@ public class ResourceManagementService {
         try{
             sitesController.addSite(site);
         }catch(IOException e){
-            return Response.getErrorResponse(e).getJson();
+            return Response.getErrorResponse(e).toJson();
         }
-        return new Response<>("Site added successfully", true).getJson();
+        return new Response("Site added successfully", true).toJson();
     }
 
     public String removeSite(String json){
@@ -124,9 +126,9 @@ public class ResourceManagementService {
         try{
             sitesController.removeSite(site.address());
         }catch(IOException e){
-            return Response.getErrorResponse(e).getJson();
+            return Response.getErrorResponse(e).toJson();
         }
-        return new Response<>("Site removed successfully", true).getJson();
+        return new Response("Site removed successfully", true).toJson();
     }
 
     public String updateSite(String json){
@@ -134,9 +136,9 @@ public class ResourceManagementService {
         try{
             sitesController.updateSite(site.address(), site);
         }catch(IOException e){
-            return Response.getErrorResponse(e).getJson();
+            return Response.getErrorResponse(e).toJson();
         }
-        return new Response<>("Site updated successfully", true).getJson();
+        return new Response("Site updated successfully", true).toJson();
     }
 
     public String getSite(String json){
@@ -144,13 +146,13 @@ public class ResourceManagementService {
         try{
             site = sitesController.getSite(site.address());
         }catch(Exception e){
-            return Response.getErrorResponse(e).getJson();
+            return Response.getErrorResponse(e).toJson();
         }
-        return new Response<>("Site found successfully", true, site).getJson();
+        return new Response("Site found successfully", true, site).toJson();
     }
 
     public String getAllSites(){
-        return new Response<>("Sites found successfully", true, sitesController.getAllSites()).getJson();
+        return new Response("Sites found successfully", true, sitesController.getAllSites()).toJson();
     }
 
 }

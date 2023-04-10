@@ -1,4 +1,4 @@
-package transportModule.backend.businessLayer.records;
+package transportModule.records;
 
 import java.util.Objects;
 

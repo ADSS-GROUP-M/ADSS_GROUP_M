@@ -4,21 +4,23 @@ import com.google.gson.reflect.TypeToken;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import transportModule.backend.businessLayer.records.Driver;
-import transportModule.backend.businessLayer.records.Site;
-import transportModule.backend.businessLayer.records.Truck;
+import transportModule.records.Driver;
+import transportModule.records.Site;
+import transportModule.records.Truck;
+import utils.JSON;
+import utils.Response;
 
 import java.lang.reflect.Type;
 import java.util.LinkedList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-    class ResourceManagementServiceTest {
+class ResourceManagementServiceTest {
 
         ResourceManagementService rms;
-        private static final Type responseDriverType = new TypeToken<Response<Driver>>(){}.getType();
-        private static final Type responseTruckType = new TypeToken<Response<Truck>>(){}.getType();
-        private static final Type responseSiteType = new TypeToken<Response<Site>>(){}.getType();
+//        private static final Type responseDriverType = new TypeToken<Response<Driver>>(){}.getType();
+//        private static final Type responseTruckType = new TypeToken<Response<Truck>>(){}.getType();
+//        private static final Type responseSiteType = new TypeToken<Response<Site>>(){}.getType();
         private Driver driver;
         private Site site;
         private Truck truck;
@@ -52,20 +54,21 @@ import static org.junit.jupiter.api.Assertions.*;
         Driver driver3 = new Driver(111111111,"Jim", Driver.LicenseType.C3);
         rms.addDriver(JSON.serialize(driver3));
         String responseJson = rms.getDriver(JSON.serialize(Driver.getLookupObject(driver3.id())));
-        Response<Driver> response = JSON.deserialize(responseJson, responseDriverType);
+        Response response = Response.fromJson(responseJson);
         assertTrue(response.isSuccess());
-        assertEquals(driver3.id(), response.getData().id());
-        assertEquals(driver3.name(), response.getData().name());
-        assertEquals(driver3.licenseType(), response.getData().licenseType());
+        Driver driverToCheck = response.getData(Driver.class);
+        assertEquals(driver3.id(), driverToCheck.id());
+        assertEquals(driver3.name(), driverToCheck.name());
+        assertEquals(driver3.licenseType(), driverToCheck.licenseType());
     }
 
     @Test
     void removeDriver() {
         String json1 = rms.removeDriver(JSON.serialize(driver));
-        Response<String> response1 = JSON.deserialize(json1, responseDriverType);
+        Response response1 = Response.fromJson(json1);
         assertTrue(response1.isSuccess());
         String responseJson = rms.getDriver(JSON.serialize(Driver.getLookupObject(driver.id())));
-        Response<Driver> response = JSON.deserialize(responseJson, responseDriverType);
+        Response response = Response.fromJson(responseJson);
         assertFalse(response.isSuccess());
     }
 
@@ -73,25 +76,27 @@ import static org.junit.jupiter.api.Assertions.*;
     void updateDriver() {
         Driver driverUpdate = new Driver(driver.id(), driver.name(), Driver.LicenseType.C1);
         String json1 = rms.updateDriver(JSON.serialize(driverUpdate));
-        Response<String> response1 = JSON.deserialize(json1, responseDriverType);
+        Response response1 = Response.fromJson(json1);
         assertTrue(response1.isSuccess());
 
         String json2 = rms.getDriver(JSON.serialize(Driver.getLookupObject(driver.id())));
-        Response<Driver> response2 = JSON.deserialize(json2, responseDriverType);
+        Response response2 = Response.fromJson(json2);
         assertTrue(response2.isSuccess());
-        assertEquals(driverUpdate.id(), response2.getData().id());
-        assertEquals(driverUpdate.name(), response2.getData().name());
-        assertEquals(driverUpdate.licenseType(), response2.getData().licenseType());
+        Driver driverToCheck = response2.getData(Driver.class);
+        assertEquals(driverUpdate.id(), driverToCheck.id());
+        assertEquals(driverUpdate.name(), driverToCheck.name());
+        assertEquals(driverUpdate.licenseType(), driverToCheck.licenseType());
     }
 
     @Test
     void getDriver() {
         String responseJson = rms.getDriver(JSON.serialize(Driver.getLookupObject(driver.id())));
-        Response<Driver> response = JSON.deserialize(responseJson, responseDriverType);
+        Response response = Response.fromJson(responseJson);
         assertTrue(response.isSuccess());
-        assertEquals(driver.id(), response.getData().id());
-        assertEquals(driver.name(), response.getData().name());
-        assertEquals(driver.licenseType(), response.getData().licenseType());
+        Driver driverToCheck = response.getData(Driver.class);
+        assertEquals(driver.id(), driverToCheck.id());
+        assertEquals(driver.name(), driverToCheck.name());
+        assertEquals(driver.licenseType(), driverToCheck.licenseType());
     }
 
     @Test
@@ -103,10 +108,10 @@ import static org.junit.jupiter.api.Assertions.*;
         }
 
         String responseJson = rms.getAllDrivers();
-        Type type = new TypeToken<Response<LinkedList<Driver>>>(){}.getType();
-        Response<LinkedList<Driver>> response = JSON.deserialize(responseJson,type);
+        Response response = Response.fromJson(responseJson);
         assertTrue(response.isSuccess());
-        assertEquals(21, response.getData().size());
+        Type type = new TypeToken<LinkedList<Driver>>(){}.getType();
+        assertEquals(21, response.<LinkedList<Driver>>getData(type).size());
     }
 
     @Test
@@ -114,25 +119,26 @@ import static org.junit.jupiter.api.Assertions.*;
         Truck truck3 = new Truck("ghi789", "chevy", 2000, 15000, Truck.CoolingCapacity.FROZEN);
 
         String json1 = rms.addTruck(JSON.serialize(truck3));
-        Response<String> response1 = JSON.deserialize(json1, responseTruckType);
+        Response response1 = Response.fromJson(json1);
         assertTrue(response1.isSuccess());
 
         String json2 = rms.getTruck(JSON.serialize(Truck.getLookupObject(truck3.id())));
-        Response<Truck> response2 = JSON.deserialize(json2, responseTruckType);
+        Response response2 = Response.fromJson(json2);
         assertTrue(response2.isSuccess());
-        assertEquals(truck3.id(), response2.getData().id());
-        assertEquals(truck3.model(), response2.getData().model());
-        assertEquals(truck3.coolingCapacity(), response2.getData().coolingCapacity());
+        Truck truckToCheck = response2.getData(Truck.class);
+        assertEquals(truck3.id(), truckToCheck.id());
+        assertEquals(truck3.model(), truckToCheck.model());
+        assertEquals(truck3.coolingCapacity(), truckToCheck.coolingCapacity());
     }
 
     @Test
     void removeTruck() {
         String json1 = rms.removeTruck(JSON.serialize(truck));
-        Response<String> response1 = JSON.deserialize(json1, responseTruckType);
+        Response response1 = Response.fromJson(json1);
         assertTrue(response1.isSuccess());
 
         String json2 = rms.getTruck(JSON.serialize(Truck.getLookupObject(truck.id())));
-        Response<Truck> response2 = JSON.deserialize(json2, responseTruckType);
+        Response response2 = Response.fromJson(json2);
         assertFalse(response2.isSuccess());
     }
 
@@ -141,25 +147,27 @@ import static org.junit.jupiter.api.Assertions.*;
         Truck truckUpdate = new Truck(truck.id(), truck.model(), 2000, 15000, Truck.CoolingCapacity.NONE);
 
         String json1 = rms.updateTruck(JSON.serialize(truckUpdate));
-        Response<String> response1 = JSON.deserialize(json1, responseTruckType);
+        Response response1 = Response.fromJson(json1);
         assertTrue(response1.isSuccess());
 
         String json2 = rms.getTruck(JSON.serialize(Truck.getLookupObject(truck.id())));
-        Response<Truck> response2 = JSON.deserialize(json2, responseTruckType);
+        Response response2 = Response.fromJson(json2);
         assertTrue(response2.isSuccess());
-        assertEquals(truckUpdate.id(), response2.getData().id());
-        assertEquals(truckUpdate.model(), response2.getData().model());
-        assertEquals(truckUpdate.coolingCapacity(), response2.getData().coolingCapacity());
+        Truck truckToCheck = response2.getData(Truck.class);
+        assertEquals(truckUpdate.id(), truckToCheck.id());
+        assertEquals(truckUpdate.model(), truckToCheck.model());
+        assertEquals(truckUpdate.coolingCapacity(), truckToCheck.coolingCapacity());
     }
 
     @Test
     void getTruck() {
         String responseJson = rms.getTruck(JSON.serialize(Truck.getLookupObject(truck.id())));
-        Response<Truck> response = JSON.deserialize(responseJson, responseTruckType);
+        Response response = Response.fromJson(responseJson);
         assertTrue(response.isSuccess());
-        assertEquals(truck.id(), response.getData().id());
-        assertEquals(truck.model(), response.getData().model());
-        assertEquals(truck.coolingCapacity(), response.getData().coolingCapacity());
+        Truck truckToCheck = response.getData(Truck.class);
+        assertEquals(truck.id(), truckToCheck.id());
+        assertEquals(truck.model(), truckToCheck.model());
+        assertEquals(truck.coolingCapacity(), truckToCheck.coolingCapacity());
     }
 
     @Test
@@ -171,10 +179,10 @@ import static org.junit.jupiter.api.Assertions.*;
         }
 
         String responseJson = rms.getAllTrucks();
-        Type type = new TypeToken<Response<LinkedList<Truck>>>(){}.getType();
-        Response<LinkedList<Truck>> response = JSON.deserialize(responseJson,type);
+        Response response = Response.fromJson(responseJson);
         assertTrue(response.isSuccess());
-        assertEquals(21, response.getData().size());
+        Type type = new TypeToken<LinkedList<Truck>>(){}.getType();
+        assertEquals(21, response.<LinkedList<Truck>>getData(type).size());
     }
 
     @Test
@@ -182,26 +190,27 @@ import static org.junit.jupiter.api.Assertions.*;
         Site site3 = new Site("zone a", "address a", "123456","bob", Site.SiteType.BRANCH);
 
         String json1 = rms.addSite(JSON.serialize(site3));
-        Response<String> response1 = JSON.deserialize(json1, responseSiteType);
+        Response response1 = Response.fromJson(json1);
         assertTrue(response1.isSuccess());
 
         String json2 = rms.getSite(JSON.serialize(Site.getLookupObject(site3.address())));
-        Response<Site> response2 = JSON.deserialize(json2, responseSiteType);
+        Response response2 = Response.fromJson(json2);
         assertTrue(response2.isSuccess());
-        assertEquals(site3.transportZone(), response2.getData().transportZone());
-        assertEquals(site3.address(), response2.getData().address());
-        assertEquals(site3.phoneNumber(), response2.getData().phoneNumber());
-        assertEquals(site3.contactName(), response2.getData().contactName());
+        Site siteToCheck = response2.getData(Site.class);
+        assertEquals(site3.transportZone(), siteToCheck.transportZone());
+        assertEquals(site3.address(), siteToCheck.address());
+        assertEquals(site3.phoneNumber(), siteToCheck.phoneNumber());
+        assertEquals(site3.contactName(), siteToCheck.contactName());
     }
 
     @Test
     void removeSite() {
         String json1 = rms.removeSite(JSON.serialize(site));
-        Response<String> response1 = JSON.deserialize(json1, responseSiteType);
+        Response response1 = Response.fromJson(json1);
         assertTrue(response1.isSuccess());
 
         String json2 = rms.getSite(JSON.serialize(Site.getLookupObject(site.address())));
-        Response<Site> response2 = JSON.deserialize(json2, responseSiteType);
+        Response response2 = Response.fromJson(json2);
         assertFalse(response2.isSuccess());
     }
 
@@ -210,29 +219,31 @@ import static org.junit.jupiter.api.Assertions.*;
         Site siteUpdate = new Site(site.transportZone(), site.address(), "123456981251","new bob", Site.SiteType.BRANCH);
 
         String json1 = rms.updateSite(JSON.serialize(siteUpdate));
-        Response<String> response1 = JSON.deserialize(json1, responseSiteType);
+        Response response1 = Response.fromJson(json1);
         assertTrue(response1.isSuccess());
 
         String json2 = rms.getSite(JSON.serialize(Site.getLookupObject(site.address())));
-        Response<Site> response2 = JSON.deserialize(json2, responseSiteType);
+        Response response2 = Response.fromJson(json2);
         assertTrue(response2.isSuccess());
-        assertEquals(siteUpdate.transportZone(), response2.getData().transportZone());
-        assertEquals(siteUpdate.address(), response2.getData().address());
-        assertEquals(siteUpdate.phoneNumber(), response2.getData().phoneNumber());
-        assertEquals(siteUpdate.contactName(), response2.getData().contactName());
-        assertEquals(siteUpdate.siteType(), response2.getData().siteType());
+        Site siteToCheck = response2.getData(Site.class);
+        assertEquals(siteUpdate.transportZone(), siteToCheck.transportZone());
+        assertEquals(siteUpdate.address(), siteToCheck.address());
+        assertEquals(siteUpdate.phoneNumber(), siteToCheck.phoneNumber());
+        assertEquals(siteUpdate.contactName(), siteToCheck.contactName());
+        assertEquals(siteUpdate.siteType(), siteToCheck.siteType());
     }
 
     @Test
     void getSite() {
         String responseJson = rms.getSite(JSON.serialize(Site.getLookupObject(site.address())));
-        Response<Site> response = JSON.deserialize(responseJson, responseSiteType);
+        Response response = Response.fromJson(responseJson);
         assertTrue(response.isSuccess());
-        assertEquals(site.transportZone(), response.getData().transportZone());
-        assertEquals(site.address(), response.getData().address());
-        assertEquals(site.phoneNumber(), response.getData().phoneNumber());
-        assertEquals(site.contactName(), response.getData().contactName());
-        assertEquals(site.siteType(), response.getData().siteType());
+        Site siteToCheck = response.getData(Site.class);
+        assertEquals(site.transportZone(), siteToCheck.transportZone());
+        assertEquals(site.address(), siteToCheck.address());
+        assertEquals(site.phoneNumber(), siteToCheck.phoneNumber());
+        assertEquals(site.contactName(), siteToCheck.contactName());
+        assertEquals(site.siteType(), siteToCheck.siteType());
     }
 
     @Test
@@ -244,9 +255,9 @@ import static org.junit.jupiter.api.Assertions.*;
         }
 
         String responseJson = rms.getAllSites();
-        Type type = new TypeToken<Response<LinkedList<Site>>>(){}.getType();
-        Response<LinkedList<Site>> response = JSON.deserialize(responseJson,type);
+        Response response = Response.fromJson(responseJson);
         assertTrue(response.isSuccess());
-        assertEquals(21, response.getData().size());
+        Type type = new TypeToken<LinkedList<Site>>(){}.getType();
+        assertEquals(21, response.<LinkedList<Site>>getData(type).size());
     }
 }

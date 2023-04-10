@@ -4,7 +4,9 @@ import com.google.gson.reflect.TypeToken;
 import transportModule.backend.serviceLayer.ItemListsService;
 import transportModule.backend.serviceLayer.ResourceManagementService;
 import transportModule.backend.serviceLayer.TransportsService;
-import transportModule.frontend.cmdApp.records.*;
+import transportModule.records.*;
+import utils.JSON;
+import utils.Response;
 
 import java.lang.reflect.Type;
 import java.time.LocalDateTime;
@@ -72,45 +74,45 @@ public class AppData {
 
     private void fetchTrucks() {
         String json = rms.getAllTrucks();
-        Type type = new TypeToken<Response<LinkedList<Truck>>>(){}.getType();
-        Response<LinkedList<Truck>> response = JSON.deserialize(json, type);
-        for(Truck truck : response.getData()){
+        Response response = Response.fromJson(json);
+        Type type = new TypeToken<LinkedList<Truck>>(){}.getType();
+        for(Truck truck : response.<LinkedList<Truck>>getData(type)){
             trucks.put(truck.id(), truck);
         }
     }
 
     private void fetchDrivers() {
         String json = rms.getAllDrivers();
-        Type type = new TypeToken<Response<LinkedList<Driver>>>(){}.getType();
-        Response<LinkedList<Driver>> response = JSON.deserialize(json, type);
-        for(var driver : response.getData()){
+        Response response = Response.fromJson(json);
+        Type type = new TypeToken<LinkedList<Driver>>(){}.getType();
+        for(Driver driver : response.<LinkedList<Driver>>getData(type)){
             drivers.put(driver.id(), driver);
         }
     }
 
     private void fetchSites() {
         String json = rms.getAllSites();
-        Type type = new TypeToken<Response<LinkedList<Site>>>(){}.getType();
-        Response<LinkedList<Site>> response = JSON.deserialize(json, type);
-        for(Site site : response.getData()){
+        Response response = Response.fromJson(json);
+        Type type = new TypeToken<LinkedList<Site>>(){}.getType();
+        for(Site site : response.<LinkedList<Site>>getData(type)){
             sites.put(site.address(), site);
         }
     }
 
     private void fetchItemLists() {
         String json = ils.getAllItemLists();
-        Type type = new TypeToken<Response<LinkedList<ItemList>>>(){}.getType();
-        Response<LinkedList<ItemList>> response = JSON.deserialize(json, type);
-        for(ItemList list : response.getData()){
+        Response response = Response.fromJson(json);
+        Type type = new TypeToken<LinkedList<ItemList>>(){}.getType();
+        for(ItemList list : response.<LinkedList<ItemList>>getData(type)){
             itemLists.put(list.id(), list);
         }
     }
 
     private void fetchTransports() {
         String json = ts.getAllTransports();
-        Type type = new TypeToken<Response<LinkedList<Transport>>>(){}.getType();
-        Response<LinkedList<Transport>> response = JSON.deserialize(json, type);
-        for(Transport transport : response.getData()){
+        Response response = Response.fromJson(json);
+        Type type = new TypeToken<LinkedList<Transport>>(){}.getType();
+        for(Transport transport : response.<LinkedList<Transport>>getData(type)){
             transports.put(transport.id(), transport);
         }
     }

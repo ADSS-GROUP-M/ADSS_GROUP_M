@@ -1,7 +1,9 @@
 package transportModule.frontend.cmdApp;
 
 import transportModule.backend.serviceLayer.ResourceManagementService;
-import transportModule.frontend.cmdApp.records.Site;
+import transportModule.records.Site;
+import utils.JSON;
+import utils.Response;
 
 public class SitesManagement {
 
@@ -64,7 +66,7 @@ public class SitesManagement {
         Site newSite = new Site(transportZone, address, contactPhone, contactName, type);
         String json = JSON.serialize(newSite);
         String responseJson = rms.addSite(json);
-        Response<String> response = JSON.deserialize(responseJson, Response.class);
+        Response response = JSON.deserialize(responseJson, Response.class);
         if(response.isSuccess()) appData.sites().put(newSite.address(), newSite);
         System.out.println("\n"+response.getMessage());
     }
@@ -122,7 +124,7 @@ public class SitesManagement {
         Site newSite = new Site(transportZone, address, phoneNumber, contactName, siteType);
         String json = JSON.serialize(newSite);
         String responseJson = rms.updateSite(json);
-        Response<String> response = JSON.deserialize(responseJson, Response.class);
+        Response response = JSON.deserialize(responseJson, Response.class);
         if(response.isSuccess()) appData.sites().put(newSite.address(), newSite);
         System.out.println("\n"+response.getMessage());
     }
@@ -143,7 +145,7 @@ public class SitesManagement {
                 case "y"-> {
                     String json = JSON.serialize(site);
                     String responseJson = rms.removeSite(json);
-                    Response<String> response = JSON.deserialize(responseJson, Response.class);
+                    Response response = JSON.deserialize(responseJson, Response.class);
                     if(response.isSuccess()) appData.sites().remove(site.address());
                     System.out.println("\n"+response.getMessage());
                 }

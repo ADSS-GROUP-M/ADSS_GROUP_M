@@ -1,7 +1,9 @@
 package transportModule.frontend.cmdApp;
 
 import transportModule.backend.serviceLayer.ItemListsService;
-import transportModule.frontend.cmdApp.records.ItemList;
+import transportModule.records.ItemList;
+import utils.JSON;
+import utils.Response;
 
 import java.util.HashMap;
 
@@ -53,7 +55,7 @@ public class ItemListsManagement {
         itemEditor(list.unload());
         String json = JSON.serialize(list);
         String responseJson = ils.addItemList(json);
-        Response<String> response = JSON.deserialize(responseJson, Response.class);
+        Response response = JSON.deserialize(responseJson, Response.class);
         if(response.isSuccess()) {
             appData.itemLists().put(itemListIdCounter,list);
             itemListIdCounter++;
@@ -85,7 +87,7 @@ public class ItemListsManagement {
             itemEditor(newList.unload());
             String json = JSON.serialize(newList);
             String responseJson = ils.updateItemList(json);
-            Response<String> response = JSON.deserialize(responseJson, Response.class);
+            Response response = JSON.deserialize(responseJson, Response.class);
             if(response.isSuccess()) appData.itemLists().put(id,newList);
             System.out.println("\n"+response.getMessage());
         }
@@ -104,7 +106,7 @@ public class ItemListsManagement {
                 case "y" ->{
                     String json = JSON.serialize(list);
                     String responseJson = ils.removeItemList(json);
-                    Response<String> response = JSON.deserialize(responseJson, Response.class);
+                    Response response = JSON.deserialize(responseJson, Response.class);
                     if(response.isSuccess()) appData.itemLists().remove(id);
                     System.out.println("\n"+response.getMessage());
                 }

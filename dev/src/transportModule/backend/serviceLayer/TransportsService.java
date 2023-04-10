@@ -2,7 +2,9 @@ package transportModule.backend.serviceLayer;
 
 import transportModule.backend.businessLayer.ItemListsController;
 import transportModule.backend.businessLayer.TransportsController;
-import transportModule.backend.businessLayer.records.Transport;
+import transportModule.records.Transport;
+import utils.JSON;
+import utils.Response;
 
 import java.io.IOException;
 
@@ -71,9 +73,9 @@ public class TransportsService {
             tc.addTransport(transport);
         }
         catch(IOException e){
-            return Response.getErrorResponse(e).getJson();
+            return Response.getErrorResponse(e).toJson();
         }
-        return new Response<>("Transport created successfully",true, "").getJson();
+        return new Response("Transport created successfully",true, "").toJson();
     }
 
     public String updateTransport(String json){
@@ -83,9 +85,9 @@ public class TransportsService {
             tc.updateTransport(transport.id(), transport);
         }
         catch(IOException e){
-            return Response.getErrorResponse(e).getJson();
+            return Response.getErrorResponse(e).toJson();
         }
-        return new Response<>("Transport updated successfully",true, "").getJson();
+        return new Response("Transport updated successfully",true, "").toJson();
     }
 
     public String removeTransport(String json){
@@ -95,9 +97,9 @@ public class TransportsService {
             tc.removeTransport(transport.id());
         }
         catch(IOException e){
-            return Response.getErrorResponse(e).getJson();
+            return Response.getErrorResponse(e).toJson();
         }
-        return new Response<>("Transport removed successfully",true, "").getJson();
+        return new Response("Transport removed successfully",true, "").toJson();
     }
 
     public String getTransport(String json){
@@ -107,12 +109,12 @@ public class TransportsService {
             transport = tc.getTransport(transport.id());
         }
         catch(IOException e){
-            return Response.getErrorResponse(e).getJson();
+            return Response.getErrorResponse(e).toJson();
         }
-        return new Response<>("Transport found successfully",true, transport).getJson();
+        return new Response("Transport found successfully",true, transport).toJson();
     }
 
     public String getAllTransports(){
-        return new Response<>("All Transports found successfully",true, tc.getAllTransports()).getJson();
+        return new Response("All Transports found successfully",true, tc.getAllTransports()).toJson();
     }
 }

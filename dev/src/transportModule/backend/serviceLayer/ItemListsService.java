@@ -1,7 +1,9 @@
 package transportModule.backend.serviceLayer;
 
 import transportModule.backend.businessLayer.ItemListsController;
-import transportModule.backend.businessLayer.records.ItemList;
+import transportModule.records.ItemList;
+import utils.JSON;
+import utils.Response;
 
 public class ItemListsService {
     private final ItemListsController ilc;
@@ -15,9 +17,9 @@ public class ItemListsService {
         try{
             ilc.addItemList(itemList);
         }catch(Exception e){
-            return Response.getErrorResponse(e).getJson();
+            return Response.getErrorResponse(e).toJson();
         }
-        return new Response<>("Item list added successfully", true).getJson();
+        return new Response("Item list added successfully", true).toJson();
     }
 
     public String removeItemList(String json){
@@ -25,9 +27,9 @@ public class ItemListsService {
         try{
             ilc.removeItemList(itemList.id());
         }catch(Exception e){
-            return Response.getErrorResponse(e).getJson();
+            return Response.getErrorResponse(e).toJson();
         }
-        return new Response<>("Item list removed successfully", true).getJson();
+        return new Response("Item list removed successfully", true).toJson();
     }
 
     public String updateItemList(String json){
@@ -35,9 +37,9 @@ public class ItemListsService {
         try{
             ilc.updateItemList(itemList.id(), itemList);
         }catch(Exception e){
-            return Response.getErrorResponse(e).getJson();
+            return Response.getErrorResponse(e).toJson();
         }
-        return new Response<>("Item list updated successfully", true).getJson();
+        return new Response("Item list updated successfully", true).toJson();
     }
 
     public String getItemList(String json){
@@ -45,13 +47,13 @@ public class ItemListsService {
         try{
             itemList = ilc.getItemList(itemList.id());
         }catch(Exception e){
-            return Response.getErrorResponse(e).getJson();
+            return Response.getErrorResponse(e).toJson();
         }
-        return new Response<>("Item list found successfully", true, itemList).getJson();
+        return new Response("Item list found successfully", true, itemList).toJson();
     }
 
     public String getAllItemLists(){
-        return new Response<>("Item lists found successfully", true, ilc.getAllItemLists()).getJson();
+        return new Response("Item lists found successfully", true, ilc.getAllItemLists()).toJson();
     }
 
 }

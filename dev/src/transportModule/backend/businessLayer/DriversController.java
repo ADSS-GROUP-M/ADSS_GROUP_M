@@ -1,6 +1,6 @@
 package transportModule.backend.businessLayer;
 
-import transportModule.backend.businessLayer.records.Driver;
+import transportModule.records.Driver;
 
 import java.io.IOException;
 import java.util.LinkedList;

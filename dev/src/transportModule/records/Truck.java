@@ -1,4 +1,4 @@
-package transportModule.frontend.cmdApp.records;
+package transportModule.records;
 
 import java.util.Objects;
 

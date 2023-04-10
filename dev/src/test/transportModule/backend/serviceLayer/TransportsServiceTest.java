@@ -4,7 +4,9 @@ import com.google.gson.reflect.TypeToken;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import transportModule.backend.businessLayer.records.*;
+import transportModule.records.*;
+import utils.JSON;
+import utils.Response;
 
 import java.lang.reflect.Type;
 import java.time.LocalDateTime;
@@ -101,15 +103,14 @@ class TransportsServiceTest {
                 2000
         );
         String json = ts.createTransport(JSON.serialize(newTransport));
-        Response<String> response = JSON.deserialize(json, Response.class);
+        Response response = Response.fromJson(json);
         assertTrue(response.isSuccess());
         String updatedJson = ts
                 .getTransport(
                         JSON.serialize(Transport.getLookupObject(newTransport.id()))
                 );
-        Type type = new TypeToken<Response<Transport>>(){}.getType();
-        Response<Transport> updatedResponse = JSON.deserialize(updatedJson, type);
-        Transport updatedTransport = updatedResponse.getData();
+        Response updatedResponse = Response.fromJson(updatedJson);
+        Transport updatedTransport = updatedResponse.getData(Transport.class);
         assertEquals(newTransport.id(), updatedTransport.id());
         assertEquals(newTransport.source(), updatedTransport.source());
         assertEquals(newTransport.destinations(), updatedTransport.destinations());
@@ -151,15 +152,14 @@ class TransportsServiceTest {
                 2000
         );
         String json = ts.updateTransport(JSON.serialize(newTransport));
-        Response<String> response = JSON.deserialize(json, Response.class);
+        Response response = Response.fromJson(json);
         assertTrue(response.isSuccess());
         String updatedJson = ts
                 .getTransport(
                         JSON.serialize(Transport.getLookupObject(newTransport.id()))
                 );
-        Type type = new TypeToken<Response<Transport>>(){}.getType();
-        Response<Transport> updatedResponse = JSON.deserialize(updatedJson, type);
-        Transport updatedTransport = updatedResponse.getData();
+        Response updatedResponse = Response.fromJson(updatedJson);
+        Transport updatedTransport = updatedResponse.getData(Transport.class);
         assertEquals(newTransport.id(), updatedTransport.id());
         assertEquals(newTransport.source(), updatedTransport.source());
         assertEquals(newTransport.destinations(), updatedTransport.destinations());
@@ -176,14 +176,13 @@ class TransportsServiceTest {
                 .removeTransport(
                         JSON.serialize(Transport.getLookupObject(transport.id()))
                 );
-        Response<String> response = JSON.deserialize(json, Response.class);
+        Response response = Response.fromJson(json);
         assertTrue(response.isSuccess());
         String updatedJson = ts
                 .getTransport(
                         JSON.serialize(Transport.getLookupObject(transport.id()))
                 );
-        Type type = new TypeToken<Response<Transport>>(){}.getType();
-        Response<Transport> updatedResponse = JSON.deserialize(updatedJson, type);
+        Response updatedResponse = Response.fromJson(updatedJson);
         assertFalse(updatedResponse.isSuccess());
     }
 
@@ -193,9 +192,8 @@ class TransportsServiceTest {
                 .getTransport(
                         JSON.serialize(Transport.getLookupObject(transport.id()))
                 );
-        Type type = new TypeToken<Response<Transport>>(){}.getType();
-        Response<Transport> response = JSON.deserialize(json, type);
-        Transport TransportReceived = response.getData();
+        Response response = Response.fromJson(json);
+        Transport TransportReceived = response.getData(Transport.class);
         assertEquals(transport.id(), TransportReceived.id());
         assertEquals(transport.source(), TransportReceived.source());
         assertEquals(transport.destinations(), TransportReceived.destinations());
@@ -210,9 +208,9 @@ class TransportsServiceTest {
     void getAllTransports() {
         String json = ts
                 .getAllTransports();
-        Type type = new TypeToken<Response<List<Transport>>>(){}.getType();
-        Response<List<Transport>> response = JSON.deserialize(json, type);
-        List<Transport> updatedTransports = response.getData();
+        Response response = Response.fromJson(json);
+        Type type = new TypeToken<LinkedList<Transport>>(){}.getType();
+        LinkedList<Transport> updatedTransports = response.getData(type);
         assertTrue(updatedTransports.contains(transport));
     }
 
@@ -232,9 +230,9 @@ class TransportsServiceTest {
                 30000
         );
         String json = ts.createTransport(JSON.serialize(newTransport));
-        Response<String> response = JSON.deserialize(json, Response.class);
+        Response response = Response.fromJson(json);
         assertFalse(response.isSuccess());
-        assertEquals(response.getData(),"weight");
+        assertEquals(response.getData(String.class),"weight");
     }
 
     @Test
@@ -255,9 +253,9 @@ class TransportsServiceTest {
                 10000
         );
         String json = ts.createTransport(JSON.serialize(newTransport));
-        Response<String> response = JSON.deserialize(json, Response.class);
+        Response response = Response.fromJson(json);
         assertFalse(response.isSuccess());
-        assertEquals(response.getData(),"license");
+        assertEquals(response.getData(String.class),"license");
     }
     @Test
     void createTransportWithBadLicenseAndTooMuchWeight(){
@@ -277,8 +275,8 @@ class TransportsServiceTest {
                 30000
         );
         String json = ts.createTransport(JSON.serialize(newTransport));
-        Response<String> response = JSON.deserialize(json, Response.class);
+        Response response = Response.fromJson(json);
         assertFalse(response.isSuccess());
-        assertEquals(response.getData(),"weight,license");
+        assertEquals(response.getData(String.class),"weight,license");
     }
 }

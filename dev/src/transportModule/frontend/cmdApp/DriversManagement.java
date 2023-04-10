@@ -1,7 +1,9 @@
 package transportModule.frontend.cmdApp;
 
 import transportModule.backend.serviceLayer.ResourceManagementService;
-import transportModule.frontend.cmdApp.records.Driver;
+import transportModule.records.Driver;
+import utils.JSON;
+import utils.Response;
 
 public class DriversManagement {
 
@@ -51,7 +53,7 @@ public class DriversManagement {
         Driver newDriver = new Driver(id, fullName, licenseType);
         String json = JSON.serialize(newDriver);
         String responseJson = rms.addDriver(json);
-        Response<String> response = JSON.deserialize(responseJson, Response.class);
+        Response response = JSON.deserialize(responseJson, Response.class);
         if(response.isSuccess()) appData.drivers().put(id, newDriver);
         System.out.println("\n"+response.getMessage());
     }
@@ -98,7 +100,7 @@ public class DriversManagement {
         Driver updatedDriver = new Driver(id, name, licenseType);
         String json = JSON.serialize(updatedDriver);
         String responseJson = rms.updateDriver(json);
-        Response<String> response = JSON.deserialize(responseJson, Response.class);
+        Response response = JSON.deserialize(responseJson, Response.class);
         if(response.isSuccess()) appData.drivers().put(id, updatedDriver);
         System.out.println("\n"+response.getMessage());
     }
@@ -119,7 +121,7 @@ public class DriversManagement {
                 case "y" ->{
                     String json = JSON.serialize(driver);
                     String responseJson = rms.removeDriver(json);
-                    Response<String> response = JSON.deserialize(responseJson, Response.class);
+                    Response response = JSON.deserialize(responseJson, Response.class);
                     if(response.isSuccess()) appData.drivers().remove(driver.id());
                     System.out.println("\n"+response.getMessage());
                 }

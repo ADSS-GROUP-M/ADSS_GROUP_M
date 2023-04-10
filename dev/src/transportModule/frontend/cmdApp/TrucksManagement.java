@@ -1,7 +1,9 @@
 package transportModule.frontend.cmdApp;
 
 import transportModule.backend.serviceLayer.ResourceManagementService;
-import transportModule.frontend.cmdApp.records.Truck;
+import transportModule.records.Truck;
+import utils.JSON;
+import utils.Response;
 
 public class TrucksManagement {
 
@@ -59,7 +61,7 @@ public class TrucksManagement {
         Truck newTruck = new Truck(licensePlate, model, baseWeight, maxWeight,coolingCapacity);
         String json = JSON.serialize(newTruck);
         String responseJson = rms.addTruck(json);
-        Response<String> response = JSON.deserialize(responseJson, Response.class);
+        Response response = JSON.deserialize(responseJson, Response.class);
         if(response.isSuccess()) appData.trucks().put(licensePlate, newTruck);
         System.out.println("\n"+response.getMessage());
     }
@@ -136,7 +138,7 @@ public class TrucksManagement {
         Truck newTruck = new Truck(licensePlate, model, baseWeight, maxWeight,coolingCapacity);
         String json = JSON.serialize(newTruck);
         String responseJson = rms.updateTruck(json);
-        Response<String> response = JSON.deserialize(responseJson, Response.class);
+        Response response = JSON.deserialize(responseJson, Response.class);
         if(response.isSuccess()) appData.trucks().put(licensePlate, newTruck);
         System.out.println("\n"+response.getMessage());
     }
@@ -157,7 +159,7 @@ public class TrucksManagement {
                 case "y"->{
                     String json = JSON.serialize(truck);
                     String responseJson = rms.removeTruck(json);
-                    Response<String> response = JSON.deserialize(responseJson, Response.class);
+                    Response response = JSON.deserialize(responseJson, Response.class);
                     if(response.isSuccess()) appData.trucks().remove(truck.id());
                     System.out.println("\n"+response.getMessage());
                 }

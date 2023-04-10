@@ -54,6 +54,10 @@ public class DiscountCategoryController {
             categoriesPerBranch.put(branch,new HashMap<String,Category>());
         categoriesPerBranch.get(branch).put(categoryName,new Category(categoryName,categoryType));
     }
+    public void removeCategory(String branch, String categoryName){
+        //TODO: need to implement
+        throw new RuntimeException();
+    }
     public void createSupplierDiscount(int productID, String branch,double discount, int supplierID, LocalDateTime startDate, LocalDateTime endDate){
         if(!checkIfBranchExistSupplierDiscount(branch))
             supplierDiscount.put(branch,new HashMap<Integer,List<ProductDiscountSupplier>>());
@@ -126,10 +130,6 @@ public class DiscountCategoryController {
             throw new RuntimeException("Branch does not exist, please create discount in order to continue");
 
     }
-    public double getStoreMaxDiscount(int productID, String branch){
-        //TODO: need to implement
-        throw new RuntimeException();
-    }
 
     public List<ProductDiscountSupplier> getSupplierDiscountPerDate(int productID, String branch, int supplierID, LocalDateTime startDate, LocalDateTime endDate){
         if(checkIfSupplierExist(branch,supplierID)){
@@ -142,22 +142,6 @@ public class DiscountCategoryController {
                 return supplierDiscountResults;
             else
                 throw new RuntimeException(String.format("in range %s  %s there is not Discount form this supplierID: %s",startDate, endDate, supplierID));
-        }
-        else
-            throw new RuntimeException("supplier or branch does not exist, please create discount in order to continue");
-
-    }
-    public double getSupplierMaxDiscount(int productID, String branch, int supplierID){
-        if(checkIfSupplierExist(branch,supplierID)){
-            List<ProductDiscountSupplier> supplierDiscountList = supplierDiscount.get(branch).get(supplierID);
-            double maxDiscount = -1;
-            for(ProductDiscountSupplier PDS: supplierDiscountList){
-                PDS.getDiscount(productID);
-            }
-            if(maxDiscount != -1)
-                return maxDiscount;
-            else
-                throw new RuntimeException(String.format("for %s there is not Discount form this supplierID: %s",productID, supplierID));
         }
         else
             throw new RuntimeException("supplier or branch does not exist, please create discount in order to continue");

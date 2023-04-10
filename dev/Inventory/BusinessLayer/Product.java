@@ -7,7 +7,7 @@ import java.util.Date;
 
 public class Product {
     private int productID;
-    private Pair<Boolean, LocalDateTime> isDefective;
+    private productPair<Boolean, LocalDateTime> isDefective;
     private Boolean isSold;
     private int supplierID;
     private double supplierPrice;
@@ -15,6 +15,21 @@ public class Product {
     private double soldPrice;
     private String location;
 
+    protected class productPair<F, S> {
+        private final F first;
+        private final S second;
+
+        protected productPair(F first, S second) {
+            this.first = first;
+            this.second = second;
+        }
+        public F getIsDefective() {
+            return first;
+        }
+        public S getDefectiveDate() {
+            return second;
+        }
+    }
     public Product(int productID, int supplierID, double supplierPrice, String location) {
         this.productID = productID;
         this.supplierID = supplierID;
@@ -31,9 +46,13 @@ public class Product {
     }
     public void updateIsDefective() {
         if (isDefective == null) {
-            this.isDefective = new Pair<Boolean, LocalDateTime>(true, LocalDateTime.now());
+            this.isDefective = new productPair<Boolean, LocalDateTime>(true, LocalDateTime.now());
         }
     }
+    public LocalDateTime getDefectiveDate() {
+        return isDefective.getDefectiveDate();
+    }
+
     //TODO: update soldPrice
     public void updateIsSold() {
         this.isSold = true;

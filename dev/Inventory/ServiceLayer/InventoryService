@@ -101,9 +101,13 @@ public class InventoryService {
 //
 //    }
 //
-//    public Response getDefectiveProducts(String json){
-//
-//    }
+    public Response getDefectiveProducts(String branch){
+        try{
+            return new Response<>(productController.getDefectiveProducts(branch));
+        } catch (Exception e) {
+            return Response.createErrorResponse("Error creating catagory: " + e.getMessage());
+        }
+    }
 
     public Response createMainCategory(String name, String branch){
         try{

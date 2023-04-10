@@ -46,6 +46,9 @@ public class ProductController {
     public void createProduct(int productID, int productTypeID, String branch, int supplierID, double supplierPrice, String location) {
         if(checkIfProductTypeExist(branch,productTypeID))
             productTypes.get(branch).get(productTypeID).addProduct(productID,supplierID,supplierPrice,location);
+        else{
+            throw new RuntimeException(String.format("Product type does not exist with the ID : %s",productTypeID));
+        }
     }
     // Add new product type
     public void createProductType(int productTypeID, String branch, String name, String manufacture, int storeAmount, int warehouseAmount, double originalSupplierPrice, double originalStorePrice){
@@ -55,13 +58,20 @@ public class ProductController {
         ProductType newProductType = new ProductType(productTypeID,name,manufacture,storeAmount,warehouseAmount,originalSupplierPrice,originalStorePrice, branch);
         productTypes.get(branch).put(productTypeID,newProductType);
     }
-//public Response updateProduct(int is_defective, int catalog_number, int serial_num, int is_sold, String supplier, int supplier_price, int sold_price, String location){
-    public void updateProduct(int productID, int productTypeID, String branch) {
+    public void updateProduct(String branch, int isDefective,int productID, int productTypeID, int isSold,int newSupplier, double newSupplierPrice, double newSoldPrice, String newLocation) {
         if(checkIfProductTypeExist(branch,productID)){
-            //TODO
+            Product currentProduct = productTypes.get(branch).get(productTypeID).getProduct(productID);
+            if(isDefective != -1){currentProduct.setIsDefective();}
+            // TODO : send price
+            if(isSold != -1){currentProduct.updateIsSold();}
+            if(newSupplier != -1){currentProduct.setSupplierID(newSupplier);}
+            if(newSupplierPrice != -1){currentProduct.setSupplierPrice(newSupplierPrice);}
+            if(newSoldPrice != -1){currentProduct.setSoldPrice(newSoldPrice);}
+            if(newLocation != null){currentProduct.setLocation(newLocation);}
         }
+        else
+            throw new RuntimeException(String.format("Product type does not exist with the ID : %s",productTypeID));
     }
-    //public Response updateProductType(String name, int catalog_number, String manufacturer, double supplier_price, double store_price, String category, String sub_category, int min_amount) {
     public void updateProductType(String branch, String newName, int productTypeID, String newManufacturer, double newSupplierPrice,double newStorePrice, String newCategory, String newSubCategory, int newMinAmount ){
         if(checkIfProductTypeExist(branch,productTypeID)){
             ProductType currentProductType = productTypes.get(branch).get(productTypeID);
@@ -84,9 +94,10 @@ public class ProductController {
                     DC_contoller.createCategory(branch,newSubCategory,0);
             }
         }
+        else
+            throw new RuntimeException(String.format("Product type does not exist with the ID : %s",productTypeID));
 
     }
-
 
 
     // update products to defective
@@ -95,6 +106,8 @@ public class ProductController {
             ProductType productType = productTypes.get(branch).get(productTypeID);
             productType.setDefective(productsID);
         }
+        else
+            throw new RuntimeException(String.format("Unable to update defective products,\nproduct type does not exist with the ID : %s",productTypeID));
     }
     // update products status to sold
     public void updateSoldProduct(int productTypeID, List<Integer> productsID, String branch){
@@ -102,6 +115,8 @@ public class ProductController {
             ProductType productType = productTypes.get(branch).get(productTypeID);
             productType.setToSold(productsID);
         }
+        else
+            throw new RuntimeException(String.format("Unable to update sold products,\n product type does not exist with the ID : %s",productTypeID));
     }
 
     public void updateProductNotificationMin(int productTypeID, int newVal, String branch){
@@ -109,6 +124,9 @@ public class ProductController {
             ProductType productType = productTypes.get(branch).get(productTypeID);
             productType.setNotificationMin(newVal);
         }
+        else
+            throw new RuntimeException(String.format("Unable to update product Min notification,\n product type does not exist with the ID : %s",productTypeID));
+
     }
     public double getProductPrice(int productTypeID, String branch){
         //TODO: need to implement

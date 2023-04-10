@@ -32,14 +32,24 @@ public class ProductType {
         this.category = null;
         this.subCategory = new ArrayList<Category>();
         this.notificationMin = -1;
+        // Map<productID, product>
         this.products = new HashMap<Integer,Product>();
         this.branch = branch;
     }
 
+    public Product getProduct(int productID){
+        if(products.containsKey(productID))
+            return products.get(productID);
+        else
+            throw new RuntimeException(String.format("Product does not exist with the ID : %s",productID));
+    }
     public void setDefective(List<Integer> productsID){
         for(Integer defectiveProductID: productsID){
-            products.get(defectiveProductID).updateIsDefective();
+            products.get(defectiveProductID).setIsDefective();
         }
+    }
+    public void setDefective(int productID){
+        products.get(productID).setIsDefective();
     }
     // TODO: should add soldPrice and check with the discount table
     public void setToSold(List<Integer> productsID){

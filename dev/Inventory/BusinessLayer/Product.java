@@ -1,5 +1,4 @@
 package dev.Inventory.BusinessLayer;
-
 import java.time.LocalDateTime;
 
 public class Product {
@@ -63,6 +62,4 @@ public class Product {
     public void setSoldPrice(double newSoldPrice){this.soldPrice = newSoldPrice;}
     public int getProductID(){return this.productID;}
     public String getLocation(){return this.location;}
-
-
 }

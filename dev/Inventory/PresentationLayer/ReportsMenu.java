@@ -1,4 +1,7 @@
 package dev.Inventory.PresentationLayer;
+import dev.Inventory.BusinessLayer.Record;
+
+import java.util.List;
 
 public class ReportsMenu extends MainMenu {
 
@@ -29,6 +32,10 @@ public class ReportsMenu extends MainMenu {
     }
 
     private void inventoryDefectiveReport() {
-        throw new RuntimeException();
+        String output = "";
+        for (Record r: (List<Record>) inventoryService.getDefectiveProducts(branch).getReturnValue()){
+            output += r.toString() + "\n";
+        }
+        System.out.println(output);
     }
 }

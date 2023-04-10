@@ -13,9 +13,6 @@ public class InventoryService {
         categoryController = DiscountCategoryController.DiscountCategoryController();
     }
 
-//    public Response getInventoryShortages(){
-//
-//    }
 
     public Response addProductType(int ProductTypeID, String name, String manufacturer, double supplier_price, double store_price, String branch, int storeAmount, int warehouseAmount){
         try {
@@ -93,67 +90,71 @@ public class InventoryService {
         }
     }
 
-//    public Response getStockProductsDetailed(){
-//
-//    }
-//
-//    public Response getStockProduct(String json){
-//
-//    }
-//
-//    public Response getDefectiveProducts(String json){
-//
+//    public Response getStockProductsByCategory(){
+//        categoryController.getProductsPerCategory()
 //    }
 
-    public Response createMainCategory(String name){
+//    public Response getInventoryShortages(){
+//
+//    }
+//
+    public Response getDefectiveProducts(String branch){
         try{
-            categoryController.createCategory(name, "1");
+            return new Response<>(productController.getDefectiveProducts(branch));
+        } catch (Exception e) {
+            return Response.createErrorResponse("Error creating catagory: " + e.getMessage());
+        }
+    }
+
+    public Response createMainCategory(String name, String branch){
+        try{
+            categoryController.createCategory(branch, name, 1);
             return new Response<>("Catagory created successfully");
         } catch (Exception e) {
             return Response.createErrorResponse("Error creating catagory: " + e.getMessage());
         }
     }
 
-    public Response createSubCategory(String name){
+    public Response createSubCategory(String name, String branch){
         try{
-            categoryController.createCategory(name, "0");
+            categoryController.createCategory(branch, name, 0);
             return new Response<>("Sub-Catagory created successfully");
         } catch (Exception e) {
             return Response.createErrorResponse("Error creating sub catagory: " + e.getMessage());
         }
     }
 
-    public Response removeMainCategory(String name){
+    public Response removeMainCategory(String name, String branch){
         try{
-            categoryController.removeCategory(name, "1");
-            return new Response<>("Catagory removed successfully")
+            categoryController.removeCategory(branch, name);
+            return new Response<>("Category removed successfully");
         } catch (Exception e) {
-            return Response.createErrorResponse("Error removing catagory: " + e.getMessage());
+            return Response.createErrorResponse("Error removing category: " + e.getMessage());
         }
     }
 
-    public Response removeSubCategory(String name){
+    public Response removeSubCategory(String name, String branch){
         try{
-            return categoryController.removeCategory(name, "0");
-            new Response<>("Sub-Catagory removed successfully")
+            categoryController.removeCategory(branch, name);
+            return new Response<>("Sub-Category removed successfully");
         } catch (Exception e) {
-            return Response.createErrorResponse("Error removing catagory: " + e.getMessage());
+            return Response.createErrorResponse("Error removing category: " + e.getMessage());
         }
     }
 
-    public Response updateDiscountPerCategory(String name, int discount, LocalDateTime startDate, LocalDateTime endDate){
+    public Response updateDiscountPerCategory(String name, String branch, double discount, LocalDateTime startDate, LocalDateTime endDate){
         try{
-            return categoryController.updateDiscountPerCategory(name, discount, startDate, endDate);
-            new Response<>("discount added successfully");
+            categoryController.createCategoryDiscount(name, branch, discount, startDate, endDate);
+            return new Response<>("discount added successfully");
         } catch (Exception e) {
             return Response.createErrorResponse("Error updating discount: " + e.getMessage());
         }
     }
 
-    public Response updateDiscountPerProduct(String ProductTypeID, String ProductID, int discount, LocalDateTime startDate, LocalDateTime endDate){
+    public Response updateDiscountPerProduct(int ProductTypeID, String branch, double discount, LocalDateTime startDate, LocalDateTime endDate){
         try{
-            return categoryController.updateDiscountPerCategory(ProductTypeID, ProductID, discount, startDate, endDate);
-            new Response<>("discount added successfully");
+            categoryController.createStoreDiscount(ProductTypeID, branch, discount, startDate, endDate);
+            return new Response<>("discount added successfully");
         } catch (Exception e) {
             return Response.createErrorResponse("Error updating discount: " + e.getMessage());
         }

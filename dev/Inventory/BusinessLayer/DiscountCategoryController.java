@@ -95,18 +95,15 @@ public class DiscountCategoryController {
         else
             throw new RuntimeException("Category does not exist, please create category in order to continue");
     }
-    public double getTodayBiggestStoreDiscountI(int productID, String branch){
+    public double getTodayBiggestStoreDiscountI(int productTypeID, String branch){
         if(checkIfBranchExistStoreDiscount(branch)){
             double maxDiscount = -1;
-            for(ProductStoreDiscount PDS: storeDiscounts.get(branch).get(productID)){
+            for(ProductStoreDiscount PDS: storeDiscounts.get(branch).get(productTypeID)){
                double currentDiscount = PDS.getDiscount(LocalDateTime.now());
                if(currentDiscount > maxDiscount)
                    maxDiscount= currentDiscount;
             }
-            if(maxDiscount != -1)
-                return maxDiscount;
-            else
-                throw new RuntimeException(String.format("There is no discount for this product type ID: %s", productID));
+            return maxDiscount;
         }
         else
             throw new RuntimeException("Branch does not exist, please create discount in order to continue");

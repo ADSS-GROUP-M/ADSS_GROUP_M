@@ -52,9 +52,9 @@ public class ProductType {
         products.get(productID).setIsDefective();
     }
     // TODO: should add soldPrice and check with the discount table
-    public void setToSold(List<Integer> productsID){
+    public void setToSold(List<Integer> productsID, double soldPrice){
         for(Integer soldProductID: productsID){
-            products.get(soldProductID).updateIsSold();
+            products.get(soldProductID).updateIsSold(soldPrice);
         }
     }
     public void setNotificationMin(int newVal){
@@ -102,4 +102,5 @@ public class ProductType {
     public void setWarehouseAmount(int newWarehouseAmount){this.warehouseAmount = newWarehouseAmount;}
     public void setOriginalStorePrice(double newPrice ){this.originalStorePrice = newPrice;}
     public void setOriginalSupplierPrice(double newPrice){this.originalSupplierPrice = newPrice;}
+    public double getOriginalStorePrice(){return this.originalStorePrice;}
 }

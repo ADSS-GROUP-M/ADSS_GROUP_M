@@ -2,7 +2,7 @@ package transportModule.frontend.cmdApp;
 
 import transportModule.backend.serviceLayer.ModuleFactory;
 
-public class Main {
+public class CmdApp {
 
     private final AppData appData;
     private final TransportsManagement transportsManagement;
@@ -11,12 +11,7 @@ public class Main {
     private final TrucksManagement trucksManagement;
     private final DriversManagement driversManagement;
 
-    public static void main(String[] args) {
-        Main program = new Main();
-        program.mainMenu();
-    }
-
-    private Main(){
+    public CmdApp(){
         ModuleFactory factory = new ModuleFactory();
         appData = new AppData(
                 factory.getResourceManagementService(),
@@ -30,7 +25,7 @@ public class Main {
         transportsManagement = new TransportsManagement(appData,factory.getTransportsService());
     }
 
-    private void mainMenu() {
+    public void start() {
         while(true){
             System.out.println("=========================================");
             System.out.println("Welcome to the Transport Module!");

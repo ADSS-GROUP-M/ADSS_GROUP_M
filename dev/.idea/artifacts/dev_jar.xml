@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
-  <artifact type="jar" build-on-make="true" name="CMDApp:jar">
-    <output-path>$PROJECT_DIR$/out/artifacts/CMDApp_jar</output-path>
+  <artifact type="jar" build-on-make="true" name="dev:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/cmdApp_jar</output-path>
     <root id="archive" name="adss2023_v01.jar">
       <element id="module-output" name="dev" />
       <element id="module-test-output" name="dev" />

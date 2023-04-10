@@ -68,21 +68,21 @@ public class ProductController {
     public void updateDefectiveProduct(int productTypeID, List<Integer> productsID, String branch){
         if(checkIfProductTypeExist(branch,productTypeID)){
             ProductType productType = productTypes.get(branch).get(productTypeID);
-            productType.updateDefective(productsID);
+            productType.setDefective(productsID);
         }
     }
     // update products status to sold
     public void updateSoldProduct(int productTypeID, List<Integer> productsID, String branch){
         if(checkIfProductTypeExist(branch,productTypeID)){
             ProductType productType = productTypes.get(branch).get(productTypeID);
-            productType.updateSold(productsID);
+            productType.setToSold(productsID);
         }
     }
 
     public void updateProductNotificationMin(int productTypeID, int newVal, String branch){
         if(checkIfProductTypeExist(branch,productTypeID)){
             ProductType productType = productTypes.get(branch).get(productTypeID);
-            productType.updateNotificationMin(newVal);
+            productType.setNotificationMin(newVal);
         }
     }
     public double getProductPrice(int productTypeID, String branch){

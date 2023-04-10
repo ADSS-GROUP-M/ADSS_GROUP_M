@@ -36,18 +36,18 @@ public class ProductType {
         this.branch = branch;
     }
 
-    public void updateDefective(List<Integer> productsID){
+    public void setDefective(List<Integer> productsID){
         for(Integer defectiveProductID: productsID){
             products.get(defectiveProductID).updateIsDefective();
         }
     }
     // TODO: should add soldPrice and check with the discount table
-    public void updateSold(List<Integer> productsID){
+    public void setToSold(List<Integer> productsID){
         for(Integer soldProductID: productsID){
             products.get(soldProductID).updateIsSold();
         }
     }
-    public void updateNotificationMin(int newVal){
+    public void setNotificationMin(int newVal){
         this.notificationMin = newVal;
     }
     public void updateCategory(Category category){
@@ -85,4 +85,11 @@ public class ProductType {
         return false;
     }
     public int getProductTypeID(){return productTypeID;}
+
+    public void setName(String newName){this.name = newName;}
+    public void setManufacturer(String newManufacturer){this.manufacturer =newManufacturer;}
+    public void setStoreAmount(int newStoreAmount){this.storeAmount = newStoreAmount;}
+    public void setWarehouseAmount(int newWarehouseAmount){this.warehouseAmount = newWarehouseAmount;}
+    public void setOriginalStorePrice(double newPrice ){this.originalStorePrice = newPrice;}
+    public void setOriginalSupplierPrice(double newPrice){this.originalSupplierPrice = newPrice;}
 }

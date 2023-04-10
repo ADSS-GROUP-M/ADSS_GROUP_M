@@ -1,19 +1,19 @@
 package dev.Inventory.ServiceLayer;
-import dev.Inventory.BusinessLayer.CategoryController;
+import dev.Inventory.BusinessLayer.DiscountCategoryController;
 import dev.Inventory.BusinessLayer.ProductController;
 
 import java.time.LocalDateTime;
 
 public class InventoryService {
     ProductController productController;
-    CategoryController categoryController;
+    DiscountCategoryController categoryController;
 
     public InventoryService(){
-        productController = new ProductController();
-        categoryController = new CategoryController();
+        productController = ProductController.ProductController();
+        categoryController = DiscountCategoryController.DiscountCategoryController();
     }
 
-//    public Response getInventoryShorages(){
+//    public Response getInventoryShortages(){
 //
 //    }
 
@@ -41,7 +41,7 @@ public class InventoryService {
                 productController.updateProductType(branch, name, catalog_number, null, -1, -1, null, null, -1);
                 return new Response<>("Product type updated successfully");
             } else if (manufacturer != null) {
-                productController.updateProductType(branch, null, catalog_number, manufacturer, null, -1, -1, null, null, -1);
+                productController.updateProductType(branch, null, catalog_number, manufacturer, -1, -1, null, null, -1);
                 return new Response<>("Product type updated successfully");
             } else if (supplier_price != -1) {
                 productController.updateProductType(branch, null, catalog_number, null, supplier_price, -1, null, null, -1);
@@ -66,25 +66,25 @@ public class InventoryService {
         }
     }
 
-    public Response updateProduct(int is_defective, int catalog_number, int serial_num, int is_sold, String supplier, int supplier_price, int sold_price, String location, String branch){
+    public Response updateProduct(int is_defective, int catalog_number, int serial_num, int is_sold, int supplier, int supplier_price, int sold_price, String location, String branch){
         try {
             if (is_defective != -1) {
-                productController.updateProductType(branch, is_defective, catalog_number, serial_num, -1, null, -1, -1, null);
+                productController.updateProduct(branch, is_defective, catalog_number, serial_num, -1, -1, -1, -1, null);
                 return new Response<>("Product type updated successfully");
             } else if (is_sold != -1) {
-                productController.updateProductType(branch, -1, catalog_number, serial_num, is_sold, null, -1, -1, null);
+                productController.updateProduct(branch, -1, catalog_number, serial_num, is_sold, -1, -1, -1, null);
                 return new Response<>("Product type updated successfully");
-            } else if (supplier != null) {
-                productController.updateProductType(branch, -1, catalog_number, serial_num, -1, supplier, -1, -1, null);
+            } else if (supplier != -1) {
+                productController.updateProduct(branch, -1, catalog_number, serial_num, -1, supplier, -1, -1, null);
                 return new Response<>("Product type updated successfully");
             } else if (supplier_price != -1) {
-                productController.updateProductType(branch, -1, catalog_number, serial_num, -1, null, supplier_price, -1, null);
+                productController.updateProduct(branch, -1, catalog_number, serial_num, -1, -1, supplier_price, -1, null);
                 return new Response<>("Product type updated successfully");
             } else if (sold_price != -1) {
-                productController.updateProductType(branch, -1, catalog_number, serial_num, -1, null, -1, sold_price, null);
+                productController.updateProduct(branch, -1, catalog_number, serial_num, -1, -1, -1, sold_price, null);
                 return new Response<>("Product type updated successfully");
             } else if (location != null) {
-                productController.updateProductType(branch, -1, catalog_number, serial_num, -1, null, -1, -1, location);
+                productController.updateProduct(branch, -1, catalog_number, serial_num, -1, -1, -1, -1, location);
                 return new Response<>("Product type updated successfully");
             } else {
                 return Response.createErrorResponse("Invalid input parameters");}
@@ -105,7 +105,7 @@ public class InventoryService {
 //
 //    }
 
-    public Response createMainCatagory(String name){
+    public Response createMainCategory(String name){
         try{
             categoryController.createCategory(name, "1");
             return new Response<>("Catagory created successfully");
@@ -114,7 +114,7 @@ public class InventoryService {
         }
     }
 
-    public Response createSubCatagory(String name){
+    public Response createSubCategory(String name){
         try{
             categoryController.createCategory(name, "0");
             return new Response<>("Sub-Catagory created successfully");
@@ -123,7 +123,7 @@ public class InventoryService {
         }
     }
 
-    public Response removeMainCatagory(String name){
+    public Response removeMainCategory(String name){
         try{
             categoryController.removeCategory(name, "1");
             return new Response<>("Catagory removed successfully")
@@ -132,7 +132,7 @@ public class InventoryService {
         }
     }
 
-    public Response removeSubCatagory(String name){
+    public Response removeSubCategory(String name){
         try{
             return categoryController.removeCategory(name, "0");
             new Response<>("Sub-Catagory removed successfully")

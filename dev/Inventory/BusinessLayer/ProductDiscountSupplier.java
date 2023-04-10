@@ -1,6 +1,7 @@
 package dev.Inventory.BusinessLayer;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class ProductDiscountSupplier {
     private int productTypeID;
@@ -19,9 +20,26 @@ public class ProductDiscountSupplier {
         this.supplierID = supplierID;
     }
 
-    public Boolean isDateInRange(LocalDateTime time){
-        //TODO: need to implement
-        throw new RuntimeException();
+    public Boolean isDateInRange(LocalDateTime dateToValidate){
+        return dateToValidate.isAfter(startDate) && dateToValidate.isBefore(endDate);
+    }
+    public double getDiscountPerDate(LocalDateTime dateToValidate, int productTypeID){
+        if(isDateInRange(dateToValidate) && productTypeID == this.productTypeID)
+            return discount;
+        else
+            return -1;
+    }
+    public double getDiscount(int productTypeID){
+        if(productTypeID == this.productTypeID)
+            return discount;
+        else
+            return -1;
+    }
+
+    public List<ProductDiscountSupplier> addDiscountSupplier(List<ProductDiscountSupplier> discountSuppliersList,LocalDateTime dateToValidate, int productTypeID){
+        if(isDateInRange(dateToValidate) && productTypeID == this.productTypeID)
+            discountSuppliersList.add(this);
+        return discountSuppliersList;
     }
 
 }

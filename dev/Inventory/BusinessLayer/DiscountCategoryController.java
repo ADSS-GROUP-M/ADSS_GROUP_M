@@ -71,12 +71,12 @@ public class DiscountCategoryController {
     }
 
     public Category getCategory(String branch, String categoryName){return categoriesPerBranch.get(branch).get(categoryName);}
-    public void createSupplierDiscount(int productID, String branch,double discount, int supplierID, LocalDateTime startDate, LocalDateTime endDate){
+    public void createSupplierDiscount(int productTypeID, String branch,double discount, int supplierID, LocalDateTime startDate, LocalDateTime endDate){
         if(!checkIfBranchExistSupplierDiscount(branch))
             supplierDiscount.put(branch,new HashMap<Integer,List<ProductDiscountSupplier>>());
         if(!checkIfSupplierExist(branch,supplierID))
             supplierDiscount.get(branch).put(supplierID,new ArrayList<ProductDiscountSupplier>());
-        supplierDiscount.get(branch).get(supplierID).add(new ProductDiscountSupplier(productID,branch,startDate,endDate,discount,supplierID));
+        supplierDiscount.get(branch).get(supplierID).add(new ProductDiscountSupplier(productTypeID,branch,startDate,endDate,discount,supplierID));
     }
     public void createStoreDiscount(int productTypeID, String branch,double discount, LocalDateTime startDate, LocalDateTime endDate){
         if(!checkIfBranchExistStoreDiscount(branch))

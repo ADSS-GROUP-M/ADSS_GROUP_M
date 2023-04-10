@@ -11,26 +11,24 @@ public class InventoryService : MainManu {
     }
 
     public Response addProductType(String ProductTypeID, String name, String manufacturer, String supplier, double supplier_price, double store_price, String branch){
-        ProductController.createProduct(ProductTypeID, ProductID, name, manufacturer, supplier_price, store_price);
-    }
-
-    public Response addProduct(String ProductTypeID, String ProductID, String supplier, double supplier_price, String branch){
-        ProductController.createProduct(ProductTypeID, ProductID, name, manufacturer, supplier_price, store_price);
-    }
-
-    public Response updateProductType(String name, String manufacturer, String supplier, double supplier_price, double store_price, String catagory, String sub_catagory, int min_amount){
-        if(name != null ){
-            ProductController.updateProductType(name, null, null, null, -1, -1, null, null, -1);
-        } else if(manufacturer != null){
-            ProductController.updateProductType(null, manufacturer, null, null, -1, -1, null, null, -1);
-        } else if(supplier != null){
-            ProductController.updateProductType(null, null, supplier, null, -1, -1, null, null, -1);
-        } else if(supplier_price != -1){
-        ProductController.updateProductType(null, null, null, supplier_price, -1, -1, null, null, -1);
+        try {
+            ProductController.createProduct(ProductTypeID, ProductID, name, manufacturer, supplier_price, store_price);
+            return new Response<>("Product added successfully");
+        } catch(Exception e) {
+            return Response.createErrorResponse("Error updating product type: " + e.getMessage());
         }
     }
 
-    public Response<Void> updateProductType(String name, String catalog_number, String manufacturer, double supplier_price, double store_price, String category, String sub_category, int min_amount) {
+    public Response addProduct(String ProductTypeID, String ProductID, String supplier, double supplier_price, String branch){
+        try {
+            ProductController.createProduct(ProductTypeID, ProductID, name, manufacturer, supplier_price, store_price);
+            return new Response<>("Product added successfully");
+        } catch(Exception e) {
+            return Response.createErrorResponse("Error updating product type: " + e.getMessage());
+        }
+    }
+
+    public Response updateProductType(String name, String catalog_number, String manufacturer, double supplier_price, double store_price, String category, String sub_category, int min_amount) {
         try {
             if (name != null) {
                 ProductController.updateProductType(name, catalog_number, null, -1, -1, null, null, -1);
@@ -101,6 +99,42 @@ public class InventoryService : MainManu {
 
     public Response getDefectiveProducts(String json){
 
+    }
+
+    public Response createMainCatagory(String name){
+        try{
+            CatagoryController.createCategory(name, "1");
+            new Response<>("Catagory created successfully")
+        } catch (Exception e) {
+            return Response.createErrorResponse("Error creating catagory: " + e.getMessage());
+        }
+    }
+
+    public Response createSubCatagory(String name){
+        try{
+            CatagoryController.createCategory(name, "0");
+            new Response<>("Sub-Catagory created successfully")
+        } catch (Exception e) {
+            return Response.createErrorResponse("Error creating sub catagory: " + e.getMessage());
+        }
+    }
+
+    public Response removeMainCatagory(String name){
+        try{
+            CatagoryController.removeCategory(name, "1");
+            new Response<>("Catagory removed successfully")
+        } catch (Exception e) {
+            return Response.createErrorResponse("Error removing catagory: " + e.getMessage());
+        }
+    }
+
+    public Response removeSubCatagory(String name){
+        try{
+            CatagoryController.removeCategory(name, "0");
+            new Response<>("Sub-Catagory removed successfully")
+        } catch (Exception e) {
+            return Response.createErrorResponse("Error removing catagory: " + e.getMessage());
+        }
     }
 
 }

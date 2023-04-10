@@ -1,7 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="ArtifactsWorkspaceSettings">
+    <artifacts-to-build>
+      <artifact name="code:jar" />
+      <artifact name="code:jar2" />
+    </artifacts-to-build>
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="e454f93c-4ee8-4f4b-9a14-eaaf36aa303c" name="Changes" comment="finish ui and tests" />
+    <list default="true" id="e454f93c-4ee8-4f4b-9a14-eaaf36aa303c" name="Changes" comment="finish ui and tests">
+      <change afterPath="$PROJECT_DIR$/.idea/artifacts/code_jar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/artifacts/code_jar2.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/code.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/code.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/BusinessLayer/Agreement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/BusinessLayer/Agreement.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/BusinessLayer/BankAccount.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/BusinessLayer/BankAccount.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/BusinessLayer/BillOfQuantities.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/BusinessLayer/BillOfQuantities.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/BusinessLayer/DeliveryAgreements/DeliveryAgreement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/BusinessLayer/DeliveryAgreements/DeliveryAgreement.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/BusinessLayer/DeliveryAgreements/DeliveryByInvitation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/BusinessLayer/DeliveryAgreements/DeliveryByInvitation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/BusinessLayer/DeliveryAgreements/DeliveryFixedDays.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/BusinessLayer/DeliveryAgreements/DeliveryFixedDays.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/BusinessLayer/Discounts/CashDiscount.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/BusinessLayer/Discounts/CashDiscount.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/BusinessLayer/Discounts/Discount.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/BusinessLayer/Discounts/Discount.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/BusinessLayer/Discounts/PercentageDiscount.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/BusinessLayer/Discounts/PercentageDiscount.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/BusinessLayer/Order.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/BusinessLayer/Order.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/BusinessLayer/OrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/BusinessLayer/OrderController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/BusinessLayer/Pair.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/BusinessLayer/Pair.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/BusinessLayer/Product.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/BusinessLayer/Product.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/BusinessLayer/Supplier.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/BusinessLayer/Supplier.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/BusinessLayer/SupplierController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/BusinessLayer/SupplierController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/ServiceLayer/OrderService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/ServiceLayer/OrderService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/ServiceLayer/Response.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/ServiceLayer/Response.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/ServiceLayer/SupplierService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/ServiceLayer/SupplierService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PresentationLayer/DeliveryAgreements/DeliveryAgreement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/PresentationLayer/DeliveryAgreements/DeliveryAgreement.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PresentationLayer/DeliveryAgreements/DeliveryByInvitation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/PresentationLayer/DeliveryAgreements/DeliveryByInvitation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PresentationLayer/DeliveryAgreements/DeliveryFixedDays.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/PresentationLayer/DeliveryAgreements/DeliveryFixedDays.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PresentationLayer/Discounts/CashDiscount.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/PresentationLayer/Discounts/CashDiscount.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PresentationLayer/Discounts/Discount.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/PresentationLayer/Discounts/Discount.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PresentationLayer/Discounts/PercentageDiscount.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/PresentationLayer/Discounts/PercentageDiscount.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PresentationLayer/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/PresentationLayer/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PresentationLayer/Order.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/PresentationLayer/Order.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PresentationLayer/Response.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/PresentationLayer/Response.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PresentationLayer/UI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/PresentationLayer/UI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/Backend/BusinessLayer/BillOfQuantitiesTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hs_err_pid12940.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hs_err_pid32692.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hs_err_pid39256.log" beforeDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -12,8 +55,8 @@
       <list>
         <option value="TypeScript File" />
         <option value="Class" />
-        <option value="JUnit4 Test Class" />
         <option value="JUnit5 Test Class" />
+        <option value="JUnit4 Test Class" />
       </list>
     </option>
   </component>
@@ -42,14 +85,15 @@
     "Repository.Attach.Sources": "false",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "WebServerToolWindowFactoryState": "false",
-    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit5",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit4",
     "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit4": "",
     "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5": "",
     "jdk.selected.JAVA_MODULE": "19",
     "last_opened_file_path": "C:/Users/yossi/OneDrive/שולחן העבודה/ניתוצ/Assignment1/Assignment1/dev/PresentationLayer",
     "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Modules",
+    "project.structure.last.edited": "Artifacts",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.2",
     "settings.editor.selected.configurable": "project.propVCSSupport.DirectoryMappings"
@@ -62,6 +106,9 @@
     <key name="CreateTestDialog.Recents.Supers">
       <recent name="" />
     </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\yossi\OneDrive\שולחן העבודה\ניתוצ\Assignment1\Assignment1\dev\src" />
+    </key>
     <key name="CreateTestDialog.RecentsKey">
       <recent name="Backend.BusinessLayer" />
     </key>
@@ -69,7 +116,7 @@
       <recent name="PresentationLayer" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.BillOfQuantitiesTest">
+  <component name="RunManager" selected="JUnit.BillOfQuantitiesTest.setOrderOfDiscounts">
     <configuration name="BillOfQuantitiesTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="code" />
       <extension name="coverage">
@@ -96,22 +143,6 @@
       <option name="PACKAGE_NAME" value="Backend.BusinessLayer" />
       <option name="MAIN_CLASS_NAME" value="Backend.BusinessLayer.BillOfQuantitiesTest" />
       <option name="METHOD_NAME" value="getPriceAfterDiscounts" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="BillOfQuantitiesTest.getProductPriceAfterDiscount" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="code" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="Backend.BusinessLayer.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="Backend.BusinessLayer" />
-      <option name="MAIN_CLASS_NAME" value="Backend.BusinessLayer.BillOfQuantitiesTest" />
-      <option name="METHOD_NAME" value="getProductPriceAfterDiscount" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -149,13 +180,29 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="BillOfQuantitiesTest.setOrderOfDiscounts" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="code" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="Backend.BusinessLayer.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="Backend.BusinessLayer" />
+      <option name="MAIN_CLASS_NAME" value="Backend.BusinessLayer.BillOfQuantitiesTest" />
+      <option name="METHOD_NAME" value="setOrderOfDiscounts" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.BillOfQuantitiesTest.setOrderOfDiscounts" />
         <item itemvalue="JUnit.BillOfQuantitiesTest" />
         <item itemvalue="JUnit.BillOfQuantitiesTest.removeDiscountOnAmountOfProducts" />
         <item itemvalue="JUnit.BillOfQuantitiesTest.setDiscountOnAmountOfProducts" />
         <item itemvalue="JUnit.BillOfQuantitiesTest.getPriceAfterDiscounts" />
-        <item itemvalue="JUnit.BillOfQuantitiesTest.getProductPriceAfterDiscount" />
       </list>
     </recent_temporary>
   </component>

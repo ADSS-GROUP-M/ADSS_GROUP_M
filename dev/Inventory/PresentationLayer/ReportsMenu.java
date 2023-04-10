@@ -14,8 +14,8 @@ public class ReportsMenu extends MainMenu {
         System.out.println("5. Exit");
         int option = in.nextInt();
         switch (option) {
-            case 1 -> inventoryReport();
-            case 2 -> inventoryRunningOutReport();
+//            case 1 -> inventoryReport();
+//            case 2 -> inventoryRunningOutReport();
             case 3 -> inventoryDefectiveReport();
             case 4 -> super.run();
             case 5 -> System.exit(0);
@@ -23,13 +23,13 @@ public class ReportsMenu extends MainMenu {
         }
     }
 
-    private void inventoryReport() {
-        throw new RuntimeException();
-    }
-
-    private void inventoryRunningOutReport() {
-        throw new RuntimeException();
-    }
+//    private void inventoryReport() {
+//        throw new RuntimeException();
+//    }
+//
+//    private void inventoryRunningOutReport() {
+//        throw new RuntimeException();
+//    }
 
     private void inventoryDefectiveReport() {
         String output = "";

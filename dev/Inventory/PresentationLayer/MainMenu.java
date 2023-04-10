@@ -1,17 +1,18 @@
 package dev.Inventory.PresentationLayer;
-import dev.Inventory.ServiceLayer.InventoryService;
+
+import dev.Inventory.ServiceLayer.StockService;
 
 import java.util.*;
 
 public class MainMenu {
     String branch;
     Scanner in;
-    InventoryService inventoryService;
+    StockService inventoryService;
 
     public MainMenu(){
         branch = "";
         in = new Scanner(System.in);
-        inventoryService = new InventoryService();
+        inventoryService = new StockService();
     }
 
     public void run() {

@@ -1,33 +1,34 @@
 package dev.Inventory.ServiceLayer;
+
 import dev.Inventory.BusinessLayer.DiscountCategoryController;
 import dev.Inventory.BusinessLayer.ProductController;
 
 import java.time.LocalDateTime;
 
-public class InventoryService {
+public class StockService {
     ProductController productController;
     DiscountCategoryController categoryController;
 
-    public InventoryService(){
+    public StockService() {
         productController = ProductController.ProductController();
         categoryController = DiscountCategoryController.DiscountCategoryController();
     }
 
 
-    public Response addProductType(int ProductTypeID, String name, String manufacturer, double supplier_price, double store_price, String branch, int storeAmount, int warehouseAmount){
+    public Response addProductType(int ProductTypeID, String name, String manufacturer, double supplier_price, double store_price, String branch, int storeAmount, int warehouseAmount) {
         try {
             productController.createProductType(ProductTypeID, branch, name, manufacturer, storeAmount, warehouseAmount, supplier_price, store_price);
             return new Response<>("Product added successfully");
-        } catch(Exception e) {
+        } catch (Exception e) {
             return Response.createErrorResponse("Error updating product type: " + e.getMessage());
         }
     }
 
-    public Response addProduct(int ProductID, int ProductTypeID, int supplier, int supplier_price, String branch, String location){
+    public Response addProduct(int ProductID, int ProductTypeID, int supplier, int supplier_price, String branch, String location) {
         try {
             productController.createProduct(ProductID, ProductTypeID, branch, supplier, supplier_price, location);
             return new Response<>("Product added successfully");
-        } catch(Exception e) {
+        } catch (Exception e) {
             return Response.createErrorResponse("Error updating product type: " + e.getMessage());
         }
     }
@@ -56,14 +57,14 @@ public class InventoryService {
                 productController.updateProductType(branch, null, catalog_number, null, -1, -1, null, null, min_amount);
                 return new Response<>("Product type updated successfully");
             } else {
-            return Response.createErrorResponse("Invalid input parameters");
+                return Response.createErrorResponse("Invalid input parameters");
             }
         } catch (Exception e) {
             return Response.createErrorResponse("Error updating product type: " + e.getMessage());
         }
     }
 
-    public Response updateProduct(int is_defective, int catalog_number, int serial_num, int is_sold, int supplier, int supplier_price, int sold_price, String location, String branch){
+    public Response updateProduct(int is_defective, int catalog_number, int serial_num, int is_sold, int supplier, int supplier_price, int sold_price, String location, String branch) {
         try {
             if (is_defective != -1) {
                 productController.updateProduct(branch, is_defective, catalog_number, serial_num, -1, -1, -1, -1, null);
@@ -84,7 +85,8 @@ public class InventoryService {
                 productController.updateProduct(branch, -1, catalog_number, serial_num, -1, -1, -1, -1, location);
                 return new Response<>("Product type updated successfully");
             } else {
-                return Response.createErrorResponse("Invalid input parameters");}
+                return Response.createErrorResponse("Invalid input parameters");
+            }
         } catch (Exception e) {
             return Response.createErrorResponse("Error updating product type: " + e.getMessage());
         }
@@ -94,20 +96,20 @@ public class InventoryService {
 //        categoryController.getProductsPerCategory()
 //    }
 
-//    public Response getInventoryShortages(){
+    //    public Response getInventoryShortages(){
 //
 //    }
 //
-    public Response getDefectiveProducts(String branch){
-        try{
+    public Response getDefectiveProducts(String branch) {
+        try {
             return new Response<>(productController.getDefectiveProducts(branch));
         } catch (Exception e) {
             return Response.createErrorResponse("Error creating catagory: " + e.getMessage());
         }
     }
 
-    public Response createMainCategory(String name, String branch){
-        try{
+    public Response createMainCategory(String name, String branch) {
+        try {
             categoryController.createCategory(branch, name, 1);
             return new Response<>("Catagory created successfully");
         } catch (Exception e) {
@@ -115,8 +117,8 @@ public class InventoryService {
         }
     }
 
-    public Response createSubCategory(String name, String branch){
-        try{
+    public Response createSubCategory(String name, String branch) {
+        try {
             categoryController.createCategory(branch, name, 0);
             return new Response<>("Sub-Catagory created successfully");
         } catch (Exception e) {
@@ -124,8 +126,8 @@ public class InventoryService {
         }
     }
 
-    public Response removeMainCategory(String name, String branch){
-        try{
+    public Response removeMainCategory(String name, String branch) {
+        try {
             categoryController.removeCategory(branch, name);
             return new Response<>("Category removed successfully");
         } catch (Exception e) {
@@ -133,8 +135,8 @@ public class InventoryService {
         }
     }
 
-    public Response removeSubCategory(String name, String branch){
-        try{
+    public Response removeSubCategory(String name, String branch) {
+        try {
             categoryController.removeCategory(branch, name);
             return new Response<>("Sub-Category removed successfully");
         } catch (Exception e) {
@@ -142,8 +144,8 @@ public class InventoryService {
         }
     }
 
-    public Response updateDiscountPerCategory(String name, String branch, double discount, LocalDateTime startDate, LocalDateTime endDate){
-        try{
+    public Response updateDiscountPerCategory(String name, String branch, double discount, LocalDateTime startDate, LocalDateTime endDate) {
+        try {
             categoryController.createCategoryDiscount(name, branch, discount, startDate, endDate);
             return new Response<>("discount added successfully");
         } catch (Exception e) {
@@ -151,8 +153,8 @@ public class InventoryService {
         }
     }
 
-    public Response updateDiscountPerProduct(int ProductTypeID, String branch, double discount, LocalDateTime startDate, LocalDateTime endDate){
-        try{
+    public Response updateDiscountPerProduct(int ProductTypeID, String branch, double discount, LocalDateTime startDate, LocalDateTime endDate) {
+        try {
             categoryController.createStoreDiscount(ProductTypeID, branch, discount, startDate, endDate);
             return new Response<>("discount added successfully");
         } catch (Exception e) {

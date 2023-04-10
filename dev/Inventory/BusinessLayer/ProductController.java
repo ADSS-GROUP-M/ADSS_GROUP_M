@@ -135,15 +135,7 @@ public class ProductController {
             throw new RuntimeException(String.format("Unable to update product Min notification,\n product type does not exist with the ID : %s",productTypeID));
 
     }
-    public List<Product> getDefectiveProducts(LocalDateTime startDate, LocalDateTime endDate, String branch){
-        List<Product> defectiveList = new ArrayList<Product>();
-        if(checkIfBranchExist(branch)) {
-            Map<Integer, ProductType> branchProductsType = productTypes.get(branch);
-            for (ProductType productType: branchProductsType.values())
-                productType.getDefectiveProducts(defectiveList);
-        }
-        return defectiveList;
-    }
+
 
     //in chosen branch, check shortage in each productType if true add the ProductType ID and obj to the return Map.
     public Map<Integer,ProductType> getInventoryShortages(LocalDateTime startDate, LocalDateTime endDate, String branch){
@@ -169,5 +161,28 @@ public class ProductController {
         return allProductsList;
     }
 
+    // Report function - inorder to receive all defective product details
+    public List<Record> getDefectiveProducts(LocalDateTime startDate, LocalDateTime endDate, String branch){
+        List<Record> defectiveRecords = new ArrayList<Record>();
+        if(checkIfBranchExist(branch)) {
+            Map<Integer, ProductType> branchProductsType = productTypes.get(branch);
+            for (ProductType productType: branchProductsType.values())
+                for(Product product : productType.getDefectiveProducts()){
+                    int productTypeID = productType.getProductTypeID();
+                    int productID = product.getProductID();
+                    String name = productType.getName();
+                    String manufacture = productType.getManufacturer();
+                    double supplierPrice = productType.getOriginalSupplierPrice();
+                    double storePrice = calcSoldPrice(branch,productTypeID,productType.getOriginalStorePrice());
+                    Category category = productType.getCategory();
+                    List<Category> subCategory = productType.getSubCategory();
+                    String location = product.getLocation();
+                    //create Record
+                    Record record = new Record(productTypeID,productID,name,branch,manufacture,supplierPrice,storePrice,category,subCategory,location);
+                    defectiveRecords.add(record);
+                }
+        }
+        return defectiveRecords;
+    }
 
 }

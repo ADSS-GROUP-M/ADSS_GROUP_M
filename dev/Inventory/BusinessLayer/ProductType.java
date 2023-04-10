@@ -73,7 +73,8 @@ public class ProductType {
         products.put(productID,new Product(productID,supplierID,supplierPrice,location));
     }
 
-    public List<Product> getDefectiveProducts(List<Product> defectiveList){
+    public List<Product> getDefectiveProducts(){
+        List<Product> defectiveList = new ArrayList<Product>();
         for(Product product: products.values()){
             if(product.isDefective())
                 defectiveList.add(product);
@@ -103,4 +104,9 @@ public class ProductType {
     public void setOriginalStorePrice(double newPrice ){this.originalStorePrice = newPrice;}
     public void setOriginalSupplierPrice(double newPrice){this.originalSupplierPrice = newPrice;}
     public double getOriginalStorePrice(){return this.originalStorePrice;}
+    public String getName(){return this.name;}
+    public String getManufacturer(){return this.manufacturer;}
+    public double getOriginalSupplierPrice(){return this.originalSupplierPrice;}
+    public Category getCategory(){return this.category;}
+    public List<Category> getSubCategory(){return this.subCategory;}
 }

@@ -36,8 +36,18 @@ public class ProductDiscountSupplier {
             return -1;
     }
 
-    public List<ProductDiscountSupplier> addDiscountSupplier(List<ProductDiscountSupplier> discountSuppliersList,LocalDateTime dateToValidate, int productTypeID){
-        if(isDateInRange(dateToValidate) && productTypeID == this.productTypeID)
+    public Boolean isDateInRange(LocalDateTime startDate, LocalDateTime endDate){
+        return isDateInRange(startDate) && isDateInRange(endDate);
+    }
+    public double getDiscountInRange(LocalDateTime startDate, LocalDateTime endDate){
+        if(isDateInRange(startDate) && isDateInRange(endDate))
+            return discount;
+        else
+            return -1;
+    }
+
+    public List<ProductDiscountSupplier> addDiscountSupplier(List<ProductDiscountSupplier> discountSuppliersList,LocalDateTime startDate, LocalDateTime endDate, int productTypeID){
+        if(isDateInRange(startDate,endDate) && productTypeID == this.productTypeID)
             discountSuppliersList.add(this);
         return discountSuppliersList;
     }

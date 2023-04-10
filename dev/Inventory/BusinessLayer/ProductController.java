@@ -34,7 +34,7 @@ public class ProductController {
         }
     }
     // Add new product
-    public void createProduct(int productID, int productTypeID, String branch, int supplierID, int supplierPrice, String location) {
+    public void createProduct(int productID, int productTypeID, String branch, int supplierID, double supplierPrice, String location) {
         if(checkIfProductTypeExist(branch,productTypeID))
             productTypes.get(branch).get(productTypeID).addProduct(productID,supplierID,supplierPrice,location);
     }

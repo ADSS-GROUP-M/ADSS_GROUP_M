@@ -70,14 +70,29 @@ public class DiscountCategoryController {
     }
     public void createCategoryDiscount(String categoryName, String branch,double discount, LocalDateTime startDate, LocalDateTime endDate){
         if(checkIfCategoryExist(branch,categoryName)){
-            categoriesPerBranch.get(branch).get(categoryName).addDiscountCategory(categoryName,branch,discount,startDate,endDate);
+            List<ProductType> relatedProducts = categoriesPerBranch.get(branch).get(categoryName).getProductsRelated();
+            for(ProductType productType: relatedProducts){
+               createStoreDiscount(productType.getProductTypeID(),branch,discount,startDate,endDate);
+            }
         }
         else
             throw new RuntimeException("Category does not exist, please create category in order to continue");
     }
     public double getTodayBiggestStoreDiscountI(int productID, String branch){
-        //TODO: need to implement
-        throw new RuntimeException();
+        if(checkIfBranchExistStoreDiscount(branch)){
+            double maxDiscount = -1;
+            for(ProductStoreDiscount PDS: storeDiscounts.get(branch).get(productID)){
+               double currentDiscount = PDS.getDiscount(LocalDateTime.now());
+               if(currentDiscount > maxDiscount)
+                   maxDiscount= currentDiscount;
+            }
+            if(maxDiscount != -1)
+                return maxDiscount;
+            else
+                throw new RuntimeException(String.format("There is no discount for this product type ID: %s", productID));
+        }
+        else
+            throw new RuntimeException("Branch does not exist, please create discount in order to continue");
     }
     public double getTodaySupplierDiscountI(int productID, String branch, int supplierID){
         if(checkIfSupplierExist(branch,supplierID)){
@@ -97,25 +112,36 @@ public class DiscountCategoryController {
             throw new RuntimeException("Supplier or branch does not exist, please create discount in order to continue");
     }
     public List<ProductStoreDiscount> getStoreDiscountPerDate(int productID, String branch, LocalDateTime startDate, LocalDateTime endDate){
-        //TODO: need to implement
-        throw new RuntimeException();
+        if(checkIfBranchExistStoreDiscount(branch)){
+            List<ProductStoreDiscount> discountList = new ArrayList<ProductStoreDiscount>();
+            for(ProductStoreDiscount PSD: storeDiscounts.get(branch).get(productID)){
+                discountList = PSD.addDiscountSupplier(discountList,startDate,endDate);
+            }
+            if(!discountList.isEmpty())
+                return discountList;
+            else
+                throw new RuntimeException(String.format("There is no discount for this product type ID: %s", productID));
+        }
+        else
+            throw new RuntimeException("Branch does not exist, please create discount in order to continue");
+
     }
-    public double getStoreMinDiscount(int productID, String branch){
+    public double getStoreMaxDiscount(int productID, String branch){
         //TODO: need to implement
         throw new RuntimeException();
     }
 
-    public List<ProductDiscountSupplier> getSupplierDiscountPerDate(int productID, String branch, int supplierID, LocalDateTime checkedDate){
+    public List<ProductDiscountSupplier> getSupplierDiscountPerDate(int productID, String branch, int supplierID, LocalDateTime startDate, LocalDateTime endDate){
         if(checkIfSupplierExist(branch,supplierID)){
             List<ProductDiscountSupplier> supplierDiscountList = supplierDiscount.get(branch).get(supplierID);
             List<ProductDiscountSupplier> supplierDiscountResults = new ArrayList<ProductDiscountSupplier>();
             for(ProductDiscountSupplier PDS: supplierDiscountList){
-                PDS.addDiscountSupplier(supplierDiscountResults,checkedDate,productID);
+                PDS.addDiscountSupplier(supplierDiscountResults,startDate,endDate,productID);
             }
             if(!supplierDiscountResults.isEmpty())
                 return supplierDiscountResults;
             else
-                throw new RuntimeException(String.format("in %s there is not Discount form this supplierID: %s",checkedDate, supplierID));
+                throw new RuntimeException(String.format("in range %s  %s there is not Discount form this supplierID: %s",startDate, endDate, supplierID));
         }
         else
             throw new RuntimeException("supplier or branch does not exist, please create discount in order to continue");
@@ -137,33 +163,9 @@ public class DiscountCategoryController {
             throw new RuntimeException("supplier or branch does not exist, please create discount in order to continue");
 
     }
-    public void updateDiscountPerCategory(String name, String branch, int discount, LocalDateTime startDate, LocalDateTime endDate){
-        //TODO: need to implement
-        throw new RuntimeException();
-    }
 
     public Map<String ,List<CategoryDiscount>> getStockProduct(List<Category> categories, String branch, LocalDateTime startDate, LocalDateTime endDate){
-        Map<String ,List<CategoryDiscount>> allProductList = new HashMap<String ,List<CategoryDiscount>>();
-        if(checkIfBranchExistCategory(branch)){
-            for(Category category : categories){
-                List<CategoryDiscount> CDlist = new ArrayList<CategoryDiscount>();
-                if(categoriesPerBranch.get(branch).containsKey(category.getNameCategory())){
-                    CDlist = category.getCategoriesDiscountInRange(CDlist,startDate,endDate);
-                    if(!CDlist.isEmpty())
-                        allProductList.put(category.getNameCategory(), CDlist);
-                }
-                else{
-                    throw new RuntimeException(String.format("Category %s does not exist",category.getNameCategory() ));
-                }
-                CDlist.clear();
-            }
-        }
-        else
-            throw new RuntimeException("Branch does not exist, please create category in order to continue");
-        if(!allProductList.isEmpty())
-            return allProductList;
-        else
-            throw new RuntimeException("There is no discount form the provided list category");
-
+        //TODO: need to implement
+        throw new RuntimeException();
     }
 }

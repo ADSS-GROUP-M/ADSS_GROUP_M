@@ -1,17 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e454f93c-4ee8-4f4b-9a14-eaaf36aa303c" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BusinessLayer/Agreement.java" beforeDir="false" afterPath="$PROJECT_DIR$/BusinessLayer/Agreement.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BusinessLayer/BillOfQuantities.java" beforeDir="false" afterPath="$PROJECT_DIR$/BusinessLayer/BillOfQuantities.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BusinessLayer/DeliveryAgreements/DeliveryAgreement.java" beforeDir="false" afterPath="$PROJECT_DIR$/BusinessLayer/DeliveryAgreements/DeliveryAgreement.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BusinessLayer/DeliveryAgreements/DeliveryByInvitation.java" beforeDir="false" afterPath="$PROJECT_DIR$/BusinessLayer/DeliveryAgreements/DeliveryByInvitation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BusinessLayer/DeliveryAgreements/DeliveryFixedDays.java" beforeDir="false" afterPath="$PROJECT_DIR$/BusinessLayer/DeliveryAgreements/DeliveryFixedDays.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BusinessLayer/Supplier.java" beforeDir="false" afterPath="$PROJECT_DIR$/BusinessLayer/Supplier.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BusinessLayer/SystemController.java" beforeDir="false" afterPath="$PROJECT_DIR$/BusinessLayer/SystemController.java" afterDir="false" />
-    </list>
+    <list default="true" id="e454f93c-4ee8-4f4b-9a14-eaaf36aa303c" name="Changes" comment="finish ui and tests" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -22,10 +12,17 @@
       <list>
         <option value="TypeScript File" />
         <option value="Class" />
+        <option value="JUnit4 Test Class" />
+        <option value="JUnit5 Test Class" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$/.." value="master" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
   <component name="MarkdownSettingsMigration">
@@ -37,32 +34,128 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;19&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;project.propVCSSupport.DirectoryMappings&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Downloaded.Files.Path.Enabled": "false",
+    "Repository.Attach.Annotations": "false",
+    "Repository.Attach.JavaDocs": "false",
+    "Repository.Attach.Sources": "false",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit5",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit4": "",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5": "",
+    "jdk.selected.JAVA_MODULE": "19",
+    "last_opened_file_path": "C:/Users/yossi/OneDrive/שולחן העבודה/ניתוצ/Assignment1/Assignment1/dev/PresentationLayer",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "project.propVCSSupport.DirectoryMappings"
   }
-}</component>
-  <component name="RunManager">
-    <configuration name="BillOfQuantities" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="BusinessLayer.BillOfQuantities" />
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\yossi\OneDrive\שולחן העבודה\ניתוצ\Assignment1\Assignment1\dev\PresentationLayer" />
+    </key>
+    <key name="CreateTestDialog.Recents.Supers">
+      <recent name="" />
+    </key>
+    <key name="CreateTestDialog.RecentsKey">
+      <recent name="Backend.BusinessLayer" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="PresentationLayer" />
+    </key>
+  </component>
+  <component name="RunManager" selected="JUnit.BillOfQuantitiesTest">
+    <configuration name="BillOfQuantitiesTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="code" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="BusinessLayer.*" />
+          <option name="PATTERN" value="Backend.BusinessLayer.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
+      <option name="PACKAGE_NAME" value="Backend.BusinessLayer" />
+      <option name="MAIN_CLASS_NAME" value="Backend.BusinessLayer.BillOfQuantitiesTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="BillOfQuantitiesTest.getPriceAfterDiscounts" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="code" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="Backend.BusinessLayer.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="Backend.BusinessLayer" />
+      <option name="MAIN_CLASS_NAME" value="Backend.BusinessLayer.BillOfQuantitiesTest" />
+      <option name="METHOD_NAME" value="getPriceAfterDiscounts" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="BillOfQuantitiesTest.getProductPriceAfterDiscount" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="code" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="Backend.BusinessLayer.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="Backend.BusinessLayer" />
+      <option name="MAIN_CLASS_NAME" value="Backend.BusinessLayer.BillOfQuantitiesTest" />
+      <option name="METHOD_NAME" value="getProductPriceAfterDiscount" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="BillOfQuantitiesTest.removeDiscountOnAmountOfProducts" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="code" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="Backend.BusinessLayer.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="Backend.BusinessLayer" />
+      <option name="MAIN_CLASS_NAME" value="Backend.BusinessLayer.BillOfQuantitiesTest" />
+      <option name="METHOD_NAME" value="removeDiscountOnAmountOfProducts" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="BillOfQuantitiesTest.setDiscountOnAmountOfProducts" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="code" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="Backend.BusinessLayer.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="Backend.BusinessLayer" />
+      <option name="MAIN_CLASS_NAME" value="Backend.BusinessLayer.BillOfQuantitiesTest" />
+      <option name="METHOD_NAME" value="setDiscountOnAmountOfProducts" />
+      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.BillOfQuantities" />
+        <item itemvalue="JUnit.BillOfQuantitiesTest" />
+        <item itemvalue="JUnit.BillOfQuantitiesTest.removeDiscountOnAmountOfProducts" />
+        <item itemvalue="JUnit.BillOfQuantitiesTest.setDiscountOnAmountOfProducts" />
+        <item itemvalue="JUnit.BillOfQuantitiesTest.getPriceAfterDiscounts" />
+        <item itemvalue="JUnit.BillOfQuantitiesTest.getProductPriceAfterDiscount" />
       </list>
     </recent_temporary>
   </component>
@@ -78,8 +171,37 @@
       <workItem from="1680438006576" duration="12448000" />
       <workItem from="1680468003859" duration="62000" />
       <workItem from="1680511359414" duration="167000" />
-      <workItem from="1680511529805" duration="8840000" />
+      <workItem from="1680511529805" duration="12696000" />
     </task>
+    <task id="LOCAL-00001" summary="done with order functionality - moving to the ability to print the order etc">
+      <created>1680693870968</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1680693870968</updated>
+    </task>
+    <task id="LOCAL-00002" summary="commit to move to another functionality">
+      <created>1680811222544</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1680811222544</updated>
+    </task>
+    <task id="LOCAL-00003" summary="added products that can be ordered only by dividing to several suppliers functionality and started ui">
+      <created>1680880637709</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1680880637709</updated>
+    </task>
+    <task id="LOCAL-00004" summary="finish ui and tests">
+      <created>1681121958493</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1681121958493</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -95,10 +217,37 @@
         </entry>
       </map>
     </option>
+    <option name="RECENT_FILTERS">
+      <map>
+        <entry key="User">
+          <value>
+            <list>
+              <RecentGroup>
+                <option name="FILTER_VALUES">
+                  <option value="*" />
+                </option>
+              </RecentGroup>
+            </list>
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <ignored-roots>
       <path value="$PROJECT_DIR$" />
     </ignored-roots>
+    <MESSAGE value="done with order functionality - moving to the ability to print the order etc" />
+    <MESSAGE value="commit to move to another functionality" />
+    <MESSAGE value="added products that can be ordered only by dividing to several suppliers functionality and started ui" />
+    <MESSAGE value="finish ui and tests" />
+    <option name="LAST_COMMIT_MESSAGE" value="finish ui and tests" />
+  </component>
+  <component name="XDebuggerManager">
+    <pin-to-top-manager>
+      <pinned-members>
+        <PinnedItemInfo parentTag="Backend.BusinessLayer.SupplierController" memberName="suppliers" />
+      </pinned-members>
+    </pin-to-top-manager>
   </component>
 </project>

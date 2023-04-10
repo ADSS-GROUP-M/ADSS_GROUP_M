@@ -1,6 +1,4 @@
-package BusinessLayer.Discounts;
-
-import BusinessLayer.Discounts.Discount;
+package PresentationLayer.Discounts;
 
 public class PercentageDiscount extends Discount {
     private double percentage;
@@ -10,5 +8,10 @@ public class PercentageDiscount extends Discount {
     @Override
     public double applyDiscount(double price) {
         return price - (percentage/100) * price;
+    }
+
+    @Override
+    public String toString() {
+        return "discount in percentages, percentage of discount: " + percentage;
     }
 }

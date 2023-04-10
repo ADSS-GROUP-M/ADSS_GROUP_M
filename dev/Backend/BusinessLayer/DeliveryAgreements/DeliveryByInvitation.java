@@ -1,4 +1,4 @@
-package BusinessLayer.DeliveryAgreements;
+package Backend.BusinessLayer.DeliveryAgreements;
 
 public class DeliveryByInvitation extends DeliveryAgreement{
     /***
@@ -12,5 +12,14 @@ public class DeliveryByInvitation extends DeliveryAgreement{
 
     public void setNumberOfDays(int numberOfDays) {
         this.numberOfDays = numberOfDays;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + "\n\t\t\tnumber of days for order to arrive: " + numberOfDays;
+    }
+
+    public String toString2() {
+        return super.toString2() + "\n\tnumber of days for order to arrive: " + numberOfDays;
     }
 }

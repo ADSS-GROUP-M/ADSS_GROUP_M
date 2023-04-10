@@ -1,7 +1,7 @@
-package dev.ServiceLayer.Objects;
+package dev.Inventory.ServiceLayer;
 
 public class Response<T> {
-    private T returnValue;s
+    private T returnValue;
     private String errorMessage;
 
     public Response() {

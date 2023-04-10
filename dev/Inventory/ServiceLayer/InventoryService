@@ -1,27 +1,34 @@
-package dev.Inventory.BusinessLayer;
-package dev.Inventory.ServiceLayer.Response;
+package dev.Inventory.ServiceLayer;
+import dev.Inventory.BusinessLayer.CategoryController;
+import dev.Inventory.BusinessLayer.ProductController;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDateTime;
 
-public class InventoryService : MainManu {
-    public Response getInventoryShorages(){
+public class InventoryService {
+    ProductController productController;
+    CategoryController categoryController;
 
+    public InventoryService(){
+        productController = new ProductController();
+        categoryController = new CategoryController();
     }
 
-    public Response addProductType(String ProductTypeID, String name, String manufacturer, String supplier, double supplier_price, double store_price, String branch){
+//    public Response getInventoryShorages(){
+//
+//    }
+
+    public Response addProductType(int ProductTypeID, String name, String manufacturer, double supplier_price, double store_price, String branch, int storeAmount, int warehouseAmount){
         try {
-            ProductController.createProduct(ProductTypeID, ProductID, name, manufacturer, supplier_price, store_price);
+            productController.createProductType(ProductTypeID, branch, name, manufacturer, storeAmount, warehouseAmount, supplier_price, store_price);
             return new Response<>("Product added successfully");
         } catch(Exception e) {
             return Response.createErrorResponse("Error updating product type: " + e.getMessage());
         }
     }
 
-    public Response addProduct(String ProductTypeID, String ProductID, String supplier, double supplier_price, String branch){
+    public Response addProduct(int ProductID, int ProductTypeID, int supplier, int supplier_price, String branch, String location){
         try {
-            ProductController.createProduct(ProductTypeID, ProductID, name, manufacturer, supplier_price, store_price);
+            productController.createProduct(ProductID, ProductTypeID, branch, supplier, supplier_price, location);
             return new Response<>("Product added successfully");
         } catch(Exception e) {
             return Response.createErrorResponse("Error updating product type: " + e.getMessage());
@@ -31,26 +38,25 @@ public class InventoryService : MainManu {
     public Response updateProductType(String name, String catalog_number, String manufacturer, double supplier_price, double store_price, String category, String sub_category, int min_amount) {
         try {
             if (name != null) {
-                ProductController.updateProductType(name, catalog_number, null, -1, -1, null, null, -1);
+                productController.updateProductType(name, catalog_number, null, -1, -1, null, null, -1);
                 return new Response<>("Product type updated successfully");
             } else if (manufacturer != null) {
-                ProductController.updateProductType(null, catalog_number, manufacturer, null, -1, -1, null, null, -1);
+                productController.updateProductType(null, catalog_number, manufacturer, null, -1, -1, null, null, -1);
                 return new Response<>("Product type updated successfully");
-            }
             } else if (supplier_price != -1) {
-                ProductController.updateProductType(null, catalog_number, null, supplier_price, -1, null, null, -1);
+                productController.updateProductType(null, catalog_number, null, supplier_price, -1, null, null, -1);
                 return new Response<>("Product type updated successfully");
             } else if (store_price != -1) {
-                ProductController.updateProductType(null, catalog_number, null, -1, store_price, null, null, -1);
+                productController.updateProductType(null, catalog_number, null, -1, store_price, null, null, -1);
                 return new Response<>("Product type updated successfully");
             } else if (category != null) {
-                ProductController.updateProductType(null, catalog_number, null, -1, -1, category, null, -1);
+                productController.updateProductType(null, catalog_number, null, -1, -1, category, null, -1);
                 return new Response<>("Product type updated successfully");
             } else if (sub_category != null) {
-                ProductController.updateProductType(null, catalog_number, null, -1, -1, null, sub_category, -1);
+                productController.updateProductType(null, catalog_number, null, -1, -1, null, sub_category, -1);
                 return new Response<>("Product type updated successfully");
             } else if (min_amount != -1) {
-                ProductController.updateProductType(null, catalog_number, null, -1, -1, null, null, min_amount);
+                productController.updateProductType(null, catalog_number, null, -1, -1, null, null, min_amount);
                 return new Response<>("Product type updated successfully");
             } else {
             return Response.createErrorResponse("Invalid input parameters");
@@ -63,48 +69,46 @@ public class InventoryService : MainManu {
     public Response updateProduct(int is_defective, String serial_num, int is_sold, String supplier, int supplier_price, int sold_price, String location){
         try {
             if (is_defective != -1) {
-                ProductController.updateProductType(is_defective, catalog_num, -1, null, -1, -1, null);
+                productController.updateProductType(is_defective, catalog_num, -1, null, -1, -1, null);
                 return new Response<>("Product type updated successfully");
             } else if (is_sold != -1) {
-                ProductController.updateProductType(-1, catalog_num, new_val, null, -1, -1, null);
+                productController.updateProductType(-1, catalog_num, new_val, null, -1, -1, null);
                 return new Response<>("Product type updated successfully");
-            }
             } else if (supplier != null) {
-                ProductController.updateProductType(-1, catalog_num, -1, new_val, -1, -1, null);
+                productController.updateProductType(-1, catalog_num, -1, new_val, -1, -1, null);
                 return new Response<>("Product type updated successfully");
             } else if (supplier_price != -1) {
-                ProductController.updateProductType(-1, catalog_num, -1, null, new_val, -1, null);
+                productController.updateProductType(-1, catalog_num, -1, null, new_val, -1, null);
                 return new Response<>("Product type updated successfully");
             } else if (sold_price != -1) {
-                ProductController.updateProductType(-1, catalog_num, -1, null, -1, new_val, null));
+                productController.updateProductType(-1, catalog_num, -1, null, -1, new_val, null));
                 return new Response<>("Product type updated successfully");
             } else if (location != null) {
-                ProductController.updateProductType(-1, catalog_num, -1, null, -1, -1, new_val);
+                productController.updateProductType(-1, catalog_num, -1, null, -1, -1, new_val);
                 return new Response<>("Product type updated successfully");
             } else {
-                return Response.createErrorResponse("Invalid input parameters");
-            }
+                return Response.createErrorResponse("Invalid input parameters");}
         } catch (Exception e) {
             return Response.createErrorResponse("Error updating product type: " + e.getMessage());
         }
     }
 
-    public Response getStockProductsDetailed(){
-
-    }
-
-    public Response getStockProduct(String json){
-
-    }
-
-    public Response getDefectiveProducts(String json){
-
-    }
+//    public Response getStockProductsDetailed(){
+//
+//    }
+//
+//    public Response getStockProduct(String json){
+//
+//    }
+//
+//    public Response getDefectiveProducts(String json){
+//
+//    }
 
     public Response createMainCatagory(String name){
         try{
-            CatagoryController.createCategory(name, "1");
-            new Response<>("Catagory created successfully")
+            categoryController.createCategory(name, "1");
+            return new Response<>("Catagory created successfully");
         } catch (Exception e) {
             return Response.createErrorResponse("Error creating catagory: " + e.getMessage());
         }
@@ -112,8 +116,8 @@ public class InventoryService : MainManu {
 
     public Response createSubCatagory(String name){
         try{
-            CatagoryController.createCategory(name, "0");
-            new Response<>("Sub-Catagory created successfully")
+            categoryController.createCategory(name, "0");
+            return new Response<>("Sub-Catagory created successfully");
         } catch (Exception e) {
             return Response.createErrorResponse("Error creating sub catagory: " + e.getMessage());
         }
@@ -121,8 +125,8 @@ public class InventoryService : MainManu {
 
     public Response removeMainCatagory(String name){
         try{
-            CatagoryController.removeCategory(name, "1");
-            new Response<>("Catagory removed successfully")
+            categoryController.removeCategory(name, "1");
+            return new Response<>("Catagory removed successfully")
         } catch (Exception e) {
             return Response.createErrorResponse("Error removing catagory: " + e.getMessage());
         }
@@ -130,11 +134,28 @@ public class InventoryService : MainManu {
 
     public Response removeSubCatagory(String name){
         try{
-            CatagoryController.removeCategory(name, "0");
+            return categoryController.removeCategory(name, "0");
             new Response<>("Sub-Catagory removed successfully")
         } catch (Exception e) {
             return Response.createErrorResponse("Error removing catagory: " + e.getMessage());
         }
     }
 
+    public Response updateDiscountPerCategory(String name, int discount, LocalDateTime startDate, LocalDateTime endDate){
+        try{
+            return categoryController.updateDiscountPerCategory(name, discount, startDate, endDate);
+            new Response<>("discount added successfully");
+        } catch (Exception e) {
+            return Response.createErrorResponse("Error updating discount: " + e.getMessage());
+        }
+    }
+
+    public Response updateDiscountPerProduct(String ProductTypeID, String ProductID, int discount, LocalDateTime startDate, LocalDateTime endDate){
+        try{
+            return categoryController.updateDiscountPerCategory(ProductTypeID, ProductID, discount, startDate, endDate);
+            new Response<>("discount added successfully");
+        } catch (Exception e) {
+            return Response.createErrorResponse("Error updating discount: " + e.getMessage());
+        }
+    }
 }

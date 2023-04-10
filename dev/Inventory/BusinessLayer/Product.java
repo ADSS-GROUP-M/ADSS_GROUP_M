@@ -53,8 +53,9 @@ public class Product {
     }
 
     //TODO: update soldPrice
-    public void updateIsSold() {
+    public void updateIsSold(double soldPrice) {
         this.isSold = true;
+        this.soldPrice = soldPrice;
     }
 
     public void setLocation(String newLocation){this.location = newLocation;}

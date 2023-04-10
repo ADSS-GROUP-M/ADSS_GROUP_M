@@ -62,8 +62,9 @@ public class ProductController {
         if(checkIfProductTypeExist(branch,productID)){
             Product currentProduct = productTypes.get(branch).get(productTypeID).getProduct(productID);
             if(isDefective != -1){currentProduct.setIsDefective();}
-            // TODO : send price
-            if(isSold != -1){currentProduct.updateIsSold();}
+            if(isSold != -1){
+                currentProduct.updateIsSold(DC_contoller.getTodayBiggestStoreDiscountI(productTypeID,branch));
+            }
             if(newSupplier != -1){currentProduct.setSupplierID(newSupplier);}
             if(newSupplierPrice != -1){currentProduct.setSupplierPrice(newSupplierPrice);}
             if(newSoldPrice != -1){currentProduct.setSoldPrice(newSoldPrice);}
@@ -99,7 +100,6 @@ public class ProductController {
 
     }
 
-
     // update products to defective
     public void updateDefectiveProduct(int productTypeID, List<Integer> productsID, String branch){
         if(checkIfProductTypeExist(branch,productTypeID)){
@@ -109,11 +109,18 @@ public class ProductController {
         else
             throw new RuntimeException(String.format("Unable to update defective products,\nproduct type does not exist with the ID : %s",productTypeID));
     }
+    // check if there is a discount today on the current product and calculate to final price
+    private double calcSoldPrice(String branch, int productTypeID, double originalStorePrice){
+        double currentDiscount = DC_contoller.getTodayBiggestStoreDiscountI(productTypeID,branch);
+        if(currentDiscount != -1)
+            return (100-currentDiscount)*originalStorePrice;
+        return originalStorePrice;
+    }
     // update products status to sold
     public void updateSoldProduct(int productTypeID, List<Integer> productsID, String branch){
         if(checkIfProductTypeExist(branch,productTypeID)){
             ProductType productType = productTypes.get(branch).get(productTypeID);
-            productType.setToSold(productsID);
+            productType.setToSold(productsID,calcSoldPrice(branch,productTypeID,productType.getOriginalStorePrice()));
         }
         else
             throw new RuntimeException(String.format("Unable to update sold products,\n product type does not exist with the ID : %s",productTypeID));
@@ -127,10 +134,6 @@ public class ProductController {
         else
             throw new RuntimeException(String.format("Unable to update product Min notification,\n product type does not exist with the ID : %s",productTypeID));
 
-    }
-    public double getProductPrice(int productTypeID, String branch){
-        //TODO: need to implement
-        throw new RuntimeException();
     }
     public List<Product> getDefectiveProducts(LocalDateTime startDate, LocalDateTime endDate, String branch){
         List<Product> defectiveList = new ArrayList<Product>();
@@ -166,10 +169,5 @@ public class ProductController {
         return allProductsList;
     }
 
-
-    //should remove to discount controller
-    public void updateDiscount(int productTypeID, int discount, LocalDateTime startDate,LocalDateTime endDate, String branch){
-        //TODO: need to implement
-    }
 
 }

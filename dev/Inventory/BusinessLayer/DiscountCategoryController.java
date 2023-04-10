@@ -145,7 +145,6 @@ public class DiscountCategoryController {
         }
         else
             throw new RuntimeException("Branch does not exist, please create discount in order to continue");
-
     }
 
     public List<ProductDiscountSupplier> getSupplierDiscountPerDate(int productID, String branch, int supplierID, LocalDateTime startDate, LocalDateTime endDate){
@@ -189,6 +188,5 @@ public class DiscountCategoryController {
         }
         else
             throw new RuntimeException("Branch does not exist, please create discount in order to continue");
-
     }
 }

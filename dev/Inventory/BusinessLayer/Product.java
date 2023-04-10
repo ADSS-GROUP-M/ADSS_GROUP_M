@@ -60,6 +60,6 @@ public class Product {
     public void setSupplierPrice(double newPrice){this.supplierPrice = newPrice;}
     public void setSupplierID(int newSupplierID){this.supplierID = newSupplierID;}
     public void setSoldPrice(double newSoldPrice){this.soldPrice = newSoldPrice;}
-
-
+    public int getProductID(){return this.productID;}
+    public String getLocation(){return this.location;}
 }

@@ -133,7 +133,7 @@ public class ProductController {
 
 
     //in chosen branch, check shortage in each productType if true add the ProductType ID and obj to the return Map.
-    public Map<Integer,ProductType> getInventoryShortages(LocalDateTime startDate, LocalDateTime endDate, String branch){
+    public Map<Integer,ProductType> getInventoryShortages(String branch){
         Map<Integer,ProductType> shortagesProducts = new HashMap<Integer,ProductType>();
         if(checkIfBranchExist(branch)){
             Map<Integer, ProductType> branchProductsType = productTypes.get(branch);

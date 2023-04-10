@@ -13,32 +13,18 @@ public class MainMenu {
     public MainMenu run() {
         System.out.println("Please select a branch:");
         branch = in.nextLine();
-        System.out.println("1. Manage reports");
-        System.out.println("5. Exit");
-        int option = appData.readInt();
-        switch (option) {
-            case 1 -> transportsManagement.manageTransports();
-            case 2 -> itemListsManagement.manageItemLists();
-            case 3 -> manageResources();
-            case 4 -> appData.generateData();
-            case 5 -> System.exit(0);
-            default -> System.out.println("\nInvalid command");
-        }
-    }
-
-    private void all_menu() {
         System.out.println("Please select an option:");
         System.out.println("1. Manage reports");
         System.out.println("2. Manage inventory's products");
         System.out.println("3. Manage Discounts");
         System.out.println("4. Manage Catagories");
         System.out.println("5. Exit");
-        int option = appData.readInt();
+        int option = in.nextLine();
         switch (option) {
-            case 1 -> transportsManagement.manageTransports();
-            case 2 -> itemListsManagement.manageItemLists();
-            case 3 -> manageResources();
-            case 4 -> appData.generateData();
+            case 1 -> ReportsMenu.run();
+            case 2 -> InventoryProductsManu.run();
+            case 3 -> DiscountsManu.run();
+            case 4 -> CatagoriesManu.run();
             case 5 -> System.exit(0);
             default -> System.out.println("\nInvalid command");
         }

@@ -9,7 +9,7 @@ public class ReportsMenu : MainManu {
         System.out.println("3. Inventory defective products report");
         System.out.println("4. Back to main manu");
         System.out.println("5. Exit");
-        int option = appData.readInt();
+        int option = in.nextLine();
         switch (option) {
             case 1 -> inventoryReport();
             case 2 -> inventoryRunningOutReport();

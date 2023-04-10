@@ -134,13 +134,31 @@ public class ProductController {
     public Map<Integer,List<Product>> getStockProductsDetails(String branch){
         Map<Integer,List<Product>> allProductsList = new HashMap<Integer,List<Product>>();
         if(checkIfBranchExist(branch)){
-            Map<Integer, ProductType> branchProductsType = productTypes.get(branch);
-            for (ProductType productType: branchProductsType.values()){
+            for (ProductType productType: productTypes.get(branch).values()){
                 productType.getAllProducts(allProductsList);
             }
         }
         return allProductsList;
     }
+
+    public Record getProductDetails(String branch, int productTypeID, int productID){
+        if(checkIfProductTypeExist(branch,productTypeID)){
+            ProductType productType = productTypes.get(branch).get(productTypeID);
+            Product product = productType.getProducts().get(productID);
+            String name = productType.getName();
+            String manufacture = productType.getManufacturer();
+            double supplierPrice = productType.getOriginalSupplierPrice();
+            double storePrice = DCContoller.calcSoldPrice(branch,productTypeID,productType.getOriginalStorePrice());
+            Category category = productType.getCategory();
+            List<Category> subCategory = productType.getSubCategory();
+            String location = product.getLocation();
+            //create Record
+            Record record = new Record(productTypeID,productID,name,branch,manufacture,supplierPrice,storePrice,category,subCategory,location);
+            return record;
+        }
+        return null;
+    }
+
     //Report shortages products - inorder to receive all shortages product details
     public List<Record> getInventoryShortages(String branch){
         List<Record> shortagesProductsRecord = new ArrayList<Record>();

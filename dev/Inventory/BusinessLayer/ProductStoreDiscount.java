@@ -17,15 +17,7 @@ public class ProductStoreDiscount {
         this.discount = discount;
     }
 
-
-    // those two should be in the controller?
-    public double getDiscountPerTypeID(int productTypeID, String branch){
-        //TODO: need to implement
-        throw new RuntimeException();
-    }
-
-    // the meaning is today discount? or should we get range of date?
-    public double getDiscountPerDate(int productTypeID, String branch){
+    public Boolean isDateInRange(LocalDateTime time){
         //TODO: need to implement
         throw new RuntimeException();
     }

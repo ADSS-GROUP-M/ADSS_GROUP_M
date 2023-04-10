@@ -1,7 +1,6 @@
 package dev.Inventory.BusinessLayer;
-import javafx.util.Pair;
+
 import java.time.LocalDateTime;
-import java.util.Date;
 
 public class Product {
     private int productID;
@@ -62,6 +61,8 @@ public class Product {
     public void setSupplierPrice(double newPrice){this.supplierPrice = newPrice;}
     public void setSupplierID(int newSupplierID){this.supplierID = newSupplierID;}
     public void setSoldPrice(double newSoldPrice){this.soldPrice = newSoldPrice;}
+    public int getProductID(){return this.productID;}
+    public String getLocation(){return this.location;}
 
 
 }

@@ -7,15 +7,17 @@ public class Record {
     private int serial_number;
     private String name;
     private String branch;
-    private int manufacturer;
-    private int supplier_price;
-    private int store_price; // Product.soldPrice != -1 ? Product.soldPrice : ProductType.originalStorePrice
+    private String manufacturer;
+    private double supplier_price;
+    private double store_price; // Product.soldPrice != -1 ? Product.soldPrice : ProductType.originalStorePrice
     private Category category;
     private List<Category> subCategories;
     private String location;
 
 
-    public Record(int catalog_number, int serial_number, String name, String branch, int manufacturer, int supplier_price, int store_price, Category category, List<Category> subCategories, String location) {
+    //catalog_number - ProductTypeID
+    //serial_number - ProductID
+    public Record(int catalog_number, int serial_number, String name, String branch, String manufacturer, double supplier_price, double store_price, Category category, List<Category> subCategories, String location) {
         this.catalog_number = catalog_number;
         this.serial_number = serial_number;
         this.name = name;

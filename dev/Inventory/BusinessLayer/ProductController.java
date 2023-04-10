@@ -37,7 +37,7 @@ public class ProductController {
     }
     public double getProductPrice(int typeID, String branch){
         //TODO: need to implement
-        return -1;
+        throw new RuntimeException();
     }
     public List<Product> getDefectiveProducts(LocalDateTime startDate, LocalDateTime endDate, String branch){
         //TODO: need to implement

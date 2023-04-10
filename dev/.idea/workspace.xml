@@ -6,10 +6,9 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e454f93c-4ee8-4f4b-9a14-eaaf36aa303c" name="Changes" comment="order packages">
-      <change beforePath="$PROJECT_DIR$/.idea/artifacts/adss2023_v01_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/code_jar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="e454f93c-4ee8-4f4b-9a14-eaaf36aa303c" name="Changes" comment="jdk 17">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../release/adss2023_v01.jar" beforeDir="false" afterPath="$PROJECT_DIR$/../release/adss2023_v01.jar" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -82,7 +81,7 @@
       <recent name="PresentationLayer" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.Main">
+  <component name="RunManager" selected="JUnit.BillOfQuantitiesTest">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="PresentationLayer.Main" />
       <module name="code" />
@@ -161,8 +160,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.Main" />
         <item itemvalue="JUnit.BillOfQuantitiesTest" />
+        <item itemvalue="Application.Main" />
         <item itemvalue="JUnit.BillOfQuantitiesTest.setOrderOfDiscounts" />
         <item itemvalue="JUnit.BillOfQuantitiesTest.removeDiscountOnAmountOfProducts" />
         <item itemvalue="JUnit.BillOfQuantitiesTest.setDiscountOnAmountOfProducts" />
@@ -183,7 +182,7 @@
       <workItem from="1680511359414" duration="167000" />
       <workItem from="1680511529805" duration="12696000" />
       <workItem from="1681150003845" duration="544000" />
-      <workItem from="1681150568098" duration="639000" />
+      <workItem from="1681150568098" duration="2870000" />
     </task>
     <task id="LOCAL-00001" summary="done with order functionality - moving to the ability to print the order etc">
       <created>1680693870968</created>
@@ -234,7 +233,14 @@
       <option name="project" value="LOCAL" />
       <updated>1681129952179</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="jdk 17">
+      <created>1681151928695</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1681151928695</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -275,7 +281,8 @@
     <MESSAGE value="added products that can be ordered only by dividing to several suppliers functionality and started ui" />
     <MESSAGE value="finish ui and tests" />
     <MESSAGE value="order packages" />
-    <option name="LAST_COMMIT_MESSAGE" value="order packages" />
+    <MESSAGE value="jdk 17" />
+    <option name="LAST_COMMIT_MESSAGE" value="jdk 17" />
   </component>
   <component name="XDebuggerManager">
     <pin-to-top-manager>

@@ -1,5 +1,9 @@
 package dev.Inventory.PresentationLayer;
 
+import dev.Inventory.BusinessLayer.Category;
+import dev.Inventory.BusinessLayer.ProductType;
+
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) {

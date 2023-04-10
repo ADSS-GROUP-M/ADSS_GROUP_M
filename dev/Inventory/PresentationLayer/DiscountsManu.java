@@ -6,7 +6,9 @@ import java.time.format.DateTimeFormatter;
 public class DiscountsManu extends MainMenu {
 
 
-    public void run() {
+    private String branch;
+    public void run(String branch) {
+        this.branch = branch;
         System.out.println("Please select an option:");
         System.out.println("1. Add product's discount");
         System.out.println("2. Add category's discount");
@@ -16,7 +18,7 @@ public class DiscountsManu extends MainMenu {
         switch (option) {
             case 1 -> productDiscount();
             case 2 -> categoryDiscount();
-            case 4 -> super.run();
+            case 4 -> new MainMenu().run();
             case 5 -> System.exit(0);
             default -> System.out.println("\nInvalid command");
         }
@@ -25,13 +27,14 @@ public class DiscountsManu extends MainMenu {
     private void productDiscount() {
         //the dates are supposed to be: "2016-03-04 11:30"
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        System.out.println("product catalog number:");
+        System.out.println("product catalog number:(number)");
         int catalog_num = in.nextInt();
-        System.out.println("discount:");
+        System.out.println("discount:(number)");
         double discount = in.nextDouble();
-        System.out.println("start date:");
+        in.nextLine();
+        System.out.println("start date:(\"2016-03-04 11:30\" - example)");
         String start_date = in.nextLine();
-        System.out.println("end date:");
+        System.out.println("end date:(\"2016-03-04 11:30\" - example)");
         String end_date = in.nextLine();
         System.out.println(inventoryService.updateDiscountPerProduct(catalog_num, branch, discount, LocalDateTime.parse(start_date, formatter), LocalDateTime.parse(end_date, formatter)).getReturnValue());
     }
@@ -39,13 +42,14 @@ public class DiscountsManu extends MainMenu {
     private void categoryDiscount() {
         //the dates are supposed to be: "2016-03-04 11:30"
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        System.out.println("category name:");
+        System.out.println("category name:(number)");
         String name = in.nextLine();
-        System.out.println("discount:");
+        System.out.println("discount:(number)");
         double discount = in.nextDouble();
-        System.out.println("start date:");
+        in.nextLine();
+        System.out.println("start date:(\"2016-03-04 11:30\" - example)");
         String start_date = in.nextLine();
-        System.out.println("end date:");
+        System.out.println("end date:(\"2016-03-04 11:30\" - example)");
         String end_date = in.nextLine();
         System.out.println(inventoryService.updateDiscountPerCategory(name, branch, discount, LocalDateTime.parse(start_date, formatter), LocalDateTime.parse(end_date, formatter)).getReturnValue());
     }

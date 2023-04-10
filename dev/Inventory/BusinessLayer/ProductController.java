@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class ProductController {
 
-    Map<String, Map<Integer,ProductType>> productTypes;
+    Map<String, Map<Integer,ProductType>> productTypes; // <branch, <productTYPEID, ProductType>
     DiscountCategoryController DCContoller;
 
     //create the controller as Singleton
@@ -148,7 +148,8 @@ public class ProductController {
             String name = productType.getName();
             String manufacture = productType.getManufacturer();
             double supplierPrice = productType.getOriginalSupplierPrice();
-            double storePrice = DCContoller.calcSoldPrice(branch,productTypeID,productType.getOriginalStorePrice());
+//            double storePrice = DCContoller.calcSoldPrice(branch,productTypeID,productType.getOriginalStorePrice());
+            double storePrice = productType.getOriginalStorePrice();
             Category category = productType.getCategory();
             List<Category> subCategory = productType.getSubCategory();
             String location = product.getLocation();
@@ -199,7 +200,7 @@ public class ProductController {
                     String name = productType.getName();
                     String manufacture = productType.getManufacturer();
                     double supplierPrice = productType.getOriginalSupplierPrice();
-                    double storePrice = DCContoller.calcSoldPrice(branch,productTypeID,productType.getOriginalStorePrice());
+                    double storePrice = productType.getOriginalStorePrice();
                     Category category = productType.getCategory();
                     List<Category> subCategory = productType.getSubCategory();
                     String location = product.getLocation();

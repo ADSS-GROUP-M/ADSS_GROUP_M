@@ -161,4 +161,12 @@ public class StockService {
             return Response.createErrorResponse("Error updating discount: " + e.getMessage());
         }
     }
+
+    public Response getProductDetails(int catalog_num, int serial_num, String branch) {
+        try {
+            return new Response<>(productController.getProductDetails(branch, catalog_num, serial_num));
+        } catch (Exception e) {
+            return Response.createErrorResponse("Error updating discount: " + e.getMessage());
+        }
+    }
 }

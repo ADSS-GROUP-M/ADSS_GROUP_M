@@ -125,6 +125,13 @@ public class DiscountCategoryController {
         else
             throw new RuntimeException("Supplier or branch does not exist, please create discount in order to continue");
     }
+    // check if there is a discount today on the current product and calculate to final price
+    public double calcSoldPrice(String branch, int productTypeID, double originalStorePrice){
+        double currentDiscount = getTodayBiggestStoreDiscountI(productTypeID,branch);
+        if(currentDiscount != -1)
+            return (100-currentDiscount)*originalStorePrice;
+        return originalStorePrice;
+    }
     public List<ProductStoreDiscount> getStoreDiscountPerDate(int productID, String branch, LocalDateTime startDate, LocalDateTime endDate){
         if(checkIfBranchExistStoreDiscount(branch)){
             List<ProductStoreDiscount> discountList = new ArrayList<ProductStoreDiscount>();
@@ -157,9 +164,31 @@ public class DiscountCategoryController {
             throw new RuntimeException("supplier or branch does not exist, please create discount in order to continue");
 
     }
+// Report Category function - inorder to receive all category product details
+    public List<Record> getProductsPerCategory(List<Category> categories, String branch){
+        if(checkIfBranchExistStoreDiscount(branch)){
+            List<Record> productsCategoryRecords = new ArrayList<Record>();
+            for(Category category: categories){
+                for(ProductType productType: category.getProductsRelated().values()){
+                    for(Product product: productType.getProducts().values()){
+                        int productTypeID = productType.getProductTypeID();
+                        int productID = product.getProductID();
+                        String name = productType.getName();
+                        String manufacture = productType.getManufacturer();
+                        double supplierPrice = productType.getOriginalSupplierPrice();
+                        double storePrice = calcSoldPrice(branch,productTypeID,productType.getOriginalStorePrice());
+                        List<Category> subCategory = productType.getSubCategory();
+                        String location = product.getLocation();
+                        //create Record
+                        Record record = new Record(productTypeID,productID,name,branch,manufacture,supplierPrice,storePrice,category,subCategory,location);
+                        productsCategoryRecords.add(record);
+                    }
+                }
+            }
+            return productsCategoryRecords;
+        }
+        else
+            throw new RuntimeException("Branch does not exist, please create discount in order to continue");
 
-    public Map<String ,List<Product>> getStockProduct(List<Category> categories, String branch, LocalDateTime startDate, LocalDateTime endDate){
-        //TODO: need to implement
-        throw new RuntimeException();
     }
 }

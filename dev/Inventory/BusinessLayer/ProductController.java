@@ -109,18 +109,13 @@ public class ProductController {
         else
             throw new RuntimeException(String.format("Unable to update defective products,\nproduct type does not exist with the ID : %s",productTypeID));
     }
-    // check if there is a discount today on the current product and calculate to final price
-    private double calcSoldPrice(String branch, int productTypeID, double originalStorePrice){
-        double currentDiscount = DC_contoller.getTodayBiggestStoreDiscountI(productTypeID,branch);
-        if(currentDiscount != -1)
-            return (100-currentDiscount)*originalStorePrice;
-        return originalStorePrice;
-    }
+
+
     // update products status to sold
     public void updateSoldProduct(int productTypeID, List<Integer> productsID, String branch){
         if(checkIfProductTypeExist(branch,productTypeID)){
             ProductType productType = productTypes.get(branch).get(productTypeID);
-            productType.setToSold(productsID,calcSoldPrice(branch,productTypeID,productType.getOriginalStorePrice()));
+            productType.setToSold(productsID, DC_contoller.calcSoldPrice(branch,productTypeID,productType.getOriginalStorePrice()));
         }
         else
             throw new RuntimeException(String.format("Unable to update sold products,\n product type does not exist with the ID : %s",productTypeID));
@@ -161,8 +156,8 @@ public class ProductController {
         return allProductsList;
     }
 
-    // Report function - inorder to receive all defective product details
-    public List<Record> getDefectiveProducts(LocalDateTime startDate, LocalDateTime endDate, String branch){
+    // Report defective function - inorder to receive all defective product details
+    public List<Record> getDefectiveProducts(String branch){
         List<Record> defectiveRecords = new ArrayList<Record>();
         if(checkIfBranchExist(branch)) {
             Map<Integer, ProductType> branchProductsType = productTypes.get(branch);
@@ -173,7 +168,7 @@ public class ProductController {
                     String name = productType.getName();
                     String manufacture = productType.getManufacturer();
                     double supplierPrice = productType.getOriginalSupplierPrice();
-                    double storePrice = calcSoldPrice(branch,productTypeID,productType.getOriginalStorePrice());
+                    double storePrice = DC_contoller.calcSoldPrice(branch,productTypeID,productType.getOriginalStorePrice());
                     Category category = productType.getCategory();
                     List<Category> subCategory = productType.getSubCategory();
                     String location = product.getLocation();

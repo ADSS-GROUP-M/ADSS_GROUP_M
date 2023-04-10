@@ -90,6 +90,9 @@ public class ProductType {
         allProducts.put(productTypeID, currentProducts);
         return allProducts;
     }
+
+    public Map<Integer,Product> getProducts(){return this.products;}
+
     public Boolean productIsShortage(){
         if(storeAmount+warehouseAmount < notificationMin)
             return true;

@@ -7,8 +7,8 @@ import java.util.Map;
 
 public class ProductController {
 
-    Map<String, Map<Integer,ProductType>> productTypes;
-    DiscountCategoryController DCContoller;
+    private Map<String, Map<Integer,ProductType>> productTypes;
+    private DiscountCategoryController DCContoller;
 
     //create the controller as Singleton
     private static ProductController productController = null;

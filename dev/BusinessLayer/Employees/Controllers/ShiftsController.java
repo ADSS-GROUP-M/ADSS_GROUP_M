@@ -19,7 +19,7 @@ import java.util.stream.Stream;
 
 public class ShiftsController {
     private static ShiftsController instance;
-    private Map<String, Map<LocalDate, Map<ShiftType,Shift>>> shifts;
+    private Map<String, Map<LocalDate, Map<ShiftType,Shift>>> shifts; // branchID to <Date to <ShiftTime to Shift>>
 
     private ShiftsController() {
         this.shifts = new HashMap<>();
@@ -100,6 +100,11 @@ public class ShiftsController {
         }
     }
 
+    public void deleteShift(String branchId, LocalDate shiftDate, ShiftType shiftType) throws Exception {
+        Shift shift = getShift(branchId, shiftDate, shiftType);
+        getShiftDay(getShiftBranch(branchId),shiftDate).remove(shiftType,shift);
+    }
+
     public List<Shift[]> getWeekShifts(String branchId, LocalDate weekStart) {
         // Get dates until the end of the week
         List<LocalDate> dates = weekStart.datesUntil(weekStart.with(next(DayOfWeek.SUNDAY))).toList();
@@ -133,9 +138,18 @@ public class ShiftsController {
             throw new Exception("Invalid shift request, the employee is already working in this shift.");
         if (shift.isEmployeeRequesting(employee))
             throw new Exception("Invalid shift request, the employee has already requested to work in this shift.");
+        if (employeeRequestedInDate(employee, shiftDate))
+            throw new Exception("Invalid shift request, the employee has already requested to work in this day.");
         if (numEmployeeShiftRequestsInWeek(employee, shift.getShiftDate()) >= 6 && !employeeRequestedInDate(employee,shift.getShiftDate()))
             throw new Exception("Invalid shift request, the employee has already requested to work in 6 days of this week.");
         shift.addShiftRequest(role, employee);
+    }
+
+    public void cancelShiftRequest(Employee employee, String branchId, LocalDate shiftDate, ShiftType shiftType, Role role) throws Exception {
+        Shift shift = getShift(branchId, shiftDate, shiftType);
+        if (!shift.isEmployeeRequestingForRole(employee, role))
+            throw new Exception("Invalid shift request, the employee hasn't requested to work in this shift and this role.");
+        shift.removeShiftRequest(role, employee);
     }
 
     private List<Shift> employeeShiftRequestsInWeek(Employee employee, LocalDate dayInWeek) {
@@ -209,5 +223,15 @@ public class ShiftsController {
     public void approveShift(String branchId, LocalDate shiftDate, ShiftType shiftType) throws Exception {
         Shift shift = getShift(branchId, shiftDate, shiftType);
         shift.approve();
+    }
+
+    public void applyCancelCard(String branchId, LocalDate shiftDate, ShiftType shiftType, String employeeId, String productId) throws Exception {
+        Shift shift = getShift(branchId, shiftDate, shiftType);
+        shift.useCancelCard(employeeId, productId);
+    }
+
+    public void reportShiftActivity(String branchId, LocalDate shiftDate, ShiftType shiftType, String reportingEmployeeId, String activity) throws Exception {
+        Shift shift = getShift(branchId, shiftDate, shiftType);
+        shift.reportActivity(reportingEmployeeId, activity);
     }
 }

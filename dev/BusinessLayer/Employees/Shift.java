@@ -1,10 +1,8 @@
 package dev.BusinessLayer.Employees;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDateTime;
+import java.util.*;
 
 public class Shift {
     private LocalDate shiftDate;
@@ -13,7 +11,8 @@ public class Shift {
     private Map<Role, Integer> neededRoles;
     private Map<Role, List<Employee>> shiftRequests;
     private Map<Role, List<Employee>> shiftWorkers;
-    private int cancelCardApplies;
+    private List<String> cancelCardApplies;
+    private List<String> shiftActivities;
 
     public enum ShiftType {
         Morning,
@@ -31,7 +30,7 @@ public class Shift {
         this.isApproved = false;
         this.shiftRequests = new HashMap<>();
         this.shiftWorkers = new HashMap<>();
-        this.cancelCardApplies = 0;
+        this.cancelCardApplies = new ArrayList<>();
     }
 
     public boolean checkLegality() { // are all constraints of the shift are met?
@@ -39,7 +38,35 @@ public class Shift {
             if (!shiftWorkers.containsKey(role) || shiftWorkers.get(role).size() < neededRoles.get(role))
                 return false;
         }
-        return true;
+        // Checks if any employee is signed to work in two different roles at the same shift. (According to the requirements, he should be able to request it, but it isn't legal as the final shift configuration)
+        List<Employee> duplicateEmployees = getDuplicateEmployees();
+        return duplicateEmployees.isEmpty();
+    }
+
+    private String getLegalityProblems() {
+        String result = "";
+        for(Role role : neededRoles.keySet()){
+            if (!shiftWorkers.containsKey(role) || shiftWorkers.get(role).size() < neededRoles.get(role))
+                result += "There are only " + shiftWorkers.get(role).size() + " / " + neededRoles.get(role) + " employees in the role " + role + "\n";
+        }
+        for(Employee employee : getDuplicateEmployees()) {
+            result += "The employee " + employee.getId() + " is assigned to multiple roles in this shift.\n";
+        }
+        return result;
+    }
+
+    private List<Employee> getDuplicateEmployees() {
+        Set<Employee> employees = new HashSet<>();
+        Set<Employee> duplicateEmployees = new HashSet<>();
+        for(List<Employee> roleWorkers : shiftWorkers.values()) {
+            for (Employee employee : roleWorkers) {
+                if (employees.contains(employee))
+                    duplicateEmployees.add(employee);
+                else
+                    employees.add(employee);
+            }
+        }
+        return duplicateEmployees.stream().toList();
     }
 
     public void approve() throws Exception {
@@ -47,7 +74,7 @@ public class Shift {
             throw new Exception("This shift is already approved.");
         this.isApproved = true;
         if (!this.checkLegality())
-            throw new Exception("Shift approved, but notice that the shift constraints are not met!");
+            throw new Exception("Shift approved, but notice that the shift constraints are not met! " + getLegalityProblems());
     }
 
     public void disapprove(){
@@ -106,7 +133,10 @@ public class Shift {
     }
 
     public void setNeededRole(Role role, Integer amount){
-        this.neededRoles.put(role, amount);
+        if(amount > 0)
+            this.neededRoles.put(role, amount);
+        else if(amount == 0)// the lack of this condition caused bugs while checking legality when a role is set to amount=0
+            this.neededRoles.remove(role); 
     }
 
     public Map<Role,Integer> getNeededRoles(){
@@ -119,6 +149,14 @@ public class Shift {
         if (!this.shiftRequests.containsKey(role))
             this.shiftRequests.put(role, new ArrayList<>());
         this.shiftRequests.get(role).add(employee);
+    }
+
+    public void removeShiftRequest(Role role, Employee employee) throws Exception {
+        if (!this.shiftRequests.containsKey(role))
+            throw new Exception("Invalid shift cancellation request, the given role doesn't have any shift requests in this shift.");
+        if (!this.shiftRequests.get(role).contains(employee))
+            throw new Exception("Invalid shift cancellation request, the given employee didn't have a request for this role in this shift.");
+        this.shiftRequests.get(role).remove(employee);
     }
 
     public void addShiftWorker(Role role, Employee employee) throws Exception {
@@ -163,12 +201,22 @@ public class Shift {
     }
 
     public void useCancelCard(String cancellingEmployeeId, String productId){
-        this.cancelCardApplies++;
+        // TODO: Save each card apply in an object, to make it easier at the next steps when we need to save it in the database
+        this.cancelCardApplies.add(cancellingEmployeeId + " " + productId + " " + LocalDateTime.now());
         // Save the cancelled product
     }
 
-    public int getTotalCancelCardApplications(){
+    public void reportActivity(String reportingEmployee, String activity) {
+        this.shiftActivities.add(activity); // TODO: Possibly need to save the reported activities in a table in the database at the next milestone.
+        // Save the reported activity
+    }
+
+    public List<String> getCancelCardApplications(){
         return this.cancelCardApplies;
+    }
+
+    public List<String> getShiftActivities(){
+        return this.shiftActivities;
     }
 
     public Employee getShiftManager(){

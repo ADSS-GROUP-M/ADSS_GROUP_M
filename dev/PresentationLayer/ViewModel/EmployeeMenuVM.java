@@ -14,8 +14,20 @@ public class EmployeeMenuVM {
         backendController = BackendController.getInstance();
     }
 
-    public String requestShift(String branchId, String shiftTime, LocalDate shiftDate, String role) {
-        return backendController.requestShift(branchId, shiftTime, shiftDate, role);
+    public String requestShift(String branchId, String shiftType, LocalDate shiftDate, String role) {
+        return backendController.requestShift(branchId, shiftType, shiftDate, role);
+    }
+
+    public String cancelShiftRequest(String branchId, String shiftType, LocalDate shiftDate, String role) {
+        return backendController.cancelShiftRequest(branchId, shiftType, shiftDate, role);
+    }
+
+    public String reportShiftActivity(String branchId, LocalDate shiftDate, String shiftType, String activity) {
+        return backendController.reportShiftActivity(branchId, shiftDate, shiftType, activity);
+    }
+
+    public String applyCancelCard(String branchId, LocalDate shiftDate, String shiftType, String productId) {
+        return backendController.applyCancelCard(branchId, shiftDate, shiftType, productId);
     }
 
     public String logout() {

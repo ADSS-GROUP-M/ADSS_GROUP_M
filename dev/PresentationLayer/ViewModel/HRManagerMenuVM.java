@@ -4,6 +4,7 @@ import dev.PresentationLayer.Model.BackendController;
 import dev.ServiceLayer.Objects.SShift;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 public class HRManagerMenuVM {
@@ -129,7 +130,47 @@ public class HRManagerMenuVM {
         return backendController.certifyEmployee(employeeId, role);
     }
 
+    public String uncertifyEmployee(String employeeId, String role) {
+        return backendController.uncertifyEmployee(employeeId, role);
+    }
+
     public String approveShift(String branchId, LocalDate shiftDate, String shiftType) {
         return backendController.approveShift(branchId, shiftDate, shiftType);
+    }
+
+    public String addEmployeeToBranch(String employeeId, String branchId) {
+        return backendController.addEmployeeToBranch(employeeId, branchId);
+    }
+
+    public String deleteShift(String branchId, LocalDate shiftDate, String shiftType) {
+        return backendController.deleteShift(branchId, shiftDate, shiftType);
+    }
+
+    public String createBranch(String branchId) {
+        return backendController.createBranch(branchId);
+    }
+
+    public String updateBranchWorkingHours(String branchId, LocalTime morningStart, LocalTime morningEnd, LocalTime eveningStart, LocalTime eveningEnd) {
+        return backendController.updateBranchWorkingHours(branchId, morningStart, morningEnd, eveningStart, eveningEnd);
+    }
+
+    public String updateEmployeeSalary(String employeeId, double hourlySalaryRate, double salaryBonus) {
+        return backendController.updateEmployeeSalary(employeeId, hourlySalaryRate, salaryBonus);
+    }
+
+    public String updateEmployeeBankDetails(String employeeId, String bankDetails) {
+        return backendController.updateEmployeeBankDetails(employeeId, bankDetails);
+    }
+
+    public String updateEmployeeEmploymentConditions(String employeeId, String employmentConditions) {
+        return backendController.updateEmployeeEmploymentConditions(employeeId, employmentConditions);
+    }
+
+    public String updateEmployeeDetails(String employeeId, String details) {
+        return backendController.updateEmployeeDetails(employeeId, details);
+    }
+
+    public String authorizeUser(String username, String authorization) {
+        return backendController.authorizeUser(username, authorization);
     }
 }

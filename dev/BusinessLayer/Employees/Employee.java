@@ -143,8 +143,24 @@ public class Employee {
         return employmentConditions;
     }
 
+    public void setEmploymentConditions(String employmentConditions) {
+        this.employmentConditions = employmentConditions;
+    }
+
     public String getDetails() {
         return details;
+    }
+
+    public String getBankDetails() {
+        return this.bankDetails;
+    }
+
+    public void setBankDetails(String bankDetails) {
+        this.bankDetails = bankDetails;
+    }
+
+    public void setDetails(String details) {
+        this.details = details;
     }
 
     public void addRole(Role role) {

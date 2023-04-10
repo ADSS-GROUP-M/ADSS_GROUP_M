@@ -10,6 +10,7 @@ import dev.ServiceLayer.Objects.SShiftType;
 import dev.BusinessLayer.Employees.Shift.ShiftType;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,8 +63,24 @@ public class EmployeesService {
         Response<Boolean> authResponse = userService.isAuthorized(actorUsername, Authorization.HRManager);
         if (authResponse.errorOccurred())
             return Response.createErrorResponse(authResponse.getErrorMessage());
+        else if(authResponse.getReturnValue() == false)
+            return Response.createErrorResponse("User isn't authorized to do this");
         try {
             employeesController.recruitEmployee(branchId, fullName, employeeId, bankDetails, hourlyRate, employmentDate, employmentConditions, details);
+            return new Response<>(true);
+        } catch (Exception e) {
+            return Response.createErrorResponse(e.getMessage());
+        }
+    }
+
+    public Response<Boolean> addEmployeeToBranch(String actorUsername, String employeeId, String branchId){
+        Response<Boolean> authResponse = userService.isAuthorized(actorUsername, Authorization.HRManager);
+        if (authResponse.errorOccurred())
+            return Response.createErrorResponse(authResponse.getErrorMessage());
+        else if(authResponse.getReturnValue() == false)
+            return Response.createErrorResponse("User isn't authorized to do this");
+        try {
+            employeesController.addEmployeeToBranch(branchId, employeeId);
             return new Response<>(true);
         } catch (Exception e) {
             return Response.createErrorResponse(e.getMessage());
@@ -74,8 +91,24 @@ public class EmployeesService {
         Response<Boolean> authResponse = userService.isAuthorized(actorUsername, Authorization.HRManager);
         if (authResponse.errorOccurred())
             return Response.createErrorResponse(authResponse.getErrorMessage());
+        else if(authResponse.getReturnValue() == false)
+            return Response.createErrorResponse("User isn't authorized to do this");
         try {
             employeesController.certifyEmployee(employeeId, Role.valueOf(role));
+            return new Response<>(true);
+        } catch (Exception e) {
+            return Response.createErrorResponse(e.getMessage());
+        }
+    }
+
+    public Response<Boolean> uncertifyEmployee(String actorUsername, String employeeId, String role) {
+        Response<Boolean> authResponse = userService.isAuthorized(actorUsername, Authorization.HRManager);
+        if (authResponse.errorOccurred())
+            return Response.createErrorResponse(authResponse.getErrorMessage());
+        else if(authResponse.getReturnValue() == false)
+            return Response.createErrorResponse("User isn't authorized to do this");
+        try {
+            employeesController.uncertifyEmployee(employeeId, Role.valueOf(role));
             return new Response<>(true);
         } catch (Exception e) {
             return Response.createErrorResponse(e.getMessage());
@@ -89,6 +122,16 @@ public class EmployeesService {
             return new Response<>(true);
         } catch (Exception e) {
             return Response.createErrorResponse(e.getMessage());
+       }
+    }
+
+    public Response<Boolean> cancelShiftRequest(String actorUsername, String branchId, LocalDate shiftDate, SShiftType shiftType, String role) {
+        try {
+            Employee employee = employeesController.getEmployee(branchId, actorUsername);
+            shiftsController.cancelShiftRequest(employee, branchId, shiftDate, ShiftType.valueOf(shiftType.toString()), Role.valueOf(role));
+            return new Response<>(true);
+        } catch (Exception e) {
+            return Response.createErrorResponse(e.getMessage());
         }
     }
 
@@ -96,8 +139,24 @@ public class EmployeesService {
         Response<Boolean> authResponse = userService.isAuthorized(actorUsername, Authorization.HRManager);
         if (authResponse.errorOccurred())
             return Response.createErrorResponse(authResponse.getErrorMessage());
+        else if(authResponse.getReturnValue() == false)
+            return Response.createErrorResponse("User isn't authorized to do this");
         try {
             shiftsController.createWeekShifts(branchId, weekStart);
+            return new Response<>(true);
+        } catch (Exception e) {
+            return Response.createErrorResponse(e.getMessage());
+        }
+    }
+
+    public Response<Boolean> deleteShift(String actorUsername, String branchId, LocalDate shiftDate, SShiftType shiftType) {
+        Response<Boolean> authResponse = userService.isAuthorized(actorUsername, Authorization.HRManager);
+        if (authResponse.errorOccurred())
+            return Response.createErrorResponse(authResponse.getErrorMessage());
+        else if(authResponse.getReturnValue() == false)
+            return Response.createErrorResponse("User isn't authorized to do this");
+        try {
+            shiftsController.deleteShift(branchId, shiftDate, ShiftType.valueOf(shiftType.toString()));
             return new Response<>(true);
         } catch (Exception e) {
             return Response.createErrorResponse(e.getMessage());
@@ -108,6 +167,8 @@ public class EmployeesService {
         Response<Boolean> authResponse = userService.isAuthorized(actorUsername, Authorization.HRManager);
         if (authResponse.errorOccurred())
             return Response.createErrorResponse(authResponse.getErrorMessage());
+        else if(authResponse.getReturnValue() == false)
+            return Response.createErrorResponse("User isn't authorized to do this");
         try {
             shiftsController.setShiftNeededAmount(branchId, shiftDate, ShiftType.valueOf(shiftType.toString()), Role.valueOf(role), amount);
             return new Response<>(true);
@@ -140,6 +201,8 @@ public class EmployeesService {
         Response<Boolean> authResponse = userService.isAuthorized(actorUsername, Authorization.HRManager);
         if (authResponse.errorOccurred())
             return Response.createErrorResponse(authResponse.getErrorMessage());
+        else if(authResponse.getReturnValue() == false)
+            return Response.createErrorResponse("User isn't authorized to do this");
         try {
             List<Employee> employees = employeesController.getEmployees(branchId, employeeIds);
             shiftsController.setShiftEmployees(branchId, shiftDate, ShiftType.valueOf(shiftType.toString()), Role.valueOf(role), employees);
@@ -153,6 +216,8 @@ public class EmployeesService {
         Response<Boolean> authResponse = userService.isAuthorized(actorUsername, Authorization.HRManager);
         if (authResponse.errorOccurred())
             return Response.createErrorResponse(authResponse.getErrorMessage());
+        else if(authResponse.getReturnValue() == false)
+            return Response.createErrorResponse("User isn't authorized to do this");
         try {
             employeesController.createBranch(branchId);
             return new Response<>(true);
@@ -194,8 +259,104 @@ public class EmployeesService {
         Response<Boolean> authResponse = userService.isAuthorized(actorUsername, Authorization.HRManager);
         if (authResponse.errorOccurred())
             return Response.createErrorResponse(authResponse.getErrorMessage());
+        else if(authResponse.getReturnValue() == false)
+            return Response.createErrorResponse("User isn't authorized to do this");
         try {
             shiftsController.approveShift(branchId,shiftDate, ShiftType.valueOf(shiftType.toString()));
+            return new Response<>(true);
+        } catch (Exception e) {
+            return Response.createErrorResponse(e.getMessage());
+        }
+    }
+
+    public Response<Boolean> applyCancelCard(String actorUsername, String branchId, LocalDate shiftDate, SShiftType shiftType, String productId) {
+        Response<Boolean> authResponse = userService.isAuthorized(actorUsername, Authorization.ShiftManager);
+        if (authResponse.errorOccurred())
+            return Response.createErrorResponse(authResponse.getErrorMessage());
+        else if(authResponse.getReturnValue() == false)
+            return Response.createErrorResponse("User isn't authorized to do this");
+        try {
+            shiftsController.applyCancelCard(branchId, shiftDate, ShiftType.valueOf(shiftType.toString()),actorUsername, productId);
+            return new Response<>(true);
+        } catch (Exception e) {
+            return Response.createErrorResponse(e.getMessage());
+        }
+    }
+
+    public Response<Boolean> updateEmployeeSalary(String actorUsername, String employeeId, double hourlySalaryRate, double salaryBonus) {
+        Response<Boolean> authResponse = userService.isAuthorized(actorUsername, Authorization.HRManager);
+        if (authResponse.errorOccurred())
+            return Response.createErrorResponse(authResponse.getErrorMessage());
+        else if(authResponse.getReturnValue() == false)
+            return Response.createErrorResponse("User isn't authorized to do this");
+        try {
+            employeesController.updateEmployeeSalary(employeeId, hourlySalaryRate, salaryBonus);
+            return new Response<>(true);
+        } catch (Exception e) {
+            return Response.createErrorResponse(e.getMessage());
+        }
+    }
+
+    public Response<Boolean> updateEmployeeBankDetails(String actorUsername, String employeeId, String bankDetails){
+        Response<Boolean> authResponse = userService.isAuthorized(actorUsername, Authorization.HRManager);
+        if (authResponse.errorOccurred())
+            return Response.createErrorResponse(authResponse.getErrorMessage());
+        else if(authResponse.getReturnValue() == false)
+            return Response.createErrorResponse("User isn't authorized to do this");
+        try {
+            employeesController.updateEmployeeBankDetails(employeeId, bankDetails);
+            return new Response<>(true);
+        } catch (Exception e) {
+            return Response.createErrorResponse(e.getMessage());
+        }
+    }
+
+    public Response<Boolean> updateEmployeeEmploymentConditions(String actorUsername, String employeeId, String employmentConditions){
+        Response<Boolean> authResponse = userService.isAuthorized(actorUsername, Authorization.HRManager);
+        if (authResponse.errorOccurred())
+            return Response.createErrorResponse(authResponse.getErrorMessage());
+        else if(authResponse.getReturnValue() == false)
+            return Response.createErrorResponse("User isn't authorized to do this");
+        try {
+            employeesController.updateEmployeeEmploymentConditions(employeeId, employmentConditions);
+            return new Response<>(true);
+        } catch (Exception e) {
+            return Response.createErrorResponse(e.getMessage());
+        }
+    }
+
+    public Response<Boolean> updateEmployeeDetails(String actorUsername, String employeeId, String details){
+        Response<Boolean> authResponse = userService.isAuthorized(actorUsername, Authorization.HRManager);
+        if (authResponse.errorOccurred())
+            return Response.createErrorResponse(authResponse.getErrorMessage());
+        else if(authResponse.getReturnValue() == false)
+            return Response.createErrorResponse("User isn't authorized to do this");
+        try {
+            employeesController.updateEmployeeDetails(employeeId, details);
+            return new Response<>(true);
+        } catch (Exception e) {
+            return Response.createErrorResponse(e.getMessage());
+        }
+    }
+
+    public Response<Boolean> reportShiftActivity(String actorUsername, String branchId, LocalDate shiftDate, SShiftType shiftType, String activity) {
+        // TODO: Possibly need to check the actor authorization
+        try {
+            shiftsController.reportShiftActivity(branchId, shiftDate, ShiftType.valueOf(shiftType.toString()), actorUsername, activity);
+            return new Response<>(true);
+        } catch (Exception e) {
+            return Response.createErrorResponse(e.getMessage());
+        }
+    }
+
+    public Response<Boolean> updateBranchWorkingHours(String actorUsername , String branchId, LocalTime morningStart, LocalTime morningEnd, LocalTime eveningStart, LocalTime eveningEnd){
+        Response<Boolean> authResponse = userService.isAuthorized(actorUsername, Authorization.HRManager);
+        if (authResponse.errorOccurred())
+            return Response.createErrorResponse(authResponse.getErrorMessage());
+        else if(authResponse.getReturnValue() == false)
+            return Response.createErrorResponse("User isn't authorized to do this");
+        try {
+            employeesController.updateBranchWorkingHours(branchId, morningStart, morningEnd, eveningStart, eveningEnd);
             return new Response<>(true);
         } catch (Exception e) {
             return Response.createErrorResponse(e.getMessage());

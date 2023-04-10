@@ -9,6 +9,7 @@ import dev.ServiceLayer.Services.UserService;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 import static java.time.temporal.TemporalAdjusters.next;
@@ -208,6 +209,14 @@ public class BackendController {
             return "Certified employee successfully.";
     }
 
+    public String uncertifyEmployee(String employeeId, String role) {
+        Response<Boolean> response = employeesService.uncertifyEmployee(loggedUsername, employeeId, role);
+        if (response.errorOccurred())
+            return response.getErrorMessage();
+        else
+            return "Uncertified employee successfully.";
+    }
+
     public String approveShift(String branchId, LocalDate shiftDate, String shiftType) {
         try {
             Response<Boolean> response = employeesService.approveShift(loggedUsername, branchId, shiftDate, SShiftType.valueOf(shiftType));
@@ -215,6 +224,118 @@ public class BackendController {
                 return response.getErrorMessage();
             else
                 return "Approved shift successfully.";
+        } catch (IllegalArgumentException e) {
+            return "Invalid ShiftType value, expected `Morning` or `Evening`.";
+        }
+    }
+
+    public String addEmployeeToBranch(String employeeId, String branchId) {
+        Response<Boolean> response = employeesService.addEmployeeToBranch(loggedUsername, employeeId, branchId);
+        if (response.errorOccurred())
+            return response.getErrorMessage();
+        else
+            return "Added employee to branch successfully.";
+    }
+
+    public String deleteShift(String branchId, LocalDate shiftDate, String shiftType) {
+        try {
+            Response<Boolean> response = employeesService.deleteShift(loggedUsername, branchId, shiftDate, SShiftType.valueOf(shiftType));
+            if (response.errorOccurred())
+                return response.getErrorMessage();
+            else
+                return "Deleted shift successfully.";
+        } catch (IllegalArgumentException e) {
+            return "Invalid ShiftType value, expected `Morning` or `Evening`.";
+        }
+    }
+
+    public String createBranch(String branchId) {
+        Response<Boolean> response = employeesService.createBranch(loggedUsername, branchId);
+        if (response.errorOccurred())
+            return response.getErrorMessage();
+        else
+            return "Created the branch successfully.";
+    }
+
+    public String updateBranchWorkingHours(String branchId, LocalTime morningStart, LocalTime morningEnd, LocalTime eveningStart, LocalTime eveningEnd) {
+        Response<Boolean> response = employeesService.updateBranchWorkingHours(loggedUsername, branchId, morningStart, morningEnd, eveningStart, eveningEnd);
+        if (response.errorOccurred())
+            return response.getErrorMessage();
+        else
+            return "Updated the branch's working hours successfully.";
+    }
+
+    public String updateEmployeeSalary(String employeeId, double hourlySalaryRate, double salaryBonus) {
+        Response<Boolean> response = employeesService.updateEmployeeSalary(loggedUsername, employeeId, hourlySalaryRate, salaryBonus);
+        if (response.errorOccurred())
+            return response.getErrorMessage();
+        else
+            return "Updated the employee's salary successfully.";
+    }
+
+    public String updateEmployeeBankDetails(String employeeId, String bankDetails) {
+        Response<Boolean> response = employeesService.updateEmployeeBankDetails(loggedUsername, employeeId, bankDetails);
+        if (response.errorOccurred())
+            return response.getErrorMessage();
+        else
+            return "Updated the employee's bank details successfully.";
+    }
+
+    public String updateEmployeeEmploymentConditions(String employeeId, String employmentConditions) {
+        Response<Boolean> response = employeesService.updateEmployeeEmploymentConditions(loggedUsername, employeeId, employmentConditions);
+        if (response.errorOccurred())
+            return response.getErrorMessage();
+        else
+            return "Updated the employee's employment conditions successfully.";
+    }
+
+    public String updateEmployeeDetails(String employeeId, String details) {
+        Response<Boolean> response = employeesService.updateEmployeeDetails(loggedUsername, employeeId, details);
+        if (response.errorOccurred())
+            return response.getErrorMessage();
+        else
+            return "Updated the employee's details successfully.";
+    }
+
+    public String authorizeUser(String username, String authorization) {
+        Response<Boolean> response = userService.authorizeUser(loggedUsername, username, authorization);
+        if (response.errorOccurred())
+            return response.getErrorMessage();
+        else
+            return "Authorized the user successfully.";
+    }
+
+    public String cancelShiftRequest(String branchId, String shiftType, LocalDate shiftDate, String role) {
+        try {
+            Response<Boolean> response = employeesService.cancelShiftRequest(loggedUsername, branchId, shiftDate, SShiftType.valueOf(shiftType), role);
+            if (response.errorOccurred())
+                return response.getErrorMessage();
+            else
+                return "Cancelled the shift request successfully.";
+        } catch (IllegalArgumentException e) {
+            return "Invalid ShiftType value, expected `Morning` or `Evening`.";
+        }
+    }
+
+    public String reportShiftActivity(String branchId, LocalDate shiftDate, String shiftType, String activity) {
+        try {
+            Response<Boolean> response = employeesService.reportShiftActivity(loggedUsername, branchId, shiftDate, SShiftType.valueOf(shiftType), activity);
+            if (response.errorOccurred())
+                return response.getErrorMessage();
+            else
+                return "Reported the shift activity successfully.";
+        } catch (IllegalArgumentException e) {
+            return "Invalid ShiftType value, expected `Morning` or `Evening`.";
+        }
+    }
+
+    public String applyCancelCard(String branchId, LocalDate shiftDate, String shiftType, String productId) {
+        try {
+            Response<Boolean> response = employeesService.applyCancelCard(loggedUsername, branchId, shiftDate, SShiftType.valueOf(shiftType), productId);
+            if (response.errorOccurred())
+                return response.getErrorMessage();
+            else
+                return "Cancelled the product successfully.";
         } catch (IllegalArgumentException e) {
             return "Invalid ShiftType value, expected `Morning` or `Evening`.";
         }

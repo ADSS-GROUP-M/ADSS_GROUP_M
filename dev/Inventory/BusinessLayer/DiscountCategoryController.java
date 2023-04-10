@@ -12,7 +12,7 @@ public class DiscountCategoryController {
 //    public Map<String, List<CategoryDiscount>>
     public Map<String,Category> categories;
 
-    //should be singleton?
+    //should be singleton
     public DiscountCategoryController() {
         this.storeDiscounts = new HashMap<String, List<ProductStoreDiscount>>();
         this.supplierDiscount = new HashMap<String, List<ProductDiscountSupplier>>();
@@ -22,6 +22,13 @@ public class DiscountCategoryController {
     public void createCategory(String name, String type){
         if(!categories.containsKey(name))
             categories.put(name,new Category(name,type));
+    }
+    private Boolean checkIfBranchExistStoreDiscount(String branch){
+        if(storeDiscounts.containsKey(branch))
+            return true;
+        else {
+            throw new RuntimeException("brunch does not exist, please create discount in order to continue");
+        }
     }
 
     public void createSupplierDiscount(int productID, String branch,double discount, int supplierID, LocalDateTime startDate, LocalDateTime endDate){
@@ -57,12 +64,12 @@ public class DiscountCategoryController {
         //TODO: need to implement
         throw new RuntimeException();
     }
-    public void updateDiscountPerCategory(String name, int discount, LocalDateTime startDate, LocalDateTime endDate){
+    public void updateDiscountPerCategory(String name, String branch, int discount, LocalDateTime startDate, LocalDateTime endDate){
         //TODO: need to implement
         throw new RuntimeException();
     }
 
-    public List<Product> getStockProduct(List<Category> categories, LocalDateTime startDate, LocalDateTime endDate){
+    public List<Product> getStockProduct(List<Category> categories, String branch, LocalDateTime startDate, LocalDateTime endDate){
         //TODO: need to implement
         throw new RuntimeException();
     }

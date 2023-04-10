@@ -41,6 +41,7 @@ public class ProductType {
             products.get(defectiveProductID).updateIsDefective();
         }
     }
+    //TODO : should add soldPrice and check with the discount table
     public void updateSold(List<Integer> productsID){
         for(Integer soldProductID: productsID){
             products.get(soldProductID).updateIsSold();
@@ -69,4 +70,19 @@ public class ProductType {
         }
         return defectiveList;
     }
+    //TODO : verify we want to return all products (maybe not defective and sold)
+    public Map<Integer,List<Product>> getAllProducts(Map<Integer,List<Product>> allProducts){
+        List<Product> currentProducts = new ArrayList<Product>();
+        for(Product product: products.values()){
+            currentProducts.add(product);
+        }
+        allProducts.put(productTypeID, currentProducts);
+        return allProducts;
+    }
+    public Boolean productIsShortage(){
+        if(storeAmount+warehouseAmount < notificationMin)
+            return true;
+        return false;
+    }
+    public int getProductTypeID(){return productTypeID;}
 }

@@ -16,15 +16,21 @@ public class ProductController {
     }
 
     private Boolean checkIfProductTypeExist(String branch, int productTypeID){
-        if(productTypes.containsKey(branch)){
+        if(checkIfBranchExist(branch)){
             Map<Integer,ProductType> branchProductsType = productTypes.get(branch);
             if(branchProductsType.containsKey(productTypeID)){
                 return true;
             }
             else {throw new RuntimeException("ProductType does not exist, please create the ProductType first");}
         }
+        return false;
+    }
+    private Boolean checkIfBranchExist(String branch){
+        if(productTypes.containsKey(branch)){
+            return true;
+        }
         else{
-            throw new RuntimeException("brunch does not exist, please create the ProductType in order to continue");
+            throw new RuntimeException("brunch does not exist, please create ProductType in order to continue");
         }
     }
     // Add new product
@@ -67,9 +73,7 @@ public class ProductController {
             productType.updateSold(productsID);
         }
     }
-    public void updateDiscount(int typeID, int discount, LocalDateTime startDate,LocalDateTime endDate, String branch){
-        //TODO: need to implement
-    }
+
     public void updateProductNotificationMin(int productTypeID, int newVal, String branch){
         if(checkIfProductTypeExist(branch,productTypeID)){
             ProductType productType = productTypes.get(branch).get(productTypeID);
@@ -82,24 +86,42 @@ public class ProductController {
     }
     public List<Product> getDefectiveProducts(LocalDateTime startDate, LocalDateTime endDate, String branch){
         List<Product> defectiveList = new ArrayList<Product>();
-        if(productTypes.containsKey(branch)) {
+        if(checkIfBranchExist(branch)) {
             Map<Integer, ProductType> branchProductsType = productTypes.get(branch);
             for (ProductType productType: branchProductsType.values())
                 productType.getDefectiveProducts(defectiveList);
         }
-        else{
-                throw new RuntimeException("brunch does not exist, please create the ProductType in order to continue");
-            }
         return defectiveList;
     }
 
-    public List<Product> getInventoryShortages(LocalDateTime startDate, LocalDateTime endDate, String branch){
-        //TODO: need to implement
-        throw new RuntimeException();
+    //in chosen branch, check shortage in each productType if true add the ProductType ID and obj to the return Map.
+    public Map<Integer,ProductType> getInventoryShortages(LocalDateTime startDate, LocalDateTime endDate, String branch){
+        Map<Integer,ProductType> shortagesProducts = new HashMap<Integer,ProductType>();
+        if(checkIfBranchExist(branch)){
+            Map<Integer, ProductType> branchProductsType = productTypes.get(branch);
+            for (ProductType productType: branchProductsType.values()){
+                if(productType.productIsShortage())
+                    shortagesProducts.put(productType.getProductTypeID(),productType);
+            }
+        }
+        return shortagesProducts;
     }
-    public List<Product> getStockProductsDetails(String branch){
+    //in chosen branch, for each ProductType return all related products to the return Map
+//    public Map<Integer,List<Product>> getStockProductsDetailsPerID(String branch){
+//        Map<Integer,List<Product>> allProductsList = new HashMap<Integer,List<Product>>();
+//        if(checkIfBranchExist(branch)){
+//            Map<Integer, ProductType> branchProductsType = productTypes.get(branch);
+//            for (ProductType productType: branchProductsType.values()){
+//                productType.getAllProducts(allProductsList);
+//            }
+//        }
+//        return allProductsList;
+//    }
+
+
+    //should remove to discount controller
+    public void updateDiscount(int productTypeID, int discount, LocalDateTime startDate,LocalDateTime endDate, String branch){
         //TODO: need to implement
-        throw new RuntimeException();
     }
 
 }

@@ -42,5 +42,11 @@ public class Category {
 
     public List<ProductType> getProductsRelated(){return this.productsRelated;}
 
-
+    @Override
+    public String toString() {
+        return "Category{" +
+                "nameCategory='" + nameCategory + '\'' +
+                ", categoryType=" + categoryType +
+                '}';
+    }
 }

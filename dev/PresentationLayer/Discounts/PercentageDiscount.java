@@ -1,15 +1,13 @@
-package Backend.BusinessLayer.Discounts;
+package PresentationLayer.Discounts;
 
 public class PercentageDiscount extends Discount {
     private double percentage;
     public PercentageDiscount(double percentage){
-        if(percentage > 100 | percentage < 0)
-            throw new RuntimeException("percentage is invalid");
         this.percentage = percentage;
     }
     @Override
     public double applyDiscount(double price) {
-        return Math.max(price - (percentage/100) * price, 0);
+        return price - (percentage/100) * price;
     }
 
     @Override

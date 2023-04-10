@@ -13,7 +13,7 @@ public class OrderController {
      * @param suppliers all available suppliers
      * @return map between supplier to the products he supplies from the orer
      */
-    public Map<Supplier, Pair<Map<Integer, Integer>, Double>> order(Map<Integer, Integer> order, List<Supplier> suppliers){
+    public Map<String, Pair<Map<Integer, Integer>, Double>> order(Map<Integer, Integer> order, List<Supplier> suppliers){
         Map<Integer, Map<Supplier, Integer>> cantBeOrderedByOneSupplier = findProductsWithoutSupplierToFullySupply(order, suppliers);
         Map<Integer, Integer> notOneSupplierOrder = new HashMap<>();
         for(Integer productId : cantBeOrderedByOneSupplier.keySet()) {
@@ -38,11 +38,11 @@ public class OrderController {
             }
         }
 
-        Map<Supplier, Pair<Map<Integer, Integer>, Double>> finalOrderWithPrice = new HashMap<>();
+        Map<String, Pair<Map<Integer, Integer>, Double>> finalOrderWithPrice = new HashMap<>();
         for(Map.Entry<Supplier, Map<Integer, Integer>> supplierToOrder : finalOrder.entrySet()){
             Supplier supplier = supplierToOrder.getKey();
             double price = computePriceAfterDiscount(supplier, supplierToOrder.getValue());
-            finalOrderWithPrice.put(supplier, new Pair<>(supplierToOrder.getValue(), price));
+            finalOrderWithPrice.put(supplier.getBnNumber(), new Pair<>(supplierToOrder.getValue(), price));
             supplier.addOrder(new Order(supplierToOrder.getValue()));
         }
 
@@ -61,33 +61,51 @@ public class OrderController {
                                                              Map<Supplier, List<Integer>> orderOfFullyProducts){
         Map<Supplier, Map<Integer, Integer>> order = new HashMap<>();
         for (Integer productId : notOneSupplierProductsOrder.keySet()){
+            Map<Supplier, Integer> suppliersCanSupply = cantBeOrderedByOneSupplier.get(productId);
             //sort suppliers by requirements
-            Map<Supplier, Integer> sortedSuppliers = new TreeMap<>((s1, s2) ->
+            Comparator<Supplier> supplierComparator = (s1, s2) ->
             {
+                if(orderOfFullyProducts.get(s1) == null){
+                    if(orderOfFullyProducts.get(s2) != null)
+                        return 1;
+                    return 0;
+                }
+                if(orderOfFullyProducts.get(s2) == null){
+                    if(orderOfFullyProducts.get(s1) != null)
+                        return -1;
+                    return 0;
+                }
                 //sort by the amount of products they are supplying
                 if(orderOfFullyProducts.get(s1).size() > orderOfFullyProducts.get(s2).size()) {
-                    return 1;
+                    return -1;
                 }
                 else if(orderOfFullyProducts.get(s1).size() < orderOfFullyProducts.get(s2).size()) {
-                    return -1;
+                    return 1;
                 }
                 //sort by the amount of not-full-amount-products they can supply
                 if(cantBeOrderedByOneSupplier.get(productId).get(s1) > cantBeOrderedByOneSupplier.get(productId).get(s2))
-                    return 1;
-                if(cantBeOrderedByOneSupplier.get(productId).get(s1) < cantBeOrderedByOneSupplier.get(productId).get(s2))
                     return -1;
+                if(cantBeOrderedByOneSupplier.get(productId).get(s1) < cantBeOrderedByOneSupplier.get(productId).get(s2))
+                    return 1;
+                if(computePriceAfterDiscount(s1, new HashMap<>(){{put(productId, Math.min(notOneSupplierProductsOrder.get(productId), suppliersCanSupply.get(s1)));}})
+                > computePriceAfterDiscount(s2, new HashMap<>(){{put(productId, Math.min(notOneSupplierProductsOrder.get(productId), suppliersCanSupply.get(s2)));}}))
+                    return 1;
+                if(computePriceAfterDiscount(s1, new HashMap<>(){{put(productId, Math.min(notOneSupplierProductsOrder.get(productId), suppliersCanSupply.get(s1)));}})
+                < computePriceAfterDiscount(s2, new HashMap<>(){{put(productId, Math.min(notOneSupplierProductsOrder.get(productId), suppliersCanSupply.get(s2)));}}))
+                    return -1;
+
                 return 0;
-            });
-            Map<Supplier, Integer> map = cantBeOrderedByOneSupplier.get(productId);
-            for(Supplier supplier : map.keySet())
-                sortedSuppliers.put(supplier, map.get(supplier));
+            };
+
+            List<Supplier> sortedSupplierList = suppliersCanSupply.keySet().stream().sorted(supplierComparator).collect(Collectors.toList());
+
             //order
             int amountLeft = notOneSupplierProductsOrder.get(productId);
-            for (Supplier supplier : sortedSuppliers.keySet()){
+            for (Supplier supplier : sortedSupplierList){
                 if(amountLeft > 0) {
                     if(order.get(supplier) == null)
                         order.put(supplier, new HashMap<>());
-                    int canSupply = Math.min(sortedSuppliers.get(supplier), amountLeft);
+                    int canSupply = Math.min(suppliersCanSupply.get(supplier), amountLeft);
                     order.get(supplier).put(productId, canSupply);
                     amountLeft -= canSupply;
                 }
@@ -184,10 +202,15 @@ public class OrderController {
         for(Integer productId : orderFromSupplier.keySet()) {
             Product product = supplier.getAgreement().getProduct(productId);
             int amount = orderFromSupplier.get(productId);
-            sum += supplier.getAgreement().getBillOfQuantities().getProductPriceAfterDiscount(productId, amount,product.getPrice() * amount);
+            if(supplier.getAgreement().getBillOfQuantities() != null)
+                sum += supplier.getAgreement().BillOfQuantities().getProductPriceAfterDiscount(productId, amount,product.getPrice() * amount);
+            else
+                sum += product.getPrice() * amount;
             amountOfProducts += amount;
         }
-        return supplier.getAgreement().getBillOfQuantities().getPriceAfterDiscounts(amountOfProducts, sum);
+        if(supplier.getAgreement().getBillOfQuantities() != null)
+            return supplier.getAgreement().BillOfQuantities().getPriceAfterDiscounts(amountOfProducts, sum);
+        return sum;
     }
 
     private double computePriceAfterDiscount(Supplier supplier, Map<Integer, Integer> order, List<Integer> productsToSupply){
@@ -196,10 +219,15 @@ public class OrderController {
         for(Integer productId : productsToSupply) {
             Product product = supplier.getAgreement().getProduct(productId);
             int amount = order.get(productId);
-            sum += supplier.getAgreement().getBillOfQuantities().getProductPriceAfterDiscount(productId, amount,product.getPrice() * amount);
+            if(supplier.getAgreement().getBillOfQuantities() != null)
+                sum += supplier.getAgreement().BillOfQuantities().getProductPriceAfterDiscount(productId, amount,product.getPrice() * amount);
+            else
+                sum += product.getPrice() * amount;
             amountOfProducts += amount;
         }
-        return supplier.getAgreement().getBillOfQuantities().getPriceAfterDiscounts(amountOfProducts, sum);
+        if(supplier.getAgreement().getBillOfQuantities() != null)
+            return supplier.getAgreement().BillOfQuantities().getPriceAfterDiscounts(amountOfProducts, sum);
+        return sum;
     }
 
 }

@@ -1,9 +1,8 @@
-package Backend.BusinessLayer.DeliveryAgreements;
+package PresentationLayer.DeliveryAgreements;
 
-import java.util.LinkedList;
 import java.util.List;
 
-public class DeliveryFixedDays extends DeliveryAgreement{
+public class DeliveryFixedDays extends DeliveryAgreement {
     /***
      * a List that contains all the days the supplier arrives
      */
@@ -26,7 +25,7 @@ public class DeliveryFixedDays extends DeliveryAgreement{
         return super.toString() + "\n\t\t\tdays of the week: " + daysOfTheWeek.toString().substring(1,daysOfTheWeek.toString().length() - 1);
     }
     public String toString2() {
-        return super.toString2() + "\n\tdays of the week: " + daysOfTheWeek.toString().substring(1,daysOfTheWeek.toString().length() - 1);
+        return super.toString() + "\n\tdays of the week: " + daysOfTheWeek.toString().substring(1,daysOfTheWeek.toString().length() - 1);
     }
 
 }

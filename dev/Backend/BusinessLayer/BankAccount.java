@@ -1,4 +1,4 @@
-package Backend;
+package Backend.BusinessLayer;
 
 public class BankAccount {
     private String bank;
@@ -33,5 +33,9 @@ public class BankAccount {
 
     public void setAccountNumber(String accountNumber) {
         this.accountNumber = accountNumber;
+    }
+
+    public String toString(){
+        return "Bank: " + bank + " Branch: " + branch + " Account number: " + accountNumber;
     }
 }

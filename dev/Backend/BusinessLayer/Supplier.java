@@ -1,8 +1,8 @@
 package Backend.BusinessLayer;
 
-import Backend.BankAccount;
 import Backend.BusinessLayer.DeliveryAgreements.DeliveryAgreement;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -46,8 +46,8 @@ public class Supplier {
         this.name = name;
     }
 
-    public void setBankAccount(BankAccount bankAccount) {
-        this.bankAccount = bankAccount;
+    public void setBankAccount(String bank, String branch, String accountNumber) {
+        this.bankAccount = new BankAccount(bank, branch, accountNumber);
     }
 
     public void setBnNumber(String bnNumber) {
@@ -88,11 +88,17 @@ public class Supplier {
             fields.add(field);
     }
 
+    public boolean productExist(int productId){
+        return agreement.getProduct(productId) != null;
+    }
+
     public void removeField(String field){
         fields.remove(field);
     }
 
     public void addOrder(Order order){
+        if(orderHistory == null)
+            orderHistory = new LinkedList<>();
         orderHistory.add(order);
     }
     public String getBnNumber(){
@@ -101,5 +107,25 @@ public class Supplier {
 
     public List<Order> getOrderHistory(){
         return orderHistory;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+
+
+    public String toString(){
+        String contactsInfo = "CONTACTS INFORMATION:";
+        for(Map.Entry<String, Pair<String, String>> contact : this.contactsInfo.entrySet())
+            contactsInfo = contactsInfo + "\n\t\tName: " + contact.getKey() + " Email: " + contact.getValue().getFirst() + " Phone number: " + contact.getValue().getSecond();
+        String fields = "FIELDS:";
+        for (String field : this.fields)
+            fields = fields + "\n\t\t" + field;
+        String bankAccount = "BANK ACCOUNT:\n\t\t" + this.bankAccount.toString();
+
+        String res = "SUPPLIER:\n\tNAME: " + name +"\n\tBN NUMBER: " + bnNumber + "\n\t" + bankAccount + "\n\t" + fields
+                + "\n\t" + contactsInfo + "\n\t" + agreement.toString();
+        return res;
     }
 }

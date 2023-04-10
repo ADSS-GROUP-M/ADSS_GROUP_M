@@ -1,8 +1,9 @@
 package Backend.BusinessLayer;
 
-import Backend.BankAccount;
 import Backend.BusinessLayer.DeliveryAgreements.DeliveryAgreement;
+import Backend.ServiceLayer.SupplierService;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -11,7 +12,15 @@ public class SupplierController {
     /***
      * maps between supplier's bn number to the supplier
      */
-    private Map<String, Supplier> suppliers;
+    private Map<String, Supplier> suppliers = new HashMap<>();
+
+    private static SupplierController supplierController;
+    private SupplierController(){}
+    public static SupplierController getInstance(){
+        if(supplierController == null)
+            supplierController = new SupplierController();
+        return supplierController;
+    }
 
     public void addSupplier(String name, String bnNumber, BankAccount bankAccount, String paymentMethod,
                             List<String> fields, Map<String,Pair<String, String>> contactsInfo,

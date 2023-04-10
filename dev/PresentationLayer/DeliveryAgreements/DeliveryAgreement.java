@@ -1,4 +1,4 @@
-package Backend.BusinessLayer.DeliveryAgreements;
+package PresentationLayer.DeliveryAgreements;
 
 public abstract class DeliveryAgreement {
     private boolean havaTransport;
@@ -10,10 +10,10 @@ public abstract class DeliveryAgreement {
 
     @Override
     public String toString() {
-        return "DELIVERY AGREEMENT:\n\t\t\ttransport: " + havaTransport;
+        return "DELIVERY AGREEMENT:\n\t\t\ttransport" + havaTransport;
     }
 
     public String toString2(){
-        return "DELIVERY AGREEMENT:\n\ttransport: " + havaTransport;
+        return "DELIVERY AGREEMENT:\n\ttransport" + havaTransport;
     }
 }

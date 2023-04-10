@@ -1,30 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e454f93c-4ee8-4f4b-9a14-eaaf36aa303c" name="Changes" comment="almost finish - trying another order functionality">
-      <change afterPath="$PROJECT_DIR$/Backend/BankAccount.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Backend/BusinessLayer/OrderController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Backend/ServiceLayer/OrderService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Backend/ServiceLayer/Response.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PresentationLayer/Response.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PresentationLayer/UI.java" afterDir="false" />
+    <list default="true" id="e454f93c-4ee8-4f4b-9a14-eaaf36aa303c" name="Changes" comment="added products that can be ordered only by dividing to several suppliers functionality and started ui">
+      <change afterPath="$PROJECT_DIR$/PresentationLayer/DeliveryAgreements/DeliveryAgreement.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PresentationLayer/DeliveryAgreements/DeliveryByInvitation.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PresentationLayer/DeliveryAgreements/DeliveryFixedDays.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PresentationLayer/Discounts/CashDiscount.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PresentationLayer/Discounts/Discount.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PresentationLayer/Discounts/PercentageDiscount.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PresentationLayer/Main.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PresentationLayer/Order.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/code.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/code.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BusinessLayer/Agreement.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/BusinessLayer/Agreement.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BusinessLayer/BillOfQuantities.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/BusinessLayer/BillOfQuantities.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BusinessLayer/DeliveryAgreements/DeliveryAgreement.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/BusinessLayer/DeliveryAgreements/DeliveryAgreement.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BusinessLayer/DeliveryAgreements/DeliveryByInvitation.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/BusinessLayer/DeliveryAgreements/DeliveryByInvitation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BusinessLayer/DeliveryAgreements/DeliveryFixedDays.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/BusinessLayer/DeliveryAgreements/DeliveryFixedDays.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BusinessLayer/Discounts/CashDiscount.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/BusinessLayer/Discounts/CashDiscount.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BusinessLayer/Discounts/Discount.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/BusinessLayer/Discounts/Discount.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BusinessLayer/Discounts/PercentageDiscount.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/BusinessLayer/Discounts/PercentageDiscount.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BusinessLayer/Order.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/BusinessLayer/Order.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BusinessLayer/OrderController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BusinessLayer/Pair.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/BusinessLayer/Pair.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BusinessLayer/Product.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/BusinessLayer/Product.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BusinessLayer/Supplier.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/BusinessLayer/Supplier.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BusinessLayer/SupplierController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/BusinessLayer/SupplierController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BusinessLayer/SystemController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/ServiceLayer/SupplierService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/BankAccount.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/BusinessLayer/BankAccount.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/BusinessLayer/Agreement.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/BusinessLayer/Agreement.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/BusinessLayer/BillOfQuantities.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/BusinessLayer/BillOfQuantities.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/BusinessLayer/DeliveryAgreements/DeliveryAgreement.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/BusinessLayer/DeliveryAgreements/DeliveryAgreement.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/BusinessLayer/DeliveryAgreements/DeliveryByInvitation.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/BusinessLayer/DeliveryAgreements/DeliveryByInvitation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/BusinessLayer/DeliveryAgreements/DeliveryFixedDays.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/BusinessLayer/DeliveryAgreements/DeliveryFixedDays.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/BusinessLayer/Discounts/CashDiscount.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/BusinessLayer/Discounts/CashDiscount.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/BusinessLayer/Discounts/PercentageDiscount.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/BusinessLayer/Discounts/PercentageDiscount.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/BusinessLayer/OrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/BusinessLayer/OrderController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/BusinessLayer/Product.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/BusinessLayer/Product.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/BusinessLayer/Supplier.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/BusinessLayer/Supplier.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/BusinessLayer/SupplierController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/BusinessLayer/SupplierController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/ServiceLayer/OrderService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/ServiceLayer/OrderService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/ServiceLayer/SupplierService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/ServiceLayer/SupplierService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PresentationLayer/UI.java" beforeDir="false" afterPath="$PROJECT_DIR$/PresentationLayer/UI.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,6 +38,8 @@
       <list>
         <option value="TypeScript File" />
         <option value="Class" />
+        <option value="JUnit4 Test Class" />
+        <option value="JUnit5 Test Class" />
       </list>
     </option>
   </component>
@@ -58,64 +62,125 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Downloaded.Files.Path.Enabled": "false",
+    "Repository.Attach.Annotations": "false",
+    "Repository.Attach.JavaDocs": "false",
+    "Repository.Attach.Sources": "false",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit5",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit4": "",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5": "",
     "jdk.selected.JAVA_MODULE": "19",
-    "last_opened_file_path": "C:/Users/yossi/OneDrive/שולחן העבודה/ניתוצ/Assignment1/Assignment1/dev/gson-2.10.1.jar",
+    "last_opened_file_path": "C:/Users/yossi/OneDrive/שולחן העבודה/ניתוצ/Assignment1/Assignment1/dev/PresentationLayer",
     "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.0",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
     "settings.editor.selected.configurable": "project.propVCSSupport.DirectoryMappings"
   }
 }]]></component>
-  <component name="RunManager" selected="Application.SupplierController">
-    <configuration name="BillOfQuantities" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="Backend.BusinessLayer.BillOfQuantities" />
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\yossi\OneDrive\שולחן העבודה\ניתוצ\Assignment1\Assignment1\dev\PresentationLayer" />
+    </key>
+    <key name="CreateTestDialog.Recents.Supers">
+      <recent name="" />
+    </key>
+    <key name="CreateTestDialog.RecentsKey">
+      <recent name="Backend.BusinessLayer" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="PresentationLayer" />
+    </key>
+  </component>
+  <component name="RunManager" selected="JUnit.BillOfQuantitiesTest">
+    <configuration name="BillOfQuantitiesTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="code" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="Backend.BusinessLayer.ServiceLayer.*" />
+          <option name="PATTERN" value="Backend.BusinessLayer.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
+      <option name="PACKAGE_NAME" value="Backend.BusinessLayer" />
+      <option name="MAIN_CLASS_NAME" value="Backend.BusinessLayer.BillOfQuantitiesTest" />
+      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="OrderController" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="Backend.BusinessLayer.OrderController" />
+    <configuration name="BillOfQuantitiesTest.getPriceAfterDiscounts" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="code" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="Backend.BusinessLayer.ServiceLayer.*" />
+          <option name="PATTERN" value="Backend.BusinessLayer.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
+      <option name="PACKAGE_NAME" value="Backend.BusinessLayer" />
+      <option name="MAIN_CLASS_NAME" value="Backend.BusinessLayer.BillOfQuantitiesTest" />
+      <option name="METHOD_NAME" value="getPriceAfterDiscounts" />
+      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="SupplierController" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="Backend.BusinessLayer.SupplierController" />
+    <configuration name="BillOfQuantitiesTest.getProductPriceAfterDiscount" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="code" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="Backend.BusinessLayer.ServiceLayer.*" />
+          <option name="PATTERN" value="Backend.BusinessLayer.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
+      <option name="PACKAGE_NAME" value="Backend.BusinessLayer" />
+      <option name="MAIN_CLASS_NAME" value="Backend.BusinessLayer.BillOfQuantitiesTest" />
+      <option name="METHOD_NAME" value="getProductPriceAfterDiscount" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="BillOfQuantitiesTest.removeDiscountOnAmountOfProducts" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="code" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="Backend.BusinessLayer.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="Backend.BusinessLayer" />
+      <option name="MAIN_CLASS_NAME" value="Backend.BusinessLayer.BillOfQuantitiesTest" />
+      <option name="METHOD_NAME" value="removeDiscountOnAmountOfProducts" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="BillOfQuantitiesTest.setDiscountOnAmountOfProducts" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="code" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="Backend.BusinessLayer.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="Backend.BusinessLayer" />
+      <option name="MAIN_CLASS_NAME" value="Backend.BusinessLayer.BillOfQuantitiesTest" />
+      <option name="METHOD_NAME" value="setDiscountOnAmountOfProducts" />
+      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.SupplierController" />
-        <item itemvalue="Application.OrderController" />
-        <item itemvalue="Application.BillOfQuantities" />
-        <item itemvalue="Application.SupplierController" />
-        <item itemvalue="Application.OrderController" />
+        <item itemvalue="JUnit.BillOfQuantitiesTest" />
+        <item itemvalue="JUnit.BillOfQuantitiesTest.removeDiscountOnAmountOfProducts" />
+        <item itemvalue="JUnit.BillOfQuantitiesTest.setDiscountOnAmountOfProducts" />
+        <item itemvalue="JUnit.BillOfQuantitiesTest.getPriceAfterDiscounts" />
+        <item itemvalue="JUnit.BillOfQuantitiesTest.getProductPriceAfterDiscount" />
       </list>
     </recent_temporary>
   </component>
@@ -147,7 +212,14 @@
       <option name="project" value="LOCAL" />
       <updated>1680811222544</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="added products that can be ordered only by dividing to several suppliers functionality and started ui">
+      <created>1680880637709</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1680880637709</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -185,6 +257,14 @@
     </ignored-roots>
     <MESSAGE value="done with order functionality - moving to the ability to print the order etc" />
     <MESSAGE value="commit to move to another functionality" />
-    <option name="LAST_COMMIT_MESSAGE" value="commit to move to another functionality" />
+    <MESSAGE value="added products that can be ordered only by dividing to several suppliers functionality and started ui" />
+    <option name="LAST_COMMIT_MESSAGE" value="added products that can be ordered only by dividing to several suppliers functionality and started ui" />
+  </component>
+  <component name="XDebuggerManager">
+    <pin-to-top-manager>
+      <pinned-members>
+        <PinnedItemInfo parentTag="Backend.BusinessLayer.SupplierController" memberName="suppliers" />
+      </pinned-members>
+    </pin-to-top-manager>
   </component>
 </project>

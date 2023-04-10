@@ -1,10 +1,8 @@
-package Backend.BusinessLayer.Discounts;
+package PresentationLayer.Discounts;
 
 public class CashDiscount extends Discount {
     private double amountOfDiscount;
     public CashDiscount(double amountOfDiscount){
-        if(amountOfDiscount < 0)
-            throw new RuntimeException("amount of cash cant be less than 0");
         this.amountOfDiscount = amountOfDiscount;
     }
     @Override
@@ -13,6 +11,6 @@ public class CashDiscount extends Discount {
     }
 
     public String toString(){
-        return "discount in cash, amount: " + amountOfDiscount;
+        return "discount in cash:\n\tamount: " + amountOfDiscount;
     }
 }

@@ -20,8 +20,8 @@ public class Agreement {
     public Agreement(String paymentMethod, List<Product> productsList, DeliveryAgreement deliveryAgreement){
         this.paymentMethod = paymentMethod;
         products = new HashMap<>();
-//        for (Product p : productsList)
-//            products.put(p.getId(), p);
+        for (Product p : productsList)
+            products.put(p.getId(), p);
         this.deliveryAgreement = deliveryAgreement;
     }
 
@@ -60,6 +60,11 @@ public class Agreement {
     public BillOfQuantities getBillOfQuantities(){
         return billOfQuantities;
     }
+    public BillOfQuantities BillOfQuantities(){
+        if(billOfQuantities == null)
+            billOfQuantities = new BillOfQuantities();
+        return billOfQuantities;
+    }
 
     public void setBillOfQuantities(BillOfQuantities billOfQuantities) {
         this.billOfQuantities = billOfQuantities;
@@ -69,5 +74,12 @@ public class Agreement {
         this.paymentMethod = paymentMethod;
     }
 
+    public String toString(){
+        String productsString = "PRODUCTS DETAILS:";
+        for (Product product : products.values())
+            productsString += "\n\t\t\t" + product.toString();
+
+        return "AGREEMENT:\n\t\t" + productsString + "\n\t\t" + deliveryAgreement.toString() + "\n\t\t" + (billOfQuantities == null ? "" : billOfQuantities.toString());
+    }
 
 }

@@ -1,6 +1,6 @@
-package Backend.BusinessLayer.DeliveryAgreements;
+package PresentationLayer.DeliveryAgreements;
 
-public class DeliveryByInvitation extends DeliveryAgreement{
+public class DeliveryByInvitation extends DeliveryAgreement {
     /***
      * number of days for the order to arrive
      */
@@ -20,6 +20,6 @@ public class DeliveryByInvitation extends DeliveryAgreement{
     }
 
     public String toString2() {
-        return super.toString2() + "\n\tnumber of days for order to arrive: " + numberOfDays;
+        return super.toString() + "\n\tnumber of days for order to arrive: " + numberOfDays;
     }
 }

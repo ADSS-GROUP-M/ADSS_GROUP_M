@@ -74,4 +74,8 @@ public class Product {
     public String getCatalogNumber() {
         return catalogNumber;
     }
+
+    public String toString(){
+        return "Name: " + name + " Id in the system: " + id + " Supplier's catalog number: " + catalogNumber + " Price: " + price + " Number of units: " + numberOfUnits;
+    }
 }

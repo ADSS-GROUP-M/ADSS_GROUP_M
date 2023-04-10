@@ -17,10 +17,10 @@ public class CategoryController {
     }
 
     //should type be enum? subC or Category
-    public void createCategory(String name, String type){
-        if(!categories.containsKey(name))
-            categories.put(name,new Category(name,type));
-    }
+//    public void createCategory(String name, String type){
+//        if(!categories.containsKey(name))
+//            categories.put(name,new Category(name,type));
+//    }
 
     public void updateDiscountPerCategory(String name, int discount, LocalDateTime startDate, LocalDateTime endDate){
         //TODO: need to implement

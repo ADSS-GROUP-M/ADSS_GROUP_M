@@ -32,6 +32,7 @@ public class Product {
             this.isDefective = new Pair<Boolean, LocalDateTime>(true, LocalDateTime.now());
         }
     }
+    //TODO: update soldPrice
     public void updateIsSold() {
         this.isSold = true;
     }

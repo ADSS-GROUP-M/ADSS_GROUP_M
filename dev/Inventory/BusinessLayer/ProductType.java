@@ -41,7 +41,7 @@ public class ProductType {
             products.get(defectiveProductID).updateIsDefective();
         }
     }
-    //TODO : should add soldPrice and check with the discount table
+    // TODO: should add soldPrice and check with the discount table
     public void updateSold(List<Integer> productsID){
         for(Integer soldProductID: productsID){
             products.get(soldProductID).updateIsSold();
@@ -59,7 +59,7 @@ public class ProductType {
         category.addProduct(this);
     }
 
-    public void addProduct(int productID, int supplierID, int supplierPrice, String location){
+    public void addProduct(int productID, int supplierID, double supplierPrice, String location){
         products.put(productID,new Product(productID,supplierID,supplierPrice,location));
     }
 

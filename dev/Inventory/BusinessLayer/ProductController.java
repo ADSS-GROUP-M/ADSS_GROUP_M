@@ -34,7 +34,7 @@ public class ProductController {
         }
     }
     // Add new product
-    public void createProduct(int productID, int productTypeID, String branch, int supplierID, int supplierPrice, String location) {
+    public void createProduct(int productID, int productTypeID, String branch, int supplierID, double supplierPrice, String location) {
         if(checkIfProductTypeExist(branch,productTypeID))
             productTypes.get(branch).get(productTypeID).addProduct(productID,supplierID,supplierPrice,location);
     }
@@ -107,16 +107,16 @@ public class ProductController {
         return shortagesProducts;
     }
     //in chosen branch, for each ProductType return all related products to the return Map
-//    public Map<Integer,List<Product>> getStockProductsDetailsPerID(String branch){
-//        Map<Integer,List<Product>> allProductsList = new HashMap<Integer,List<Product>>();
-//        if(checkIfBranchExist(branch)){
-//            Map<Integer, ProductType> branchProductsType = productTypes.get(branch);
-//            for (ProductType productType: branchProductsType.values()){
-//                productType.getAllProducts(allProductsList);
-//            }
-//        }
-//        return allProductsList;
-//    }
+    public Map<Integer,List<Product>> getStockProductsDetails(String branch){
+        Map<Integer,List<Product>> allProductsList = new HashMap<Integer,List<Product>>();
+        if(checkIfBranchExist(branch)){
+            Map<Integer, ProductType> branchProductsType = productTypes.get(branch);
+            for (ProductType productType: branchProductsType.values()){
+                productType.getAllProducts(allProductsList);
+            }
+        }
+        return allProductsList;
+    }
 
 
     //should remove to discount controller

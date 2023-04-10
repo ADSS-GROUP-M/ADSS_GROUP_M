@@ -36,7 +36,7 @@ public class DiscountCategoryController {
     private Boolean checkIfBranchExistCategory(String branch){
         return categoriesPerBranch.containsKey(branch);
     }
-    private Boolean checkIfCategoryExist(String branch, String categoryName){
+    public Boolean checkIfCategoryExist(String branch, String categoryName){
         if(checkIfBranchExistCategory(branch))
             return categoriesPerBranch.get(branch).containsKey(categoryName);
         else
@@ -69,6 +69,8 @@ public class DiscountCategoryController {
         }
 
     }
+
+    public Category getCategory(String branch, String categoryName){return categoriesPerBranch.get(branch).get(categoryName);}
     public void createSupplierDiscount(int productID, String branch,double discount, int supplierID, LocalDateTime startDate, LocalDateTime endDate){
         if(!checkIfBranchExistSupplierDiscount(branch))
             supplierDiscount.put(branch,new HashMap<Integer,List<ProductDiscountSupplier>>());

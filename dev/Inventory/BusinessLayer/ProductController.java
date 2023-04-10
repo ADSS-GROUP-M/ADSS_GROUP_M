@@ -9,10 +9,14 @@ import java.util.Map;
 public class ProductController {
 
     Map<String, Map<Integer,ProductType>> productTypes;
+    DiscountCategoryController DC_contoller;
 
     //create the controller as Singleton
     private static ProductController productController = null;
-    private ProductController() {this.productTypes = new HashMap<String, Map<Integer,ProductType>>();}
+    private ProductController() {
+        this.productTypes = new HashMap<String, Map<Integer,ProductType>>();
+        this.DC_contoller = DiscountCategoryController.DiscountCategoryController();
+    }
 
     public static ProductController ProductController(){
         if(productController == null)
@@ -51,18 +55,39 @@ public class ProductController {
         ProductType newProductType = new ProductType(productTypeID,name,manufacture,storeAmount,warehouseAmount,originalSupplierPrice,originalStorePrice, branch);
         productTypes.get(branch).put(productTypeID,newProductType);
     }
-
+//public Response updateProduct(int is_defective, int catalog_number, int serial_num, int is_sold, String supplier, int supplier_price, int sold_price, String location){
     public void updateProduct(int productID, int productTypeID, String branch) {
         if(checkIfProductTypeExist(branch,productID)){
             //TODO
         }
     }
-    // remove product type
-    public void updateProductType(int productTypeID, String branch){
+    //public Response updateProductType(String name, int catalog_number, String manufacturer, double supplier_price, double store_price, String category, String sub_category, int min_amount) {
+    public void updateProductType(String branch, String newName, int productTypeID, String newManufacturer, double newSupplierPrice,double newStorePrice, String newCategory, String newSubCategory, int newMinAmount ){
         if(checkIfProductTypeExist(branch,productTypeID)){
-            //TODO
+            ProductType currentProductType = productTypes.get(branch).get(productTypeID);
+            //set name
+            if(newName != null){currentProductType.setName(newName);}
+            if (newManufacturer != null){currentProductType.setManufacturer(newManufacturer);}
+            if(newSupplierPrice != -1){currentProductType.setOriginalSupplierPrice(newSupplierPrice);}
+            if(newStorePrice != -1){currentProductType.setOriginalStorePrice(newStorePrice);}
+            if(newMinAmount != -1){currentProductType.setNotificationMin(newMinAmount);}
+            if(newCategory != null){
+                if(DC_contoller.checkIfCategoryExist(branch,newCategory))
+                    currentProductType.setCategory(DC_contoller.getCategory(branch,newCategory));
+                else
+                    DC_contoller.createCategory(branch,newCategory,1);
+            }
+            if(newSubCategory != null){
+                if(DC_contoller.checkIfCategoryExist(branch,newCategory))
+                    currentProductType.setCategory(DC_contoller.getCategory(branch,newSubCategory));
+                else
+                    DC_contoller.createCategory(branch,newSubCategory,0);
+            }
         }
+
     }
+
+
 
     // update products to defective
     public void updateDefectiveProduct(int productTypeID, List<Integer> productsID, String branch){

@@ -50,7 +50,7 @@ public class ProductType {
     public void setNotificationMin(int newVal){
         this.notificationMin = newVal;
     }
-    public void updateCategory(Category category){
+    public void setCategory(Category category){
         this.category = category;
         category.addProduct(this);
     }

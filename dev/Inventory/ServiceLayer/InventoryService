@@ -35,28 +35,28 @@ public class InventoryService {
         }
     }
 
-    public Response updateProductType(String name, String catalog_number, String manufacturer, double supplier_price, double store_price, String category, String sub_category, int min_amount) {
+    public Response updateProductType(String name, int catalog_number, String manufacturer, double supplier_price, double store_price, String category, String sub_category, int min_amount, String branch) {
         try {
             if (name != null) {
-                productController.updateProductType(name, catalog_number, null, -1, -1, null, null, -1);
+                productController.updateProductType(branch, name, catalog_number, null, -1, -1, null, null, -1);
                 return new Response<>("Product type updated successfully");
             } else if (manufacturer != null) {
-                productController.updateProductType(null, catalog_number, manufacturer, null, -1, -1, null, null, -1);
+                productController.updateProductType(branch, null, catalog_number, manufacturer, null, -1, -1, null, null, -1);
                 return new Response<>("Product type updated successfully");
             } else if (supplier_price != -1) {
-                productController.updateProductType(null, catalog_number, null, supplier_price, -1, null, null, -1);
+                productController.updateProductType(branch, null, catalog_number, null, supplier_price, -1, null, null, -1);
                 return new Response<>("Product type updated successfully");
             } else if (store_price != -1) {
-                productController.updateProductType(null, catalog_number, null, -1, store_price, null, null, -1);
+                productController.updateProductType(branch, null, catalog_number, null, -1, store_price, null, null, -1);
                 return new Response<>("Product type updated successfully");
             } else if (category != null) {
-                productController.updateProductType(null, catalog_number, null, -1, -1, category, null, -1);
+                productController.updateProductType(branch, null, catalog_number, null, -1, -1, category, null, -1);
                 return new Response<>("Product type updated successfully");
             } else if (sub_category != null) {
-                productController.updateProductType(null, catalog_number, null, -1, -1, null, sub_category, -1);
+                productController.updateProductType(branch, null, catalog_number, null, -1, -1, null, sub_category, -1);
                 return new Response<>("Product type updated successfully");
             } else if (min_amount != -1) {
-                productController.updateProductType(null, catalog_number, null, -1, -1, null, null, min_amount);
+                productController.updateProductType(branch, null, catalog_number, null, -1, -1, null, null, min_amount);
                 return new Response<>("Product type updated successfully");
             } else {
             return Response.createErrorResponse("Invalid input parameters");
@@ -66,25 +66,25 @@ public class InventoryService {
         }
     }
 
-    public Response updateProduct(int is_defective, String serial_num, int is_sold, String supplier, int supplier_price, int sold_price, String location){
+    public Response updateProduct(int is_defective, int catalog_number, int serial_num, int is_sold, String supplier, int supplier_price, int sold_price, String location, String branch){
         try {
             if (is_defective != -1) {
-                productController.updateProductType(is_defective, catalog_num, -1, null, -1, -1, null);
+                productController.updateProductType(branch, is_defective, catalog_number, serial_num, -1, null, -1, -1, null);
                 return new Response<>("Product type updated successfully");
             } else if (is_sold != -1) {
-                productController.updateProductType(-1, catalog_num, new_val, null, -1, -1, null);
+                productController.updateProductType(branch, -1, catalog_number, serial_num, is_sold, null, -1, -1, null);
                 return new Response<>("Product type updated successfully");
             } else if (supplier != null) {
-                productController.updateProductType(-1, catalog_num, -1, new_val, -1, -1, null);
+                productController.updateProductType(branch, -1, catalog_number, serial_num, -1, supplier, -1, -1, null);
                 return new Response<>("Product type updated successfully");
             } else if (supplier_price != -1) {
-                productController.updateProductType(-1, catalog_num, -1, null, new_val, -1, null);
+                productController.updateProductType(branch, -1, catalog_number, serial_num, -1, null, supplier_price, -1, null);
                 return new Response<>("Product type updated successfully");
             } else if (sold_price != -1) {
-                productController.updateProductType(-1, catalog_num, -1, null, -1, new_val, null));
+                productController.updateProductType(branch, -1, catalog_number, serial_num, -1, null, -1, sold_price, null);
                 return new Response<>("Product type updated successfully");
             } else if (location != null) {
-                productController.updateProductType(-1, catalog_num, -1, null, -1, -1, new_val);
+                productController.updateProductType(branch, -1, catalog_number, serial_num, -1, null, -1, -1, location);
                 return new Response<>("Product type updated successfully");
             } else {
                 return Response.createErrorResponse("Invalid input parameters");}

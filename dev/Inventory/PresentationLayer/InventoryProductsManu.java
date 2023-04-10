@@ -82,7 +82,7 @@ public class InventoryProductsManu extends MainMenu {
             case 4 -> inventoryService.updateProductType(null, catalog_num, null, null, new_val, -1, null, null, -1);
             case 5 -> inventoryService.updateProductType(null, catalog_num, null, null, -1, new_val, null, null, -1);
             case 6 -> inventoryService.updateProductType(null, catalog_num, null, null, -1, -1, new_val, null, -1);
-            case 7 -> inventoryService.updateProductType(null, catalog_num, null, null, -1, new_val, null, null, -1);
+            case 7 -> inventoryService.updateProductType(null, catalog_num, null, null, -1, -1, null, new_val, -1);
             case 8 -> super.run();
             case 9 -> System.exit(0);
             default -> System.out.println("\nInvalid command");
@@ -105,12 +105,12 @@ public class InventoryProductsManu extends MainMenu {
             System.out.println("the new value is: [[for condition question -> 1 is yes and 2 is no]]");
             String new_val = in.nextLine();
             switch (option) {
-                case 1 -> inventoryService.updateProductType(new_val, catalog_num, -1, null, -1, -1, null);
-                case 2 -> inventoryService.updateProductType(-1, catalog_num, new_val, null, -1, -1, null);
-                case 3 -> inventoryService.updateProductType(-1, catalog_num, -1, new_val, -1, -1, null);
-                case 4 -> inventoryService.updateProductType(-1, catalog_num, -1, null, new_val, -1, null);
-                case 5 -> inventoryService.updateProductType(-1, catalog_num, -1, null, -1, new_val, null);
-                case 6 -> inventoryService.updateProductType(-1, catalog_num, -1, null, -1, -1, new_val);
+                case 1 -> inventoryService.updateProduct(new_val, catalog_num, -1, null, -1, -1, null);
+                case 2 -> inventoryService.updateProduct(-1, catalog_num, new_val, null, -1, -1, null);
+                case 3 -> inventoryService.updateProduct(-1, catalog_num, -1, new_val, -1, -1, null);
+                case 4 -> inventoryService.updateProduct(-1, catalog_num, -1, null, new_val, -1, null);
+                case 5 -> inventoryService.updateProduct(-1, catalog_num, -1, null, -1, new_val, null);
+                case 6 -> inventoryService.updateProduct(-1, catalog_num, -1, null, -1, -1, new_val);
                 case 7 -> super.run();
                 case 8 -> System.exit(0);
                 default -> System.out.println("\nInvalid command");

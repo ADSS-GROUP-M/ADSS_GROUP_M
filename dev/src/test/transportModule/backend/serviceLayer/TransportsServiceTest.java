@@ -232,7 +232,7 @@ class TransportsServiceTest {
         String json = ts.createTransport(JSON.serialize(newTransport));
         Response response = Response.fromJson(json);
         assertFalse(response.isSuccess());
-        assertEquals(response.getData(String.class),"weight");
+        assertEquals(response.getData(),"weight");
     }
 
     @Test
@@ -255,7 +255,7 @@ class TransportsServiceTest {
         String json = ts.createTransport(JSON.serialize(newTransport));
         Response response = Response.fromJson(json);
         assertFalse(response.isSuccess());
-        assertEquals(response.getData(String.class),"license");
+        assertEquals(response.getData(),"license");
     }
     @Test
     void createTransportWithBadLicenseAndTooMuchWeight(){
@@ -277,6 +277,6 @@ class TransportsServiceTest {
         String json = ts.createTransport(JSON.serialize(newTransport));
         Response response = Response.fromJson(json);
         assertFalse(response.isSuccess());
-        assertEquals(response.getData(String.class),"weight,license");
+        assertEquals(response.getData(),"weight,license");
     }
 }

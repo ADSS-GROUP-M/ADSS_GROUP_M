@@ -13,15 +13,18 @@ public class DiscountCategoryController {
     //Map<branch,Map<productTypeID, List<ProductStoreDiscount>>>
     public Map<String, Map<Integer,List<ProductStoreDiscount>>> storeDiscounts;
 
-//    public Map<String, List<CategoryDiscount>> categoryDiscount;
     public Map<String,Map<String,Category>> categoriesPerBranch;
 
-    //should be singleton
-    public DiscountCategoryController() {
+    //create the controller as Singleton
+    private static DiscountCategoryController discountCategoryController = null;
+    private DiscountCategoryController() {
         this.storeDiscounts = new HashMap<String, Map<Integer,List<ProductStoreDiscount>>>();
         this.supplierDiscount = new HashMap<String, Map<Integer,List<ProductDiscountSupplier>>>();
-//        this.categoryDiscount = new HashMap<String, List<CategoryDiscount>>();
-        this.categoriesPerBranch = new HashMap<String, Map<String,Category>>();
+        this.categoriesPerBranch = new HashMap<String, Map<String,Category>>();}
+    public static DiscountCategoryController DiscountCategoryController(){
+        if(discountCategoryController == null)
+            discountCategoryController = new DiscountCategoryController();
+        return discountCategoryController;
     }
 
     private Boolean checkIfBranchExistStoreDiscount(String branch){
@@ -33,7 +36,7 @@ public class DiscountCategoryController {
     private Boolean checkIfBranchExistCategory(String branch){
         return categoriesPerBranch.containsKey(branch);
     }
-    private Boolean checkIfCategoryExist(String branch, String categoryName){
+    public Boolean checkIfCategoryExist(String branch, String categoryName){
         if(checkIfBranchExistCategory(branch))
             return categoriesPerBranch.get(branch).containsKey(categoryName);
         else
@@ -55,9 +58,19 @@ public class DiscountCategoryController {
         categoriesPerBranch.get(branch).put(categoryName,new Category(categoryName,categoryType));
     }
     public void removeCategory(String branch, String categoryName){
-        //TODO: need to implement
-        throw new RuntimeException();
+        if(checkIfCategoryExist(branch,categoryName)){
+            if(!categoriesPerBranch.get(branch).get(categoryName).isRelatedProductEmpty())
+                categoriesPerBranch.get(branch).remove(categoryName);
+            else
+                throw new RuntimeException("Category related to other products, please update before remove");
+        }
+        else{
+            throw new RuntimeException("Category does not exist");
+        }
+
     }
+
+    public Category getCategory(String branch, String categoryName){return categoriesPerBranch.get(branch).get(categoryName);}
     public void createSupplierDiscount(int productID, String branch,double discount, int supplierID, LocalDateTime startDate, LocalDateTime endDate){
         if(!checkIfBranchExistSupplierDiscount(branch))
             supplierDiscount.put(branch,new HashMap<Integer,List<ProductDiscountSupplier>>());
@@ -74,8 +87,8 @@ public class DiscountCategoryController {
     }
     public void createCategoryDiscount(String categoryName, String branch,double discount, LocalDateTime startDate, LocalDateTime endDate){
         if(checkIfCategoryExist(branch,categoryName)){
-            List<ProductType> relatedProducts = categoriesPerBranch.get(branch).get(categoryName).getProductsRelated();
-            for(ProductType productType: relatedProducts){
+            Map<Integer,ProductType> relatedProducts = categoriesPerBranch.get(branch).get(categoryName).getProductsRelated();
+            for(ProductType productType: relatedProducts.values()){
                createStoreDiscount(productType.getProductTypeID(),branch,discount,startDate,endDate);
             }
         }
@@ -148,7 +161,7 @@ public class DiscountCategoryController {
 
     }
 
-    public Map<String ,List<CategoryDiscount>> getStockProduct(List<Category> categories, String branch, LocalDateTime startDate, LocalDateTime endDate){
+    public Map<String ,List<Product>> getStockProduct(List<Category> categories, String branch, LocalDateTime startDate, LocalDateTime endDate){
         //TODO: need to implement
         throw new RuntimeException();
     }

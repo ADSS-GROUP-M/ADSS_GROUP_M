@@ -42,7 +42,8 @@ public class Product {
             return false;
         return true;
     }
-    public void updateIsDefective() {
+
+    public void setIsDefective() {
         if (isDefective == null) {
             this.isDefective = new productPair<Boolean, LocalDateTime>(true, LocalDateTime.now());
         }
@@ -55,6 +56,11 @@ public class Product {
     public void updateIsSold() {
         this.isSold = true;
     }
+
+    public void setLocation(String newLocation){this.location = newLocation;}
+    public void setSupplierPrice(double newPrice){this.supplierPrice = newPrice;}
+    public void setSupplierID(int newSupplierID){this.supplierID = newSupplierID;}
+    public void setSoldPrice(double newSoldPrice){this.soldPrice = newSoldPrice;}
 
 
 }

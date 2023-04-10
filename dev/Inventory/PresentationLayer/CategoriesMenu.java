@@ -26,24 +26,24 @@ public class CategoriesMenu extends MainMenu {
     private void mainCategory() {
         System.out.println("Please enter new category's name");
         String category_name = in.nextLine();
-        System.out.println(inventoryService.createMainCategory(category_name).getReturnValue());
+        System.out.println(inventoryService.createMainCategory(category_name, branch).getReturnValue());
     }
 
     private void subCategory() {
         System.out.println("Please enter new category's name");
         String category_name = in.nextLine();
-        System.out.println(inventoryService.createSubCategory(category_name).getReturnValue());
+        System.out.println(inventoryService.createSubCategory(category_name, branch).getReturnValue());
     }
 
     private void removeMainCategory() {
         System.out.println("category name:");
         String category_name = in.nextLine();
-        System.out.println(inventoryService.removeMainCategory(category_name).getReturnValue());
+        System.out.println(inventoryService.removeMainCategory(category_name, branch).getReturnValue());
     }
 
     private void removeSubCategory() {
         System.out.println("category name:");
         String category_name = in.nextLine();
-        System.out.println(inventoryService.removeSubCategory(category_name).getReturnValue());
+        System.out.println(inventoryService.removeSubCategory(category_name, branch).getReturnValue());
     }
 }

@@ -61,7 +61,7 @@ public class InventoryProductsManu extends MainMenu {
 
     private void updateProduct() {
         System.out.println("what is the product's catalog num?:");
-        String catalog_num = in.nextLine();
+        int catalog_num = in.nextInt();
         System.out.println("Choose details to update:");
         System.out.println("1. name");
         System.out.println("2. manufacturer");
@@ -76,55 +76,53 @@ public class InventoryProductsManu extends MainMenu {
         System.out.println("the new value is:");
         String new_val = in.nextLine();
         switch (option) {
-            case 1 -> inventoryService.updateProductType(new_val, catalog_num, null, null, -1, -1, null, null, -1);
-            case 2 -> inventoryService.updateProductType(null, catalog_num, new_val, null, -1, -1, null, null, -1);
-            case 3 -> inventoryService.updateProductType(null, catalog_num, null, new_val, -1, -1, null, null, -1);
-            case 4 -> inventoryService.updateProductType(null, catalog_num, null, null, new_val, -1, null, null, -1);
-            case 5 -> inventoryService.updateProductType(null, catalog_num, null, null, -1, new_val, null, null, -1);
-            case 6 -> inventoryService.updateProductType(null, catalog_num, null, null, -1, -1, new_val, null, -1);
-            case 7 -> inventoryService.updateProductType(null, catalog_num, null, null, -1, -1, null, new_val, -1);
+            case 1 -> inventoryService.updateProductType(new_val, catalog_num, null, -1, -1, null, null, -1, branch);
+            case 2 -> inventoryService.updateProductType(null, catalog_num, new_val, -1, -1, null, null, -1, branch);
+            case 3 -> inventoryService.updateProductType(null, catalog_num, null, Integer.parseInt(new_val), -1, null, null, -1, branch);
+            case 4 -> inventoryService.updateProductType(null, catalog_num, null, -1, Integer.parseInt(new_val), null, null, -1, branch);
+            case 5 -> inventoryService.updateProductType(null, catalog_num, null, -1, -1, new_val, null, -1, branch);
+            case 6 -> inventoryService.updateProductType(null, catalog_num, null, -1, -1, null, new_val, -1, branch);
+            case 7 -> inventoryService.updateProductType(null, catalog_num, null, -1, -1, null, null, Integer.parseInt(new_val), branch);
             case 8 -> super.run();
             case 9 -> System.exit(0);
             default -> System.out.println("\nInvalid command");
         }
     }
 
-        private void updateItem() {
-            System.out.println("what is the product's catalog num?:");
-            String catalog_num = in.nextLine();
-            System.out.println("Choose details to update:");
-            System.out.println("1. is defective?");
-            System.out.println("2. is sold?");
-            System.out.println("3. supplier");
-            System.out.println("4. supplier price");
-            System.out.println("5. sold price");
-            System.out.println("6. location");
-            System.out.println("7. Back to main manu");
-            System.out.println("8. Exit");
-            int option = in.nextInt();
-            System.out.println("the new value is: [[for condition question -> 1 is yes and 2 is no]]");
-            String new_val = in.nextLine();
-            switch (option) {
-                case 1 -> inventoryService.updateProduct(new_val, catalog_num, -1, null, -1, -1, null);
-                case 2 -> inventoryService.updateProduct(-1, catalog_num, new_val, null, -1, -1, null);
-                case 3 -> inventoryService.updateProduct(-1, catalog_num, -1, new_val, -1, -1, null);
-                case 4 -> inventoryService.updateProduct(-1, catalog_num, -1, null, new_val, -1, null);
-                case 5 -> inventoryService.updateProduct(-1, catalog_num, -1, null, -1, new_val, null);
-                case 6 -> inventoryService.updateProduct(-1, catalog_num, -1, null, -1, -1, new_val);
-                case 7 -> super.run();
-                case 8 -> System.exit(0);
-                default -> System.out.println("\nInvalid command");
-            }
+    private void updateItem() {
+        System.out.println("what is the product's catalog number?");
+        int catalog_num = in.nextInt();
+        System.out.println("what is the product's serial number?");
+        int serial_number = in.nextInt();
+        System.out.println("Choose details to update:");
+        System.out.println("1. is defective?");
+        System.out.println("2. is sold?");
+        System.out.println("3. supplier");
+        System.out.println("4. supplier price");
+        System.out.println("5. sold price");
+        System.out.println("6. location");
+        System.out.println("7. Back to main manu");
+        System.out.println("8. Exit");
+        int option = in.nextInt();
+        System.out.println("the new value is: [[for condition question -> 1 is yes and 2 is no]]");
+        String new_val = in.nextLine();
+        switch (option) {
+            case 1 -> inventoryService.updateProduct(Integer.parseInt(new_val), catalog_num, serial_number, -1, -1, -1, -1, null, branch);
+            case 2 -> inventoryService.updateProduct(-1, catalog_num, serial_number, Integer.parseInt(new_val), -1, -1, -1, null, branch);
+            case 3 -> inventoryService.updateProduct(-1, catalog_num, serial_number, -1 , Integer.parseInt(new_val), -1, -1, null, branch);
+            case 4 -> inventoryService.updateProduct(-1, catalog_num, serial_number, -1, -1, Integer.parseInt(new_val), -1, null, branch);
+            case 5 -> inventoryService.updateProduct(-1, catalog_num, serial_number, -1, -1, -1, Integer.parseInt(new_val), null, branch);
+            case 6 -> inventoryService.updateProduct(-1, catalog_num, serial_number, -1, -1, -1, -1, new_val, branch);
+            case 7 -> super.run();
+            case 8 -> System.exit(0);
+            default -> System.out.println("\nInvalid command");
         }
+    }
 
-//    private void getProductDetails() {
-//        System.out.println("what is the product's catalog num?:");
-//        int catalog_num = in.nextLine();
-//
-//    }
-//
-//    private String ToString(){
-//
-//
-//    }
+    private void getProductDetails() {
+        System.out.println("what is the product's catalog num?");
+        int catalog_num = in.nextInt();
+
+
+    }
 }

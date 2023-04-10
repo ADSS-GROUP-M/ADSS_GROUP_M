@@ -26,16 +26,14 @@ public class DiscountsManu extends MainMenu {
         //the dates are supposed to be: "2016-03-04 11:30"
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         System.out.println("product catalog number:");
-        String catalog_num = in.nextLine();
-        System.out.println("product serial number:");
-        String serial_num = in.nextLine();
+        int catalog_num = in.nextInt();
         System.out.println("discount:");
-        int discount = in.nextInt();
+        double discount = in.nextDouble();
         System.out.println("start date:");
         String start_date = in.nextLine();
         System.out.println("end date:");
         String end_date = in.nextLine();
-        System.out.println(inventoryService.updateDiscountPerProduct(catalog_num, serial_num, discount, LocalDateTime.parse(start_date, formatter), LocalDateTime.parse(end_date, formatter)).getReturnValue());
+        System.out.println(inventoryService.updateDiscountPerProduct(catalog_num, branch, discount, LocalDateTime.parse(start_date, formatter), LocalDateTime.parse(end_date, formatter)).getReturnValue());
     }
 
     private void categoryDiscount() {
@@ -44,11 +42,11 @@ public class DiscountsManu extends MainMenu {
         System.out.println("category name:");
         String name = in.nextLine();
         System.out.println("discount:");
-        int discount = in.nextInt();
+        double discount = in.nextDouble();
         System.out.println("start date:");
         String start_date = in.nextLine();
         System.out.println("end date:");
         String end_date = in.nextLine();
-        System.out.println(inventoryService.updateDiscountPerCategory(name, discount, LocalDateTime.parse(start_date, formatter), LocalDateTime.parse(end_date, formatter)).getReturnValue());
+        System.out.println(inventoryService.updateDiscountPerCategory(name, branch, discount, LocalDateTime.parse(start_date, formatter), LocalDateTime.parse(end_date, formatter)).getReturnValue());
     }
 }

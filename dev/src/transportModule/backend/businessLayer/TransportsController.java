@@ -116,28 +116,7 @@ public class TransportsController {
     public LinkedList<Transport> getAllTransports(){
         return new LinkedList<>(transports.values());
     }
-
-    /**
-     * Validates a Transport object by checking if the given Truck can carry the load, if the assigned Driver has
-     * the required license for the Truck, if the source and all destinations of the Transport exist in the System, and
-     * if all assigned ItemLists for the destinations exist in the System.
-     * <p>
-     * If any of the validations fail, an IOException will be thrown, containing a message detailing all the reasons for
-     * the failure, as well as a cause message containing the name of the fields that failed validation.
-     * </p>
-     * @param transport the Transport object to be validated
-     * @throws IOException if any of the following conditions occur:
-     * <ul>
-     * <li>The Truck's maximum weight has been exceeded</li>
-     * <li>The assigned Driver does not have the required license for the Truck</li>
-     * <li>The source address of the Transport does not exist in the System</li>
-     * <li>Any of the destination addresses of the Transport do not exist in the System</li>
-     * <li>Any of the assigned ItemLists for the destinations do not exist in the System</li>
-     * </ul>
-     * The IOException message will contain information detailing all the reasons for the failure,
-     * separated by newlines, while the cause message will contain a comma-separated list of the fields
-     * that failed validation.
-     */
+    
     private void validateTransport(Transport transport) throws IOException{
 
         Truck truck = tc.getTruck(transport.truckId());

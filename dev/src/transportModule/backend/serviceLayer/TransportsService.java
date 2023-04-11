@@ -37,7 +37,7 @@ public class TransportsService {
      * Site with address 123 Main St does not exist<br/>
      * Site with address 456 Oak St does not exist<br>
      * Item list with id 1234 does not exist<br/><br/>
-     * the cause field will contain the following:<br/><br/>
+     * the data field will contain the following:<br/><br/>
      * weight,license,source,destination:0,itemList:1
      * <br/><br/>
      * destination:0 means that the first destination failed validation

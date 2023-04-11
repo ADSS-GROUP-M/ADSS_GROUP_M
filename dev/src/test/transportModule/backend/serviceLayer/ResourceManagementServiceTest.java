@@ -6,10 +6,7 @@ import org.junit.jupiter.api.Test;
 import transportModule.records.Driver;
 import transportModule.records.Site;
 import transportModule.records.Truck;
-import utils.JSON;
 import utils.Response;
-
-import java.util.LinkedList;
 
 import static org.junit.jupiter.api.Assertions.*;
 

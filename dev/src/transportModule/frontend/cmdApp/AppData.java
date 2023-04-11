@@ -4,7 +4,6 @@ import transportModule.backend.serviceLayer.ItemListsService;
 import transportModule.backend.serviceLayer.ResourceManagementService;
 import transportModule.backend.serviceLayer.TransportsService;
 import transportModule.records.*;
-import utils.JSON;
 import utils.Response;
 
 import java.time.LocalDateTime;

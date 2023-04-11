@@ -1,8 +1,5 @@
 package utils;
 
-import transportModule.frontend.cmdApp.AppData;
-import transportModule.records.Truck;
-
 import java.lang.reflect.Type;
 
 public class Response {
@@ -30,12 +27,12 @@ public class Response {
     }
 
     /**
-     * This constructor is used when there is no data to be sent. The data field will be null.
+     * This constructor is used when there is no data to be sent. The data field will be an empty string.
      */
     public Response(String message, boolean success) {
         this.message = message;
         this.success = success;
-        data = null;
+        data = "";
     }
 
     public String message() {
@@ -50,7 +47,7 @@ public class Response {
      * @param typeOfT Type of the object for deserialization
      * @return Deserialized object of type T
      * @apiNote If you want to get the raw data as a string, use {@link #data()} instead
-     * <br/><br/><br/>example for a type definition:<br/><br/><code>1) Type type = new TypeToken&lt;LinkedList&lt;SomeClass&gt;&gt;(){}.getType();</code>
+     * <br/><br/><br/>examples for a type definition:<br/><br/><code>1) Type type = new TypeToken&lt;LinkedList&lt;SomeClass&gt;&gt;(){}.getType();</code>
      * <br/><br/><code>2) Type type = SomeClass.class;</code>
      */
     public <T> T data(Type typeOfT) {

@@ -1,5 +1,8 @@
 package utils;
 
+import transportModule.frontend.cmdApp.AppData;
+import transportModule.records.Truck;
+
 import java.lang.reflect.Type;
 
 public class Response {
@@ -35,19 +38,22 @@ public class Response {
         data = null;
     }
 
-    public String getMessage() {
+    public String message() {
         return message;
     }
 
-    public boolean isSuccess() {
+    public boolean success() {
         return success;
     }
 
     /**
      * @param typeOfT Type of the object for deserialization
      * @return Deserialized object of type T
+     * @apiNote If you want to get the raw data as a string, use {@link #data()} instead
+     * <br/><br/><br/>example for a type definition:<br/><br/><code>1) Type type = new TypeToken&lt;LinkedList&lt;SomeClass&gt;&gt;(){}.getType();</code>
+     * <br/><br/><code>2) Type type = SomeClass.class;</code>
      */
-    public <T> T getData(Type typeOfT) {
+    public <T> T data(Type typeOfT) {
         if(data == null)
             return null;
         return JSON.deserialize(data,typeOfT);
@@ -55,9 +61,9 @@ public class Response {
 
     /**
      * @return Raw data as a string. Object must be deserialized manually
-     * @apiNote If you want to get a deserialized object Use {@link #getData(Type)} instead
+     * @apiNote If you want to get a deserialized object Use {@link #data(Type)} instead
      */
-    public String getData(){
+    public String data(){
         return data;
     }
 

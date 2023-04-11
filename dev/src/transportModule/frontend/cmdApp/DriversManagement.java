@@ -51,11 +51,11 @@ public class DriversManagement {
         Driver.LicenseType licenseType = pickLicenseType();
         if (licenseType == null) return;
         Driver newDriver = new Driver(id, fullName, licenseType);
-        String json = JSON.serialize(newDriver);
+        String json = newDriver.toJson();
         String responseJson = rms.addDriver(json);
         Response response = JSON.deserialize(responseJson, Response.class);
-        if(response.isSuccess()) appData.drivers().put(id, newDriver);
-        System.out.println("\n"+response.getMessage());
+        if(response.success()) appData.drivers().put(id, newDriver);
+        System.out.println("\n"+response.message());
     }
 
     private void updateDriver() {
@@ -98,11 +98,11 @@ public class DriversManagement {
 
     private void updateDriverHelperMethod(int id, String name, Driver.LicenseType licenseType) {
         Driver updatedDriver = new Driver(id, name, licenseType);
-        String json = JSON.serialize(updatedDriver);
+        String json = updatedDriver.toJson();
         String responseJson = rms.updateDriver(json);
         Response response = JSON.deserialize(responseJson, Response.class);
-        if(response.isSuccess()) appData.drivers().put(id, updatedDriver);
-        System.out.println("\n"+response.getMessage());
+        if(response.success()) appData.drivers().put(id, updatedDriver);
+        System.out.println("\n"+response.message());
     }
 
     private void removeDriver() {
@@ -119,11 +119,11 @@ public class DriversManagement {
             String option = appData.readLine();
             switch(option) {
                 case "y" ->{
-                    String json = JSON.serialize(driver);
+                    String json = driver.toJson();
                     String responseJson = rms.removeDriver(json);
                     Response response = JSON.deserialize(responseJson, Response.class);
-                    if(response.isSuccess()) appData.drivers().remove(driver.id());
-                    System.out.println("\n"+response.getMessage());
+                    if(response.success()) appData.drivers().remove(driver.id());
+                    System.out.println("\n"+response.message());
                 }
                 case "n" ->{}
                 default -> System.out.println("\nInvalid option!");

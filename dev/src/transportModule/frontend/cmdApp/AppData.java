@@ -1,6 +1,5 @@
 package transportModule.frontend.cmdApp;
 
-import com.google.gson.reflect.TypeToken;
 import transportModule.backend.serviceLayer.ItemListsService;
 import transportModule.backend.serviceLayer.ResourceManagementService;
 import transportModule.backend.serviceLayer.TransportsService;
@@ -8,7 +7,6 @@ import transportModule.records.*;
 import utils.JSON;
 import utils.Response;
 
-import java.lang.reflect.Type;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -75,8 +73,8 @@ public class AppData {
     private void fetchTrucks() {
         String json = rms.getAllTrucks();
         Response response = Response.fromJson(json);
-        Type type = new TypeToken<LinkedList<Truck>>(){}.getType();
-        for(Truck truck : response.<LinkedList<Truck>>getData(type)){
+
+        for(Truck truck : Truck.listFromJson(response.data())){
             trucks.put(truck.id(), truck);
         }
     }
@@ -84,8 +82,7 @@ public class AppData {
     private void fetchDrivers() {
         String json = rms.getAllDrivers();
         Response response = Response.fromJson(json);
-        Type type = new TypeToken<LinkedList<Driver>>(){}.getType();
-        for(Driver driver : response.<LinkedList<Driver>>getData(type)){
+        for(Driver driver : Driver.listFromJson(response.data())){
             drivers.put(driver.id(), driver);
         }
     }
@@ -93,8 +90,8 @@ public class AppData {
     private void fetchSites() {
         String json = rms.getAllSites();
         Response response = Response.fromJson(json);
-        Type type = new TypeToken<LinkedList<Site>>(){}.getType();
-        for(Site site : response.<LinkedList<Site>>getData(type)){
+
+        for(Site site : Site.listFromJson(response.data())){
             sites.put(site.address(), site);
         }
     }
@@ -102,8 +99,8 @@ public class AppData {
     private void fetchItemLists() {
         String json = ils.getAllItemLists();
         Response response = Response.fromJson(json);
-        Type type = new TypeToken<LinkedList<ItemList>>(){}.getType();
-        for(ItemList list : response.<LinkedList<ItemList>>getData(type)){
+
+        for(ItemList list : ItemList.listFromJson(response.data())){
             itemLists.put(list.id(), list);
         }
     }
@@ -111,8 +108,8 @@ public class AppData {
     private void fetchTransports() {
         String json = ts.getAllTransports();
         Response response = Response.fromJson(json);
-        Type type = new TypeToken<LinkedList<Transport>>(){}.getType();
-        for(Transport transport : response.<LinkedList<Transport>>getData(type)){
+
+        for(Transport transport : Transport.listFromJson(response.data())){
             transports.put(transport.id(), transport);
         }
     }
@@ -142,21 +139,22 @@ public class AppData {
         Truck truck4 = new Truck("jkl012", "honda", 3000, 25000, Truck.CoolingCapacity.FROZEN);
         Truck truck5 = new Truck("mno345", "nissan", 3500, 30000, Truck.CoolingCapacity.FROZEN);
 
-        rms.addDriver(JSON.serialize(driver1));
-        rms.addDriver(JSON.serialize(driver2));
-        rms.addDriver(JSON.serialize(driver3));
-        rms.addDriver(JSON.serialize(driver4));
-        rms.addDriver(JSON.serialize(driver5));
-        rms.addTruck(JSON.serialize(truck1));
-        rms.addTruck(JSON.serialize(truck2));
-        rms.addTruck(JSON.serialize(truck3));
-        rms.addTruck(JSON.serialize(truck4));
-        rms.addTruck(JSON.serialize(truck5));
-        rms.addSite(JSON.serialize(site1));
-        rms.addSite(JSON.serialize(site2));
-        rms.addSite(JSON.serialize(site3));
-        rms.addSite(JSON.serialize(site4));
-        rms.addSite(JSON.serialize(site5));
+        rms.addDriver(driver1.toJson());
+        rms.addDriver(driver2.toJson());
+        rms.addDriver(driver3.toJson());
+        rms.addDriver(driver4.toJson());
+        rms.addDriver(driver5.toJson());
+        rms.addTruck(truck1.toJson());
+        rms.addTruck(truck2.toJson());
+        rms.addTruck(truck3.toJson());
+        rms.addTruck(truck4.toJson());
+        rms.addTruck(truck5.toJson());
+        rms.addSite(site1.toJson());
+        rms.addSite(site2.toJson());
+        rms.addSite(site3.toJson());
+        rms.addSite(site4.toJson());
+        rms.addSite(site5.toJson());
+
 
         // generate item lists with random data:
         HashMap<String, Integer> load1 = new HashMap<>();
@@ -219,11 +217,11 @@ public class AppData {
 
         ItemList itemList5 = new ItemList(1005, load5, unload5);
 
-        ils.addItemList(JSON.serialize(itemList1));
-        ils.addItemList(JSON.serialize(itemList2));
-        ils.addItemList(JSON.serialize(itemList3));
-        ils.addItemList(JSON.serialize(itemList4));
-        ils.addItemList(JSON.serialize(itemList5));
+        ils.addItemList(itemList1.toJson());
+        ils.addItemList(itemList2.toJson());
+        ils.addItemList(itemList3.toJson());
+        ils.addItemList(itemList4.toJson());
+        ils.addItemList(itemList5.toJson());
 
         // Randomly generated transports
         Transport transport1 = new Transport(
@@ -296,11 +294,11 @@ public class AppData {
                 truck5.maxWeight()
         );
 
-        ts.createTransport(JSON.serialize(transport1));
-        ts.createTransport(JSON.serialize(transport2));
-        ts.createTransport(JSON.serialize(transport3));
-        ts.createTransport(JSON.serialize(transport4));
-        ts.createTransport(JSON.serialize(transport5));
+        ts.createTransport(transport1.toJson());
+        ts.createTransport(transport2.toJson());
+        ts.createTransport(transport3.toJson());
+        ts.createTransport(transport4.toJson());
+        ts.createTransport(transport5.toJson());
 
     }
 

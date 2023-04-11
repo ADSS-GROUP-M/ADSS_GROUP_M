@@ -1,5 +1,10 @@
 package transportModule.records;
 
+import com.google.gson.reflect.TypeToken;
+import utils.JSON;
+
+import java.lang.reflect.Type;
+import java.util.LinkedList;
 import java.util.Objects;
 
 public record Site (String transportZone, String address, String phoneNumber, String contactName, SiteType siteType) {
@@ -12,6 +17,19 @@ public record Site (String transportZone, String address, String phoneNumber, St
 
     public static Site getLookupObject(String address){
         return new Site(null, address, null, null, null);
+    }
+
+    public String toJson(){
+        return JSON.serialize(this);
+    }
+
+    public static Site fromJson(String json){
+        return JSON.deserialize(json, Site.class);
+    }
+
+    public static LinkedList<Site> listFromJson(String json){
+        Type type = new TypeToken<LinkedList<Site>>(){}.getType();
+        return JSON.deserialize(json, type);
     }
 
     @Override

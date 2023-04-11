@@ -1,5 +1,10 @@
 package transportModule.records;
 
+import com.google.gson.reflect.TypeToken;
+import utils.JSON;
+
+import java.lang.reflect.Type;
+import java.util.LinkedList;
 import java.util.Objects;
 
 public record Driver (int id, String name, LicenseType licenseType){
@@ -10,6 +15,19 @@ public record Driver (int id, String name, LicenseType licenseType){
 
     public static Driver getLookupObject(int id){
         return new Driver(id, null, null);
+    }
+
+    public String toJson(){
+        return JSON.serialize(this);
+    }
+
+    public static Driver fromJson(String json){
+        return JSON.deserialize(json, Driver.class);
+    }
+
+    public static LinkedList<Driver> listFromJson(String json){
+        Type type = new TypeToken<LinkedList<Driver>>(){}.getType();
+        return JSON.deserialize(json, type);
     }
 
     @Override

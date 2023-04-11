@@ -1,5 +1,10 @@
 package transportModule.records;
 
+import com.google.gson.reflect.TypeToken;
+import utils.JSON;
+
+import java.lang.reflect.Type;
+import java.util.LinkedList;
 import java.util.Objects;
 
 public record Truck (String id, String model, int baseWeight, int maxWeight, CoolingCapacity coolingCapacity){
@@ -32,6 +37,19 @@ public record Truck (String id, String model, int baseWeight, int maxWeight, Coo
 
     public static Truck getLookupObject(String id){
         return new Truck(id, null, 0, 0, null);
+    }
+
+    public String toJson(){
+        return JSON.serialize(this);
+    }
+
+    public static Truck fromJson(String json){
+        return JSON.deserialize(json, Truck.class);
+    }
+
+    public static LinkedList<Truck> listFromJson(String json){
+        Type type = new TypeToken<LinkedList<Truck>>(){}.getType();
+        return JSON.deserialize(json, type);
     }
 
     @Override

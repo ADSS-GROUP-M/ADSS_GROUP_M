@@ -37,7 +37,7 @@ class JSONTest {
         HashMap<Site,ItemList> siteItems = new HashMap<>();
         siteItems.put(destination, itemList);
         Transport t = new Transport(1,source,sites,siteItems,"1",1,dateTime,0);
-        String output = JSON.serialize(t);
+        String output = t.toJson();
         String expected = """
                  {
                    "id": 1,

@@ -96,7 +96,7 @@ public class TransportsManagement {
 
         Response response = createTransportHelperMethod(newTransport);
 
-        if(response.isSuccess() == false){
+        if(response.success() == false){
             pickAnOptionIfFail(newTransport);
         }
     }
@@ -126,7 +126,7 @@ public class TransportsManagement {
                             newTransport.weight()
                     );
                     Response response2 = createTransportHelperMethod(newTransport);
-                    if(response2.isSuccess()) return;
+                    if(response2.success()) return;
                 }
                 case 2 -> {
                     LinkedList<Site> destinations = new LinkedList<>();
@@ -145,7 +145,7 @@ public class TransportsManagement {
                             weight
                     );
                     Response response2 = createTransportHelperMethod(newTransport);
-                    if(response2.isSuccess()) return;
+                    if(response2.success()) return;
                 }
                 case 3 -> {
                     System.out.println("Transport creation cancelled");
@@ -297,10 +297,10 @@ public class TransportsManagement {
             String option = appData.readLine();
             switch (option) {
                 case "y" -> {
-                    String json = JSON.serialize(transport);
+                    String json = transport.toJson();
                     String responseJson = ts.removeTransport(json);
                     Response response = JSON.deserialize(responseJson, Response.class);
-                    if (response.isSuccess()) appData.transports().remove(transport.id());
+                    if (response.success()) appData.transports().remove(transport.id());
                     System.out.println("\nTransport deleted successfully!");
                 }
                 case "n"-> {}
@@ -354,13 +354,13 @@ public class TransportsManagement {
                 weight
         );
 
-        String json = JSON.serialize(newTransport);
+        String json = newTransport.toJson();
         String responseJson = ts.updateTransport(json);
         Response response = JSON.deserialize(responseJson, Response.class);
-        if(response.isSuccess()){
+        if(response.success()){
             appData.transports().put(id, newTransport);
         }
-        System.out.println("\n"+response.getMessage());
+        System.out.println("\n"+response.message());
     }
 
     private Transport getTransport() {
@@ -395,12 +395,12 @@ public class TransportsManagement {
     private Response createTransportHelperMethod(Transport newTransport) {
 
         // send to server
-        String json = JSON.serialize(newTransport);
+        String json = newTransport.toJson();
         String responseJson = ts.createTransport(json);
         Response response = JSON.deserialize(responseJson, Response.class);
-        System.out.println("\n"+response.getMessage());
+        System.out.println("\n"+response.message());
 
-        if(response.isSuccess()){
+        if(response.success()){
             appData.transports().put(transportIdCounter, newTransport);
             transportIdCounter++;
         }

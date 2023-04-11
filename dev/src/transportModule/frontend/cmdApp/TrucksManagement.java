@@ -59,11 +59,11 @@ public class TrucksManagement {
         Truck.CoolingCapacity coolingCapacity = pickCoolingCapacity();
 
         Truck newTruck = new Truck(licensePlate, model, baseWeight, maxWeight,coolingCapacity);
-        String json = JSON.serialize(newTruck);
+        String json = newTruck.toJson();
         String responseJson = rms.addTruck(json);
         Response response = JSON.deserialize(responseJson, Response.class);
-        if(response.isSuccess()) appData.trucks().put(licensePlate, newTruck);
-        System.out.println("\n"+response.getMessage());
+        if(response.success()) appData.trucks().put(licensePlate, newTruck);
+        System.out.println("\n"+response.message());
     }
 
 
@@ -136,11 +136,11 @@ public class TrucksManagement {
 
     private void updateTruckHelperMethod(String licensePlate, String model, int baseWeight, int maxWeight, Truck.CoolingCapacity coolingCapacity){
         Truck newTruck = new Truck(licensePlate, model, baseWeight, maxWeight,coolingCapacity);
-        String json = JSON.serialize(newTruck);
+        String json = newTruck.toJson();
         String responseJson = rms.updateTruck(json);
         Response response = JSON.deserialize(responseJson, Response.class);
-        if(response.isSuccess()) appData.trucks().put(licensePlate, newTruck);
-        System.out.println("\n"+response.getMessage());
+        if(response.success()) appData.trucks().put(licensePlate, newTruck);
+        System.out.println("\n"+response.message());
     }
 
     private void removeTruck() {
@@ -157,11 +157,11 @@ public class TrucksManagement {
             String option = appData.readLine();
             switch(option){
                 case "y"->{
-                    String json = JSON.serialize(truck);
+                    String json = truck.toJson();
                     String responseJson = rms.removeTruck(json);
                     Response response = JSON.deserialize(responseJson, Response.class);
-                    if(response.isSuccess()) appData.trucks().remove(truck.id());
-                    System.out.println("\n"+response.getMessage());
+                    if(response.success()) appData.trucks().remove(truck.id());
+                    System.out.println("\n"+response.message());
                 }
                 case "n"->{}
                 default-> System.out.println("\nInvalid option!");

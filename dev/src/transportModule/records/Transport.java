@@ -1,5 +1,9 @@
 package transportModule.records;
 
+import com.google.gson.reflect.TypeToken;
+import utils.JSON;
+
+import java.lang.reflect.Type;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -12,6 +16,18 @@ public record Transport (int id, Site source, LinkedList<Site> destinations, Has
         return new Transport(id, null, null, null, null, 0, null, 0);
     }
 
+    public String toJson(){
+        return JSON.serialize(this);
+    }
+
+    public static Transport fromJson(String json){
+        return JSON.deserialize(json, Transport.class);
+    }
+
+    public static LinkedList<Transport> listFromJson(String json){
+        Type type = new TypeToken<LinkedList<Transport>>(){}.getType();
+        return JSON.deserialize(json, type);
+    }
 
     @Override
     public boolean equals(Object o) {

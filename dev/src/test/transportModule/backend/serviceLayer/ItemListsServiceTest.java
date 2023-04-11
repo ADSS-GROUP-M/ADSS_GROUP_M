@@ -1,6 +1,5 @@
 package transportModule.backend.serviceLayer;
 
-import com.google.gson.reflect.TypeToken;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -8,7 +7,6 @@ import transportModule.records.ItemList;
 import utils.JSON;
 import utils.Response;
 
-import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -35,7 +33,7 @@ class ItemListsServiceTest {
 
         itemList = new ItemList(1001, load1, unload1);
 
-        ils.addItemList(JSON.serialize(itemList));
+        ils.addItemList(itemList.toJson());
     }
 
     @AfterEach
@@ -56,51 +54,51 @@ class ItemListsServiceTest {
         unload2.put("Napkins", 25);
 
         ItemList itemList2 = new ItemList(1002, load2, unload2);
-        String json1 = ils.addItemList(JSON.serialize(itemList2));
+        String json1 = ils.addItemList(itemList2.toJson());
         Response response1 = Response.fromJson(json1);
-        assertTrue(response1.isSuccess());
+        assertTrue(response1.success());
 
-        String json2 = ils.getItemList(JSON.serialize(ItemList.getLookupObject(itemList2.id())));
+        String json2 = ils.getItemList(ItemList.getLookupObject(itemList2.id()).toJson());
         Response response2 = Response.fromJson(json2);
-        ItemList addedItemList = response2.getData(ItemList.class);
+        ItemList addedItemList = response2.data(ItemList.class);
         assertEquals(itemList2.load(), addedItemList.load());
         assertEquals(itemList2.unload(), addedItemList.unload());
     }
 
     @Test
     void removeItemList() {
-        String json1 = ils.removeItemList(JSON.serialize(itemList));
+        String json1 = ils.removeItemList(itemList.toJson());
         Response response1 = Response.fromJson(json1);
-        assertTrue(response1.isSuccess());
+        assertTrue(response1.success());
 
-        String json2 = ils.getItemList(JSON.serialize(ItemList.getLookupObject(itemList.id())));
+        String json2 = ils.getItemList(ItemList.getLookupObject(itemList.id()).toJson());
         Response response2 = Response.fromJson(json2);
-        assertFalse(response2.isSuccess());
+        assertFalse(response2.success());
     }
 
     @Test
     void updateItemList() {
         itemList.load().put("Shirts", 25);
         itemList.unload().put("Jackets", 15);
-        String json1 = ils.updateItemList(JSON.serialize(itemList));
+        String json1 = ils.updateItemList(itemList.toJson());
         Response response1 = Response.fromJson(json1);
-        assertTrue(response1.isSuccess());
+        assertTrue(response1.success());
 
-        String json2 = ils.getItemList(JSON.serialize(ItemList.getLookupObject(itemList.id())));
+        String json2 = ils.getItemList(ItemList.getLookupObject(itemList.id()).toJson());
         Response response2 = Response.fromJson(json2);
-        assertTrue(response2.isSuccess());
-        ItemList updatedItemList = response2.getData(ItemList.class);
+        assertTrue(response2.success());
+        ItemList updatedItemList = response2.data(ItemList.class);
         assertEquals(itemList.load(), updatedItemList.load());
         assertEquals(itemList.unload(), updatedItemList.unload());
     }
 
     @Test
     void getItemList() {
-        String json1 = ils.getItemList(JSON.serialize(ItemList.getLookupObject(itemList.id())));
+        String json1 = ils.getItemList(ItemList.getLookupObject(itemList.id()).toJson());
         Response response1 = Response.fromJson(json1);
-        assertTrue(response1.isSuccess());
+        assertTrue(response1.success());
 
-        ItemList retrievedItemList = response1.getData(ItemList.class);
+        ItemList retrievedItemList = response1.data(ItemList.class);
         assertEquals(itemList.load(), retrievedItemList.load());
         assertEquals(itemList.unload(), retrievedItemList.unload());
     }
@@ -120,14 +118,13 @@ class ItemListsServiceTest {
             unload.put("Gloves", 20);
 
             ItemList itemList = new ItemList(1002 + i, load, unload);
-            ils.addItemList(JSON.serialize(itemList));
+            ils.addItemList(itemList.toJson());
         }
 
         String json1 = ils.getAllItemLists();
         Response response1 = Response.fromJson(json1);
-        assertTrue(response1.isSuccess());
-        Type type = new TypeToken<LinkedList<ItemList>>(){}.getType();
-        assertEquals(21, response1.<LinkedList<ItemList>>getData(type).size());
+        assertTrue(response1.success());
+        assertEquals(21, ItemList.listFromJson(response1.data()).size());
 
     }
 }

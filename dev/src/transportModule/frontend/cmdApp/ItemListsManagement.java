@@ -53,14 +53,14 @@ public class ItemListsManagement {
         itemEditor(list.load());
         System.out.println("\nItem unloading list:");
         itemEditor(list.unload());
-        String json = JSON.serialize(list);
+        String json = list.toJson();
         String responseJson = ils.addItemList(json);
         Response response = JSON.deserialize(responseJson, Response.class);
-        if(response.isSuccess()) {
+        if(response.success()) {
             appData.itemLists().put(itemListIdCounter,list);
             itemListIdCounter++;
         }
-        System.out.println("\n"+response.getMessage());
+        System.out.println("\n"+response.message());
     }
 
     private void updateItemList() {
@@ -85,11 +85,11 @@ public class ItemListsManagement {
                 System.out.println("  "+key+" : "+newList.unload().get(key));
             }
             itemEditor(newList.unload());
-            String json = JSON.serialize(newList);
+            String json = newList.toJson();
             String responseJson = ils.updateItemList(json);
             Response response = JSON.deserialize(responseJson, Response.class);
-            if(response.isSuccess()) appData.itemLists().put(id,newList);
-            System.out.println("\n"+response.getMessage());
+            if(response.success()) appData.itemLists().put(id,newList);
+            System.out.println("\n"+response.message());
         }
     }
 
@@ -104,11 +104,11 @@ public class ItemListsManagement {
             String option = appData.readLine();
             switch(option){
                 case "y" ->{
-                    String json = JSON.serialize(list);
+                    String json = list.toJson();
                     String responseJson = ils.removeItemList(json);
                     Response response = JSON.deserialize(responseJson, Response.class);
-                    if(response.isSuccess()) appData.itemLists().remove(id);
-                    System.out.println("\n"+response.getMessage());
+                    if(response.success()) appData.itemLists().remove(id);
+                    System.out.println("\n"+response.message());
                 }
                 case "n" ->{
                     return;

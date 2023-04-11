@@ -1,6 +1,5 @@
 package transportModule.backend.serviceLayer;
 
-import com.google.gson.reflect.TypeToken;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,7 +9,6 @@ import transportModule.records.Truck;
 import utils.JSON;
 import utils.Response;
 
-import java.lang.reflect.Type;
 import java.util.LinkedList;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -31,16 +29,16 @@ class ResourceManagementServiceTest {
 
         //add drivers
         driver = new Driver(123456789,"John", Driver.LicenseType.C3);
-        rms.addDriver(JSON.serialize(driver));
+        rms.addDriver(driver.toJson());
 
         //add sites
 
         site = new Site("zone a", "123 main st", "(555) 123-4567", "john smith", Site.SiteType.BRANCH);
-        rms.addSite(JSON.serialize(site));
+        rms.addSite(site.toJson());
 
         //add trucks
         truck = new Truck("abc123", "ford", 1500, 10000, Truck.CoolingCapacity.FROZEN);
-        rms.addTruck(JSON.serialize(truck));
+        rms.addTruck(truck.toJson());
 
     }
 
@@ -52,11 +50,11 @@ class ResourceManagementServiceTest {
     @Test
     void addDriver() {
         Driver driver3 = new Driver(111111111,"Jim", Driver.LicenseType.C3);
-        rms.addDriver(JSON.serialize(driver3));
-        String responseJson = rms.getDriver(JSON.serialize(Driver.getLookupObject(driver3.id())));
+        rms.addDriver(driver3.toJson());
+        String responseJson = rms.getDriver(Driver.getLookupObject(driver3.id()).toJson());
         Response response = Response.fromJson(responseJson);
-        assertTrue(response.isSuccess());
-        Driver driverToCheck = response.getData(Driver.class);
+        assertTrue(response.success());
+        Driver driverToCheck = response.data(Driver.class);
         assertEquals(driver3.id(), driverToCheck.id());
         assertEquals(driver3.name(), driverToCheck.name());
         assertEquals(driver3.licenseType(), driverToCheck.licenseType());
@@ -64,25 +62,25 @@ class ResourceManagementServiceTest {
 
     @Test
     void removeDriver() {
-        String json1 = rms.removeDriver(JSON.serialize(driver));
+        String json1 = rms.removeDriver(driver.toJson());
         Response response1 = Response.fromJson(json1);
-        assertTrue(response1.isSuccess());
-        String responseJson = rms.getDriver(JSON.serialize(Driver.getLookupObject(driver.id())));
+        assertTrue(response1.success());
+        String responseJson = rms.getDriver(Driver.getLookupObject(driver.id()).toJson());
         Response response = Response.fromJson(responseJson);
-        assertFalse(response.isSuccess());
+        assertFalse(response.success());
     }
 
     @Test
     void updateDriver() {
         Driver driverUpdate = new Driver(driver.id(), driver.name(), Driver.LicenseType.C1);
-        String json1 = rms.updateDriver(JSON.serialize(driverUpdate));
+        String json1 = rms.updateDriver(driverUpdate.toJson());
         Response response1 = Response.fromJson(json1);
-        assertTrue(response1.isSuccess());
+        assertTrue(response1.success());
 
-        String json2 = rms.getDriver(JSON.serialize(Driver.getLookupObject(driver.id())));
+        String json2 = rms.getDriver(Driver.getLookupObject(driver.id()).toJson());
         Response response2 = Response.fromJson(json2);
-        assertTrue(response2.isSuccess());
-        Driver driverToCheck = response2.getData(Driver.class);
+        assertTrue(response2.success());
+        Driver driverToCheck = response2.data(Driver.class);
         assertEquals(driverUpdate.id(), driverToCheck.id());
         assertEquals(driverUpdate.name(), driverToCheck.name());
         assertEquals(driverUpdate.licenseType(), driverToCheck.licenseType());
@@ -90,10 +88,10 @@ class ResourceManagementServiceTest {
 
     @Test
     void getDriver() {
-        String responseJson = rms.getDriver(JSON.serialize(Driver.getLookupObject(driver.id())));
+        String responseJson = rms.getDriver(Driver.getLookupObject(driver.id()).toJson());
         Response response = Response.fromJson(responseJson);
-        assertTrue(response.isSuccess());
-        Driver driverToCheck = response.getData(Driver.class);
+        assertTrue(response.success());
+        Driver driverToCheck = response.data(Driver.class);
         assertEquals(driver.id(), driverToCheck.id());
         assertEquals(driver.name(), driverToCheck.name());
         assertEquals(driver.licenseType(), driverToCheck.licenseType());
@@ -104,28 +102,28 @@ class ResourceManagementServiceTest {
         //generate more drivers
         for (int i = 0; i < 20; i++) {
             Driver driver = new Driver(i, "driver" + i, Driver.LicenseType.C3);
-            rms.addDriver(JSON.serialize(driver));
+            rms.addDriver(driver.toJson());
         }
 
         String responseJson = rms.getAllDrivers();
         Response response = Response.fromJson(responseJson);
-        assertTrue(response.isSuccess());
-        Type type = new TypeToken<LinkedList<Driver>>(){}.getType();
-        assertEquals(21, response.<LinkedList<Driver>>getData(type).size());
+        assertTrue(response.success());
+
+        assertEquals(21, Driver.listFromJson(response.data()).size());
     }
 
     @Test
     void addTruck() {
         Truck truck3 = new Truck("ghi789", "chevy", 2000, 15000, Truck.CoolingCapacity.FROZEN);
 
-        String json1 = rms.addTruck(JSON.serialize(truck3));
+        String json1 = rms.addTruck(truck3.toJson());
         Response response1 = Response.fromJson(json1);
-        assertTrue(response1.isSuccess());
+        assertTrue(response1.success());
 
-        String json2 = rms.getTruck(JSON.serialize(Truck.getLookupObject(truck3.id())));
+        String json2 = rms.getTruck(Truck.getLookupObject(truck3.id()).toJson());
         Response response2 = Response.fromJson(json2);
-        assertTrue(response2.isSuccess());
-        Truck truckToCheck = response2.getData(Truck.class);
+        assertTrue(response2.success());
+        Truck truckToCheck = response2.data(Truck.class);
         assertEquals(truck3.id(), truckToCheck.id());
         assertEquals(truck3.model(), truckToCheck.model());
         assertEquals(truck3.coolingCapacity(), truckToCheck.coolingCapacity());
@@ -133,27 +131,27 @@ class ResourceManagementServiceTest {
 
     @Test
     void removeTruck() {
-        String json1 = rms.removeTruck(JSON.serialize(truck));
+        String json1 = rms.removeTruck(truck.toJson());
         Response response1 = Response.fromJson(json1);
-        assertTrue(response1.isSuccess());
+        assertTrue(response1.success());
 
-        String json2 = rms.getTruck(JSON.serialize(Truck.getLookupObject(truck.id())));
+        String json2 = rms.getTruck(Truck.getLookupObject(truck.id()).toJson());
         Response response2 = Response.fromJson(json2);
-        assertFalse(response2.isSuccess());
+        assertFalse(response2.success());
     }
 
     @Test
     void updateTruck() {
         Truck truckUpdate = new Truck(truck.id(), truck.model(), 2000, 15000, Truck.CoolingCapacity.NONE);
 
-        String json1 = rms.updateTruck(JSON.serialize(truckUpdate));
+        String json1 = rms.updateTruck(truckUpdate.toJson());
         Response response1 = Response.fromJson(json1);
-        assertTrue(response1.isSuccess());
+        assertTrue(response1.success());
 
-        String json2 = rms.getTruck(JSON.serialize(Truck.getLookupObject(truck.id())));
+        String json2 = rms.getTruck(Truck.getLookupObject(truck.id()).toJson());
         Response response2 = Response.fromJson(json2);
-        assertTrue(response2.isSuccess());
-        Truck truckToCheck = response2.getData(Truck.class);
+        assertTrue(response2.success());
+        Truck truckToCheck = response2.data(Truck.class);
         assertEquals(truckUpdate.id(), truckToCheck.id());
         assertEquals(truckUpdate.model(), truckToCheck.model());
         assertEquals(truckUpdate.coolingCapacity(), truckToCheck.coolingCapacity());
@@ -161,10 +159,10 @@ class ResourceManagementServiceTest {
 
     @Test
     void getTruck() {
-        String responseJson = rms.getTruck(JSON.serialize(Truck.getLookupObject(truck.id())));
+        String responseJson = rms.getTruck(Truck.getLookupObject(truck.id()).toJson());
         Response response = Response.fromJson(responseJson);
-        assertTrue(response.isSuccess());
-        Truck truckToCheck = response.getData(Truck.class);
+        assertTrue(response.success());
+        Truck truckToCheck = response.data(Truck.class);
         assertEquals(truck.id(), truckToCheck.id());
         assertEquals(truck.model(), truckToCheck.model());
         assertEquals(truck.coolingCapacity(), truckToCheck.coolingCapacity());
@@ -175,28 +173,28 @@ class ResourceManagementServiceTest {
         //generate more trucks
         for (int i = 0; i < 20; i++) {
             Truck truck = new Truck("abc" + i, "truck" + i, 2000, 15000, Truck.CoolingCapacity.FROZEN);
-            rms.addTruck(JSON.serialize(truck));
+            rms.addTruck(truck.toJson());
         }
 
         String responseJson = rms.getAllTrucks();
         Response response = Response.fromJson(responseJson);
-        assertTrue(response.isSuccess());
-        Type type = new TypeToken<LinkedList<Truck>>(){}.getType();
-        assertEquals(21, response.<LinkedList<Truck>>getData(type).size());
+        assertTrue(response.success());
+
+        assertEquals(21, Truck.listFromJson(response.data()).size());
     }
 
     @Test
     void addSite() {
         Site site3 = new Site("zone a", "address a", "123456","bob", Site.SiteType.BRANCH);
 
-        String json1 = rms.addSite(JSON.serialize(site3));
+        String json1 = rms.addSite(site3.toJson());
         Response response1 = Response.fromJson(json1);
-        assertTrue(response1.isSuccess());
+        assertTrue(response1.success());
 
-        String json2 = rms.getSite(JSON.serialize(Site.getLookupObject(site3.address())));
+        String json2 = rms.getSite(Site.getLookupObject(site3.address()).toJson());
         Response response2 = Response.fromJson(json2);
-        assertTrue(response2.isSuccess());
-        Site siteToCheck = response2.getData(Site.class);
+        assertTrue(response2.success());
+        Site siteToCheck = response2.data(Site.class);
         assertEquals(site3.transportZone(), siteToCheck.transportZone());
         assertEquals(site3.address(), siteToCheck.address());
         assertEquals(site3.phoneNumber(), siteToCheck.phoneNumber());
@@ -205,27 +203,27 @@ class ResourceManagementServiceTest {
 
     @Test
     void removeSite() {
-        String json1 = rms.removeSite(JSON.serialize(site));
+        String json1 = rms.removeSite(site.toJson());
         Response response1 = Response.fromJson(json1);
-        assertTrue(response1.isSuccess());
+        assertTrue(response1.success());
 
-        String json2 = rms.getSite(JSON.serialize(Site.getLookupObject(site.address())));
+        String json2 = rms.getSite(Site.getLookupObject(site.address()).toJson());
         Response response2 = Response.fromJson(json2);
-        assertFalse(response2.isSuccess());
+        assertFalse(response2.success());
     }
 
     @Test
     void updateSite() {
         Site siteUpdate = new Site(site.transportZone(), site.address(), "123456981251","new bob", Site.SiteType.BRANCH);
 
-        String json1 = rms.updateSite(JSON.serialize(siteUpdate));
+        String json1 = rms.updateSite(siteUpdate.toJson());
         Response response1 = Response.fromJson(json1);
-        assertTrue(response1.isSuccess());
+        assertTrue(response1.success());
 
-        String json2 = rms.getSite(JSON.serialize(Site.getLookupObject(site.address())));
+        String json2 = rms.getSite(Site.getLookupObject(site.address()).toJson());
         Response response2 = Response.fromJson(json2);
-        assertTrue(response2.isSuccess());
-        Site siteToCheck = response2.getData(Site.class);
+        assertTrue(response2.success());
+        Site siteToCheck = response2.data(Site.class);
         assertEquals(siteUpdate.transportZone(), siteToCheck.transportZone());
         assertEquals(siteUpdate.address(), siteToCheck.address());
         assertEquals(siteUpdate.phoneNumber(), siteToCheck.phoneNumber());
@@ -235,10 +233,10 @@ class ResourceManagementServiceTest {
 
     @Test
     void getSite() {
-        String responseJson = rms.getSite(JSON.serialize(Site.getLookupObject(site.address())));
+        String responseJson = rms.getSite(Site.getLookupObject(site.address()).toJson());
         Response response = Response.fromJson(responseJson);
-        assertTrue(response.isSuccess());
-        Site siteToCheck = response.getData(Site.class);
+        assertTrue(response.success());
+        Site siteToCheck = response.data(Site.class);
         assertEquals(site.transportZone(), siteToCheck.transportZone());
         assertEquals(site.address(), siteToCheck.address());
         assertEquals(site.phoneNumber(), siteToCheck.phoneNumber());
@@ -251,13 +249,13 @@ class ResourceManagementServiceTest {
         //generate more sites
         for (int i = 0; i < 20; i++) {
             Site site = new Site("abc" + i, "address" + i, "123456","bob", Site.SiteType.BRANCH);
-            rms.addSite(JSON.serialize(site));
+            rms.addSite(site.toJson());
         }
 
         String responseJson = rms.getAllSites();
         Response response = Response.fromJson(responseJson);
-        assertTrue(response.isSuccess());
-        Type type = new TypeToken<LinkedList<Site>>(){}.getType();
-        assertEquals(21, response.<LinkedList<Site>>getData(type).size());
+        assertTrue(response.success());
+
+        assertEquals(21, Site.listFromJson(response.data()).size());
     }
 }

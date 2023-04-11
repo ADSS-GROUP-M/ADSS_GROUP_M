@@ -64,11 +64,11 @@ public class SitesManagement {
             }
         }
         Site newSite = new Site(transportZone, address, contactPhone, contactName, type);
-        String json = JSON.serialize(newSite);
+        String json = newSite.toJson();
         String responseJson = rms.addSite(json);
         Response response = JSON.deserialize(responseJson, Response.class);
-        if(response.isSuccess()) appData.sites().put(newSite.address(), newSite);
-        System.out.println("\n"+response.getMessage());
+        if(response.success()) appData.sites().put(newSite.address(), newSite);
+        System.out.println("\n"+response.message());
     }
 
     private void updateSite() {
@@ -122,11 +122,11 @@ public class SitesManagement {
 
     private void updateSiteHelperMethod(String transportZone, String address, String phoneNumber, String contactName, Site.SiteType siteType) {
         Site newSite = new Site(transportZone, address, phoneNumber, contactName, siteType);
-        String json = JSON.serialize(newSite);
+        String json = newSite.toJson();
         String responseJson = rms.updateSite(json);
         Response response = JSON.deserialize(responseJson, Response.class);
-        if(response.isSuccess()) appData.sites().put(newSite.address(), newSite);
-        System.out.println("\n"+response.getMessage());
+        if(response.success()) appData.sites().put(newSite.address(), newSite);
+        System.out.println("\n"+response.message());
     }
 
     private void removeSite() {
@@ -143,11 +143,11 @@ public class SitesManagement {
             String option = appData.readLine();
             switch (option) {
                 case "y"-> {
-                    String json = JSON.serialize(site);
+                    String json = site.toJson();
                     String responseJson = rms.removeSite(json);
                     Response response = JSON.deserialize(responseJson, Response.class);
-                    if(response.isSuccess()) appData.sites().remove(site.address());
-                    System.out.println("\n"+response.getMessage());
+                    if(response.success()) appData.sites().remove(site.address());
+                    System.out.println("\n"+response.message());
                 }
                 case "n"-> {}
                 default -> System.out.println("\nInvalid option!");

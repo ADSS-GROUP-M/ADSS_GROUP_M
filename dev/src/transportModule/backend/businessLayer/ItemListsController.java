@@ -17,21 +17,40 @@ public class ItemListsController {
 
     public ItemListsController(){
         itemLists = new TreeMap<>();
-        idCounter = 1; // currently not in use.
-                // this will have to be restored from the DB in the future.
+        idCounter = 1; //TODO: currently not in use. this will have to be restored from the DB in the future.
     }
 
     /**
      * Adds a new item list to the system.
      *
      * @param itemList The item list to be added.
+     * @return The ID of the added item list.
      * @throws IOException If the item list already exists in the system.
      */
-    public void addItemList(ItemList itemList) throws IOException{
-        if(itemLists.containsKey(itemList.id()) == true)
-            throw new IOException("Item list already exists");
+    public Integer addItemList(ItemList itemList) throws IOException{
 
-        itemLists.put(itemList.id(), itemList);
+        //TODO: remove support for pre-defined IDs and move to auto-incrementing IDs.
+        // currently, the ID is set to -1 if it is not pre-defined.
+        // this is a temporary solution until the DB is implemented.
+
+        if(itemLists.containsKey(itemList.id()) == true)
+            throw new IOException("An item list with this id already exists");
+
+        //<TEMPORARY SOLUTION>
+        if(itemList.id() != -1){
+
+            //TODO: uncomment this when pre-defined IDs are no longer supported
+            //throw new UnsupportedOperationException("Pre-defined IDs are not supported");
+
+            itemLists.put(itemList.id(), itemList);
+            return itemList.id();
+        }
+        //<TEMPORARY SOLUTION/>
+        else{
+            ItemList toAdd = new ItemList(idCounter++, itemList);
+            itemLists.put(toAdd.id(), toAdd);
+            return toAdd.id();
+        }
     }
 
     /**

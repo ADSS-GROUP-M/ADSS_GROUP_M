@@ -17,12 +17,16 @@ public class TransportsController {
 
     private final TrucksController tc;
     private final DriversController dc;
+    private final SitesController sc;
+    private final ItemListsController ic;
     private final TreeMap<Integer, Transport> transports;
     private int idCounter;
 
-    public TransportsController(TrucksController tc, DriversController dc){
+    public TransportsController(TrucksController tc, DriversController dc, SitesController sc, ItemListsController ic){
+        this.sc = sc;
+        this.ic = ic;
         transports = new TreeMap<>();
-        idCounter = 0; // currently not in use. this will have to be restored from the DB in the future
+        idCounter = 0; //TODO: currently not in use. this will have to be restored from the DB in the future
         this.tc = tc;
         this.dc = dc;
     }
@@ -33,10 +37,32 @@ public class TransportsController {
      * @param transport The transport object to add.
      * @throws IOException If the transport object is invalid or if a transport with the same ID already exists.
      */
-    public void addTransport(Transport transport)throws IOException{
+    public Integer addTransport(Transport transport)throws IOException{
+
+        //TODO: remove support for pre-defined IDs and move to auto-incrementing IDs.
+        // currently, the ID is set to -1 if it is not pre-defined.
+        // this is a temporary solution until the DB is implemented.
+
+        if(transports.containsKey(transport.id()) == true)
+            throw new IOException("A transport with this id already exists");
+
         validateTransport(transport);
 
-        transports.put(transport.id(), transport);
+        //<TEMPORARY SOLUTION>
+        if(transport.id() != -1){
+
+            //TODO: uncomment this when pre-defined IDs are no longer supported
+            //throw new UnsupportedOperationException("Pre-defined IDs are not supported");
+
+            transports.put(transport.id(), transport);
+            return transport.id();
+        }
+        //<TEMPORARY SOLUTION/>
+        else{
+            Transport toAdd = new Transport(idCounter++,transport);
+            transports.put(toAdd.id(), toAdd);
+            return toAdd.id();
+        }
     }
 
     /**
@@ -62,7 +88,7 @@ public class TransportsController {
     public void removeTransport(int id) throws IOException {
         if (transports.containsKey(id) == false)
             throw new IOException("Transport not found");
-
+;
         transports.remove(id);
     }
 
@@ -92,10 +118,25 @@ public class TransportsController {
     }
 
     /**
-     * Validates a transport object before adding or updating it in the TransportsController.
-     *
-     * @param transport The transport object to validate.
-     * @throws IOException If the transport object is invalid.
+     * Validates a Transport object by checking if the given Truck can carry the load, if the assigned Driver has
+     * the required license for the Truck, if the source and all destinations of the Transport exist in the System, and
+     * if all assigned ItemLists for the destinations exist in the System.
+     * <p>
+     * If any of the validations fail, an IOException will be thrown, containing a message detailing all the reasons for
+     * the failure, as well as a cause message containing the name of the fields that failed validation.
+     * </p>
+     * @param transport the Transport object to be validated
+     * @throws IOException if any of the following conditions occur:
+     * <ul>
+     * <li>The Truck's maximum weight has been exceeded</li>
+     * <li>The assigned Driver does not have the required license for the Truck</li>
+     * <li>The source address of the Transport does not exist in the System</li>
+     * <li>Any of the destination addresses of the Transport do not exist in the System</li>
+     * <li>Any of the assigned ItemLists for the destinations do not exist in the System</li>
+     * </ul>
+     * The IOException message will contain information detailing all the reasons for the failure,
+     * separated by newlines, while the cause message will contain a comma-separated list of the fields
+     * that failed validation.
      */
     private void validateTransport(Transport transport) throws IOException{
 
@@ -103,16 +144,16 @@ public class TransportsController {
         Driver driver = dc.getDriver(transport.driverId());
 
         // used to return information about all the errors
-        String message = "";
-        String cause = "";
+        StringBuilder message = new StringBuilder();
+        StringBuilder cause = new StringBuilder();
         boolean throwException = false;
         //==================================================
 
         // weight validation
         int weight = transport.weight();
         if (truck.maxWeight() < weight) {
-            message += "The truck's maximum weight has been exceeded";
-            cause = "weight";
+            message.append("The truck's maximum weight has been exceeded");
+            cause.append("weight");
             throwException = true;
         }
 
@@ -122,15 +163,64 @@ public class TransportsController {
 
         if(driverLicense[0].compareToIgnoreCase(requiredLicense[0]) < 0 ||  driverLicense[1].compareToIgnoreCase(requiredLicense[1]) < 0) {
             if(throwException){
-                message += "\n";
-                cause += ",";
+                message.append("\n");
+                cause.append(",");
             }
-            cause += "license";
-            message += "A driver with license type "+driver.licenseType()+
-                            " is not permitted to drive this truck";
+            cause.append("license");
+            message.append("A driver with license type ")
+                    .append(driver.licenseType())
+                    .append(" is not permitted to drive this truck");
             throwException = true;
-
         }
-        if(throwException) throw new IOException(message,new Throwable(cause));
+
+        // source validation
+        try{
+            sc.getSite(transport.source());
+        }
+        catch(IOException e){
+            if(throwException){
+                message.append("\n");
+                cause.append(",");
+            }
+            cause.append("source");
+            message.append("Site with address ").append(transport.source()).append(" does not exist");
+            throwException = true;
+        }
+
+        // destinations + itemLists validation
+        int destIndex = 0;
+        for(String address : transport.destinations()){
+
+            //destination validation
+            try{
+                sc.getSite(address);
+            }
+            catch(IOException e){
+                if(throwException){
+                    message.append("\n");
+                    cause.append(",");
+                }
+                cause.append("destination:").append(destIndex);
+                message.append("Site with address ").append(address).append(" does not exist");
+                throwException = true;
+            }
+
+            //itemList validation
+            Integer itemListId = transport.itemLists().get(address);
+            try{
+                ic.getItemList(itemListId);
+            }
+            catch(IOException e){
+                if(throwException){
+                    message.append("\n");
+                    cause.append(",");
+                }
+                cause.append("itemList:").append(destIndex);
+                message.append("Item list with id ").append(itemListId).append(" does not exist");
+                throwException = true;
+            }
+        }
+
+        if(throwException) throw new IOException(message.toString(),new Throwable(cause.toString()));
     }
 }

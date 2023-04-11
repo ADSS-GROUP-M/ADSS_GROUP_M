@@ -1,7 +1,6 @@
 package transportModule.frontend.cmdApp;
 
 import transportModule.backend.serviceLayer.TransportsService;
-import transportModule.records.ItemList;
 import transportModule.records.Site;
 import transportModule.records.Transport;
 import utils.JSON;
@@ -76,8 +75,8 @@ public class TransportsManagement {
         Site source = appData.pickSite(false);
 
         // destinations and items lists
-        LinkedList<Site> destinations = new LinkedList<>();
-        HashMap<Site, ItemList> itemsList = new HashMap<>();
+        LinkedList<String> destinations = new LinkedList<>();
+        HashMap<String, Integer> itemsList = new HashMap<>();
         destinationsMaker(destinations, itemsList);
 
         //weight
@@ -85,7 +84,7 @@ public class TransportsManagement {
 
         Transport newTransport = new Transport(
                 transportIdCounter,
-                source,
+                source.address(),
                 destinations,
                 itemsList,
                 truckId,
@@ -129,8 +128,8 @@ public class TransportsManagement {
                     if(response2.success()) return;
                 }
                 case 2 -> {
-                    LinkedList<Site> destinations = new LinkedList<>();
-                    HashMap<Site, ItemList> itemsList = new HashMap<>();
+                    LinkedList<String> destinations = new LinkedList<>();
+                    HashMap<String, Integer> itemsList = new HashMap<>();
                     destinationsMaker(destinations, itemsList);
                     System.out.println("New weight :");
                     int weight = appData.readInt();
@@ -236,7 +235,7 @@ public class TransportsManagement {
                     Site source = appData.pickSite(false);
                     updateTransportHelperMethod(
                             transport.id(),
-                            source,
+                            source.address(),
                             transport.destinations(),
                             transport.itemLists(),
                             transport.truckId(),
@@ -247,8 +246,8 @@ public class TransportsManagement {
                 }
                 case 6 ->{
                     System.out.println("Select new destinations and item lists: ");
-                    HashMap<Site, ItemList> itemsList = new HashMap<>();
-                    LinkedList<Site> destinations = new LinkedList<>();
+                    HashMap<String, Integer> itemsList = new HashMap<>();
+                    LinkedList<String> destinations = new LinkedList<>();
                     destinationsMaker(destinations, itemsList);
                     updateTransportHelperMethod(
                             transport.id(),
@@ -337,12 +336,13 @@ public class TransportsManagement {
         System.out.println("Weight:       "+ transport.weight());
         System.out.println("Source:       "+ transport.source());
         System.out.println("Destinations: ");
-        for(Site destination : transport.destinations()){
-            System.out.println("   "+ destination + " (items list id: "+ transport.itemLists().get(destination).id()+")");
+        for(String address : transport.destinations()){
+            Site destination = appData.sites().get(address);
+            System.out.println("   "+ destination + " (items list id: "+ transport.itemLists().get(address)+")");
         }
     }
 
-    private void updateTransportHelperMethod(int id, Site source, LinkedList<Site> destinations, HashMap<Site, ItemList> itemLists, String truckId, int driverId, LocalDateTime departureDateTime, int weight) {
+    private void updateTransportHelperMethod(int id, String source, LinkedList<String> destinations, HashMap<String, Integer> itemLists, String truckId, int driverId, LocalDateTime departureDateTime, int weight) {
         Transport newTransport = new Transport(
                 id,
                 source,
@@ -373,7 +373,7 @@ public class TransportsManagement {
         return appData.transports().get(transportId);
     }
 
-    private void destinationsMaker(LinkedList<Site> destinations, HashMap<Site, ItemList> itemsList) {
+    private void destinationsMaker(LinkedList<String> destinations, HashMap<String, Integer> itemsList) {
         int destinationId = 1;
         System.out.println("Pick destinations and items lists:");
         while(true){
@@ -386,8 +386,8 @@ public class TransportsManagement {
                 System.out.println();
                 continue;
             }
-            itemsList.put(site, appData.itemLists().get(listId));
-            destinations.add(site);
+            itemsList.put(site.address(), listId);
+            destinations.add(site.address());
             destinationId++;
         }
     }

@@ -226,11 +226,11 @@ public class AppData {
         // Randomly generated transports
         Transport transport1 = new Transport(
                 2001,
-                site1,
-                new LinkedList<>(Arrays.asList(site2, site3)),
+                site1.address(),
+                new LinkedList<>(Arrays.asList(site2.address(), site3.address())),
                 new HashMap<>() {{
-                    put(site2, itemList1);
-                    put(site3, itemList2);
+                    put(site2.address(), itemList1.id());
+                    put(site3.address(), itemList2.id());
                 }},
                 truck1.id(),
                 driver1.id(),
@@ -240,11 +240,11 @@ public class AppData {
 
         Transport transport2 = new Transport(
                 2002,
-                site2,
-                new LinkedList<>(Arrays.asList(site1, site4)),
+                site2.address(),
+                new LinkedList<>(Arrays.asList(site1.address(), site4.address())),
                 new HashMap<>() {{
-                    put(site1, itemList3);
-                    put(site4, itemList4);
+                    put(site1.address(), itemList3.id());
+                    put(site4.address(), itemList4.id());
                 }},
                 truck2.id(),
                 driver2.id(),
@@ -254,11 +254,11 @@ public class AppData {
 
         Transport transport3 = new Transport(
                 2003,
-                site3,
-                new LinkedList<>(Arrays.asList(site1, site5)),
+                site3.address(),
+                new LinkedList<>(Arrays.asList(site1.address(), site5.address())),
                 new HashMap<>() {{
-                    put(site1, itemList2);
-                    put(site5, itemList5);
+                    put(site1.address(), itemList2.id());
+                    put(site5.address(), itemList5.id());
                 }},
                 truck3.id(),
                 driver3.id(),
@@ -268,12 +268,12 @@ public class AppData {
 
         Transport transport4 = new Transport(
                 2004,
-                site4,
-                new LinkedList<>(Arrays.asList(site2, site3, site5)),
+                site4.address(),
+                new LinkedList<>(Arrays.asList(site2.address(), site3.address(), site5.address())),
                 new HashMap<>() {{
-                    put(site2, itemList4);
-                    put(site3, itemList1);
-                    put(site5, itemList3);
+                    put(site2.address(), itemList4.id());
+                    put(site3.address(), itemList1.id());
+                    put(site5.address(), itemList3.id());
                 }},
                 truck4.id(),
                 driver4.id(),
@@ -283,10 +283,10 @@ public class AppData {
 
         Transport transport5 = new Transport(
                 2005,
-                site5,
-                new LinkedList<>(List.of(site4)),
+                site5.address(),
+                new LinkedList<>(List.of(site4.address())),
                 new HashMap<>() {{
-                    put(site4, itemList2);
+                    put(site4.address(), itemList2.id());
                 }},
                 truck5.id(),
                 driver5.id(),

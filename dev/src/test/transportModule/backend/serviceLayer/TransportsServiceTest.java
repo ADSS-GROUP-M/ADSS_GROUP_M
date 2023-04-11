@@ -49,13 +49,13 @@ class TransportsServiceTest {
         rms.addSite(site1.toJson());
         rms.addSite(site2.toJson());
 
-        HashMap<Site,ItemList> hm = new HashMap<>();
-        hm.put(site2, itemList1);
+        HashMap<String,Integer> hm = new HashMap<>();
+        hm.put(site2.address(), itemList1.id());
 
         transport = new Transport(
                 1,
-                site1,
-                new LinkedList<>(List.of(site2)),
+                site1.address(),
+                new LinkedList<>(List.of(site2.address())),
                 hm,
                 truck1.id(),
                 driver1.id(),
@@ -83,15 +83,15 @@ class TransportsServiceTest {
 
         ItemList itemList = new ItemList(1001, load1, unload1);
 
-        HashMap<Site,ItemList> hm = new HashMap<>();
+        HashMap<String,Integer> hm = new HashMap<>();
 
         Site source = new Site("zone b", "456 oak ave", "(555) 234-5678", "jane doe", Site.SiteType.LOGISTICAL_CENTER);
         Site destination = new Site("zone a", "123 main st", "(555) 123-4567", "john smith", Site.SiteType.BRANCH);
-        hm.put(destination, itemList);
-        LinkedList<Site> destinations = new LinkedList<>(List.of(destination));
+        hm.put(destination.address(), itemList.id());
+        LinkedList<String> destinations = new LinkedList<>(List.of(destination.address()));
         Transport newTransport = new Transport(
                 50,
-                source,
+                source.address(),
                 destinations,
                 hm,
                 "abc123",
@@ -132,15 +132,15 @@ class TransportsServiceTest {
 
         ItemList itemList = new ItemList(1001, load1, unload1);
 
-        HashMap<Site,ItemList> hm = new HashMap<>();
+        HashMap<String,Integer> hm = new HashMap<>();
 
         Site source = new Site("zone b", "456 oak ave", "(555) 234-5678", "jane doe", Site.SiteType.LOGISTICAL_CENTER);
         Site destination = new Site("zone a", "123 main st", "(555) 123-4567", "john smith", Site.SiteType.BRANCH);
-        hm.put(destination, itemList);
-        LinkedList<Site> destinations = new LinkedList<>(List.of(destination));
+        hm.put(destination.address(), itemList.id());
+        LinkedList<String> destinations = new LinkedList<>(List.of(destination.address()));
         Transport newTransport = new Transport(
                 1,
-                source,
+                source.address(),
                 destinations,
                 hm,
                 "abc123",
@@ -218,7 +218,7 @@ class TransportsServiceTest {
 
         Transport newTransport = new Transport(
                 50,
-                Site.getLookupObject("address"),
+                "address",
                 new LinkedList<>(),
                 new HashMap<>(),
                 "abcd1234",
@@ -241,7 +241,7 @@ class TransportsServiceTest {
 
         Transport newTransport = new Transport(
                 50,
-                Site.getLookupObject("address"),
+                "address",
                 new LinkedList<>(),
                 new HashMap<>(),
                 "abcd1234",
@@ -263,7 +263,7 @@ class TransportsServiceTest {
 
         Transport newTransport = new Transport(
                 50,
-                Site.getLookupObject("address"),
+                "address",
                 new LinkedList<>(),
                 new HashMap<>(),
                 "abcd1234",

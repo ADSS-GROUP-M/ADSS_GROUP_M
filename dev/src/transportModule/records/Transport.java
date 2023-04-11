@@ -9,8 +9,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Objects;
 
-public record Transport (int id, Site source, LinkedList<Site> destinations, HashMap<Site,ItemList> itemLists,
-        String truckId, int driverId, LocalDateTime scheduledTime, int weight){
+public record Transport (int id, String source, LinkedList<String> destinations, HashMap<String, Integer> itemLists,
+                         String truckId, int driverId, LocalDateTime scheduledTime, int weight){
 
     public static Transport getLookupObject(int id){
         return new Transport(id, null, null, null, null, 0, null, 0);

@@ -218,7 +218,7 @@ class TransportsServiceTest {
 
         Transport newTransport = new Transport(
                 50,
-                "address",
+                "123 main st",
                 new LinkedList<>(),
                 new HashMap<>(),
                 "abcd1234",
@@ -241,7 +241,7 @@ class TransportsServiceTest {
 
         Transport newTransport = new Transport(
                 50,
-                "address",
+                "123 main st",
                 new LinkedList<>(),
                 new HashMap<>(),
                 "abcd1234",
@@ -263,7 +263,7 @@ class TransportsServiceTest {
 
         Transport newTransport = new Transport(
                 50,
-                "address",
+                "123 main st",
                 new LinkedList<>(),
                 new HashMap<>(),
                 "abcd1234",

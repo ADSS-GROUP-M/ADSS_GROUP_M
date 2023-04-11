@@ -1,9 +1,7 @@
 package transportModule.backend.serviceLayer;
 
-import transportModule.backend.businessLayer.ItemListsController;
 import transportModule.backend.businessLayer.TransportsController;
 import transportModule.records.Transport;
-import utils.JSON;
 import utils.Response;
 
 import java.io.IOException;

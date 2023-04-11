@@ -2,7 +2,6 @@ package transportModule.backend.serviceLayer;
 
 import transportModule.backend.businessLayer.ItemListsController;
 import transportModule.records.ItemList;
-import utils.JSON;
 import utils.Response;
 
 public class ItemListsService {

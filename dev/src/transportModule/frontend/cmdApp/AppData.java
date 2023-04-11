@@ -11,9 +11,8 @@ import java.util.*;
 
 public class AppData {
 
-    static Scanner scanner = new Scanner(System.in);
-
-    static boolean dataGenerated = false;
+    private Scanner scanner;
+    private boolean dataGenerated;
     private final HashMap<Integer, Driver> drivers;
     private final HashMap<String, Truck> trucks;
     private final HashMap<String, Site> sites;
@@ -24,6 +23,8 @@ public class AppData {
     private final TransportsService ts;
 
     public AppData(ResourceManagementService rms, ItemListsService ils, TransportsService ts){
+        scanner = new Scanner(System.in);
+        dataGenerated = false;
         this.rms = rms;
         this.ils = ils;
         this.ts = ts;

@@ -33,7 +33,7 @@ public class ItemListsController {
         // currently, the ID is set to -1 if it is not pre-defined.
         // this is a temporary solution until the DB is implemented.
 
-        if(itemLists.containsKey(itemList.id()) == true)
+        if(listExists(itemList.id()) == true)
             throw new IOException("An item list with this id already exists");
 
         //<TEMPORARY SOLUTION>
@@ -61,7 +61,7 @@ public class ItemListsController {
      * @throws IOException If the item list with the specified ID is not found.
      */
     public ItemList getItemList(int id) throws IOException{
-        if(itemLists.containsKey(id) == false)
+        if(listExists(id) == false)
             throw new IOException("Item list not found");
 
         return itemLists.get(id);
@@ -74,7 +74,7 @@ public class ItemListsController {
      * @throws IOException If the item list with the specified ID is not found.
      */
     public void removeItemList(int id) throws IOException {
-        if (itemLists.containsKey(id) == false)
+        if (listExists(id) == false)
             throw new IOException("Item list not found");
 
         itemLists.remove(id);
@@ -88,7 +88,7 @@ public class ItemListsController {
      * @throws IOException If the item list with the specified ID is not found.
      */
     public void updateItemList(int id, ItemList newItemList) throws IOException{
-        if(itemLists.containsKey(id) == false)
+        if(listExists(id) == false)
             throw new IOException("Item list not found");
 
         itemLists.put(id, newItemList);
@@ -101,5 +101,9 @@ public class ItemListsController {
      */
     public LinkedList<ItemList> getAllItemLists() {
         return new LinkedList<>(itemLists.values());
+    }
+
+    public boolean listExists(int id) {
+        return itemLists.containsKey(id);
     }
 }

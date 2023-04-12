@@ -24,7 +24,7 @@ public class SitesController {
      * @throws IOException If the site already exists.
      */
     public void addSite(Site site) throws IOException {
-        if (sites.containsKey(site.address()) == false)
+        if (siteExists(site.address()) == false)
             sites.put(site.address(), site);
         else throw new IOException("Site already exists");
     }
@@ -36,7 +36,7 @@ public class SitesController {
      * @throws IOException If the site is not found.
      */
     public void removeSite(String address) throws IOException {
-        if (sites.containsKey(address) == false)
+        if (siteExists(address) == false)
             throw new IOException("Site not found");
 
         sites.remove(address);
@@ -50,7 +50,7 @@ public class SitesController {
      * @throws IOException If the site is not found.
      */
     public Site getSite(String address) throws IOException {
-        if (sites.containsKey(address) == false)
+        if (siteExists(address) == false)
             throw new IOException("Site not found");
 
         return sites.get(address);
@@ -64,7 +64,7 @@ public class SitesController {
      * @throws IOException If the site is not found.
      */
     public void updateSite(String address, Site newSite) throws IOException{
-        if(sites.containsKey(address) == false)
+        if(siteExists(address) == false)
             throw new IOException("Site not found");
 
         sites.put(address, newSite);
@@ -79,4 +79,7 @@ public class SitesController {
         return new LinkedList<>(sites.values());
     }
 
+    public boolean siteExists(String address) {
+        return sites.containsKey(address);
+    }
 }

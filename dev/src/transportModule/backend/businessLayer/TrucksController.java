@@ -26,7 +26,7 @@ public class TrucksController {
      * @throws IOException If the truck already exists or if the base weight is greater than the max weight.
      */
     public void addTruck(Truck truck) throws IOException {
-        if (trucks.containsKey(truck.id()) == true)
+        if (truckExists(truck.id()) == true)
             throw new IOException("Truck already exists");
 
         validateTruck(truck);
@@ -41,7 +41,7 @@ public class TrucksController {
      * @throws IOException If the truck is not found.
      */
     public void removeTruck(String id) throws IOException {
-        if (trucks.containsKey(id) == false)
+        if (truckExists(id) == false)
             throw new IOException("Truck not found");
 
         trucks.remove(id);
@@ -55,7 +55,7 @@ public class TrucksController {
      * @throws IOException If the truck is not found.
      */
     public Truck getTruck(String id) throws IOException {
-        if (trucks.containsKey(id) == false)
+        if (truckExists(id) == false)
             throw new IOException("Truck not found");
 
         return trucks.get(id);
@@ -69,7 +69,7 @@ public class TrucksController {
      * @throws IOException If the truck is not found or if the base weight of the updated truck is greater than the max weight.
      */
     public void updateTruck(String id, Truck newTruck) throws IOException{
-        if(trucks.containsKey(id) == false)
+        if(truckExists(id) == false)
             throw new IOException("Truck not found");
 
         validateTruck(newTruck);
@@ -106,5 +106,9 @@ public class TrucksController {
         if(ec.hasErrors()){
             throw new IOException(ec.message(),ec.cause());
         }
+    }
+
+    public boolean truckExists(String id) {
+        return trucks.containsKey(id);
     }
 }

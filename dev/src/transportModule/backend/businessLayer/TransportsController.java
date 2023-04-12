@@ -19,17 +19,17 @@ public class TransportsController {
     private final TrucksController tc;
     private final DriversController dc;
     private final SitesController sc;
-    private final ItemListsController ic;
+    private final ItemListsController ilc;
     private final TreeMap<Integer, Transport> transports;
     private int idCounter;
 
     public TransportsController(TrucksController tc, DriversController dc, SitesController sc, ItemListsController ic){
         this.sc = sc;
-        this.ic = ic;
-        transports = new TreeMap<>();
-        idCounter = 0; //TODO: currently not in use. this will have to be restored from the DB in the future
+        this.ilc = ic;
         this.tc = tc;
         this.dc = dc;
+        transports = new TreeMap<>();
+        idCounter = 0; //TODO: currently not in use. this will have to be restored from the DB in the future
     }
 
     /**
@@ -44,7 +44,7 @@ public class TransportsController {
         // currently, the ID is set to -1 if it is not pre-defined.
         // this is a temporary solution until the DB is implemented.
 
-        if(transports.containsKey(transport.id()) == true)
+        if(transportExists(transport.id()) == true)
             throw new IOException("A transport with this id already exists");
 
         validateTransport(transport);
@@ -74,7 +74,7 @@ public class TransportsController {
      * @throws IOException If a transport with the given ID is not found.
      */
     public Transport getTransport(int id) throws IOException {
-        if (transports.containsKey(id) == false)
+        if (transportExists(id) == false)
             throw new IOException("Transport not found");
 
         return transports.get(id);
@@ -87,7 +87,7 @@ public class TransportsController {
      * @throws IOException If a transport with the given ID is not found.
      */
     public void removeTransport(int id) throws IOException {
-        if (transports.containsKey(id) == false)
+        if (transportExists(id) == false)
             throw new IOException("Transport not found");
 ;
         transports.remove(id);
@@ -101,7 +101,7 @@ public class TransportsController {
      * @throws IOException If the newTransport object is invalid or if a transport with the given ID is not found.
      */
     public void updateTransport(int id, Transport newTransport) throws IOException{
-        if(transports.containsKey(id) == false)
+        if(transportExists(id) == false)
             throw new IOException("Transport not found");
 
         validateTransport(newTransport);
@@ -117,28 +117,18 @@ public class TransportsController {
     public LinkedList<Transport> getAllTransports(){
         return new LinkedList<>(transports.values());
     }
-    
+
     private void validateTransport(Transport transport) throws IOException{
 
         ErrorCollection ec = new ErrorCollection();
 
         // driver validation
-        Driver driver = null;
-        try{
-            driver = dc.getDriver(transport.driverId());
-        }
-        catch(IOException e){
-            ec.addError(e.getMessage(), "driver");
-        }
+        Driver driver = dc.driverExists(transport.driverId()) ? dc.getDriver(transport.driverId()) : null;
+        if(driver == null) ec.addError("Driver not found", "driver");
 
         // truck validation
-        Truck truck = null;
-        try{
-            truck = tc.getTruck(transport.truckId());
-        }
-        catch(IOException e){
-            ec.addError(e.getMessage(), "truck");
-        }
+        Truck truck = tc.truckExists(transport.truckId()) ? tc.getTruck(transport.truckId()) :  null;
+        if(truck == null) ec.addError("Truck not found", "truck");
 
         // truck - driver validation
         if(driver != null && truck != null){
@@ -167,21 +157,16 @@ public class TransportsController {
         for(String address : transport.destinations()){
 
             //destination validation
-            try{
-                sc.getSite(address);
-            }
-            catch(IOException e){
+            if(sc.siteExists(address) == false){
                 ec.addError("Site with address " + address + " does not exist", "destination:"+destIndex);
             }
 
             //itemList validation
             Integer itemListId = transport.itemLists().get(address);
-            try{
-                ic.getItemList(itemListId);
-            }
-            catch(IOException e){
+            if(ilc.listExists(itemListId) == false) {
                 ec.addError("Item list with id " + itemListId + " does not exist", "itemList:"+destIndex);
             }
+
             destIndex++;
         }
 
@@ -192,5 +177,9 @@ public class TransportsController {
         }
 
         if(ec.hasErrors()) throw new IOException(ec.message(),ec.cause());
+    }
+
+    public boolean transportExists(int id) {
+        return transports.containsKey(id);
     }
 }

@@ -24,7 +24,7 @@ public class DriversController {
      * @throws IOException If the driver with the same ID already exists in the system.
      */
     public void addDriver(Driver driver) throws IOException{
-        if (drivers.containsKey(driver.id()) == false)
+        if (driverExists(driver.id()) == false)
             drivers.put(driver.id(), driver);
 
         else throw new IOException("Driver already exists");
@@ -38,7 +38,7 @@ public class DriversController {
      * @throws IOException If the driver with the specified ID is not found.
      */
     public  Driver getDriver(int id) throws IOException {
-        if (drivers.containsKey(id) == false)
+        if (driverExists(id) == false)
             throw new IOException("Driver not found");
 
         return drivers.get(id);
@@ -51,7 +51,7 @@ public class DriversController {
      * @throws IOException If the driver with the specified ID is not found.
      */
     public void removeDriver(int id) throws IOException {
-        if (drivers.containsKey(id) == false)
+        if (driverExists(id) == false)
             throw new IOException("Driver not found");
 
         drivers.remove(id);
@@ -65,7 +65,7 @@ public class DriversController {
      * @throws IOException If the driver with the specified ID is not found.
      */
     public void updateDriver(int id, Driver newDriver) throws IOException{
-        if(drivers.containsKey(id) == false)
+        if(driverExists(id) == false)
             throw new IOException("Driver not found");
 
         drivers.put(id, newDriver);
@@ -80,5 +80,8 @@ public class DriversController {
         return new LinkedList<>(drivers.values());
     }
 
+    public boolean driverExists(int id){
+        return drivers.containsKey(id);
+    }
 }
 

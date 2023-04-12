@@ -3,6 +3,7 @@ package transportModule.backend.businessLayer;
 import transportModule.records.Driver;
 import transportModule.records.Transport;
 import transportModule.records.Truck;
+import utils.ErrorCollection;
 
 import java.io.IOException;
 import java.util.LinkedList;
@@ -119,39 +120,38 @@ public class TransportsController {
     
     private void validateTransport(Transport transport) throws IOException{
 
-        //TODO: replace the error collection method with a cleaner solution
+        ErrorCollection ec = new ErrorCollection();
 
-        Truck truck = tc.getTruck(transport.truckId());
-        Driver driver = dc.getDriver(transport.driverId());
+        // driver validation
+        Driver driver = null;
+        try{
+            driver = dc.getDriver(transport.driverId());
+        }
+        catch(IOException e){
+            ec.addError(e.getMessage(), "driver");
+        }
 
-        // used to return information about all the errors
-        StringBuilder message = new StringBuilder();
-        StringBuilder cause = new StringBuilder();
-        boolean throwException = false;
-        //==================================================
-
-        // weight validation
-        int weight = transport.weight();
-        if (truck.maxWeight() < weight) {
-            message.append("The truck's maximum weight has been exceeded");
-            cause.append("weight");
-            throwException = true;
+        // truck validation
+        Truck truck = null;
+        try{
+            truck = tc.getTruck(transport.truckId());
+        }
+        catch(IOException e){
+            ec.addError(e.getMessage(), "truck");
         }
 
         // truck - driver validation
-        String[] requiredLicense = truck.requiredLicense().split("");
-        String[] driverLicense = driver.licenseType().name().split("");
+        if(driver != null && truck != null){
+            String[] requiredLicense = truck.requiredLicense().split("");
+            String[] driverLicense = driver.licenseType().name().split("");
 
-        if(driverLicense[0].compareToIgnoreCase(requiredLicense[0]) < 0 ||  driverLicense[1].compareToIgnoreCase(requiredLicense[1]) < 0) {
-            if(throwException){
-                message.append("\n");
-                cause.append(",");
+            if((driverLicense[0].compareToIgnoreCase(requiredLicense[0]) < 0
+             || driverLicense[1].compareToIgnoreCase(requiredLicense[1]) < 0)) {
+
+                ec.addError("A driver with license type "
+                        + driver.licenseType()
+                        + " is not permitted to drive this truck", "license");
             }
-            cause.append("license");
-            message.append("A driver with license type ")
-                    .append(driver.licenseType())
-                    .append(" is not permitted to drive this truck");
-            throwException = true;
         }
 
         // source validation
@@ -159,13 +159,7 @@ public class TransportsController {
             sc.getSite(transport.source());
         }
         catch(IOException e){
-            if(throwException){
-                message.append("\n");
-                cause.append(",");
-            }
-            cause.append("source");
-            message.append("Site with address ").append(transport.source()).append(" does not exist");
-            throwException = true;
+            ec.addError("Site with address " + transport.source() + " does not exist", "source");
         }
 
         // destinations + itemLists validation
@@ -177,13 +171,7 @@ public class TransportsController {
                 sc.getSite(address);
             }
             catch(IOException e){
-                if(throwException){
-                    message.append("\n");
-                    cause.append(",");
-                }
-                cause.append("destination:").append(destIndex);
-                message.append("Site with address ").append(address).append(" does not exist");
-                throwException = true;
+                ec.addError("Site with address " + address + " does not exist", "destination:"+destIndex);
             }
 
             //itemList validation
@@ -192,16 +180,16 @@ public class TransportsController {
                 ic.getItemList(itemListId);
             }
             catch(IOException e){
-                if(throwException){
-                    message.append("\n");
-                    cause.append(",");
-                }
-                cause.append("itemList:").append(destIndex);
-                message.append("Item list with id ").append(itemListId).append(" does not exist");
-                throwException = true;
+                ec.addError("Item list with id " + itemListId + " does not exist", "itemList:"+destIndex);
             }
         }
 
-        if(throwException) throw new IOException(message.toString(),new Throwable(cause.toString()));
+        // weight validation
+        int weight = transport.weight();
+        if (truck != null && truck.maxWeight() < weight) {
+            ec.addError("The truck's maximum weight has been exceeded", "weight");
+        }
+
+        if(ec.hasErrors()) throw new IOException(ec.message(),ec.cause());
     }
 }

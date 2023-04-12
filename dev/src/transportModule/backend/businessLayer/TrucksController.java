@@ -1,6 +1,7 @@
 package transportModule.backend.businessLayer;
 
 import transportModule.records.Truck;
+import utils.ErrorCollection;
 
 import java.io.IOException;
 import java.util.LinkedList;
@@ -88,17 +89,22 @@ public class TrucksController {
 
     private static void validateTruck(Truck newTruck) throws IOException {
 
-        //TODO: Add complete error collection instead of throwing on first error
+        ErrorCollection ec = new ErrorCollection();
 
         if(newTruck.baseWeight() <= 0) {
-            throw new IOException("Truck base weight is less than or equal to 0");
+             ec.addError("Truck base weight must be positive","baseWeight");
         }
 
         if(newTruck.maxWeight() <= 0) {
-            throw new IOException("Truck max weight is less than or equal to 0");
+            ec.addError("Truck max weight must be positive","maxWeight");
         }
 
-        if(newTruck.baseWeight() > newTruck.maxWeight())
-            throw new IOException("Truck base weight is bigger than max weight");
+        if(newTruck.baseWeight() > newTruck.maxWeight()){
+            ec.addError("Truck base weight must be smaller than max weight","baseWeightMaxWeight");
+        }
+
+        if(ec.hasErrors()){
+            throw new IOException(ec.message(),ec.cause());
+        }
     }
 }

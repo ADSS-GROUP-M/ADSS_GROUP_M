@@ -45,7 +45,9 @@ public class ErrorCollection {
         ListIterator<String> it = errors.listIterator();
         while(it.hasNext()){
             sb.append(it.next());
-            if(it.hasNext()) sb.append("\n");
+            if(it.hasNext()) {
+                sb.append("\n");
+            }
         }
         return sb.toString();
     }
@@ -55,7 +57,9 @@ public class ErrorCollection {
         ListIterator<String> it = causes.listIterator();
         while(it.hasNext()){
             sb.append(it.next());
-            if(it.hasNext()) sb.append(",");
+            if(it.hasNext()) {
+                sb.append(",");
+            }
         }
         return new Throwable(sb.toString());
     }

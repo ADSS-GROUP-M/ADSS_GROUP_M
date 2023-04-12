@@ -44,8 +44,12 @@ public record Site (String transportZone, String address, String phoneNumber, St
     
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Site site = (Site) o;
         return address.equals(site.address);
     }

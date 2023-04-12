@@ -62,7 +62,9 @@ public class TrucksManagement {
         String json = newTruck.toJson();
         String responseJson = rms.addTruck(json);
         Response response = JSON.deserialize(responseJson, Response.class);
-        if(response.success()) appData.trucks().put(licensePlate, newTruck);
+        if(response.success()) {
+            appData.trucks().put(licensePlate, newTruck);
+        }
         System.out.println("\n"+response.message());
     }
 
@@ -87,7 +89,9 @@ public class TrucksManagement {
             System.out.println("=========================================");
             System.out.println("Select truck to update:");
             Truck truck = appData.pickTruck(true);
-            if (truck == null) return;
+            if (truck == null) {
+                return;
+            }
 
             while(true) {
                 System.out.println("=========================================");
@@ -139,7 +143,9 @@ public class TrucksManagement {
         String json = newTruck.toJson();
         String responseJson = rms.updateTruck(json);
         Response response = JSON.deserialize(responseJson, Response.class);
-        if(response.success()) appData.trucks().put(licensePlate, newTruck);
+        if(response.success()) {
+            appData.trucks().put(licensePlate, newTruck);
+        }
         System.out.println("\n"+response.message());
     }
 
@@ -148,7 +154,9 @@ public class TrucksManagement {
             System.out.println("=========================================");
             System.out.println("Select truck to remove:");
             Truck truck = appData.pickTruck(true);
-            if (truck == null) return;
+            if (truck == null) {
+                return;
+            }
             System.out.println("=========================================");
             System.out.println("Truck details:");
             printTruckDetails(truck);
@@ -160,7 +168,9 @@ public class TrucksManagement {
                     String json = truck.toJson();
                     String responseJson = rms.removeTruck(json);
                     Response response = JSON.deserialize(responseJson, Response.class);
-                    if(response.success()) appData.trucks().remove(truck.id());
+                    if(response.success()) {
+                        appData.trucks().remove(truck.id());
+                    }
                     System.out.println("\n"+response.message());
                 }
                 case "n"->{}
@@ -173,7 +183,9 @@ public class TrucksManagement {
         while(true) {
             System.out.println("=========================================");
             String truckId = appData.readLine("Enter license plate of truck to view ('done!' to return to previous menu): ");
-            if (truckId.equalsIgnoreCase("done!")) return;
+            if (truckId.equalsIgnoreCase("done!")) {
+                return;
+            }
             Truck truck = appData.trucks().get(truckId);
             System.out.println("=========================================");
             System.out.println("Truck details:");

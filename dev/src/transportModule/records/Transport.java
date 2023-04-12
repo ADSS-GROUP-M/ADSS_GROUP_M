@@ -67,8 +67,12 @@ public record Transport (int id, String source, LinkedList<String> destinations,
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Transport transport = (Transport) o;
         return id == transport.id;
     }

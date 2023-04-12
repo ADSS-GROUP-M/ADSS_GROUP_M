@@ -44,8 +44,9 @@ public class TransportsController {
         // currently, the ID is set to -1 if it is not pre-defined.
         // this is a temporary solution until the DB is implemented.
 
-        if(transportExists(transport.id()) == true)
+        if(transportExists(transport.id())) {
             throw new IOException("A transport with this id already exists");
+        }
 
         validateTransport(transport);
 
@@ -74,8 +75,9 @@ public class TransportsController {
      * @throws IOException If a transport with the given ID is not found.
      */
     public Transport getTransport(int id) throws IOException {
-        if (transportExists(id) == false)
+        if (transportExists(id) == false) {
             throw new IOException("Transport not found");
+        }
 
         return transports.get(id);
     }
@@ -87,8 +89,9 @@ public class TransportsController {
      * @throws IOException If a transport with the given ID is not found.
      */
     public void removeTransport(int id) throws IOException {
-        if (transportExists(id) == false)
+        if (transportExists(id) == false) {
             throw new IOException("Transport not found");
+        }
 ;
         transports.remove(id);
     }
@@ -101,8 +104,9 @@ public class TransportsController {
      * @throws IOException If the newTransport object is invalid or if a transport with the given ID is not found.
      */
     public void updateTransport(int id, Transport newTransport) throws IOException{
-        if(transportExists(id) == false)
+        if(transportExists(id) == false) {
             throw new IOException("Transport not found");
+        }
 
         validateTransport(newTransport);
 
@@ -124,11 +128,15 @@ public class TransportsController {
 
         // driver validation
         Driver driver = dc.driverExists(transport.driverId()) ? dc.getDriver(transport.driverId()) : null;
-        if(driver == null) ec.addError("Driver not found", "driver");
+        if(driver == null) {
+            ec.addError("Driver not found", "driver");
+        }
 
         // truck validation
         Truck truck = tc.truckExists(transport.truckId()) ? tc.getTruck(transport.truckId()) :  null;
-        if(truck == null) ec.addError("Truck not found", "truck");
+        if(truck == null) {
+            ec.addError("Truck not found", "truck");
+        }
 
         // truck - driver validation
         if(driver != null && truck != null){
@@ -176,7 +184,9 @@ public class TransportsController {
             ec.addError("The truck's maximum weight has been exceeded", "weight");
         }
 
-        if(ec.hasErrors()) throw new IOException(ec.message(),ec.cause());
+        if(ec.hasErrors()) {
+            throw new IOException(ec.message(),ec.cause());
+        }
     }
 
     public boolean transportExists(int id) {

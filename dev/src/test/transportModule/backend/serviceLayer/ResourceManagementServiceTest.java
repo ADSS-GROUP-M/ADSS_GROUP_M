@@ -12,10 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ResourceManagementServiceTest {
 
-        ResourceManagementService rms;
-//        private static final Type responseDriverType = new TypeToken<Response<Driver>>(){}.getType();
-//        private static final Type responseTruckType = new TypeToken<Response<Truck>>(){}.getType();
-//        private static final Type responseSiteType = new TypeToken<Response<Site>>(){}.getType();
+        private ResourceManagementService rms;
         private Driver driver;
         private Site site;
         private Truck truck;

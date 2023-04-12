@@ -51,7 +51,9 @@ public class TransportsManagement {
 
     private void createTransport() {
 
-        if (verifyDataAvailability()) return;
+        if (verifyDataAvailability()) {
+            return;
+        }
 
         System.out.println("=========================================");
         System.out.println("Transport ID: "+transportIdCounter);
@@ -125,7 +127,9 @@ public class TransportsManagement {
                             newTransport.weight()
                     );
                     Response response2 = createTransportHelperMethod(newTransport);
-                    if(response2.success()) return;
+                    if(response2.success()) {
+                        return;
+                    }
                 }
                 case 2 -> {
                     LinkedList<String> destinations = new LinkedList<>();
@@ -144,7 +148,9 @@ public class TransportsManagement {
                             weight
                     );
                     Response response2 = createTransportHelperMethod(newTransport);
-                    if(response2.success()) return;
+                    if(response2.success()) {
+                        return;
+                    }
                 }
                 case 3 -> {
                     System.out.println("Transport creation cancelled");
@@ -160,7 +166,9 @@ public class TransportsManagement {
             System.out.println("=========================================");
             System.out.println("Select transport to update:");
             Transport transport = getTransport();
-            if(transport == null) return;
+            if(transport == null) {
+                return;
+            }
             printTransportDetails(transport);
             System.out.println("=========================================");
             System.out.println("Please select an option:");
@@ -289,7 +297,9 @@ public class TransportsManagement {
         while(true) {
             System.out.println("=========================================");
             Transport transport = getTransport();
-            if(transport == null) return;
+            if(transport == null) {
+                return;
+            }
             printTransportDetails(transport);
             System.out.println("=========================================");
             System.out.println("Are you sure you want to delete this transport? (y/n)");
@@ -299,7 +309,9 @@ public class TransportsManagement {
                     String json = transport.toJson();
                     String responseJson = ts.removeTransport(json);
                     Response response = JSON.deserialize(responseJson, Response.class);
-                    if (response.success()) appData.transports().remove(transport.id());
+                    if (response.success()) {
+                        appData.transports().remove(transport.id());
+                    }
                     System.out.println("\nTransport deleted successfully!");
                 }
                 case "n"-> {}
@@ -311,7 +323,9 @@ public class TransportsManagement {
     private void viewTransport() {
         System.out.println("=========================================");
         Transport transport = getTransport();
-        if(transport == null) return;
+        if(transport == null) {
+            return;
+        }
         printTransportDetails(transport);
         System.out.println("\nEnter 'done!' to return to previous menu");
     }
@@ -365,7 +379,9 @@ public class TransportsManagement {
 
     private Transport getTransport() {
         int transportId = appData.readInt("Enter transport ID (enter '-1' to return to previous menu): ");
-        if(transportId == -1) return null;
+        if(transportId == -1) {
+            return null;
+        }
         if(appData.transports().containsKey(transportId) == false) {
             System.out.println("Transport with ID "+transportId+" does not exist!");
             return null;
@@ -379,7 +395,9 @@ public class TransportsManagement {
         while(true){
             System.out.println("Destination number "+destinationId+": ");
             Site site = appData.pickSite(true);
-            if(site == null) break;
+            if(site == null) {
+                break;
+            }
             int listId = appData.readInt("Items list id: ");
             if (appData.itemLists().containsKey(listId) == false) {
                 System.out.println("\nItems list with ID " + listId + " does not exist!");
@@ -417,12 +435,16 @@ public class TransportsManagement {
             isMissingData = true;
         }
         if(appData.drivers().isEmpty()){
-            if(isMissingData) errorMessage.append(", ");
+            if(isMissingData) {
+                errorMessage.append(", ");
+            }
             errorMessage.append("drivers");
             isMissingData = true;
         }
         if(appData.sites().isEmpty()){
-            if(isMissingData) errorMessage.append(", ");
+            if(isMissingData) {
+                errorMessage.append(", ");
+            }
             errorMessage.append("sites");
             isMissingData = true;
         }

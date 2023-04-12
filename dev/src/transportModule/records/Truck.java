@@ -54,8 +54,12 @@ public record Truck (String id, String model, int baseWeight, int maxWeight, Coo
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Truck truck = (Truck) o;
         return id.equalsIgnoreCase(truck.id);
     }

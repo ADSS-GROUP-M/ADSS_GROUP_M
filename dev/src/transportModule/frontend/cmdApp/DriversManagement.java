@@ -49,12 +49,16 @@ public class DriversManagement {
         String fullName = appData.readLine("Name: ");
         System.out.println("License type: ");
         Driver.LicenseType licenseType = pickLicenseType();
-        if (licenseType == null) return;
+        if (licenseType == null) {
+            return;
+        }
         Driver newDriver = new Driver(id, fullName, licenseType);
         String json = newDriver.toJson();
         String responseJson = rms.addDriver(json);
         Response response = JSON.deserialize(responseJson, Response.class);
-        if(response.success()) appData.drivers().put(id, newDriver);
+        if(response.success()) {
+            appData.drivers().put(id, newDriver);
+        }
         System.out.println("\n"+response.message());
     }
 
@@ -63,7 +67,9 @@ public class DriversManagement {
             System.out.println("=========================================");
             System.out.println("Select driver to update:");
             Driver driver = appData.pickDriver(true);
-            if (driver == null) return;
+            if (driver == null) {
+                return;
+            }
             while (true) {
                 System.out.println("=========================================");
                 printDriverDetails(driver);
@@ -101,7 +107,9 @@ public class DriversManagement {
         String json = updatedDriver.toJson();
         String responseJson = rms.updateDriver(json);
         Response response = JSON.deserialize(responseJson, Response.class);
-        if(response.success()) appData.drivers().put(id, updatedDriver);
+        if(response.success()) {
+            appData.drivers().put(id, updatedDriver);
+        }
         System.out.println("\n"+response.message());
     }
 
@@ -110,7 +118,9 @@ public class DriversManagement {
             System.out.println("=========================================");
             System.out.println("Select driver to remove:");
             Driver driver = appData.pickDriver(true);
-            if(driver == null) return;
+            if(driver == null) {
+                return;
+            }
             System.out.println("=========================================");
             System.out.println("Driver details:");
             printDriverDetails(driver);
@@ -122,21 +132,24 @@ public class DriversManagement {
                     String json = driver.toJson();
                     String responseJson = rms.removeDriver(json);
                     Response response = JSON.deserialize(responseJson, Response.class);
-                    if(response.success()) appData.drivers().remove(driver.id());
+                    if(response.success()) {
+                        appData.drivers().remove(driver.id());
+                    }
                     System.out.println("\n"+response.message());
                 }
                 case "n" ->{}
                 default -> System.out.println("\nInvalid option!");
             }
         }
-
     }
 
     private void viewDriver() {
         while(true){
             System.out.println("=========================================");
             int driverId = appData.readInt("Enter employee ID of driver to view (enter '-1' to return to previous menu): ");
-            if(driverId == -1) return;
+            if(driverId == -1) {
+                return;
+            }
             Driver driver = appData.drivers().get(driverId);
             System.out.println("=========================================");
             System.out.println("Driver details:");

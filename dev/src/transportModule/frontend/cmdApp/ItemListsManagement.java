@@ -67,7 +67,9 @@ public class ItemListsManagement {
         while (true) {
             System.out.println("=========================================");
             Integer id = getListID();
-            if (id == null) return;
+            if (id == null) {
+                return;
+            }
 
             ItemList oldList = appData.itemLists().get(id);
             ItemList newList = new ItemList(id, oldList.load(), oldList.unload());
@@ -88,7 +90,9 @@ public class ItemListsManagement {
             String json = newList.toJson();
             String responseJson = ils.updateItemList(json);
             Response response = JSON.deserialize(responseJson, Response.class);
-            if(response.success()) appData.itemLists().put(id,newList);
+            if(response.success()) {
+                appData.itemLists().put(id,newList);
+            }
             System.out.println("\n"+response.message());
         }
     }
@@ -97,7 +101,9 @@ public class ItemListsManagement {
         while (true) {
             System.out.println("=========================================");
             Integer id = getListID();
-            if (id == null) return;
+            if (id == null) {
+                return;
+            }
             ItemList list = appData.itemLists().get(id);
             printItemList(list);
             System.out.println("Are you sure you want to remove this item list? (y/n)");
@@ -107,7 +113,9 @@ public class ItemListsManagement {
                     String json = list.toJson();
                     String responseJson = ils.removeItemList(json);
                     Response response = JSON.deserialize(responseJson, Response.class);
-                    if(response.success()) appData.itemLists().remove(id);
+                    if(response.success()) {
+                        appData.itemLists().remove(id);
+                    }
                     System.out.println("\n"+response.message());
                 }
                 case "n" ->{
@@ -122,7 +130,9 @@ public class ItemListsManagement {
         System.out.println("=========================================");
         System.out.println("Select item list to view:");
         Integer id = getListID();
-        if (id == null) return;
+        if (id == null) {
+            return;
+        }
         ItemList list = appData.itemLists().get(id);
         printItemList(list);
         System.out.println("\nEnter 'done!' to return to previous menu");
@@ -154,7 +164,9 @@ public class ItemListsManagement {
             StringBuilder item = new StringBuilder();
             for(int i = 0; i < itemQuantityArray.length-1; i++){
                 item.append(itemQuantityArray[i]);
-                if(i != itemQuantityArray.length-2) item.append(" ");
+                if(i != itemQuantityArray.length-2) {
+                    item.append(" ");
+                }
             }
             int quantity = Integer.parseInt(itemQuantityArray[itemQuantityArray.length-1]);
 
@@ -170,7 +182,9 @@ public class ItemListsManagement {
     private Integer getListID() {
         System.out.println();
         int id = appData.readInt("Enter item list ID (enter '-1' to return to the previous menu): ");
-        if (id == -1) return null;
+        if (id == -1) {
+            return null;
+        }
         if(appData.itemLists().containsKey(id) == false){
             System.out.println("Item list with ID "+id+" does not exist!");
             return null;

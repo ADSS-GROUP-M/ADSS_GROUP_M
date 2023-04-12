@@ -51,8 +51,9 @@ public class Response {
      * <br/><br/><code>2) Type type = SomeClass.class;</code>
      */
     public <T> T data(Type typeOfT) {
-        if(data == null)
+        if(data == null) {
             return null;
+        }
         return JSON.deserialize(data,typeOfT);
     }
 

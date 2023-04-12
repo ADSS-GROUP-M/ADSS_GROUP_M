@@ -67,7 +67,9 @@ public class SitesManagement {
         String json = newSite.toJson();
         String responseJson = rms.addSite(json);
         Response response = JSON.deserialize(responseJson, Response.class);
-        if(response.success()) appData.sites().put(newSite.address(), newSite);
+        if(response.success()) {
+            appData.sites().put(newSite.address(), newSite);
+        }
         System.out.println("\n"+response.message());
     }
 
@@ -76,7 +78,9 @@ public class SitesManagement {
             System.out.println("=========================================");
             System.out.println("Select site to update:");
             Site site = appData.pickSite(true);
-            if(site == null) return;
+            if(site == null) {
+                return;
+            }
             while(true) {
                 System.out.println("=========================================");
                 System.out.println("Site details:");
@@ -125,7 +129,9 @@ public class SitesManagement {
         String json = newSite.toJson();
         String responseJson = rms.updateSite(json);
         Response response = JSON.deserialize(responseJson, Response.class);
-        if(response.success()) appData.sites().put(newSite.address(), newSite);
+        if(response.success()) {
+            appData.sites().put(newSite.address(), newSite);
+        }
         System.out.println("\n"+response.message());
     }
 
@@ -134,7 +140,9 @@ public class SitesManagement {
             System.out.println("=========================================");
             System.out.println("Select site to remove:");
             Site site = appData.pickSite(true);
-            if (site == null) return;
+            if (site == null) {
+                return;
+            }
             System.out.println("=========================================");
             System.out.println("Site details:");
             printSiteDetails(site);
@@ -146,7 +154,9 @@ public class SitesManagement {
                     String json = site.toJson();
                     String responseJson = rms.removeSite(json);
                     Response response = JSON.deserialize(responseJson, Response.class);
-                    if(response.success()) appData.sites().remove(site.address());
+                    if(response.success()) {
+                        appData.sites().remove(site.address());
+                    }
                     System.out.println("\n"+response.message());
                 }
                 case "n"-> {}
@@ -159,7 +169,9 @@ public class SitesManagement {
         while(true) {
             System.out.println("=========================================");
             String siteId = appData.readLine("Enter address of site to view (enter 'done!' to return to previous menu): ");
-            if(siteId.equals("done!")) return;
+            if(siteId.equals("done!")) {
+                return;
+            }
             if(appData.sites().containsKey(siteId) == false) {
                 System.out.println("Site not found!");
                 continue;

@@ -310,7 +310,9 @@ public class AppData {
         return readInt(">> ");
     }
     int readInt(String prefix){
-        if(prefix.equals("") == false) System.out.print(prefix);
+        if(prefix.equals("") == false) {
+            System.out.print(prefix);
+        }
         int option;
         try{
             option = scanner.nextInt();
@@ -327,7 +329,9 @@ public class AppData {
     }
 
     String readLine(String prefix) {
-        if(prefix.equals("") == false) System.out.print(prefix);
+        if(prefix.equals("") == false) {
+            System.out.print(prefix);
+        }
         return scanner.nextLine().toLowerCase();
     }
 
@@ -336,7 +340,9 @@ public class AppData {
     }
 
     String readWord(String prefix) {
-        if(prefix.equals("") == false) System.out.print(prefix);
+        if(prefix.equals("") == false) {
+            System.out.print(prefix);
+        }
         String str = scanner.next().toLowerCase();
         scanner.nextLine();
         return str;
@@ -352,14 +358,18 @@ public class AppData {
             siteArray[i-1] = site;
             i++;
         }
-        if(allowDone) System.out.println(i+". Done");
+        if(allowDone) {
+            System.out.println(i+". Done");
+        }
         int option = readInt()-1;
         if( (allowDone && (option < 0 || option > sites.size()))
                 || (!allowDone && (option < 0 || option > sites.size()-1))){
             System.out.println("\nInvalid option!");
             return pickSite(allowDone);
         }
-        if(allowDone && option == sites.size()) return null;
+        if(allowDone && option == sites.size()) {
+            return null;
+        }
         return siteArray[option];
     }
 
@@ -373,14 +383,18 @@ public class AppData {
             driverArray[i-1] = driver;
             i++;
         }
-        if(allowDone) System.out.println(i+". Done");
+        if(allowDone) {
+            System.out.println(i+". Done");
+        }
         int option = readInt()-1;
         if( (allowDone && (option < 0 || option > drivers.size()))
                 || (!allowDone && (option < 0 || option > drivers.size()-1))){
             System.out.println("\nInvalid option!");
             return pickDriver(allowDone);
         }
-        if(allowDone && option == drivers.size()) return null;
+        if(allowDone && option == drivers.size()) {
+            return null;
+        }
         return driverArray[option];
     }
 
@@ -396,14 +410,18 @@ public class AppData {
             truckArray[i-1] = truck;
             i++;
         }
-        if(allowDone) System.out.println(i+". Done");
+        if(allowDone) {
+            System.out.println(i+". Done");
+        }
         int option = readInt()-1;
         if( (allowDone && (option < 0 || option > trucks.size()))
                 || (!allowDone && (option < 0 || option > trucks.size()-1))){
             System.out.println("\nInvalid option!");
             return pickTruck(allowDone);
         }
-        if(allowDone && option == trucks.size()) return null;
+        if(allowDone && option == trucks.size()) {
+            return null;
+        }
         return truckArray[option];
     }
 }

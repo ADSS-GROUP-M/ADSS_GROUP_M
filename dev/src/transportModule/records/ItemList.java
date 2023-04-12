@@ -52,8 +52,12 @@ public record ItemList (int id, HashMap<String, Integer> load,HashMap<String, In
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         ItemList itemList = (ItemList) o;
         return id == itemList.id;
     }

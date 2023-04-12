@@ -3,7 +3,7 @@ package transportModule.backend.businessLayer;
 import transportModule.records.Truck;
 import utils.ErrorCollection;
 
-import java.io.IOException;
+import utils.TransportException;
 import java.util.LinkedList;
 import java.util.TreeMap;
 
@@ -23,11 +23,11 @@ public class TrucksController {
      * Adds a truck to the controller.
      *
      * @param truck The truck to be added.
-     * @throws IOException If the truck already exists or if the base weight is greater than the max weight.
+     * @throws TransportException If the truck already exists or if the base weight is greater than the max weight.
      */
-    public void addTruck(Truck truck) throws IOException {
+    public void addTruck(Truck truck) throws TransportException {
         if (truckExists(truck.id())) {
-            throw new IOException("Truck already exists");
+            throw new TransportException("Truck already exists");
         }
 
         validateTruck(truck);
@@ -39,11 +39,11 @@ public class TrucksController {
      * Removes a truck from the controller.
      *
      * @param id The ID of the truck to be removed.
-     * @throws IOException If the truck is not found.
+     * @throws TransportException If the truck is not found.
      */
-    public void removeTruck(String id) throws IOException {
+    public void removeTruck(String id) throws TransportException {
         if (truckExists(id) == false) {
-            throw new IOException("Truck not found");
+            throw new TransportException("Truck not found");
         }
 
         trucks.remove(id);
@@ -54,11 +54,11 @@ public class TrucksController {
      *
      * @param id The ID of the truck to be retrieved.
      * @return The retrieved truck.
-     * @throws IOException If the truck is not found.
+     * @throws TransportException If the truck is not found.
      */
-    public Truck getTruck(String id) throws IOException {
+    public Truck getTruck(String id) throws TransportException {
         if (truckExists(id) == false) {
-            throw new IOException("Truck not found");
+            throw new TransportException("Truck not found");
         }
 
         return trucks.get(id);
@@ -69,11 +69,11 @@ public class TrucksController {
      *
      * @param id The ID of the truck to be updated.
      * @param newTruck The updated truck object.
-     * @throws IOException If the truck is not found or if the base weight of the updated truck is greater than the max weight.
+     * @throws TransportException If the truck is not found or if the base weight of the updated truck is greater than the max weight.
      */
-    public void updateTruck(String id, Truck newTruck) throws IOException{
+    public void updateTruck(String id, Truck newTruck) throws TransportException{
         if(truckExists(id) == false) {
-            throw new IOException("Truck not found");
+            throw new TransportException("Truck not found");
         }
 
         validateTruck(newTruck);
@@ -91,7 +91,7 @@ public class TrucksController {
     }
 
 
-    private static void validateTruck(Truck newTruck) throws IOException {
+    private static void validateTruck(Truck newTruck) throws TransportException {
 
         ErrorCollection ec = new ErrorCollection();
 
@@ -108,7 +108,7 @@ public class TrucksController {
         }
 
         if(ec.hasErrors()){
-            throw new IOException(ec.message(),ec.cause());
+            throw new TransportException(ec.message(),ec.cause());
         }
     }
 

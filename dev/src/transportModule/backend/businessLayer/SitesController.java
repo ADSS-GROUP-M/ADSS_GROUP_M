@@ -2,7 +2,7 @@ package transportModule.backend.businessLayer;
 
 import transportModule.records.Site;
 
-import java.io.IOException;
+import utils.TransportException;
 import java.util.LinkedList;
 import java.util.TreeMap;
 
@@ -21,13 +21,13 @@ public class SitesController {
      * Adds a site to the `SitesController`.
      *
      * @param site The site to be added.
-     * @throws IOException If the site already exists.
+     * @throws TransportException If the site already exists.
      */
-    public void addSite(Site site) throws IOException {
+    public void addSite(Site site) throws TransportException {
         if (siteExists(site.address()) == false) {
             sites.put(site.address(), site);
         } else {
-            throw new IOException("Site already exists");
+            throw new TransportException("Site already exists");
         }
     }
 
@@ -35,11 +35,11 @@ public class SitesController {
      * Removes a site from the `SitesController`.
      *
      * @param address The address of the site to be removed.
-     * @throws IOException If the site is not found.
+     * @throws TransportException If the site is not found.
      */
-    public void removeSite(String address) throws IOException {
+    public void removeSite(String address) throws TransportException {
         if (siteExists(address) == false) {
-            throw new IOException("Site not found");
+            throw new TransportException("Site not found");
         }
 
         sites.remove(address);
@@ -50,11 +50,11 @@ public class SitesController {
      *
      * @param address The address of the site to be retrieved.
      * @return The retrieved site.
-     * @throws IOException If the site is not found.
+     * @throws TransportException If the site is not found.
      */
-    public Site getSite(String address) throws IOException {
+    public Site getSite(String address) throws TransportException {
         if (siteExists(address) == false) {
-            throw new IOException("Site not found");
+            throw new TransportException("Site not found");
         }
 
         return sites.get(address);
@@ -65,11 +65,11 @@ public class SitesController {
      *
      * @param address The address of the site to be updated.
      * @param newSite The updated site.
-     * @throws IOException If the site is not found.
+     * @throws TransportException If the site is not found.
      */
-    public void updateSite(String address, Site newSite) throws IOException{
+    public void updateSite(String address, Site newSite) throws TransportException{
         if(siteExists(address) == false) {
-            throw new IOException("Site not found");
+            throw new TransportException("Site not found");
         }
 
         sites.put(address, newSite);

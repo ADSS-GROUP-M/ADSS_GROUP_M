@@ -72,7 +72,7 @@ class ResourceManagementServiceTest {
     }
 
     @Test
-    void removeDriverDoesntExist(){
+    void removeDriverDoesNotExist(){
         Driver driver3 = Driver.getLookupObject(111111111);
         String json1 = rms.removeDriver(driver3.toJson());
         Response response1 = Response.fromJson(json1);
@@ -96,7 +96,7 @@ class ResourceManagementServiceTest {
     }
 
     @Test
-    void updateDriverDoesntExist(){
+    void updateDriverDoesNotExist(){
         Driver driver3 = new Driver (111111111, "Jim", Driver.LicenseType.C3);
         String json1 = rms.updateDriver(driver3.toJson());
         Response response1 = Response.fromJson(json1);
@@ -115,7 +115,7 @@ class ResourceManagementServiceTest {
     }
 
     @Test
-    void getDriverDoesntExist(){
+    void getDriverDoesNotExist(){
         Driver driver3 = Driver.getLookupObject(111111111);
         String responseJson = rms.getDriver(driver3.toJson());
         Response response = Response.fromJson(responseJson);
@@ -200,7 +200,7 @@ class ResourceManagementServiceTest {
     }
 
     @Test
-    void removeTruckDoesntExist(){
+    void removeTruckDoesNotExist(){
         Truck truck3 = Truck.getLookupObject("ghi789");
         String json1 = rms.removeTruck(truck3.toJson());
         Response response1 = Response.fromJson(json1);
@@ -225,7 +225,7 @@ class ResourceManagementServiceTest {
     }
 
     @Test
-    void updateTruckDoesntExist(){
+    void updateTruckDoesNotExist(){
         Truck truck3 = new Truck("ghi789", "chevy", 2000, 15000, Truck.CoolingCapacity.FROZEN);
         String json1 = rms.updateTruck(truck3.toJson());
         Response response1 = Response.fromJson(json1);
@@ -271,7 +271,7 @@ class ResourceManagementServiceTest {
     }
 
     @Test
-    void getTruckDoesntExist(){
+    void getTruckDoesNotExist(){
         Truck truck3 = Truck.getLookupObject("ghi789");
         String responseJson = rms.getTruck(truck3.toJson());
         Response response = Response.fromJson(responseJson);
@@ -330,7 +330,7 @@ class ResourceManagementServiceTest {
     }
 
     @Test
-    void removeSiteDoesntExist(){
+    void removeSiteDoesNotExist(){
         Site site3 = new Site("zone a", "address a", "123456","bob", Site.SiteType.BRANCH);
         String json1 = rms.removeSite(site3.toJson());
         Response response1 = Response.fromJson(json1);
@@ -357,7 +357,7 @@ class ResourceManagementServiceTest {
     }
 
     @Test
-    void updateSiteDoesntExist(){
+    void updateSiteDoesNotExist(){
         Site site3 = new Site("zone a", "address a", "123456","bob", Site.SiteType.BRANCH);
         String json1 = rms.updateSite(site3.toJson());
         Response response1 = Response.fromJson(json1);
@@ -378,7 +378,7 @@ class ResourceManagementServiceTest {
     }
 
     @Test
-    void getSiteDoesntExist(){
+    void getSiteDoesNotExist(){
         Site site3 = Site.getLookupObject("address a");
         String responseJson = rms.getSite(site3.toJson());
         Response response = Response.fromJson(responseJson);

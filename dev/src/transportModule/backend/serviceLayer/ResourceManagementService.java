@@ -9,7 +9,7 @@ import transportModule.records.Truck;
 import utils.JSON;
 import utils.Response;
 
-import java.io.IOException;
+import utils.TransportException;
 
 public class ResourceManagementService {
 
@@ -27,7 +27,7 @@ public class ResourceManagementService {
         Driver driver = JSON.deserialize(json, Driver.class);
         try{
             driversController.addDriver(driver);
-        }catch(IOException e){
+        }catch(TransportException e){
             return Response.getErrorResponse(e).toJson();
         }
         return new Response("Driver added successfully", true).toJson();
@@ -37,7 +37,7 @@ public class ResourceManagementService {
         Driver driver = JSON.deserialize(json, Driver.class);
         try{
             driversController.removeDriver(driver.id());
-        }catch(IOException e){
+        }catch(TransportException e){
             return Response.getErrorResponse(e).toJson();
         }
         return new Response("Driver removed successfully", true).toJson();
@@ -47,7 +47,7 @@ public class ResourceManagementService {
         Driver driver = JSON.deserialize(json, Driver.class);
         try{
             driversController.updateDriver(driver.id(), driver);
-        }catch(IOException e){
+        }catch(TransportException e){
             return Response.getErrorResponse(e).toJson();
         }
         return new Response("Driver updated successfully", true).toJson();
@@ -71,7 +71,7 @@ public class ResourceManagementService {
         Truck truck = JSON.deserialize(json, Truck.class);
         try{
             trucksController.addTruck(truck);
-        }catch(IOException e){
+        }catch(TransportException e){
             return Response.getErrorResponse(e).toJson();
         }
         return new Response("Truck added successfully", true).toJson();
@@ -81,7 +81,7 @@ public class ResourceManagementService {
         Truck truck = JSON.deserialize(json, Truck.class);
         try{
             trucksController.removeTruck(truck.id());
-        }catch(IOException e){
+        }catch(TransportException e){
             return Response.getErrorResponse(e).toJson();
         }
         return new Response("Truck removed successfully", true).toJson();
@@ -91,7 +91,7 @@ public class ResourceManagementService {
         Truck truck = JSON.deserialize(json, Truck.class);
         try{
             trucksController.updateTruck(truck.id(), truck);
-        }catch(IOException e){
+        }catch(TransportException e){
             return Response.getErrorResponse(e).toJson();
         }
         return new Response("Truck updated successfully", true).toJson();
@@ -115,7 +115,7 @@ public class ResourceManagementService {
         Site site = JSON.deserialize(json, Site.class);
         try{
             sitesController.addSite(site);
-        }catch(IOException e){
+        }catch(TransportException e){
             return Response.getErrorResponse(e).toJson();
         }
         return new Response("Site added successfully", true).toJson();
@@ -125,7 +125,7 @@ public class ResourceManagementService {
         Site site = JSON.deserialize(json, Site.class);
         try{
             sitesController.removeSite(site.address());
-        }catch(IOException e){
+        }catch(TransportException e){
             return Response.getErrorResponse(e).toJson();
         }
         return new Response("Site removed successfully", true).toJson();
@@ -135,7 +135,7 @@ public class ResourceManagementService {
         Site site = JSON.deserialize(json, Site.class);
         try{
             sitesController.updateSite(site.address(), site);
-        }catch(IOException e){
+        }catch(TransportException e){
             return Response.getErrorResponse(e).toJson();
         }
         return new Response("Site updated successfully", true).toJson();

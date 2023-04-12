@@ -5,7 +5,7 @@ import transportModule.records.Transport;
 import transportModule.records.Truck;
 import utils.ErrorCollection;
 
-import java.io.IOException;
+import utils.TransportException;
 import java.util.LinkedList;
 import java.util.TreeMap;
 
@@ -36,16 +36,16 @@ public class TransportsController {
      * Adds a transport object to the TransportsController.
      *
      * @param transport The transport object to add.
-     * @throws IOException If the transport object is invalid or if a transport with the same ID already exists.
+     * @throws TransportException If the transport object is invalid or if a transport with the same ID already exists.
      */
-    public Integer addTransport(Transport transport)throws IOException{
+    public Integer addTransport(Transport transport)throws TransportException{
 
         //TODO: remove support for pre-defined IDs and move to auto-incrementing IDs.
         // currently, the ID is set to -1 if it is not pre-defined.
         // this is a temporary solution until the DB is implemented.
 
         if(transportExists(transport.id())) {
-            throw new IOException("A transport with this id already exists");
+            throw new TransportException("A transport with this id already exists");
         }
 
         validateTransport(transport);
@@ -72,11 +72,11 @@ public class TransportsController {
      *
      * @param id The ID of the transport object to retrieve.
      * @return The transport object with the given ID.
-     * @throws IOException If a transport with the given ID is not found.
+     * @throws TransportException If a transport with the given ID is not found.
      */
-    public Transport getTransport(int id) throws IOException {
+    public Transport getTransport(int id) throws TransportException {
         if (transportExists(id) == false) {
-            throw new IOException("Transport not found");
+            throw new TransportException("Transport not found");
         }
 
         return transports.get(id);
@@ -86,11 +86,11 @@ public class TransportsController {
      * Removes a transport object with the given ID from the TransportsController.
      *
      * @param id The ID of the transport object to remove.
-     * @throws IOException If a transport with the given ID is not found.
+     * @throws TransportException If a transport with the given ID is not found.
      */
-    public void removeTransport(int id) throws IOException {
+    public void removeTransport(int id) throws TransportException {
         if (transportExists(id) == false) {
-            throw new IOException("Transport not found");
+            throw new TransportException("Transport not found");
         }
 ;
         transports.remove(id);
@@ -101,11 +101,11 @@ public class TransportsController {
      *
      * @param id The ID of the transport object to update.
      * @param newTransport The updated transport object.
-     * @throws IOException If the newTransport object is invalid or if a transport with the given ID is not found.
+     * @throws TransportException If the newTransport object is invalid or if a transport with the given ID is not found.
      */
-    public void updateTransport(int id, Transport newTransport) throws IOException{
+    public void updateTransport(int id, Transport newTransport) throws TransportException{
         if(transportExists(id) == false) {
-            throw new IOException("Transport not found");
+            throw new TransportException("Transport not found");
         }
 
         validateTransport(newTransport);
@@ -122,7 +122,7 @@ public class TransportsController {
         return new LinkedList<>(transports.values());
     }
 
-    private void validateTransport(Transport transport) throws IOException{
+    private void validateTransport(Transport transport) throws TransportException{
 
         ErrorCollection ec = new ErrorCollection();
 
@@ -156,7 +156,7 @@ public class TransportsController {
         try{
             sc.getSite(transport.source());
         }
-        catch(IOException e){
+        catch(TransportException e){
             ec.addError("Site with address " + transport.source() + " does not exist", "source");
         }
 
@@ -185,7 +185,7 @@ public class TransportsController {
         }
 
         if(ec.hasErrors()) {
-            throw new IOException(ec.message(),ec.cause());
+            throw new TransportException(ec.message(),ec.cause());
         }
     }
 

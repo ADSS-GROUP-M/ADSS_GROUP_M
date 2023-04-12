@@ -4,7 +4,7 @@ import transportModule.backend.businessLayer.TransportsController;
 import transportModule.records.Transport;
 import utils.Response;
 
-import java.io.IOException;
+import utils.TransportException;
 
 public class TransportsService {
 
@@ -51,7 +51,7 @@ public class TransportsService {
             Integer id = tc.addTransport(transport);
             return new Response("Transport created successfully",true, id).toJson();
         }
-        catch(IOException e){
+        catch(TransportException e){
             return Response.getErrorResponse(e).toJson();
         }
     }
@@ -63,7 +63,7 @@ public class TransportsService {
             tc.updateTransport(transport.id(), transport);
             return new Response("Transport updated successfully",true, "").toJson();
         }
-        catch(IOException e){
+        catch(TransportException e){
             return Response.getErrorResponse(e).toJson();
         }
     }
@@ -75,7 +75,7 @@ public class TransportsService {
             tc.removeTransport(transport.id());
             return new Response("Transport removed successfully",true, "").toJson();
         }
-        catch(IOException e){
+        catch(TransportException e){
             return Response.getErrorResponse(e).toJson();
         }
     }
@@ -87,7 +87,7 @@ public class TransportsService {
             transport = tc.getTransport(transport.id());
             return new Response("Transport found successfully",true, transport).toJson();
         }
-        catch(IOException e){
+        catch(TransportException e){
             return Response.getErrorResponse(e).toJson();
         }
     }

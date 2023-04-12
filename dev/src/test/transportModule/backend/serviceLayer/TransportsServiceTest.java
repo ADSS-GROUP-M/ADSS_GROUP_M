@@ -169,7 +169,7 @@ class TransportsServiceTest {
     }
 
     @Test
-    void updateTransportDoesntExist(){
+    void updateTransportDoesNotExist(){
         Transport updatedTransport = Transport.getLookupObject(5);
         String json = ts.updateTransport(updatedTransport.toJson());
         Response response = Response.fromJson(json);
@@ -187,7 +187,7 @@ class TransportsServiceTest {
     }
 
     @Test
-    void removeTransportDoesntExist(){
+    void removeTransportDoesNotExist(){
         String json = ts.removeTransport(Transport.getLookupObject(5).toJson());
         Response response = Response.fromJson(json);
         assertFalse(response.success());
@@ -209,7 +209,7 @@ class TransportsServiceTest {
     }
 
     @Test
-    void getTransportDoesntExist(){
+    void getTransportDoesNotExist(){
         String json = ts.getTransport(Transport.getLookupObject(5).toJson());
         Response response = Response.fromJson(json);
         assertFalse(response.success());
@@ -290,7 +290,7 @@ class TransportsServiceTest {
     }
 
     @Test
-    void createTransportEverythingDoesntExist(){
+    void createTransportEverythingDoesNotExist(){
         Transport newTransport = new Transport(
                 50,
                 "some address",

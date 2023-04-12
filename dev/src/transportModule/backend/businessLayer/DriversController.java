@@ -2,7 +2,7 @@ package transportModule.backend.businessLayer;
 
 import transportModule.records.Driver;
 
-import java.io.IOException;
+import utils.TransportException;
 import java.util.LinkedList;
 import java.util.TreeMap;
 
@@ -21,13 +21,13 @@ public class DriversController {
      * Adds a new driver to the system.
      *
      * @param driver The driver to be added.
-     * @throws IOException If the driver with the same ID already exists in the system.
+     * @throws TransportException If the driver with the same ID already exists in the system.
      */
-    public void addDriver(Driver driver) throws IOException{
+    public void addDriver(Driver driver) throws TransportException{
         if (driverExists(driver.id()) == false) {
             drivers.put(driver.id(), driver);
         } else {
-            throw new IOException("Driver already exists");
+            throw new TransportException("Driver already exists");
         }
     }
 
@@ -36,11 +36,11 @@ public class DriversController {
      *
      * @param id The ID of the driver to retrieve.
      * @return The driver with the specified ID.
-     * @throws IOException If the driver with the specified ID is not found.
+     * @throws TransportException If the driver with the specified ID is not found.
      */
-    public  Driver getDriver(int id) throws IOException {
+    public  Driver getDriver(int id) throws TransportException {
         if (driverExists(id) == false) {
-            throw new IOException("Driver not found");
+            throw new TransportException("Driver not found");
         }
 
         return drivers.get(id);
@@ -50,11 +50,11 @@ public class DriversController {
      * Removes a driver from the system by ID.
      *
      * @param id The ID of the driver to remove.
-     * @throws IOException If the driver with the specified ID is not found.
+     * @throws TransportException If the driver with the specified ID is not found.
      */
-    public void removeDriver(int id) throws IOException {
+    public void removeDriver(int id) throws TransportException {
         if (driverExists(id) == false) {
-            throw new IOException("Driver not found");
+            throw new TransportException("Driver not found");
         }
 
         drivers.remove(id);
@@ -65,11 +65,11 @@ public class DriversController {
      *
      * @param id The ID of the driver to update.
      * @param newDriver The updated driver object.
-     * @throws IOException If the driver with the specified ID is not found.
+     * @throws TransportException If the driver with the specified ID is not found.
      */
-    public void updateDriver(int id, Driver newDriver) throws IOException{
+    public void updateDriver(int id, Driver newDriver) throws TransportException{
         if(driverExists(id) == false) {
-            throw new IOException("Driver not found");
+            throw new TransportException("Driver not found");
         }
 
         drivers.put(id, newDriver);

@@ -2,7 +2,7 @@ package transportModule.backend.businessLayer;
 
 import transportModule.records.ItemList;
 
-import java.io.IOException;
+import utils.TransportException;
 import java.util.LinkedList;
 import java.util.TreeMap;
 
@@ -25,16 +25,16 @@ public class ItemListsController {
      *
      * @param itemList The item list to be added.
      * @return The ID of the added item list.
-     * @throws IOException If the item list already exists in the system.
+     * @throws TransportException If the item list already exists in the system.
      */
-    public Integer addItemList(ItemList itemList) throws IOException{
+    public Integer addItemList(ItemList itemList) throws TransportException{
 
         //TODO: remove support for pre-defined IDs and move to auto-incrementing IDs.
         // currently, the ID is set to -1 if it is not pre-defined.
         // this is a temporary solution until the DB is implemented.
 
         if(listExists(itemList.id())) {
-            throw new IOException("An item list with this id already exists");
+            throw new TransportException("An item list with this id already exists");
         }
 
         //<TEMPORARY SOLUTION>
@@ -59,11 +59,11 @@ public class ItemListsController {
      *
      * @param id The ID of the item list to retrieve.
      * @return The item list with the specified ID.
-     * @throws IOException If the item list with the specified ID is not found.
+     * @throws TransportException If the item list with the specified ID is not found.
      */
-    public ItemList getItemList(int id) throws IOException{
+    public ItemList getItemList(int id) throws TransportException{
         if(listExists(id) == false) {
-            throw new IOException("Item list not found");
+            throw new TransportException("Item list not found");
         }
 
         return itemLists.get(id);
@@ -73,11 +73,11 @@ public class ItemListsController {
      * Removes an item list with the specified ID from the system.
      *
      * @param id The ID of the item list to remove.
-     * @throws IOException If the item list with the specified ID is not found.
+     * @throws TransportException If the item list with the specified ID is not found.
      */
-    public void removeItemList(int id) throws IOException {
+    public void removeItemList(int id) throws TransportException {
         if (listExists(id) == false) {
-            throw new IOException("Item list not found");
+            throw new TransportException("Item list not found");
         }
 
         itemLists.remove(id);
@@ -88,11 +88,11 @@ public class ItemListsController {
      *
      * @param id The ID of the item list to update.
      * @param newItemList The new item list to update with.
-     * @throws IOException If the item list with the specified ID is not found.
+     * @throws TransportException If the item list with the specified ID is not found.
      */
-    public void updateItemList(int id, ItemList newItemList) throws IOException{
+    public void updateItemList(int id, ItemList newItemList) throws TransportException{
         if(listExists(id) == false) {
-            throw new IOException("Item list not found");
+            throw new TransportException("Item list not found");
         }
 
         itemLists.put(id, newItemList);

@@ -27,11 +27,11 @@ public record Truck (String id, String model, int baseWeight, int maxWeight, Coo
         } else {
             license += "C";
         }
-        switch (coolingCapacity) {
-            case NONE -> license += "1";
-            case COLD -> license += "2";
-            case FROZEN -> license += "3";
-        }
+        license += switch (coolingCapacity) {
+            case NONE -> "1";
+            case COLD -> "2";
+            case FROZEN ->"3";
+        };
         return license;
     }
 

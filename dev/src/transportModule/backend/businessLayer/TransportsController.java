@@ -119,6 +119,8 @@ public class TransportsController {
     
     private void validateTransport(Transport transport) throws IOException{
 
+        //TODO: replace the error collection method with a cleaner solution
+
         Truck truck = tc.getTruck(transport.truckId());
         Driver driver = dc.getDriver(transport.driverId());
 

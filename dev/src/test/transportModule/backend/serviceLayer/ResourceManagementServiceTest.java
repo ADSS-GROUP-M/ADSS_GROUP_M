@@ -58,6 +58,13 @@ class ResourceManagementServiceTest {
     }
 
     @Test
+    void addDriverAlreadyExists(){
+        String json1 = rms.addDriver(driver.toJson());
+        Response response1 = Response.fromJson(json1);
+        assertFalse(response1.success());
+    }
+
+    @Test
     void removeDriver() {
         String json1 = rms.removeDriver(driver.toJson());
         Response response1 = Response.fromJson(json1);
@@ -65,6 +72,14 @@ class ResourceManagementServiceTest {
         String responseJson = rms.getDriver(Driver.getLookupObject(driver.id()).toJson());
         Response response = Response.fromJson(responseJson);
         assertFalse(response.success());
+    }
+
+    @Test
+    void removeDriverDoesntExist(){
+        Driver driver3 = Driver.getLookupObject(111111111);
+        String json1 = rms.removeDriver(driver3.toJson());
+        Response response1 = Response.fromJson(json1);
+        assertFalse(response1.success());
     }
 
     @Test
@@ -84,6 +99,14 @@ class ResourceManagementServiceTest {
     }
 
     @Test
+    void updateDriverDoesntExist(){
+        Driver driver3 = new Driver (111111111, "Jim", Driver.LicenseType.C3);
+        String json1 = rms.updateDriver(driver3.toJson());
+        Response response1 = Response.fromJson(json1);
+        assertFalse(response1.success());
+    }
+
+    @Test
     void getDriver() {
         String responseJson = rms.getDriver(Driver.getLookupObject(driver.id()).toJson());
         Response response = Response.fromJson(responseJson);
@@ -92,6 +115,14 @@ class ResourceManagementServiceTest {
         assertEquals(driver.id(), driverToCheck.id());
         assertEquals(driver.name(), driverToCheck.name());
         assertEquals(driver.licenseType(), driverToCheck.licenseType());
+    }
+
+    @Test
+    void getDriverDoesntExist(){
+        Driver driver3 = Driver.getLookupObject(111111111);
+        String responseJson = rms.getDriver(driver3.toJson());
+        Response response = Response.fromJson(responseJson);
+        assertFalse(response.success());
     }
 
     @Test
@@ -127,6 +158,40 @@ class ResourceManagementServiceTest {
     }
 
     @Test
+    void addTruckAlreadyExists(){
+        String json1 = rms.addTruck(truck.toJson());
+        Response response1 = Response.fromJson(json1);
+        assertFalse(response1.success());
+    }
+
+    @Test
+    void addTruckNegativeBaseWeight(){
+        Truck truck3 = new Truck("ghi789", "chevy", -2000, 15000, Truck.CoolingCapacity.FROZEN);
+
+        String json1 = rms.addTruck(truck3.toJson());
+        Response response1 = Response.fromJson(json1);
+        assertFalse(response1.success());
+    }
+
+    @Test
+    void addTruckNegativeMaxWeight(){
+        Truck truck3 = new Truck("ghi789", "chevy", 2000, -15000, Truck.CoolingCapacity.FROZEN);
+
+        String json1 = rms.addTruck(truck3.toJson());
+        Response response1 = Response.fromJson(json1);
+        assertFalse(response1.success());
+    }
+
+    @Test
+    void addTruckBaseWeightGreaterThanMaxWeight(){
+        Truck truck3 = new Truck("ghi789", "chevy", 2000, 1500, Truck.CoolingCapacity.FROZEN);
+
+        String json1 = rms.addTruck(truck3.toJson());
+        Response response1 = Response.fromJson(json1);
+        assertFalse(response1.success());
+    }
+
+    @Test
     void removeTruck() {
         String json1 = rms.removeTruck(truck.toJson());
         Response response1 = Response.fromJson(json1);
@@ -135,6 +200,14 @@ class ResourceManagementServiceTest {
         String json2 = rms.getTruck(Truck.getLookupObject(truck.id()).toJson());
         Response response2 = Response.fromJson(json2);
         assertFalse(response2.success());
+    }
+
+    @Test
+    void removeTruckDoesntExist(){
+        Truck truck3 = Truck.getLookupObject("ghi789");
+        String json1 = rms.removeTruck(truck3.toJson());
+        Response response1 = Response.fromJson(json1);
+        assertFalse(response1.success());
     }
 
     @Test
@@ -155,6 +228,41 @@ class ResourceManagementServiceTest {
     }
 
     @Test
+    void updateTruckDoesntExist(){
+        Truck truck3 = new Truck("ghi789", "chevy", 2000, 15000, Truck.CoolingCapacity.FROZEN);
+        String json1 = rms.updateTruck(truck3.toJson());
+        Response response1 = Response.fromJson(json1);
+        assertFalse(response1.success());
+    }
+
+    @Test
+    void updateTruckNegativeBaseWeight(){
+        Truck truckUpdate = new Truck("ggghhh222", truck.model(), -2000, 15000, Truck.CoolingCapacity.NONE);
+
+        String json1 = rms.updateTruck(truckUpdate.toJson());
+        Response response1 = Response.fromJson(json1);
+        assertFalse(response1.success());
+    }
+
+    @Test
+    void updateTruckNegativeMaxWeight(){
+        Truck truckUpdate = new Truck("ggghhh222", truck.model(), 2000, -15000, Truck.CoolingCapacity.NONE);
+
+        String json1 = rms.updateTruck(truckUpdate.toJson());
+        Response response1 = Response.fromJson(json1);
+        assertFalse(response1.success());
+    }
+
+    @Test
+    void updateTruckBaseWeightGreaterThanMaxWeight(){
+        Truck truckUpdate = new Truck("ggghhh222", truck.model(), 2000, 1500, Truck.CoolingCapacity.NONE);
+
+        String json1 = rms.updateTruck(truckUpdate.toJson());
+        Response response1 = Response.fromJson(json1);
+        assertFalse(response1.success());
+    }
+
+    @Test
     void getTruck() {
         String responseJson = rms.getTruck(Truck.getLookupObject(truck.id()).toJson());
         Response response = Response.fromJson(responseJson);
@@ -163,6 +271,14 @@ class ResourceManagementServiceTest {
         assertEquals(truck.id(), truckToCheck.id());
         assertEquals(truck.model(), truckToCheck.model());
         assertEquals(truck.coolingCapacity(), truckToCheck.coolingCapacity());
+    }
+
+    @Test
+    void getTruckDoesntExist(){
+        Truck truck3 = Truck.getLookupObject("ghi789");
+        String responseJson = rms.getTruck(truck3.toJson());
+        Response response = Response.fromJson(responseJson);
+        assertFalse(response.success());
     }
 
     @Test
@@ -199,6 +315,13 @@ class ResourceManagementServiceTest {
     }
 
     @Test
+    void addSiteAlreadyExists(){
+        String json1 = rms.addSite(site.toJson());
+        Response response1 = Response.fromJson(json1);
+        assertFalse(response1.success());
+    }
+
+    @Test
     void removeSite() {
         String json1 = rms.removeSite(site.toJson());
         Response response1 = Response.fromJson(json1);
@@ -207,6 +330,14 @@ class ResourceManagementServiceTest {
         String json2 = rms.getSite(Site.getLookupObject(site.address()).toJson());
         Response response2 = Response.fromJson(json2);
         assertFalse(response2.success());
+    }
+
+    @Test
+    void removeSiteDoesntExist(){
+        Site site3 = new Site("zone a", "address a", "123456","bob", Site.SiteType.BRANCH);
+        String json1 = rms.removeSite(site3.toJson());
+        Response response1 = Response.fromJson(json1);
+        assertFalse(response1.success());
     }
 
     @Test
@@ -229,6 +360,14 @@ class ResourceManagementServiceTest {
     }
 
     @Test
+    void updateSiteDoesntExist(){
+        Site site3 = new Site("zone a", "address a", "123456","bob", Site.SiteType.BRANCH);
+        String json1 = rms.updateSite(site3.toJson());
+        Response response1 = Response.fromJson(json1);
+        assertFalse(response1.success());
+    }
+
+    @Test
     void getSite() {
         String responseJson = rms.getSite(Site.getLookupObject(site.address()).toJson());
         Response response = Response.fromJson(responseJson);
@@ -239,6 +378,14 @@ class ResourceManagementServiceTest {
         assertEquals(site.phoneNumber(), siteToCheck.phoneNumber());
         assertEquals(site.contactName(), siteToCheck.contactName());
         assertEquals(site.siteType(), siteToCheck.siteType());
+    }
+
+    @Test
+    void getSiteDoesntExist(){
+        Site site3 = Site.getLookupObject("address a");
+        String responseJson = rms.getSite(site3.toJson());
+        Response response = Response.fromJson(responseJson);
+        assertFalse(response.success());
     }
 
     @Test

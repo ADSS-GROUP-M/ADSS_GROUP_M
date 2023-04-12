@@ -28,8 +28,7 @@ public class TrucksController {
         if (trucks.containsKey(truck.id()) == true)
             throw new IOException("Truck already exists");
 
-        if(truck.baseWeight() > truck.maxWeight())
-            throw new IOException("Truck base weight is bigger than max weight");
+        validateTruck(truck);
 
         trucks.put(truck.id(), truck);
     }
@@ -71,8 +70,8 @@ public class TrucksController {
     public void updateTruck(String id, Truck newTruck) throws IOException{
         if(trucks.containsKey(id) == false)
             throw new IOException("Truck not found");
-        if(newTruck.baseWeight() > newTruck.maxWeight())
-            throw new IOException("Truck base weight is bigger than max weight");
+
+        validateTruck(newTruck);
 
         trucks.put(id, newTruck);
     }
@@ -86,4 +85,20 @@ public class TrucksController {
         return new LinkedList<>(trucks.values());
     }
 
+
+    private static void validateTruck(Truck newTruck) throws IOException {
+
+        //TODO: Add complete error collection instead of throwing on first error
+
+        if(newTruck.baseWeight() <= 0) {
+            throw new IOException("Truck base weight is less than or equal to 0");
+        }
+
+        if(newTruck.maxWeight() <= 0) {
+            throw new IOException("Truck max weight is less than or equal to 0");
+        }
+
+        if(newTruck.baseWeight() > newTruck.maxWeight())
+            throw new IOException("Truck base weight is bigger than max weight");
+    }
 }

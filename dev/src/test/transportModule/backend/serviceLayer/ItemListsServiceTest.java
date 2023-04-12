@@ -64,6 +64,13 @@ class ItemListsServiceTest {
     }
 
     @Test
+    void addItemListAlreadyExists() {
+        String json1 = ils.addItemList(itemList.toJson());
+        Response response1 = Response.fromJson(json1);
+        assertFalse(response1.success());
+    }
+
+    @Test
     void removeItemList() {
         String json1 = ils.removeItemList(itemList.toJson());
         Response response1 = Response.fromJson(json1);
@@ -72,6 +79,14 @@ class ItemListsServiceTest {
         String json2 = ils.getItemList(ItemList.getLookupObject(itemList.id()).toJson());
         Response response2 = Response.fromJson(json2);
         assertFalse(response2.success());
+    }
+
+    @Test
+    void removeItemListDoesNotExist() {
+        ItemList list = ItemList.getLookupObject(1002);
+        String json1 = ils.removeItemList(list.toJson());
+        Response response1 = Response.fromJson(json1);
+        assertFalse(response1.success());
     }
 
     @Test
@@ -91,6 +106,14 @@ class ItemListsServiceTest {
     }
 
     @Test
+    void updateItemListDoesNotExist() {
+        ItemList list = ItemList.getLookupObject(1002);
+        String json1 = ils.updateItemList(list.toJson());
+        Response response1 = Response.fromJson(json1);
+        assertFalse(response1.success());
+    }
+
+    @Test
     void getItemList() {
         String json1 = ils.getItemList(ItemList.getLookupObject(itemList.id()).toJson());
         Response response1 = Response.fromJson(json1);
@@ -99,6 +122,14 @@ class ItemListsServiceTest {
         ItemList retrievedItemList = response1.data(ItemList.class);
         assertEquals(itemList.load(), retrievedItemList.load());
         assertEquals(itemList.unload(), retrievedItemList.unload());
+    }
+
+    @Test
+    void getItemListDoesNotExist() {
+        ItemList list = ItemList.getLookupObject(1002);
+        String json1 = ils.getItemList(list.toJson());
+        Response response1 = Response.fromJson(json1);
+        assertFalse(response1.success());
     }
 
     @Test

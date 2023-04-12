@@ -182,6 +182,7 @@ public class TransportsController {
             catch(IOException e){
                 ec.addError("Item list with id " + itemListId + " does not exist", "itemList:"+destIndex);
             }
+            destIndex++;
         }
 
         // weight validation

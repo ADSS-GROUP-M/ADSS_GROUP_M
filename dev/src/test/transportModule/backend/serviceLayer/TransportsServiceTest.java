@@ -102,10 +102,7 @@ class TransportsServiceTest {
         String json = ts.createTransport(newTransport.toJson());
         Response response = Response.fromJson(json);
         assertTrue(response.success());
-        String updatedJson = ts
-                .getTransport(
-                        Transport.getLookupObject(newTransport.id()).toJson()
-                );
+        String updatedJson = ts.getTransport(Transport.getLookupObject(newTransport.id()).toJson());
         Response updatedResponse = Response.fromJson(updatedJson);
         Transport updatedTransport = updatedResponse.data(Transport.class);
         assertEquals(newTransport.id(), updatedTransport.id());
@@ -116,6 +113,13 @@ class TransportsServiceTest {
         assertEquals(newTransport.driverId(), updatedTransport.driverId());
         assertEquals(newTransport.scheduledTime(), updatedTransport.scheduledTime());
         assertEquals(newTransport.weight(), updatedTransport.weight());
+    }
+
+    @Test
+    void createTransportAlreadyExists(){
+        String json = ts.createTransport(transport.toJson());
+        Response response = Response.fromJson(json);
+        assertFalse(response.success());
     }
 
     @Test
@@ -151,10 +155,7 @@ class TransportsServiceTest {
         String json = ts.updateTransport(newTransport.toJson());
         Response response = Response.fromJson(json);
         assertTrue(response.success());
-        String updatedJson = ts
-                .getTransport(
-                        Transport.getLookupObject(newTransport.id()).toJson()
-                );
+        String updatedJson = ts.getTransport(Transport.getLookupObject(newTransport.id()).toJson());
         Response updatedResponse = Response.fromJson(updatedJson);
         Transport updatedTransport = updatedResponse.data(Transport.class);
         assertEquals(newTransport.id(), updatedTransport.id());
@@ -168,27 +169,33 @@ class TransportsServiceTest {
     }
 
     @Test
+    void updateTransportDoesntExist(){
+        Transport updatedTransport = Transport.getLookupObject(5);
+        String json = ts.updateTransport(updatedTransport.toJson());
+        Response response = Response.fromJson(json);
+        assertFalse(response.success());
+    }
+
+    @Test
     void removeTransport() {
-        String json = ts
-                .removeTransport(
-                        Transport.getLookupObject(transport.id()).toJson()
-                );
+        String json = ts.removeTransport(Transport.getLookupObject(transport.id()).toJson());
         Response response = Response.fromJson(json);
         assertTrue(response.success());
-        String updatedJson = ts
-                .getTransport(
-                        Transport.getLookupObject(transport.id()).toJson()
-                );
+        String updatedJson = ts.getTransport(Transport.getLookupObject(transport.id()).toJson());
         Response updatedResponse = Response.fromJson(updatedJson);
         assertFalse(updatedResponse.success());
     }
 
     @Test
+    void removeTransportDoesntExist(){
+        String json = ts.removeTransport(Transport.getLookupObject(5).toJson());
+        Response response = Response.fromJson(json);
+        assertFalse(response.success());
+    }
+
+    @Test
     void getTransport() {
-        String json = ts
-                .getTransport(
-                        Transport.getLookupObject(transport.id()).toJson()
-                );
+        String json = ts.getTransport(Transport.getLookupObject(transport.id()).toJson());
         Response response = Response.fromJson(json);
         Transport TransportReceived = response.data(Transport.class);
         assertEquals(transport.id(), TransportReceived.id());
@@ -202,11 +209,16 @@ class TransportsServiceTest {
     }
 
     @Test
-    void getAllTransports() {
-        String json = ts
-                .getAllTransports();
+    void getTransportDoesntExist(){
+        String json = ts.getTransport(Transport.getLookupObject(5).toJson());
         Response response = Response.fromJson(json);
+        assertFalse(response.success());
+    }
 
+    @Test
+    void getAllTransports() {
+        String json = ts.getAllTransports();
+        Response response = Response.fromJson(json);
         LinkedList<Transport> updatedTransports = Transport.listFromJson(response.data());
         assertTrue(updatedTransports.contains(transport));
     }
@@ -229,7 +241,7 @@ class TransportsServiceTest {
         String json = ts.createTransport(newTransport.toJson());
         Response response = Response.fromJson(json);
         assertFalse(response.success());
-        assertEquals(response.data(),"weight");
+        assertEquals("weight",response.data());
     }
 
     @Test
@@ -252,7 +264,7 @@ class TransportsServiceTest {
         String json = ts.createTransport(newTransport.toJson());
         Response response = Response.fromJson(json);
         assertFalse(response.success());
-        assertEquals(response.data(),"license");
+        assertEquals("license",response.data());
     }
     @Test
     void createTransportWithBadLicenseAndTooMuchWeight(){
@@ -274,6 +286,31 @@ class TransportsServiceTest {
         String json = ts.createTransport(newTransport.toJson());
         Response response = Response.fromJson(json);
         assertFalse(response.success());
-        assertEquals(response.data(),"weight,license");
+        assertEquals("license,weight",response.data());
     }
+
+    @Test
+    void createTransportEverythingDoesntExist(){
+        Transport newTransport = new Transport(
+                50,
+                "some address",
+                new LinkedList<>(){{
+                    add("some other address");
+                    add("some other address2");
+                }},
+                new HashMap<>(){{
+                    put("some other address", 10);
+                    put("some other address2", 20);
+                }},
+                "some driver",
+                9999999,
+                LocalDateTime.of(2020, 1, 1, 0, 0),
+                10000
+        );
+        String json = ts.createTransport(newTransport.toJson());
+        Response response = Response.fromJson(json);
+        assertFalse(response.success());
+        assertEquals("driver,truck,source,destination:0,itemList:0,destination:1,itemList:1",response.data());
+    }
+
 }

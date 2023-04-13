@@ -414,7 +414,7 @@ public class TransportsManagement {
 
         // send to server
         String json = newTransport.toJson();
-        String responseJson = ts.createTransport(json);
+        String responseJson = ts.addTransport(json);
         Response response = JSON.deserialize(responseJson, Response.class);
         System.out.println("\n"+response.message());
 

@@ -155,7 +155,6 @@ public class AppData {
         rms.addSite(site4.toJson());
         rms.addSite(site5.toJson());
 
-
         // generate item lists with random data:
         HashMap<String, Integer> load1 = new HashMap<>();
         load1.put("shirts", 20);
@@ -167,7 +166,7 @@ public class AppData {
         unload1.put("hats", 5);
         unload1.put("gloves", 20);
 
-        ItemList itemList1 = new ItemList(1001, load1, unload1);
+        ItemList itemList1 = new ItemList(load1, unload1);
 
         HashMap<String, Integer> load2 = new HashMap<>();
         load2.put("pencils", 50);
@@ -179,7 +178,7 @@ public class AppData {
         unload2.put("markers", 15);
         unload2.put("highlighters", 25);
 
-        ItemList itemList2 = new ItemList(1002, load2, unload2);
+        ItemList itemList2 = new ItemList(load2, unload2);
 
         HashMap<String, Integer> load3 = new HashMap<>();
         load3.put("laptops", 5);
@@ -191,7 +190,7 @@ public class AppData {
         unload3.put("monitors", 12);
         unload3.put("printers", 6);
 
-        ItemList itemList3 = new ItemList(1003, load3, unload3);
+        ItemList itemList3 = new ItemList(load3, unload3);
 
         HashMap<String, Integer> load4 = new HashMap<>();
         load4.put("carrots", 15);
@@ -203,7 +202,7 @@ public class AppData {
         unload4.put("peppers", 8);
         unload4.put("cucumbers", 18);
 
-        ItemList itemList4 = new ItemList(1004, load4, unload4);
+        ItemList itemList4 = new ItemList(load4, unload4);
 
         HashMap<String, Integer> load5 = new HashMap<>();
         load5.put("screws", 500);
@@ -215,7 +214,7 @@ public class AppData {
         unload5.put("anchors", 600);
         unload5.put("clamps", 900);
 
-        ItemList itemList5 = new ItemList(1005, load5, unload5);
+        ItemList itemList5 = new ItemList(load5, unload5);
 
         ils.addItemList(itemList1.toJson());
         ils.addItemList(itemList2.toJson());
@@ -225,12 +224,11 @@ public class AppData {
 
         // Randomly generated transports
         Transport transport1 = new Transport(
-                2001,
                 site1.address(),
                 new LinkedList<>(Arrays.asList(site2.address(), site3.address())),
                 new HashMap<>() {{
-                    put(site2.address(), itemList1.id());
-                    put(site3.address(), itemList2.id());
+                    put(site2.address(), 1);
+                    put(site3.address(), 2);
                 }},
                 truck1.id(),
                 driver1.id(),
@@ -239,12 +237,11 @@ public class AppData {
         );
 
         Transport transport2 = new Transport(
-                2002,
                 site2.address(),
                 new LinkedList<>(Arrays.asList(site1.address(), site4.address())),
                 new HashMap<>() {{
-                    put(site1.address(), itemList3.id());
-                    put(site4.address(), itemList4.id());
+                    put(site1.address(), 3);
+                    put(site4.address(), 4);
                 }},
                 truck2.id(),
                 driver2.id(),
@@ -253,12 +250,11 @@ public class AppData {
         );
 
         Transport transport3 = new Transport(
-                2003,
                 site3.address(),
                 new LinkedList<>(Arrays.asList(site1.address(), site5.address())),
                 new HashMap<>() {{
-                    put(site1.address(), itemList2.id());
-                    put(site5.address(), itemList5.id());
+                    put(site1.address(), 2);
+                    put(site5.address(), 5);
                 }},
                 truck3.id(),
                 driver3.id(),
@@ -267,13 +263,12 @@ public class AppData {
         );
 
         Transport transport4 = new Transport(
-                2004,
                 site4.address(),
                 new LinkedList<>(Arrays.asList(site2.address(), site3.address(), site5.address())),
                 new HashMap<>() {{
-                    put(site2.address(), itemList4.id());
-                    put(site3.address(), itemList1.id());
-                    put(site5.address(), itemList3.id());
+                    put(site2.address(), 4);
+                    put(site3.address(), 1);
+                    put(site5.address(), 3);
                 }},
                 truck4.id(),
                 driver4.id(),
@@ -282,11 +277,10 @@ public class AppData {
         );
 
         Transport transport5 = new Transport(
-                2005,
                 site5.address(),
                 new LinkedList<>(List.of(site4.address())),
                 new HashMap<>() {{
-                    put(site4.address(), itemList2.id());
+                    put(site4.address(), 2);
                 }},
                 truck5.id(),
                 driver5.id(),
@@ -294,14 +288,13 @@ public class AppData {
                 truck5.maxWeight()
         );
 
-        ts.createTransport(transport1.toJson());
-        ts.createTransport(transport2.toJson());
-        ts.createTransport(transport3.toJson());
-        ts.createTransport(transport4.toJson());
-        ts.createTransport(transport5.toJson());
-
+        ts.addTransport(transport1.toJson());
+        ts.addTransport(transport2.toJson());
+        ts.addTransport(transport3.toJson());
+        ts.addTransport(transport4.toJson());
+        ts.addTransport(transport5.toJson());
     }
-
+    
     //==========================================================================|
     //============================== HELPER METHODS ============================|
     //==========================================================================|

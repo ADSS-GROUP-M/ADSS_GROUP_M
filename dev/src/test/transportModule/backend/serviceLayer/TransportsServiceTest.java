@@ -40,9 +40,12 @@ class TransportsServiceTest {
         unload1.put("jackets", 10);
         unload1.put("hats", 5);
         unload1.put("gloves", 20);
-        ItemList itemList1 = new ItemList(1001, load1, unload1);
+        ItemList itemList1 = new ItemList(load1, unload1);
 
-        ils.addItemList(itemList1.toJson());
+
+        String json = ils.addItemList(itemList1.toJson());
+        int id = Response.fromJson(json).dataToInt();
+        itemList1 = itemList1.newId(id);
 
         rms.addDriver(driver1.toJson());
         rms.addTruck(truck1.toJson());
@@ -53,7 +56,6 @@ class TransportsServiceTest {
         hm.put(site2.address(), itemList1.id());
 
         transport = new Transport(
-                1,
                 site1.address(),
                 new LinkedList<>(List.of(site2.address())),
                 hm,
@@ -62,7 +64,9 @@ class TransportsServiceTest {
                 LocalDateTime.of(2020, 1, 1, 0, 0),
                 100
         );
-        ts.createTransport(transport.toJson());
+        String json2 = ts.addTransport(transport.toJson());
+        int id2 = Response.fromJson(json2).dataToInt();
+        transport = transport.newId(id2);
     }
 
     @AfterEach
@@ -71,7 +75,7 @@ class TransportsServiceTest {
     }
 
     @Test
-    void createTransport() {
+    void addTransport() {
         HashMap<String, Integer> load1 = new HashMap<>();
         load1.put("shirts", 20);
         load1.put("pants", 15);
@@ -81,7 +85,11 @@ class TransportsServiceTest {
         unload1.put("hats", 5);
         unload1.put("gloves", 20);
 
-        ItemList itemList = new ItemList(1001, load1, unload1);
+        ItemList itemList = new ItemList(load1, unload1);
+
+        String json = ils.addItemList(itemList.toJson());
+        int id = Response.fromJson(json).dataToInt();
+        itemList = itemList.newId(id);
 
         HashMap<String,Integer> hm = new HashMap<>();
 
@@ -90,7 +98,6 @@ class TransportsServiceTest {
         hm.put(destination.address(), itemList.id());
         LinkedList<String> destinations = new LinkedList<>(List.of(destination.address()));
         Transport newTransport = new Transport(
-                50,
                 source.address(),
                 destinations,
                 hm,
@@ -99,10 +106,11 @@ class TransportsServiceTest {
                 LocalDateTime.of(2020, 1, 1, 0, 0),
                 2000
         );
-        String json = ts.createTransport(newTransport.toJson());
-        Response response = Response.fromJson(json);
+        String json2 = ts.addTransport(newTransport.toJson());
+        Response response = Response.fromJson(json2);
         assertTrue(response.success());
-        String updatedJson = ts.getTransport(Transport.getLookupObject(newTransport.id()).toJson());
+        newTransport = newTransport.newId(response.dataToInt());
+        String updatedJson = ts.getTransport(Transport.getLookupObject(response.dataToInt()).toJson());
         Response updatedResponse = Response.fromJson(updatedJson);
         Transport updatedTransport = updatedResponse.data(Transport.class);
         assertEquals(newTransport.id(), updatedTransport.id());
@@ -116,10 +124,13 @@ class TransportsServiceTest {
     }
 
     @Test
-    void createTransportAlreadyExists(){
-        String json = ts.createTransport(transport.toJson());
-        Response response = Response.fromJson(json);
-        assertFalse(response.success());
+    void addTransportPredefinedId(){
+        try {
+            ts.addTransport(Transport.getLookupObject(1001).toJson());
+        } catch (UnsupportedOperationException e) {
+            return;
+        }
+        fail();
     }
 
     @Test
@@ -134,12 +145,20 @@ class TransportsServiceTest {
         unload1.put("hats", 5);
         unload1.put("gloves", 20);
 
-        ItemList itemList = new ItemList(1001, load1, unload1);
+        ItemList itemList = new ItemList(load1, unload1);
+
+        String json = ils.addItemList(itemList.toJson());
+        int id = Response.fromJson(json).dataToInt();
+        itemList = itemList.newId(id);
 
         HashMap<String,Integer> hm = new HashMap<>();
 
-        Site source = new Site("zone b", "456 oak ave", "(555) 234-5678", "jane doe", Site.SiteType.LOGISTICAL_CENTER);
-        Site destination = new Site("zone a", "123 main st", "(555) 123-4567", "john smith", Site.SiteType.BRANCH);
+        Site source = new Site("zone b", "456 oak ave UPDATED", "(555) 234-5678", "jane doe", Site.SiteType.LOGISTICAL_CENTER);
+        Site destination = new Site("zone a", "123 main st UPDATED", "(555) 123-4567", "john smith", Site.SiteType.BRANCH);
+
+        rms.addSite(source.toJson());
+        rms.addSite(destination.toJson());
+
         hm.put(destination.address(), itemList.id());
         LinkedList<String> destinations = new LinkedList<>(List.of(destination.address()));
         Transport newTransport = new Transport(
@@ -152,8 +171,8 @@ class TransportsServiceTest {
                 LocalDateTime.of(2020, 1, 1, 0, 0),
                 2000
         );
-        String json = ts.updateTransport(newTransport.toJson());
-        Response response = Response.fromJson(json);
+        String json2 = ts.updateTransport(newTransport.toJson());
+        Response response = Response.fromJson(json2);
         assertTrue(response.success());
         String updatedJson = ts.getTransport(Transport.getLookupObject(newTransport.id()).toJson());
         Response updatedResponse = Response.fromJson(updatedJson);
@@ -229,7 +248,6 @@ class TransportsServiceTest {
         rms.addTruck(truck1.toJson());
 
         Transport newTransport = new Transport(
-                50,
                 "123 main st",
                 new LinkedList<>(),
                 new HashMap<>(),
@@ -238,7 +256,7 @@ class TransportsServiceTest {
                 LocalDateTime.of(2020, 1, 1, 0, 0),
                 30000
         );
-        String json = ts.createTransport(newTransport.toJson());
+        String json = ts.addTransport(newTransport.toJson());
         Response response = Response.fromJson(json);
         assertFalse(response.success());
         assertEquals("weight",response.data());
@@ -252,7 +270,6 @@ class TransportsServiceTest {
         rms.addTruck(truck1.toJson());
 
         Transport newTransport = new Transport(
-                50,
                 "123 main st",
                 new LinkedList<>(),
                 new HashMap<>(),
@@ -261,7 +278,7 @@ class TransportsServiceTest {
                 LocalDateTime.of(2020, 1, 1, 0, 0),
                 10000
         );
-        String json = ts.createTransport(newTransport.toJson());
+        String json = ts.addTransport(newTransport.toJson());
         Response response = Response.fromJson(json);
         assertFalse(response.success());
         assertEquals("license",response.data());
@@ -274,7 +291,6 @@ class TransportsServiceTest {
         rms.addTruck(truck1.toJson());
 
         Transport newTransport = new Transport(
-                50,
                 "123 main st",
                 new LinkedList<>(),
                 new HashMap<>(),
@@ -283,7 +299,7 @@ class TransportsServiceTest {
                 LocalDateTime.of(2020, 1, 1, 0, 0),
                 30000
         );
-        String json = ts.createTransport(newTransport.toJson());
+        String json = ts.addTransport(newTransport.toJson());
         Response response = Response.fromJson(json);
         assertFalse(response.success());
         assertEquals("license,weight",response.data());
@@ -292,7 +308,6 @@ class TransportsServiceTest {
     @Test
     void createTransportEverythingDoesNotExist(){
         Transport newTransport = new Transport(
-                50,
                 "some address",
                 new LinkedList<>(){{
                     add("some other address");
@@ -307,7 +322,7 @@ class TransportsServiceTest {
                 LocalDateTime.of(2020, 1, 1, 0, 0),
                 10000
         );
-        String json = ts.createTransport(newTransport.toJson());
+        String json = ts.addTransport(newTransport.toJson());
         Response response = Response.fromJson(json);
         assertFalse(response.success());
         assertEquals("driver,truck,source,destination:0,itemList:0,destination:1,itemList:1",response.data());

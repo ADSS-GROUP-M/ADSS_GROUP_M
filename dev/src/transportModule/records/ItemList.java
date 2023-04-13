@@ -16,9 +16,9 @@ public record ItemList (int id, HashMap<String, Integer> load,HashMap<String, In
      */
     public ItemList(int id, ItemList other){
         this(
-                id,
-                other.load,
-                other.unload
+            id,
+            other.load,
+            other.unload
         );
     }
 
@@ -27,10 +27,14 @@ public record ItemList (int id, HashMap<String, Integer> load,HashMap<String, In
      */
     public ItemList(HashMap<String, Integer> load,HashMap<String, Integer> unload) {
         this(
-                -1,
-                load,
-                unload
+            -1,
+            load,
+            unload
         );
+    }
+
+    public ItemList newId(int id){
+        return new ItemList(id,this);
     }
 
     public static ItemList getLookupObject(int id){

@@ -81,6 +81,10 @@ public record Transport (int id, String source, LinkedList<String> destinations,
     public int hashCode() {
         return Objects.hash(id);
     }
+
+    public Transport newId(int id) {
+        return new Transport(id, this);
+    }
 }
 
 

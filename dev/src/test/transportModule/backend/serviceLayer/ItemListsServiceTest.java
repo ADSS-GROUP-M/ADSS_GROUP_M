@@ -29,9 +29,10 @@ class ItemListsServiceTest {
         unload1.put("Hats", 5);
         unload1.put("Gloves", 20);
 
-        itemList = new ItemList(1001, load1, unload1);
-
-        ils.addItemList(itemList.toJson());
+        itemList = new ItemList(load1, unload1);
+        String json = ils.addItemList(itemList.toJson());
+        int id = Response.fromJson(json).dataToInt();
+        itemList = itemList.newId(id);
     }
 
     @AfterEach
@@ -51,12 +52,12 @@ class ItemListsServiceTest {
         unload2.put("Spoons", 15);
         unload2.put("Napkins", 25);
 
-        ItemList itemList2 = new ItemList(1002, load2, unload2);
+        ItemList itemList2 = new ItemList(load2, unload2);
         String json1 = ils.addItemList(itemList2.toJson());
         Response response1 = Response.fromJson(json1);
         assertTrue(response1.success());
 
-        String json2 = ils.getItemList(ItemList.getLookupObject(itemList2.id()).toJson());
+        String json2 = ils.getItemList(ItemList.getLookupObject(response1.dataToInt()).toJson());
         Response response2 = Response.fromJson(json2);
         ItemList addedItemList = response2.data(ItemList.class);
         assertEquals(itemList2.load(), addedItemList.load());
@@ -64,10 +65,14 @@ class ItemListsServiceTest {
     }
 
     @Test
-    void addItemListAlreadyExists() {
-        String json1 = ils.addItemList(itemList.toJson());
-        Response response1 = Response.fromJson(json1);
-        assertFalse(response1.success());
+    void addItemListPredefinedId() {
+
+        try {
+            ils.addItemList(ItemList.getLookupObject(1001).toJson());
+        } catch (UnsupportedOperationException e) {
+            return;
+        }
+        fail();
     }
 
     @Test
@@ -146,7 +151,7 @@ class ItemListsServiceTest {
             unload.put("Hats", 5);
             unload.put("Gloves", 20);
 
-            ItemList itemList = new ItemList(1002 + i, load, unload);
+            ItemList itemList = new ItemList(load, unload);
             ils.addItemList(itemList.toJson());
         }
 

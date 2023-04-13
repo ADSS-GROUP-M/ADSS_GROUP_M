@@ -65,6 +65,10 @@ public class Response {
         return data;
     }
 
+    public Integer dataToInt(){
+        return Integer.parseInt(data);
+    }
+
     /**
      * This method will serialize the response object using {@link JSON#serialize(Object)}
      */

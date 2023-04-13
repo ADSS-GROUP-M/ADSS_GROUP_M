@@ -27,31 +27,15 @@ public class ItemListsController {
      * @return The ID of the added item list.
      * @throws TransportException If the item list already exists in the system.
      */
-    public Integer addItemList(ItemList itemList) throws TransportException{
+    public Integer addItemList(ItemList itemList){
 
-        //TODO: remove support for pre-defined IDs and move to auto-incrementing IDs.
-        // currently, the ID is set to -1 if it is not pre-defined.
-        // this is a temporary solution until the DB is implemented.
-
-        if(listExists(itemList.id())) {
-            throw new TransportException("An item list with this id already exists");
-        }
-
-        //<TEMPORARY SOLUTION>
         if(itemList.id() != -1){
-
-            //TODO: uncomment this when pre-defined IDs are no longer supported
-            //throw new UnsupportedOperationException("Pre-defined IDs are not supported");
-
-            itemLists.put(itemList.id(), itemList);
-            return itemList.id();
+            throw new UnsupportedOperationException("Pre-defined IDs are not supported");
         }
-        //<TEMPORARY SOLUTION/>
-        else{
-            ItemList toAdd = new ItemList(idCounter++, itemList);
-            itemLists.put(toAdd.id(), toAdd);
-            return toAdd.id();
-        }
+
+        ItemList toAdd = new ItemList(idCounter++, itemList);
+        itemLists.put(toAdd.id(), toAdd);
+        return toAdd.id();
     }
 
     /**

@@ -29,7 +29,7 @@ public class TransportsController {
         this.tc = tc;
         this.dc = dc;
         transports = new TreeMap<>();
-        idCounter = 0; //TODO: currently not in use. this will have to be restored from the DB in the future
+        idCounter = 1; //TODO: currently not in use. this will have to be restored from the DB in the future
     }
 
     /**
@@ -40,31 +40,15 @@ public class TransportsController {
      */
     public Integer addTransport(Transport transport)throws TransportException{
 
-        //TODO: remove support for pre-defined IDs and move to auto-incrementing IDs.
-        // currently, the ID is set to -1 if it is not pre-defined.
-        // this is a temporary solution until the DB is implemented.
-
-        if(transportExists(transport.id())) {
-            throw new TransportException("A transport with this id already exists");
+        if(transport.id() != -1){
+            throw new UnsupportedOperationException("Pre-defined IDs are not supported");
         }
 
         validateTransport(transport);
 
-        //<TEMPORARY SOLUTION>
-        if(transport.id() != -1){
-
-            //TODO: uncomment this when pre-defined IDs are no longer supported
-            //throw new UnsupportedOperationException("Pre-defined IDs are not supported");
-
-            transports.put(transport.id(), transport);
-            return transport.id();
-        }
-        //<TEMPORARY SOLUTION/>
-        else{
-            Transport toAdd = new Transport(idCounter++,transport);
-            transports.put(toAdd.id(), toAdd);
-            return toAdd.id();
-        }
+        Transport toAdd = new Transport(idCounter++,transport);
+        transports.put(toAdd.id(), toAdd);
+        return toAdd.id();
     }
 
     /**

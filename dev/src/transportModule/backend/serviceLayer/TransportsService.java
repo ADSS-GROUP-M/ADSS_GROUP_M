@@ -16,6 +16,7 @@ public class TransportsService {
 
     /**
      * @param json serialized {@link Transport} object with id -1
+     * @throws UnsupportedOperationException if transport.id() != -1
      * @return if successful, a serialized {@link Response} object with the id of the added transport in the data field
      * <br/><br/>
      * if unsuccessful, a serialized {@link Response} object with all the collected errors
@@ -44,12 +45,12 @@ public class TransportsService {
      * <br/>
      * itemList:1 means that the second item list failed validation
      */
-    public String createTransport(String json){
+    public String addTransport(String json){
         Transport transport = Transport.fromJson(json);
         try
         {
             Integer id = tc.addTransport(transport);
-            return new Response("Transport created successfully",true, id).toJson();
+            return new Response("Transport added successfully with id "+id,true, id).toJson();
         }
         catch(TransportException e){
             return Response.getErrorResponse(e).toJson();

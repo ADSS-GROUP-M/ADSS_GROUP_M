@@ -2,7 +2,7 @@ package transportModule.frontend.cmdApp;
 
 import transportModule.backend.serviceLayer.ResourceManagementService;
 import transportModule.records.Truck;
-import utils.JSON;
+import utils.JsonUtils;
 import utils.Response;
 
 public class TrucksManagement {
@@ -61,7 +61,7 @@ public class TrucksManagement {
         Truck newTruck = new Truck(licensePlate, model, baseWeight, maxWeight,coolingCapacity);
         String json = newTruck.toJson();
         String responseJson = rms.addTruck(json);
-        Response response = JSON.deserialize(responseJson, Response.class);
+        Response response = JsonUtils.deserialize(responseJson, Response.class);
         if(response.success()) {
             appData.trucks().put(licensePlate, newTruck);
         }
@@ -142,7 +142,7 @@ public class TrucksManagement {
         Truck newTruck = new Truck(licensePlate, model, baseWeight, maxWeight,coolingCapacity);
         String json = newTruck.toJson();
         String responseJson = rms.updateTruck(json);
-        Response response = JSON.deserialize(responseJson, Response.class);
+        Response response = JsonUtils.deserialize(responseJson, Response.class);
         if(response.success()) {
             appData.trucks().put(licensePlate, newTruck);
         }
@@ -167,7 +167,7 @@ public class TrucksManagement {
                 case "y"->{
                     String json = truck.toJson();
                     String responseJson = rms.removeTruck(json);
-                    Response response = JSON.deserialize(responseJson, Response.class);
+                    Response response = JsonUtils.deserialize(responseJson, Response.class);
                     if(response.success()) {
                         appData.trucks().remove(truck.id());
                     }

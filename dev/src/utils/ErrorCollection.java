@@ -69,10 +69,10 @@ public class ErrorCollection {
     }
 
     public String toJson(){
-        return JSON.serialize(this);
+        return JsonUtils.serialize(this);
     }
 
     public static ErrorCollection fromJson(String json){
-        return JSON.deserialize(json, ErrorCollection.class);
+        return JsonUtils.deserialize(json, ErrorCollection.class);
     }
 }

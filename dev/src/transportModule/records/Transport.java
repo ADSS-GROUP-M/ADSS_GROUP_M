@@ -1,7 +1,7 @@
 package transportModule.records;
 
 import com.google.gson.reflect.TypeToken;
-import utils.JSON;
+import utils.JsonUtils;
 
 import java.lang.reflect.Type;
 import java.time.LocalDateTime;
@@ -53,16 +53,16 @@ public record Transport (int id, String source, LinkedList<String> destinations,
     }
 
     public String toJson(){
-        return JSON.serialize(this);
+        return JsonUtils.serialize(this);
     }
 
     public static Transport fromJson(String json){
-        return JSON.deserialize(json, Transport.class);
+        return JsonUtils.deserialize(json, Transport.class);
     }
 
     public static LinkedList<Transport> listFromJson(String json){
         Type type = new TypeToken<LinkedList<Transport>>(){}.getType();
-        return JSON.deserialize(json, type);
+        return JsonUtils.deserialize(json, type);
     }
 
     @Override

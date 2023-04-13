@@ -2,7 +2,7 @@ package transportModule.frontend.cmdApp;
 
 import transportModule.backend.serviceLayer.ResourceManagementService;
 import transportModule.records.Driver;
-import utils.JSON;
+import utils.JsonUtils;
 import utils.Response;
 
 public class DriversManagement {
@@ -55,7 +55,7 @@ public class DriversManagement {
         Driver newDriver = new Driver(id, fullName, licenseType);
         String json = newDriver.toJson();
         String responseJson = rms.addDriver(json);
-        Response response = JSON.deserialize(responseJson, Response.class);
+        Response response = JsonUtils.deserialize(responseJson, Response.class);
         if(response.success()) {
             appData.drivers().put(id, newDriver);
         }
@@ -106,7 +106,7 @@ public class DriversManagement {
         Driver updatedDriver = new Driver(id, name, licenseType);
         String json = updatedDriver.toJson();
         String responseJson = rms.updateDriver(json);
-        Response response = JSON.deserialize(responseJson, Response.class);
+        Response response = JsonUtils.deserialize(responseJson, Response.class);
         if(response.success()) {
             appData.drivers().put(id, updatedDriver);
         }
@@ -131,7 +131,7 @@ public class DriversManagement {
                 case "y" ->{
                     String json = driver.toJson();
                     String responseJson = rms.removeDriver(json);
-                    Response response = JSON.deserialize(responseJson, Response.class);
+                    Response response = JsonUtils.deserialize(responseJson, Response.class);
                     if(response.success()) {
                         appData.drivers().remove(driver.id());
                     }

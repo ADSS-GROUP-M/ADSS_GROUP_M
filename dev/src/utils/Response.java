@@ -9,12 +9,12 @@ public class Response {
     private final String data;
 
     /**
-     * The data parameter will be serialized using {@link JSON#serialize(Object)}
+     * The data parameter will be serialized using {@link JsonUtils#serialize(Object)}
      */
     public <T> Response(String message, boolean success, T data) {
         this.message = message;
         this.success = success;
-        this.data = JSON.serialize(data);
+        this.data = JsonUtils.serialize(data);
     }
 
     /**
@@ -54,7 +54,7 @@ public class Response {
         if(data == null) {
             return null;
         }
-        return JSON.deserialize(data,typeOfT);
+        return JsonUtils.deserialize(data,typeOfT);
     }
 
     /**
@@ -70,17 +70,17 @@ public class Response {
     }
 
     /**
-     * This method will serialize the response object using {@link JSON#serialize(Object)}
+     * This method will serialize the response object using {@link JsonUtils#serialize(Object)}
      */
     public String toJson(){
-        return JSON.serialize(this);
+        return JsonUtils.serialize(this);
     }
 
     /**
-     * This method will deserialize the json string using {@link JSON#deserialize(String, Type)}
+     * This method will deserialize the json string using {@link JsonUtils#deserialize(String, Type)}
      */
     public static Response fromJson(String json){
-        return JSON.deserialize(json, Response.class);
+        return JsonUtils.deserialize(json, Response.class);
     }
 
     /**

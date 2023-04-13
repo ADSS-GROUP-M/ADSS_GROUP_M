@@ -2,7 +2,7 @@ package transportModule.frontend.cmdApp;
 
 import transportModule.backend.serviceLayer.ItemListsService;
 import transportModule.records.ItemList;
-import utils.JSON;
+import utils.JsonUtils;
 import utils.Response;
 
 import java.util.HashMap;
@@ -53,7 +53,7 @@ public class ItemListsManagement {
         itemEditor(list.unload());
         String json = list.toJson();
         String responseJson = ils.addItemList(json);
-        Response response = JSON.deserialize(responseJson, Response.class);
+        Response response = JsonUtils.deserialize(responseJson, Response.class);
         if(response.success()) {
             int id = response.dataToInt();
             list = list.newId(id);
@@ -88,7 +88,7 @@ public class ItemListsManagement {
             itemEditor(newList.unload());
             String json = newList.toJson();
             String responseJson = ils.updateItemList(json);
-            Response response = JSON.deserialize(responseJson, Response.class);
+            Response response = JsonUtils.deserialize(responseJson, Response.class);
             if(response.success()) {
                 appData.itemLists().put(id,newList);
             }
@@ -111,7 +111,7 @@ public class ItemListsManagement {
                 case "y" ->{
                     String json = list.toJson();
                     String responseJson = ils.removeItemList(json);
-                    Response response = JSON.deserialize(responseJson, Response.class);
+                    Response response = JsonUtils.deserialize(responseJson, Response.class);
                     if(response.success()) {
                         appData.itemLists().remove(id);
                     }

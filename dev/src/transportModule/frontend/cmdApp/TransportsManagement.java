@@ -3,7 +3,7 @@ package transportModule.frontend.cmdApp;
 import transportModule.backend.serviceLayer.TransportsService;
 import transportModule.records.Site;
 import transportModule.records.Transport;
-import utils.JSON;
+import utils.JsonUtils;
 import utils.Response;
 
 import java.time.LocalDate;
@@ -303,7 +303,7 @@ public class TransportsManagement {
                 case "y" -> {
                     String json = transport.toJson();
                     String responseJson = ts.removeTransport(json);
-                    Response response = JSON.deserialize(responseJson, Response.class);
+                    Response response = JsonUtils.deserialize(responseJson, Response.class);
                     if (response.success()) {
                         appData.transports().remove(transport.id());
                     }
@@ -365,7 +365,7 @@ public class TransportsManagement {
 
         String json = newTransport.toJson();
         String responseJson = ts.updateTransport(json);
-        Response response = JSON.deserialize(responseJson, Response.class);
+        Response response = JsonUtils.deserialize(responseJson, Response.class);
         if(response.success()){
             appData.transports().put(id, newTransport);
         }
@@ -410,7 +410,7 @@ public class TransportsManagement {
         // send to server
         String json = newTransport.toJson();
         String responseJson = ts.addTransport(json);
-        Response response = JSON.deserialize(responseJson, Response.class);
+        Response response = JsonUtils.deserialize(responseJson, Response.class);
         System.out.println("\n"+response.message());
 
         if(response.success()){

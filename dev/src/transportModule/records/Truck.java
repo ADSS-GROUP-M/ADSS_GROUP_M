@@ -1,7 +1,7 @@
 package transportModule.records;
 
 import com.google.gson.reflect.TypeToken;
-import utils.JSON;
+import utils.JsonUtils;
 
 import java.lang.reflect.Type;
 import java.util.LinkedList;
@@ -40,16 +40,16 @@ public record Truck (String id, String model, int baseWeight, int maxWeight, Coo
     }
 
     public String toJson(){
-        return JSON.serialize(this);
+        return JsonUtils.serialize(this);
     }
 
     public static Truck fromJson(String json){
-        return JSON.deserialize(json, Truck.class);
+        return JsonUtils.deserialize(json, Truck.class);
     }
 
     public static LinkedList<Truck> listFromJson(String json){
         Type type = new TypeToken<LinkedList<Truck>>(){}.getType();
-        return JSON.deserialize(json, type);
+        return JsonUtils.deserialize(json, type);
     }
 
     @Override

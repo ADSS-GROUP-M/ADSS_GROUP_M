@@ -1,7 +1,7 @@
 package transportModule.records;
 
 import com.google.gson.reflect.TypeToken;
-import utils.JSON;
+import utils.JsonUtils;
 
 import java.lang.reflect.Type;
 import java.util.LinkedList;
@@ -20,16 +20,16 @@ public record Site (String transportZone, String address, String phoneNumber, St
     }
 
     public String toJson(){
-        return JSON.serialize(this);
+        return JsonUtils.serialize(this);
     }
 
     public static Site fromJson(String json){
-        return JSON.deserialize(json, Site.class);
+        return JsonUtils.deserialize(json, Site.class);
     }
 
     public static LinkedList<Site> listFromJson(String json){
         Type type = new TypeToken<LinkedList<Site>>(){}.getType();
-        return JSON.deserialize(json, type);
+        return JsonUtils.deserialize(json, type);
     }
 
     @Override

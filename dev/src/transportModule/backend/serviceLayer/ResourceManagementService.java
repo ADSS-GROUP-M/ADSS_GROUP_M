@@ -6,7 +6,7 @@ import transportModule.backend.businessLayer.TrucksController;
 import transportModule.records.Driver;
 import transportModule.records.Site;
 import transportModule.records.Truck;
-import utils.JSON;
+import utils.JsonUtils;
 import utils.Response;
 
 import utils.TransportException;
@@ -24,7 +24,7 @@ public class ResourceManagementService {
     }
 
     public String addDriver(String json){
-        Driver driver = JSON.deserialize(json, Driver.class);
+        Driver driver = JsonUtils.deserialize(json, Driver.class);
         try{
             driversController.addDriver(driver);
         }catch(TransportException e){
@@ -34,7 +34,7 @@ public class ResourceManagementService {
     }
 
     public String removeDriver(String json){
-        Driver driver = JSON.deserialize(json, Driver.class);
+        Driver driver = JsonUtils.deserialize(json, Driver.class);
         try{
             driversController.removeDriver(driver.id());
         }catch(TransportException e){
@@ -44,7 +44,7 @@ public class ResourceManagementService {
     }
 
     public String updateDriver(String json){
-        Driver driver = JSON.deserialize(json, Driver.class);
+        Driver driver = JsonUtils.deserialize(json, Driver.class);
         try{
             driversController.updateDriver(driver.id(), driver);
         }catch(TransportException e){
@@ -54,7 +54,7 @@ public class ResourceManagementService {
     }
 
     public String getDriver(String json){
-        Driver driver = JSON.deserialize(json, Driver.class);
+        Driver driver = JsonUtils.deserialize(json, Driver.class);
         try{
             driver = driversController.getDriver(driver.id());
         }catch(Exception e){
@@ -68,7 +68,7 @@ public class ResourceManagementService {
     }
 
     public String addTruck(String json){
-        Truck truck = JSON.deserialize(json, Truck.class);
+        Truck truck = JsonUtils.deserialize(json, Truck.class);
         try{
             trucksController.addTruck(truck);
         }catch(TransportException e){
@@ -78,7 +78,7 @@ public class ResourceManagementService {
     }
 
     public String removeTruck(String json){
-        Truck truck = JSON.deserialize(json, Truck.class);
+        Truck truck = JsonUtils.deserialize(json, Truck.class);
         try{
             trucksController.removeTruck(truck.id());
         }catch(TransportException e){
@@ -88,7 +88,7 @@ public class ResourceManagementService {
     }
 
     public String updateTruck(String json){
-        Truck truck = JSON.deserialize(json, Truck.class);
+        Truck truck = JsonUtils.deserialize(json, Truck.class);
         try{
             trucksController.updateTruck(truck.id(), truck);
         }catch(TransportException e){
@@ -98,7 +98,7 @@ public class ResourceManagementService {
     }
 
     public String getTruck(String json){
-        Truck truck = JSON.deserialize(json, Truck.class);
+        Truck truck = JsonUtils.deserialize(json, Truck.class);
         try{
             truck = trucksController.getTruck(truck.id());
         }catch(Exception e){
@@ -112,7 +112,7 @@ public class ResourceManagementService {
     }
 
     public String addSite(String json){
-        Site site = JSON.deserialize(json, Site.class);
+        Site site = JsonUtils.deserialize(json, Site.class);
         try{
             sitesController.addSite(site);
         }catch(TransportException e){
@@ -122,7 +122,7 @@ public class ResourceManagementService {
     }
 
     public String removeSite(String json){
-        Site site = JSON.deserialize(json, Site.class);
+        Site site = JsonUtils.deserialize(json, Site.class);
         try{
             sitesController.removeSite(site.address());
         }catch(TransportException e){
@@ -132,7 +132,7 @@ public class ResourceManagementService {
     }
 
     public String updateSite(String json){
-        Site site = JSON.deserialize(json, Site.class);
+        Site site = JsonUtils.deserialize(json, Site.class);
         try{
             sitesController.updateSite(site.address(), site);
         }catch(TransportException e){
@@ -142,7 +142,7 @@ public class ResourceManagementService {
     }
 
     public String getSite(String json){
-        Site site = JSON.deserialize(json, Site.class);
+        Site site = JsonUtils.deserialize(json, Site.class);
         try{
             site = sitesController.getSite(site.address());
         }catch(Exception e){

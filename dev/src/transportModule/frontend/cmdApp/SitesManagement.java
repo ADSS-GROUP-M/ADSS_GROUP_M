@@ -2,7 +2,7 @@ package transportModule.frontend.cmdApp;
 
 import transportModule.backend.serviceLayer.ResourceManagementService;
 import transportModule.records.Site;
-import utils.JSON;
+import utils.JsonUtils;
 import utils.Response;
 
 public class SitesManagement {
@@ -66,7 +66,7 @@ public class SitesManagement {
         Site newSite = new Site(transportZone, address, contactPhone, contactName, type);
         String json = newSite.toJson();
         String responseJson = rms.addSite(json);
-        Response response = JSON.deserialize(responseJson, Response.class);
+        Response response = JsonUtils.deserialize(responseJson, Response.class);
         if(response.success()) {
             appData.sites().put(newSite.address(), newSite);
         }
@@ -128,7 +128,7 @@ public class SitesManagement {
         Site newSite = new Site(transportZone, address, phoneNumber, contactName, siteType);
         String json = newSite.toJson();
         String responseJson = rms.updateSite(json);
-        Response response = JSON.deserialize(responseJson, Response.class);
+        Response response = JsonUtils.deserialize(responseJson, Response.class);
         if(response.success()) {
             appData.sites().put(newSite.address(), newSite);
         }
@@ -153,7 +153,7 @@ public class SitesManagement {
                 case "y"-> {
                     String json = site.toJson();
                     String responseJson = rms.removeSite(json);
-                    Response response = JSON.deserialize(responseJson, Response.class);
+                    Response response = JsonUtils.deserialize(responseJson, Response.class);
                     if(response.success()) {
                         appData.sites().remove(site.address());
                     }

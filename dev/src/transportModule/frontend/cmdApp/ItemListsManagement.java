@@ -11,7 +11,6 @@ public class ItemListsManagement {
 
     private final AppData appData;
     private final ItemListsService ils;
-    private int itemListIdCounter = 1;
 
     ItemListsManagement(AppData appData, ItemListsService ils){
         this.appData = appData;
@@ -46,9 +45,8 @@ public class ItemListsManagement {
 
     private void createItemList() {
         System.out.println("=========================================");
-        System.out.println("Item list ID: "+itemListIdCounter);
         System.out.println("Enter items details:");
-        ItemList list = new ItemList(itemListIdCounter, new HashMap<>(), new HashMap<>());
+        ItemList list = new ItemList(new HashMap<>(), new HashMap<>());
         System.out.println("\nItem loading list:");
         itemEditor(list.load());
         System.out.println("\nItem unloading list:");
@@ -57,8 +55,9 @@ public class ItemListsManagement {
         String responseJson = ils.addItemList(json);
         Response response = JSON.deserialize(responseJson, Response.class);
         if(response.success()) {
-            appData.itemLists().put(itemListIdCounter,list);
-            itemListIdCounter++;
+            int id = response.dataToInt();
+            list = list.newId(id);
+            appData.itemLists().put(id,list);
         }
         System.out.println("\n"+response.message());
     }

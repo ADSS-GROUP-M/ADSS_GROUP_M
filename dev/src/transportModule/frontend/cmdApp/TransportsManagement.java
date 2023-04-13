@@ -16,7 +16,6 @@ public class TransportsManagement {
 
     private final AppData appData;
     private final TransportsService ts;
-    private int transportIdCounter = 1;
 
     public TransportsManagement(AppData appData, TransportsService ts) {
         this.appData = appData;
@@ -56,7 +55,6 @@ public class TransportsManagement {
         }
 
         System.out.println("=========================================");
-        System.out.println("Transport ID: "+transportIdCounter);
         System.out.println("Enter transport details:");
 
         // date/time
@@ -85,7 +83,6 @@ public class TransportsManagement {
         int truckWeight = appData.readInt("Truck weight: ");
 
         Transport newTransport = new Transport(
-                transportIdCounter,
                 source.address(),
                 destinations,
                 itemsList,
@@ -117,7 +114,6 @@ public class TransportsManagement {
                     System.out.println("Driver: ");
                     int driverID = appData.pickDriver(false).id();
                     newTransport = new Transport(
-                            newTransport.id(),
                             newTransport.source(),
                             newTransport.destinations(),
                             newTransport.itemLists(),
@@ -138,7 +134,6 @@ public class TransportsManagement {
                     System.out.println("New weight :");
                     int weight = appData.readInt();
                     newTransport = new Transport(
-                            newTransport.id(),
                             newTransport.source(),
                             destinations,
                             itemsList,
@@ -419,8 +414,9 @@ public class TransportsManagement {
         System.out.println("\n"+response.message());
 
         if(response.success()){
-            appData.transports().put(transportIdCounter, newTransport);
-            transportIdCounter++;
+            int id = response.dataToInt();
+            newTransport = newTransport.newId(id);
+            appData.transports().put(id, newTransport);
         }
         return response;
     }
@@ -446,6 +442,13 @@ public class TransportsManagement {
                 errorMessage.append(", ");
             }
             errorMessage.append("sites");
+            isMissingData = true;
+        }
+        if(appData.itemLists().isEmpty()){
+            if(isMissingData) {
+                errorMessage.append(", ");
+            }
+            errorMessage.append("item lists");
             isMissingData = true;
         }
 

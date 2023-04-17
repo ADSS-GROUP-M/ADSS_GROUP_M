@@ -1,4 +1,5 @@
 package employeeModule.BusinessLayer.Employees;
+import com.google.gson.reflect.TypeToken;
 import utils.Response;
 import employeeModule.ServiceLayer.Objects.SEmployee;
 import employeeModule.ServiceLayer.Objects.SShift;
@@ -9,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import employeeModule.employeeUtils.DateUtils;
 
+import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
@@ -16,6 +18,8 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class EmployeeServiceTests {
+    public static final Type LIST_SSHIFT_ARRAY_TYPE = new TypeToken<List<SShift[]>>() {
+    }.getType();
     private UserService userService;
     private EmployeesService empService;
     private User admin;
@@ -38,7 +42,7 @@ public class EmployeeServiceTests {
         empService = EmployeesService.getInstance();
         userService.loadData(); // Loads the HR Manager user: "admin123" "123", clears the data in each test
         empService.loadData();
-        admin = userService.getUser(adminUsername).data();
+        admin = userService.getUser(adminUsername).data(User.class);
         users = new User[30];
         String usernamer = "0";
         String passworder = "0";
@@ -65,7 +69,7 @@ public class EmployeeServiceTests {
             userService.createUser(admin.getUsername(), usernames[i], passwords[i]);
         if(empService.getEmployee(usernames[i]).success() == false)
             empService.recruitEmployee(admin.getUsername(),fullnames[i], branches[i], usernames[i],bankDetails[i], hourlyRates[i], employmentDates[i],employmentConditions[i], details[i]);
-        users[i] = userService.getUser(usernames[i]).data();
+        users[i] = userService.getUser(usernames[i]).data(User.class);
         users[i].login(passwords[i]);
 
         counter++;        
@@ -120,23 +124,23 @@ public class EmployeeServiceTests {
             Response ans2 = empService.getWeekShifts(adminUsername, "1",week[0]);
             boolean foundShift = false;
             SShift theShift = null;
-            for(SShift[] shifts : ans2.data()){
+            for(SShift[] shifts : ans2.<List<SShift[]>>data(LIST_SSHIFT_ARRAY_TYPE)){
                 for(SShift shift: shifts){
                     if(shift.getShiftDate().isEqual(week[0]) &&  shift.getShiftType() == SShiftType.Morning){
                         theShift = shift;
                         foundShift = true;
                         boolean foundEmployee1 = false, foundEmployee2 = false;
                         for(SEmployee se: shift.getShiftRequestsEmployees(Role.Cashier.name()) ){
-                            if(se.getId().equals( empService.getEmployee(usernames[10]).data().getId()))
+                            if(se.getId().equals( empService.getEmployee(usernames[10]).<SEmployee>data(SEmployee.class).getId()))
                                 foundEmployee1 = true;
-                            if(se.getId().equals( empService.getEmployee(usernames[11]).data().getId()))
+                            if(se.getId().equals( empService.getEmployee(usernames[11]).<SEmployee>data(SEmployee.class).getId()))
                                 foundEmployee2 = true;
                         }
                         assertTrue(foundEmployee1 && foundEmployee2);
                         
-                        assertTrue( shift.getShiftRequestsEmployees(Role.ShiftManager.name()).get(0).getId().equals(empService.getEmployee(usernames[0]).data().getId()));
-                        assertTrue( shift.getShiftRequestsEmployees(Role.Storekeeper.name()).get(0).getId().equals(empService.getEmployee(usernames[20]).data().getId()));
-                        assertTrue( shift.getShiftRequestsEmployees(Role.GeneralWorker.name()).get(0).getId().equals(empService.getEmployee(usernames[21]).data().getId()));
+                        assertTrue( shift.getShiftRequestsEmployees(Role.ShiftManager.name()).get(0).getId().equals(empService.getEmployee(usernames[0]).<SEmployee>data(SEmployee.class).getId()));
+                        assertTrue( shift.getShiftRequestsEmployees(Role.Storekeeper.name()).get(0).getId().equals(empService.getEmployee(usernames[20]).<SEmployee>data(SEmployee.class).getId()));
+                        assertTrue( shift.getShiftRequestsEmployees(Role.GeneralWorker.name()).get(0).getId().equals(empService.getEmployee(usernames[21]).<SEmployee>data(SEmployee.class).getId()));
 
                     }
                 }
@@ -283,7 +287,8 @@ public class EmployeeServiceTests {
         Response ans3 = empService.getEmployeeShifts(usernames[0]);
         Response ans4 = empService.getEmployeeShifts(usernames[10]);
         boolean flag1=false,flag2=false,flag3=false;
-        for(SShift[] shi : ans2.data()){
+        Type type = new TypeToken<List<SShift[]>>(){}.getType();
+        for(SShift[] shi : ans2.<List<SShift[]>>data(type)){
             if(shi[0].getShiftDate().equals(week[0]) && shi[0].getShiftType() == SShiftType.Morning){// branch also needs to be checked, but code doesnt allow
               for(SEmployee sEmployee: shi[0].getShiftWorkersEmployees(Role.Steward.name()) ){
                 if(sEmployee.getId().equals(newUsername))

@@ -69,6 +69,10 @@ public class Response {
         return Integer.parseInt(data);
     }
 
+    public Boolean dataToBoolean(){
+        return Boolean.parseBoolean(data);
+    }
+
     /**
      * This method will serialize the response object using {@link JsonUtils#serialize(Object)}
      */

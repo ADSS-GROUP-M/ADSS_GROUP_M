@@ -1,5 +1,6 @@
 package employeeModule.BusinessLayer.Employees;
 
+import employeeModule.ServiceLayer.Objects.SEmployee;
 import utils.Response;
 import employeeModule.ServiceLayer.Services.EmployeesService;
 import employeeModule.ServiceLayer.Services.UserService;
@@ -28,35 +29,35 @@ public class RecruitAndUserCreationTests {
         empService = EmployeesService.getInstance();
         userService.loadData(); // Loads the HR Manager user: "admin123" "123", clears the data in each test
         empService.loadData();
-        admin = userService.getUser(adminUsername).data();
+        admin = userService.getUser(adminUsername).data(User.class);
         if(userService.getUser(username2).success() == false)
             userService.createUser(admin.getUsername(), username2, password2);
         if(empService.getEmployee(username2).success() == false)
             empService.recruitEmployee(admin.getUsername(),"Moshe Biton", "1", username2,"Hapoalim 12 230", 50, LocalDate.of(2023,2,2),"Employment Conditions Test", "More details about Moshe");
-        user = userService.getUser(username2).data();
+        user = userService.getUser(username2).data(User.class);
     }
 
     @Test
     public void recruit_newEmployee() {
         try {
             Response ans = empService.recruitEmployee(admin.getUsername(),"Max T","2", "555","Hapoalim 12 231", 50, LocalDate.of(2023,2,2),"Employment Conditions Test", "about me");
-            assertTrue(ans.message() == null, ans.message());
+            assertTrue(ans.success(), ans.message());
             ans = empService.recruitEmployee(admin.getUsername(),"ab T","2", "555","Hapoalim 12 211", 50, LocalDate.of(2023,2,2),"Employment Conditions Test", "about me");
-            assertFalse(ans.message() == null, ans.message()); // existing employee with same ID
+            assertFalse(ans.success(),ans.message()); // existing employee with same ID
             ans = empService.recruitEmployee(username2,"ab T","2", "575","Hapoalim 12 211", 50, LocalDate.of(2023,2,2),"Employment Conditions Test", "about me");
-            assertFalse(ans.message() == null, ans.message()); //unauthorized personnel
+            assertFalse(ans.success(),ans.message()); //unauthorized personnel
         } catch (Exception ignore) { ignore.printStackTrace(); fail("failed");}
     }
 
     @Test
     public void create_user() {
         try {
-            String error = userService.createUser(adminUsername, "989", password).message();
-            assertTrue(error == null);
-            error = userService.createUser(adminUsername, username2, password).message();
-            assertFalse(error  == null); // existing user
-            error = userService.createUser(username2, "985", password).message();
-            assertFalse(error == null);//unauthorized user
+            Response response = userService.createUser(adminUsername, "989", password);
+            assertTrue(response.success(), response.message());
+            response = userService.createUser(adminUsername, username2, password);
+            assertFalse(response.success(), response.message()); // existing user
+            response = userService.createUser(username2, "985", password);
+            assertFalse(response.success(), response.message());//unauthorized user
         } catch (Exception ignore) {
             fail("failed.");
         }
@@ -72,11 +73,11 @@ public class RecruitAndUserCreationTests {
             ans = empService.recruitEmployee(admin.getUsername(),employeeName,"2", employeeId,"Hapoalim 12 221", 50, LocalDate.of(2023,2,2),"Employment Conditions Test", "about me");
             assertFalse(ans.success() == false);
             try{
-            User us = userService.getUser(employeeId).data();
+            User us = userService.getUser(employeeId).data(User.class);
             assertTrue( us != null);
             Response as = empService.getEmployee(employeeId);
             assertTrue(as.data()!=null, as.message());
-            assertTrue(as.data().getFullName().equals(employeeName));
+            assertTrue(as.<SEmployee>data(SEmployee.class).getFullName().equals(employeeName));
             } catch(Exception e){
                 fail(e.getMessage());
             }

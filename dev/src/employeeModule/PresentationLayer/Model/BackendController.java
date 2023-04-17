@@ -1,5 +1,6 @@
 package employeeModule.PresentationLayer.Model;
 
+import com.google.gson.reflect.TypeToken;
 import employeeModule.ServiceLayer.Objects.SEmployee;
 import employeeModule.ServiceLayer.Objects.SShift;
 import employeeModule.ServiceLayer.Objects.SShiftType;
@@ -7,6 +8,7 @@ import employeeModule.ServiceLayer.Services.EmployeesService;
 import utils.Response;
 import employeeModule.ServiceLayer.Services.UserService;
 
+import java.lang.reflect.Type;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -15,6 +17,10 @@ import java.util.List;
 import static java.time.temporal.TemporalAdjusters.next;
 
 public class BackendController {
+
+    public static final Type SEMPLOYEE_TYPE = new TypeToken<SEmployee>(){}.getType();
+    public static final Type STRING_lIST_TYPE = new TypeToken<List<String>>(){}.getType();
+    private static final Type LIST_SSHIFT_ARRAY_TYPE = new TypeToken<List<SShift[]>>(){}.getType();
 
     private static BackendController instance;
     private UserService userService;
@@ -107,8 +113,9 @@ public class BackendController {
         Response response = userService.getUserAuthorizations(loggedUsername);
         if (response.success() == false)
             return null;
-        else
-            return response.data();
+        else{
+            return response.data(STRING_lIST_TYPE);
+        }
     }
 
     public String createWeekShifts(String branchId, LocalDate weekStart) {
@@ -172,7 +179,7 @@ public class BackendController {
         if (response.success() == false)
             throw new Exception(response.message());
         else {
-            List<SShift[]> result = response.data();
+            List<SShift[]> result = response.data(LIST_SSHIFT_ARRAY_TYPE);
             return result;
         }
     }
@@ -187,7 +194,7 @@ public class BackendController {
         if (response.success() == false)
             throw new Exception(response.message());
         else {
-            List<SShift[]> result = response.data();
+            List<SShift[]> result = response.data(LIST_SSHIFT_ARRAY_TYPE);
             return result;
         }
     }
@@ -196,8 +203,9 @@ public class BackendController {
         Response response = employeesService.getEmployee(loggedUsername);
         if (response.success() == false)
             throw new Exception(response.message());
-        else
-            return response.data();
+        else{
+            return response.data(SEMPLOYEE_TYPE);
+        }
     }
 
 

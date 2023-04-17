@@ -76,7 +76,7 @@ public class RecruitAndUserCreationTests {
             User us = userService.getUser(employeeId).data(User.class);
             assertTrue( us != null);
             Response as = empService.getEmployee(employeeId);
-            assertTrue(as.data()!=null, as.message());
+            assertTrue(as.success(), as.message());
             assertTrue(as.<SEmployee>data(SEmployee.class).getFullName().equals(employeeName));
             } catch(Exception e){
                 fail(e.getMessage());

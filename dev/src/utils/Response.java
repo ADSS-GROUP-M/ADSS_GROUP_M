@@ -30,9 +30,14 @@ public class Response {
      * This constructor is used when there is no data to be sent. The data field will be an empty string.
      */
     public Response(String message, boolean success) {
-        this.message = message;
-        this.success = success;
-        data = "";
+        this(message, success, "");
+    }
+    public Response(boolean success) {
+        this("", success, "");
+    }
+
+    public <T> Response(boolean success,T data) {
+        this("", success, data);
     }
 
     public String message() {

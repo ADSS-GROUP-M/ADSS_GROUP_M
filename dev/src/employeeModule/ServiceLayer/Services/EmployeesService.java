@@ -67,7 +67,7 @@ public class EmployeesService {
             return new Response("User isn't authorized to do this",false,"");
         try {
             employeesController.recruitEmployee(branchId, fullName, employeeId, bankDetails, hourlyRate, employmentDate, employmentConditions, details);
-            return new Response("",true,"");
+            return new Response(true);
         } catch (Exception e) {
             return  new Response(e.getMessage(),false,"");
         }
@@ -81,7 +81,7 @@ public class EmployeesService {
             return new Response("User isn't authorized to do this",false,"");
         try {
             employeesController.addEmployeeToBranch(branchId, employeeId);
-            return new Response("",true,"");
+            return new Response(true);
         } catch (Exception e) {
             return  new Response(e.getMessage(),false,"");
         }
@@ -95,7 +95,7 @@ public class EmployeesService {
             return new Response("User isn't authorized to do this",false,"");
         try {
             employeesController.certifyEmployee(employeeId, Role.valueOf(role));
-            return new Response("",true,"");
+            return new Response(true);
         } catch (Exception e) {
             return  new Response(e.getMessage(),false,"");
         }
@@ -109,7 +109,7 @@ public class EmployeesService {
             return new Response("User isn't authorized to do this",false,"");
         try {
             employeesController.uncertifyEmployee(employeeId, Role.valueOf(role));
-            return new Response("",true,"");
+            return new Response(true);
         } catch (Exception e) {
             return  new Response(e.getMessage(),false,"");
         }
@@ -119,7 +119,7 @@ public class EmployeesService {
         try {
             Employee employee = employeesController.getEmployee(branchId, actorUsername);
             shiftsController.requestShift(employee, branchId, shiftDate, ShiftType.valueOf(shiftType.toString()), Role.valueOf(role));
-            return new Response("",true,"");
+            return new Response(true);
         } catch (Exception e) {
             return  new Response(e.getMessage(),false,"");
        }
@@ -129,7 +129,7 @@ public class EmployeesService {
         try {
             Employee employee = employeesController.getEmployee(branchId, actorUsername);
             shiftsController.cancelShiftRequest(employee, branchId, shiftDate, ShiftType.valueOf(shiftType.toString()), Role.valueOf(role));
-            return new Response("",true,"");
+            return new Response(true);
         } catch (Exception e) {
             return  new Response(e.getMessage(),false,"");
         }
@@ -143,7 +143,7 @@ public class EmployeesService {
             return new Response("User isn't authorized to do this",false,"");
         try {
             shiftsController.createWeekShifts(branchId, weekStart);
-            return new Response("",true,"");
+            return new Response(true);
         } catch (Exception e) {
             return  new Response(e.getMessage(),false,"");
         }
@@ -157,7 +157,7 @@ public class EmployeesService {
             return new Response("User isn't authorized to do this",false,"");
         try {
             shiftsController.deleteShift(branchId, shiftDate, ShiftType.valueOf(shiftType.toString()));
-            return new Response("",true,"");
+            return new Response(true);
         } catch (Exception e) {
             return  new Response(e.getMessage(),false,"");
         }
@@ -171,7 +171,7 @@ public class EmployeesService {
             return new Response("User isn't authorized to do this",false,"");
         try {
             shiftsController.setShiftNeededAmount(branchId, shiftDate, ShiftType.valueOf(shiftType.toString()), Role.valueOf(role), amount);
-            return new Response("",true,"");
+            return new Response(true);
         } catch (Exception e) {
             return  new Response(e.getMessage(),false,"");
         }
@@ -191,7 +191,7 @@ public class EmployeesService {
                         serviceShifts[i] = new SShift(shifts[i]);
                 result.add(serviceShifts);
             }
-            return new Response("",true,result);
+            return new Response(true,result);
         } catch (Exception e) {
             return  new Response(e.getMessage(),false,"");
         }
@@ -206,7 +206,7 @@ public class EmployeesService {
         try {
             List<Employee> employees = employeesController.getEmployees(branchId, employeeIds);
             shiftsController.setShiftEmployees(branchId, shiftDate, ShiftType.valueOf(shiftType.toString()), Role.valueOf(role), employees);
-            return new Response("",true,"");
+            return new Response(true);
         } catch (Exception e) {
             return  new Response(e.getMessage(),false,"");
         }
@@ -220,7 +220,7 @@ public class EmployeesService {
             return new Response("User isn't authorized to do this",false,"");
         try {
             employeesController.createBranch(branchId);
-            return new Response("",true,"");
+            return new Response(true);
         } catch (Exception e) {
             return  new Response(e.getMessage(),false,"");
         }
@@ -240,7 +240,7 @@ public class EmployeesService {
                         serviceShifts[i] = new SShift(shifts[i]);
                 result.add(serviceShifts);
             }
-            return new Response("",true,result);
+            return new Response(true,result);
         } catch (Exception e) {
             return  new Response(e.getMessage(),false,"");
         }
@@ -263,7 +263,7 @@ public class EmployeesService {
             return new Response("User isn't authorized to do this",false,"");
         try {
             shiftsController.approveShift(branchId,shiftDate, ShiftType.valueOf(shiftType.toString()));
-            return new Response("",true,"");
+            return new Response(true);
         } catch (Exception e) {
             return  new Response(e.getMessage(),false,"");
         }
@@ -277,7 +277,7 @@ public class EmployeesService {
             return new Response("User isn't authorized to do this",false,"");
         try {
             shiftsController.applyCancelCard(branchId, shiftDate, ShiftType.valueOf(shiftType.toString()),actorUsername, productId);
-            return new Response("",true,"");
+            return new Response(true);
         } catch (Exception e) {
             return  new Response(e.getMessage(),false,"");
         }
@@ -291,7 +291,7 @@ public class EmployeesService {
             return new Response("User isn't authorized to do this",false,"");
         try {
             employeesController.updateEmployeeSalary(employeeId, hourlySalaryRate, salaryBonus);
-            return new Response("",true,"");
+            return new Response(true);
         } catch (Exception e) {
             return  new Response(e.getMessage(),false,"");
         }
@@ -305,7 +305,7 @@ public class EmployeesService {
             return new Response("User isn't authorized to do this",false,"");
         try {
             employeesController.updateEmployeeBankDetails(employeeId, bankDetails);
-            return new Response("",true,"");
+            return new Response(true);
         } catch (Exception e) {
             return  new Response(e.getMessage(),false,"");
         }
@@ -319,7 +319,7 @@ public class EmployeesService {
             return new Response("User isn't authorized to do this",false,"");
         try {
             employeesController.updateEmployeeEmploymentConditions(employeeId, employmentConditions);
-            return new Response("",true,"");
+            return new Response(true);
         } catch (Exception e) {
             return  new Response(e.getMessage(),false,"");
         }
@@ -333,7 +333,7 @@ public class EmployeesService {
             return new Response("User isn't authorized to do this",false,"");
         try {
             employeesController.updateEmployeeDetails(employeeId, details);
-            return new Response("",true,"");
+            return new Response(true);
         } catch (Exception e) {
             return  new Response(e.getMessage(),false,"");
         }
@@ -343,7 +343,7 @@ public class EmployeesService {
         // TODO: Possibly need to check the actor authorization
         try {
             shiftsController.reportShiftActivity(branchId, shiftDate, ShiftType.valueOf(shiftType.toString()), actorUsername, activity);
-            return new Response("",true,"");
+            return new Response(true);
         } catch (Exception e) {
             return  new Response(e.getMessage(),false,"");
         }
@@ -357,7 +357,7 @@ public class EmployeesService {
             return new Response("User isn't authorized to do this",false,"");
         try {
             employeesController.updateBranchWorkingHours(branchId, morningStart, morningEnd, eveningStart, eveningEnd);
-            return new Response("",true,"");
+            return new Response(true);
         } catch (Exception e) {
             return  new Response(e.getMessage(),false,"");
         }

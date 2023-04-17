@@ -4,7 +4,7 @@ import employeeModule.BusinessLayer.Employees.Employee;
 import employeeModule.BusinessLayer.Employees.Role;
 import employeeModule.BusinessLayer.Employees.Shift;
 import employeeModule.BusinessLayer.Employees.Shift.ShiftType;
-import utils.DateUtils;
+import employeeModule.employeeUtils.DateUtils;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;

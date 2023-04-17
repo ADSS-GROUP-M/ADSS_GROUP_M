@@ -1,9 +1,9 @@
 package transportModule.backend.businessLayer;
 
 import transportModule.records.Truck;
-import utils.ErrorCollection;
+import transportModule.transportUtils.ErrorCollection;
 
-import utils.TransportException;
+import transportModule.transportUtils.TransportException;
 import java.util.LinkedList;
 import java.util.TreeMap;
 

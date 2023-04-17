@@ -3,7 +3,7 @@ package transportModule.backend.serviceLayer;
 import transportModule.backend.businessLayer.ItemListsController;
 import transportModule.records.ItemList;
 import utils.Response;
-import utils.TransportException;
+import transportModule.transportUtils.TransportException;
 
 public class ItemListsService {
     private final ItemListsController ilc;

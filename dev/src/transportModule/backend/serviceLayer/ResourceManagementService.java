@@ -9,7 +9,7 @@ import transportModule.records.Truck;
 import utils.JsonUtils;
 import utils.Response;
 
-import utils.TransportException;
+import transportModule.transportUtils.TransportException;
 
 public class ResourceManagementService {
 

@@ -1,7 +1,7 @@
 package employeeModule.PresentationLayer.View;
 
 import employeeModule.PresentationLayer.ViewModel.HRManagerMenuVM;
-import utils.DateUtils;
+import employeeModule.employeeUtils.DateUtils;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

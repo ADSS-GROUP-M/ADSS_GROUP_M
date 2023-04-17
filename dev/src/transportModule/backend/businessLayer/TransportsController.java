@@ -3,9 +3,9 @@ package transportModule.backend.businessLayer;
 import transportModule.records.Driver;
 import transportModule.records.Transport;
 import transportModule.records.Truck;
-import utils.ErrorCollection;
+import transportModule.transportUtils.ErrorCollection;
 
-import utils.TransportException;
+import transportModule.transportUtils.TransportException;
 import java.util.LinkedList;
 import java.util.TreeMap;
 
@@ -137,10 +137,7 @@ public class TransportsController {
         }
 
         // source validation
-        try{
-            sc.getSite(transport.source());
-        }
-        catch(TransportException e){
+        if(sc.siteExists(transport.source()) == false){
             ec.addError("Site with address " + transport.source() + " does not exist", "source");
         }
 

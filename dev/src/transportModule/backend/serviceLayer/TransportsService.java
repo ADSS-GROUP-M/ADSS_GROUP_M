@@ -4,7 +4,7 @@ import transportModule.backend.businessLayer.TransportsController;
 import transportModule.records.Transport;
 import utils.Response;
 
-import utils.TransportException;
+import transportModule.transportUtils.TransportException;
 
 public class TransportsService {
 

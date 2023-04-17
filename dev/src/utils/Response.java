@@ -32,6 +32,10 @@ public class Response {
     public Response(String message, boolean success) {
         this(message, success, "");
     }
+
+    /**
+     * @param success If the request was successful or not
+     */
     public Response(boolean success) {
         this("", success, "");
     }

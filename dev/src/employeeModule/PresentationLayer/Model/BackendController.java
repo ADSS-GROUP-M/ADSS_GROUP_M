@@ -18,7 +18,6 @@ import static java.time.temporal.TemporalAdjusters.next;
 
 public class BackendController {
 
-    public static final Type SEMPLOYEE_TYPE = new TypeToken<SEmployee>(){}.getType();
     public static final Type STRING_lIST_TYPE = new TypeToken<List<String>>(){}.getType();
     private static final Type LIST_SSHIFT_ARRAY_TYPE = new TypeToken<List<SShift[]>>(){}.getType();
 
@@ -204,7 +203,7 @@ public class BackendController {
         if (response.success() == false)
             throw new Exception(response.message());
         else{
-            return response.data(SEMPLOYEE_TYPE);
+            return response.data(SEmployee.class);
         }
     }
 

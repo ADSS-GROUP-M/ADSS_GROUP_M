@@ -249,7 +249,7 @@ public class EmployeesService {
     public Response getEmployee(String actorUsername) {
         try {
             Employee employee = employeesController.getEmployee(actorUsername);
-            return new Response("",true,new SEmployee(employee));
+            return new Response(true,new SEmployee(employee));
         } catch (Exception e) {
             return Response.getErrorResponse(e);
         }

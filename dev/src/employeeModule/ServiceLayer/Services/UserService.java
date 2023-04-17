@@ -62,7 +62,7 @@ public class UserService {
     public Response getUser(String username) {
         try {
             User user = this.userController.getUser(username);
-            return new Response("",true,user);
+            return new Response(true,user);
         } catch (Exception e) {
             return Response.getErrorResponse(e);
         }

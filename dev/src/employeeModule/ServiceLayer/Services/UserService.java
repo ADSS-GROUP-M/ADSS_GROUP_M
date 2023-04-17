@@ -3,7 +3,7 @@ package employeeModule.ServiceLayer.Services;
 import employeeModule.BusinessLayer.Employees.Authorization;
 import employeeModule.BusinessLayer.Employees.Controllers.UserController;
 import employeeModule.BusinessLayer.Employees.User;
-import employeeModule.ServiceLayer.Objects.Response;
+import utils.Response;
 
 import java.util.List;
 import java.util.Objects;
@@ -41,89 +41,89 @@ public class UserService {
         userController.resetData();
     }
 
-    public Response<Boolean> login(String username, String password) {
+    public Response login(String username, String password) {
         try {
             this.userController.login(username, password);
-            return new Response<>(true);
+            return new Response(true);
         } catch (Exception e) {
             return Response.createErrorResponse(e.getMessage());
         }
     }
 
-    public Response<Boolean> logout(String username) {
+    public Response logout(String username) {
         try {
             this.userController.logout(username);
-            return new Response<>(true);
+            return new Response(true);
         } catch (Exception e) {
             return Response.createErrorResponse(e.getMessage());
         }
     }
 
-    public Response<User> getUser(String username) {
+    public Response getUser(String username) {
         try {
             User user = this.userController.getUser(username);
-            return new Response<>(user);
+            return new Response(user);
         } catch (Exception e) {
             return Response.createErrorResponse(e.getMessage());
         }
     }
 
-    public Response<Boolean> createUser(String actorUsername, String username, String password) {
+    public Response createUser(String actorUsername, String username, String password) {
         try {
             if(!userController.isAuthorized(actorUsername, Authorization.HRManager)) // Throws an exception if actor user is not found
                 throw new Exception("User " + actorUsername + " is not authorized to create users.");
             userController.createUser(username, password);
-            return new Response<>(true);
+            return new Response(true);
         } catch (Exception e) {
             return Response.createErrorResponse(e.getMessage());
         }
     }
 
-    public Response<Boolean> createManagerUser(String actorUsername, String username, String password) {
+    public Response createManagerUser(String actorUsername, String username, String password) {
         try {
             if(!userController.isAuthorized(actorUsername, Authorization.HRManager)) // Throws an exception if actor user is not found
                 throw new Exception("User " + actorUsername + " is not authorized to create manager users.");
             userController.createManagerUser(username, password);
-            return new Response<>(true);
+            return new Response(true);
         } catch (Exception e) {
             return Response.createErrorResponse(e.getMessage());
         }
     }
 
-    public Response<Boolean> isAuthorized(String username, String authorization) {
+    public Response isAuthorized(String username, String authorization) {
         try {
             boolean result = userController.isAuthorized(username, Authorization.valueOf(authorization));
-            return new Response<>(result);
+            return new Response(result);
         } catch (Exception e) {
             return Response.createErrorResponse(e.getMessage());
         }
     }
 
-    public Response<Boolean> isAuthorized(String username, Authorization authorization) {
+    public Response isAuthorized(String username, Authorization authorization) {
         try {
             boolean result = userController.isAuthorized(username, authorization);
-            return new Response<>(result);
+            return new Response(result);
         } catch (Exception e) {
             return Response.createErrorResponse(e.getMessage());
         }
     }
 
-    public Response<List<String>> getUserAuthorizations(String username) {
+    public Response getUserAuthorizations(String username) {
         try {
             List<Authorization> authorizations = userController.getUserAuthorizations(username);
             List<String> result = authorizations.stream().map(Objects::toString).collect(Collectors.toList());
-            return new Response<>(result);
+            return new Response(result);
         } catch (Exception e) {
             return Response.createErrorResponse(e.getMessage());
         }
     }
 
-    public Response<Boolean> authorizeUser(String actorUsername, String username, String authorization) {
+    public Response authorizeUser(String actorUsername, String username, String authorization) {
         try {
             if(!userController.isAuthorized(actorUsername, Authorization.HRManager)) // Throws an exception if actor user is not found
                 throw new Exception("User " + actorUsername + " is not authorized to authorize other users.");
             userController.authorizeUser(username, Authorization.valueOf(authorization));
-            return new Response<>(true);
+            return new Response(true);
         } catch (Exception e) {
             return Response.createErrorResponse(e.getMessage());
         }

@@ -1,7 +1,7 @@
 package PresentationLayer.transportModule.cmdApp;
 
 import ServiceLayer.transportModule.ResourceManagementService;
-import Objects.transportObjects.Truck;
+import objects.transportObjects.Truck;
 import utils.JsonUtils;
 import utils.Response;
 

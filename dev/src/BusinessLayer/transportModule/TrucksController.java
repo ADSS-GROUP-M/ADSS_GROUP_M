@@ -1,6 +1,6 @@
 package BusinessLayer.transportModule;
 
-import Objects.transportObjects.Truck;
+import objects.transportObjects.Truck;
 import utils.transportUtils.ErrorCollection;
 
 import utils.transportUtils.TransportException;

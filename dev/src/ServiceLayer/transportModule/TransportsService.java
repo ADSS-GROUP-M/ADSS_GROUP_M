@@ -1,9 +1,8 @@
 package ServiceLayer.transportModule;
 
 import BusinessLayer.transportModule.TransportsController;
-import Objects.transportObjects.Transport;
+import objects.transportObjects.Transport;
 import utils.Response;
-
 import utils.transportUtils.TransportException;
 
 public class TransportsService {

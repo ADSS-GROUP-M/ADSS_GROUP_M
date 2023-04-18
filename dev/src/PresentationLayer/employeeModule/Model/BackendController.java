@@ -1,9 +1,9 @@
 package PresentationLayer.employeeModule.Model;
 
 import com.google.gson.reflect.TypeToken;
-import Objects.employeeObjects.SEmployee;
-import Objects.employeeObjects.SShift;
-import Objects.employeeObjects.SShiftType;
+import ServiceLayer.employeeModule.Services.employeeObjects.SEmployee;
+import ServiceLayer.employeeModule.Services.employeeObjects.SShift;
+import ServiceLayer.employeeModule.Services.employeeObjects.SShiftType;
 import ServiceLayer.employeeModule.Services.EmployeesService;
 import utils.Response;
 import ServiceLayer.employeeModule.Services.UserService;

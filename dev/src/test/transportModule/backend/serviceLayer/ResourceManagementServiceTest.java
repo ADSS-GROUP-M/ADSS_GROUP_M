@@ -5,9 +5,9 @@ import ServiceLayer.transportModule.ResourceManagementService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import Objects.transportObjects.Driver;
-import Objects.transportObjects.Site;
-import Objects.transportObjects.Truck;
+import objects.transportObjects.Driver;
+import objects.transportObjects.Site;
+import objects.transportObjects.Truck;
 import utils.Response;
 
 import static org.junit.jupiter.api.Assertions.*;

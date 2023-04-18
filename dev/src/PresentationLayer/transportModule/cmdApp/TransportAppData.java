@@ -3,7 +3,7 @@ package PresentationLayer.transportModule.cmdApp;
 import ServiceLayer.transportModule.ItemListsService;
 import ServiceLayer.transportModule.ResourceManagementService;
 import ServiceLayer.transportModule.TransportsService;
-import utils.transportUtils.transportObjects.*;
+import objects.transportObjects.*;
 import utils.Response;
 
 import java.time.LocalDateTime;

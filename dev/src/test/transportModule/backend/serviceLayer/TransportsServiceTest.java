@@ -1,6 +1,6 @@
 package transportModule.backend.serviceLayer;
 
-import Objects.transportObjects.*;
+import objects.transportObjects.*;
 import ServiceLayer.transportModule.ItemListsService;
 import ServiceLayer.transportModule.ModuleFactory;
 import ServiceLayer.transportModule.ResourceManagementService;
@@ -9,7 +9,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import utils.Response;
-import utils.transportUtils.transportObjects.*;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;

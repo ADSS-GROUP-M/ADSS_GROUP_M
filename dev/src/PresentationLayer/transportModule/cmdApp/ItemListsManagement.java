@@ -1,7 +1,7 @@
 package PresentationLayer.transportModule.cmdApp;
 
 import ServiceLayer.transportModule.ItemListsService;
-import Objects.transportObjects.ItemList;
+import objects.transportObjects.ItemList;
 import utils.JsonUtils;
 import utils.Response;
 

@@ -9,11 +9,11 @@ import java.util.HashMap;
 
 public class ItemListsManagement {
 
-    private final AppData appData;
+    private final TransportAppData transportAppData;
     private final ItemListsService ils;
 
-    ItemListsManagement(AppData appData, ItemListsService ils){
-        this.appData = appData;
+    ItemListsManagement(TransportAppData transportAppData, ItemListsService ils){
+        this.transportAppData = transportAppData;
         this.ils = ils;
     }
 
@@ -28,7 +28,7 @@ public class ItemListsManagement {
             System.out.println("4. View full item list information");
             System.out.println("5. View all item lists");
             System.out.println("6. Return to previous menu");
-            int option = appData.readInt();
+            int option = transportAppData.readInt();
             switch (option) {
                 case 1 -> createItemList();
                 case 2 -> updateItemList();
@@ -57,7 +57,7 @@ public class ItemListsManagement {
         if(response.success()) {
             int id = response.dataToInt();
             list = list.newId(id);
-            appData.itemLists().put(id,list);
+            transportAppData.itemLists().put(id,list);
         }
         System.out.println("\n"+response.message());
     }
@@ -70,7 +70,7 @@ public class ItemListsManagement {
                 return;
             }
 
-            ItemList oldList = appData.itemLists().get(id);
+            ItemList oldList = transportAppData.itemLists().get(id);
             ItemList newList = new ItemList(id, oldList.load(), oldList.unload());
 
             //unloading item list
@@ -90,7 +90,7 @@ public class ItemListsManagement {
             String responseJson = ils.updateItemList(json);
             Response response = JsonUtils.deserialize(responseJson, Response.class);
             if(response.success()) {
-                appData.itemLists().put(id,newList);
+                transportAppData.itemLists().put(id,newList);
             }
             System.out.println("\n"+response.message());
         }
@@ -103,17 +103,17 @@ public class ItemListsManagement {
             if (id == null) {
                 return;
             }
-            ItemList list = appData.itemLists().get(id);
+            ItemList list = transportAppData.itemLists().get(id);
             printItemList(list);
             System.out.println("Are you sure you want to remove this item list? (y/n)");
-            String option = appData.readLine();
+            String option = transportAppData.readLine();
             switch(option){
                 case "y" ->{
                     String json = list.toJson();
                     String responseJson = ils.removeItemList(json);
                     Response response = JsonUtils.deserialize(responseJson, Response.class);
                     if(response.success()) {
-                        appData.itemLists().remove(id);
+                        transportAppData.itemLists().remove(id);
                     }
                     System.out.println("\n"+response.message());
                 }
@@ -132,28 +132,28 @@ public class ItemListsManagement {
         if (id == null) {
             return;
         }
-        ItemList list = appData.itemLists().get(id);
+        ItemList list = transportAppData.itemLists().get(id);
         printItemList(list);
         System.out.println("\nEnter 'done!' to return to previous menu");
-        appData.readLine();
+        transportAppData.readLine();
     }
 
     private void viewAllItemLists() {
         System.out.println("=========================================");
         System.out.println("All item lists:");
-        for (ItemList list : appData.itemLists().values()) {
+        for (ItemList list : transportAppData.itemLists().values()) {
             System.out.println("-----------------------------------------");
             printItemList(list);
         }
         System.out.println("\nEnter 'done!' to return to previous menu");
-        appData.readWord();
+        transportAppData.readWord();
     }
 
     private void itemEditor(HashMap<String,Integer> items) {
         System.out.println("\nTo remove items from the list enter the item name and 0 in the quantity");
         System.out.println("To finish adding items, enter \"done!\" in the item name");
         while (true) {
-            String itemQuantity = appData.readLine("<Item name> <Quantity>: ").toLowerCase();
+            String itemQuantity = transportAppData.readLine("<Item name> <Quantity>: ").toLowerCase();
 
             if(itemQuantity.equalsIgnoreCase("done!")){
                 break;
@@ -180,11 +180,11 @@ public class ItemListsManagement {
 
     private Integer getListID() {
         System.out.println();
-        int id = appData.readInt("Enter item list ID (enter '-1' to return to the previous menu): ");
+        int id = transportAppData.readInt("Enter item list ID (enter '-1' to return to the previous menu): ");
         if (id == -1) {
             return null;
         }
-        if(appData.itemLists().containsKey(id) == false){
+        if(transportAppData.itemLists().containsKey(id) == false){
             System.out.println("Item list with ID "+id+" does not exist!");
             return null;
         }

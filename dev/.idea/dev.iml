@@ -9,11 +9,9 @@
     <orderEntry type="jdk" jdkName="17" jdkType="JavaSDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="junit.jupiter" level="project" />
-    <orderEntry type="library" name="h" level="project" />
-    <orderEntry type="library" name="bertoncelj.hibernatejson.hibernate.json" level="project" />
-    <orderEntry type="library" name="springframework.amqp.spring" level="project" />
-    <orderEntry type="library" name="springframework.spring.jdbc" level="project" />
-    <orderEntry type="library" name="hibernate.core" level="project" />
-    <orderEntry type="library" name="cqsudu.sudu.spring.jpa" level="project" />
+
+    <orderEntry type="library" name="google.code.gson" level="project" />
+    <orderEntry type="library" name="xerial.sqlite.jdbc" level="project" />
+
   </component>
 </module>

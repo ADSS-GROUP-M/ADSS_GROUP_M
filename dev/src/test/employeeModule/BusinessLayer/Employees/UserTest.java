@@ -19,7 +19,7 @@ public class UserTest {
     public void setUp() throws Exception {
         userService = UserService.getInstance();
         userService.loadData(); // Loads the HR Manager user: "admin123" "123", clears the data in each test
-        user = userService.getUser(username).getReturnValue();
+        user = userService.getUser(username).data(User.class);
     }
 
     @Test

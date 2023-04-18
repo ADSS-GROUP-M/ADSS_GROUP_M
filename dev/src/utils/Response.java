@@ -30,9 +30,18 @@ public class Response {
      * This constructor is used when there is no data to be sent. The data field will be an empty string.
      */
     public Response(String message, boolean success) {
-        this.message = message;
-        this.success = success;
-        data = "";
+        this(message, success, "");
+    }
+
+    /**
+     * @param success If the request was successful or not
+     */
+    public Response(boolean success) {
+        this("", success, "");
+    }
+
+    public <T> Response(boolean success,T data) {
+        this("", success, data);
     }
 
     public String message() {
@@ -67,6 +76,10 @@ public class Response {
 
     public Integer dataToInt(){
         return Integer.parseInt(data);
+    }
+
+    public Boolean dataToBoolean(){
+        return Boolean.parseBoolean(data);
     }
 
     /**

@@ -32,7 +32,7 @@ public class TransportsManagement {
             System.out.println("3. Delete transport");
             System.out.println("4. View full transport information");
             System.out.println("5. View all transports");
-            System.out.println("6. Return to main menu");
+            System.out.println("6. Return to previous menu");
             int option = transportAppData.readInt();
             switch (option) {
                 case 1 -> createTransport();

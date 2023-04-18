@@ -9,7 +9,9 @@ import utils.Response;
 import java.time.LocalDateTime;
 import java.util.*;
 
-public class AppData {
+public class TransportAppData {
+
+    private static TransportAppData instance = null;
 
     private Scanner scanner;
     private boolean dataGenerated;
@@ -22,7 +24,7 @@ public class AppData {
     private final ItemListsService ils;
     private final TransportsService ts;
 
-    public AppData(ResourceManagementService rms, ItemListsService ils, TransportsService ts){
+    public TransportAppData(ResourceManagementService rms, ItemListsService ils, TransportsService ts){
         scanner = new Scanner(System.in);
         dataGenerated = false;
         this.rms = rms;
@@ -417,4 +419,12 @@ public class AppData {
         }
         return truckArray[option];
     }
+
+    public static TransportAppData getInstance(){
+        if(instance == null){
+            instance = TransportUIFactory.getAppData();
+        }
+        return instance;
+    }
+
 }

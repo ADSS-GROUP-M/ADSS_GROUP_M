@@ -1,9 +1,10 @@
 package employeeModule.BusinessLayer.Employees;
 
-import employeeModule.ServiceLayer.Objects.SEmployee;
+import BusinessLayer.employeeModule.User;
+import ServiceLayer.employeeModule.Objects.SEmployee;
 import utils.Response;
-import employeeModule.ServiceLayer.Services.EmployeesService;
-import employeeModule.ServiceLayer.Services.UserService;
+import ServiceLayer.employeeModule.Services.EmployeesService;
+import ServiceLayer.employeeModule.Services.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

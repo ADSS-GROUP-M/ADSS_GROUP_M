@@ -1,11 +1,13 @@
 package transportModule.backend.serviceLayer;
 
+import ServiceLayer.transportModule.ModuleFactory;
+import ServiceLayer.transportModule.ResourceManagementService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import transportModule.records.Driver;
-import transportModule.records.Site;
-import transportModule.records.Truck;
+import utils.transportUtils.records.Driver;
+import utils.transportUtils.records.Site;
+import utils.transportUtils.records.Truck;
 import utils.Response;
 
 import static org.junit.jupiter.api.Assertions.*;

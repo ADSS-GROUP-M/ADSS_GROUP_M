@@ -1,4 +1,4 @@
-package ServiceLayer.employeeModule.Services.employeeObjects;
+package ServiceLayer.employeeModule.Objects;
 
 import BusinessLayer.employeeModule.Employee;
 import BusinessLayer.employeeModule.Role;

@@ -3,9 +3,8 @@ package PresentationLayer.transportModule.cmdApp;
 import ServiceLayer.transportModule.ItemListsService;
 import ServiceLayer.transportModule.ResourceManagementService;
 import ServiceLayer.transportModule.TransportsService;
-import utils.transportUtils.records.*;
+import utils.transportUtils.transportObjects.*;
 import utils.Response;
-import utils.transportUtils.records.*;
 
 import java.time.LocalDateTime;
 import java.util.*;

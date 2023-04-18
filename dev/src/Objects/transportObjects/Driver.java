@@ -1,4 +1,4 @@
-package utils.transportUtils.records;
+package Objects.transportObjects;
 
 import com.google.gson.reflect.TypeToken;
 import utils.JsonUtils;

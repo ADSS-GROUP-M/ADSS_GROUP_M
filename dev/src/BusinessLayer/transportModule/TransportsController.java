@@ -1,8 +1,8 @@
 package BusinessLayer.transportModule;
 
-import utils.transportUtils.records.Driver;
-import utils.transportUtils.records.Transport;
-import utils.transportUtils.records.Truck;
+import Objects.transportObjects.Driver;
+import Objects.transportObjects.Transport;
+import Objects.transportObjects.Truck;
 import utils.transportUtils.ErrorCollection;
 
 import utils.transportUtils.TransportException;

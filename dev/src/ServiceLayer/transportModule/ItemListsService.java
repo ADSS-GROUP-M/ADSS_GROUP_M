@@ -1,7 +1,7 @@
 package ServiceLayer.transportModule;
 
 import BusinessLayer.transportModule.ItemListsController;
-import utils.transportUtils.records.ItemList;
+import Objects.transportObjects.ItemList;
 import utils.Response;
 import utils.transportUtils.TransportException;
 

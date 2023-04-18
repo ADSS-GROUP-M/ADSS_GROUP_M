@@ -1,8 +1,8 @@
 package PresentationLayer.transportModule.cmdApp;
 
 import ServiceLayer.transportModule.TransportsService;
-import utils.transportUtils.records.Site;
-import utils.transportUtils.records.Transport;
+import Objects.transportObjects.Site;
+import Objects.transportObjects.Transport;
 import utils.JsonUtils;
 import utils.Response;
 

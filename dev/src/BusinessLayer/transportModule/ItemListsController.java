@@ -1,6 +1,6 @@
 package BusinessLayer.transportModule;
 
-import utils.transportUtils.records.ItemList;
+import Objects.transportObjects.ItemList;
 
 import utils.transportUtils.TransportException;
 import java.util.LinkedList;

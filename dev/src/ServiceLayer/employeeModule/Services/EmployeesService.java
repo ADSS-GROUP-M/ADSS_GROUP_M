@@ -7,9 +7,9 @@ import BusinessLayer.employeeModule.Shift;
 import BusinessLayer.employeeModule.Controllers.EmployeesController;
 import BusinessLayer.employeeModule.Controllers.ShiftsController;
 import utils.Response;
-import ServiceLayer.employeeModule.Objects.SEmployee;
-import ServiceLayer.employeeModule.Objects.SShift;
-import ServiceLayer.employeeModule.Objects.SShiftType;
+import Objects.employeeObjects.SEmployee;
+import Objects.employeeObjects.SShift;
+import Objects.employeeObjects.SShiftType;
 import BusinessLayer.employeeModule.Shift.ShiftType;
 
 import java.time.LocalDate;

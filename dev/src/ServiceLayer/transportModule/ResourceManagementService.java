@@ -3,9 +3,9 @@ package ServiceLayer.transportModule;
 import BusinessLayer.transportModule.DriversController;
 import BusinessLayer.transportModule.SitesController;
 import BusinessLayer.transportModule.TrucksController;
-import utils.transportUtils.records.Driver;
-import utils.transportUtils.records.Site;
-import utils.transportUtils.records.Truck;
+import Objects.transportObjects.Driver;
+import Objects.transportObjects.Site;
+import Objects.transportObjects.Truck;
 import utils.JsonUtils;
 import utils.Response;
 

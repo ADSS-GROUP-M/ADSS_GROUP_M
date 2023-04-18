@@ -1,4 +1,4 @@
-package ServiceLayer.employeeModule.Objects;
+package Objects.employeeObjects;
 
 import BusinessLayer.employeeModule.Employee;
 import utils.JsonUtils;

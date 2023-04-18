@@ -1,4 +1,4 @@
-package ServiceLayer.employeeModule.Objects;
+package Objects.employeeObjects;
 
 public enum SShiftType {
     Morning,

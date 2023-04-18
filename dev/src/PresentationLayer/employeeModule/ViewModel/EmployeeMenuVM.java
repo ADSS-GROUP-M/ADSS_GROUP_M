@@ -1,8 +1,8 @@
 package PresentationLayer.employeeModule.ViewModel;
 
 import PresentationLayer.employeeModule.Model.BackendController;
-import ServiceLayer.employeeModule.Objects.SEmployee;
-import ServiceLayer.employeeModule.Objects.SShift;
+import Objects.employeeObjects.SEmployee;
+import Objects.employeeObjects.SShift;
 
 import java.time.LocalDate;
 import java.util.List;

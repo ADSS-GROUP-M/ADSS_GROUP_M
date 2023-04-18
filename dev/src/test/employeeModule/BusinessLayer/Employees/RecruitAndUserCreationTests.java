@@ -1,7 +1,7 @@
 package employeeModule.BusinessLayer.Employees;
 
 import BusinessLayer.employeeModule.User;
-import ServiceLayer.employeeModule.Objects.SEmployee;
+import Objects.employeeObjects.SEmployee;
 import utils.Response;
 import ServiceLayer.employeeModule.Services.EmployeesService;
 import ServiceLayer.employeeModule.Services.UserService;

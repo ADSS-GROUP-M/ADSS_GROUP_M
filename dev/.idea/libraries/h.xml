@@ -1,5 +1,5 @@
 <component name="libraryTable">
-  <library name="google.code.gson" type="repository">
+  <library name="h" type="repository">
     <properties maven-id="com.google.code.gson:gson:2.10.1" />
     <CLASSES>
       <root url="jar://$MAVEN_REPOSITORY$/com/google/code/gson/gson/2.10.1/gson-2.10.1.jar!/" />

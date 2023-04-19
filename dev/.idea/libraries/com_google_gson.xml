@@ -1,5 +1,5 @@
 <component name="libraryTable">
-  <library name="bertoncelj.hibernatejson.hibernate.json" type="repository">
+  <library name="com.google.gson" type="repository">
     <properties maven-id="com.bertoncelj.hibernatejson:hibernate-json:1.0.4" />
     <CLASSES>
       <root url="jar://$MAVEN_REPOSITORY$/com/bertoncelj/hibernatejson/hibernate-json/1.0.4/hibernate-json-1.0.4.jar!/" />

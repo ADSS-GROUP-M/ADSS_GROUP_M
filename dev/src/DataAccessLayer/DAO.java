@@ -8,7 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.List;
 
-public abstract class DAO<T extends DTO> {
+public abstract class DAO {
     private Connection connection = null;
     private PreparedStatement ptmt = null;
     private ResultSet resultSet = null;
@@ -24,34 +24,7 @@ public abstract class DAO<T extends DTO> {
         return conn;
     }
 
-    public void add(T studentBean) {
-        try {
-            String queryString = "INSERT INTO student(RollNo, Name, Course, Address) VALUES(?,?,?,?)";
-            connection = getConnection();
-            ptmt = connection.prepareStatement(queryString);
-            ptmt.setInt(1, studentBean.getRollNo());
-            ptmt.setString(2, studentBean.getName());
-            ptmt.setString(3, studentBean.getCourse());
-            ptmt.setString(4, studentBean.getAddress());
-            ptmt.executeUpdate();
-            System.out.println("Data Added Successfully");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (ptmt != null)
-                    ptmt.close();
-                if (connection != null)
-                    connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-        }
-
-    }
+    public abstract void create(DTO dto);
 
     public boolean Update(int id, String attributeName, String attributeValue)
     {

@@ -1,6 +1,7 @@
 package ServiceLayer.transportModule;
 
 import BusinessLayer.transportModule.TransportsController;
+import objects.transportObjects.Site;
 import objects.transportObjects.Transport;
 import utils.Response;
 import utils.transportUtils.TransportException;
@@ -61,25 +62,31 @@ public class TransportsService {
         try
         {
             tc.updateTransport(transport.id(), transport);
-            return new Response("Transport updated successfully",true, "").toJson();
+            return new Response("Transport updated successfully",true).toJson();
         }
         catch(TransportException e){
             return Response.getErrorResponse(e).toJson();
         }
     }
 
+    /**
+     * @param json serialized {@link Transport#getLookupObject(int)}
+     */
     public String removeTransport(String json){
         Transport transport = Transport.fromJson(json);
         try
         {
             tc.removeTransport(transport.id());
-            return new Response("Transport removed successfully",true, "").toJson();
+            return new Response("Transport removed successfully",true).toJson();
         }
         catch(TransportException e){
             return Response.getErrorResponse(e).toJson();
         }
     }
 
+    /**
+     * @param json serialized {@link Transport#getLookupObject(int)}
+     */
     public String getTransport(String json){
         Transport transport = Transport.fromJson(json);
         try

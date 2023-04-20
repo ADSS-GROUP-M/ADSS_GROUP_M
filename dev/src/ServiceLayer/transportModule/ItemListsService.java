@@ -23,6 +23,9 @@ public class ItemListsService {
         return new Response("Item list added successfully with id"+id, true, id).toJson();
     }
 
+    /**
+     * @param json a serialized {@link ItemList#getLookupObject(int)}
+     */
     public String removeItemList(String json){
         ItemList itemList = ItemList.fromJson(json);
         try{
@@ -43,6 +46,9 @@ public class ItemListsService {
         return new Response("Item list updated successfully", true).toJson();
     }
 
+    /**
+     * @param json a serialized {@link ItemList#getLookupObject(int)}
+     */
     public String getItemList(String json){
         ItemList itemList = ItemList.fromJson(json);
         try{

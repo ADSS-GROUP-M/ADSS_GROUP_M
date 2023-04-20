@@ -33,6 +33,9 @@ public class ResourceManagementService {
         return new Response("Driver added successfully", true).toJson();
     }
 
+    /**
+     * @param json serialized {@link Driver#getLookupObject(String)}
+     */
     public String removeDriver(String json){
         Driver driver = JsonUtils.deserialize(json, Driver.class);
         try{
@@ -53,6 +56,9 @@ public class ResourceManagementService {
         return new Response("Driver updated successfully", true).toJson();
     }
 
+    /**
+     * @param json serialized {@link Driver#getLookupObject(String)}
+     */
     public String getDriver(String json){
         Driver driver = JsonUtils.deserialize(json, Driver.class);
         try{
@@ -77,6 +83,9 @@ public class ResourceManagementService {
         return new Response("Truck added successfully", true).toJson();
     }
 
+    /**
+     * @param json serialized {@link Truck#getLookupObject(String)}
+     */
     public String removeTruck(String json){
         Truck truck = JsonUtils.deserialize(json, Truck.class);
         try{
@@ -97,6 +106,9 @@ public class ResourceManagementService {
         return new Response("Truck updated successfully", true).toJson();
     }
 
+    /**
+     * @param json serialized {@link Truck#getLookupObject(String)}
+     */
     public String getTruck(String json){
         Truck truck = JsonUtils.deserialize(json, Truck.class);
         try{
@@ -121,6 +133,9 @@ public class ResourceManagementService {
         return new Response("Site added successfully", true).toJson();
     }
 
+    /**
+     * @param json serialized {@link Site#getLookupObject(String)}
+     */
     public String removeSite(String json){
         Site site = JsonUtils.deserialize(json, Site.class);
         try{
@@ -141,6 +156,9 @@ public class ResourceManagementService {
         return new Response("Site updated successfully", true).toJson();
     }
 
+    /**
+     * @param json serialized {@link Site#getLookupObject(String)}
+     */
     public String getSite(String json){
         Site site = JsonUtils.deserialize(json, Site.class);
         try{

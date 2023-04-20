@@ -231,4 +231,8 @@ public class Shift {
         //}
         return null;
     }
+
+    public boolean isStorekeeperWorking() {
+        return shiftWorkers.containsKey(Role.Storekeeper) && !shiftWorkers.get(Role.Storekeeper).isEmpty();
+    }
 }

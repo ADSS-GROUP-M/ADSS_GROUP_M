@@ -15,29 +15,59 @@ public abstract class DAO {
     private String connectionString;
 
     protected final String TABLE_NAME;
-    public final String idColumnName = "ID";
+    private String[] primaryKey;
 
-    public DAO(String tableName) throws SQLException{
+
+    public DAO(String tableName, String[] keyFields) throws SQLException{
         this.TABLE_NAME = tableName;
         path = (new File("").getAbsolutePath()).concat("\\SuperLiDB.db");
         connectionString = "jdbc:sqlite:".concat(path);
-
+        this.primaryKey = keyFields;
     }
+
     protected Connection getConnection() throws SQLException {
         return DriverManager.getConnection(connectionString);
     }
 
     //public abstract void create(T dto);
-
-    protected DTO select(int id)  {
+    private String createConditionForPrimaryKey (Object[] idValues) throws Exception{
+        if(idValues.length != this.primaryKey.length || this.primaryKey.length == 0)
+            throw new Exception ("Illegal set of identifying values");
+        String ans = "";
+        if(idValues[0] instanceof String)
+            ans.concat(String.format(" %s = %s ",this.primaryKey[0],idValues[0]));
+        else if(idValues[0] instanceof Integer)
+            ans.concat(String.format(" %s = %d ",this.primaryKey[0],idValues[0]));
+        else if(idValues[0] instanceof Boolean)
+            ans.concat(String.format(" %s = %s ",this.primaryKey[0],idValues[0]));
+        else
+            throw new Exception("illegal idValues. should be String, Integer or Boolean");
+        for(int i =1; i< idValues.length; i++){
+            if(idValues[i] instanceof String)
+                ans.concat(String.format(" , %s = %s ",this.primaryKey[i],idValues[i]));
+            else if(idValues[i] instanceof Integer)
+                ans.concat(String.format(" , %s = %d ",this.primaryKey[i],idValues[i]));
+            else if(idValues[i] instanceof Boolean)
+                ans.concat(String.format(" , %s = %s ",this.primaryKey[i],idValues[i]));
+            else
+                throw new Exception("illegal idValues. Should be String, Integer or Boolean");
+        }
+        return ans;
+    }
+    protected DTO select(Object[] idValues) throws Exception {
+        Exception ex = null;
         ResultSet result = null;
         try {
-            String queryString = String.format("SELECT * FROM %s WHERE %s = %d",TABLE_NAME,idColumnName,id);
+            String queryString = String.format("SELECT * FROM %s WHERE",TABLE_NAME);
+            queryString.concat(createConditionForPrimaryKey(idValues));
             connection = getConnection();
             ptmt = connection.prepareStatement(queryString);
+
             result = ptmt.executeQuery();
         } catch (SQLException e) {
-            e.printStackTrace();
+            ex = e;
+        } catch (Exception e) {
+            ex = e;
         } finally {
             try {
                 if (ptmt != null)
@@ -59,6 +89,7 @@ public abstract class DAO {
     }
     protected List<DTO> selectAll() throws SQLException {
         ResultSet result = null;
+        Exception ex = null;
         try {
             String queryString = String.format("SELECT * FROM %s",TABLE_NAME);
             connection = getConnection();
@@ -66,6 +97,7 @@ public abstract class DAO {
             result = ptmt.executeQuery();
         } catch (SQLException e) {
             e.printStackTrace();
+            ex = e;
         } finally {
             try {
                 if (ptmt != null)
@@ -74,9 +106,9 @@ public abstract class DAO {
                     connection.close();
             }
             catch (SQLException e) {
-                e.printStackTrace();
+               ex = e;
             } catch (Exception e) {
-                e.printStackTrace();
+                ex = e;
             }
         }
         if(result!= null){
@@ -89,17 +121,19 @@ public abstract class DAO {
         else
             return new LinkedList<>();
     }
-    public void update(int id, String attributeName, String attributeValue) {
+    public void update(Object[] idValues, String attributeName, String attributeValue) throws Exception {
+        Exception ex = null;
         try {
-            String queryString = "UPDATE "+TABLE_NAME+" SET "+attributeName+"=? WHERE ID=?";
+            String queryString = "UPDATE "+TABLE_NAME+" SET "+attributeName+"=? WHERE";
+            queryString.concat(createConditionForPrimaryKey(idValues));
             connection = getConnection();
             ptmt = connection.prepareStatement(queryString);
             ptmt.setString(1, attributeValue);
-            ptmt.setInt(2, id);
             ptmt.executeUpdate();
-        } catch (SQLException e) {
+        } catch(Exception e) {
             e.printStackTrace();
-        } finally {
+        }finally
+         {
             try {
                 if (ptmt != null)
                     ptmt.close();
@@ -116,14 +150,14 @@ public abstract class DAO {
         }
     }
 
-    public void update(int id, String attributeName, Integer attributeValue)
+    public void update(Object[] idValues, String attributeName, Integer attributeValue) throws Exception
     {
         try {
-            String queryString = "UPDATE "+TABLE_NAME+" SET "+attributeName+"=? WHERE ID=?";
+            String queryString = "UPDATE "+TABLE_NAME+" SET "+attributeName+"=? WHERE";
+            queryString.concat(createConditionForPrimaryKey(idValues));
             connection = getConnection();
             ptmt = connection.prepareStatement(queryString);
             ptmt.setInt(1, attributeValue);
-            ptmt.setInt(2, id);
             ptmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -143,14 +177,14 @@ public abstract class DAO {
             }
         }
     }
-    public void update(int id, String attributeName, boolean attributeValue)
+    public void update(Object[] idValues, String attributeName, boolean attributeValue) throws Exception
     {
         try {
-            String queryString = "UPDATE "+TABLE_NAME+" SET "+attributeName+"=? WHERE ID=?";
+            String queryString = "UPDATE "+TABLE_NAME+" SET "+attributeName+"=? WHERE";
+            queryString.concat(createConditionForPrimaryKey(idValues));
             connection = getConnection();
             ptmt = connection.prepareStatement(queryString);
             ptmt.setBoolean(1, attributeValue);
-            ptmt.setInt(2, id);
             ptmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -171,14 +205,15 @@ public abstract class DAO {
         }
     }
 
-    public void delete(int id)
+    public void delete(Object[] idValues)
     {
         try {
-            String queryString = String.format("DELETE FROM %s WHERE %s = %d", this.TABLE_NAME, id);
+            String queryString = String.format("DELETE FROM %s WHERE", this.TABLE_NAME);
+            queryString.concat(createConditionForPrimaryKey(idValues));
             connection = getConnection();
             ptmt = connection.prepareStatement(queryString);
             ptmt.executeUpdate();
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
             try {

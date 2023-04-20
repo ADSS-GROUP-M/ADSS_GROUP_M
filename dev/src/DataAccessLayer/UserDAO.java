@@ -9,13 +9,14 @@ import java.util.List;
 
 public class UserDAO extends DAO {
 
-    public final String usernameColumnName = "Username";
-    public final String passwordColumnName = "Password";
-    public final String isLoggedInColumnName = "IsOnline";
-
+    public enum Columns {
+        Username,
+        Password,
+        IsLoggedIn;
+    }
 
     public UserDAO() throws SQLException{
-        super("USERS");
+        super("USERS", new String[] {Columns.Username.name(), Columns.Password.name()});
     }
 
     public List<UserDTO> SelectAllUsers() throws SQLException {
@@ -27,15 +28,41 @@ public class UserDAO extends DAO {
 
         return result;
     }
-    public UserDTO select(int id) {
-       return ((UserDTO)select(id));
+
+    public UserDTO select(String username, String password) throws Exception {
+        Object[] keys = {username,password};
+        return ((UserDTO)select(keys));
+    }
+
+    public void update(String username, String password, String attributeName, String attributeValue) throws Exception
+    {
+        Object[] keys = {username,password};
+        super.update(keys,attributeName,attributeValue);
+    }
+
+    public void update(String username, String password, String attributeName, Integer attributeValue) throws Exception
+    {
+        Object[] keys = {username,password};
+        super.update(keys,attributeName,attributeValue);
+    }
+
+    public void update(String username, String password, String attributeName, boolean attributeValue) throws Exception
+    {
+        Object[] keys = {username,password};
+        super.update(keys,attributeName,attributeValue);
+    }
+
+    public void delete(String username, String password)
+    {
+        Object[] keys = {username,password};
+      super.delete(keys);
     }
 
     protected DTO convertReaderToObject(ResultSet reader){
         UserDTO res = null;
         try {
-            res = new UserDTO(this, reader.getInt(this.idColumnName),reader.getString(this.usernameColumnName),reader.getString(this.passwordColumnName),
-                    reader.getInt(this.isLoggedInColumnName));
+            res = new UserDTO(this,reader.getString(Columns.Username.name()),reader.getString(Columns.Password.name()),
+                    reader.getInt(Columns.IsLoggedIn.name()));
         }
         catch (Exception throwables) {
             throwables.printStackTrace();
@@ -45,16 +72,14 @@ public class UserDAO extends DAO {
 
     public void create(UserDTO userDto) throws SQLException {
         try {
-            String queryString = String.format("INSERT INTO "+TABLE_NAME+"( %s ,%s, %s, %s) VALUES(?,?,?,?)",
-                    idColumnName, usernameColumnName, passwordColumnName, isLoggedInColumnName);
+            String queryString = String.format("INSERT INTO "+TABLE_NAME+"(%s, %s, %s) VALUES(?,?,?)",
+                    Columns.Username.name(), Columns.Password.name(), Columns.IsLoggedIn.name());
             connection = getConnection();
             ptmt = connection.prepareStatement(queryString);
-            ptmt.setInt(1, userDto.getId());
-            ptmt.setString(2, userDto.getUsername());
-            ptmt.setString(3, userDto.getPassword());
-            ptmt.setBoolean(4, userDto.isLoggedIn());
+            ptmt.setString(1, userDto.getUsername());
+            ptmt.setString(2, userDto.getPassword());
+            ptmt.setBoolean(3, userDto.isLoggedIn());
             ptmt.executeUpdate();
-            System.out.println("Data Added Successfully (UserDAO)");
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {

@@ -14,7 +14,6 @@ public class UserDTO extends DTO<UserDAO> {
 
     public UserDTO(UserDAO dao, int id, String username, String pass, int isLoggedIn) throws SQLException{
         super(dao);
-        this.setId(id);
         this.username = username;
         this.password = password;
         this.loggedIn = isLoggedIn != 0;
@@ -25,8 +24,8 @@ public class UserDTO extends DTO<UserDAO> {
         return username;
     }
 
-    public void setUsername(String username) throws SQLException{
-        this.controller.update(this.getId(), this.controller.usernameColumnName, username);
+    public void setUsername(String newUsername) throws Exception{
+        this.controller.update(username, password, UserDAO.Columns.Username.name(), newUsername);
         this.username = username;
     }
 
@@ -34,8 +33,8 @@ public class UserDTO extends DTO<UserDAO> {
         return password;
     }
 
-    public void setPassword(String password) throws SQLException {
-        this.controller.update(this.getId(),this.controller.passwordColumnName, password);
+    public void setPassword(String newPassword) throws Exception {
+        this.controller.update(username, password, UserDAO.Columns.Password.name(), newPassword);
         this.password = password;
     }
 
@@ -44,7 +43,7 @@ public class UserDTO extends DTO<UserDAO> {
     }
 
     public void setLoggedIn(boolean loggedIn) {
-        this.controller.update(this.getId(),this.controller.isLoggedInColumnName, loggedIn);
+        this.controller.update(username, password, UserDAO.Columns.Username.name(), newUsername);
         this.loggedIn = loggedIn;
     }
 

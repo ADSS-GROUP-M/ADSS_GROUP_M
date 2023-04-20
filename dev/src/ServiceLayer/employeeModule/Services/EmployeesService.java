@@ -6,6 +6,7 @@ import BusinessLayer.employeeModule.Role;
 import BusinessLayer.employeeModule.Shift;
 import BusinessLayer.employeeModule.Controllers.EmployeesController;
 import BusinessLayer.employeeModule.Controllers.ShiftsController;
+import utils.JsonUtils;
 import utils.Response;
 import ServiceLayer.employeeModule.Objects.SEmployee;
 import ServiceLayer.employeeModule.Objects.SShift;
@@ -13,6 +14,7 @@ import ServiceLayer.employeeModule.Objects.SShiftType;
 import BusinessLayer.employeeModule.Shift.ShiftType;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +30,24 @@ public class EmployeesService {
         employeesController = EmployeesController.getInstance();
         shiftsController = ShiftsController.getInstance();
     }
+
+    //TODO:
+    // implement the following methods:
+    // ============================================================================= |
+
+    public String getAvailableDrivers(String atDateTime){
+        LocalDateTime dateTime = JsonUtils.deserialize(atDateTime,LocalDateTime.class);
+        //TODO: implement this
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    public String checkStoreKeeperAvailability(String dateToCheck, String branchAddress){
+        LocalDate date = JsonUtils.deserialize(dateToCheck,LocalDate.class);
+        //TODO: implement this
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    //<TODO - - - - - - - - - - - - - - - - - -  - - - - - - />
 
     public static EmployeesService getInstance() {
         if (instance == null)

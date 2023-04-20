@@ -1,4 +1,4 @@
-package PresentationLayer.transportModule.cmdApp;
+package PresentationLayer.transportModule;
 
 import ServiceLayer.transportModule.ItemListsService;
 import ServiceLayer.transportModule.ResourceManagementService;
@@ -10,8 +10,6 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 public class TransportAppData {
-
-    private static TransportAppData instance = null;
 
     private Scanner scanner;
     private boolean dataGenerated;
@@ -30,7 +28,7 @@ public class TransportAppData {
         this.rms = rms;
         this.ils = ils;
         this.ts = ts;
-        drivers = new HashMap<String, Driver>();
+        drivers = new HashMap<>();
         trucks = new HashMap<>();
         sites = new HashMap<>();
         itemLists = new HashMap<>();
@@ -419,12 +417,4 @@ public class TransportAppData {
         }
         return truckArray[option];
     }
-
-    public static TransportAppData getInstance(){
-        if(instance == null){
-            instance = TransportUIFactory.getAppData();
-        }
-        return instance;
-    }
-
 }

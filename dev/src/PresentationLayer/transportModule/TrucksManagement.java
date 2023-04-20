@@ -1,4 +1,4 @@
-package PresentationLayer.transportModule.cmdApp;
+package PresentationLayer.transportModule;
 
 import ServiceLayer.transportModule.ResourceManagementService;
 import objects.transportObjects.Truck;

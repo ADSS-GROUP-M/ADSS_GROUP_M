@@ -1,4 +1,4 @@
-package PresentationLayer.transportModule.cmdApp;
+package PresentationLayer.transportModule;
 
 import ServiceLayer.transportModule.ItemListsService;
 import objects.transportObjects.ItemList;

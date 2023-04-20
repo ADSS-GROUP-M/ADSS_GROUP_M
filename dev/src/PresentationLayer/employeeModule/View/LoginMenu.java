@@ -2,7 +2,7 @@ package PresentationLayer.employeeModule.View;
 import java.util.*;
 
 import PresentationLayer.employeeModule.ViewModel.LoginMenuVM;
-import PresentationLayer.transportModule.cmdApp.TransportUI;
+import PresentationLayer.transportModule.TransportUI;
 
 public class LoginMenu implements Menu {
     private final LoginMenuVM loginMenuVM;

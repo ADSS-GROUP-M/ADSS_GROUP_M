@@ -1,4 +1,4 @@
-package PresentationLayer.transportModule.cmdApp;
+package PresentationLayer.transportModule;
 
 import PresentationLayer.employeeModule.View.LoginMenu;
 import PresentationLayer.employeeModule.View.Menu;
@@ -15,8 +15,12 @@ public class TransportUI implements Menu {
     private final DriversManagement driversManagement;
 
     public TransportUI(){
-        ModuleFactory factory = TransportUIFactory.getFactory();
-        transportAppData = TransportAppData.getInstance();
+        ModuleFactory factory = new ModuleFactory();
+        transportAppData = new TransportAppData(
+                factory.getResourceManagementService(),
+                factory.getItemListsService(),
+                factory.getTransportsService()
+        );
         itemListsManagement = new ItemListsManagement(transportAppData,factory.getItemListsService());
         sitesManagement = new SitesManagement(transportAppData,factory.getResourceManagementService());
         trucksManagement = new TrucksManagement(transportAppData,factory.getResourceManagementService());

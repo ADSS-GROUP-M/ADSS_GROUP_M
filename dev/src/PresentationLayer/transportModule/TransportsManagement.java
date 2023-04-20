@@ -2,20 +2,19 @@ package PresentationLayer.transportModule;
 
 import ServiceLayer.employeeModule.Services.EmployeesService;
 import ServiceLayer.transportModule.TransportsService;
-import com.google.gson.reflect.TypeToken;
 import objects.transportObjects.Driver;
 import objects.transportObjects.Site;
 import objects.transportObjects.Transport;
 import utils.JsonUtils;
 import utils.Response;
 
-import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Objects;
 
 public class TransportsManagement {
     
@@ -75,8 +74,10 @@ public class TransportsManagement {
 
         // driver
         System.out.println("Driver: ");
-
         String driverID = pickFromAvailableDrivers(departureDateTime);
+        if(driverID == null){
+            return;
+        }
 
         // source
         System.out.println("Source: ");
@@ -85,7 +86,7 @@ public class TransportsManagement {
         // destinations and items lists
         LinkedList<String> destinations = new LinkedList<>();
         HashMap<String, Integer> itemsList = new HashMap<>();
-        destinationsMaker(destinations, itemsList);
+        destinationsMaker(destinations, itemsList, departureDateTime);
 
         //weight
         int truckWeight = uiData.readInt("Truck weight: ");
@@ -108,11 +109,17 @@ public class TransportsManagement {
     }
 
     private String pickFromAvailableDrivers(LocalDateTime departureDateTime) {
-        Response _response = Response.fromJson(es.getAvailableDrivers(JsonUtils.serialize(departureDateTime)));
+        String json = es.getAvailableDrivers(JsonUtils.serialize(departureDateTime));
+        Response response = Response.fromJson(json);
         Driver[] availableDrivers = Arrays.stream(
-                _response.<String[]>data(String[].class))
+                response.<String[]>data(String[].class))
                 .map(driver -> uiData.drivers().get(driver))
+                .filter(Objects::nonNull)
                 .toArray(Driver[]::new);
+        if(availableDrivers.length == 0){
+            System.out.println("No available drivers for "+departureDateTime.toString()+", aborting...");
+            return null;
+        }
         return uiData.pickDriver(false,availableDrivers).id();
     }
 
@@ -147,7 +154,7 @@ public class TransportsManagement {
                 case 2 -> {
                     LinkedList<String> destinations = new LinkedList<>();
                     HashMap<String, Integer> itemsList = new HashMap<>();
-                    destinationsMaker(destinations, itemsList);
+                    destinationsMaker(destinations, itemsList, newTransport.scheduledTime());
                     System.out.println("New weight :");
                     int weight = uiData.readInt();
                     newTransport = new Transport(
@@ -197,6 +204,10 @@ public class TransportsManagement {
                 case 1 -> {
                     LocalDate departureDate = LocalDate.parse(uiData.readLine("Departure date (format: yyyy-mm-dd): "));
                     LocalDateTime departureDateTime = LocalDateTime.of(departureDate, transport.scheduledTime().toLocalTime());
+
+                    //TODO: the dateTime has been changed, we need to revalidate if the driver is available
+                    // and if there is an available storekeeper for every branch in the transport
+
                     updateTransportHelperMethod(
                             transport.id(),
                             transport.source(),
@@ -211,6 +222,10 @@ public class TransportsManagement {
                 case 2 -> {
                     LocalTime departureTime = LocalTime.parse(uiData.readLine("Departure time (format: hh:mm): "));
                     LocalDateTime departureDateTime = LocalDateTime.of(transport.scheduledTime().toLocalDate(), departureTime);
+
+                    //TODO: the dateTime has been changed, we need to revalidate if the driver is available
+                    // and if there is an available storekeeper for every branch in the transport
+
                     updateTransportHelperMethod(
                             transport.id(),
                             transport.source(),
@@ -224,7 +239,10 @@ public class TransportsManagement {
                 }
                 case 3 -> {
                     System.out.println("Select driver: ");
-                    String driverID = uiData.pickDriver(false).id();
+                    String driverID = pickFromAvailableDrivers(transport.scheduledTime());
+                    if(driverID == null) {
+                        continue;
+                    }
                     updateTransportHelperMethod(
                             transport.id(),
                             transport.source(),
@@ -268,7 +286,7 @@ public class TransportsManagement {
                     System.out.println("Select new destinations and item lists: ");
                     HashMap<String, Integer> itemsList = new HashMap<>();
                     LinkedList<String> destinations = new LinkedList<>();
-                    destinationsMaker(destinations, itemsList);
+                    destinationsMaker(destinations, itemsList, transport.scheduledTime());
                     updateTransportHelperMethod(
                             transport.id(),
                             transport.source(),
@@ -401,7 +419,7 @@ public class TransportsManagement {
         return uiData.transports().get(transportId);
     }
 
-    private void destinationsMaker(LinkedList<String> destinations, HashMap<String, Integer> itemsList) {
+    private void destinationsMaker(LinkedList<String> destinations, HashMap<String, Integer> itemsList, LocalDateTime departureDateTime) {
         int destinationId = 1;
         System.out.println("Pick destinations and items lists:");
         while(true){
@@ -410,6 +428,10 @@ public class TransportsManagement {
             if(site == null) {
                 break;
             }
+            //TODO: validate the site if it is a branch
+            // if(site.siteType() == Site.SiteType.BRANCH) {
+            //    es.checkStoreKeeperAvailability(site.address(), JsonUtils.serialize(departureDateTime));
+            // }
             int listId = uiData.readInt("Items list id: ");
             if (uiData.itemLists().containsKey(listId) == false) {
                 System.out.println("\nItems list with ID " + listId + " does not exist!");

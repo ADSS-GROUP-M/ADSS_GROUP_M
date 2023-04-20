@@ -5,6 +5,7 @@ import BusinessLayer.employeeModule.User;
 import ServiceLayer.employeeModule.Services.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import utils.Response;
 
 import java.util.List;
 
@@ -21,7 +22,7 @@ public class UserTest {
     public void setUp() throws Exception {
         userService = UserService.getInstance();
         userService.loadData(); // Loads the HR Manager user: "admin123" "123", clears the data in each test
-        user = userService.getUser(username).data(User.class);
+        user = Response.fromJson(userService.getUser(username)).data(User.class);
     }
 
     @Test

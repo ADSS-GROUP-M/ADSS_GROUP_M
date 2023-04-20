@@ -24,7 +24,7 @@ class ResourceManagementServiceTest {
         rms = new ModuleFactory().getResourceManagementService();
 
         //add drivers
-        driver = new Driver(123456789,"John", Driver.LicenseType.C3);
+        driver = new Driver("123456789","John", Driver.LicenseType.C3);
         rms.addDriver(driver.toJson());
 
         //add sites
@@ -45,7 +45,7 @@ class ResourceManagementServiceTest {
 
     @Test
     void addDriver() {
-        Driver driver3 = new Driver(111111111,"Jim", Driver.LicenseType.C3);
+        Driver driver3 = new Driver("111111111","Jim", Driver.LicenseType.C3);
         rms.addDriver(driver3.toJson());
         String responseJson = rms.getDriver(Driver.getLookupObject(driver3.id()).toJson());
         Response response = Response.fromJson(responseJson);
@@ -75,7 +75,7 @@ class ResourceManagementServiceTest {
 
     @Test
     void removeDriverDoesNotExist(){
-        Driver driver3 = Driver.getLookupObject(111111111);
+        Driver driver3 = Driver.getLookupObject("111111111");
         String json1 = rms.removeDriver(driver3.toJson());
         Response response1 = Response.fromJson(json1);
         assertFalse(response1.success());
@@ -99,7 +99,7 @@ class ResourceManagementServiceTest {
 
     @Test
     void updateDriverDoesNotExist(){
-        Driver driver3 = new Driver (111111111, "Jim", Driver.LicenseType.C3);
+        Driver driver3 = new Driver ("111111111", "Jim", Driver.LicenseType.C3);
         String json1 = rms.updateDriver(driver3.toJson());
         Response response1 = Response.fromJson(json1);
         assertFalse(response1.success());
@@ -118,7 +118,7 @@ class ResourceManagementServiceTest {
 
     @Test
     void getDriverDoesNotExist(){
-        Driver driver3 = Driver.getLookupObject(111111111);
+        Driver driver3 = Driver.getLookupObject("111111111");
         String responseJson = rms.getDriver(driver3.toJson());
         Response response = Response.fromJson(responseJson);
         assertFalse(response.success());
@@ -128,7 +128,7 @@ class ResourceManagementServiceTest {
     void getAllDrivers() {
         //generate more drivers
         for (int i = 0; i < 20; i++) {
-            Driver driver = new Driver(i, "driver" + i, Driver.LicenseType.C3);
+            Driver driver = new Driver(String.valueOf(i), "driver" + i, Driver.LicenseType.C3);
             rms.addDriver(driver.toJson());
         }
 

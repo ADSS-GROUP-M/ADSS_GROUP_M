@@ -15,7 +15,7 @@ public class TransportAppData {
 
     private Scanner scanner;
     private boolean dataGenerated;
-    private final HashMap<Integer, Driver> drivers;
+    private final HashMap<String, Driver> drivers;
     private final HashMap<String, Truck> trucks;
     private final HashMap<String, Site> sites;
     private final HashMap<Integer, ItemList> itemLists;
@@ -30,14 +30,14 @@ public class TransportAppData {
         this.rms = rms;
         this.ils = ils;
         this.ts = ts;
-        drivers = new HashMap<>();
+        drivers = new HashMap<String, Driver>();
         trucks = new HashMap<>();
         sites = new HashMap<>();
         itemLists = new HashMap<>();
         transports = new HashMap<>();
     }
 
-    public HashMap<Integer, Driver> drivers() {
+    public HashMap<String, Driver> drivers() {
         return drivers;
     }
 
@@ -128,11 +128,11 @@ public class TransportAppData {
         Site site5 = new Site("zone e", "369 pine ave", "(555) 567-8901", "tom smith", Site.SiteType.LOGISTICAL_CENTER);
 
         // generate drivers with random data:
-        Driver driver1 = new Driver(1234, "megan smith", Driver.LicenseType.A1);
-        Driver driver2 = new Driver(5678, "john doe", Driver.LicenseType.B2);
-        Driver driver3 = new Driver(9012, "emily chen", Driver.LicenseType.C2);
-        Driver driver4 = new Driver(3456, "david lee", Driver.LicenseType.C3);
-        Driver driver5 = new Driver(7890, "sarah kim", Driver.LicenseType.C3);
+        Driver driver1 = new Driver("1234", "megan smith", Driver.LicenseType.A1);
+        Driver driver2 = new Driver("5678", "john doe", Driver.LicenseType.B2);
+        Driver driver3 = new Driver("9012", "emily chen", Driver.LicenseType.C2);
+        Driver driver4 = new Driver("3456", "david lee", Driver.LicenseType.C3);
+        Driver driver5 = new Driver("7890", "sarah kim", Driver.LicenseType.C3);
 
         // generate trucks with random data:
         Truck truck1 = new Truck("abc123", "ford", 1500, 10000, Truck.CoolingCapacity.NONE);

@@ -11,7 +11,7 @@ import java.util.TreeMap;
  * It provides methods for adding, retrieving, updating, and removing drivers from the system.
  */
 public class DriversController {
-    private final TreeMap <Integer, Driver> drivers;
+    private final TreeMap<String, Driver> drivers;
 
     public DriversController(){
         drivers = new TreeMap<>();
@@ -38,7 +38,7 @@ public class DriversController {
      * @return The driver with the specified ID.
      * @throws TransportException If the driver with the specified ID is not found.
      */
-    public  Driver getDriver(int id) throws TransportException {
+    public  Driver getDriver(String id) throws TransportException {
         if (driverExists(id) == false) {
             throw new TransportException("Driver not found");
         }
@@ -52,7 +52,7 @@ public class DriversController {
      * @param id The ID of the driver to remove.
      * @throws TransportException If the driver with the specified ID is not found.
      */
-    public void removeDriver(int id) throws TransportException {
+    public void removeDriver(String id) throws TransportException {
         if (driverExists(id) == false) {
             throw new TransportException("Driver not found");
         }
@@ -67,7 +67,7 @@ public class DriversController {
      * @param newDriver The updated driver object.
      * @throws TransportException If the driver with the specified ID is not found.
      */
-    public void updateDriver(int id, Driver newDriver) throws TransportException{
+    public void updateDriver(String id, Driver newDriver) throws TransportException{
         if(driverExists(id) == false) {
             throw new TransportException("Driver not found");
         }
@@ -84,7 +84,7 @@ public class DriversController {
         return new LinkedList<>(drivers.values());
     }
 
-    public boolean driverExists(int id){
+    public boolean driverExists(String id){
         return drivers.containsKey(id);
     }
 }

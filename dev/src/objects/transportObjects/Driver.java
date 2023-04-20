@@ -7,13 +7,13 @@ import java.lang.reflect.Type;
 import java.util.LinkedList;
 import java.util.Objects;
 
-public record Driver (int id, String name, LicenseType licenseType){
+public record Driver (String id, String name, LicenseType licenseType){
 
     public enum LicenseType{
         A1,A2,A3,B1,B2,B3,C1,C2,C3
     }
 
-    public static Driver getLookupObject(int id){
+    public static Driver getLookupObject(String id){
         return new Driver(id, null, null);
     }
 

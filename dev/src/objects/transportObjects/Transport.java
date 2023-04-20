@@ -10,7 +10,7 @@ import java.util.LinkedList;
 import java.util.Objects;
 
 public record Transport (int id, String source, LinkedList<String> destinations, HashMap<String, Integer> itemLists,
-                         String truckId, int driverId, LocalDateTime scheduledTime, int weight){
+                         String truckId, String driverId, LocalDateTime scheduledTime, int weight){
 
 
     /**
@@ -35,7 +35,7 @@ public record Transport (int id, String source, LinkedList<String> destinations,
      * this constructor sets the id to be -1
      */
     public Transport(String source, LinkedList<String> destinations, HashMap<String, Integer> itemLists,
-                     String truckId, int driverId, LocalDateTime scheduledTime, int weight){
+                     String truckId, String driverId, LocalDateTime scheduledTime, int weight){
         this(
                 -1,
                 source,
@@ -49,7 +49,7 @@ public record Transport (int id, String source, LinkedList<String> destinations,
     }
 
     public static Transport getLookupObject(int id){
-        return new Transport(id, null, null, null, null, 0, null, 0);
+        return new Transport(id, null, null, null, null, null, null, 0);
     }
 
     public String toJson(){

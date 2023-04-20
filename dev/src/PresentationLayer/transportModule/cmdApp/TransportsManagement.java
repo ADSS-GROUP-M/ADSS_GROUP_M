@@ -68,7 +68,7 @@ public class TransportsManagement {
 
         // driver
         System.out.println("Driver: ");
-        int driverID = transportAppData.pickDriver(false).id();
+        String driverID = transportAppData.pickDriver(false).id();
 
         // source
         System.out.println("Source: ");
@@ -112,7 +112,7 @@ public class TransportsManagement {
                     System.out.println("Truck: ");
                     String truckId = transportAppData.pickTruck(false).id();
                     System.out.println("Driver: ");
-                    int driverID = transportAppData.pickDriver(false).id();
+                    String driverID = transportAppData.pickDriver(false).id();
                     newTransport = new Transport(
                             newTransport.source(),
                             newTransport.destinations(),
@@ -207,7 +207,7 @@ public class TransportsManagement {
                 }
                 case 3 -> {
                     System.out.println("Select driver: ");
-                    int driverID = transportAppData.pickDriver(false).id();
+                    String driverID = transportAppData.pickDriver(false).id();
                     updateTransportHelperMethod(
                             transport.id(),
                             transport.source(),
@@ -351,7 +351,7 @@ public class TransportsManagement {
         }
     }
 
-    private void updateTransportHelperMethod(int id, String source, LinkedList<String> destinations, HashMap<String, Integer> itemLists, String truckId, int driverId, LocalDateTime departureDateTime, int weight) {
+    private void updateTransportHelperMethod(int id, String source, LinkedList<String> destinations, HashMap<String, Integer> itemLists, String truckId, String driverId, LocalDateTime departureDateTime, int weight) {
         Transport newTransport = new Transport(
                 id,
                 source,

@@ -45,7 +45,7 @@ public class DriversManagement {
     private void createDriver() {
         System.out.println("=========================================");
         System.out.println("Enter driver details:");
-        int id = transportAppData.readInt("Employee ID: ");
+        String id = transportAppData.readLine("Employee ID: ");
         String fullName = transportAppData.readLine("Name: ");
         System.out.println("License type: ");
         Driver.LicenseType licenseType = pickLicenseType();
@@ -102,7 +102,7 @@ public class DriversManagement {
         }
     }
 
-    private void updateDriverHelperMethod(int id, String name, Driver.LicenseType licenseType) {
+    private void updateDriverHelperMethod(String id, String name, Driver.LicenseType licenseType) {
         Driver updatedDriver = new Driver(id, name, licenseType);
         String json = updatedDriver.toJson();
         String responseJson = rms.updateDriver(json);

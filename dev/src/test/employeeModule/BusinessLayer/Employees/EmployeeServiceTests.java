@@ -45,7 +45,7 @@ public class EmployeeServiceTests {
         empService = EmployeesService.getInstance();
         userService.loadData(); // Loads the HR Manager user: "admin123" "123", clears the data in each test
         empService.loadData();
-        admin = userService.getUser(adminUsername).data(User.class);
+        admin = Response.fromJson(userService.getUser(adminUsername)).data(User.class);
         users = new User[30];
         String usernamer = "0";
         String passworder = "0";
@@ -68,11 +68,11 @@ public class EmployeeServiceTests {
         employmentConditions[i] = employmentConditioner;
         details[i] = detailer;
 
-        if(userService.getUser(usernames[i]).success() == false)
+        if(Response.fromJson(userService.getUser(usernames[i])).success() == false)
             userService.createUser(admin.getUsername(), usernames[i], passwords[i]);
-        if(empService.getEmployee(usernames[i]).success() == false)
+        if(Response.fromJson(empService.getEmployee(usernames[i])).success() == false)
             empService.recruitEmployee(admin.getUsername(),fullnames[i], branches[i], usernames[i],bankDetails[i], hourlyRates[i], employmentDates[i],employmentConditions[i], details[i]);
-        users[i] = userService.getUser(usernames[i]).data(User.class);
+        users[i] = Response.fromJson(userService.getUser(usernames[i])).data(User.class);
         users[i].login(passwords[i]);
 
         counter++;        
@@ -85,7 +85,7 @@ public class EmployeeServiceTests {
             brancher = "1";
         Response ans = null;
         if(i<10){
-            ans = userService.authorizeUser(adminUsername, usernames[i], Authorization.ShiftManager.name());
+            Response.fromJson(userService.authorizeUser(adminUsername, usernames[i], Authorization.ShiftManager.name()));
             empService.certifyEmployee(adminUsername, usernames[i], Role.ShiftManager.name());
         }
         else if(i>=10 && i<20){
@@ -106,25 +106,25 @@ public class EmployeeServiceTests {
         try {
             
             LocalDate[] week = DateUtils.getWeekDates(LocalDate.of(2023,4, 9));
-            Response ans = empService.createWeekShifts(adminUsername, "1", week[0]);
+            Response ans = Response.fromJson(empService.createWeekShifts(adminUsername, "1", week[0]));
             assertFalse(ans.success() == false, ans.message());
-            ans = empService.setShiftNeededAmount(adminUsername, "1", week[0], SShiftType.Morning, Role.Cashier.name(), 2);
+            ans = Response.fromJson(empService.setShiftNeededAmount(adminUsername, "1", week[0], SShiftType.Morning, Role.Cashier.name(), 2));
             assertFalse(ans.success() == false, ans.message());
-            ans =empService.setShiftNeededAmount(adminUsername, "1", week[0], SShiftType.Morning, Role.Storekeeper.name(), 1);
+            ans = Response.fromJson(empService.setShiftNeededAmount(adminUsername, "1", week[0], SShiftType.Morning, Role.Storekeeper.name(), 1));
             assertFalse(ans.success() == false, ans.message());
-            ans = empService.requestShift(usernames[0],"1" , week[0], SShiftType.Morning, Role.ShiftManager.name());
+            ans = Response.fromJson(empService.requestShift(usernames[0],"1" , week[0], SShiftType.Morning, Role.ShiftManager.name()));
             assertFalse(ans.success() == false, ans.message());
-            ans = empService.requestShift(usernames[10],"1" , week[0], SShiftType.Morning, Role.Cashier.name());
+            ans = Response.fromJson(empService.requestShift(usernames[10],"1" , week[0], SShiftType.Morning, Role.Cashier.name()));
             assertFalse(ans.success() == false, ans.message());
-            ans = empService.requestShift(usernames[11],"1" , week[0], SShiftType.Morning, Role.Cashier.name());
+            ans = Response.fromJson(empService.requestShift(usernames[11],"1" , week[0], SShiftType.Morning, Role.Cashier.name()));
             assertFalse(ans.success() == false, ans.message());
-            ans = empService.requestShift(usernames[11],"1" , week[0], SShiftType.Morning, Role.Cashier.name()); // done twice intentionally
+            ans = Response.fromJson(empService.requestShift(usernames[11],"1" , week[0], SShiftType.Morning, Role.Cashier.name())); // done twice intentionally
            // assertFalse(ans.getErrorMessage(), ans.success() == false);
-            ans = empService.requestShift(usernames[20],"1" , week[0], SShiftType.Morning, Role.Storekeeper.name());
+            ans = Response.fromJson(empService.requestShift(usernames[20],"1" , week[0], SShiftType.Morning, Role.Storekeeper.name()));
             assertFalse(ans.success() == false, ans.message());
-            ans = empService.requestShift(usernames[21],"1" , week[0], SShiftType.Morning, Role.GeneralWorker.name());
+            ans = Response.fromJson(empService.requestShift(usernames[21],"1" , week[0], SShiftType.Morning, Role.GeneralWorker.name()));
             assertFalse(ans.success() == false, ans.message());
-            Response ans2 = empService.getWeekShifts(adminUsername, "1",week[0]);
+            Response ans2 = Response.fromJson(empService.getWeekShifts(adminUsername, "1",week[0]));
             boolean foundShift = false;
             SShift theShift = null;
             for(SShift[] shifts : ans2.<List<SShift[]>>data(LIST_SSHIFT_ARRAY_TYPE)){
@@ -134,30 +134,30 @@ public class EmployeeServiceTests {
                         foundShift = true;
                         boolean foundEmployee1 = false, foundEmployee2 = false;
                         for(SEmployee se: shift.getShiftRequestsEmployees(Role.Cashier.name()) ){
-                            if(se.getId().equals( empService.getEmployee(usernames[10]).<SEmployee>data(SEmployee.class).getId()))
+                            if(se.getId().equals( Response.fromJson(empService.getEmployee(usernames[10])).<SEmployee>data(SEmployee.class).getId()))
                                 foundEmployee1 = true;
-                            if(se.getId().equals( empService.getEmployee(usernames[11]).<SEmployee>data(SEmployee.class).getId()))
+                            if(se.getId().equals( Response.fromJson(empService.getEmployee(usernames[11])).<SEmployee>data(SEmployee.class).getId()))
                                 foundEmployee2 = true;
                         }
                         assertTrue(foundEmployee1 && foundEmployee2);
                         
-                        assertTrue( shift.getShiftRequestsEmployees(Role.ShiftManager.name()).get(0).getId().equals(empService.getEmployee(usernames[0]).<SEmployee>data(SEmployee.class).getId()));
-                        assertTrue( shift.getShiftRequestsEmployees(Role.Storekeeper.name()).get(0).getId().equals(empService.getEmployee(usernames[20]).<SEmployee>data(SEmployee.class).getId()));
-                        assertTrue( shift.getShiftRequestsEmployees(Role.GeneralWorker.name()).get(0).getId().equals(empService.getEmployee(usernames[21]).<SEmployee>data(SEmployee.class).getId()));
+                        assertTrue( shift.getShiftRequestsEmployees(Role.ShiftManager.name()).get(0).getId().equals(Response.fromJson(empService.getEmployee(usernames[0])).<SEmployee>data(SEmployee.class).getId()));
+                        assertTrue( shift.getShiftRequestsEmployees(Role.Storekeeper.name()).get(0).getId().equals(Response.fromJson(empService.getEmployee(usernames[20])).<SEmployee>data(SEmployee.class).getId()));
+                        assertTrue( shift.getShiftRequestsEmployees(Role.GeneralWorker.name()).get(0).getId().equals(Response.fromJson(empService.getEmployee(usernames[21])).<SEmployee>data(SEmployee.class).getId()));
 
                     }
                 }
             }
             assertTrue(foundShift);
-            ans = empService.setShiftEmployees(adminUsername, "1", week[0], SShiftType.Morning,Role.Cashier.name(),employeesToIds(theShift.getShiftRequestsEmployees(Role.Cashier.name())));
-            ans = empService.setShiftEmployees(adminUsername, "1", week[0], SShiftType.Morning,Role.ShiftManager.name(),employeesToIds(theShift.getShiftRequestsEmployees(Role.ShiftManager.name())));
-            ans = empService.setShiftEmployees(adminUsername, "1", week[0], SShiftType.Morning,Role.Storekeeper.name(),employeesToIds(theShift.getShiftRequestsEmployees(Role.Storekeeper.name())));
-            ans = empService.setShiftEmployees(adminUsername, "1", week[0], SShiftType.Morning,Role.GeneralWorker.name(),employeesToIds(theShift.getShiftRequestsEmployees(Role.GeneralWorker.name())));
-            ans = empService.approveShift(adminUsername, "1", week[0], SShiftType.Morning);
+            ans = Response.fromJson(empService.setShiftEmployees(adminUsername, "1", week[0], SShiftType.Morning,Role.Cashier.name(),employeesToIds(theShift.getShiftRequestsEmployees(Role.Cashier.name()))));
+            ans = Response.fromJson(empService.setShiftEmployees(adminUsername, "1", week[0], SShiftType.Morning,Role.ShiftManager.name(),employeesToIds(theShift.getShiftRequestsEmployees(Role.ShiftManager.name()))));
+            ans = Response.fromJson(empService.setShiftEmployees(adminUsername, "1", week[0], SShiftType.Morning,Role.Storekeeper.name(),employeesToIds(theShift.getShiftRequestsEmployees(Role.Storekeeper.name()))));
+            ans = Response.fromJson(empService.setShiftEmployees(adminUsername, "1", week[0], SShiftType.Morning,Role.GeneralWorker.name(),employeesToIds(theShift.getShiftRequestsEmployees(Role.GeneralWorker.name()))));
+            ans = Response.fromJson(empService.approveShift(adminUsername, "1", week[0], SShiftType.Morning));
             assertFalse(ans.success() == false, ans.message());
-            ans = empService.setShiftNeededAmount(adminUsername, "1", week[0], SShiftType.Morning, "Cashier", 3);
+            ans = Response.fromJson(empService.setShiftNeededAmount(adminUsername, "1", week[0], SShiftType.Morning, "Cashier", 3));
             assertFalse(ans.success() == false, ans.message());
-            ans = empService.approveShift(adminUsername, "1", week[0], SShiftType.Morning);
+            ans = Response.fromJson(empService.approveShift(adminUsername, "1", week[0], SShiftType.Morning));
             assertTrue(ans.success() == false, ans.message());
         } catch (Exception ignore) { ignore.printStackTrace(); fail("failed");}
     }
@@ -171,32 +171,32 @@ public class EmployeeServiceTests {
     @Test
     public void situation2(){ // test cancel card, create shift, set shift needed roles, set employees to work and approve.
         LocalDate date = LocalDate.now();
-        Response ans = empService.applyCancelCard(usernames[0], "1", date, SShiftType.Morning, "something");
+        Response ans = Response.fromJson(empService.applyCancelCard(usernames[0], "1", date, SShiftType.Morning, "something"));
         assertTrue(ans.success() == false, ans.message());// a shift manager that is not signed up to this shift
         empService.createWeekShifts(adminUsername, "1", DateUtils.getWeekDates(date)[0]);
-        ans = empService.setShiftNeededAmount(adminUsername, "1", date, SShiftType.Morning, Role.Cashier.name(), 1);
+        ans = Response.fromJson(empService.setShiftNeededAmount(adminUsername, "1", date, SShiftType.Morning, Role.Cashier.name(), 1));
         assertFalse(ans.success() == false, ans.message());
-        ans = empService.setShiftNeededAmount(adminUsername, "1", date, SShiftType.Morning, Role.ShiftManager.name(), 1);
+        ans = Response.fromJson(empService.setShiftNeededAmount(adminUsername, "1", date, SShiftType.Morning, Role.ShiftManager.name(), 1));
         assertFalse(ans.success() == false, ans.message());
-        ans = empService.setShiftNeededAmount(adminUsername, "1", date, SShiftType.Morning, Role.Storekeeper.name(), 0);
+        ans = Response.fromJson(empService.setShiftNeededAmount(adminUsername, "1", date, SShiftType.Morning, Role.Storekeeper.name(), 0));
         assertFalse(ans.success() == false, ans.message());
-        ans = empService.setShiftNeededAmount(adminUsername, "1", date, SShiftType.Morning, Role.GeneralWorker.name(), 0);
+        ans = Response.fromJson(empService.setShiftNeededAmount(adminUsername, "1", date, SShiftType.Morning, Role.GeneralWorker.name(), 0));
         assertFalse(ans.success() == false, ans.message());
         empService.requestShift(usernames[0], "1", date, SShiftType.Morning, Role.ShiftManager.name());
-        ans = empService.requestShift(usernames[10], "1", date, SShiftType.Morning, Role.Cashier.name());
+        ans = Response.fromJson(empService.requestShift(usernames[10], "1", date, SShiftType.Morning, Role.Cashier.name()));
         assertFalse(ans.success() == false, ans.message());
         List<String> li = new LinkedList<>(), li2 = new LinkedList<>();
         li.add(usernames[0]);
-        ans = empService.setShiftEmployees(adminUsername, "1", date, SShiftType.Morning, Role.ShiftManager.name(), li);
+        ans = Response.fromJson(empService.setShiftEmployees(adminUsername, "1", date, SShiftType.Morning, Role.ShiftManager.name(), li));
         assertFalse(ans.success() == false, ans.message());
         li2.add(usernames[10]);
-        ans = empService.setShiftEmployees(adminUsername, "1", date, SShiftType.Morning, Role.Cashier.name(), li2);
+        ans = Response.fromJson(empService.setShiftEmployees(adminUsername, "1", date, SShiftType.Morning, Role.Cashier.name(), li2));
         assertFalse(ans.success() == false, ans.message());
-        ans = empService.approveShift(adminUsername,"1", date, SShiftType.Morning);
+        ans = Response.fromJson(empService.approveShift(adminUsername,"1", date, SShiftType.Morning));
         assertFalse(ans.success() == false, ans.message());
-        ans = empService.applyCancelCard(usernames[0], "1", date, SShiftType.Morning,"something");
+        ans = Response.fromJson(empService.applyCancelCard(usernames[0], "1", date, SShiftType.Morning,"something"));
         assertFalse(ans.success() == false, ans.message());
-        ans = empService.applyCancelCard(usernames[10], "1", date, SShiftType.Morning,"something");
+        ans = Response.fromJson(empService.applyCancelCard(usernames[10], "1", date, SShiftType.Morning,"something"));
         assertTrue(ans.success() == false, ans.message()); // uncertified employee
     }
     @Test
@@ -211,84 +211,84 @@ public class EmployeeServiceTests {
         LocalDate[] week = DateUtils.getConsequtiveDates(dates[0],dates[1]);
         Response ans;
         String newUsername = "777";
-        ans = userService.createUser(admin.getUsername(), newUsername, "123");
-        ans = empService.recruitEmployee(admin.getUsername(),"abc", "2", newUsername,"Nothin 123 11", 30, week[0],"Nothing", "about");
+        ans = Response.fromJson(userService.createUser(admin.getUsername(), newUsername, "123"));
+        ans = Response.fromJson(empService.recruitEmployee(admin.getUsername(),"abc", "2", newUsername,"Nothin 123 11", 30, week[0],"Nothing", "about"));
         assertFalse(ans.success() == false, ans.message());
-        ans = empService.recruitEmployee(admin.getUsername(),"abc", "1", newUsername,"Nothin 123 11", 30, week[0],"Nothing", "about");
+        ans = Response.fromJson(empService.recruitEmployee(admin.getUsername(),"abc", "1", newUsername,"Nothin 123 11", 30, week[0],"Nothing", "about"));
         assertTrue(ans.success() == false, ans.message()); //recruiting same employee to different branch
-        ans = empService.addEmployeeToBranch(adminUsername, newUsername, "1");
-        ans = userService.login(newUsername, "123");
-        ans = empService.requestShift(newUsername,"1" , week[0], SShiftType.Morning, Role.GeneralWorker.name());
+        ans = Response.fromJson(empService.addEmployeeToBranch(adminUsername, newUsername, "1"));
+        ans = Response.fromJson(userService.login(newUsername, "123"));
+        ans = Response.fromJson(empService.requestShift(newUsername,"1" , week[0], SShiftType.Morning, Role.GeneralWorker.name()));
         assertTrue(ans.success() == false, ans.message()); // shift doesnt exist, therefore should fail
 
-        ans = empService.createWeekShifts(adminUsername, "1", week[0]);
-        ans = empService.createWeekShifts(adminUsername, "2", week[0]);
+        ans = Response.fromJson(empService.createWeekShifts(adminUsername, "1", week[0]));
+        ans = Response.fromJson(empService.createWeekShifts(adminUsername, "2", week[0]));
         for(LocalDate date: week){ // set up needs for shifts
-            ans = empService.setShiftNeededAmount(adminUsername, "1", date, SShiftType.Morning, Role.Cashier.name(), 1);
+            ans = Response.fromJson(empService.setShiftNeededAmount(adminUsername, "1", date, SShiftType.Morning, Role.Cashier.name(), 1));
             assertFalse(ans.success() == false, ans.message());
-            ans = empService.setShiftNeededAmount(adminUsername, "1", date, SShiftType.Morning, Role.ShiftManager.name(), 1);
+            ans = Response.fromJson(empService.setShiftNeededAmount(adminUsername, "1", date, SShiftType.Morning, Role.ShiftManager.name(), 1));
             assertFalse(ans.success() == false, ans.message());
-            ans = empService.setShiftNeededAmount(adminUsername, "1", date, SShiftType.Morning, Role.Storekeeper.name(), 0);
+            ans = Response.fromJson(empService.setShiftNeededAmount(adminUsername, "1", date, SShiftType.Morning, Role.Storekeeper.name(), 0));
             assertFalse(ans.success() == false, ans.message());
-            ans = empService.setShiftNeededAmount(adminUsername, "1", date, SShiftType.Morning, Role.GeneralWorker.name(), 0);
+            ans = Response.fromJson(empService.setShiftNeededAmount(adminUsername, "1", date, SShiftType.Morning, Role.GeneralWorker.name(), 0));
             assertFalse(ans.success() == false, ans.message());
-            ans = empService.setShiftNeededAmount(adminUsername, "1", date, SShiftType.Morning, Role.Steward.name(), 1);
+            ans = Response.fromJson(empService.setShiftNeededAmount(adminUsername, "1", date, SShiftType.Morning, Role.Steward.name(), 1));
             assertFalse(ans.success() == false, ans.message());
-            ans = empService.setShiftNeededAmount(adminUsername, "2", date, SShiftType.Morning, Role.ShiftManager.name(), 1);
+            ans = Response.fromJson(empService.setShiftNeededAmount(adminUsername, "2", date, SShiftType.Morning, Role.ShiftManager.name(), 1));
             assertFalse(ans.success() == false, ans.message());
-            ans = empService.setShiftNeededAmount(adminUsername, "2", date, SShiftType.Morning, Role.Storekeeper.name(), 0);
+            ans = Response.fromJson(empService.setShiftNeededAmount(adminUsername, "2", date, SShiftType.Morning, Role.Storekeeper.name(), 0));
             assertFalse(ans.success() == false, ans.message());
-            ans = empService.setShiftNeededAmount(adminUsername, "2", date, SShiftType.Morning, Role.GeneralWorker.name(), 0);
+            ans = Response.fromJson(empService.setShiftNeededAmount(adminUsername, "2", date, SShiftType.Morning, Role.GeneralWorker.name(), 0));
             assertFalse(ans.success() == false, ans.message());
         }// branch1 - manager,cashier,steward branch2 - shiftmanager, cashier
-        ans = empService.requestShift(newUsername, "1", week[0], SShiftType.Morning, Role.Steward.name());
+        ans = Response.fromJson(empService.requestShift(newUsername, "1", week[0], SShiftType.Morning, Role.Steward.name()));
         assertTrue(ans.success() == false, ans.message()); // uncertified to be steward
-        ans = empService.certifyEmployee(adminUsername, newUsername, Role.Steward.name());
-        ans = empService.certifyEmployee(adminUsername, newUsername, Role.Cashier.name());
-        ans = empService.requestShift(newUsername, "1", week[0], SShiftType.Morning, Role.Steward.name());
+        ans = Response.fromJson(empService.certifyEmployee(adminUsername, newUsername, Role.Steward.name()));
+        ans = Response.fromJson(empService.certifyEmployee(adminUsername, newUsername, Role.Cashier.name()));
+        ans = Response.fromJson(empService.requestShift(newUsername, "1", week[0], SShiftType.Morning, Role.Steward.name()));
         assertFalse(ans.success() == false, ans.message());
 
-        ans = empService.requestShift(newUsername, "2", week[0], SShiftType.Morning, Role.Steward.name());
+        ans = Response.fromJson(empService.requestShift(newUsername, "2", week[0], SShiftType.Morning, Role.Steward.name()));
         assertTrue(ans.success() == false, ans.message()); // cannot sign up to paraller shifts in different branches
 
-        ans = empService.requestShift(newUsername, "2", week[0], SShiftType.Evening, Role.Steward.name());
+        ans = Response.fromJson(empService.requestShift(newUsername, "2", week[0], SShiftType.Evening, Role.Steward.name()));
         assertTrue(ans.success() == false, ans.message()); // cannot sign up to 2 shifts a day
 
-        ans = empService.requestShift(newUsername, "1", week[1], SShiftType.Morning, Role.Steward.name());
+        ans = Response.fromJson(empService.requestShift(newUsername, "1", week[1], SShiftType.Morning, Role.Steward.name()));
         assertFalse(ans.success() == false, ans.message());
-        ans = empService.requestShift(newUsername, "1", week[2], SShiftType.Morning, Role.Steward.name());
+        ans = Response.fromJson(empService.requestShift(newUsername, "1", week[2], SShiftType.Morning, Role.Steward.name()));
         assertFalse(ans.success() == false, ans.message());
-        ans = empService.requestShift(newUsername, "1", week[3], SShiftType.Morning, Role.Steward.name());
+        ans = Response.fromJson(empService.requestShift(newUsername, "1", week[3], SShiftType.Morning, Role.Steward.name()));
         assertFalse(ans.success() == false, ans.message());
-        ans = empService.requestShift(newUsername, "1", week[4], SShiftType.Morning, Role.Steward.name());
+        ans = Response.fromJson(empService.requestShift(newUsername, "1", week[4], SShiftType.Morning, Role.Steward.name()));
         assertFalse(ans.success() == false, ans.message());
-        ans = empService.requestShift(newUsername, "2", week[5], SShiftType.Evening, Role.Cashier.name());
+        ans = Response.fromJson(empService.requestShift(newUsername, "2", week[5], SShiftType.Evening, Role.Cashier.name()));
         assertFalse(ans.success() == false, ans.message());
 
-        ans = empService.requestShift(newUsername, "2", week[6], SShiftType.Evening, Role.Cashier.name());
+        ans = Response.fromJson(empService.requestShift(newUsername, "2", week[6], SShiftType.Evening, Role.Cashier.name()));
         assertTrue(ans.success() == false, ans.message()); //cannot sign up to 7 shifts a week
 
         List<String> ids = new LinkedList<>();
-        ans = empService.requestShift(usernames[0], "1", week[0], SShiftType.Morning, Role.ShiftManager.name());
-        ans = empService.requestShift(usernames[10], "1", week[0], SShiftType.Morning, Role.Cashier.name());
-        ans = empService.cancelShiftRequest(usernames[10], "1", week[0], SShiftType.Morning, Role.Cashier.name());
+        ans = Response.fromJson(empService.requestShift(usernames[0], "1", week[0], SShiftType.Morning, Role.ShiftManager.name()));
+        ans = Response.fromJson(empService.requestShift(usernames[10], "1", week[0], SShiftType.Morning, Role.Cashier.name()));
+        ans = Response.fromJson(empService.cancelShiftRequest(usernames[10], "1", week[0], SShiftType.Morning, Role.Cashier.name()));
         assertFalse(ans.success() == false, ans.message());
         ids.add(newUsername);
-        ans = empService.setShiftEmployees(adminUsername, "1", week[0], SShiftType.Morning, Role.Steward.name(),ids);
+        ans = Response.fromJson(empService.setShiftEmployees(adminUsername, "1", week[0], SShiftType.Morning, Role.Steward.name(),ids));
         assertFalse(ans.success() == false, ans.message());
         ids.remove(newUsername);
         ids.add(usernames[0]);
-        ans = empService.setShiftEmployees(adminUsername, "1", week[0], SShiftType.Morning, Role.ShiftManager.name(),ids);
+        ans = Response.fromJson(empService.setShiftEmployees(adminUsername, "1", week[0], SShiftType.Morning, Role.ShiftManager.name(),ids));
         assertFalse(ans.success() == false, ans.message());
         ids.remove(usernames[0]);
         ids.add(usernames[10]);
-        ans = empService.setShiftEmployees(adminUsername, "1", week[0], SShiftType.Morning, Role.Cashier.name(),ids);
+        ans = Response.fromJson(empService.setShiftEmployees(adminUsername, "1", week[0], SShiftType.Morning, Role.Cashier.name(),ids));
         assertTrue(ans.success() == false, ans.message()); // the request was removed by the usernames[10], so the manager cant set him to the shift
-        ans = empService.approveShift(adminUsername, "1",week[0],SShiftType.Morning);
+        ans = Response.fromJson(empService.approveShift(adminUsername, "1",week[0],SShiftType.Morning));
         assertTrue(ans.success() == false, ans.message()); // cashier is missing, approving shift should make a warning.
-        Response ans2 = empService.getEmployeeShifts(newUsername);
-        Response ans3 = empService.getEmployeeShifts(usernames[0]);
-        Response ans4 = empService.getEmployeeShifts(usernames[10]);
+        Response ans2 = Response.fromJson(empService.getEmployeeShifts(newUsername));
+        Response ans3 = Response.fromJson(empService.getEmployeeShifts(usernames[0]));
+        Response ans4 = Response.fromJson(empService.getEmployeeShifts(usernames[10]));
         boolean flag1=false,flag2=false,flag3=false;
         Type type = new TypeToken<List<SShift[]>>(){}.getType();
         for(SShift[] shi : ans2.<List<SShift[]>>data(type)){

@@ -22,8 +22,8 @@ public class BackendController {
     private static final Type LIST_SSHIFT_ARRAY_TYPE = new TypeToken<List<SShift[]>>(){}.getType();
 
     private static BackendController instance;
-    private UserService userService;
-    private EmployeesService employeesService;
+    private final UserService userService;
+    private final EmployeesService employeesService;
     private String loggedUsername;
 
     public BackendController() {
@@ -47,7 +47,7 @@ public class BackendController {
     }
 
     public String login(String username, String password) {
-        Response response = userService.login(username, password);
+        Response response = Response.fromJson(userService.login(username, password));
         if (response.success() == false)
             return response.message();
         else if (response.success()) {
@@ -59,7 +59,7 @@ public class BackendController {
     }
 
     public String logout() {
-        Response response = userService.logout(loggedUsername);
+        Response response = Response.fromJson(userService.logout(loggedUsername));
         if (response.success() == false)
             return response.message();
         else if (response.success()) {
@@ -71,7 +71,7 @@ public class BackendController {
     }
 
     public String recruitEmployee(String fullName, String branchId, String id, String bankDetails, double hourlyRate, LocalDate employmentDate, String employmentConditions, String details) {
-        Response response = employeesService.recruitEmployee(loggedUsername, fullName, branchId, id, bankDetails, hourlyRate, employmentDate, employmentConditions, details);
+        Response response = Response.fromJson(employeesService.recruitEmployee(loggedUsername, fullName, branchId, id, bankDetails, hourlyRate, employmentDate, employmentConditions, details));
         if (response.success() == false)
             return response.message();
         else
@@ -79,7 +79,7 @@ public class BackendController {
     }
 
     public String createUser(String username, String password) {
-        Response response = userService.createUser(loggedUsername, username, password);
+        Response response = Response.fromJson(userService.createUser(loggedUsername, username, password));
         if (response.success() == false)
             return response.message();
         else if (response.success()) {
@@ -91,7 +91,7 @@ public class BackendController {
 
     public String requestShift(String branchId, String shiftTime, LocalDate shiftDate, String role) {
         try {
-            Response response = employeesService.requestShift(loggedUsername, branchId, shiftDate, SShiftType.valueOf(shiftTime), role);
+            Response response = Response.fromJson(employeesService.requestShift(loggedUsername, branchId, shiftDate, SShiftType.valueOf(shiftTime), role));
             if (response.success() == false)
                 return response.message();
             else {
@@ -109,7 +109,7 @@ public class BackendController {
     }
 
     public List<String> getUserAuthorizations() {
-        Response response = userService.getUserAuthorizations(loggedUsername);
+        Response response = Response.fromJson(userService.getUserAuthorizations(loggedUsername));
         if (response.success() == false)
             return null;
         else{
@@ -118,7 +118,7 @@ public class BackendController {
     }
 
     public String createWeekShifts(String branchId, LocalDate weekStart) {
-        Response response = employeesService.createWeekShifts(loggedUsername, branchId, weekStart);
+        Response response = Response.fromJson(employeesService.createWeekShifts(loggedUsername, branchId, weekStart));
         if (response.success() == false)
             return response.message();
         else {
@@ -137,7 +137,7 @@ public class BackendController {
 
     public String setShiftNeededAmount(String branchId, LocalDate shiftDate, String shiftType, String role, int amount) {
         try {
-            Response response = employeesService.setShiftNeededAmount(loggedUsername, branchId, shiftDate, SShiftType.valueOf(shiftType), role, amount);
+            Response response = Response.fromJson(employeesService.setShiftNeededAmount(loggedUsername, branchId, shiftDate, SShiftType.valueOf(shiftType), role, amount));
             if (response.success() == false)
                 return response.message();
             else {
@@ -156,7 +156,7 @@ public class BackendController {
 
     public String setShiftEmployees(String branchId, LocalDate shiftDate, String shiftType, String role, List<String> employeeIds) {
         try {
-            Response response = employeesService.setShiftEmployees(loggedUsername, branchId, shiftDate, SShiftType.valueOf(shiftType), role, employeeIds);
+            Response response = Response.fromJson(employeesService.setShiftEmployees(loggedUsername, branchId, shiftDate, SShiftType.valueOf(shiftType), role, employeeIds));
             if (response.success() == false)
                 return response.message();
             else {
@@ -174,12 +174,11 @@ public class BackendController {
     }
 
     public List<SShift[]> getWeekShifts(String branchId, LocalDate weekStart) throws Exception {
-        Response response = employeesService.getWeekShifts(loggedUsername, branchId, weekStart);
+        Response response = Response.fromJson(employeesService.getWeekShifts(loggedUsername, branchId, weekStart));
         if (response.success() == false)
             throw new Exception(response.message());
         else {
-            List<SShift[]> result = response.data(LIST_SSHIFT_ARRAY_TYPE);
-            return result;
+            return response.data(LIST_SSHIFT_ARRAY_TYPE);
         }
     }
 
@@ -189,17 +188,16 @@ public class BackendController {
     }
 
     public List<SShift[]> getMyShifts() throws Exception {
-        Response response = employeesService.getEmployeeShifts(loggedUsername);
+        Response response = Response.fromJson(employeesService.getEmployeeShifts(loggedUsername));
         if (response.success() == false)
             throw new Exception(response.message());
         else {
-            List<SShift[]> result = response.data(LIST_SSHIFT_ARRAY_TYPE);
-            return result;
+            return response.data(LIST_SSHIFT_ARRAY_TYPE);
         }
     }
 
     public SEmployee getEmployee() throws Exception {
-        Response response = employeesService.getEmployee(loggedUsername);
+        Response response = Response.fromJson(employeesService.getEmployee(loggedUsername));
         if (response.success() == false)
             throw new Exception(response.message());
         else{
@@ -209,7 +207,7 @@ public class BackendController {
 
 
     public String certifyEmployee(String employeeId, String role) {
-        Response response = employeesService.certifyEmployee(loggedUsername, employeeId, role);
+        Response response = Response.fromJson(employeesService.certifyEmployee(loggedUsername, employeeId, role));
         if (response.success() == false)
             return response.message();
         else
@@ -217,7 +215,7 @@ public class BackendController {
     }
 
     public String uncertifyEmployee(String employeeId, String role) {
-        Response response = employeesService.uncertifyEmployee(loggedUsername, employeeId, role);
+        Response response = Response.fromJson(employeesService.uncertifyEmployee(loggedUsername, employeeId, role));
         if (response.success() == false)
             return response.message();
         else
@@ -226,7 +224,7 @@ public class BackendController {
 
     public String approveShift(String branchId, LocalDate shiftDate, String shiftType) {
         try {
-            Response response = employeesService.approveShift(loggedUsername, branchId, shiftDate, SShiftType.valueOf(shiftType));
+            Response response = Response.fromJson(employeesService.approveShift(loggedUsername, branchId, shiftDate, SShiftType.valueOf(shiftType)));
             if (response.success() == false)
                 return response.message();
             else
@@ -237,7 +235,7 @@ public class BackendController {
     }
 
     public String addEmployeeToBranch(String employeeId, String branchId) {
-        Response response = employeesService.addEmployeeToBranch(loggedUsername, employeeId, branchId);
+        Response response = Response.fromJson(employeesService.addEmployeeToBranch(loggedUsername, employeeId, branchId));
         if (response.success() == false)
             return response.message();
         else
@@ -246,7 +244,7 @@ public class BackendController {
 
     public String deleteShift(String branchId, LocalDate shiftDate, String shiftType) {
         try {
-            Response response = employeesService.deleteShift(loggedUsername, branchId, shiftDate, SShiftType.valueOf(shiftType));
+            Response response = Response.fromJson(employeesService.deleteShift(loggedUsername, branchId, shiftDate, SShiftType.valueOf(shiftType)));
             if (response.success() == false)
                 return response.message();
             else
@@ -257,7 +255,7 @@ public class BackendController {
     }
 
     public String createBranch(String branchId) {
-        Response response = employeesService.createBranch(loggedUsername, branchId);
+        Response response = Response.fromJson(employeesService.createBranch(loggedUsername, branchId));
         if (response.success() == false)
             return response.message();
         else
@@ -265,7 +263,7 @@ public class BackendController {
     }
 
     public String updateBranchWorkingHours(String branchId, LocalTime morningStart, LocalTime morningEnd, LocalTime eveningStart, LocalTime eveningEnd) {
-        Response response = employeesService.updateBranchWorkingHours(loggedUsername, branchId, morningStart, morningEnd, eveningStart, eveningEnd);
+        Response response = Response.fromJson(employeesService.updateBranchWorkingHours(loggedUsername, branchId, morningStart, morningEnd, eveningStart, eveningEnd));
         if (response.success() == false)
             return response.message();
         else
@@ -273,7 +271,7 @@ public class BackendController {
     }
 
     public String updateEmployeeSalary(String employeeId, double hourlySalaryRate, double salaryBonus) {
-        Response response = employeesService.updateEmployeeSalary(loggedUsername, employeeId, hourlySalaryRate, salaryBonus);
+        Response response = Response.fromJson(employeesService.updateEmployeeSalary(loggedUsername, employeeId, hourlySalaryRate, salaryBonus));
         if (response.success() == false)
             return response.message();
         else
@@ -281,7 +279,7 @@ public class BackendController {
     }
 
     public String updateEmployeeBankDetails(String employeeId, String bankDetails) {
-        Response response = employeesService.updateEmployeeBankDetails(loggedUsername, employeeId, bankDetails);
+        Response response = Response.fromJson(employeesService.updateEmployeeBankDetails(loggedUsername, employeeId, bankDetails));
         if (response.success() == false)
             return response.message();
         else
@@ -289,7 +287,7 @@ public class BackendController {
     }
 
     public String updateEmployeeEmploymentConditions(String employeeId, String employmentConditions) {
-        Response response = employeesService.updateEmployeeEmploymentConditions(loggedUsername, employeeId, employmentConditions);
+        Response response = Response.fromJson(employeesService.updateEmployeeEmploymentConditions(loggedUsername, employeeId, employmentConditions));
         if (response.success() == false)
             return response.message();
         else
@@ -297,7 +295,7 @@ public class BackendController {
     }
 
     public String updateEmployeeDetails(String employeeId, String details) {
-        Response response = employeesService.updateEmployeeDetails(loggedUsername, employeeId, details);
+        Response response = Response.fromJson(employeesService.updateEmployeeDetails(loggedUsername, employeeId, details));
         if (response.success() == false)
             return response.message();
         else
@@ -305,7 +303,7 @@ public class BackendController {
     }
 
     public String authorizeUser(String username, String authorization) {
-        Response response = userService.authorizeUser(loggedUsername, username, authorization);
+        Response response = Response.fromJson(userService.authorizeUser(loggedUsername, username, authorization));
         if (response.success() == false)
             return response.message();
         else
@@ -314,7 +312,7 @@ public class BackendController {
 
     public String cancelShiftRequest(String branchId, String shiftType, LocalDate shiftDate, String role) {
         try {
-            Response response = employeesService.cancelShiftRequest(loggedUsername, branchId, shiftDate, SShiftType.valueOf(shiftType), role);
+            Response response = Response.fromJson(employeesService.cancelShiftRequest(loggedUsername, branchId, shiftDate, SShiftType.valueOf(shiftType), role));
             if (response.success() == false)
                 return response.message();
             else
@@ -326,7 +324,7 @@ public class BackendController {
 
     public String reportShiftActivity(String branchId, LocalDate shiftDate, String shiftType, String activity) {
         try {
-            Response response = employeesService.reportShiftActivity(loggedUsername, branchId, shiftDate, SShiftType.valueOf(shiftType), activity);
+            Response response = Response.fromJson(employeesService.reportShiftActivity(loggedUsername, branchId, shiftDate, SShiftType.valueOf(shiftType), activity));
             if (response.success() == false)
                 return response.message();
             else
@@ -338,7 +336,7 @@ public class BackendController {
 
     public String applyCancelCard(String branchId, LocalDate shiftDate, String shiftType, String productId) {
         try {
-            Response response = employeesService.applyCancelCard(loggedUsername, branchId, shiftDate, SShiftType.valueOf(shiftType), productId);
+            Response response = Response.fromJson(employeesService.applyCancelCard(loggedUsername, branchId, shiftDate, SShiftType.valueOf(shiftType), productId));
             if (response.success() == false)
                 return response.message();
             else

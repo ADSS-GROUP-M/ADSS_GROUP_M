@@ -42,7 +42,7 @@ public class EmployeesService {
     }
 
     public String checkStoreKeeperAvailability(String dateToCheck, String branchAddress){
-        LocalDate date = JsonUtils.deserialize(dateToCheck,LocalDate.class);
+        LocalDate date = JsonUtils.deserialize(dateToCheck,LocalDateTime.class);
         //TODO: implement this
         throw new UnsupportedOperationException("Not implemented yet");
     }

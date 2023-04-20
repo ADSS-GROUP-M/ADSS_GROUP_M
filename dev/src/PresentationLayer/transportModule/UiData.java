@@ -9,7 +9,7 @@ import utils.Response;
 import java.time.LocalDateTime;
 import java.util.*;
 
-public class TransportAppData {
+public class UiData {
 
     private Scanner scanner;
     private boolean dataGenerated;
@@ -22,7 +22,7 @@ public class TransportAppData {
     private final ItemListsService ils;
     private final TransportsService ts;
 
-    public TransportAppData(ResourceManagementService rms, ItemListsService ils, TransportsService ts){
+    public UiData(ResourceManagementService rms, ItemListsService ils, TransportsService ts){
         scanner = new Scanner(System.in);
         dataGenerated = false;
         this.rms = rms;
@@ -366,29 +366,32 @@ public class TransportAppData {
         return siteArray[option];
     }
 
-    Driver pickDriver(boolean allowDone) {
+    Driver pickDriver(boolean allowDone){
+        return pickDriver(allowDone,drivers.values().toArray(new Driver[0]));
+    }
+
+    Driver pickDriver(boolean allowDone, Driver[] availableDrivers) {
+
         int i = 1;
-        Driver[] driverArray = new Driver[drivers.size()];
-        for(Driver driver : drivers.values()){
-            System.out.print(i+".");
-            System.out.println(" name:         "+driver.name());
-            System.out.println("   license type: "+driver.licenseType());
-            driverArray[i-1] = driver;
-            i++;
+        for (; i <= availableDrivers.length; i++) {
+            Driver driver = availableDrivers[i-1];
+            System.out.print(i + ".");
+            System.out.println(" name:         " + driver.name());
+            System.out.println("   license type: " + driver.licenseType());
         }
         if(allowDone) {
             System.out.println(i+". Done");
         }
         int option = readInt()-1;
-        if( (allowDone && (option < 0 || option > drivers.size()))
-                || (!allowDone && (option < 0 || option > drivers.size()-1))){
+        if( (allowDone && (option < 0 || option > availableDrivers.length))
+                || (!allowDone && (option < 0 || option > availableDrivers.length-1))){
             System.out.println("\nInvalid option!");
             return pickDriver(allowDone);
         }
-        if(allowDone && option == drivers.size()) {
+        if(allowDone && option == availableDrivers.length) {
             return null;
         }
-        return driverArray[option];
+        return availableDrivers[option];
     }
 
     Truck pickTruck(boolean allowDone) {

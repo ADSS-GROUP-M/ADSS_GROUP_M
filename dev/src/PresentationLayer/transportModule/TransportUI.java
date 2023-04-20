@@ -3,11 +3,12 @@ package PresentationLayer.transportModule;
 import PresentationLayer.employeeModule.View.LoginMenu;
 import PresentationLayer.employeeModule.View.Menu;
 import PresentationLayer.employeeModule.View.MenuManager;
+import ServiceLayer.employeeModule.Services.EmployeesService;
 import ServiceLayer.transportModule.ModuleFactory;
 
 public class TransportUI implements Menu {
 
-    private final TransportAppData transportAppData;
+    private final UiData UIData;
     private final TransportsManagement transportsManagement;
     private final ItemListsManagement itemListsManagement;
     private final SitesManagement sitesManagement;
@@ -16,27 +17,28 @@ public class TransportUI implements Menu {
 
     public TransportUI(){
         ModuleFactory factory = new ModuleFactory();
-        transportAppData = new TransportAppData(
+        UIData = new UiData(
                 factory.getResourceManagementService(),
                 factory.getItemListsService(),
                 factory.getTransportsService()
         );
-        itemListsManagement = new ItemListsManagement(transportAppData,factory.getItemListsService());
-        sitesManagement = new SitesManagement(transportAppData,factory.getResourceManagementService());
-        trucksManagement = new TrucksManagement(transportAppData,factory.getResourceManagementService());
-        driversManagement = new DriversManagement(transportAppData,factory.getResourceManagementService());
-        transportsManagement = new TransportsManagement(transportAppData,factory.getTransportsService());
+        EmployeesService employeesService = EmployeesService.getInstance();
+        itemListsManagement = new ItemListsManagement(UIData,factory.getItemListsService());
+        sitesManagement = new SitesManagement(UIData,factory.getResourceManagementService());
+        trucksManagement = new TrucksManagement(UIData,factory.getResourceManagementService());
+        driversManagement = new DriversManagement(UIData,factory.getResourceManagementService());
+        transportsManagement = new TransportsManagement(UIData,factory.getTransportsService(), employeesService);
     }
 
     @Override
     public Menu run() {
         printCommands();
-        int option = transportAppData.readInt();
+        int option = UIData.readInt();
         switch (option) {
             case 1 -> transportsManagement.manageTransports();
             case 2 -> itemListsManagement.manageItemLists();
             case 3 -> manageResources();
-            case 4 -> transportAppData.generateData();
+            case 4 -> UIData.generateData();
             case 5 -> {
                 return new LoginMenu();
             }
@@ -71,7 +73,7 @@ public class TransportUI implements Menu {
             System.out.println("2. Manage drivers");
             System.out.println("3. Manage trucks");
             System.out.println("4. Return to main menu");
-            int option = transportAppData.readInt();
+            int option = UIData.readInt();
             switch (option) {
                 case 1 -> sitesManagement.manageSites();
                 case 2 -> driversManagement.manageDrivers();

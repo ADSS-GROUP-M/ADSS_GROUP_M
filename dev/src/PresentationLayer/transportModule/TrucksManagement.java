@@ -7,11 +7,11 @@ import utils.Response;
 
 public class TrucksManagement {
 
-    private final TransportAppData transportAppData;
+    private final UiData uiData;
     private final ResourceManagementService rms;
 
-    public TrucksManagement(TransportAppData transportAppData, ResourceManagementService rms) {
-        this.transportAppData = transportAppData;
+    public TrucksManagement(UiData uiData, ResourceManagementService rms) {
+        this.uiData = uiData;
         this.rms = rms;
     }
 
@@ -26,7 +26,7 @@ public class TrucksManagement {
             System.out.println("4. View full truck information");
             System.out.println("5. View all trucks");
             System.out.println("6. Return to previous menu");
-            int option = transportAppData.readInt();
+            int option = uiData.readInt();
             switch (option) {
                 case 1 -> createTruck();
                 case 2 -> updateTruck();
@@ -44,14 +44,14 @@ public class TrucksManagement {
     private void createTruck() {
         System.out.println("=========================================");
         System.out.println("Enter truck details:");
-        String licensePlate = transportAppData.readLine("License plate: ");
-        String model = transportAppData.readLine("Model: ");
-        int baseWeight = transportAppData.readInt("Base weight: ");
+        String licensePlate = uiData.readLine("License plate: ");
+        String model = uiData.readLine("Model: ");
+        int baseWeight = uiData.readInt("Base weight: ");
         if(baseWeight <= 0) {
             System.out.println("\nInvalid base weight!");
             return;
         }
-        int maxWeight = transportAppData.readInt("Max weight: ");
+        int maxWeight = uiData.readInt("Max weight: ");
         if(maxWeight <= 0) {
             System.out.println("\nInvalid max weight!");
             return;
@@ -63,7 +63,7 @@ public class TrucksManagement {
         String responseJson = rms.addTruck(json);
         Response response = JsonUtils.deserialize(responseJson, Response.class);
         if(response.success()) {
-            transportAppData.trucks().put(licensePlate, newTruck);
+            uiData.trucks().put(licensePlate, newTruck);
         }
         System.out.println("\n"+response.message());
     }
@@ -76,7 +76,7 @@ public class TrucksManagement {
         for (int i = 0; i < Truck.CoolingCapacity.values().length; i++) {
             System.out.println((i+1) + ". " + Truck.CoolingCapacity.values()[i]);
         }
-        int option = transportAppData.readInt()-1;
+        int option = uiData.readInt()-1;
         if (option < 0 || option >= Truck.CoolingCapacity.values().length) {
             System.out.println("\nInvalid cooling capacity!");
             return null;
@@ -88,7 +88,7 @@ public class TrucksManagement {
         while(true) {
             System.out.println("=========================================");
             System.out.println("Select truck to update:");
-            Truck truck = transportAppData.pickTruck(true);
+            Truck truck = uiData.pickTruck(true);
             if (truck == null) {
                 return;
             }
@@ -103,10 +103,10 @@ public class TrucksManagement {
                 System.out.println("2. Update max weight");
                 System.out.println("3. Update cooling capacity");
                 System.out.println("4. Return to previous menu");
-                int option = transportAppData.readInt();
+                int option = uiData.readInt();
                 switch (option) {
                     case 1 -> {
-                        int baseWeight = transportAppData.readInt("Base weight: ");
+                        int baseWeight = uiData.readInt("Base weight: ");
                         if (baseWeight <= 0) {
                             System.out.println("\nInvalid base weight!");
                             continue;
@@ -114,7 +114,7 @@ public class TrucksManagement {
                         updateTruckHelperMethod(truck.id(), truck.model(), baseWeight, truck.maxWeight(),truck.coolingCapacity());
                     }
                     case 2 -> {
-                        int maxWeight = transportAppData.readInt("Max weight: ");
+                        int maxWeight = uiData.readInt("Max weight: ");
                         if (maxWeight <= 0) {
                             System.out.println("\nInvalid max weight!");
                             continue;
@@ -144,7 +144,7 @@ public class TrucksManagement {
         String responseJson = rms.updateTruck(json);
         Response response = JsonUtils.deserialize(responseJson, Response.class);
         if(response.success()) {
-            transportAppData.trucks().put(licensePlate, newTruck);
+            uiData.trucks().put(licensePlate, newTruck);
         }
         System.out.println("\n"+response.message());
     }
@@ -153,7 +153,7 @@ public class TrucksManagement {
         while(true) {
             System.out.println("=========================================");
             System.out.println("Select truck to remove:");
-            Truck truck = transportAppData.pickTruck(true);
+            Truck truck = uiData.pickTruck(true);
             if (truck == null) {
                 return;
             }
@@ -162,14 +162,14 @@ public class TrucksManagement {
             printTruckDetails(truck);
             System.out.println("=========================================");
             System.out.println("Are you sure you want to remove this truck? (y/n)");
-            String option = transportAppData.readLine();
+            String option = uiData.readLine();
             switch(option){
                 case "y"->{
                     String json = truck.toJson();
                     String responseJson = rms.removeTruck(json);
                     Response response = JsonUtils.deserialize(responseJson, Response.class);
                     if(response.success()) {
-                        transportAppData.trucks().remove(truck.id());
+                        uiData.trucks().remove(truck.id());
                     }
                     System.out.println("\n"+response.message());
                 }
@@ -182,17 +182,17 @@ public class TrucksManagement {
     private void viewTruck() {
         while(true) {
             System.out.println("=========================================");
-            String truckId = transportAppData.readLine("Enter license plate of truck to view ('done!' to return to previous menu): ");
+            String truckId = uiData.readLine("Enter license plate of truck to view ('done!' to return to previous menu): ");
             if (truckId.equalsIgnoreCase("done!")) {
                 return;
             }
-            Truck truck = transportAppData.trucks().get(truckId);
+            Truck truck = uiData.trucks().get(truckId);
             System.out.println("=========================================");
             System.out.println("Truck details:");
             printTruckDetails(truck);
             System.out.println("=========================================");
             System.out.println("\nEnter 'done!' to return to previous menu");
-            transportAppData.readLine();
+            uiData.readLine();
         }
 
     }
@@ -200,12 +200,12 @@ public class TrucksManagement {
     private void viewAllTrucks() {
         System.out.println("=========================================");
         System.out.println("All trucks:");
-        for (Truck truck : transportAppData.trucks().values()) {
+        for (Truck truck : uiData.trucks().values()) {
             printTruckDetails(truck);
             System.out.println("-----------------------------------------");
         }
         System.out.println("\nEnter 'done!' to return to previous menu");
-        transportAppData.readLine();
+        uiData.readLine();
     }
 
     private void printTruckDetails(Truck truck) {

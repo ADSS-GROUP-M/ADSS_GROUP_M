@@ -7,11 +7,11 @@ import utils.Response;
 
 public class SitesManagement {
 
-    private final TransportAppData transportAppData;
+    private final UiData uiData;
     private final ResourceManagementService rms;
 
-    public SitesManagement(TransportAppData transportAppData, ResourceManagementService rms) {
-        this.transportAppData = transportAppData;
+    public SitesManagement(UiData uiData, ResourceManagementService rms) {
+        this.uiData = uiData;
         this.rms = rms;
     }
 
@@ -26,7 +26,7 @@ public class SitesManagement {
             System.out.println("4. View full site information");
             System.out.println("5. View all sites");
             System.out.println("6. Return to previous menu");
-            int option = transportAppData.readInt();
+            int option = uiData.readInt();
             switch (option) {
                 case 1 -> createSite();
                 case 2 -> updateSite();
@@ -44,15 +44,15 @@ public class SitesManagement {
     private void createSite() {
         System.out.println("=========================================");
         System.out.println("Enter site details:");
-        String transportZone = transportAppData.readLine("Transport zone: ");
-        String address = transportAppData.readLine("Address: ");
-        String contactPhone = transportAppData.readLine("Contact phone: ");
-        String contactName = transportAppData.readLine("Contact name: ");
+        String transportZone = uiData.readLine("Transport zone: ");
+        String address = uiData.readLine("Address: ");
+        String contactPhone = uiData.readLine("Contact phone: ");
+        String contactName = uiData.readLine("Contact name: ");
         System.out.println("Site type: ");
         System.out.println("1. Logistical center");
         System.out.println("2. Branch");
         System.out.println("3. Supplier");
-        int siteType = transportAppData.readInt();
+        int siteType = uiData.readInt();
         Site.SiteType type;
         switch (siteType) {
             case 1 -> type = Site.SiteType.LOGISTICAL_CENTER;
@@ -68,7 +68,7 @@ public class SitesManagement {
         String responseJson = rms.addSite(json);
         Response response = JsonUtils.deserialize(responseJson, Response.class);
         if(response.success()) {
-            transportAppData.sites().put(newSite.address(), newSite);
+            uiData.sites().put(newSite.address(), newSite);
         }
         System.out.println("\n"+response.message());
     }
@@ -77,7 +77,7 @@ public class SitesManagement {
         while(true) {
             System.out.println("=========================================");
             System.out.println("Select site to update:");
-            Site site = transportAppData.pickSite(true);
+            Site site = uiData.pickSite(true);
             if(site == null) {
                 return;
             }
@@ -90,10 +90,10 @@ public class SitesManagement {
                 System.out.println("1. Update contact name");
                 System.out.println("2. Update contact phone");
                 System.out.println("3. Return to previous menu");
-                int option = transportAppData.readInt();
+                int option = uiData.readInt();
                 switch (option) {
                     case 1 -> {
-                        String contactName = transportAppData.readLine("Contact name: ");
+                        String contactName = uiData.readLine("Contact name: ");
                         updateSiteHelperMethod(site.transportZone(),
                                 site.address(),
                                 site.phoneNumber(),
@@ -102,7 +102,7 @@ public class SitesManagement {
                         );
                     }
                     case 2 -> {
-                        String contactPhone = transportAppData.readLine("Contact phone: ");
+                        String contactPhone = uiData.readLine("Contact phone: ");
                         updateSiteHelperMethod(
                                 site.transportZone(),
                                 site.address(),
@@ -130,7 +130,7 @@ public class SitesManagement {
         String responseJson = rms.updateSite(json);
         Response response = JsonUtils.deserialize(responseJson, Response.class);
         if(response.success()) {
-            transportAppData.sites().put(newSite.address(), newSite);
+            uiData.sites().put(newSite.address(), newSite);
         }
         System.out.println("\n"+response.message());
     }
@@ -139,7 +139,7 @@ public class SitesManagement {
         while(true) {
             System.out.println("=========================================");
             System.out.println("Select site to remove:");
-            Site site = transportAppData.pickSite(true);
+            Site site = uiData.pickSite(true);
             if (site == null) {
                 return;
             }
@@ -148,14 +148,14 @@ public class SitesManagement {
             printSiteDetails(site);
             System.out.println("=========================================");
             System.out.println("Are you sure you want to remove this site? (y/n)");
-            String option = transportAppData.readLine();
+            String option = uiData.readLine();
             switch (option) {
                 case "y"-> {
                     String json = site.toJson();
                     String responseJson = rms.removeSite(json);
                     Response response = JsonUtils.deserialize(responseJson, Response.class);
                     if(response.success()) {
-                        transportAppData.sites().remove(site.address());
+                        uiData.sites().remove(site.address());
                     }
                     System.out.println("\n"+response.message());
                 }
@@ -168,33 +168,33 @@ public class SitesManagement {
     private void viewSite() {
         while(true) {
             System.out.println("=========================================");
-            String siteId = transportAppData.readLine("Enter address of site to view (enter 'done!' to return to previous menu): ");
+            String siteId = uiData.readLine("Enter address of site to view (enter 'done!' to return to previous menu): ");
             if(siteId.equals("done!")) {
                 return;
             }
-            if(transportAppData.sites().containsKey(siteId) == false) {
+            if(uiData.sites().containsKey(siteId) == false) {
                 System.out.println("Site not found!");
                 continue;
             }
-            Site site = transportAppData.sites().get(siteId);
+            Site site = uiData.sites().get(siteId);
             System.out.println("=========================================");
             System.out.println("Site details:");
             printSiteDetails(site);
             System.out.println("=========================================");
             System.out.println("Enter 'done!' to return to previous menu");
-            transportAppData.readLine();
+            uiData.readLine();
         }
     }
 
     private void viewAllSites() {
         System.out.println("=========================================");
         System.out.println("All sites:");
-        for(Site site : transportAppData.sites().values()) {
+        for(Site site : uiData.sites().values()) {
             printSiteDetails(site);
             System.out.println("-----------------------------------------");
         }
         System.out.println("\nEnter 'done!' to return to previous menu");
-        transportAppData.readLine();
+        uiData.readLine();
     }
 
     void printSiteDetails(Site site) {

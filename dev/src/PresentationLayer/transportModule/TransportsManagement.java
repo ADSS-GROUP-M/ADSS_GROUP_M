@@ -1,25 +1,32 @@
 package PresentationLayer.transportModule;
 
+import ServiceLayer.employeeModule.Services.EmployeesService;
 import ServiceLayer.transportModule.TransportsService;
+import com.google.gson.reflect.TypeToken;
+import objects.transportObjects.Driver;
 import objects.transportObjects.Site;
 import objects.transportObjects.Transport;
 import utils.JsonUtils;
 import utils.Response;
 
+import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 
 public class TransportsManagement {
-
-    private final TransportAppData transportAppData;
+    
+    private final UiData uiData;
     private final TransportsService ts;
+    private final EmployeesService es;
 
-    public TransportsManagement(TransportAppData transportAppData, TransportsService ts) {
-        this.transportAppData = transportAppData;
+    public TransportsManagement(UiData uiData, TransportsService ts, EmployeesService es) {
+        this.uiData = uiData;
         this.ts = ts;
+        this.es = es;
     }
 
     void manageTransports() {
@@ -33,7 +40,7 @@ public class TransportsManagement {
             System.out.println("4. View full transport information");
             System.out.println("5. View all transports");
             System.out.println("6. Return to previous menu");
-            int option = transportAppData.readInt();
+            int option = uiData.readInt();
             switch (option) {
                 case 1 -> createTransport();
                 case 2 -> updateTransport();
@@ -58,21 +65,22 @@ public class TransportsManagement {
         System.out.println("Enter transport details:");
 
         // date/time
-        LocalDate departureDate = LocalDate.parse(transportAppData.readLine("Departure date (format: yyyy-mm-dd): "));
-        LocalTime departureTime = LocalTime.parse(transportAppData.readLine("Departure time (format: hh:mm): "));
+        LocalDate departureDate = LocalDate.parse(uiData.readLine("Departure date (format: yyyy-mm-dd): "));
+        LocalTime departureTime = LocalTime.parse(uiData.readLine("Departure time (format: hh:mm): "));
         LocalDateTime departureDateTime = LocalDateTime.of(departureDate, departureTime);
 
         // truck
         System.out.println("Truck: ");
-        String truckId = transportAppData.pickTruck(false).id();
+        String truckId = uiData.pickTruck(false).id();
 
         // driver
         System.out.println("Driver: ");
-        String driverID = transportAppData.pickDriver(false).id();
+
+        String driverID = pickFromAvailableDrivers(departureDateTime);
 
         // source
         System.out.println("Source: ");
-        Site source = transportAppData.pickSite(false);
+        Site source = uiData.pickSite(false);
 
         // destinations and items lists
         LinkedList<String> destinations = new LinkedList<>();
@@ -80,7 +88,7 @@ public class TransportsManagement {
         destinationsMaker(destinations, itemsList);
 
         //weight
-        int truckWeight = transportAppData.readInt("Truck weight: ");
+        int truckWeight = uiData.readInt("Truck weight: ");
 
         Transport newTransport = new Transport(
                 source.address(),
@@ -99,6 +107,15 @@ public class TransportsManagement {
         }
     }
 
+    private String pickFromAvailableDrivers(LocalDateTime departureDateTime) {
+        Response _response = Response.fromJson(es.getAvailableDrivers(JsonUtils.serialize(departureDateTime)));
+        Driver[] availableDrivers = Arrays.stream(
+                _response.<String[]>data(String[].class))
+                .map(driver -> uiData.drivers().get(driver))
+                .toArray(Driver[]::new);
+        return uiData.pickDriver(false,availableDrivers).id();
+    }
+
     private void pickAnOptionIfFail(Transport newTransport) {
         while(true){
             System.out.println("current weight: "+newTransport.weight());
@@ -106,13 +123,13 @@ public class TransportsManagement {
             System.out.println("1. Pick new truck and driver");
             System.out.println("2. Pick new destinations and item lists");
             System.out.println("3. Cancel and return to previous menu");
-            int option = transportAppData.readInt();
+            int option = uiData.readInt();
             switch (option) {
                 case 1 -> {
                     System.out.println("Truck: ");
-                    String truckId = transportAppData.pickTruck(false).id();
+                    String truckId = uiData.pickTruck(false).id();
                     System.out.println("Driver: ");
-                    String driverID = transportAppData.pickDriver(false).id();
+                    String driverID = uiData.pickDriver(false).id();
                     newTransport = new Transport(
                             newTransport.source(),
                             newTransport.destinations(),
@@ -132,7 +149,7 @@ public class TransportsManagement {
                     HashMap<String, Integer> itemsList = new HashMap<>();
                     destinationsMaker(destinations, itemsList);
                     System.out.println("New weight :");
-                    int weight = transportAppData.readInt();
+                    int weight = uiData.readInt();
                     newTransport = new Transport(
                             newTransport.source(),
                             destinations,
@@ -175,10 +192,10 @@ public class TransportsManagement {
             System.out.println("6. Update destinations");
             System.out.println("7. Update weight");
             System.out.println("8. Return to previous menu");
-            int option = transportAppData.readInt();
+            int option = uiData.readInt();
             switch (option) {
                 case 1 -> {
-                    LocalDate departureDate = LocalDate.parse(transportAppData.readLine("Departure date (format: yyyy-mm-dd): "));
+                    LocalDate departureDate = LocalDate.parse(uiData.readLine("Departure date (format: yyyy-mm-dd): "));
                     LocalDateTime departureDateTime = LocalDateTime.of(departureDate, transport.scheduledTime().toLocalTime());
                     updateTransportHelperMethod(
                             transport.id(),
@@ -192,7 +209,7 @@ public class TransportsManagement {
                     );
                 }
                 case 2 -> {
-                    LocalTime departureTime = LocalTime.parse(transportAppData.readLine("Departure time (format: hh:mm): "));
+                    LocalTime departureTime = LocalTime.parse(uiData.readLine("Departure time (format: hh:mm): "));
                     LocalDateTime departureDateTime = LocalDateTime.of(transport.scheduledTime().toLocalDate(), departureTime);
                     updateTransportHelperMethod(
                             transport.id(),
@@ -207,7 +224,7 @@ public class TransportsManagement {
                 }
                 case 3 -> {
                     System.out.println("Select driver: ");
-                    String driverID = transportAppData.pickDriver(false).id();
+                    String driverID = uiData.pickDriver(false).id();
                     updateTransportHelperMethod(
                             transport.id(),
                             transport.source(),
@@ -221,7 +238,7 @@ public class TransportsManagement {
                 }
                 case 4 -> {
                     System.out.println("Select truck: ");
-                    String truckId = transportAppData.pickTruck(false).id();
+                    String truckId = uiData.pickTruck(false).id();
                     updateTransportHelperMethod(
                             transport.id(),
                             transport.source(),
@@ -235,7 +252,7 @@ public class TransportsManagement {
                 }
                 case 5 -> {
                     System.out.println("Select source: ");
-                    Site source = transportAppData.pickSite(false);
+                    Site source = uiData.pickSite(false);
                     updateTransportHelperMethod(
                             transport.id(),
                             source.address(),
@@ -264,7 +281,7 @@ public class TransportsManagement {
                     );
                 }
                 case 7 -> {
-                    int truckWeight = transportAppData.readInt("Truck weight: ");
+                    int truckWeight = uiData.readInt("Truck weight: ");
                     updateTransportHelperMethod(
                             transport.id(),
                             transport.source(),
@@ -298,14 +315,14 @@ public class TransportsManagement {
             printTransportDetails(transport);
             System.out.println("=========================================");
             System.out.println("Are you sure you want to delete this transport? (y/n)");
-            String option = transportAppData.readLine();
+            String option = uiData.readLine();
             switch (option) {
                 case "y" -> {
                     String json = transport.toJson();
                     String responseJson = ts.removeTransport(json);
                     Response response = JsonUtils.deserialize(responseJson, Response.class);
                     if (response.success()) {
-                        transportAppData.transports().remove(transport.id());
+                        uiData.transports().remove(transport.id());
                     }
                     System.out.println("\nTransport deleted successfully!");
                 }
@@ -328,12 +345,12 @@ public class TransportsManagement {
     private void viewAllTransports() {
         System.out.println("=========================================");
         System.out.println("All transports:");
-        for(Transport transport : transportAppData.transports().values()){
+        for(Transport transport : uiData.transports().values()){
             printTransportDetails(transport);
             System.out.println("-----------------------------------------");
         }
         System.out.println("\nEnter 'done!' to return to previous menu");
-        transportAppData.readLine();
+        uiData.readLine();
     }
 
     private void printTransportDetails(Transport transport) {
@@ -346,7 +363,7 @@ public class TransportsManagement {
         System.out.println("Source:       "+ transport.source());
         System.out.println("Destinations: ");
         for(String address : transport.destinations()){
-            Site destination = transportAppData.sites().get(address);
+            Site destination = uiData.sites().get(address);
             System.out.println("   "+ destination + " (items list id: "+ transport.itemLists().get(address)+")");
         }
     }
@@ -367,21 +384,21 @@ public class TransportsManagement {
         String responseJson = ts.updateTransport(json);
         Response response = JsonUtils.deserialize(responseJson, Response.class);
         if(response.success()){
-            transportAppData.transports().put(id, newTransport);
+            uiData.transports().put(id, newTransport);
         }
         System.out.println("\n"+response.message());
     }
 
     private Transport getTransport() {
-        int transportId = transportAppData.readInt("Enter transport ID (enter '-1' to return to previous menu): ");
+        int transportId = uiData.readInt("Enter transport ID (enter '-1' to return to previous menu): ");
         if(transportId == -1) {
             return null;
         }
-        if(transportAppData.transports().containsKey(transportId) == false) {
+        if(uiData.transports().containsKey(transportId) == false) {
             System.out.println("Transport with ID "+transportId+" does not exist!");
             return null;
         }
-        return transportAppData.transports().get(transportId);
+        return uiData.transports().get(transportId);
     }
 
     private void destinationsMaker(LinkedList<String> destinations, HashMap<String, Integer> itemsList) {
@@ -389,12 +406,12 @@ public class TransportsManagement {
         System.out.println("Pick destinations and items lists:");
         while(true){
             System.out.println("Destination number "+destinationId+": ");
-            Site site = transportAppData.pickSite(true);
+            Site site = uiData.pickSite(true);
             if(site == null) {
                 break;
             }
-            int listId = transportAppData.readInt("Items list id: ");
-            if (transportAppData.itemLists().containsKey(listId) == false) {
+            int listId = uiData.readInt("Items list id: ");
+            if (uiData.itemLists().containsKey(listId) == false) {
                 System.out.println("\nItems list with ID " + listId + " does not exist!");
                 System.out.println();
                 continue;
@@ -416,7 +433,7 @@ public class TransportsManagement {
         if(response.success()){
             int id = response.dataToInt();
             newTransport = newTransport.newId(id);
-            transportAppData.transports().put(id, newTransport);
+            uiData.transports().put(id, newTransport);
         }
         return response;
     }
@@ -426,25 +443,25 @@ public class TransportsManagement {
         boolean isMissingData = false;
         StringBuilder errorMessage = new StringBuilder("\nData not found for ");
 
-        if(transportAppData.trucks().isEmpty()){
+        if(uiData.trucks().isEmpty()){
             errorMessage.append("trucks");
             isMissingData = true;
         }
-        if(transportAppData.drivers().isEmpty()){
+        if(uiData.drivers().isEmpty()){
             if(isMissingData) {
                 errorMessage.append(", ");
             }
             errorMessage.append("drivers");
             isMissingData = true;
         }
-        if(transportAppData.sites().isEmpty()){
+        if(uiData.sites().isEmpty()){
             if(isMissingData) {
                 errorMessage.append(", ");
             }
             errorMessage.append("sites");
             isMissingData = true;
         }
-        if(transportAppData.itemLists().isEmpty()){
+        if(uiData.itemLists().isEmpty()){
             if(isMissingData) {
                 errorMessage.append(", ");
             }

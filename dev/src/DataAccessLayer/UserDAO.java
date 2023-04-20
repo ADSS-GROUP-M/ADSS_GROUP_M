@@ -45,7 +45,7 @@ public class UserDAO extends DAO {
 
     public void create(UserDTO userDto) throws SQLException {
         try {
-            String queryString = String.format("INSERT INTO "+TABLE_NAME+"( %s,%s, %s, %s) VALUES(?,?,?,?)",
+            String queryString = String.format("INSERT INTO "+TABLE_NAME+"( %s ,%s, %s, %s) VALUES(?,?,?,?)",
                     idColumnName, usernameColumnName, passwordColumnName, isLoggedInColumnName);
             connection = getConnection();
             ptmt = connection.prepareStatement(queryString);

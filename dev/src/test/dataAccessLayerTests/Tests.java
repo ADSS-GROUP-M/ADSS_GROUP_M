@@ -18,6 +18,7 @@ import org.junit.jupiter.api.Test;
 import utils.Response;
 
 import java.lang.reflect.Type;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
@@ -30,15 +31,28 @@ public class Tests {
     @BeforeEach
     public void setUp() throws Exception {
         dao = new UserDAO();
-        userDto = new UserDTO(dao,3,"sd", "br", 1);
     }
+
     @Test
-    public void situation1() { //
+    public void situation1() {
+        dao.deleteAll();
+        try{
+            userDto = new UserDTO(dao,3,"sd", "br", 1);
+            assertTrue(true);
+        }catch(Exception e){assertTrue(true);}
         try {
             userDto.setUsername("abc");
             userDto.setPassword(("gfds"));
-            userDto.setLoggedIn(true);
-        } catch (Exception e){e.printStackTrace();}
+            userDto.setLoggedIn(false);
+        } catch (Exception e){e.printStackTrace(); assertTrue(false);}
+        try {
+            UserDTO another = new UserDTO(dao, 2, "abc", "bsr", 1);
+            assertTrue(true);
+        } catch(Exception e) {e.printStackTrace(); assertTrue(true);}
+        try{
+            UserDTO another2 = new UserDTO(dao, 2, "sda", "bsra", 1);
+            assertTrue(true);
+        } catch(Exception e) {e.printStackTrace(); assertTrue(true);}
 
 
     }

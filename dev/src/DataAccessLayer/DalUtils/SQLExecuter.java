@@ -1,24 +1,28 @@
 package DataAccessLayer.DalUtils;
 
 import java.sql.*;
+import java.util.LinkedList;
 
 public class SQLExecuter {
 
-    private static final String URL = "jdbc:mysql:SuperLiDB";
+    private static final String URL = "jdbc:sqlite:SuperLiDB.db";
     private static final String USER = "";
     private static final String PASSWORD = "";
 
-    public Object[] executeRead(String query) throws SQLException {
+    public LinkedList<Object[]> executeRead(String query) throws SQLException {
 
         try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD)) {
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(query);
 
-            int size = resultSet.getFetchSize();
-            Object[] rows = new Object[size];
-            int i = 0;
+            LinkedList<Object[]> rows = new LinkedList<>();
             while (resultSet.next()) {
-                rows[i++] = resultSet.getRow();
+                int columnCount = resultSet.getMetaData().getColumnCount();
+                Object[] row = new Object[columnCount];
+                for(int i = 0; i < columnCount; i++){
+                    row[i] = resultSet.getObject(i+1);
+                }
+                rows.add(row);
             }
             return rows;
         }

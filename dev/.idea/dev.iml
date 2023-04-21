@@ -11,6 +11,5 @@
     <orderEntry type="library" name="junit.jupiter" level="project" />
     <orderEntry type="library" name="xerial.sqlite.jdbc" level="project" />
     <orderEntry type="library" name="google.code.gson" level="project" />
-    <orderEntry type="library" name="hibernate.core" level="project" />
   </component>
 </module>

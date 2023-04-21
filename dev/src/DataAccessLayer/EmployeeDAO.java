@@ -31,9 +31,9 @@ public class EmployeeDAO extends DAO {
     }
 
     //needed roles HashMap<Role,Integer>, shiftRequests HashMap<Role,List<Employees>>, shiftWorkers Map<Role,List<Employees>>, cancelCardApplies List<String>, shiftActivities List<String>.
-    private EmployeeDAO() throws SQLException {
+    private EmployeeDAO() throws Exception {
         super("EMPLOYEES", new String[]{Columns.Id.name()});
-        employeeRolesDAO = employeeRolesDAO.getInstance();
+        employeeRolesDAO = EmployeeRolesDAO.getInstance();
         this.cache = new HashMap<>();
     }
 
@@ -49,7 +49,7 @@ public class EmployeeDAO extends DAO {
     public void create(Employee emp) throws SQLException {
         try {
             this.employeeRolesDAO.create(emp);
-            String queryString = String.format("INSERT INTO " + TABLE_NAME + "(%s, %s, %s, %d, %d, %d, %s,%s,%s) VALUES(?,?,?,?,?,?,?,?,?)",
+            String queryString = String.format("INSERT INTO " + TABLE_NAME + "(%s, %s, %s, %s, %s, %s, %s,%s,%s) VALUES(?,?,?,?,?,?,?,?,?)",
                     Columns.Id.name(), Columns.Name.name(), Columns.BankDetails.name(),Columns.HourlySalaryRate.name(),Columns.MonthlyHours.name()
                     ,Columns.SalaryBonus.name(),Columns.EmploymentDate.name(),Columns.EmploymentConditions.name(),Columns.Details.name());
             connection = getConnection();
@@ -181,7 +181,7 @@ public class EmployeeDAO extends DAO {
             ans.setRoles(roles);
 
         } catch (Exception throwables) {
-            throwables.printStackTrace();
+           // throwables.printStackTrace();
         }
         return ans;
     }

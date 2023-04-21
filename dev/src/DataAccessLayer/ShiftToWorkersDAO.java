@@ -28,7 +28,7 @@ class ShiftToWorkersDAO extends DAO {
 
     //needed roles HashMap<Role,Integer>, shiftRequests HashMap<Role,List<Employees>>, shiftWorkers Map<Role,List<Employees>>, cancelCardApplies List<String>, shiftActivities List<String>.
     private ShiftToWorkersDAO() throws Exception {
-        super("SHIFT_TO_WORKERS", new String[]{Columns.ShiftDate.name(), Columns.ShiftType.name(), Columns.Branch.name(),Columns.EmployeeId.name()});
+        super("SHIFT_WORKERS", new String[]{Columns.ShiftDate.name(), Columns.ShiftType.name(), Columns.Branch.name(),Columns.EmployeeId.name()});
         employeeDAO = EmployeeDAO.getInstance();
         this.cache = new HashMap<>();
     }
@@ -83,7 +83,7 @@ class ShiftToWorkersDAO extends DAO {
         }
     }
 
-    public HashMap<Role,List<Employee>> get(LocalDate dt, Shift.ShiftType st, String branch) throws Exception {
+    public HashMap<Role,List<Employee>> getAll(LocalDate dt, Shift.ShiftType st, String branch) throws Exception {
         if (this.cache.get(getHashCode(dt,st,branch))!=null)
             return this.cache.get(getHashCode(dt,st,branch));
         HashMap<Role,List<Employee>> ans = this.select(dt,st.name(),branch);
@@ -106,46 +106,12 @@ class ShiftToWorkersDAO extends DAO {
         }
         return list;
     }*/
-
-    /* public void update(Shift s, String branch) throws Exception {
-        try {
+    void update(Shift s, String branch) throws Exception {
         if(!this.cache.containsKey(getHashCode(s.getShiftDate(), s.getShiftType(), branch)))
             throw new Exception("Key doesnt exist! Create if first.");
-        HashMap<Role,List<Employee>> entries = new HashMap<>();
-        for(Role r: s.getShiftWorkers().keySet()) {
-            if(!this.cache.get(getHashCode(s.getShiftDate(),s.getShiftType(),branch)).containsKey(r)) // create
-            List<Employee> list = new LinkedList<>();
-            for(Employee e: shift.getShiftWorkers().get(r)) {
-                Exception ex = null;
-
-                    Object[] key = {s.getShiftDate(), s.getShiftType().name(), branch};
-                    String queryString = String.format("UPDATE " + TABLE_NAME + " SET %s = '%s' WHERE",
-                            Columns.IsApproved, s.getIsApproved());
-                    queryString = queryString.concat(createConditionForPrimaryKey(key));
-                    connection = getConnection();
-                    ptmt = connection.prepareStatement(queryString);
-                    ptmt.executeUpdate();
-                }
-            }
-
-        } catch(Exception e) {
-            e.printStackTrace();
-        }finally
-        {
-            try {
-                if (ptmt != null)
-                    ptmt.close();
-                if (connection != null)
-                    connection.close();
-            }
-            catch (SQLException e) {
-                e.printStackTrace();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-    }*/
+        this.delete(s,branch);
+        this.create(s,branch);
+    }
 
     void delete(Shift s, String branch) {// first check if it is in cache, if it is, then delete that object! and remove from cache
         this.cache.remove(getHashCode(s.getShiftDate(),s.getShiftType(),branch));
@@ -159,7 +125,7 @@ class ShiftToWorkersDAO extends DAO {
     }
 
     protected HashMap<Role,List<Employee>> convertReaderToObject(ResultSet reader) {
-        HashMap<Role,List<Employee>> ans = null;
+        HashMap<Role,List<Employee>> ans = new HashMap<>();
         try {
 
             while (true) {
@@ -175,7 +141,7 @@ class ShiftToWorkersDAO extends DAO {
                 if (!reader.next())
                     break;
             }
-        }catch (Exception e){ e.printStackTrace();}
+        }catch (Exception e){}
         return ans;
     }
 }

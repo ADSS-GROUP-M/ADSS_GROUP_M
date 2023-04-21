@@ -1,12 +1,10 @@
 package dataAccessLayerTests;
 
 
+import DataAccessLayer.EmployeeDAO;
 import DataAccessLayer.ShiftDAO;
 import com.google.gson.reflect.TypeToken;
-import employeeModule.BusinessLayer.Employees.Authorization;
-import employeeModule.BusinessLayer.Employees.Role;
-import employeeModule.BusinessLayer.Employees.Shift;
-import employeeModule.BusinessLayer.Employees.User;
+import employeeModule.BusinessLayer.Employees.*;
 import employeeModule.ServiceLayer.Objects.SEmployee;
 import employeeModule.ServiceLayer.Objects.SShift;
 import employeeModule.ServiceLayer.Objects.SShiftType;
@@ -20,6 +18,7 @@ import utils.Response;
 import java.lang.reflect.Type;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -28,10 +27,31 @@ import static org.junit.jupiter.api.Assertions.*;
 public class Tests {
 
     ShiftDAO dao;
+    EmployeeDAO empDao;
     Shift s;
+    HashMap<Role,List<Employee>> workers;
+    Employee oneEmployee;
+    Employee twoEmployee;
+    Employee threeEmployee;
     @BeforeEach
     public void setUp() throws Exception {
+        empDao = EmployeeDAO.getInstance();
+        empDao.deleteAll();
         s = new Shift(LocalDate.now(), Shift.ShiftType.Evening);
+        workers = new HashMap<>();
+        List<Employee> generalWorkers = new LinkedList<>();
+        twoEmployee = new Employee("abc","2088",2,"Poalim",LocalDate.now(),"condition","detil");
+        generalWorkers.add(twoEmployee);
+        empDao.create(twoEmployee);
+        workers.put(Role.GeneralWorker,generalWorkers);
+        List<Employee> cashiers = new LinkedList<>();
+        threeEmployee = new Employee("qwerty","1118",2,"Poalim",LocalDate.now(),"condition","detil");
+        cashiers.add(threeEmployee);
+        empDao.create(threeEmployee);
+        workers.put(Role.Cashier,cashiers);
+        s.setShiftWorkers(workers);
+        oneEmployee = new Employee("abc","123456",2,"Poalim",LocalDate.now(),"condition","detil");
+        empDao.create(oneEmployee);
     }
 
     @Test
@@ -41,6 +61,7 @@ public class Tests {
         dao.deleteAll();
 
         try{
+            s.setShiftWorkers(workers);
             dao.create(s,"branch1");
             try{
                 dao.create(s,"branch1"); // cannot create same object with existing key
@@ -80,9 +101,15 @@ public class Tests {
 
         try{
             s = dao.get(s.getShiftDate(),s.getShiftType(),"branch1");
+            HashMap<Role,List<Employee>> newWorkers = new HashMap<>();
+            List<Employee> worker = new LinkedList<>();
+            worker.add(oneEmployee);
+            newWorkers.put(Role.GeneralWorker, worker);
+            s.setShiftWorkers(newWorkers);
             s.setApproved(true);
             dao.update(s,"branch1");
-            assertTrue(true);
+            Shift s2 = dao.get(s.getShiftDate(),s.getShiftType(),"branch1");
+            assertTrue(s2.getShiftWorkers().get(Role.GeneralWorker).get(0).getId() == worker.get(0).getId());
         } catch(Exception e) {e.printStackTrace(); assertTrue(false);}
     }
     @Test

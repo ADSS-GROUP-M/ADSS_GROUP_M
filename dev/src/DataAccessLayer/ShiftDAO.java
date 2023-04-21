@@ -8,14 +8,12 @@ import employeeModule.BusinessLayer.Employees.Shift.ShiftType;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
-
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 public class ShiftDAO extends DAO {
-
     private static ShiftDAO instance;
     private HashMap<Integer, Shift> cache;
     private ShiftToNeededRolesDAO shiftToNeededRolesDAO;
@@ -32,7 +30,7 @@ public class ShiftDAO extends DAO {
     }
 
     //needed roles HashMap<Role,Integer>, shiftRequests HashMap<Role,List<Employees>>, shiftWorkers Map<Role,List<Employees>>, cancelCardApplies List<String>, shiftActivities List<String>.
-    private ShiftDAO() throws SQLException {
+    private ShiftDAO() throws Exception {
         super("SHIFTS", new String[]{ShiftDAO.Columns.ShiftDate.name(), ShiftDAO.Columns.ShiftType.name(), Columns.Branch.name()});
         shiftToNeededRolesDAO = ShiftToNeededRolesDAO.getInstance();
         shiftToRequestsDAO = ShiftToRequestsDAO.getInstance();
@@ -51,7 +49,7 @@ public class ShiftDAO extends DAO {
     private int getHashCode(LocalDate dt, ShiftType st, String branch){
         return (formatLocalDate(dt) + st.name() + branch).hashCode();
     }
-    public void create(Shift shift, String branch) throws SQLException {
+    public void create(Shift shift, String branch) throws Exception {
         try {
             this.shiftToNeededRolesDAO.create(shift, branch);
             this.shiftToRequestsDAO.create(shift, branch);
@@ -175,7 +173,7 @@ public class ShiftDAO extends DAO {
         List<String> activities = null;
         neededRoles = this.shiftToNeededRolesDAO.getAll(dt,st,branch);
         shiftRequests = this.shiftToRequestsDAO.getAll(dt,st,branch);
-        shiftWorkers = this.shiftToWorkersDAO.get(dt,st,branch);
+        shiftWorkers = this.shiftToWorkersDAO.getAll(dt,st,branch);
         cancelApplies = this.shiftToCancelsDAO.getAll(dt,st,branch);
         activities = this.shiftToActivityDAO.getAll(dt,st,branch);
         ans.setApproved(Boolean.valueOf(reader.getString(Columns.IsApproved.name())));
@@ -188,6 +186,16 @@ public class ShiftDAO extends DAO {
             throwables.printStackTrace();
         }
         return ans;
+    }
+
+    public void deleteAll(){
+        this.cache = new HashMap<>();
+        this.shiftToNeededRolesDAO.deleteAll();
+        this.shiftToRequestsDAO.deleteAll();
+        this.shiftToWorkersDAO.deleteAll();
+        this.shiftToCancelsDAO.deleteAll();
+        this.shiftToActivityDAO.deleteAll();
+        super.deleteAll();
     }
 
      /*void update(String date, String shiftType, String branch, String attributeName, String attributeValue) throws Exception {

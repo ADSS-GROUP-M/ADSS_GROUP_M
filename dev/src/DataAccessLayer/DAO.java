@@ -20,7 +20,6 @@ public abstract class DAO {
     protected final String TABLE_NAME;
     private String[] primaryKey;
 
-
     public DAO(String tableName, String[] keyFields) throws SQLException{
         this.TABLE_NAME = tableName;
         path = (new File("").getAbsolutePath()).concat("\\SuperLiDB.db");
@@ -37,8 +36,6 @@ public abstract class DAO {
     }
 
     protected String createConditionForPrimaryKey (Object[] idValues) throws Exception{
-        if(idValues.length != this.primaryKey.length || this.primaryKey.length == 0)
-            throw new Exception ("Illegal set of identifying values");
         String ans = "";
         if(idValues[0] instanceof String)
            ans =  ans.concat(String.format(" %s = '%s' ",this.primaryKey[0],idValues[0]));

@@ -16,6 +16,7 @@ public class Shift {
     private List<String> shiftActivities;
 
 
+
     public enum ShiftType {
         Morning,
         Evening;
@@ -33,6 +34,7 @@ public class Shift {
         this.shiftRequests = new HashMap<>();
         this.shiftWorkers = new HashMap<>();
         this.cancelCardApplies = new ArrayList<>();
+        this.shiftActivities = new LinkedList<>();
     }
 
     public boolean checkLegality() { // are all constraints of the shift are met?
@@ -182,7 +184,9 @@ public class Shift {
     public Map<Role, List<Employee>> getShiftWorkers() {
         return this.shiftWorkers;
     }
-
+    public Map<Role, Integer> getShiftNeededRoles() {
+        return this.neededRoles;
+    }
     public Map<Role, List<Employee>> getShiftRequests() {
         return this.shiftRequests;
     }
@@ -213,6 +217,9 @@ public class Shift {
         // Save the reported activity
     }
 
+    public List<String> getShiftCancels() {
+        return cancelCardApplies;
+    }
     public List<String> getCancelCardApplications(){
         return this.cancelCardApplies;
     }

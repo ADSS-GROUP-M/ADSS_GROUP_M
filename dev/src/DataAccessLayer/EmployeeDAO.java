@@ -181,7 +181,7 @@ public class EmployeeDAO extends DAO {
             ans.setRoles(roles);
 
         } catch (Exception throwables) {
-            throwables.printStackTrace();
+           // throwables.printStackTrace();
         }
         return ans;
     }

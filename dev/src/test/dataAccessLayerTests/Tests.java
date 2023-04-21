@@ -108,7 +108,8 @@ public class Tests {
             s.setShiftWorkers(newWorkers);
             s.setApproved(true);
             dao.update(s,"branch1");
-            assertTrue(true);
+            Shift s2 = dao.get(s.getShiftDate(),s.getShiftType(),"branch1");
+            assertTrue(s2.getShiftWorkers().get(Role.GeneralWorker).get(0).getId() == worker.get(0).getId());
         } catch(Exception e) {e.printStackTrace(); assertTrue(false);}
     }
     @Test

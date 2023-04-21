@@ -83,7 +83,7 @@ class ShiftToWorkersDAO extends DAO {
         }
     }
 
-    public HashMap<Role,List<Employee>> get(LocalDate dt, Shift.ShiftType st, String branch) throws Exception {
+    public HashMap<Role,List<Employee>> getAll(LocalDate dt, Shift.ShiftType st, String branch) throws Exception {
         if (this.cache.get(getHashCode(dt,st,branch))!=null)
             return this.cache.get(getHashCode(dt,st,branch));
         HashMap<Role,List<Employee>> ans = this.select(dt,st.name(),branch);
@@ -125,7 +125,7 @@ class ShiftToWorkersDAO extends DAO {
     }
 
     protected HashMap<Role,List<Employee>> convertReaderToObject(ResultSet reader) {
-        HashMap<Role,List<Employee>> ans = null;
+        HashMap<Role,List<Employee>> ans = new HashMap<>();
         try {
 
             while (true) {
@@ -141,7 +141,7 @@ class ShiftToWorkersDAO extends DAO {
                 if (!reader.next())
                     break;
             }
-        }catch (Exception e){ e.printStackTrace();}
+        }catch (Exception e){}
         return ans;
     }
 }

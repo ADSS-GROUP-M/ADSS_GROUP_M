@@ -173,7 +173,7 @@ public class ShiftDAO extends DAO {
         List<String> activities = null;
         neededRoles = this.shiftToNeededRolesDAO.getAll(dt,st,branch);
         shiftRequests = this.shiftToRequestsDAO.getAll(dt,st,branch);
-        shiftWorkers = this.shiftToWorkersDAO.get(dt,st,branch);
+        shiftWorkers = this.shiftToWorkersDAO.getAll(dt,st,branch);
         cancelApplies = this.shiftToCancelsDAO.getAll(dt,st,branch);
         activities = this.shiftToActivityDAO.getAll(dt,st,branch);
         ans.setApproved(Boolean.valueOf(reader.getString(Columns.IsApproved.name())));

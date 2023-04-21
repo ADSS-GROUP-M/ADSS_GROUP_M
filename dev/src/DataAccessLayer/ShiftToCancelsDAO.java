@@ -95,7 +95,7 @@ class ShiftToCancelsDAO extends DAO{
     }
 
     protected List<String> convertReaderToObject(ResultSet reader) {
-        List<String> ans = null;
+        List<String> ans = new LinkedList<>();
         try {
 
             while (true) {
@@ -104,7 +104,7 @@ class ShiftToCancelsDAO extends DAO{
                 if (!reader.next())
                     break;
             }
-        }catch (Exception e){ e.printStackTrace();}
+        }catch (Exception e){ }
         return ans;
     }
 }

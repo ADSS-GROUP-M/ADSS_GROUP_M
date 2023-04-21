@@ -34,6 +34,7 @@ public class Shift {
         this.shiftRequests = new HashMap<>();
         this.shiftWorkers = new HashMap<>();
         this.cancelCardApplies = new ArrayList<>();
+        this.shiftActivities = new LinkedList<>();
     }
 
     public boolean checkLegality() { // are all constraints of the shift are met?

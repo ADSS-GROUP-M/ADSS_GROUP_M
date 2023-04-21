@@ -93,7 +93,7 @@ class ShiftToActivityDAO extends DAO{
         return ((List<String>) super.select(keys));
     }
     protected List<String> convertReaderToObject(ResultSet reader) {
-        List<String> ans = null;
+        List<String> ans = new LinkedList<String>();
         try {
 
             while (true) {
@@ -102,7 +102,7 @@ class ShiftToActivityDAO extends DAO{
                 if (!reader.next())
                     break;
             }
-        }catch (Exception e){ e.printStackTrace();}
+        }catch (Exception e){}
         return ans;
     }
 }

@@ -105,7 +105,7 @@ class ShiftToRequestsDAO extends DAO{
     }
 
     protected HashMap<Role,List<Employee>> convertReaderToObject(ResultSet reader) {
-        HashMap<Role,List<Employee>> ans = null;
+        HashMap<Role,List<Employee>> ans = new HashMap<>();
         try {
 
             while (true) {
@@ -121,7 +121,7 @@ class ShiftToRequestsDAO extends DAO{
                 if (!reader.next())
                     break;
             }
-        }catch (Exception e){ e.printStackTrace();}
+        }catch (Exception e){}
         return ans;
     }
 }

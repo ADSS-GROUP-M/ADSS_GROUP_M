@@ -95,17 +95,16 @@ class ShiftToNeededRolesDAO extends DAO{
     }
 
     protected HashMap<Role,Integer> convertReaderToObject(ResultSet reader) {
-        HashMap<Role,Integer> ans = null;
+        HashMap<Role,Integer> ans = new HashMap<>();
         try {
-
             while (true) {
-                Role r = Role.valueOf(reader.getString(ShiftToNeededRolesDAO.Columns.Role.name()));
-                int x = reader.getInt(ShiftToNeededRolesDAO.Columns.Amount.name());
-                ans.put(r,x);
+                    Role r = Role.valueOf(reader.getString(ShiftToNeededRolesDAO.Columns.Role.name()));
+                    int x = reader.getInt(ShiftToNeededRolesDAO.Columns.Amount.name());
+                    ans.put(r,x);
                 if (!reader.next())
                     break;
             }
-        }catch (Exception e){ e.printStackTrace();}
+        }catch (Exception e){ }
         return ans;
     }
 }

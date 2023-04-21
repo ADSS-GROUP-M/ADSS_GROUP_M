@@ -20,7 +20,6 @@ public abstract class DAO {
     protected final String TABLE_NAME;
     private String[] primaryKey;
 
-
     public DAO(String tableName, String[] keyFields) throws SQLException{
         this.TABLE_NAME = tableName;
         path = (new File("").getAbsolutePath()).concat("\\SuperLiDB.db");

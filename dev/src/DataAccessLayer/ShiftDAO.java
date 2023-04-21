@@ -8,14 +8,12 @@ import employeeModule.BusinessLayer.Employees.Shift.ShiftType;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
-
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 public class ShiftDAO extends DAO {
-
     private static ShiftDAO instance;
     private HashMap<Integer, Shift> cache;
     private ShiftToNeededRolesDAO shiftToNeededRolesDAO;

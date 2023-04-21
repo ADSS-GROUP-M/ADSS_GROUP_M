@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 public class Shift {
+
     private LocalDate shiftDate;
     private ShiftType shiftType;
     private boolean isApproved; // approved by HR manager
@@ -13,6 +14,7 @@ public class Shift {
     private Map<Role, List<Employee>> shiftWorkers;
     private List<String> cancelCardApplies;
     private List<String> shiftActivities;
+
 
     public enum ShiftType {
         Morning,
@@ -230,5 +232,47 @@ public class Shift {
         //    }
         //}
         return null;
+    }
+    public void setShiftDate(LocalDate shiftDate) {
+        this.shiftDate = shiftDate;
+    }
+
+    public void setShiftType(ShiftType shiftType) {
+        this.shiftType = shiftType;
+    }
+
+    public boolean isApproved() {
+        return isApproved;
+    }
+
+    public void setApproved(boolean approved) {
+        isApproved = approved;
+    }
+
+    public void setNeededRoles(Map<Role, Integer> neededRoles) {
+        this.neededRoles = neededRoles;
+    }
+
+    public void setShiftRequests(Map<Role, List<Employee>> shiftRequests) {
+        this.shiftRequests = shiftRequests;
+    }
+
+    public void setShiftWorkers(Map<Role, List<Employee>> shiftWorkers) {
+        this.shiftWorkers = shiftWorkers;
+    }
+
+    public List<String> getCancelCardApplies() {
+        return cancelCardApplies;
+    }
+
+    public void setCancelCardApplies(List<String> cancelCardApplies) {
+        this.cancelCardApplies = cancelCardApplies;
+    }
+
+    public void setShiftActivities(List<String> shiftActivities) {
+        this.shiftActivities = shiftActivities;
+    }
+    public String getBranch() {
+        return "branch1";
     }
 }

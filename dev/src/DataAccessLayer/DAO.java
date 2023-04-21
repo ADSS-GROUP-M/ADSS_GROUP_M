@@ -4,8 +4,11 @@ package DataAccessLayer;
 import java.io.File;
 import java.sql.*;
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.sql.DriverManager;
+import java.time.format.DateTimeFormatter;
 
 public abstract class DAO {
     protected Connection connection = null;
@@ -29,41 +32,49 @@ public abstract class DAO {
         return DriverManager.getConnection(connectionString);
     }
 
-    //public abstract void create(T dto);
-    private String createConditionForPrimaryKey (Object[] idValues) throws Exception{
+    String formatLocalDate (LocalDate dt){
+        return dt.format(DateTimeFormatter.ISO_LOCAL_DATE);
+    }
+
+    protected String createConditionForPrimaryKey (Object[] idValues) throws Exception{
         if(idValues.length != this.primaryKey.length || this.primaryKey.length == 0)
             throw new Exception ("Illegal set of identifying values");
         String ans = "";
         if(idValues[0] instanceof String)
-            ans.concat(String.format(" %s = %s ",this.primaryKey[0],idValues[0]));
+           ans =  ans.concat(String.format(" %s = '%s' ",this.primaryKey[0],idValues[0]));
         else if(idValues[0] instanceof Integer)
-            ans.concat(String.format(" %s = %d ",this.primaryKey[0],idValues[0]));
+           ans =  ans.concat(String.format(" %s = %d ",this.primaryKey[0],idValues[0]));
         else if(idValues[0] instanceof Boolean)
-            ans.concat(String.format(" %s = %s ",this.primaryKey[0],idValues[0]));
+            ans = ans.concat(String.format(" %s = '%s' ",this.primaryKey[0],String.valueOf((boolean)idValues[0])));
+        else if(idValues[0] instanceof LocalDate)
+            ans = ans.concat(String.format(" %s = '%s' ",this.primaryKey[0],formatLocalDate((LocalDate)idValues[0])));
         else
             throw new Exception("illegal idValues. should be String, Integer or Boolean");
         for(int i =1; i< idValues.length; i++){
             if(idValues[i] instanceof String)
-                ans.concat(String.format(" , %s = %s ",this.primaryKey[i],idValues[i]));
+               ans =  ans.concat(String.format(" AND %s = '%s' ",this.primaryKey[i],idValues[i]));
             else if(idValues[i] instanceof Integer)
-                ans.concat(String.format(" , %s = %d ",this.primaryKey[i],idValues[i]));
+                ans = ans.concat(String.format(" AND %s = %d ",this.primaryKey[i],idValues[i]));
             else if(idValues[i] instanceof Boolean)
-                ans.concat(String.format(" , %s = %s ",this.primaryKey[i],idValues[i]));
+                ans = ans.concat(String.format(" AND %s = '%s' ",this.primaryKey[i],String.valueOf((boolean)idValues[i])));
+            else if(idValues[i] instanceof LocalDate)
+                ans = ans.concat(String.format(" %s = '%s' ",this.primaryKey[i],formatLocalDate((LocalDate)idValues[i])));
             else
                 throw new Exception("illegal idValues. Should be String, Integer or Boolean");
         }
         return ans;
     }
-    protected DTO select(Object[] idValues) throws Exception {
+    protected Object select(Object[] idValues) throws Exception {
         Exception ex = null;
         ResultSet result = null;
+        Object ans = null;
         try {
             String queryString = String.format("SELECT * FROM %s WHERE",TABLE_NAME);
-            queryString.concat(createConditionForPrimaryKey(idValues));
+            queryString = queryString.concat(createConditionForPrimaryKey(idValues));
             connection = getConnection();
             ptmt = connection.prepareStatement(queryString);
-
             result = ptmt.executeQuery();
+            ans = convertReaderToObject(result);
         } catch (SQLException e) {
             ex = e;
         } catch (Exception e) {
@@ -81,20 +92,22 @@ public abstract class DAO {
                 e.printStackTrace();
             }
         }
-        if(result!= null){
-            return convertReaderToObject(result);
-        }
-        else
-            return null;
+        return ans;
     }
-    protected List<DTO> selectAll() throws SQLException {
+    protected List<Object> selectAll() throws SQLException {
         ResultSet result = null;
         Exception ex = null;
+        List<Object> ans = new LinkedList<>();
         try {
             String queryString = String.format("SELECT * FROM %s",TABLE_NAME);
             connection = getConnection();
             ptmt = connection.prepareStatement(queryString);
             result = ptmt.executeQuery();
+            if(result!= null){
+                while(result.next()){
+                    ans.add(convertReaderToObject(result));
+                }
+            }
         } catch (SQLException e) {
             e.printStackTrace();
             ex = e;
@@ -111,21 +124,14 @@ public abstract class DAO {
                 ex = e;
             }
         }
-        if(result!= null){
-            List<DTO> list = new LinkedList<>();
-            while(result.next()){
-                list.add(convertReaderToObject(result));
-            }
-            return list;
-        }
-        else
-            return new LinkedList<>();
+
+        return ans;
     }
-    public void update(Object[] idValues, String attributeName, String attributeValue) throws Exception {
+    protected void update(Object[] idValues, String attributeName, String attributeValue) throws Exception {
         Exception ex = null;
         try {
-            String queryString = "UPDATE "+TABLE_NAME+" SET "+attributeName+"=? WHERE";
-            queryString.concat(createConditionForPrimaryKey(idValues));
+            String queryString = "UPDATE "+TABLE_NAME+" SET "+attributeName+"='?' WHERE";
+            queryString = queryString.concat(createConditionForPrimaryKey(idValues));
             connection = getConnection();
             ptmt = connection.prepareStatement(queryString);
             ptmt.setString(1, attributeValue);
@@ -150,11 +156,11 @@ public abstract class DAO {
         }
     }
 
-    public void update(Object[] idValues, String attributeName, Integer attributeValue) throws Exception
+    protected void update(Object[] idValues, String attributeName, Integer attributeValue) throws Exception
     {
         try {
             String queryString = "UPDATE "+TABLE_NAME+" SET "+attributeName+"=? WHERE";
-            queryString.concat(createConditionForPrimaryKey(idValues));
+            queryString = queryString.concat(createConditionForPrimaryKey(idValues));
             connection = getConnection();
             ptmt = connection.prepareStatement(queryString);
             ptmt.setInt(1, attributeValue);
@@ -177,11 +183,11 @@ public abstract class DAO {
             }
         }
     }
-    public void update(Object[] idValues, String attributeName, boolean attributeValue) throws Exception
+    protected void update(Object[] idValues, String attributeName, boolean attributeValue) throws Exception
     {
         try {
             String queryString = "UPDATE "+TABLE_NAME+" SET "+attributeName+"=? WHERE";
-            queryString.concat(createConditionForPrimaryKey(idValues));
+            queryString = queryString.concat(createConditionForPrimaryKey(idValues));
             connection = getConnection();
             ptmt = connection.prepareStatement(queryString);
             ptmt.setBoolean(1, attributeValue);
@@ -205,12 +211,13 @@ public abstract class DAO {
         }
     }
 
-    public void delete(Object[] idValues)
+    protected void delete(Object[] idValues)
     {
         try {
             String queryString = String.format("DELETE FROM %s WHERE", this.TABLE_NAME);
-            queryString.concat(createConditionForPrimaryKey(idValues));
+            queryString = queryString.concat(createConditionForPrimaryKey(idValues));
             connection = getConnection();
+            System.out.println(queryString);
             ptmt = connection.prepareStatement(queryString);
             ptmt.executeUpdate();
         } catch (Exception e) {
@@ -258,6 +265,6 @@ public abstract class DAO {
         }
     }
 
-    protected abstract DTO convertReaderToObject(ResultSet reader);
+    protected abstract Object convertReaderToObject(ResultSet reader);
 
 }

@@ -1,13 +1,16 @@
-package DataAccessLayer;
+/*package DataAccessLayer;
 
 import employeeModule.BusinessLayer.Employees.User;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
 public class UserDAO extends DAO {
+
+    private HashMap<Integer,User> cache;
 
     public enum Columns {
         Username,
@@ -19,7 +22,7 @@ public class UserDAO extends DAO {
         super("USERS", new String[] {Columns.Username.name(), Columns.Password.name()});
     }
 
-    public List<UserDTO> SelectAllUsers() throws SQLException {
+    public List<UserDTO> SelectAll() throws SQLException {
         List<UserDTO> result = new LinkedList<>();
         for(DTO t :selectAll())
         {
@@ -97,4 +100,4 @@ public class UserDAO extends DAO {
         }
     }
 
-}
+}*/

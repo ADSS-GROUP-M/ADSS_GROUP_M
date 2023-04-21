@@ -4,11 +4,12 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Employee implements EmployeeInterface {
+public class Employee {
     private String name;
     private String id;
     private String bankDetails;
     private double hourlySalaryRate;
+
     private double monthlyHours;
     private double salaryBonus;
     private LocalDate employmentDate;
@@ -127,64 +128,61 @@ public class Employee implements EmployeeInterface {
        this.roles = new HashSet<>();
     }
 
-    @Override
+
     public String getId() {
         return this.id;
     }
 
-    @Override
+
     public String getName() {
         return this.name;
     }
 
-    @Override
+
     public LocalDate getEmploymentDate() {
         return this.employmentDate;
     }
 
-    @Override
     public String getEmploymentConditions() {
         return employmentConditions;
     }
 
-    @Override
+
     public void setEmploymentConditions(String employmentConditions) {
         this.employmentConditions = employmentConditions;
     }
 
-    @Override
+
     public String getDetails() {
         return details;
     }
 
-    @Override
+
     public String getBankDetails() {
         return this.bankDetails;
     }
 
-    @Override
+
     public void setBankDetails(String bankDetails) {
         this.bankDetails = bankDetails;
     }
 
-    @Override
     public void setDetails(String details) {
         this.details = details;
     }
 
-    @Override
     public void addRole(Role role) {
         roles.add(role);
     }
 
-    @Override
+
     public void removeRole(Role role) throws Exception {
         if (!roles.contains(role))
             throw new Exception("The given role: `" + role + "` is not one of the employee roles.");
         roles.remove(role);
     }
 
-    @Override
+
     public Set<Role> getRoles() {
         return this.roles;
     }
@@ -197,44 +195,61 @@ public class Employee implements EmployeeInterface {
     //   this.workingConstraints.setAvailableDate(d);
     //}
 
-    @Override
+
     public void setHourlySalaryRate(double newRate){
        this.hourlySalaryRate = newRate;
     }
 
-    @Override
+
     public double getHourlySalaryRate() {
         return this.hourlySalaryRate;
     }
 
-    @Override
+
     public void setSalaryBonus(double salaryBonus) {
         this.salaryBonus = salaryBonus;
     }
 
-    @Override
+
     public double getSalaryBonus() {
         return this.salaryBonus;
     }
 
-    @Override
+
     public void addMonthlyHours(double hours) {
         this.monthlyHours += hours;
     }
 
-    @Override
+
     public void resetMonthlyHours() {
         this.monthlyHours = 0;
     }
-
-    @Override
     public double getMonthlyHours() {
         return this.monthlyHours;
     }
 
-    @Override
+
     public double calculateSalary() {
         return hourlySalaryRate * monthlyHours + salaryBonus;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setMonthlyHours(double monthlyHours) {
+        this.monthlyHours = monthlyHours;
+    }
+
+    public void setEmploymentDate(LocalDate employmentDate) {
+        this.employmentDate = employmentDate;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 
     //public String toString() {

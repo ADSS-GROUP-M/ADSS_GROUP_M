@@ -19,7 +19,7 @@ public class EmployeeRolesDAO {
     public void create(Employee emp) {
     }
 
-    public EmployeeRolesDAO getInstance() {
+    static EmployeeRolesDAO getInstance() {
         return new EmployeeRolesDAO();
     }
 }

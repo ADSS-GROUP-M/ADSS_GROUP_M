@@ -37,8 +37,6 @@ public abstract class DAO {
     }
 
     protected String createConditionForPrimaryKey (Object[] idValues) throws Exception{
-        if(idValues.length != this.primaryKey.length || this.primaryKey.length == 0)
-            throw new Exception ("Illegal set of identifying values");
         String ans = "";
         if(idValues[0] instanceof String)
            ans =  ans.concat(String.format(" %s = '%s' ",this.primaryKey[0],idValues[0]));

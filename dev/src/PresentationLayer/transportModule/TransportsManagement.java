@@ -191,58 +191,22 @@ public class TransportsManagement {
             printTransportDetails(transport);
             System.out.println("=========================================");
             System.out.println("Please select an option:");
-            System.out.println("1. Update date");
-            System.out.println("2. Update time");
-            System.out.println("3. Update driver");
-            System.out.println("4. Update truck");
-            System.out.println("5. Update source");
-            System.out.println("6. Update destinations");
-            System.out.println("7. Update weight");
-            System.out.println("8. Return to previous menu");
+            System.out.println("1. Update driver");
+            System.out.println("2. Update truck");
+            System.out.println("3. Update source");
+            System.out.println("4. Update destinations");
+            System.out.println("5. Update weight");
+            System.out.println("6. Return to previous menu");
             int option = uiData.readInt();
             switch (option) {
+
                 case 1 -> {
-                    LocalDate departureDate = LocalDate.parse(uiData.readLine("Departure date (format: yyyy-mm-dd): "));
-                    LocalDateTime departureDateTime = LocalDateTime.of(departureDate, transport.scheduledTime().toLocalTime());
-
-                    //TODO: the dateTime has been changed, we need to revalidate if the driver is available
-                    // and if there is an available storekeeper for every branch in the transport
-
-                    updateTransportHelperMethod(
-                            transport.id(),
-                            transport.source(),
-                            transport.destinations(),
-                            transport.itemLists(),
-                            transport.truckId(),
-                            transport.driverId(),
-                            departureDateTime,
-                            transport.weight()
-                    );
-                }
-                case 2 -> {
-                    LocalTime departureTime = LocalTime.parse(uiData.readLine("Departure time (format: hh:mm): "));
-                    LocalDateTime departureDateTime = LocalDateTime.of(transport.scheduledTime().toLocalDate(), departureTime);
-
-                    //TODO: the dateTime has been changed, we need to revalidate if the driver is available
-                    // and if there is an available storekeeper for every branch in the transport
-
-                    updateTransportHelperMethod(
-                            transport.id(),
-                            transport.source(),
-                            transport.destinations(),
-                            transport.itemLists(),
-                            transport.truckId(),
-                            transport.driverId(),
-                            departureDateTime,
-                            transport.weight()
-                    );
-                }
-                case 3 -> {
                     System.out.println("Select driver: ");
                     String driverID = pickFromAvailableDrivers(transport.scheduledTime());
                     if(driverID == null) {
                         continue;
                     }
+
                     updateTransportHelperMethod(
                             transport.id(),
                             transport.source(),
@@ -254,7 +218,7 @@ public class TransportsManagement {
                             transport.weight()
                     );
                 }
-                case 4 -> {
+                case 2 -> {
                     System.out.println("Select truck: ");
                     String truckId = uiData.pickTruck(false).id();
                     updateTransportHelperMethod(
@@ -268,7 +232,7 @@ public class TransportsManagement {
                             transport.weight()
                     );
                 }
-                case 5 -> {
+                case 3 -> {
                     System.out.println("Select source: ");
                     Site source = uiData.pickSite(false);
                     updateTransportHelperMethod(
@@ -282,11 +246,12 @@ public class TransportsManagement {
                             transport.weight()
                     );
                 }
-                case 6 ->{
+                case 4 ->{
                     System.out.println("Select new destinations and item lists: ");
                     HashMap<String, Integer> itemsList = new HashMap<>();
                     LinkedList<String> destinations = new LinkedList<>();
                     destinationsMaker(destinations, itemsList, transport.scheduledTime());
+
                     updateTransportHelperMethod(
                             transport.id(),
                             transport.source(),
@@ -298,7 +263,7 @@ public class TransportsManagement {
                             transport.weight()
                     );
                 }
-                case 7 -> {
+                case 5 -> {
                     int truckWeight = uiData.readInt("Truck weight: ");
                     updateTransportHelperMethod(
                             transport.id(),
@@ -311,7 +276,7 @@ public class TransportsManagement {
                             truckWeight
                     );
                 }
-                case 8 -> {
+                case 6 -> {
                     return;
                 }
                 default -> {
@@ -428,10 +393,20 @@ public class TransportsManagement {
             if(site == null) {
                 break;
             }
-            //TODO: validate the site if it is a branch
-            // if(site.siteType() == Site.SiteType.BRANCH) {
-            //    es.checkStoreKeeperAvailability(site.address(), JsonUtils.serialize(departureDateTime));
-            // }
+            //validate the site if it is a branch
+             if(site.siteType() == Site.SiteType.BRANCH) {
+               String stokeKeeperMassageJson =  es.checkStoreKeeperAvailability(site.address(), JsonUtils.serialize(departureDateTime));
+                 Response response = JsonUtils.deserialize(stokeKeeperMassageJson, Response.class);
+                 if(response.success() == false){
+                     System.out.println("\n"+response.message());
+                     continue;
+                 }
+
+            }
+
+
+
+
             int listId = uiData.readInt("Items list id: ");
             if (uiData.itemLists().containsKey(listId) == false) {
                 System.out.println("\nItems list with ID " + listId + " does not exist!");

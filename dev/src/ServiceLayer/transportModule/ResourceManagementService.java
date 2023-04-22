@@ -17,6 +17,8 @@ public class ResourceManagementService {
     private final DriversController driversController;
     private final TrucksController trucksController;
 
+
+
     public ResourceManagementService(SitesController sitesController, DriversController driversController, TrucksController trucksController) {
         this.sitesController = sitesController;
         this.driversController = driversController;

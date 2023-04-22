@@ -1,11 +1,19 @@
 package BusinessLayer.transportModule;
 
+import BusinessLayer.employeeModule.Controllers.EmployeesController;
+import ServiceLayer.employeeModule.Services.EmployeesService;
+import com.google.gson.reflect.TypeToken;
 import objects.transportObjects.Driver;
 import objects.transportObjects.Transport;
 import objects.transportObjects.Truck;
+import utils.JsonUtils;
+import utils.Response;
 import utils.transportUtils.ErrorCollection;
 
 import utils.transportUtils.TransportException;
+
+import java.lang.reflect.Type;
+import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.TreeMap;
 
@@ -20,14 +28,16 @@ public class TransportsController {
     private final DriversController dc;
     private final SitesController sc;
     private final ItemListsController ilc;
+    private final EmployeesService es;
     private final TreeMap<Integer, Transport> transports;
     private int idCounter;
 
-    public TransportsController(TrucksController tc, DriversController dc, SitesController sc, ItemListsController ic){
+    public TransportsController(TrucksController tc, DriversController dc, SitesController sc, ItemListsController ic, EmployeesService es){
         this.sc = sc;
         this.ilc = ic;
         this.tc = tc;
         this.dc = dc;
+        this.es = es;
         transports = new TreeMap<>();
         idCounter = 1; //TODO: currently not in use. this will have to be restored from the DB in the future
     }
@@ -106,6 +116,16 @@ public class TransportsController {
         return new LinkedList<>(transports.values());
     }
 
+    private boolean checkIfDriverIsAvailable(Driver driver, LocalDateTime dateTime){
+
+        String driverJson = es.getAvailableDrivers(JsonUtils.serialize(dateTime));
+        Response response = Response.fromJson(driverJson);
+        Type type = new TypeToken<LinkedList<String>>(){}.getType();
+        LinkedList<String> driversIds = response.data(type);
+        return driversIds.stream().anyMatch(x -> x.equals(driver.id()));
+
+    }
+
     private void validateTransport(Transport transport) throws TransportException{
 
         ErrorCollection ec = new ErrorCollection();
@@ -115,6 +135,13 @@ public class TransportsController {
         if(driver == null) {
             ec.addError("Driver not found", "driver");
         }
+
+        if(driver != null && checkIfDriverIsAvailable(driver, transport.scheduledTime()) == false){
+            ec.addError("Driver is not available", "driverNotAvailable");
+        }
+
+
+
 
         // truck validation
         Truck truck = tc.truckExists(transport.truckId()) ? tc.getTruck(transport.truckId()) :  null;
@@ -148,6 +175,11 @@ public class TransportsController {
             //destination validation
             if(sc.siteExists(address) == false){
                 ec.addError("Site with address " + address + " does not exist", "destination:"+destIndex);
+            }
+            String destinationJson = es.checkStoreKeeperAvailability(JsonUtils.serialize(transport.scheduledTime()),address);
+            Response response = Response.fromJson(destinationJson);
+            if(response.success()==false){
+                ec.addError("Store keeper is not available on site with address " + address, "storeKeeper");
             }
 
             //itemList validation

@@ -38,7 +38,7 @@ public class TransportUI implements Menu {
             case 1 -> transportsManagement.manageTransports();
             case 2 -> itemListsManagement.manageItemLists();
             case 3 -> manageResources();
-            case 4 -> UIData.generateData();
+            case 4 -> UIData.loadData();
             case 5 -> {
                 return new LoginMenu();
             }

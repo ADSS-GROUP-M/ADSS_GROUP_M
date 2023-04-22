@@ -55,7 +55,7 @@ public class UiData {
         return transports;
     }
 
-    public void generateData(){
+    public void loadData(){
         if(dataGenerated){
             System.out.println("Data already generated!");
             return;

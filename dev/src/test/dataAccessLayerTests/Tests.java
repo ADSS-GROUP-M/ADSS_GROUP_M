@@ -1,22 +1,12 @@
 package dataAccessLayerTests;
 
 
-import DataAccessLayer.EmployeeDAO;
-import DataAccessLayer.ShiftDAO;
-import com.google.gson.reflect.TypeToken;
+import DataAccessLayer.employeeModule.EmployeeDAO;
+import DataAccessLayer.employeeModule.ShiftDAO;
 import employeeModule.BusinessLayer.Employees.*;
-import employeeModule.ServiceLayer.Objects.SEmployee;
-import employeeModule.ServiceLayer.Objects.SShift;
-import employeeModule.ServiceLayer.Objects.SShiftType;
-import employeeModule.ServiceLayer.Services.EmployeesService;
-import employeeModule.ServiceLayer.Services.UserService;
-import employeeModule.employeeUtils.DateUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import utils.Response;
 
-import java.lang.reflect.Type;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.LinkedList;

@@ -1,4 +1,4 @@
-package DataAccessLayer;
+package DataAccessLayer.employeeModule;
 
 import employeeModule.BusinessLayer.Employees.Employee;
 import employeeModule.BusinessLayer.Employees.Role;
@@ -10,7 +10,6 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 class ShiftToWorkersDAO extends DAO {
 

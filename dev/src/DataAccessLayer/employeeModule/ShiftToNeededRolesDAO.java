@@ -1,6 +1,5 @@
-package DataAccessLayer;
+package DataAccessLayer.employeeModule;
 
-import employeeModule.BusinessLayer.Employees.Employee;
 import employeeModule.BusinessLayer.Employees.Role;
 import employeeModule.BusinessLayer.Employees.Shift;
 
@@ -8,69 +7,56 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 
-class ShiftToRequestsDAO extends DAO{
-    private static ShiftToRequestsDAO instance;
-    private HashMap<Integer, HashMap<Role,List<Employee>>> cache;
-    private EmployeeDAO employeeDAO;
+class ShiftToNeededRolesDAO extends DAO{
+    private static ShiftToNeededRolesDAO instance;
+    private HashMap<Integer, HashMap<Role,Integer>> cache;
     public enum Columns {
         ShiftDate,
         ShiftType,
         Branch,
-        EmployeeId,
-        Role;
+        Role,
+        Amount;
     }
-    private ShiftToRequestsDAO() throws Exception {
-        super("SHIFT_REQUESTS", new String[]{ShiftToWorkersDAO.Columns.ShiftDate.name(), ShiftToWorkersDAO.Columns.ShiftType.name(), ShiftToWorkersDAO.Columns.Branch.name(), ShiftToWorkersDAO.Columns.EmployeeId.name()});
-        employeeDAO = EmployeeDAO.getInstance();
+    private ShiftToNeededRolesDAO() throws Exception{
+        super("SHIFT_ROLES", new String[]{ShiftToNeededRolesDAO.Columns.ShiftDate.name(), ShiftToNeededRolesDAO.Columns.ShiftType.name(), ShiftToNeededRolesDAO.Columns.Branch.name(), ShiftToNeededRolesDAO.Columns.Role.name()});
         this.cache = new HashMap<>();
     }
-    static ShiftToRequestsDAO getInstance() throws Exception {
+    static ShiftToNeededRolesDAO getInstance() throws Exception {
        if(instance == null)
-          instance = new ShiftToRequestsDAO();
+          instance = new ShiftToNeededRolesDAO();
        return instance;
     }
-
     private int getHashCode(LocalDate dt, Shift.ShiftType st, String branch){
         return (formatLocalDate(dt) + st.name() + branch).hashCode();
     }
 
-    HashMap<Role,List<Employee>> getAll(LocalDate dt, Shift.ShiftType st, String branch) throws Exception {
+     HashMap<Role,Integer> getAll(LocalDate dt, Shift.ShiftType st, String branch) throws Exception {
         if (this.cache.get(getHashCode(dt,st,branch))!=null)
             return this.cache.get(getHashCode(dt,st,branch));
-        HashMap<Role,List<Employee>> ans = this.select(dt,st.name(),branch);
+        HashMap<Role,Integer> ans = this.select(dt,st.name(),branch);
         this.cache.put(getHashCode(dt,st,branch),ans);
         return ans;
     }
-
     void create(Shift shift, String branch) throws Exception {
         try {
             if(this.cache.containsKey(getHashCode(shift.getShiftDate(), shift.getShiftType(), branch)))
                 throw new Exception("Key already exists!");
-            HashMap<Role,List<Employee>> entries = new HashMap<>();
-            for(Role r: shift.getShiftWorkers().keySet()) {
-                List<Employee> list = new LinkedList<>();
-                for(Employee e: shift.getShiftWorkers().get(r)) {
-
+            HashMap<Role,Integer> entries = new HashMap<>();
+            for(Role r: shift.getShiftNeededRoles().keySet()) {
                     String queryString = String.format("INSERT INTO " + TABLE_NAME + "(%s, %s, %s, %s, %s) VALUES(?,?,?,?,?)",
-                            ShiftToWorkersDAO.Columns.ShiftDate.name(), ShiftToWorkersDAO.Columns.ShiftType.name(), ShiftDAO.Columns.Branch.name(), ShiftToWorkersDAO.Columns.EmployeeId.name(), ShiftToWorkersDAO.Columns.Role.name());
+                            Columns.ShiftDate.name(), Columns.ShiftType.name(), Columns.Branch.name(),Columns.Role.name(), Columns.Amount.name());
                     connection = getConnection();
                     ptmt = connection.prepareStatement(queryString);
                     ptmt.setString(1, formatLocalDate(shift.getShiftDate()));
                     ptmt.setString(2, shift.getShiftType().name());
                     ptmt.setString(3, branch);
-                    ptmt.setString(4, e.getId());
-                    ptmt.setString(5, r.name());
+                    ptmt.setString(4, r.name());
+                    ptmt.setInt(5, shift.getShiftNeededRoles().get(r));
                     ptmt.executeUpdate();
-                    list.add(e);
-                }
-                entries.put(r,list);
+                    entries.put(r,shift.getShiftNeededRoles().get(r));
             }
             this.cache.put(getHashCode(shift.getShiftDate(), shift.getShiftType(), branch),entries );
-
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -86,6 +72,7 @@ class ShiftToRequestsDAO extends DAO{
             }
         }
     }
+
     void update(Shift s, String branch) throws Exception {
         if(!this.cache.containsKey(getHashCode(s.getShiftDate(), s.getShiftType(), branch)))
             throw new Exception("Key doesnt exist! Create if first.");
@@ -98,30 +85,22 @@ class ShiftToRequestsDAO extends DAO{
         Object[] keys = {s.getShiftDate(),s.getShiftType().name(),branch};
         super.delete(keys);
     }
-
-    HashMap<Role,List<Employee>> select(LocalDate date, String shiftType, String branch) throws Exception {
+    HashMap<Role,Integer> select(LocalDate date, String shiftType, String branch) throws Exception {
         Object[] keys = {date,shiftType, branch};
-        return ((HashMap<Role,List<Employee>>) super.select(keys));
+        return ((HashMap<Role,Integer>) super.select(keys));
     }
 
-    protected HashMap<Role,List<Employee>> convertReaderToObject(ResultSet reader) {
-        HashMap<Role,List<Employee>> ans = new HashMap<>();
+    protected HashMap<Role,Integer> convertReaderToObject(ResultSet reader) {
+        HashMap<Role,Integer> ans = new HashMap<>();
         try {
-
             while (true) {
-                Role r = Role.valueOf(reader.getString(ShiftToWorkersDAO.Columns.Role.name()));
-                Employee e = employeeDAO.get(reader.getString(ShiftToWorkersDAO.Columns.Role.name()));
-                if (ans.containsKey(r)) {
-                    ans.get(r).add(e);
-                } else {
-                    List<Employee> li = new LinkedList<>();
-                    li.add(e);
-                    ans.put(r, li);
-                }
+                    Role r = Role.valueOf(reader.getString(ShiftToNeededRolesDAO.Columns.Role.name()));
+                    int x = reader.getInt(ShiftToNeededRolesDAO.Columns.Amount.name());
+                    ans.put(r,x);
                 if (!reader.next())
                     break;
             }
-        }catch (Exception e){}
+        }catch (Exception e){ }
         return ans;
     }
 }

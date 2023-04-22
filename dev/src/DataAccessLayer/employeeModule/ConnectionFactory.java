@@ -1,4 +1,4 @@
-package DataAccessLayer;
+package DataAccessLayer.employeeModule;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

@@ -1,4 +1,4 @@
-package DataAccessLayer;
+package DataAccessLayer.employeeModule;
 
 import employeeModule.BusinessLayer.Employees.Employee;
 import employeeModule.BusinessLayer.Employees.Role;

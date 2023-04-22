@@ -1,7 +1,5 @@
-package DataAccessLayer;
+package DataAccessLayer.employeeModule;
 
-import employeeModule.BusinessLayer.Employees.Employee;
-import employeeModule.BusinessLayer.Employees.Role;
 import employeeModule.BusinessLayer.Employees.Shift;
 
 import java.sql.ResultSet;
@@ -10,24 +8,23 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
-class ShiftToCancelsDAO extends DAO{
-    private static ShiftToCancelsDAO instance;
+class ShiftToActivityDAO extends DAO{
+    private static ShiftToActivityDAO instance;
     private HashMap<Integer, List<String>> cache;
     public enum Columns {
         ShiftDate,
         ShiftType,
         Branch,
-        CancelAction;
+        Activity;
     }
-    private ShiftToCancelsDAO()throws Exception{
-        super("SHIFT_CANCELS", new String[]{Columns.ShiftDate.name(), Columns.ShiftType.name(), Columns.Branch.name()});
+    private ShiftToActivityDAO() throws Exception {
+        super("SHIFT_ACTIVITIES", new String[]{Columns.ShiftDate.name(), Columns.ShiftType.name(),Columns.Branch.name()});
         this.cache = new HashMap<>();
     }
-    static ShiftToCancelsDAO getInstance() throws Exception {
+    static ShiftToActivityDAO getInstance() throws Exception {
        if(instance == null)
-          instance = new ShiftToCancelsDAO();
+          instance = new ShiftToActivityDAO();
        return instance;
     }
     private int getHashCode(LocalDate dt, Shift.ShiftType st, String branch){
@@ -47,9 +44,9 @@ class ShiftToCancelsDAO extends DAO{
             if(this.cache.containsKey(getHashCode(shift.getShiftDate(), shift.getShiftType(), branch)))
                 throw new Exception("Key already exists!");
             List<String> entries = new LinkedList<>();
-            for(String str: shift.getShiftCancels()) {
+            for(String str: shift.getShiftActivities()) {
                 String queryString = String.format("INSERT INTO " + TABLE_NAME + "(%s, %s, %s, %s) VALUES(?,?,?,?)",
-                        ShiftToCancelsDAO.Columns.ShiftDate.name(), ShiftToCancelsDAO.Columns.ShiftType.name(), ShiftToCancelsDAO.Columns.Branch.name(), Columns.CancelAction.name());
+                        Columns.ShiftDate.name(), Columns.ShiftType.name(), Columns.Branch.name(), Columns.Activity.name());
                 connection = getConnection();
                 ptmt = connection.prepareStatement(queryString);
                 ptmt.setString(1, formatLocalDate(shift.getShiftDate()));
@@ -75,7 +72,6 @@ class ShiftToCancelsDAO extends DAO{
             }
         }
     }
-
     void update(Shift s, String branch) throws Exception {
         if(!this.cache.containsKey(getHashCode(s.getShiftDate(), s.getShiftType(), branch)))
             throw new Exception("Key doesnt exist! Create if first.");
@@ -93,19 +89,16 @@ class ShiftToCancelsDAO extends DAO{
         Object[] keys = {date,shiftType, branch};
         return ((List<String>) super.select(keys));
     }
-
     protected List<String> convertReaderToObject(ResultSet reader) {
-        List<String> ans = new LinkedList<>();
+        List<String> ans = new LinkedList<String>();
         try {
-
             while (reader.next()) {
-                String str = reader.getString(Columns.CancelAction.name());
+                String str = reader.getString(Columns.Activity.name());
                 if(str == null)
                     continue;
                 ans.add(str);
-
             }
-        }catch (Exception e){ }
+        }catch (Exception e){}
         return ans;
     }
 }

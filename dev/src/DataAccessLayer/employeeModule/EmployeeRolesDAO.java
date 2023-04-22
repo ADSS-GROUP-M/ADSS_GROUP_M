@@ -1,9 +1,8 @@
-package DataAccessLayer;
+package DataAccessLayer.employeeModule;
 
 import employeeModule.BusinessLayer.Employees.Employee;
 import employeeModule.BusinessLayer.Employees.Role;
 
-import java.sql.ResultSet;
 import java.util.Set;
 
 public class EmployeeRolesDAO {

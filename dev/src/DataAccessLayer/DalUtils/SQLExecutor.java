@@ -3,7 +3,7 @@ package DataAccessLayer.DalUtils;
 import java.sql.*;
 import java.util.LinkedList;
 
-public class SQLExecuter {
+public class SQLExecutor {
 
     private static final String URL = "jdbc:sqlite:SuperLiDB.db";
     private static final String USER = "";

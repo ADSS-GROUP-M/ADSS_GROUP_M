@@ -30,7 +30,7 @@ public abstract class DAO<T> {
      * @return the object with the given identifier
      * @throws DalException if an error occurred while trying to select the object
      */
-    public abstract T select(T values) throws DalException;
+    public abstract T select(T object) throws DalException;
 
     /**
      * @return All the objects in the table
@@ -55,6 +55,6 @@ public abstract class DAO<T> {
      * @param values getLookUpObject(identifier) of the object to delete
      * @throws DalException if an error occurred while trying to delete the object
      */
-    public abstract void delete(T values) throws DalException;
+    public abstract void delete(T object) throws DalException;
 
 }

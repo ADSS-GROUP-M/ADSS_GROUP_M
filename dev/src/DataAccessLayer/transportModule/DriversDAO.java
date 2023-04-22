@@ -20,12 +20,11 @@ public class DriversDAO extends DAO<Driver>{
     }
 
     /**
-     * @param values getLookUpObject(identifier) of the object to select
-     * @return the object with the given identifier
+     * @param object@return the object with the given identifier
      * @throws DalException if an error occurred while trying to select the object
      */
     @Override
-    public Driver select(Driver values) throws DalException {
+    public Driver select(Driver object) throws DalException {
         return null;
     }
 
@@ -57,11 +56,10 @@ public class DriversDAO extends DAO<Driver>{
     }
 
     /**
-     * @param values getLookUpObject(identifier) of the object to delete
-     * @throws DalException if an error occurred while trying to delete the object
+     * @param object@throws DalException if an error occurred while trying to delete the object
      */
     @Override
-    public void delete(Driver values) throws DalException {
+    public void delete(Driver object) throws DalException {
 
     }
 }

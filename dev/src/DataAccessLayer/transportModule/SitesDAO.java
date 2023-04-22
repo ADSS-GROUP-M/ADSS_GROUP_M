@@ -1,10 +1,11 @@
 package DataAccessLayer.transportModule;
 
 import DataAccessLayer.DalUtils.DalException;
+import transportModule.records.Site;
 
 import java.util.List;
 
-public class SitesDAO extends DAO{
+public class SitesDAO extends DAO<Site>{
 
     protected SitesDAO() {
         super("Sites", new String[]{"SiteAddress"}, "SiteAddress", "TransportZone","ContactName","ContactPhone","SiteType");
@@ -19,12 +20,11 @@ public class SitesDAO extends DAO{
     }
 
     /**
-     * @param values getLookUpObject(identifier) of the object to select
-     * @return the object with the given identifier
+     * @param object@return the object with the given identifier
      * @throws DalException if an error occurred while trying to select the object
      */
     @Override
-    public Object select(Object values) throws DalException {
+    public Site select(Site object) throws DalException {
         return null;
     }
 
@@ -33,7 +33,7 @@ public class SitesDAO extends DAO{
      * @throws DalException if an error occurred while trying to select the objects
      */
     @Override
-    public List selectAll() throws DalException {
+    public List<Site> selectAll() throws DalException {
         return null;
     }
 
@@ -42,7 +42,7 @@ public class SitesDAO extends DAO{
      * @throws DalException if an error occurred while trying to insert the object
      */
     @Override
-    public void insert(Object object) throws DalException {
+    public void insert(Site object) throws DalException {
 
     }
 
@@ -51,16 +51,15 @@ public class SitesDAO extends DAO{
      * @throws DalException if an error occurred while trying to update the object
      */
     @Override
-    public void update(Object object) throws DalException {
+    public void update(Site object) throws DalException {
 
     }
 
     /**
-     * @param values getLookUpObject(identifier) of the object to delete
-     * @throws DalException if an error occurred while trying to delete the object
+     * @param object@throws DalException if an error occurred while trying to delete the object
      */
     @Override
-    public void delete(Object values) throws DalException {
+    public void delete(Site object) throws DalException {
 
     }
 }

@@ -19,12 +19,11 @@ public class ItemListsDAO extends DAO<ItemList>{
     }
 
     /**
-     * @param values getLookUpObject(identifier) of the object to select
-     * @return the object with the given identifier
+     * @param object@return the object with the given identifier
      * @throws DalException if an error occurred while trying to select the object
      */
     @Override
-    public ItemList select(ItemList values) throws DalException {
+    public ItemList select(ItemList object) throws DalException {
         return null;
     }
 
@@ -56,11 +55,10 @@ public class ItemListsDAO extends DAO<ItemList>{
     }
 
     /**
-     * @param values getLookUpObject(identifier) of the object to delete
-     * @throws DalException if an error occurred while trying to delete the object
+     * @param object@throws DalException if an error occurred while trying to delete the object
      */
     @Override
-    public void delete(ItemList values) throws DalException {
+    public void delete(ItemList object) throws DalException {
 
     }
 }

@@ -1,10 +1,11 @@
 package DataAccessLayer.transportModule;
 
 import DataAccessLayer.DalUtils.DalException;
+import transportModule.records.Truck;
 
 import java.util.List;
 
-public class TrucksDAO extends DAO{
+public class TrucksDAO extends DAO<Truck>{
 
     public TrucksDAO() {
         super("Trucks", new String[]{"TruckId"}, "TruckId","Model","BaseWeight","MaxWeight","CoolingCapacity");
@@ -19,12 +20,11 @@ public class TrucksDAO extends DAO{
     }
 
     /**
-     * @param values getLookUpObject(identifier) of the object to select
-     * @return the object with the given identifier
+     * @param object@return the object with the given identifier
      * @throws DalException if an error occurred while trying to select the object
      */
     @Override
-    public Object select(Object values) throws DalException {
+    public Truck select(Truck object) throws DalException {
         return null;
     }
 
@@ -33,7 +33,7 @@ public class TrucksDAO extends DAO{
      * @throws DalException if an error occurred while trying to select the objects
      */
     @Override
-    public List selectAll() throws DalException {
+    public List<Truck> selectAll() throws DalException {
         return null;
     }
 
@@ -42,7 +42,7 @@ public class TrucksDAO extends DAO{
      * @throws DalException if an error occurred while trying to insert the object
      */
     @Override
-    public void insert(Object object) throws DalException {
+    public void insert(Truck object) throws DalException {
 
     }
 
@@ -51,16 +51,15 @@ public class TrucksDAO extends DAO{
      * @throws DalException if an error occurred while trying to update the object
      */
     @Override
-    public void update(Object object) throws DalException {
+    public void update(Truck object) throws DalException {
 
     }
 
     /**
-     * @param values getLookUpObject(identifier) of the object to delete
-     * @throws DalException if an error occurred while trying to delete the object
+     * @param object@throws DalException if an error occurred while trying to delete the object
      */
     @Override
-    public void delete(Object values) throws DalException {
+    public void delete(Truck object) throws DalException {
 
     }
 }

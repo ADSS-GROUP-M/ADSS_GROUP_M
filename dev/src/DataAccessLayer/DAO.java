@@ -84,9 +84,9 @@ public abstract class DAO {
                     connection.close();
             }
             catch (SQLException e) {
-                e.printStackTrace();
+                //e.printStackTrace();
             } catch (Exception e) {
-                e.printStackTrace();
+                //e.printStackTrace();
             }
         }
         return ans;

@@ -24,7 +24,7 @@ class ShiftToRequestsDAO extends DAO{
         Role;
     }
     private ShiftToRequestsDAO() throws Exception {
-        super("SHIFT_REQUESTS", new String[]{ShiftToWorkersDAO.Columns.ShiftDate.name(), ShiftToWorkersDAO.Columns.ShiftType.name(), ShiftToWorkersDAO.Columns.Branch.name(), ShiftToWorkersDAO.Columns.EmployeeId.name()});
+        super("SHIFT_REQUESTS", new String[]{ShiftToRequestsDAO.Columns.ShiftDate.name(), ShiftToRequestsDAO.Columns.ShiftType.name(), ShiftToRequestsDAO.Columns.Branch.name(), ShiftToRequestsDAO.Columns.EmployeeId.name()});
         employeeDAO = EmployeeDAO.getInstance();
         this.cache = new HashMap<>();
     }
@@ -51,12 +51,12 @@ class ShiftToRequestsDAO extends DAO{
             if(this.cache.containsKey(getHashCode(shift.getShiftDate(), shift.getShiftType(), branch)))
                 throw new Exception("Key already exists!");
             HashMap<Role,List<Employee>> entries = new HashMap<>();
-            for(Role r: shift.getShiftWorkers().keySet()) {
+            for(Role r: shift.getShiftRequests().keySet()) {
                 List<Employee> list = new LinkedList<>();
-                for(Employee e: shift.getShiftWorkers().get(r)) {
+                for(Employee e: shift.getShiftRequests().get(r)) {
 
                     String queryString = String.format("INSERT INTO " + TABLE_NAME + "(%s, %s, %s, %s, %s) VALUES(?,?,?,?,?)",
-                            ShiftToWorkersDAO.Columns.ShiftDate.name(), ShiftToWorkersDAO.Columns.ShiftType.name(), ShiftDAO.Columns.Branch.name(), ShiftToWorkersDAO.Columns.EmployeeId.name(), ShiftToWorkersDAO.Columns.Role.name());
+                            ShiftToRequestsDAO.Columns.ShiftDate.name(), ShiftToRequestsDAO.Columns.ShiftType.name(), ShiftToRequestsDAO.Columns.Branch.name(), ShiftToRequestsDAO.Columns.EmployeeId.name(), ShiftToRequestsDAO.Columns.Role.name());
                     connection = getConnection();
                     ptmt = connection.prepareStatement(queryString);
                     ptmt.setString(1, formatLocalDate(shift.getShiftDate()));
@@ -108,9 +108,11 @@ class ShiftToRequestsDAO extends DAO{
         HashMap<Role,List<Employee>> ans = new HashMap<>();
         try {
 
-            while (true) {
-                Role r = Role.valueOf(reader.getString(ShiftToWorkersDAO.Columns.Role.name()));
-                Employee e = employeeDAO.get(reader.getString(ShiftToWorkersDAO.Columns.Role.name()));
+            while (reader.next()) {
+                Role r = Role.valueOf(reader.getString(ShiftToRequestsDAO.Columns.Role.name()));
+                Employee e = employeeDAO.get(reader.getString(ShiftToRequestsDAO.Columns.EmployeeId.name()));
+                if(r == null || e == null)
+                    continue;
                 if (ans.containsKey(r)) {
                     ans.get(r).add(e);
                 } else {
@@ -118,8 +120,7 @@ class ShiftToRequestsDAO extends DAO{
                     li.add(e);
                     ans.put(r, li);
                 }
-                if (!reader.next())
-                    break;
+
             }
         }catch (Exception e){}
         return ans;

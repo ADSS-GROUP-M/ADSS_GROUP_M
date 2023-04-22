@@ -34,7 +34,7 @@ public class Tests {
     Employee twoEmployee;
     Employee threeEmployee;
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() throws Exception { // cleans empDAO, creates 3 employees in DB, sets up 2 of them as workers shift
         empDao = EmployeeDAO.getInstance();
         empDao.deleteAll();
         s = new Shift(LocalDate.now(), Shift.ShiftType.Evening);
@@ -55,13 +55,13 @@ public class Tests {
     }
 
     @Test
-    public void create() throws Exception {
+    public void create() throws Exception {//resets shifts table, creates 2 shifts in DB
         dao = ShiftDAO.getInstance();
         assertTrue(dao!=null);
         dao.deleteAll();
-
+        Shift noise = new Shift(LocalDate.of(1893,2,24), Shift.ShiftType.Morning);
         try{
-            s.setShiftWorkers(workers);
+            dao.create(noise,"branch2");
             dao.create(s,"branch1");
             try{
                 dao.create(s,"branch1"); // cannot create same object with existing key
@@ -70,27 +70,29 @@ public class Tests {
             assertTrue(true);
         } catch(Exception e) {e.printStackTrace(); assertTrue(false);}
     }
+
+    //Run only after 'create'.
     @Test
-    public void delete() throws Exception {
+    public void delete() throws Exception { // deletes shift from DB
         dao = ShiftDAO.getInstance();
         assertTrue(dao!=null);
         //dao.deleteAll();
 
         try{
             dao.delete(s,"branch1");
-            assertTrue(true);
+            assertTrue(dao.get(s.getShiftDate(),s.getShiftType(),s.getBranch()) == null);
         } catch(Exception e) {e.printStackTrace(); assertTrue(false);}
     }
+
+    //Run after 'create'.
     @Test
-    public void get() throws Exception {
+    public void get() throws Exception {// gets the shift from DB and confirms its' state
         dao = ShiftDAO.getInstance();
         assertTrue(dao!=null);
-       // dao.deleteAll();
-
         try{
-           Shift sh = dao.get(LocalDate.now(), Shift.ShiftType.Evening,"branch1");
-           System.out.println(sh.getShiftDate());
-            assertTrue(sh!=null);
+           Shift sh = dao.get(s.getShiftDate(), s.getShiftType(),s.getBranch());
+            assertTrue(sh.getShiftDate().getDayOfYear() == s.getShiftDate().getDayOfYear());
+            assertTrue(sh.getShiftWorkers().get(Role.GeneralWorker).get(0).getId() == s.getShiftWorkers().get(Role.GeneralWorker).get(0).getId());
         } catch(Exception e) {e.printStackTrace(); assertTrue(false);}
     }
     @Test

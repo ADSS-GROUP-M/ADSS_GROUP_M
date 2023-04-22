@@ -98,11 +98,12 @@ class ShiftToCancelsDAO extends DAO{
         List<String> ans = new LinkedList<>();
         try {
 
-            while (true) {
+            while (reader.next()) {
                 String str = reader.getString(Columns.CancelAction.name());
+                if(str == null)
+                    continue;
                 ans.add(str);
-                if (!reader.next())
-                    break;
+
             }
         }catch (Exception e){ }
         return ans;

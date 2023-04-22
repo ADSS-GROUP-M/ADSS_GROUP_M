@@ -95,12 +95,11 @@ class ShiftToActivityDAO extends DAO{
     protected List<String> convertReaderToObject(ResultSet reader) {
         List<String> ans = new LinkedList<String>();
         try {
-
-            while (true) {
+            while (reader.next()) {
                 String str = reader.getString(Columns.Activity.name());
+                if(str == null)
+                    continue;
                 ans.add(str);
-                if (!reader.next())
-                    break;
             }
         }catch (Exception e){}
         return ans;

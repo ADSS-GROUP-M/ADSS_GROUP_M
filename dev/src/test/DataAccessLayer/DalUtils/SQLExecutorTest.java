@@ -5,14 +5,12 @@ import org.junit.jupiter.api.Test;
 import java.sql.SQLException;
 import java.util.LinkedList;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-class SQLExecuterTest {
+class SQLExecutorTest {
 
     @Test
     void executeRead() {
         String query = "SELECT * FROM EMPLOYEES";
-        SQLExecuter executer = new SQLExecuter();
+        SQLExecutor executer = new SQLExecutor();
         try {
             LinkedList<Object[]> rows = executer.executeRead(query);
             for(Object[] row : rows){

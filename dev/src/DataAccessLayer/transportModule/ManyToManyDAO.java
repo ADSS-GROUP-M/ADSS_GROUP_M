@@ -5,21 +5,28 @@ import DataAccessLayer.DalUtils.SQLExecutor;
 
 import java.util.List;
 
-public abstract class DAO<T> {
+public abstract class ManyToManyDAO<T,K>{
 
     protected final SQLExecutor cursor;
+
     protected final String TABLE_NAME;
     protected final String[] ALL_COLUMNS;
     protected final String[] PRIMARY_KEYS;
+    protected final String[] T_FOREIGN_KEYS;
+    protected final String[] K_FOREIGN_KEYS;
 
-    protected DAO(String tableName, String[] primaryKeys, String ... allColumns){
-        this.cursor = new SQLExecutor();
+    protected ManyToManyDAO(String tableName, String[] primaryKeys, String[] foreignKeys, String[] tForeignKeys, String ... allColumns){
+        cursor = new SQLExecutor();
         this.TABLE_NAME = tableName;
         this.PRIMARY_KEYS = primaryKeys;
+        this.K_FOREIGN_KEYS = foreignKeys;
+        this.T_FOREIGN_KEYS = tForeignKeys;
         this.ALL_COLUMNS = allColumns;
         initTable();
     }
 
+
+    //TODO: Finish this
     /**
      * Initialize the table if it doesn't exist
      */
@@ -52,9 +59,11 @@ public abstract class DAO<T> {
 
     /**
      *
-     * @param object getLookUpObject(identifier) of the object to delete
+     * @param k_object object with the identifier to delete
+     * @param t_object object with the identifier to delete
      * @throws DalException if an error occurred while trying to delete the object
      */
-    public abstract void delete(T object) throws DalException;
+    public abstract void delete(T t_object, K k_object) throws DalException;
+
 
 }

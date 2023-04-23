@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -19,10 +20,12 @@ public class Tests {
     ShiftDAO dao;
     EmployeeDAO empDao;
     Shift s;
-    HashMap<Role,List<Employee>> workers;
+    Shift noise;
+    Map<Role,List<Employee>> workers;
     Employee oneEmployee;
     Employee twoEmployee;
     Employee threeEmployee;
+    Employee fourthEmployee;
     @BeforeEach
     public void setUp() throws Exception { // cleans empDAO, creates 3 employees in DB, sets up 2 of them as workers shift
         empDao = EmployeeDAO.getInstance();
@@ -31,17 +34,24 @@ public class Tests {
         workers = new HashMap<>();
         List<Employee> generalWorkers = new LinkedList<>();
         twoEmployee = new Employee("abc","2088",2,"Poalim",LocalDate.now(),"condition","detil");
+        twoEmployee.addRole(Role.GeneralWorker);
         generalWorkers.add(twoEmployee);
         empDao.create(twoEmployee);
         workers.put(Role.GeneralWorker,generalWorkers);
         List<Employee> cashiers = new LinkedList<>();
         threeEmployee = new Employee("qwerty","1118",2,"Poalim",LocalDate.now(),"condition","detil");
+        threeEmployee.addRole(Role.Cashier);
         cashiers.add(threeEmployee);
         empDao.create(threeEmployee);
         workers.put(Role.Cashier,cashiers);
         s.setShiftWorkers(workers);
         oneEmployee = new Employee("abc","123456",2,"Poalim",LocalDate.now(),"condition","detil");
+        oneEmployee.addRole(Role.GeneralWorker);
         empDao.create(oneEmployee);
+        fourthEmployee = new Employee("four","1122",32,"Poalim",LocalDate.now(),"conditions","Detedfails");
+        fourthEmployee.addRole(Role.SecurityGuard);
+        empDao.create(fourthEmployee);
+        noise = new Shift(LocalDate.of(1893,2,24), Shift.ShiftType.Morning);
     }
 
     @Test
@@ -49,7 +59,6 @@ public class Tests {
         dao = ShiftDAO.getInstance();
         assertTrue(dao!=null);
         dao.deleteAll();
-        Shift noise = new Shift(LocalDate.of(1893,2,24), Shift.ShiftType.Morning);
         try{
             dao.create(noise,"branch2");
             dao.create(s,"branch1");
@@ -66,8 +75,6 @@ public class Tests {
     public void delete() throws Exception { // deletes shift from DB
         dao = ShiftDAO.getInstance();
         assertTrue(dao!=null);
-        //dao.deleteAll();
-
         try{
             dao.delete(s,"branch1");
             assertTrue(dao.get(s.getShiftDate(),s.getShiftType(),s.getBranch()) == null);
@@ -85,6 +92,8 @@ public class Tests {
             assertTrue(sh.getShiftWorkers().get(Role.GeneralWorker).get(0).getId() == s.getShiftWorkers().get(Role.GeneralWorker).get(0).getId());
         } catch(Exception e) {e.printStackTrace(); assertTrue(false);}
     }
+
+    //Run after 'create'
     @Test
     public void update() throws Exception {
         dao = ShiftDAO.getInstance();
@@ -104,8 +113,30 @@ public class Tests {
             assertTrue(s2.getShiftWorkers().get(Role.GeneralWorker).get(0).getId() == worker.get(0).getId());
         } catch(Exception e) {e.printStackTrace(); assertTrue(false);}
     }
+    //Run after 'create'
     @Test
-    public void selectAll() throws Exception{
+    public void update2() throws Exception {
+        dao = ShiftDAO.getInstance();
+        assertTrue(dao!=null);
+        // dao.deleteAll();
+
+        try{
+            s = dao.get(s.getShiftDate(),s.getShiftType(),"branch1");
+            workers = s.getShiftWorkers();
+            workers.get(Role.GeneralWorker).remove(workers.get(Role.GeneralWorker).get(0)); // removes twoEmployee
+            List<Employee> security = new LinkedList<>();
+            security.add(fourthEmployee);
+            workers.put(Role.SecurityGuard, security);
+            dao.update(s,"branch1");
+            Shift s2 = dao.get(s.getShiftDate(),s.getShiftType(),"branch1");
+            assertTrue(s2.getShiftWorkers().get(Role.GeneralWorker).size() == 0);
+            assertTrue(s2.getShiftWorkers().get(Role.SecurityGuard).get(0).getId() == fourthEmployee.getId());
+            assertTrue(s2.getShiftWorkers().get(Role.SecurityGuard).get(0).getRoles().contains(Role.SecurityGuard));
+        } catch(Exception e) {e.printStackTrace(); assertTrue(false);}
+    }
+
+    @Test
+    public void selectAllCacheTest() throws Exception{
         dao = ShiftDAO.getInstance();
         assertTrue(dao!=null);
         dao.deleteAll();
@@ -116,16 +147,33 @@ public class Tests {
             dao.create(s2,"branch1");
             dao.create(s3,"branch1");
             List<Shift> list = dao.getAll();
-            for(Shift sh: list){
-                System.out.println(sh);
-            }
-
             assertTrue(list.size() == 3);
         } catch(Exception e) {e.printStackTrace(); assertTrue(false);}
     }
 
+    //Run 'create' first
     @Test
-    public void checkCachedObjects() throws Exception{
+    public void selectAllSQLTest() throws Exception{ // tries to get all shifts from DB without relying on cache.
+        dao = ShiftDAO.getInstance();
+        assertTrue(dao!=null);
+        //dao.deleteAll();
+        try{
+            List<Shift> list = dao.getAll();
+            boolean sFlag = false, noiseFlag = false;
+            for(Shift sh: list){
+                if(sh.getShiftDate().getDayOfYear() == s.getShiftDate().getDayOfYear() && sh.getShiftType() == s.getShiftType())
+                    sFlag = true;
+                if(sh.getShiftDate().getDayOfYear() == noise.getShiftDate().getDayOfYear() && sh.getShiftType() == noise.getShiftType())
+                    noiseFlag = true;
+            }
+
+            assertTrue(sFlag && noiseFlag);
+        } catch(Exception e) {e.printStackTrace(); assertTrue(false);}
+    }
+
+
+    @Test
+    public void checkCachedObjects() throws Exception{ // tests wether changes in object's state is visible to other dao clients without updating it in the database.
         dao = ShiftDAO.getInstance();
         assertTrue(dao!=null);
         dao.deleteAll();
@@ -144,6 +192,4 @@ public class Tests {
             assertTrue(testShift.getIsApproved() == true);
         } catch(Exception e) {e.printStackTrace(); assertTrue(false);}
     }
-
-
 }

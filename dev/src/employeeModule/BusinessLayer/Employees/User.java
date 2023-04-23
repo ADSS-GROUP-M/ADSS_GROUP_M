@@ -62,6 +62,14 @@ public class User {// This class represents a user in the system and manages its
         this.authorizations.add(auth);
     }
 
+    public String getPassword() {
+        return this.password;
+    }
+
+    public void setAuthorizations(Set<Authorization> auth) {
+        this.authorizations = auth;
+    }
+
     //public String[] recruitEmployeeAndNewUser(String name, String id, int bankNumber, int branchNumber,  List<String> employmentConditions, LocalDate employmentDate) throws Exception { // returns User details for new employee
     //    if(this.getIsHrManager()){
     //        BankDetails bd = new BankDetails(bankNumber, branchNumber);

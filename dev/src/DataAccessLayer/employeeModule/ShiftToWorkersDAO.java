@@ -17,7 +17,7 @@ class ShiftToWorkersDAO extends DAO {
     private HashMap<Integer, HashMap<Role,List<Employee>>> cache;
     private EmployeeDAO employeeDAO;
 
-    public enum Columns {
+    private enum Columns {
         ShiftDate,
         ShiftType,
         Branch,
@@ -51,7 +51,7 @@ class ShiftToWorkersDAO extends DAO {
                     for(Employee e: shift.getShiftWorkers().get(r)) {
 
                     String queryString = String.format("INSERT INTO " + TABLE_NAME + "(%s, %s, %s, %s, %s) VALUES(?,?,?,?,?)",
-                            Columns.ShiftDate.name(), Columns.ShiftType.name(), ShiftDAO.Columns.Branch.name(), Columns.EmployeeId.name(), Columns.Role.name());
+                            Columns.ShiftDate.name(), Columns.ShiftType.name(), ShiftToWorkersDAO.Columns.Branch.name(), Columns.EmployeeId.name(), Columns.Role.name());
                     connection = getConnection();
                     ptmt = connection.prepareStatement(queryString);
                     ptmt.setString(1, formatLocalDate(shift.getShiftDate()));
@@ -67,17 +67,15 @@ class ShiftToWorkersDAO extends DAO {
             this.cache.put(getHashCode(shift.getShiftDate(), shift.getShiftType(), branch),entries );
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         } finally {
             try {
                 if (ptmt != null)
                     ptmt.close();
                 if (connection != null)
                     connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
             } catch (Exception e) {
-                e.printStackTrace();
+                throw  new Exception("Failed closing connection to DB.");
             }
         }
     }
@@ -107,7 +105,7 @@ class ShiftToWorkersDAO extends DAO {
     }*/
     void update(Shift s, String branch) throws Exception {
         if(!this.cache.containsKey(getHashCode(s.getShiftDate(), s.getShiftType(), branch)))
-            throw new Exception("Key doesnt exist! Create if first.");
+            throw new Exception("Key doesnt exist! Create it first.");
         this.delete(s,branch);
         this.create(s,branch);
     }

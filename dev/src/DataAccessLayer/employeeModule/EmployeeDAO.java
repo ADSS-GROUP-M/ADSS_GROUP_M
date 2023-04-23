@@ -15,7 +15,7 @@ public class EmployeeDAO extends DAO {
     private HashMap<Integer, Employee> cache;
     private EmployeeRolesDAO employeeRolesDAO;
 
-    public enum Columns {
+    private enum Columns {
         Id,
         Name,
         BankDetails,
@@ -44,7 +44,7 @@ public class EmployeeDAO extends DAO {
     private int getHashCode(String id){
         return (id).hashCode();
     }
-    public void create(Employee emp) throws SQLException {
+    public void create(Employee emp) throws Exception {
         try {
             this.employeeRolesDAO.create(emp);
             String queryString = String.format("INSERT INTO " + TABLE_NAME + "(%s, %s, %s, %s, %s, %s, %s,%s,%s) VALUES(?,?,?,?,?,?,?,?,?)",
@@ -64,17 +64,15 @@ public class EmployeeDAO extends DAO {
             ptmt.executeUpdate();
             this.cache.put(getHashCode(emp.getId()), emp);
         } catch (SQLException e) {
-            e.printStackTrace();
+           // e.printStackTrace();
         } finally {
             try {
                 if (ptmt != null)
                     ptmt.close();
                 if (connection != null)
                     connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            } catch (Exception e) {
-                e.printStackTrace();
+            }  catch (Exception e) {
+                throw  new Exception("Failed closing connection to DB.");
             }
         }
     }

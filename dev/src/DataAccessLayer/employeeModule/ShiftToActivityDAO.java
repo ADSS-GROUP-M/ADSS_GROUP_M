@@ -12,7 +12,7 @@ import java.util.List;
 class ShiftToActivityDAO extends DAO{
     private static ShiftToActivityDAO instance;
     private HashMap<Integer, List<String>> cache;
-    public enum Columns {
+    private enum Columns {
         ShiftDate,
         ShiftType,
         Branch,
@@ -58,23 +58,21 @@ class ShiftToActivityDAO extends DAO{
             }
             this.cache.put(getHashCode(shift.getShiftDate(), shift.getShiftType(), branch),entries );
         } catch (SQLException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         } finally {
             try {
                 if (ptmt != null)
                     ptmt.close();
                 if (connection != null)
                     connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
             } catch (Exception e) {
-                e.printStackTrace();
+                throw new Exception("Failed closing connection to DB.");
             }
         }
     }
     void update(Shift s, String branch) throws Exception {
         if(!this.cache.containsKey(getHashCode(s.getShiftDate(), s.getShiftType(), branch)))
-            throw new Exception("Key doesnt exist! Create if first.");
+            throw new Exception("Key doesnt exist! Create it first.");
         this.delete(s,branch);
         this.create(s,branch);
     }

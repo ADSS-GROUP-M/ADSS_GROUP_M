@@ -22,7 +22,7 @@ public class ShiftDAO extends DAO {
     private ShiftToCancelsDAO shiftToCancelsDAO;
     private ShiftToActivityDAO shiftToActivityDAO;
 
-    public enum Columns {
+    private enum Columns {
         ShiftDate,
         ShiftType,
         Branch,
@@ -67,17 +67,15 @@ public class ShiftDAO extends DAO {
             ptmt.executeUpdate();
             this.cache.put(getHashCode(shift.getShiftDate(),shift.getShiftType(),branch), shift);
         } catch (SQLException e) {
-            e.printStackTrace();
+           // e.printStackTrace();
         } finally {
             try {
                 if (ptmt != null)
                     ptmt.close();
                 if (connection != null)
                     connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
             } catch (Exception e) {
-                e.printStackTrace();
+                throw  new Exception("Failed closing connection to DB.");
             }
         }
     }
@@ -183,7 +181,7 @@ public class ShiftDAO extends DAO {
         ans.setCancelCardApplies(cancelApplies);
         ans.setShiftActivities(activities);
         } catch (Exception throwables) {
-            throwables.printStackTrace();
+            //throwables.printStackTrace();
         }
         return ans;
     }

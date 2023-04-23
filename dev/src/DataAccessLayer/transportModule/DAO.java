@@ -3,6 +3,7 @@ package DataAccessLayer.transportModule;
 import DataAccessLayer.DalUtils.DalException;
 import DataAccessLayer.DalUtils.SQLExecutor;
 
+import java.sql.ResultSet;
 import java.util.List;
 
 public abstract class DAO<T> {

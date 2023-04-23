@@ -9,22 +9,12 @@ public class SQLExecutor {
     private static final String USER = "";
     private static final String PASSWORD = "";
 
-    public LinkedList<Object[]> executeRead(String query) throws SQLException {
+    public OfflineResultSet executeRead(String query) throws SQLException {
 
         try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD)) {
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(query);
-
-            LinkedList<Object[]> rows = new LinkedList<>();
-            while (resultSet.next()) {
-                int columnCount = resultSet.getMetaData().getColumnCount();
-                Object[] row = new Object[columnCount];
-                for(int i = 0; i < columnCount; i++){
-                    row[i] = resultSet.getObject(i+1);
-                }
-                rows.add(row);
-            }
-            return rows;
+            return new OfflineResultSet(resultSet);
         }
     }
 

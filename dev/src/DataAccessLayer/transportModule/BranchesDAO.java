@@ -3,6 +3,7 @@ package DataAccessLayer.transportModule;
 import DataAccessLayer.DalUtils.DalException;
 import employeeModule.BusinessLayer.Employees.Branch;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public class BranchesDAO extends ManyToManyDAO<Branch> {
@@ -24,6 +25,22 @@ public class BranchesDAO extends ManyToManyDAO<Branch> {
      */
     @Override
     protected void initTable() throws DalException {
+        String query = """
+                CREATE TABLE IF NOT EXISTS branches (
+                    address TEXT NOT NULL,
+                    morning_shift_start TEXT NOT NULL,
+                    morning_shift_end TEXT NOT NULL,
+                    evening_shift_start TEXT NOT NULL,
+                    evening_shift_end TEXT NOT NULL,
+                    PRIMARY KEY (address),
+                    FOREIGN KEY (address) REFERENCES sites(address)
+                );
+                """;
+        try {
+            cursor.executeWrite(query);
+        } catch (SQLException e) {
+            throw new DalException("Failed to initialize Branches table", e);
+        }
 
     }
 

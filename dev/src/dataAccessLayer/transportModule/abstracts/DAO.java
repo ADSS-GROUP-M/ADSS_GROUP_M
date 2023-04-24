@@ -41,7 +41,7 @@ public abstract class DAO<T> {
     /**
      * Initialize the table if it doesn't exist
      */
-    protected void initTable() throws DalException{
+    private void initTable() throws DalException{
         StringBuilder query = new StringBuilder();
 
         query.append(String.format("CREATE TABLE IF NOT EXISTS %s (", TABLE_NAME));
@@ -66,7 +66,7 @@ public abstract class DAO<T> {
         try {
             cursor.executeWrite(query.toString());
         } catch (SQLException e) {
-            throw new DalException("Failed to initialize table", e);
+            throw new DalException("Failed to initialize table "+TABLE_NAME, e);
         }
     }
 

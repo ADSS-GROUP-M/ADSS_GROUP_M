@@ -11,8 +11,11 @@ import java.util.List;
 
 public class TrucksDAO extends DAO<Truck> {
 
+    private static final String[] types = new String[]{"TEXT", "TEXT", "INTEGER", "INTEGER", "TEXT"};
+
     public TrucksDAO() throws DalException {
         super("trucks",
+                types,
                 new String[]{"id"},
                 "id",
                 "model",
@@ -24,34 +27,13 @@ public class TrucksDAO extends DAO<Truck> {
     public TrucksDAO(String dbName) throws DalException {
         super(dbName,
                 "trucks",
+                types,
                 new String[]{"id"},
                 "id",
                 "model",
                 "base_weight",
                 "max_weight",
                 "cooling_capacity");
-    }
-
-    /**
-     * Initialize the table if it doesn't exist
-     */
-    @Override
-    protected void initTable() throws DalException {
-        String query = """
-                CREATE TABLE IF NOT EXISTS trucks (
-                    id TEXT PRIMARY KEY,
-                    model TEXT NOT NULL,
-                    base_weight INTEGER NOT NULL,
-                    max_weight INTEGER NOT NULL,
-                    cooling_capacity TEXT NOT NULL,
-                    PRIMARY KEY (id)
-                );
-                """;
-        try {
-            cursor.executeWrite(query);
-        } catch (SQLException e) {
-            throw new DalException("Failed to initialize Trucks table", e);
-        }
     }
 
     /**

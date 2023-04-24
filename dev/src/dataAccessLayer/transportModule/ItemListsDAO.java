@@ -12,8 +12,12 @@ import java.util.Map;
 import java.util.Set;
 
 public class ItemListsDAO extends DAO<ItemList> {
+
+    public static final String[] types = new String[]{"INTEGER", "TEXT", "TEXT", "INTEGER"};
+
     public ItemListsDAO() throws DalException {
         super("item_lists",
+                types,
                 new String[]{"id"},
                 "id",
                 "loading_type",
@@ -28,32 +32,12 @@ public class ItemListsDAO extends DAO<ItemList> {
     public ItemListsDAO(String dbName) throws DalException {
         super(dbName,
                 "item_lists",
+                types,
                 new String[]{"id"},
                 "id",
                 "loading_type",
                 "item_name",
                 "amount");
-    }
-
-    /**
-     * Initialize the table if it doesn't exist
-     */
-    @Override
-    protected void initTable() throws DalException {
-        String query = """
-                CREATE TABLE IF NOT EXISTS item_lists (
-                    id INTEGER PRIMARY KEY,
-                    loading_type TEXT NOT NULL,
-                    item_name TEXT NOT NULL,
-                    amount INTEGER NOT NULL,
-                    PRIMARY KEY (id)
-                );
-                """;
-        try {
-            cursor.executeWrite(query);
-        } catch (SQLException e) {
-            throw new DalException("Failed to initialize item_lists table", e);
-        }
     }
 
     /**

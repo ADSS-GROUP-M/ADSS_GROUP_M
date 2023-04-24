@@ -4,6 +4,7 @@ import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.dalUtils.OfflineResultSet;
 import dataAccessLayer.dalUtils.SQLExecutor;
 
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -15,6 +16,7 @@ public abstract class ManyToManyDAO<T>{
     protected final String TABLE_NAME;
     protected final String PARENT_TABLE_NAME;
     protected final String[] ALL_COLUMNS;
+    protected final String[] TYPES;
     protected final String[] PRIMARY_KEYS;
     protected final String[] FOREIGN_KEYS;
 
@@ -22,6 +24,7 @@ public abstract class ManyToManyDAO<T>{
 
     protected ManyToManyDAO(String tableName,
                             String parentTableName,
+                            String[] types,
                             String[] primaryKeys,
                             String[] foreignKeys,
                             String[] references,
@@ -29,6 +32,7 @@ public abstract class ManyToManyDAO<T>{
         cursor = new SQLExecutor();
         TABLE_NAME = tableName;
         PARENT_TABLE_NAME = parentTableName;
+        TYPES = types;
         PRIMARY_KEYS = primaryKeys;
         FOREIGN_KEYS = foreignKeys;
         REFERENCES = references;
@@ -43,6 +47,7 @@ public abstract class ManyToManyDAO<T>{
     protected ManyToManyDAO(String dbName,
                             String tableName,
                             String parentTableName,
+                            String[] types,
                             String[] primaryKeys,
                             String[] foreignKeys,
                             String[] references,
@@ -50,6 +55,7 @@ public abstract class ManyToManyDAO<T>{
         cursor = new SQLExecutor(dbName);
         TABLE_NAME = tableName;
         PARENT_TABLE_NAME = parentTableName;
+        TYPES = types;
         PRIMARY_KEYS = primaryKeys;
         FOREIGN_KEYS = foreignKeys;
         REFERENCES = references;
@@ -57,12 +63,56 @@ public abstract class ManyToManyDAO<T>{
         initTable();
     }
 
-
-    //TODO: Finish this
     /**
      * Initialize the table if it doesn't exist
      */
-    protected abstract void initTable() throws DalException;
+    private void initTable() throws DalException{
+        StringBuilder query = new StringBuilder();
+
+        query.append(String.format("CREATE TABLE IF NOT EXISTS %s (\n", TABLE_NAME));
+
+        for (int i = 0; i < ALL_COLUMNS.length; i++) {
+            query.append(String.format("%s %s NOT NULL,\n", ALL_COLUMNS[i], TYPES[i]));
+        }
+
+        query.append("PRIMARY KEY(");
+        for(int i = 0; i < PRIMARY_KEYS.length; i++) {
+            query.append(String.format("'%s'",PRIMARY_KEYS[i]));
+            if (i != PRIMARY_KEYS.length-1) {
+                query.append(",");
+            } else {
+                query.append(")\n");
+            }
+        }
+
+        query.append("CONSTRAINT FK FOREIGN KEY(");
+        for(int i = 0; i < FOREIGN_KEYS.length ; i++) {
+            query.append(String.format("'%s'",FOREIGN_KEYS[i]));
+            if (i != FOREIGN_KEYS.length-1) {
+                query.append(",");
+            } else {
+                query.append(")");
+            }
+        }
+
+        query.append(String.format(" REFERENCES %s(",PARENT_TABLE_NAME));
+        for(int i = 0; i < REFERENCES.length ; i++) {
+            query.append(String.format("'%s'",REFERENCES[i]));
+            if (i != REFERENCES.length-1) {
+                query.append(",");
+            } else {
+                query.append(")\n");
+            }
+        }
+
+        query.append(");");
+
+        try {
+            cursor.executeWrite(query.toString());
+        } catch (SQLException e) {
+            throw new DalException("Failed to initialize table "+TABLE_NAME, e);
+        }
+    };
 
     /**
      * @param object getLookUpObject(identifier) of the object to select

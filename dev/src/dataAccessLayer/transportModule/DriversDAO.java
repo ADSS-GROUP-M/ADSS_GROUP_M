@@ -10,9 +10,12 @@ import java.util.List;
 
 public class DriversDAO extends ManyToManyDAO<Driver> {
 
+    public static final String[] types = new String[]{"TEXT", "TEXT"};
+
     public DriversDAO() throws DalException {
         super("truck_drivers",
                 "EMPLOYEES",
+                types,
                 new String[]{"id"},
                 new String[]{"id"},
                 new String[]{"Id"},
@@ -24,31 +27,12 @@ public class DriversDAO extends ManyToManyDAO<Driver> {
         super(dbName,
                 "truck_drivers",
                 "EMPLOYEES",
+                types,
                 new String[]{"id"},
                 new String[]{"id"},
                 new String[]{"Id"},
                 "id",
                 "license_type");
-    }
-
-    /**
-     * Initialize the table if it doesn't exist
-     */
-    @Override
-    protected void initTable() throws DalException {
-        String query = """
-                CREATE TABLE IF NOT EXISTS truck_drivers (
-                    id TEXT PRIMARY KEY,
-                    license_type TEXT NOT NULL,
-                    PRIMARY KEY (id),
-                    FOREIGN KEY (id) REFERENCES EMPLOYEES(id)
-                );
-                """;
-        try {
-            cursor.executeWrite(query);
-        } catch (SQLException e) {
-            throw new DalException("Failed to initialize Drivers table", e);
-        }
     }
 
     /**

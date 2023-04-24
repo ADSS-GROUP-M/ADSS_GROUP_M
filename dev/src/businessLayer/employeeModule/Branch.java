@@ -3,10 +3,16 @@ package businessLayer.employeeModule;
 import java.time.LocalTime;
 
 public class Branch {
+    private String address;
     private LocalTime morningStart;
     private LocalTime morningEnd;
     private LocalTime eveningStart;
     private LocalTime eveningEnd;
+
+    public Branch(String address) {
+        this();
+        this.address = address;
+    }
 
     public Branch() {
         // Default values of branch working hours
@@ -43,5 +49,9 @@ public class Branch {
         this.morningEnd = mUntil;
         this.eveningStart = eFrom;
         this.eveningEnd = eUntil;
+    }
+
+    public String address() {
+        return address;
     }
 }

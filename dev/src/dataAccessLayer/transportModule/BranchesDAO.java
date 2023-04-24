@@ -8,10 +8,16 @@ import businessLayer.employeeModule.Branch;
 import java.sql.SQLException;
 import java.util.List;
 
+
+
 public class BranchesDAO extends ManyToManyDAO<Branch> {
+
+    private static final String[] types = new String[]{"TEXT", "TEXT", "TEXT", "TEXT", "TEXT"};
+
     public BranchesDAO() throws DalException{
         super("branches",
                 "sites",
+                types,
                 new String[]{"address"},
                 new String[]{"address"},
                 new String[]{"address"},
@@ -26,6 +32,7 @@ public class BranchesDAO extends ManyToManyDAO<Branch> {
         super(dbName,
                 "branches",
                 "sites",
+                types,
                 new String[]{"address"},
                 new String[]{"address"},
                 new String[]{"address"},
@@ -34,30 +41,6 @@ public class BranchesDAO extends ManyToManyDAO<Branch> {
                 "morning_shift_end",
                 "evening_shift_start",
                 "evening_shift_end");
-    }
-
-    /**
-     * Initialize the table if it doesn't exist
-     */
-    @Override
-    protected void initTable() throws DalException {
-        String query = """
-                CREATE TABLE IF NOT EXISTS branches (
-                    address TEXT NOT NULL,
-                    morning_shift_start TEXT NOT NULL,
-                    morning_shift_end TEXT NOT NULL,
-                    evening_shift_start TEXT NOT NULL,
-                    evening_shift_end TEXT NOT NULL,
-                    PRIMARY KEY (address),
-                    FOREIGN KEY (address) REFERENCES sites(address)
-                );
-                """;
-        try {
-            cursor.executeWrite(query);
-        } catch (SQLException e) {
-            throw new DalException("Failed to initialize Branches table", e);
-        }
-
     }
 
     /**

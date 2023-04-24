@@ -55,7 +55,7 @@ public class ItemListsDAO extends DAO<ItemList> {
         } catch (SQLException e) {
             throw new DalException("Failed to select item list", e);
         }
-        if(resultSet.next()) {
+        if(resultSet.isEmpty() == false) {
             return getObjectFromResultSet(resultSet);
         } else {
             throw new DalException("No item list with id " + object.id() + " was found");
@@ -70,7 +70,7 @@ public class ItemListsDAO extends DAO<ItemList> {
     public List<ItemList> selectAll() throws DalException {
         OfflineResultSet resultSet;
 
-        String idsQuery = String.format("SELECT UNIQUE id FROM %s;", TABLE_NAME);
+        String idsQuery = String.format("SELECT DISTINCT id FROM %s;", TABLE_NAME);
         try{
             resultSet = cursor.executeRead(idsQuery);
         } catch(SQLException e){
@@ -164,7 +164,7 @@ public class ItemListsDAO extends DAO<ItemList> {
         for(var item : map.entrySet()){
             String itemName = item.getKey();
             int amount = item.getValue();
-            String query = String.format("INSERT INTO %s VALUES ('%s', '%s', '%s', '%s');",
+            String query = String.format("INSERT INTO %s VALUES ('%s', '%s', '%s', %d);",
                     TABLE_NAME,
                     id,
                     loadingType,
@@ -181,7 +181,7 @@ public class ItemListsDAO extends DAO<ItemList> {
                 .toList();
         List<String> itemsToUpdate = newMap.keySet().stream()
                 .filter(oldMap::containsKey)
-                .filter(itemName -> oldMap.get(itemName).equals(oldMap.get(itemName)) == false)
+                .filter(itemName -> newMap.get(itemName).equals(oldMap.get(itemName)) == false)
                 .toList();
         List<String> itemsToAdd = newMap.keySet().stream()
                 .filter(itemName -> oldMap.containsKey(itemName) == false)
@@ -197,7 +197,7 @@ public class ItemListsDAO extends DAO<ItemList> {
         }
 
         for(String itemName: itemsToUpdate) {
-            String updateQuery = String.format("UPDATE %s SET amount = '%s' WHERE id = '%s' AND loading_type = '%s' AND item_name = '%s';",
+            String updateQuery = String.format("UPDATE %s SET amount = %d WHERE id = '%s' AND loading_type = '%s' AND item_name = '%s';",
                     TABLE_NAME,
                     newMap.get(itemName),
                     id,
@@ -207,7 +207,7 @@ public class ItemListsDAO extends DAO<ItemList> {
         }
 
         for(String itemName: itemsToAdd){
-            String addQuery = String.format("INSERT INTO %s VALUES ('%s', '%s', '%s', '%s');",
+            String addQuery = String.format("INSERT INTO %s VALUES ('%s', '%s', '%s', %d);",
                     TABLE_NAME,
                     id,
                     loadingType,

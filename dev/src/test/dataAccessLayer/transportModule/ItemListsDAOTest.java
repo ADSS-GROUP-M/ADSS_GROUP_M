@@ -164,16 +164,16 @@ class ItemListsDAOTest {
     void getObjectFromResultSet() {
         SQLExecutor cursor = new SQLExecutor("TestingDB.db");
         try {
-            OfflineResultSet resultSet = cursor.executeRead("SELECT * FROM ItemLists WHERE id = "+itemList.id());
+            OfflineResultSet resultSet = cursor.executeRead("SELECT * FROM item_lists WHERE id = "+itemList.id());
             assertDeepEquals(itemList, dao.getObjectFromResultSet(resultSet));
         } catch (SQLException e) {
             fail(e);
         }
     }
 
-    private void assertDeepEquals(ItemList itemList, ItemList select) {
-        assertEquals(itemList.id(), select.id());
-        assertEquals(itemList.load(), select.load());
-        assertEquals(itemList.unload(), select.unload());
+    private void assertDeepEquals(ItemList itemList1, ItemList itemList2) {
+        assertEquals(itemList1.id(), itemList2.id());
+        assertEquals(itemList1.load(), itemList2.load());
+        assertEquals(itemList1.unload(), itemList2.unload());
     }
 }

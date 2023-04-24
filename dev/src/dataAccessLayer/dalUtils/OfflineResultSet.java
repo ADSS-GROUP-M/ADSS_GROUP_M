@@ -69,6 +69,10 @@ public class OfflineResultSet {
         currentRowData = null;
     }
 
+    public boolean isEmpty() {
+        return rows.isEmpty();
+    }
+
     public Object getObject(String columnName) {
         return currentRowData.get(columnName);
     }

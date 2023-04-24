@@ -19,11 +19,11 @@ public class ItemListsItemsDAO extends ManyToManyDAO<ItemList> {
 
     public ItemListsItemsDAO() throws DalException {
         super("item_lists_items",
-                "item_lists",
+                new String[]{"item_lists"},
                 types,
                 new String[]{"id","loading_type","item_name"},
                 new String[]{"id"},
-                new String[]{"Id"},
+                new String[]{"id"},
                 "id",
                 "loading_type",
                 "item_name",
@@ -37,7 +37,7 @@ public class ItemListsItemsDAO extends ManyToManyDAO<ItemList> {
     public ItemListsItemsDAO(String dbName) throws DalException {
         super(dbName,
                 "item_lists_items",
-                "items_lists",
+                new String[]{"item_lists"},
                 types,
                 new String[]{"id","loading_type","item_name"},
                 new String[]{"id"},

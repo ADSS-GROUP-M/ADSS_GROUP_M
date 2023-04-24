@@ -14,7 +14,7 @@ public class DriversDAO extends ManyToManyDAO<Driver> {
 
     public DriversDAO() throws DalException {
         super("truck_drivers",
-                "EMPLOYEES",
+                new String[]{"EMPLOYEES"},
                 types,
                 new String[]{"id"},
                 new String[]{"id"},
@@ -26,7 +26,7 @@ public class DriversDAO extends ManyToManyDAO<Driver> {
     public DriversDAO(String dbName) throws DalException {
         super(dbName,
                 "truck_drivers",
-                "EMPLOYEES",
+                new String[]{"EMPLOYEES"},
                 types,
                 new String[]{"id"},
                 new String[]{"id"},

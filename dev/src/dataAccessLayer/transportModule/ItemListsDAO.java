@@ -3,10 +3,14 @@ package dataAccessLayer.transportModule;
 import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.dalUtils.OfflineResultSet;
 import dataAccessLayer.transportModule.abstracts.DAO;
+import objects.transportObjects.ItemList;
 
+import java.sql.SQLException;
 import java.util.List;
 
-public class ItemListsDAO<T> extends DAO<T> {
+public class ItemListsDAO extends DAO<ItemList> {
+
+    private final ItemListsItemsDAO itemListsItemsDAO;
 
     public ItemListsDAO() throws DalException {
         super("item_lists",
@@ -14,6 +18,7 @@ public class ItemListsDAO<T> extends DAO<T> {
                 new String[]{"id"},
                 "id"
         );
+        itemListsItemsDAO = new ItemListsItemsDAO();
     }
 
     /**
@@ -27,6 +32,7 @@ public class ItemListsDAO<T> extends DAO<T> {
                 new String[]{"id"},
                 "id"
         );
+        itemListsItemsDAO = new ItemListsItemsDAO(dbName);
     }
 
     /**
@@ -35,8 +41,8 @@ public class ItemListsDAO<T> extends DAO<T> {
      * @throws DalException if an error occurred while trying to select the object
      */
     @Override
-    public T select(T object) throws DalException {
-        return null;
+    public ItemList select(ItemList object) throws DalException {
+        return itemListsItemsDAO.select(object);
     }
 
     /**
@@ -44,8 +50,8 @@ public class ItemListsDAO<T> extends DAO<T> {
      * @throws DalException if an error occurred while trying to select the objects
      */
     @Override
-    public List<T> selectAll() throws DalException {
-        return null;
+    public List<ItemList> selectAll() throws DalException {
+        return itemListsItemsDAO.selectAll();
     }
 
     /**
@@ -53,8 +59,14 @@ public class ItemListsDAO<T> extends DAO<T> {
      * @throws DalException if an error occurred while trying to insert the object
      */
     @Override
-    public void insert(T object) throws DalException {
-
+    public void insert(ItemList object) throws DalException {
+        String query = String.format("INSERT INTO %s (id) VALUES (%d);", TABLE_NAME, object.id());
+        try {
+            cursor.executeWrite(query);
+            itemListsItemsDAO.insert(object);
+        } catch (SQLException e) {
+            throw new DalException("Failed to insert item list", e);
+        }
     }
 
     /**
@@ -62,8 +74,8 @@ public class ItemListsDAO<T> extends DAO<T> {
      * @throws DalException if an error occurred while trying to update the object
      */
     @Override
-    public void update(T object) throws DalException {
-
+    public void update(ItemList object) throws DalException {
+        itemListsItemsDAO.update(object);
     }
 
     /**
@@ -71,13 +83,18 @@ public class ItemListsDAO<T> extends DAO<T> {
      * @throws DalException if an error occurred while trying to delete the object
      */
     @Override
-    public void delete(T object) throws DalException {
-
+    public void delete(ItemList object) throws DalException {
+        String query = String.format("DELETE FROM %s WHERE id = %d;", TABLE_NAME, object.id());
+        try {
+            cursor.executeWrite(query);
+            itemListsItemsDAO.delete(object);
+        } catch (SQLException e) {
+            throw new DalException("Failed to delete item list", e);
+        }
     }
 
     @Override
-    protected T getObjectFromResultSet(OfflineResultSet resultSet) {
-        return null;
+    protected ItemList getObjectFromResultSet(OfflineResultSet resultSet) {
+        return itemListsItemsDAO.getObjectFromResultSet(resultSet);
     }
-
 }

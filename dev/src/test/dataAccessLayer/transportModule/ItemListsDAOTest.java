@@ -15,9 +15,9 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ItemListsItemsDAOTest {
+class ItemListsDAOTest {
 
-    private ItemListsItemsDAO dao;
+    private ItemListsDAO dao;
 
     private ItemList itemList;
 
@@ -36,7 +36,7 @@ class ItemListsItemsDAOTest {
         itemList = new ItemList(1, load, unload);
 
         try {
-            dao = new ItemListsItemsDAO("TestingDB.db");
+            dao = new ItemListsDAO("TestingDB.db");
             dao.insert(itemList);
         } catch (DalException e) {
             fail(e);
@@ -164,7 +164,7 @@ class ItemListsItemsDAOTest {
     void getObjectFromResultSet() {
         SQLExecutor cursor = new SQLExecutor("TestingDB.db");
         try {
-            OfflineResultSet resultSet = cursor.executeRead("SELECT * FROM item_lists WHERE id = "+itemList.id());
+            OfflineResultSet resultSet = cursor.executeRead("SELECT * FROM item_lists_items WHERE id = "+itemList.id());
             assertDeepEquals(itemList, dao.getObjectFromResultSet(resultSet));
         } catch (SQLException e) {
             fail(e);

@@ -1,12 +1,13 @@
 package DataAccessLayer.transportModule;
 
 import DataAccessLayer.DalUtils.DalException;
+import DataAccessLayer.transportModule.abstracts.DAO;
 import transportModule.records.Truck;
 
 import java.sql.SQLException;
 import java.util.List;
 
-public class TrucksDAO extends DAO<Truck>{
+public class TrucksDAO extends DAO<Truck> {
 
     public TrucksDAO() throws DalException {
         super("trucks",

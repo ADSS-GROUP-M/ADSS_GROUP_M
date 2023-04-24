@@ -1,37 +1,22 @@
-package DataAccessLayer.transportModule;
+package DataAccessLayer.transportModule.abstracts;
 
 import DataAccessLayer.DalUtils.DalException;
 import DataAccessLayer.DalUtils.SQLExecutor;
 
 import java.util.List;
 
-/**
- * @param <T> The child Type
- */
-public abstract class ManyToManyDAO<T>{
+public abstract class DAO<T> {
 
     protected final SQLExecutor cursor;
     protected final String TABLE_NAME;
-    protected final String PARENT_TABLE_NAME;
     protected final String[] ALL_COLUMNS;
     protected final String[] PRIMARY_KEYS;
-    protected final String[] FOREIGN_KEYS;
 
-    protected final String[] REFERENCES;
-
-    protected ManyToManyDAO(String tableName,
-                            String parentTableName,
-                            String[] primaryKeys,
-                            String[] foreignKeys,
-                            String[] references,
-                            String ... allColumns) throws DalException{
-        cursor = new SQLExecutor();
-        TABLE_NAME = tableName;
-        PARENT_TABLE_NAME = parentTableName;
-        PRIMARY_KEYS = primaryKeys;
-        FOREIGN_KEYS = foreignKeys;
-        REFERENCES = references;
-        ALL_COLUMNS = allColumns;
+    protected DAO(String tableName, String[] primaryKeys, String ... allColumns) throws DalException {
+        this.cursor = new SQLExecutor();
+        this.TABLE_NAME = tableName;
+        this.PRIMARY_KEYS = primaryKeys;
+        this.ALL_COLUMNS = allColumns;
         initTable();
     }
 
@@ -39,25 +24,14 @@ public abstract class ManyToManyDAO<T>{
      * used for testing
      * @param dbName the name of the database to connect to
      */
-    protected ManyToManyDAO(String dbName,
-                            String tableName,
-                            String parentTableName,
-                            String[] primaryKeys,
-                            String[] foreignKeys,
-                            String[] references,
-                            String ... allColumns) throws DalException{
-        cursor = new SQLExecutor(dbName);
-        TABLE_NAME = tableName;
-        PARENT_TABLE_NAME = parentTableName;
-        PRIMARY_KEYS = primaryKeys;
-        FOREIGN_KEYS = foreignKeys;
-        REFERENCES = references;
-        ALL_COLUMNS = allColumns;
+    protected DAO(String dbName, String tableName, String[] primaryKeys, String ... allColumns) throws DalException {
+        this.cursor = new SQLExecutor(dbName);
+        this.TABLE_NAME = tableName;
+        this.PRIMARY_KEYS = primaryKeys;
+        this.ALL_COLUMNS = allColumns;
         initTable();
     }
 
-
-    //TODO: Finish this
     /**
      * Initialize the table if it doesn't exist
      */
@@ -90,11 +64,9 @@ public abstract class ManyToManyDAO<T>{
 
     /**
      *
-     * @param t_object object with the identifier to delete
-     * @param t_object object with the identifier to delete
+     * @param object getLookUpObject(identifier) of the object to delete
      * @throws DalException if an error occurred while trying to delete the object
      */
     public abstract void delete(T object) throws DalException;
-
 
 }

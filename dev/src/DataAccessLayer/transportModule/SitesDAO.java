@@ -1,12 +1,13 @@
 package DataAccessLayer.transportModule;
 
 import DataAccessLayer.DalUtils.DalException;
+import DataAccessLayer.transportModule.abstracts.DAO;
 import transportModule.records.Site;
 
 import java.sql.SQLException;
 import java.util.List;
 
-public class SitesDAO extends DAO<Site>{
+public class SitesDAO extends DAO<Site> {
 
     public SitesDAO() throws DalException {
         super("sites",

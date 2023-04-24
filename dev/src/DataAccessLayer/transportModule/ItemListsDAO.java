@@ -1,12 +1,13 @@
 package DataAccessLayer.transportModule;
 
 import DataAccessLayer.DalUtils.DalException;
+import DataAccessLayer.transportModule.abstracts.DAO;
 import transportModule.records.ItemList;
 
 import java.sql.SQLException;
 import java.util.List;
 
-public class ItemListsDAO extends DAO<ItemList>{
+public class ItemListsDAO extends DAO<ItemList> {
     public ItemListsDAO() throws DalException {
         super("item_lists",
                 new String[]{"id"},

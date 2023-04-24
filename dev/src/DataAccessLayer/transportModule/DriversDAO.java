@@ -1,12 +1,13 @@
 package DataAccessLayer.transportModule;
 
 import DataAccessLayer.DalUtils.DalException;
+import DataAccessLayer.transportModule.abstracts.ManyToManyDAO;
 import transportModule.records.Driver;
 
 import java.sql.SQLException;
 import java.util.List;
 
-public class DriversDAO extends ManyToManyDAO<Driver>{
+public class DriversDAO extends ManyToManyDAO<Driver> {
 
     public DriversDAO() throws DalException {
         super("truck_drivers",

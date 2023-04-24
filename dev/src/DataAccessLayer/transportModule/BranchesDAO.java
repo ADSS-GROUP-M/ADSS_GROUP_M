@@ -1,6 +1,7 @@
 package DataAccessLayer.transportModule;
 
 import DataAccessLayer.DalUtils.DalException;
+import DataAccessLayer.transportModule.abstracts.ManyToManyDAO;
 import employeeModule.BusinessLayer.Employees.Branch;
 
 import java.sql.SQLException;

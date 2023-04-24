@@ -26,6 +26,7 @@ public class Tests {
     Employee twoEmployee;
     Employee threeEmployee;
     Employee fourthEmployee;
+
     @BeforeEach
     public void setUp() throws Exception { // cleans empDAO, creates 3 employees in DB, sets up 2 of them as workers shift
         empDao = EmployeeDAO.getInstance();
@@ -52,10 +53,18 @@ public class Tests {
         fourthEmployee.addRole(Role.SecurityGuard);
         empDao.create(fourthEmployee);
         noise = new Shift(LocalDate.of(1893,2,24), Shift.ShiftType.Morning);
+        createData(); // To test data persistence, comment this line and run the tests separately after creating the data.
+    }
+
+    private void createData() throws Exception {
+        dao = ShiftDAO.getInstance();
+        dao.deleteAll();
+        dao.create(noise, "branch2");
+        dao.create(s,"branch1");
     }
 
     @Test
-    public void create() throws Exception {//resets shifts table, creates 2 shifts in DB
+    public void testCreateData() throws Exception {//resets shifts table, creates 2 shifts in DB
         dao = ShiftDAO.getInstance();
         assertTrue(dao!=null);
         dao.deleteAll();
@@ -70,7 +79,7 @@ public class Tests {
         } catch(Exception e) {e.printStackTrace(); assertTrue(false);}
     }
 
-    //Run only after 'create'.
+    //To test data persistence, run after 'createData'
     @Test
     public void delete() throws Exception { // deletes shift from DB
         dao = ShiftDAO.getInstance();
@@ -81,7 +90,7 @@ public class Tests {
         } catch(Exception e) {e.printStackTrace(); assertTrue(false);}
     }
 
-    //Run after 'create'.
+    //To test data persistence, run after 'createData'
     @Test
     public void get() throws Exception {// gets the shift from DB and confirms its' state
         dao = ShiftDAO.getInstance();
@@ -93,7 +102,7 @@ public class Tests {
         } catch(Exception e) {e.printStackTrace(); assertTrue(false);}
     }
 
-    //Run after 'create'
+    //To test data persistence, run after 'createData'
     @Test
     public void update() throws Exception {
         dao = ShiftDAO.getInstance();
@@ -113,7 +122,8 @@ public class Tests {
             assertTrue(s2.getShiftWorkers().get(Role.GeneralWorker).get(0).getId() == worker.get(0).getId());
         } catch(Exception e) {e.printStackTrace(); assertTrue(false);}
     }
-    //Run after 'create'
+
+    //To test data persistence, run after 'createData'
     @Test
     public void update2() throws Exception {
         dao = ShiftDAO.getInstance();
@@ -151,7 +161,7 @@ public class Tests {
         } catch(Exception e) {e.printStackTrace(); assertTrue(false);}
     }
 
-    //Run 'create' first
+    //To test data persistence, run after 'createData'
     @Test
     public void selectAllSQLTest() throws Exception{ // tries to get all shifts from DB without relying on cache.
         dao = ShiftDAO.getInstance();

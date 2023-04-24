@@ -20,7 +20,7 @@ public class ItemListsDAO extends DAO<ItemList> {
     public ItemListsDAO() throws DalException {
         super("item_lists",
                 types,
-                new String[]{"id"},
+                new String[]{"id","loading_type","item_name"},
                 "id",
                 "loading_type",
                 "item_name",
@@ -35,7 +35,7 @@ public class ItemListsDAO extends DAO<ItemList> {
         super(dbName,
                 "item_lists",
                 types,
-                new String[]{"id"},
+                new String[]{"id","loading_type","item_name"},
                 "id",
                 "loading_type",
                 "item_name",

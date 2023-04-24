@@ -28,7 +28,7 @@ class TrucksDAOTest {
             truck = new Truck("1", "model1", 1000, 20000, Truck.CoolingCapacity.FROZEN);
             dao.insert(truck);
         } catch (DalException e) {
-            fail(e.getMessage());
+            fail(e);
         }
     }
 

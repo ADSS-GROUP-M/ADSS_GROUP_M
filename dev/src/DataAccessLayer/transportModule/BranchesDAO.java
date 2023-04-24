@@ -20,6 +20,20 @@ public class BranchesDAO extends ManyToManyDAO<Branch> {
                 "evening_shift_end");
     }
 
+    public BranchesDAO(String dbName) throws DalException{
+        super(dbName,
+                "branches",
+                "sites",
+                new String[]{"address"},
+                new String[]{"address"},
+                new String[]{"address"},
+                "address",
+                "morning_shift_start",
+                "morning_shift_end",
+                "evening_shift_start",
+                "evening_shift_end");
+    }
+
     /**
      * Initialize the table if it doesn't exist
      */

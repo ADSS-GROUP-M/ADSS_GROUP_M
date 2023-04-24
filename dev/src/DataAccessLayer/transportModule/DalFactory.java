@@ -17,6 +17,18 @@ public class DalFactory {
         branchesDAO = new BranchesDAO();
     }
 
+    /**
+     * used for testing
+     * @param dbName the name of the database to connect to
+     */
+    public DalFactory(String dbName) throws DalException {
+        trucksDAO = new TrucksDAO(dbName);
+        driversDAO = new DriversDAO(dbName);
+        itemListsDAO = new ItemListsDAO(dbName);
+        sitesDAO = new SitesDAO(dbName);
+        branchesDAO = new BranchesDAO(dbName);
+    }
+
     public TrucksDAO trucksDAO() {
         return trucksDAO;
     }

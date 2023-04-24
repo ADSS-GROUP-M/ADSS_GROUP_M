@@ -18,6 +18,17 @@ public class TrucksDAO extends DAO<Truck>{
                 "cooling_capacity");
     }
 
+    public TrucksDAO(String dbName) throws DalException {
+        super(dbName,
+                "trucks",
+                new String[]{"id"},
+                "id",
+                "model",
+                "base_weight",
+                "max_weight",
+                "cooling_capacity");
+    }
+
     /**
      * Initialize the table if it doesn't exist
      */

@@ -17,6 +17,20 @@ public class ItemListsDAO extends DAO<ItemList>{
     }
 
     /**
+     *  used for testing
+     *  @param dbName the name of the database to connect to
+     */
+    public ItemListsDAO(String dbName) throws DalException {
+        super(dbName,
+                "item_lists",
+                new String[]{"id"},
+                "id",
+                "loading_type",
+                "item_name",
+                "amount");
+    }
+
+    /**
      * Initialize the table if it doesn't exist
      */
     @Override

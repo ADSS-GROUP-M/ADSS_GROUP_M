@@ -18,6 +18,17 @@ public class DriversDAO extends ManyToManyDAO<Driver>{
                 "license_type");
     }
 
+    public DriversDAO(String dbName) throws DalException {
+        super(dbName,
+                "truck_drivers",
+                "EMPLOYEES",
+                new String[]{"id"},
+                new String[]{"id"},
+                new String[]{"Id"},
+                "id",
+                "license_type");
+    }
+
     /**
      * Initialize the table if it doesn't exist
      */

@@ -19,6 +19,21 @@ public class SitesDAO extends DAO<Site>{
     }
 
     /**
+     *  used for testing
+     *  @param dbName the name of the database to connect to
+     */
+    public SitesDAO(String dbName) throws DalException {
+        super(dbName,
+                "sites",
+                new String[]{"address"},
+                "address",
+                "transport_zone",
+                "contact_name",
+                "contact_phone",
+                "site_type");
+    }
+
+    /**
      * Initialize the table if it doesn't exist
      */
     @Override

@@ -35,6 +35,27 @@ public abstract class ManyToManyDAO<T>{
         initTable();
     }
 
+    /**
+     * used for testing
+     * @param dbName the name of the database to connect to
+     */
+    protected ManyToManyDAO(String dbName,
+                            String tableName,
+                            String parentTableName,
+                            String[] primaryKeys,
+                            String[] foreignKeys,
+                            String[] references,
+                            String ... allColumns) throws DalException{
+        cursor = new SQLExecutor(dbName);
+        TABLE_NAME = tableName;
+        PARENT_TABLE_NAME = parentTableName;
+        PRIMARY_KEYS = primaryKeys;
+        FOREIGN_KEYS = foreignKeys;
+        REFERENCES = references;
+        ALL_COLUMNS = allColumns;
+        initTable();
+    }
+
 
     //TODO: Finish this
     /**

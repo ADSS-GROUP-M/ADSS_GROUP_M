@@ -21,6 +21,18 @@ public abstract class DAO<T> {
     }
 
     /**
+     * used for testing
+     * @param dbName the name of the database to connect to
+     */
+    protected DAO(String dbName, String tableName, String[] primaryKeys, String ... allColumns) throws DalException {
+        this.cursor = new SQLExecutor(dbName);
+        this.TABLE_NAME = tableName;
+        this.PRIMARY_KEYS = primaryKeys;
+        this.ALL_COLUMNS = allColumns;
+        initTable();
+    }
+
+    /**
      * Initialize the table if it doesn't exist
      */
     protected abstract void initTable() throws DalException;

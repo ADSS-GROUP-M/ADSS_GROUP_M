@@ -9,6 +9,7 @@ public class Employee {
     private String id;
     private String bankDetails;
     private double hourlySalaryRate;
+
     private double monthlyHours;
     private double salaryBonus;
     private LocalDate employmentDate;
@@ -127,13 +128,16 @@ public class Employee {
        this.roles = new HashSet<>();
     }
 
+
     public String getId() {
         return this.id;
     }
 
+
     public String getName() {
         return this.name;
     }
+
 
     public LocalDate getEmploymentDate() {
         return this.employmentDate;
@@ -143,17 +147,21 @@ public class Employee {
         return employmentConditions;
     }
 
+
     public void setEmploymentConditions(String employmentConditions) {
         this.employmentConditions = employmentConditions;
     }
+
 
     public String getDetails() {
         return details;
     }
 
+
     public String getBankDetails() {
         return this.bankDetails;
     }
+
 
     public void setBankDetails(String bankDetails) {
         this.bankDetails = bankDetails;
@@ -167,11 +175,13 @@ public class Employee {
         roles.add(role);
     }
 
+
     public void removeRole(Role role) throws Exception {
         if (!roles.contains(role))
             throw new Exception("The given role: `" + role + "` is not one of the employee roles.");
         roles.remove(role);
     }
+
 
     public Set<Role> getRoles() {
         return this.roles;
@@ -185,36 +195,61 @@ public class Employee {
     //   this.workingConstraints.setAvailableDate(d);
     //}
 
+
     public void setHourlySalaryRate(double newRate){
        this.hourlySalaryRate = newRate;
     }
+
 
     public double getHourlySalaryRate() {
         return this.hourlySalaryRate;
     }
 
+
     public void setSalaryBonus(double salaryBonus) {
         this.salaryBonus = salaryBonus;
     }
+
 
     public double getSalaryBonus() {
         return this.salaryBonus;
     }
 
+
     public void addMonthlyHours(double hours) {
         this.monthlyHours += hours;
     }
 
+
     public void resetMonthlyHours() {
         this.monthlyHours = 0;
     }
-
     public double getMonthlyHours() {
         return this.monthlyHours;
     }
 
+
     public double calculateSalary() {
         return hourlySalaryRate * monthlyHours + salaryBonus;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setMonthlyHours(double monthlyHours) {
+        this.monthlyHours = monthlyHours;
+    }
+
+    public void setEmploymentDate(LocalDate employmentDate) {
+        this.employmentDate = employmentDate;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 
     //public String toString() {

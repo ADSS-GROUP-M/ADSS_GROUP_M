@@ -29,6 +29,14 @@ public class Branch {
         eveningEnd = LocalTime.of(eveningShiftFinish, 0);
     }
 
+    public Branch(String address, LocalTime morningShiftStart,LocalTime morningShiftFinish, LocalTime eveningShiftStart, LocalTime eveningShiftFinish){
+        this.morningStart = morningShiftStart;
+        this.morningEnd = morningShiftFinish;
+        this.eveningStart = eveningShiftStart;
+        this.eveningEnd = eveningShiftFinish;
+        this.address = address;
+    }
+
     public LocalTime getMorningStart() {
         return this.morningStart;
     }

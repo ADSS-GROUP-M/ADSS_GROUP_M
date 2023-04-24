@@ -6,6 +6,7 @@ import dataAccessLayer.transportModule.abstracts.ManyToManyDAO;
 import businessLayer.employeeModule.Branch;
 
 import java.sql.SQLException;
+import java.util.LinkedList;
 import java.util.List;
 
 
@@ -50,7 +51,20 @@ public class BranchesDAO extends ManyToManyDAO<Branch> {
      */
     @Override
     public Branch select(Branch object) throws DalException {
-        return null;
+        String query = String.format("SELECT * FROM %s WHERE address = '%s'",
+                TABLE_NAME,
+                object.address());
+        OfflineResultSet resultSet;
+        try {
+            resultSet = cursor.executeRead(query);
+        } catch (SQLException e) {
+            throw new DalException("Failed to select branch", e);
+        }
+        if (resultSet.next()) {
+            return getObjectFromResultSet(resultSet);
+        } else {
+            throw new DalException("No branch with address " + object.address() + " was found");
+        }
     }
 
     /**
@@ -59,7 +73,18 @@ public class BranchesDAO extends ManyToManyDAO<Branch> {
      */
     @Override
     public List<Branch> selectAll() throws DalException {
-        return null;
+        String query = String.format("SELECT * FROM %s", TABLE_NAME);
+        OfflineResultSet resultSet;
+        try {
+            resultSet = cursor.executeRead(query);
+        } catch (SQLException e) {
+            throw new DalException("Failed to select all branches", e);
+        }
+        List<Branch> branches = new LinkedList<>();
+        while (resultSet.next()) {
+            branches.add(getObjectFromResultSet(resultSet));
+        }
+        return branches;
     }
 
     /**
@@ -68,7 +93,18 @@ public class BranchesDAO extends ManyToManyDAO<Branch> {
      */
     @Override
     public void insert(Branch object) throws DalException {
-
+        String query = String.format("INSERT INTO %s VALUES ('%s', '%s', '%s', '%s', '%s')",
+                TABLE_NAME,
+                object.address(),
+                object.getMorningStart(),
+                object.getMorningEnd(),
+                object.getEveningStart(),
+                object.getEveningEnd());
+        try {
+            cursor.executeWrite(query);
+        } catch (SQLException e) {
+            throw new DalException("Failed to insert branch", e);
+        }
     }
 
     /**
@@ -77,7 +113,18 @@ public class BranchesDAO extends ManyToManyDAO<Branch> {
      */
     @Override
     public void update(Branch object) throws DalException {
-
+        String query = String.format("UPDATE %s SET morning_shift_start = '%s', morning_shift_end = '%s', evening_shift_start = '%s', evening_shift_end = '%s' WHERE address = '%s'",
+                TABLE_NAME,
+                object.getMorningStart(),
+                object.getMorningEnd(),
+                object.getEveningStart(),
+                object.getEveningEnd(),
+                object.address());
+        try {
+            cursor.executeWrite(query);
+        } catch (SQLException e) {
+            throw new DalException("Failed to update branch", e);
+        }
     }
 
     /**
@@ -85,11 +132,23 @@ public class BranchesDAO extends ManyToManyDAO<Branch> {
      */
     @Override
     public void delete(Branch object) throws DalException {
-
+        String query = String.format("DELETE FROM %s WHERE address = '%s'",
+                TABLE_NAME,
+                object.address());
+        try {
+            cursor.executeWrite(query);
+        } catch (SQLException e) {
+            throw new DalException("Failed to delete branch", e);
+        }
     }
 
     @Override
     protected Branch getObjectFromResultSet(OfflineResultSet resultSet) {
-        return null;
+        return new Branch(
+                resultSet.getString("address"),
+                resultSet.getLocalTime("morning_shift_start"),
+                resultSet.getLocalTime("morning_shift_end"),
+                resultSet.getLocalTime("evening_shift_start"),
+                resultSet.getLocalTime("evening_shift_end"));
     }
 }

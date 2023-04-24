@@ -6,6 +6,7 @@ import dataAccessLayer.transportModule.abstracts.ManyToManyDAO;
 import objects.transportObjects.Driver;
 
 import java.sql.SQLException;
+import java.util.LinkedList;
 import java.util.List;
 
 public class DriversDAO extends ManyToManyDAO<Driver> {
@@ -41,7 +42,18 @@ public class DriversDAO extends ManyToManyDAO<Driver> {
      */
     @Override
     public Driver select(Driver object) throws DalException {
-        return null;
+        String query = String.format("SELECT * FROM %s WHERE id = '%s';", TABLE_NAME, object.id());
+        OfflineResultSet resultSet;
+        try {
+            resultSet = cursor.executeRead(query);
+        } catch (SQLException e) {
+            throw new DalException("Failed to select Driver", e);
+        }
+        if (resultSet.next()) {
+            return getObjectFromResultSet(resultSet);
+        } else {
+            throw new DalException("No driver with id " + object.id() + " was found");
+        }
     }
 
     /**
@@ -50,7 +62,21 @@ public class DriversDAO extends ManyToManyDAO<Driver> {
      */
     @Override
     public List<Driver> selectAll() throws DalException {
-        return null;
+        String query = String.format("""
+                    SELECT id,name,license_type FROM %s
+                    INNER JOIN %s ON %s.id = %s.id
+                        """, TABLE_NAME, PARENT_TABLE_NAME[0], TABLE_NAME, PARENT_TABLE_NAME[0]);
+        OfflineResultSet resultSet;
+        try {
+            resultSet = cursor.executeRead(query);
+        } catch (SQLException e) {
+            throw new DalException("Failed to select all Drivers", e);
+        }
+        List<Driver> drivers = new LinkedList<>();
+        while (resultSet.next()) {
+            drivers.add(getObjectFromResultSet(resultSet));
+        }
+        return drivers;
     }
 
     /**
@@ -59,7 +85,15 @@ public class DriversDAO extends ManyToManyDAO<Driver> {
      */
     @Override
     public void insert(Driver object) throws DalException {
-
+        String query = String.format("INSERT INTO %s VALUES ('%s', '%s');",
+                TABLE_NAME,
+                object.id(),
+                object.licenseType());
+        try {
+            cursor.executeWrite(query);
+        } catch (SQLException e) {
+            throw new DalException("Failed to insert Driver", e);
+        }
     }
 
     /**
@@ -68,7 +102,15 @@ public class DriversDAO extends ManyToManyDAO<Driver> {
      */
     @Override
     public void update(Driver object) throws DalException {
-
+        String query = String.format("UPDATE %s SET license_type = '%s' WHERE id = '%s';",
+                TABLE_NAME,
+                object.licenseType(),
+                object.id());
+        try {
+            cursor.executeWrite(query);
+        } catch (SQLException e) {
+            throw new DalException("Failed to update Driver", e);
+        }
     }
 
     /**
@@ -76,11 +118,19 @@ public class DriversDAO extends ManyToManyDAO<Driver> {
      */
     @Override
     public void delete(Driver object) throws DalException {
-
+        String query = String.format("DELETE FROM %s WHERE id = '%s';", TABLE_NAME, object.id());
+        try {
+            cursor.executeWrite(query);
+        } catch (SQLException e) {
+            throw new DalException("Failed to delete Driver", e);
+        }
     }
 
     @Override
     protected Driver getObjectFromResultSet(OfflineResultSet resultSet) {
-        return null;
+        return new Driver(
+                resultSet.getString("id"),
+                resultSet.getString("name"),
+                Driver.LicenseType.valueOf(resultSet.getString("license_type")));
     }
 }

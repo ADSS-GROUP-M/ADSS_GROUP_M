@@ -3,29 +3,27 @@ package DataAccessLayer.transportModule;
 import DataAccessLayer.DalUtils.DalException;
 import employeeModule.BusinessLayer.Employees.Branch;
 
-import java.time.LocalTime;
 import java.util.List;
 
 public class BranchesDAO extends ManyToManyDAO<Branch> {
-    public BranchesDAO() {
-        super("Branches",
-                "Sites",
-                new String[]{"Branch_Address"},
-                new String[]{"Branch_Address"},
-                new String[]{"Site_Address"},
-                "Branch_Address",
-                "Moring_Shift_Start",
-                "Moring_Shift_End",
-                "Evening_Shift_Start",
-                "Evening_Shift_End"
-        );
+    public BranchesDAO() throws DalException{
+        super("branches",
+                "sites",
+                new String[]{"address"},
+                new String[]{"address"},
+                new String[]{"address"},
+                "address",
+                "morning_shift_start",
+                "morning_shift_end",
+                "evening_shift_start",
+                "evening_shift_end");
     }
 
     /**
      * Initialize the table if it doesn't exist
      */
     @Override
-    protected void initTable() {
+    protected void initTable() throws DalException {
 
     }
 

@@ -19,7 +19,12 @@ public abstract class ManyToManyDAO<T>{
 
     protected final String[] REFERENCES;
 
-    protected ManyToManyDAO(String tableName, String parentTableName, String[] primaryKeys, String[] foreignKeys, String[] references, String ... allColumns){
+    protected ManyToManyDAO(String tableName,
+                            String parentTableName,
+                            String[] primaryKeys,
+                            String[] foreignKeys,
+                            String[] references,
+                            String ... allColumns) throws DalException{
         cursor = new SQLExecutor();
         TABLE_NAME = tableName;
         PARENT_TABLE_NAME = parentTableName;
@@ -35,7 +40,7 @@ public abstract class ManyToManyDAO<T>{
     /**
      * Initialize the table if it doesn't exist
      */
-    protected abstract void initTable();
+    protected abstract void initTable() throws DalException;
 
     /**
      * @param object getLookUpObject(identifier) of the object to select

@@ -3,7 +3,6 @@ package DataAccessLayer.transportModule;
 import DataAccessLayer.DalUtils.DalException;
 import DataAccessLayer.DalUtils.SQLExecutor;
 
-import java.sql.ResultSet;
 import java.util.List;
 
 public abstract class DAO<T> {
@@ -13,7 +12,7 @@ public abstract class DAO<T> {
     protected final String[] ALL_COLUMNS;
     protected final String[] PRIMARY_KEYS;
 
-    protected DAO(String tableName, String[] primaryKeys, String ... allColumns){
+    protected DAO(String tableName, String[] primaryKeys, String ... allColumns) throws DalException {
         this.cursor = new SQLExecutor();
         this.TABLE_NAME = tableName;
         this.PRIMARY_KEYS = primaryKeys;
@@ -24,7 +23,7 @@ public abstract class DAO<T> {
     /**
      * Initialize the table if it doesn't exist
      */
-    protected abstract void initTable();
+    protected abstract void initTable() throws DalException;
 
     /**
      * @param object getLookUpObject(identifier) of the object to select

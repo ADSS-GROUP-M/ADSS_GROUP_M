@@ -3,19 +3,38 @@ package DataAccessLayer.transportModule;
 import DataAccessLayer.DalUtils.DalException;
 import transportModule.records.ItemList;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public class ItemListsDAO extends DAO<ItemList>{
-    protected ItemListsDAO() {
-        super("ItemLists", new String[]{"ItemListId"}, "ItemListId", "LoadingType","ItemName","Amount");
+    public ItemListsDAO() throws DalException {
+        super("item_lists",
+                new String[]{"id"},
+                "id",
+                "loading_type",
+                "item_name",
+                "amount");
     }
 
     /**
      * Initialize the table if it doesn't exist
      */
     @Override
-    protected void initTable() {
-
+    protected void initTable() throws DalException {
+        String query = """
+                CREATE TABLE IF NOT EXISTS item_lists (
+                    id INTEGER PRIMARY KEY,
+                    loading_type TEXT NOT NULL,
+                    item_name TEXT NOT NULL,
+                    amount INTEGER NOT NULL,
+                    PRIMARY KEY (id)
+                );
+                """;
+        try {
+            cursor.executeWrite(query);
+        } catch (SQLException e) {
+            throw new DalException("Failed to initialize ItemLists table", e);
+        }
     }
 
     /**

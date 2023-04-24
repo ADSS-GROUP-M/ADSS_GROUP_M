@@ -3,20 +3,39 @@ package DataAccessLayer.transportModule;
 import DataAccessLayer.DalUtils.DalException;
 import transportModule.records.Driver;
 
+import java.sql.SQLException;
 import java.util.List;
 
-public class DriversDAO extends DAO<Driver>{
+public class DriversDAO extends ManyToManyDAO<Driver>{
 
-    protected DriversDAO() {
-        super("TruckDrivers", new String[]{"DriverId"}, "DriverId", "LicenseType");
+    public DriversDAO() throws DalException {
+        super("truck_drivers",
+                "EMPLOYEES",
+                new String[]{"id"},
+                new String[]{"id"},
+                new String[]{"Id"},
+                "id",
+                "license_type");
     }
 
     /**
      * Initialize the table if it doesn't exist
      */
     @Override
-    protected void initTable() {
-
+    protected void initTable() throws DalException {
+        String query = """
+                CREATE TABLE IF NOT EXISTS truck_drivers (
+                    id TEXT PRIMARY KEY,
+                    license_type TEXT NOT NULL,
+                    PRIMARY KEY (id),
+                    FOREIGN KEY (id) REFERENCES EMPLOYEES(id)
+                );
+                """;
+        try {
+            cursor.executeWrite(query);
+        } catch (SQLException e) {
+            throw new DalException("Failed to initialize Drivers table", e);
+        }
     }
 
     /**

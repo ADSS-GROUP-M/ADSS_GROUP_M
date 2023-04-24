@@ -3,20 +3,41 @@ package DataAccessLayer.transportModule;
 import DataAccessLayer.DalUtils.DalException;
 import transportModule.records.Truck;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public class TrucksDAO extends DAO<Truck>{
 
-    public TrucksDAO() {
-        super("Trucks", new String[]{"TruckId"}, "TruckId","Model","BaseWeight","MaxWeight","CoolingCapacity");
+    public TrucksDAO() throws DalException {
+        super("trucks",
+                new String[]{"id"},
+                "id",
+                "model",
+                "base_weight",
+                "max_weight",
+                "cooling_capacity");
     }
 
     /**
      * Initialize the table if it doesn't exist
      */
     @Override
-    protected void initTable() {
-
+    protected void initTable() throws DalException {
+        String query = """
+                CREATE TABLE IF NOT EXISTS trucks (
+                    id TEXT PRIMARY KEY,
+                    model TEXT NOT NULL,
+                    base_weight INTEGER NOT NULL,
+                    max_weight INTEGER NOT NULL,
+                    cooling_capacity TEXT NOT NULL,
+                    PRIMARY KEY (id)
+                );
+                """;
+        try {
+            cursor.executeWrite(query);
+        } catch (SQLException e) {
+            throw new DalException("Failed to initialize Trucks table", e);
+        }
     }
 
     /**

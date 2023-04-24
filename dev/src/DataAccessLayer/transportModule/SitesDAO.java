@@ -3,20 +3,41 @@ package DataAccessLayer.transportModule;
 import DataAccessLayer.DalUtils.DalException;
 import transportModule.records.Site;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public class SitesDAO extends DAO<Site>{
 
-    protected SitesDAO() {
-        super("Sites", new String[]{"SiteAddress"}, "SiteAddress", "TransportZone","ContactName","ContactPhone","SiteType");
+    public SitesDAO() throws DalException {
+        super("sites",
+                new String[]{"address"},
+                "address",
+                "transport_zone",
+                "contact_name",
+                "contact_phone",
+                "site_type");
     }
 
     /**
      * Initialize the table if it doesn't exist
      */
     @Override
-    protected void initTable() {
-
+    protected void initTable() throws DalException {
+        String query = """
+                CREATE TABLE IF NOT EXISTS sites (
+                    site_address TEXT PRIMARY KEY,
+                    transport_zone TEXT NOT NULL,
+                    contact_name TEXT NOT NULL,
+                    contact_phone TEXT NOT NULL,
+                    site_type TEXT NOT NULL,
+                    PRIMARY KEY (address)
+                );
+                """;
+        try {
+            cursor.executeWrite(query);
+        } catch (SQLException e) {
+            throw new DalException("Failed to initialize Sites table", e);
+        }
     }
 
     /**

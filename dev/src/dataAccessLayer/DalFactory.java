@@ -7,13 +7,13 @@ public class DalFactory {
 
     private final TrucksDAO trucksDAO;
     private final DriversDAO driversDAO;
-    private final ItemListsDAO itemListsDAO;
+    private final ItemListsItemsDAO itemListsItemsDAO;
     private final SitesDAO sitesDAO;
     private final BranchesDAO branchesDAO;
     public DalFactory() throws DalException {
         trucksDAO = new TrucksDAO();
         driversDAO = new DriversDAO();
-        itemListsDAO = new ItemListsDAO();
+        itemListsItemsDAO = new ItemListsItemsDAO();
         sitesDAO = new SitesDAO();
         branchesDAO = new BranchesDAO();
     }
@@ -25,7 +25,7 @@ public class DalFactory {
     public DalFactory(String dbName) throws DalException {
         trucksDAO = new TrucksDAO(dbName);
         driversDAO = new DriversDAO(dbName);
-        itemListsDAO = new ItemListsDAO(dbName);
+        itemListsItemsDAO = new ItemListsItemsDAO(dbName);
         sitesDAO = new SitesDAO(dbName);
         branchesDAO = new BranchesDAO(dbName);
     }
@@ -38,8 +38,8 @@ public class DalFactory {
         return driversDAO;
     }
 
-    public ItemListsDAO itemListsDAO() {
-        return itemListsDAO;
+    public ItemListsItemsDAO itemListsDAO() {
+        return itemListsItemsDAO;
     }
 
     public SitesDAO sitesDAO() {

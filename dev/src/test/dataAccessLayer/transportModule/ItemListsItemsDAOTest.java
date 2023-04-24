@@ -15,9 +15,9 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ItemListsDAOTest {
+class ItemListsItemsDAOTest {
 
-    private ItemListsDAO dao;
+    private ItemListsItemsDAO dao;
 
     private ItemList itemList;
 
@@ -36,7 +36,7 @@ class ItemListsDAOTest {
         itemList = new ItemList(1, load, unload);
 
         try {
-            dao = new ItemListsDAO("TestingDB.db");
+            dao = new ItemListsItemsDAO("TestingDB.db");
             dao.insert(itemList);
         } catch (DalException e) {
             fail(e);

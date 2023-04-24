@@ -16,7 +16,7 @@ public class BranchesDAO extends ManyToManyDAO<Branch> {
 
     public BranchesDAO() throws DalException{
         super("branches",
-                "sites",
+                new String[]{"sites"},
                 types,
                 new String[]{"address"},
                 new String[]{"address"},
@@ -31,7 +31,7 @@ public class BranchesDAO extends ManyToManyDAO<Branch> {
     public BranchesDAO(String dbName) throws DalException{
         super(dbName,
                 "branches",
-                "sites",
+                new String[]{"sites"},
                 types,
                 new String[]{"address"},
                 new String[]{"address"},

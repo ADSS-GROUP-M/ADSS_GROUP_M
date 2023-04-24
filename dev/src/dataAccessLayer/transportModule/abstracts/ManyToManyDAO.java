@@ -14,7 +14,7 @@ public abstract class ManyToManyDAO<T>{
 
     protected final SQLExecutor cursor;
     protected final String TABLE_NAME;
-    protected final String PARENT_TABLE_NAME;
+    protected final String[] PARENT_TABLE_NAME;
     protected final String[] ALL_COLUMNS;
     protected final String[] TYPES;
     protected final String[] PRIMARY_KEYS;
@@ -23,7 +23,7 @@ public abstract class ManyToManyDAO<T>{
     protected final String[] REFERENCES;
 
     protected ManyToManyDAO(String tableName,
-                            String parentTableName,
+                            String[] parentTableName,
                             String[] types,
                             String[] primaryKeys,
                             String[] foreignKeys,
@@ -46,7 +46,7 @@ public abstract class ManyToManyDAO<T>{
      */
     protected ManyToManyDAO(String dbName,
                             String tableName,
-                            String parentTableName,
+                            String[] parentTableName,
                             String[] types,
                             String[] primaryKeys,
                             String[] foreignKeys,
@@ -85,25 +85,39 @@ public abstract class ManyToManyDAO<T>{
             }
         }
 
-        query.append("CONSTRAINT FK FOREIGN KEY(");
-        for(int i = 0; i < FOREIGN_KEYS.length ; i++) {
-            query.append(String.format("'%s'",FOREIGN_KEYS[i]));
-            if (i != FOREIGN_KEYS.length-1) {
-                query.append(",");
+        for(int i = 0; i < FOREIGN_KEYS.length ; i++){
+            query.append(String.format("CONSTRAINT FK_%s FOREIGN KEY('%s') REFERENCES %s('%s')",
+                    FOREIGN_KEYS[i],
+                    FOREIGN_KEYS[i],
+                    PARENT_TABLE_NAME[i],
+                    REFERENCES[i]
+            ));
+            if(i != FOREIGN_KEYS.length-1){
+                query.append(",\n");
             } else {
-                query.append(")");
+                query.append("\n");
             }
         }
 
-        query.append(String.format(" REFERENCES %s(",PARENT_TABLE_NAME));
-        for(int i = 0; i < REFERENCES.length ; i++) {
-            query.append(String.format("'%s'",REFERENCES[i]));
-            if (i != REFERENCES.length-1) {
-                query.append(",");
-            } else {
-                query.append(")\n");
-            }
-        }
+//        query.append("CONSTRAINT FK FOREIGN KEY(");
+//        for(int i = 0; i < FOREIGN_KEYS.length ; i++) {
+//            query.append(String.format("'%s'",FOREIGN_KEYS[i]));
+//            if (i != FOREIGN_KEYS.length-1) {
+//                query.append(",");
+//            } else {
+//                query.append(")");
+//            }
+//        }
+//
+//        query.append(String.format(" REFERENCES %s(",PARENT_TABLE_NAME));
+//        for(int i = 0; i < REFERENCES.length ; i++) {
+//            query.append(String.format("'%s'",REFERENCES[i]));
+//            if (i != REFERENCES.length-1) {
+//                query.append(",");
+//            } else {
+//                query.append(")\n");
+//            }
+//        }
 
         query.append(");");
 

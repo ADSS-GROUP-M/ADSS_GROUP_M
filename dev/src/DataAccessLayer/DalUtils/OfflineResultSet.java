@@ -80,11 +80,11 @@ public class OfflineResultSet {
         return (String) currentRowData.get(columnName);
     }
 
-    public Integer getInteger(String columnName) {
-        return (Integer) currentRowData.get(columnName);
+    public int getInt(String columnName) {
+        return (int) currentRowData.get(columnName);
     }
 
-    public Boolean getBoolean(String columnName) {
+    public boolean getBoolean(String columnName) {
         return (Boolean) currentRowData.get(columnName);
     }
 

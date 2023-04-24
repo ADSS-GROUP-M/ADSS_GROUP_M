@@ -5,23 +5,28 @@ import DataAccessLayer.DalUtils.SQLExecutor;
 
 import java.util.List;
 
-public abstract class ManyToManyDAO<T,K>{
+/**
+ * @param <T> The child Type
+ */
+public abstract class ManyToManyDAO<T>{
 
     protected final SQLExecutor cursor;
-
     protected final String TABLE_NAME;
+    protected final String PARENT_TABLE_NAME;
     protected final String[] ALL_COLUMNS;
     protected final String[] PRIMARY_KEYS;
-    protected final String[] T_FOREIGN_KEYS;
-    protected final String[] K_FOREIGN_KEYS;
+    protected final String[] FOREIGN_KEYS;
 
-    protected ManyToManyDAO(String tableName, String[] primaryKeys, String[] foreignKeys, String[] tForeignKeys, String ... allColumns){
+    protected final String[] REFERENCES;
+
+    protected ManyToManyDAO(String tableName, String parentTableName, String[] primaryKeys, String[] foreignKeys, String[] references, String ... allColumns){
         cursor = new SQLExecutor();
-        this.TABLE_NAME = tableName;
-        this.PRIMARY_KEYS = primaryKeys;
-        this.K_FOREIGN_KEYS = foreignKeys;
-        this.T_FOREIGN_KEYS = tForeignKeys;
-        this.ALL_COLUMNS = allColumns;
+        TABLE_NAME = tableName;
+        PARENT_TABLE_NAME = parentTableName;
+        PRIMARY_KEYS = primaryKeys;
+        FOREIGN_KEYS = foreignKeys;
+        REFERENCES = references;
+        ALL_COLUMNS = allColumns;
         initTable();
     }
 
@@ -59,11 +64,11 @@ public abstract class ManyToManyDAO<T,K>{
 
     /**
      *
-     * @param k_object object with the identifier to delete
+     * @param t_object object with the identifier to delete
      * @param t_object object with the identifier to delete
      * @throws DalException if an error occurred while trying to delete the object
      */
-    public abstract void delete(T t_object, K k_object) throws DalException;
+    public abstract void delete(T object) throws DalException;
 
 
 }

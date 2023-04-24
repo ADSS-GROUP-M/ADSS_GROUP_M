@@ -1,6 +1,7 @@
 package dataAccessLayer.transportModule;
 
 import dataAccessLayer.dalUtils.DalException;
+import dataAccessLayer.dalUtils.OfflineResultSet;
 import dataAccessLayer.transportModule.abstracts.DAO;
 import objects.transportObjects.ItemList;
 
@@ -94,5 +95,10 @@ public class ItemListsDAO extends DAO<ItemList> {
     @Override
     public void delete(ItemList object) throws DalException {
 
+    }
+
+    @Override
+    protected ItemList getObjectFromResultSet(OfflineResultSet resultSet) {
+        return null;
     }
 }

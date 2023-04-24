@@ -1,7 +1,9 @@
 package dataAccessLayer.transportModule.abstracts;
 
 import dataAccessLayer.dalUtils.DalException;
+import dataAccessLayer.dalUtils.OfflineResultSet;
 import dataAccessLayer.dalUtils.SQLExecutor;
+import objects.transportObjects.Truck;
 
 import java.util.List;
 
@@ -69,4 +71,5 @@ public abstract class DAO<T> {
      */
     public abstract void delete(T object) throws DalException;
 
+    protected abstract T getObjectFromResultSet(OfflineResultSet resultSet);
 }

@@ -1,6 +1,7 @@
 package dataAccessLayer.transportModule;
 
 import dataAccessLayer.dalUtils.DalException;
+import dataAccessLayer.dalUtils.OfflineResultSet;
 import dataAccessLayer.transportModule.abstracts.DAO;
 import objects.transportObjects.Site;
 
@@ -98,5 +99,10 @@ public class SitesDAO extends DAO<Site> {
     @Override
     public void delete(Site object) throws DalException {
 
+    }
+
+    @Override
+    protected Site getObjectFromResultSet(OfflineResultSet resultSet) {
+        return null;
     }
 }

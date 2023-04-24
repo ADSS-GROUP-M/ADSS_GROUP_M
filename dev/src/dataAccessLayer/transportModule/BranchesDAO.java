@@ -1,6 +1,7 @@
 package dataAccessLayer.transportModule;
 
 import dataAccessLayer.dalUtils.DalException;
+import dataAccessLayer.dalUtils.OfflineResultSet;
 import dataAccessLayer.transportModule.abstracts.ManyToManyDAO;
 import businessLayer.employeeModule.Branch;
 
@@ -102,5 +103,10 @@ public class BranchesDAO extends ManyToManyDAO<Branch> {
     @Override
     public void delete(Branch object) throws DalException {
 
+    }
+
+    @Override
+    protected Branch getObjectFromResultSet(OfflineResultSet resultSet) {
+        return null;
     }
 }

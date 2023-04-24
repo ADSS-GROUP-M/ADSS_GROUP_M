@@ -1,6 +1,7 @@
 package dataAccessLayer.transportModule.abstracts;
 
 import dataAccessLayer.dalUtils.DalException;
+import dataAccessLayer.dalUtils.OfflineResultSet;
 import dataAccessLayer.dalUtils.SQLExecutor;
 
 import java.util.List;
@@ -96,5 +97,5 @@ public abstract class ManyToManyDAO<T>{
      */
     public abstract void delete(T object) throws DalException;
 
-
+    protected abstract T getObjectFromResultSet(OfflineResultSet resultSet);
 }

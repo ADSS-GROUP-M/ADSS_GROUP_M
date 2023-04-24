@@ -1,10 +1,12 @@
 package dataAccessLayer.transportModule;
 
 import dataAccessLayer.dalUtils.DalException;
+import dataAccessLayer.dalUtils.OfflineResultSet;
 import dataAccessLayer.transportModule.abstracts.DAO;
 import objects.transportObjects.Truck;
 
 import java.sql.SQLException;
+import java.util.LinkedList;
 import java.util.List;
 
 public class TrucksDAO extends DAO<Truck> {
@@ -58,7 +60,18 @@ public class TrucksDAO extends DAO<Truck> {
      */
     @Override
     public Truck select(Truck object) throws DalException {
-        return null;
+        String query = String.format("SELECT * FROM %s WHERE id = '%s';", TABLE_NAME, object.id());
+        OfflineResultSet resultSet;
+        try {
+            resultSet = cursor.executeRead(query);
+        } catch (SQLException e) {
+            throw new DalException("Failed to select Truck", e);
+        }
+        if (resultSet.next()) {
+            return getObjectFromResultSet(resultSet);
+        } else {
+            throw new DalException("Truck not found");
+        }
     }
 
     /**
@@ -67,7 +80,18 @@ public class TrucksDAO extends DAO<Truck> {
      */
     @Override
     public List<Truck> selectAll() throws DalException {
-        return null;
+        String query = String.format("SELECT * FROM %s;", TABLE_NAME);
+        OfflineResultSet resultSet;
+        try {
+            resultSet = cursor.executeRead(query);
+        } catch (SQLException e) {
+            throw new DalException("Failed to select all Trucks", e);
+        }
+        List<Truck> trucks = new LinkedList<>();
+        while (resultSet.next()) {
+            trucks.add(getObjectFromResultSet(resultSet));
+        }
+        return trucks;
     }
 
     /**
@@ -76,7 +100,18 @@ public class TrucksDAO extends DAO<Truck> {
      */
     @Override
     public void insert(Truck object) throws DalException {
-
+        String query = String.format("INSERT INTO %s VALUES ('%s', '%s', %d, %d, '%s');",
+                TABLE_NAME,
+                object.id(),
+                object.model(),
+                object.baseWeight(),
+                object.maxWeight(),
+                object.coolingCapacity().toString());
+        try {
+            cursor.executeWrite(query);
+        } catch (SQLException e) {
+            throw new DalException("Failed to insert Truck", e);
+        }
     }
 
     /**
@@ -85,7 +120,18 @@ public class TrucksDAO extends DAO<Truck> {
      */
     @Override
     public void update(Truck object) throws DalException {
-
+        String query = String.format("UPDATE %s SET model = '%s', base_weight = %d, max_weight = %d, cooling_capacity = '%s' WHERE id = '%s';",
+                TABLE_NAME,
+                object.model(),
+                object.baseWeight(),
+                object.maxWeight(),
+                object.coolingCapacity().toString(),
+                object.id());
+        try {
+            cursor.executeWrite(query);
+        } catch (SQLException e) {
+            throw new DalException("Failed to update Truck", e);
+        }
     }
 
     /**
@@ -93,6 +139,21 @@ public class TrucksDAO extends DAO<Truck> {
      */
     @Override
     public void delete(Truck object) throws DalException {
+        String query = String.format("DELETE FROM %s WHERE id = '%s';", TABLE_NAME, object.id());
+        try {
+            cursor.executeWrite(query);
+        } catch (SQLException e) {
+            throw new DalException("Failed to delete Truck", e);
+        }
+    }
 
+    protected Truck getObjectFromResultSet(OfflineResultSet resultSet) {
+        return new Truck(
+                resultSet.getString("id"),
+                resultSet.getString("model"),
+                resultSet.getInt("base_weight"),
+                resultSet.getInt("max_weight"),
+                Truck.CoolingCapacity.valueOf(resultSet.getString("cooling_capacity"))
+        );
     }
 }

@@ -17,11 +17,8 @@ public class OfflineResultSet {
     private final String[] columnNames;
     private final int columnCount;
     private int currentRow;
-
     private HashMap<String,Object> currentRowData;
-
     private ListIterator<HashMap<String,Object>> iterator;
-
 
     public OfflineResultSet(ResultSet rs) throws SQLException {
         currentRow = -1;

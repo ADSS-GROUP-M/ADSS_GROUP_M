@@ -1,6 +1,7 @@
 package dataAccessLayer.transportModule;
 
 import dataAccessLayer.dalUtils.DalException;
+import dataAccessLayer.dalUtils.OfflineResultSet;
 import dataAccessLayer.transportModule.abstracts.ManyToManyDAO;
 import objects.transportObjects.Driver;
 
@@ -92,5 +93,10 @@ public class DriversDAO extends ManyToManyDAO<Driver> {
     @Override
     public void delete(Driver object) throws DalException {
 
+    }
+
+    @Override
+    protected Driver getObjectFromResultSet(OfflineResultSet resultSet) {
+        return null;
     }
 }

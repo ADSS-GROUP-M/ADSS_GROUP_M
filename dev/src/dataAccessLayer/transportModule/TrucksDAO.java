@@ -70,7 +70,7 @@ public class TrucksDAO extends DAO<Truck> {
         if (resultSet.next()) {
             return getObjectFromResultSet(resultSet);
         } else {
-            throw new DalException("Truck not found");
+            throw new DalException("No truck with id " + object.id() + " was found");
         }
     }
 

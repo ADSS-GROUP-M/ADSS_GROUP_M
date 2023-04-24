@@ -6,7 +6,10 @@ import dataAccessLayer.transportModule.abstracts.DAO;
 import objects.transportObjects.ItemList;
 
 import java.sql.SQLException;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class ItemListsDAO extends DAO<ItemList> {
     public ItemListsDAO() throws DalException {
@@ -49,7 +52,7 @@ public class ItemListsDAO extends DAO<ItemList> {
         try {
             cursor.executeWrite(query);
         } catch (SQLException e) {
-            throw new DalException("Failed to initialize ItemLists table", e);
+            throw new DalException("Failed to initialize item_lists table", e);
         }
     }
 
@@ -59,7 +62,18 @@ public class ItemListsDAO extends DAO<ItemList> {
      */
     @Override
     public ItemList select(ItemList object) throws DalException {
-        return null;
+        String query = String.format("SELECT * FROM %s WHERE id = '%s';", TABLE_NAME, object.id());
+        OfflineResultSet resultSet;
+        try {
+            resultSet = cursor.executeRead(query);
+        } catch (SQLException e) {
+            throw new DalException("Failed to select item list", e);
+        }
+        if(resultSet.next()) {
+            return getObjectFromResultSet(resultSet);
+        } else {
+            throw new DalException("No item list with id " + object.id() + " was found");
+        }
     }
 
     /**
@@ -68,7 +82,18 @@ public class ItemListsDAO extends DAO<ItemList> {
      */
     @Override
     public List<ItemList> selectAll() throws DalException {
-        return null;
+        String query = String.format("SELECT * FROM %s;", TABLE_NAME);
+        OfflineResultSet resultSet;
+        try{
+            resultSet = cursor.executeRead(query);
+        } catch(SQLException e){
+            throw new DalException("Failed to select all item lists");
+        }
+        LinkedList<ItemList> itemLists = new LinkedList<>();
+        while(resultSet.next()){
+            itemLists.add(getObjectFromResultSet(resultSet));
+        }
+        return itemLists;
     }
 
     /**
@@ -77,7 +102,8 @@ public class ItemListsDAO extends DAO<ItemList> {
      */
     @Override
     public void insert(ItemList object) throws DalException {
-
+        insertMapToDB(object.id(), "loading", object.load());
+        insertMapToDB(object.id(), "unloading", object.unload());
     }
 
     /**
@@ -100,5 +126,33 @@ public class ItemListsDAO extends DAO<ItemList> {
     @Override
     protected ItemList getObjectFromResultSet(OfflineResultSet resultSet) {
         return null;
+    }
+
+    private void insertMapToDB(int id,String loadingType, Map<String,Integer> map) throws DalException {
+        for(var list : map.entrySet()){
+            String itemName = list.getKey();
+            int amount = list.getValue();
+            String query = String.format("INSERT INTO %s VALUES ('%s', '%s', '%s', '%s');",
+                    TABLE_NAME,
+                    id,
+                    loadingType,
+                    itemName,
+                    amount);
+            try {
+                cursor.executeWrite(query);
+            } catch (SQLException e) {
+                recoverFromError(id);
+                throw new DalException("Failed to insert item list", e);
+            }
+        }
+    }
+
+    private void recoverFromError(int id) throws DalException{
+        String query = String.format("DELETE FROM %s WHERE id = '%s';", TABLE_NAME, id);
+        try {
+            cursor.executeWrite(query);
+        } catch (SQLException e) {
+            throw new DalException("Failed to recover from error", e);
+        }
     }
 }

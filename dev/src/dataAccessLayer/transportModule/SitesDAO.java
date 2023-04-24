@@ -65,7 +65,7 @@ public class SitesDAO extends DAO<Site> {
      */
     @Override
     public Site select(Site object) throws DalException {
-        String query = String.format("SELECT * FROM %s WHERE address = %s", TABLE_NAME, object.address());
+        String query = String.format("SELECT * FROM %s WHERE address = '%s';", TABLE_NAME, object.address());
         OfflineResultSet resultSet;
         try {
             resultSet = cursor.executeRead(query);

@@ -1,9 +1,9 @@
 package dataAccessLayerTests;
 
 
-import DataAccessLayer.employeeModule.EmployeeDAO;
-import DataAccessLayer.employeeModule.ShiftDAO;
-import BusinessLayer.employeeModule.*;
+import dataAccessLayer.employeeModule.EmployeeDAO;
+import dataAccessLayer.employeeModule.ShiftDAO;
+import businessLayer.employeeModule.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

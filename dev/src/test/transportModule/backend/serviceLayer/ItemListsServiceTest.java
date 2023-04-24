@@ -1,7 +1,7 @@
 package transportModule.backend.serviceLayer;
 
-import ServiceLayer.transportModule.ItemListsService;
-import ServiceLayer.transportModule.ModuleFactory;
+import serviceLayer.transportModule.ItemListsService;
+import serviceLayer.transportModule.ModuleFactory;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

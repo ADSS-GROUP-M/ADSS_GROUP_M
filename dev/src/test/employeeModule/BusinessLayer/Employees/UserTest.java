@@ -1,8 +1,8 @@
 package employeeModule.BusinessLayer.Employees;
 
-import BusinessLayer.employeeModule.Authorization;
-import BusinessLayer.employeeModule.User;
-import ServiceLayer.employeeModule.Services.UserService;
+import businessLayer.employeeModule.Authorization;
+import businessLayer.employeeModule.User;
+import serviceLayer.employeeModule.Services.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import utils.Response;

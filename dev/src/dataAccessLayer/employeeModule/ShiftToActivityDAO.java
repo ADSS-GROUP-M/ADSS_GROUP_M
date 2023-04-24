@@ -99,4 +99,9 @@ class ShiftToActivityDAO extends DAO{
         }catch (Exception e){}
         return ans;
     }
+
+    public void deleteAll() {
+        super.deleteAll();
+        cache.clear();
+    }
 }

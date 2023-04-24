@@ -26,14 +26,14 @@ public class OfflineResultSet {
         columnCount = metaData.getColumnCount();
         columnNames = new String[columnCount];
         for(int i = 0; i < columnCount ; i++){
-            columnNames[i] = metaData.getColumnName(i);
+            columnNames[i] = metaData.getColumnName(i+1);
         }
 
         rows = new LinkedList<>();
         while (rs.next()){
             HashMap<String,Object> row = new HashMap<>();
             for(int i = 0; i < columnCount ; i++){
-                row.put(columnNames[i],rs.getObject(i));
+                row.put(columnNames[i],rs.getObject(i+1));
             }
             rows.add(row);
         }

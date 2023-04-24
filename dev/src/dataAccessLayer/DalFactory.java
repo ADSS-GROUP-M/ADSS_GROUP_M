@@ -1,6 +1,7 @@
-package dataAccessLayer.transportModule;
+package dataAccessLayer;
 
 import dataAccessLayer.dalUtils.DalException;
+import dataAccessLayer.transportModule.*;
 
 public class DalFactory {
 

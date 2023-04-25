@@ -22,17 +22,17 @@ public class EmployeeDAO extends DAO<Employee> {
 
     private EmployeeDAO() throws DalException{
         super("employees",
-                primary_keys,
                 types,
-                "id",
-                "name",
-                "bank_details",
-                "hourly_salary_rate",
-                "monthly_hours",
-                "salary_bonus",
-                "employment_date",
-                "employment_conditions",
-                "details"
+                primary_keys,
+                "Id",
+                "Name",
+                "BankDetails",
+                "HourlySalaryRate",
+                "MonthlyHours",
+                "SalaryBonus",
+                "EmploymentDate",
+                "EmploymentConditions",
+                "Details"
         );
         employeeRolesDAO = EmployeeRolesDAO.getInstance();
         cache = new HashMap<>();
@@ -41,17 +41,17 @@ public class EmployeeDAO extends DAO<Employee> {
     private EmployeeDAO(String dbName) throws DalException{
         super(dbName,
                 "employees",
-                primary_keys,
                 types,
-                "id",
-                "name",
-                "bank_details",
-                "hourly_salary_rate",
-                "monthly_hours",
-                "salary_bonus",
-                "employment_date",
-                "employment_conditions",
-                "details"
+                primary_keys,
+                "Id",
+                "Name",
+                "BankDetails",
+                "HourlySalaryRate",
+                "MonthlyHours",
+                "SalaryBonus",
+                "EmploymentDate",
+                "EmploymentConditions",
+                "Details"
         );
         employeeRolesDAO = EmployeeRolesDAO.getInstance();
         cache = new HashMap<>();
@@ -222,11 +222,12 @@ public class EmployeeDAO extends DAO<Employee> {
     }
 
     public void deleteAll() {
-        cache.clear();
         try {
+            employeeRolesDAO.deleteAll();
+            cache.clear();
             cursor.executeWrite("DELETE FROM EMPLOYEE_ROLES");
             cursor.executeWrite("DELETE FROM EMPLOYEES");
-        } catch (SQLException e) {
+        } catch (SQLException | DalException e) {
             throw new RuntimeException(e);
         }
     }

@@ -19,7 +19,17 @@ public abstract class DAO {
     public DAO(String tableName, String[] keyFields){
         this.TABLE_NAME = tableName;
         this.primaryKey = keyFields;
-        cursor = new SQLExecutor("TestingDB.db");
+        cursor = new SQLExecutor("SuperLiDB.db");
+    }
+
+    /**
+     * Can be used for testing in a different database
+     * @param dbName the name of the database to connect to
+     */
+    public DAO(String dbName, String tableName, String[] keyFields){
+        this.TABLE_NAME = tableName;
+        this.primaryKey = keyFields;
+        cursor = new SQLExecutor(dbName);
     }
 
     String formatLocalDate (LocalDate dt){

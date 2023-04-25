@@ -46,8 +46,9 @@ class ShiftToCancelsDAO extends DAO{
                 throw new DalException("Key already exists!");
             List<String> entries = new LinkedList<>();
             for(String str: shift.getShiftCancels()) {
-                String queryString = String.format("INSERT INTO " + TABLE_NAME + "(%s, %s, %s, %s) VALUES(?,?,?,?)",
-                        ShiftToCancelsDAO.Columns.ShiftDate.name(), ShiftToCancelsDAO.Columns.ShiftType.name(), ShiftToCancelsDAO.Columns.Branch.name(), Columns.CancelAction.name());
+                String queryString = String.format("INSERT INTO " + TABLE_NAME + "(%s, %s, %s, %s) VALUES('%s','%s','%s','%s')",
+                        ShiftToCancelsDAO.Columns.ShiftDate.name(), ShiftToCancelsDAO.Columns.ShiftType.name(), ShiftToCancelsDAO.Columns.Branch.name(), Columns.CancelAction.name(),
+                        formatLocalDate(shift.getShiftDate()), shift.getShiftType().name(), branch, str);
                 cursor.executeWrite(queryString);
                 entries.add(str);
             }

@@ -47,8 +47,9 @@ class UserAuthorizationsDAO extends DAO {
                 throw new DalException("Key already exists!");
             Set<Authorization> entries = new HashSet<>();
             for(Authorization auth: user.getAuthorizations()) {
-                String queryString = String.format("INSERT INTO " + TABLE_NAME + "(%s, %s) VALUES(?,?)",
-                        Columns.Username.name(), Columns.Authorization.name());
+                String queryString = String.format("INSERT INTO " + TABLE_NAME + "(%s, %s) VALUES('%s','%s')",
+                        Columns.Username.name(), Columns.Authorization.name(),
+                        user.getUsername(), auth.name());
                 cursor.executeWrite(queryString);
                 entries.add(auth);
             }

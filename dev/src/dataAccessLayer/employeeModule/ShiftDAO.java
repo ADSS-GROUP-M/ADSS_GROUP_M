@@ -41,6 +41,20 @@ public class ShiftDAO extends DAO {
          this.cache = new HashMap<>();
     }
 
+    /**
+     * Can be used for testing in a different database
+     * @param dbName the name of the database to connect to
+     */
+    private ShiftDAO(String dbName) throws DalException {
+        super(dbName,"SHIFTS", new String[]{ShiftDAO.Columns.ShiftDate.name(), ShiftDAO.Columns.ShiftType.name(), Columns.Branch.name()});
+        shiftToNeededRolesDAO = ShiftToNeededRolesDAO.getInstance();
+        shiftToRequestsDAO = ShiftToRequestsDAO.getInstance();
+        shiftToWorkersDAO = ShiftToWorkersDAO.getInstance();
+        shiftToCancelsDAO = ShiftToCancelsDAO.getInstance();
+        shiftToActivityDAO = ShiftToActivityDAO.getInstance();
+        this.cache = new HashMap<>();
+    }
+
     public static ShiftDAO getInstance() throws DalException {
         if (instance == null)
             instance = new ShiftDAO();
@@ -57,8 +71,9 @@ public class ShiftDAO extends DAO {
             this.shiftToWorkersDAO.create(shift, branch);
             this.shiftToCancelsDAO.create(shift, branch);
             this.shiftToActivityDAO.create(shift, branch);
-            String queryString = String.format("INSERT INTO " + TABLE_NAME + "(%s, %s, %s, %s) VALUES(?,?,?,?)",
-                    Columns.ShiftDate.name(), Columns.ShiftType.name(), ShiftDAO.Columns.Branch.name(),Columns.IsApproved.name());
+            String queryString = String.format("INSERT INTO " + TABLE_NAME + "(%s, %s, %s, %s) VALUES('%s','%s','%s','%s')",
+                    Columns.ShiftDate.name(), Columns.ShiftType.name(), ShiftDAO.Columns.Branch.name(),Columns.IsApproved.name(),
+                    formatLocalDate(shift.getShiftDate()), shift.getShiftType().name(), branch, String.valueOf(shift.getIsApproved()));
             cursor.executeWrite(queryString);
             this.cache.put(getHashCode(shift.getShiftDate(),shift.getShiftType(),branch), shift);
         } catch (SQLException e) {

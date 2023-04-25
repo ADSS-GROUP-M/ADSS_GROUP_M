@@ -45,8 +45,9 @@ class ShiftToNeededRolesDAO extends DAO{
                 throw new DalException("Key already exists!");
             HashMap<Role,Integer> entries = new HashMap<>();
             for(Role r: shift.getShiftNeededRoles().keySet()) {
-                    String queryString = String.format("INSERT INTO " + TABLE_NAME + "(%s, %s, %s, %s, %s) VALUES(?,?,?,?,?)",
-                            Columns.ShiftDate.name(), Columns.ShiftType.name(), Columns.Branch.name(),Columns.Role.name(), Columns.Amount.name());
+                    String queryString = String.format("INSERT INTO " + TABLE_NAME + "(%s, %s, %s, %s, %s) VALUES('%s','%s','%s','%s',%d)",
+                            Columns.ShiftDate.name(), Columns.ShiftType.name(), Columns.Branch.name(),Columns.Role.name(), Columns.Amount.name(),
+                            formatLocalDate(shift.getShiftDate()), shift.getShiftType().name(), branch, r.name(), shift.getShiftNeededRoles().get(r));
                     cursor.executeWrite(queryString);
                     entries.put(r,shift.getShiftNeededRoles().get(r));
             }

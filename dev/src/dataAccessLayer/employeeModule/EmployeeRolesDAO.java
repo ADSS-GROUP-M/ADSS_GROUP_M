@@ -46,8 +46,9 @@ class EmployeeRolesDAO extends DAO {
                 throw new DalException("Key already exists!");
             Set<Role> entries = new HashSet<>();
             for(Role str: emp.getRoles()) {
-                String queryString = String.format("INSERT INTO " + TABLE_NAME + "(%s, %s) VALUES(?,?)",
-                        Columns.EmployeeId.name(), Columns.Role.name());
+                String queryString = String.format("INSERT INTO " + TABLE_NAME + "(%s, %s) VALUES('%s','%s')",
+                        Columns.EmployeeId.name(), Columns.Role.name(),
+                        emp.getId(), str.name());
                 cursor.executeWrite(queryString);
                 entries.add(str);
             }
@@ -87,5 +88,10 @@ class EmployeeRolesDAO extends DAO {
             }
         }catch (Exception e){ }
         return ans;
+    }
+
+    public void deleteAll() throws DalException {
+        super.deleteAll();
+        this.cache.clear();
     }
 }

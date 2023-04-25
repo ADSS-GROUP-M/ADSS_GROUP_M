@@ -55,8 +55,9 @@ class ShiftToRequestsDAO extends DAO{
                 List<Employee> list = new LinkedList<>();
                 for(Employee e: shift.getShiftRequests().get(r)) {
 
-                    String queryString = String.format("INSERT INTO " + TABLE_NAME + "(%s, %s, %s, %s, %s) VALUES(?,?,?,?,?)",
-                            ShiftToRequestsDAO.Columns.ShiftDate.name(), ShiftToRequestsDAO.Columns.ShiftType.name(), ShiftToRequestsDAO.Columns.Branch.name(), ShiftToRequestsDAO.Columns.EmployeeId.name(), ShiftToRequestsDAO.Columns.Role.name());
+                    String queryString = String.format("INSERT INTO " + TABLE_NAME + "(%s, %s, %s, %s, %s) VALUES('%s','%s','%s','%s','%s')",
+                            ShiftToRequestsDAO.Columns.ShiftDate.name(), ShiftToRequestsDAO.Columns.ShiftType.name(), ShiftToRequestsDAO.Columns.Branch.name(), ShiftToRequestsDAO.Columns.EmployeeId.name(), ShiftToRequestsDAO.Columns.Role.name(),
+                            formatLocalDate(shift.getShiftDate()), shift.getShiftType().name(), branch, e.getId(), r.name());
                     cursor.executeWrite(queryString);
                     list.add(e);
                 }

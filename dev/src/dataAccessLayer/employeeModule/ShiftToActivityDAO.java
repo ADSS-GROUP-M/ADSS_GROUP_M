@@ -46,8 +46,9 @@ class ShiftToActivityDAO extends DAO{
                 throw new DalException("Key already exists!");
             List<String> entries = new LinkedList<>();
             for(String str: shift.getShiftActivities()) {
-                String queryString = String.format("INSERT INTO " + TABLE_NAME + "(%s, %s, %s, %s) VALUES(?,?,?,?)",
-                        Columns.ShiftDate.name(), Columns.ShiftType.name(), Columns.Branch.name(), Columns.Activity.name());
+                String queryString = String.format("INSERT INTO " + TABLE_NAME + "(%s, %s, %s, %s) VALUES('%s','%s','%s','%s')",
+                        Columns.ShiftDate.name(), Columns.ShiftType.name(), Columns.Branch.name(), Columns.Activity.name(),
+                        formatLocalDate(shift.getShiftDate()), shift.getShiftType().name(), branch, str);
                 cursor.executeWrite(queryString);
                 entries.add(str);
             }

@@ -42,8 +42,9 @@ public class UserDAO extends DAO {
     public void create(User user) throws DalException {
         try {
             this.userAuthorizationsDAO.create(user);
-            String queryString = String.format("INSERT INTO " + TABLE_NAME + "(%s, %s, %s) VALUES(?,?,?)",
-                    Columns.Username.name(), Columns.Password.name(), Columns.LoggedIn.name());
+            String queryString = String.format("INSERT INTO " + TABLE_NAME + "(%s, %s, %s) VALUES('%s','%s','%s')",
+                    Columns.Username.name(), Columns.Password.name(), Columns.LoggedIn.name(),
+                    user.getUsername(), user.getPassword(), String.valueOf(user.isLoggedIn()));
             cursor.executeWrite(queryString);
             this.cache.put(getHashCode(user.getUsername()), user);
         } catch (SQLException e) {

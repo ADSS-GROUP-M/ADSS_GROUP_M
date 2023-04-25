@@ -65,4 +65,8 @@ public class Branch {
     public String address() {
         return address;
     }
+
+    public static Branch getLookupObject(String address) {
+        return new Branch(address);
+    }
 }

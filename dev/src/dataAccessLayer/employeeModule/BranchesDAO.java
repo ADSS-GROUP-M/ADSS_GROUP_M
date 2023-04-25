@@ -49,6 +49,15 @@ public class BranchesDAO extends ManyToManyDAO<Branch> {
     }
 
     /**
+     * @param branchAddress the identifier of the object to select
+     * @return the object with the given identifier
+     * @throws DalException if an error occurred while trying to select the object
+     */
+    public Branch select(String branchAddress) throws DalException {
+        return select(Branch.getLookupObject(branchAddress));
+    }
+
+    /**
      * @param object getLookUpObject(identifier) of the object to select
      * @return the object with the given identifier
      * @throws DalException if an error occurred while trying to select the object
@@ -125,7 +134,9 @@ public class BranchesDAO extends ManyToManyDAO<Branch> {
                 object.getEveningEnd(),
                 object.address());
         try {
-            cursor.executeWrite(query);
+            if (cursor.executeWrite(query) != 1)
+                throw new DalException("No branch with id " + object.address() + " was found");
+            this.cache.put(object);
         } catch (SQLException e) {
             throw new DalException("Failed to update branch", e);
         }
@@ -140,14 +151,24 @@ public class BranchesDAO extends ManyToManyDAO<Branch> {
                 TABLE_NAME,
                 object.address());
         try {
-            cursor.executeWrite(query);
+            if (cursor.executeWrite(query) != 1)
+                throw new DalException("No branch with id " + object.address() + " was found");
         } catch (SQLException e) {
             throw new DalException("Failed to delete branch", e);
         }
     }
 
+    public void deleteAll() {
+        try {
+            cache.clear();
+            cursor.executeWrite("DELETE FROM Branches");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @Override
-    protected Branch getObjectFromResultSet(OfflineResultSet resultSet) {
+    public Branch getObjectFromResultSet(OfflineResultSet resultSet) {
         return new Branch(
                 resultSet.getString("address"),
                 resultSet.getLocalTime("morning_shift_start"),

@@ -83,7 +83,7 @@ public abstract class ManyToManyDAO<T>{
             if (i != PRIMARY_KEYS.length-1) {
                 query.append(",");
             } else {
-                query.append(")\n");
+                query.append("),\n");
             }
         }
 

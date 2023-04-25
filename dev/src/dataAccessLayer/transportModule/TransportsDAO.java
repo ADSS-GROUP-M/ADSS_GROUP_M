@@ -207,6 +207,9 @@ public class TransportsDAO extends ManyToManyDAO<Transport> {
         );
     }
 
+    /**
+     * @deprecated use {@link #getObjectFromResultSet(OfflineResultSet, List)} instead
+     */
     @Deprecated
     protected Transport getObjectFromResultSet(OfflineResultSet resultSet) {
         throw new UnsupportedOperationException("Not implemented");

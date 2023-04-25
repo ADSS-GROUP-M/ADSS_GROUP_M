@@ -1,6 +1,8 @@
 package dataAccessLayer.employeeModule;
 
 //import org.sqlite.SQLiteConnection;
+import dataAccessLayer.dalUtils.DalException;
+
 import java.io.File;
 import java.sql.*;
 import java.time.LocalDate;
@@ -18,7 +20,7 @@ public abstract class DAO {
     protected final String TABLE_NAME;
     private String[] primaryKey;
 
-    public DAO(String tableName, String[] keyFields) throws SQLException{
+    public DAO(String tableName, String[] keyFields){
         this.TABLE_NAME = tableName;
         path = (new File("").getAbsolutePath()).concat("\\SuperLiDB.db");
         connectionString = "jdbc:sqlite:".concat(path);
@@ -33,7 +35,7 @@ public abstract class DAO {
         return dt.format(DateTimeFormatter.ISO_LOCAL_DATE);
     }
 
-    protected String createConditionForPrimaryKey (Object[] idValues) throws Exception{
+    protected String createConditionForPrimaryKey (Object[] idValues) throws DalException{
         String ans = "";
         if(idValues[0] instanceof String)
            ans =  ans.concat(String.format(" %s = '%s' ",this.primaryKey[0],idValues[0]));
@@ -44,7 +46,7 @@ public abstract class DAO {
         else if(idValues[0] instanceof LocalDate)
             ans = ans.concat(String.format(" %s = '%s' ",this.primaryKey[0],formatLocalDate((LocalDate)idValues[0])));
         else
-            throw new Exception("illegal idValues. should be String, Integer or Boolean");
+            throw new DalException("illegal idValues. should be String, Integer or Boolean");
         for(int i =1; i< idValues.length; i++){
             if(idValues[i] instanceof String)
                ans =  ans.concat(String.format(" AND %s = '%s' ",this.primaryKey[i],idValues[i]));
@@ -55,11 +57,11 @@ public abstract class DAO {
             else if(idValues[i] instanceof LocalDate)
                 ans = ans.concat(String.format(" %s = '%s' ",this.primaryKey[i],formatLocalDate((LocalDate)idValues[i])));
             else
-                throw new Exception("illegal idValues. Should be String, Integer or Boolean");
+                throw new DalException("illegal idValues. Should be String, Integer or Boolean");
         }
         return ans;
     }
-    protected Object select(Object[] idValues) throws Exception {
+    protected Object select(Object[] idValues) throws DalException {
         Exception ex = null;
         ResultSet result = null;
         Object ans = null;
@@ -122,7 +124,7 @@ public abstract class DAO {
 
         return ans;
     }
-    protected void update(Object[] idValues, String attributeName, String attributeValue) throws Exception {
+    protected void update(Object[] idValues, String attributeName, String attributeValue) throws DalException {
         Exception ex = null;
         try {
             String queryString = "UPDATE "+TABLE_NAME+" SET "+attributeName+"='?' WHERE";
@@ -151,7 +153,7 @@ public abstract class DAO {
         }
     }
 
-    protected void update(Object[] idValues, String attributeName, Integer attributeValue) throws Exception
+    protected void update(Object[] idValues, String attributeName, Integer attributeValue) throws DalException
     {
         try {
             String queryString = "UPDATE "+TABLE_NAME+" SET "+attributeName+"=? WHERE";
@@ -178,7 +180,7 @@ public abstract class DAO {
             }
         }
     }
-    protected void update(Object[] idValues, String attributeName, boolean attributeValue) throws Exception
+    protected void update(Object[] idValues, String attributeName, boolean attributeValue) throws DalException
     {
         try {
             String queryString = "UPDATE "+TABLE_NAME+" SET "+attributeName+"=? WHERE";

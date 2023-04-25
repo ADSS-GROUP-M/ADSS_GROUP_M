@@ -3,6 +3,7 @@ package dataAccessLayer.employeeModule;
 import businessLayer.employeeModule.Authorization;
 import businessLayer.employeeModule.Employee;
 import businessLayer.employeeModule.User;
+import dataAccessLayer.dalUtils.DalException;
 
 
 import java.sql.ResultSet;
@@ -23,13 +24,13 @@ public class UserDAO extends DAO {
     }
 
     //needed roles HashMap<Role,Integer>, shiftRequests HashMap<Role,List<Employees>>, shiftWorkers Map<Role,List<Employees>>, cancelCardApplies List<String>, shiftActivities List<String>.
-    private UserDAO() throws Exception {
+    private UserDAO() throws DalException {
         super("USERS", new String[]{Columns.Username.name()});
         userAuthorizationsDAO = UserAuthorizationsDAO.getInstance();
         this.cache = new HashMap<>();
     }
 
-    public static UserDAO getInstance() throws Exception {
+    public static UserDAO getInstance() throws DalException {
         if (instance == null)
             instance = new UserDAO();
         return instance;
@@ -38,7 +39,7 @@ public class UserDAO extends DAO {
     private int getHashCode(String username){
         return (username).hashCode();
     }
-    public void create(User user) throws Exception {
+    public void create(User user) throws DalException {
         try {
             this.userAuthorizationsDAO.create(user);
             String queryString = String.format("INSERT INTO " + TABLE_NAME + "(%s, %s, %s) VALUES(?,?,?)",
@@ -59,12 +60,12 @@ public class UserDAO extends DAO {
                 if (connection != null)
                     connection.close();
             } catch (Exception e) {
-                throw  new Exception("Failed closing connection to DB.");
+                throw new DalException("Failed closing connection to DB.");
             }
         }
     }
 
-    public User get(String username) throws Exception {
+    public User get(String username) throws DalException {
         if (this.cache.get(getHashCode(username))!=null)
             return this.cache.get(getHashCode(username));
         User ans = this.select(username);
@@ -72,27 +73,31 @@ public class UserDAO extends DAO {
         return ans;
     }
 
-    public List<User> getAll() throws Exception {
+    public List<User> getAll() throws DalException {
         List<User> list = new LinkedList<>();
-        for(Object o: selectAll()) {
-            if(!(o instanceof Employee))
-                throw new Exception("Something went wrong");
-            User user = ((User)o);
-            if (this.cache.get(getHashCode(user.getUsername())) != null)
-                list.add(this.cache.get(getHashCode(user.getUsername())));
-            else {
-                list.add(user);
-                this.cache.put(getHashCode(user.getUsername()), user);
+        try {
+            for(Object o: selectAll()) {
+                if(!(o instanceof Employee))
+                    throw new DalException("Something went wrong");
+                User user = ((User)o);
+                if (this.cache.get(getHashCode(user.getUsername())) != null)
+                    list.add(this.cache.get(getHashCode(user.getUsername())));
+                else {
+                    list.add(user);
+                    this.cache.put(getHashCode(user.getUsername()), user);
+                }
             }
+        } catch (SQLException e) {
+            throw new DalException(e);
         }
         return list;
     }
 
-    public void update(User user) throws Exception {
+    public void update(User user) throws DalException {
         if(!this.cache.containsValue(user))
-            throw new Exception("Object doesn't exist in the database! Create it first.");
+            throw new DalException("Object doesn't exist in the database! Create it first.");
         if(!this.cache.containsKey(getHashCode(user.getUsername())) || this.cache.get(getHashCode(user.getUsername()))!= user)
-            throw new Exception("Cannot change primary key of an object. You must delete it and then create a new one.");
+            throw new DalException("Cannot change primary key of an object. You must delete it and then create a new one.");
         Exception ex = null;
         try {
             Object[] key = {user.getUsername()};
@@ -131,7 +136,7 @@ public class UserDAO extends DAO {
         super.delete(keys);
     }
 
-    User select(String id) throws Exception {
+    User select(String id) throws DalException {
         Object[] keys = {id};
         return ((User) super.select(keys));
     }

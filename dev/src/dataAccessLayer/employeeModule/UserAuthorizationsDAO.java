@@ -3,6 +3,7 @@ package dataAccessLayer.employeeModule;
 
 import businessLayer.employeeModule.Authorization;
 import businessLayer.employeeModule.*;
+import dataAccessLayer.dalUtils.DalException;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,12 +18,12 @@ class UserAuthorizationsDAO extends DAO {
         Authorization;
     }
 
-    private UserAuthorizationsDAO()throws Exception{
+    private UserAuthorizationsDAO()throws DalException {
         super("USER_AUTHORIZATIONS", new String[]{Columns.Username.name()});
         this.cache = new HashMap<>();
     }
 
-    static UserAuthorizationsDAO getInstance() throws Exception {
+    static UserAuthorizationsDAO getInstance() throws DalException {
         if(instance == null)
             instance = new UserAuthorizationsDAO();
         return instance;
@@ -32,7 +33,7 @@ class UserAuthorizationsDAO extends DAO {
         return (id).hashCode();
     }
 
-    Set<Authorization> getAll(String username) throws Exception {
+    Set<Authorization> getAll(String username) throws DalException {
         if (this.cache.get(getHashCode(username))!=null)
             return this.cache.get(getHashCode(username));
         Set<Authorization> ans = this.select(username);
@@ -40,10 +41,10 @@ class UserAuthorizationsDAO extends DAO {
         return ans;
     }
 
-    void create(User user) throws Exception {
+    void create(User user) throws DalException {
         try {
             if(this.cache.containsKey(getHashCode(user.getUsername())))
-                throw new Exception("Key already exists!");
+                throw new DalException("Key already exists!");
             Set<Authorization> entries = new HashSet<>();
             for(Authorization auth: user.getAuthorizations()) {
                 String queryString = String.format("INSERT INTO " + TABLE_NAME + "(%s, %s) VALUES(?,?)",
@@ -65,14 +66,14 @@ class UserAuthorizationsDAO extends DAO {
                 if (connection != null)
                     connection.close();
             } catch (Exception e) {
-                throw  new Exception("Failed closing connection to DB.");
+                throw new DalException("Failed closing connection to DB.");
             }
         }
     }
 
-    void update(User user) throws Exception {
+    void update(User user) throws DalException {
         if(!this.cache.containsKey(getHashCode(user.getUsername())))
-            throw new Exception("Key doesnt exist! Create it first.");
+            throw new DalException("Key doesnt exist! Create it first.");
         this.delete(user);
         this.create(user);
     }
@@ -83,7 +84,7 @@ class UserAuthorizationsDAO extends DAO {
         super.delete(keys);
     }
 
-    private Set<Authorization> select(String username) throws Exception {
+    private Set<Authorization> select(String username) throws DalException {
         Object[] keys = {username};
         return ((Set<Authorization>) super.select(keys));
     }

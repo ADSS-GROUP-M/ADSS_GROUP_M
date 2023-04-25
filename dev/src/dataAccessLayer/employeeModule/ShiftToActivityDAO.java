@@ -1,6 +1,7 @@
 package dataAccessLayer.employeeModule;
 
 import businessLayer.employeeModule.Shift;
+import dataAccessLayer.dalUtils.DalException;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,11 +19,11 @@ class ShiftToActivityDAO extends DAO{
         Branch,
         Activity;
     }
-    private ShiftToActivityDAO() throws Exception {
+    private ShiftToActivityDAO() throws DalException {
         super("SHIFT_ACTIVITIES", new String[]{Columns.ShiftDate.name(), Columns.ShiftType.name(),Columns.Branch.name()});
         this.cache = new HashMap<>();
     }
-    static ShiftToActivityDAO getInstance() throws Exception {
+    static ShiftToActivityDAO getInstance() throws DalException {
        if(instance == null)
           instance = new ShiftToActivityDAO();
        return instance;
@@ -31,7 +32,7 @@ class ShiftToActivityDAO extends DAO{
         return (formatLocalDate(dt) + st.name() + branch).hashCode();
     }
 
-    List<String> getAll(LocalDate dt, Shift.ShiftType st, String branch) throws Exception {
+    List<String> getAll(LocalDate dt, Shift.ShiftType st, String branch) throws DalException {
         if (this.cache.get(getHashCode(dt,st,branch))!=null)
             return this.cache.get(getHashCode(dt,st,branch));
         List<String> ans = this.select(dt,st.name(),branch);
@@ -39,10 +40,10 @@ class ShiftToActivityDAO extends DAO{
         return ans;
     }
 
-    void create(Shift shift, String branch) throws Exception {
+    void create(Shift shift, String branch) throws DalException {
         try {
             if(this.cache.containsKey(getHashCode(shift.getShiftDate(), shift.getShiftType(), branch)))
-                throw new Exception("Key already exists!");
+                throw new DalException("Key already exists!");
             List<String> entries = new LinkedList<>();
             for(String str: shift.getShiftActivities()) {
                 String queryString = String.format("INSERT INTO " + TABLE_NAME + "(%s, %s, %s, %s) VALUES(?,?,?,?)",
@@ -66,13 +67,13 @@ class ShiftToActivityDAO extends DAO{
                 if (connection != null)
                     connection.close();
             } catch (Exception e) {
-                throw new Exception("Failed closing connection to DB.");
+                throw new DalException("Failed closing connection to DB.");
             }
         }
     }
-    void update(Shift s, String branch) throws Exception {
+    void update(Shift s, String branch) throws DalException {
         if(!this.cache.containsKey(getHashCode(s.getShiftDate(), s.getShiftType(), branch)))
-            throw new Exception("Key doesnt exist! Create it first.");
+            throw new DalException("Key doesnt exist! Create it first.");
         this.delete(s,branch);
         this.create(s,branch);
     }
@@ -83,7 +84,7 @@ class ShiftToActivityDAO extends DAO{
         super.delete(keys);
     }
 
-    List<String> select(LocalDate date, String shiftType, String branch) throws Exception {
+    List<String> select(LocalDate date, String shiftType, String branch) throws DalException {
         Object[] keys = {date,shiftType, branch};
         return ((List<String>) super.select(keys));
     }

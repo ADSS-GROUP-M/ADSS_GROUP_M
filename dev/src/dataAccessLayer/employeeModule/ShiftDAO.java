@@ -4,6 +4,7 @@ import businessLayer.employeeModule.Employee;
 import businessLayer.employeeModule.Role;
 import businessLayer.employeeModule.Shift;
 import businessLayer.employeeModule.Shift.ShiftType;
+import dataAccessLayer.dalUtils.DalException;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -30,7 +31,7 @@ public class ShiftDAO extends DAO {
     }
 
     //needed roles HashMap<Role,Integer>, shiftRequests HashMap<Role,List<Employees>>, shiftWorkers Map<Role,List<Employees>>, cancelCardApplies List<String>, shiftActivities List<String>.
-    private ShiftDAO() throws Exception {
+    private ShiftDAO() throws DalException {
         super("SHIFTS", new String[]{ShiftDAO.Columns.ShiftDate.name(), ShiftDAO.Columns.ShiftType.name(), Columns.Branch.name()});
         shiftToNeededRolesDAO = ShiftToNeededRolesDAO.getInstance();
         shiftToRequestsDAO = ShiftToRequestsDAO.getInstance();
@@ -40,7 +41,7 @@ public class ShiftDAO extends DAO {
          this.cache = new HashMap<>();
     }
 
-    public static ShiftDAO getInstance() throws Exception {
+    public static ShiftDAO getInstance() throws DalException {
         if (instance == null)
             instance = new ShiftDAO();
         return instance;
@@ -49,7 +50,7 @@ public class ShiftDAO extends DAO {
     private int getHashCode(LocalDate dt, ShiftType st, String branch){
         return (formatLocalDate(dt) + st.name() + branch).hashCode();
     }
-    public void create(Shift shift, String branch) throws Exception {
+    public void create(Shift shift, String branch) throws DalException {
         try {
             this.shiftToNeededRolesDAO.create(shift, branch);
             this.shiftToRequestsDAO.create(shift, branch);
@@ -75,12 +76,12 @@ public class ShiftDAO extends DAO {
                 if (connection != null)
                     connection.close();
             } catch (Exception e) {
-                throw  new Exception("Failed closing connection to DB.");
+                throw new DalException("Failed closing connection to DB.");
             }
         }
     }
 
-    public Shift get(LocalDate dt, ShiftType st, String branch) throws Exception {
+    public Shift get(LocalDate dt, ShiftType st, String branch) throws DalException {
         if (this.cache.get(getHashCode(dt,st,branch))!=null)
             return this.cache.get(getHashCode(dt,st,branch));
         Shift ans = this.select(dt,st.name(),branch);
@@ -88,27 +89,31 @@ public class ShiftDAO extends DAO {
         return ans;
     }
 
-    public List<Shift> getAll() throws Exception {
+    public List<Shift> getAll() throws DalException {
         List<Shift> list = new LinkedList<>();
-        for(Object o: selectAll()) {
-            if(!(o instanceof Shift))
-                throw new Exception("Something went wrong");
-            Shift s = ((Shift)o);
-            if (this.cache.get(getHashCode(s.getShiftDate(), s.getShiftType(), s.getBranch())) != null)
-                list.add(this.cache.get(getHashCode(s.getShiftDate(), s.getShiftType(), s.getBranch())));
-            else {
-                list.add(s);
-                this.cache.put(getHashCode(s.getShiftDate(), s.getShiftType(), s.getBranch()), s);
+        try {
+            for(Object o: selectAll()) {
+                if(!(o instanceof Shift))
+                    throw new DalException("Something went wrong");
+                Shift s = ((Shift)o);
+                if (this.cache.get(getHashCode(s.getShiftDate(), s.getShiftType(), s.getBranch())) != null)
+                    list.add(this.cache.get(getHashCode(s.getShiftDate(), s.getShiftType(), s.getBranch())));
+                else {
+                    list.add(s);
+                    this.cache.put(getHashCode(s.getShiftDate(), s.getShiftType(), s.getBranch()), s);
+                }
             }
+        } catch (SQLException e) {
+            throw new DalException(e);
         }
         return list;
     }
 
-    public void update(Shift s, String branch) throws Exception {
+    public void update(Shift s, String branch) throws DalException {
         if(!this.cache.containsValue(s))
-            throw new Exception("Object doesn't exist in the database! Create it first.");
+            throw new DalException("Object doesn't exist in the database! Create it first.");
         if(!this.cache.containsKey(getHashCode(s.getShiftDate(),s.getShiftType(),branch)) || this.cache.get(getHashCode(s.getShiftDate(),s.getShiftType(),branch)) != s)
-            throw new Exception("Cannot change primary key of an object. You must delete it and then create a new one.");
+            throw new DalException("Cannot change primary key of an object. You must delete it and then create a new one.");
         Exception ex = null;
         try {
             Object[] key = {s.getShiftDate(), s.getShiftType().name(), branch};
@@ -152,7 +157,7 @@ public class ShiftDAO extends DAO {
         super.delete(keys);
     }
 
-    Shift select(LocalDate date, String shiftType, String branch) throws Exception {
+    Shift select(LocalDate date, String shiftType, String branch) throws DalException {
         Object[] keys = {date,shiftType, branch};
         return ((Shift) super.select(keys));
     }
@@ -196,17 +201,17 @@ public class ShiftDAO extends DAO {
         super.deleteAll();
     }
 
-     /*void update(String date, String shiftType, String branch, String attributeName, String attributeValue) throws Exception {
+     /*void update(String date, String shiftType, String branch, String attributeName, String attributeValue) throws DalException {
         Object[] keys = {date,shiftType,branch};
         super.update(keys, attributeName, attributeValue);
     }
 
-    void update(String date, String shiftType, String branch, String attributeName, Integer attributeValue) throws Exception {
+    void update(String date, String shiftType, String branch, String attributeName, Integer attributeValue) throws DalException {
         Object[] keys = {date,shiftType,branch};
         super.update(keys, attributeName, attributeValue);
     }
 
-    void update(LocalDate date, String shiftType, String branch, String attributeName, boolean attributeValue) throws Exception {
+    void update(LocalDate date, String shiftType, String branch, String attributeName, boolean attributeValue) throws DalException {
         Object[] keys = {date,shiftType,branch};
         super.update(keys, attributeName, attributeValue);
     }*/

@@ -2,6 +2,7 @@ package dataAccessLayer.employeeModule;
 
 import businessLayer.employeeModule.Employee;
 import businessLayer.employeeModule.Role;
+import dataAccessLayer.dalUtils.DalException;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,12 +17,12 @@ class EmployeeRolesDAO extends DAO {
        Role;
     }
 
-    private EmployeeRolesDAO()throws Exception{
+    private EmployeeRolesDAO()throws DalException {
         super("EMPLOYEE_ROLES", new String[]{Columns.EmployeeId.name()});
         this.cache = new HashMap<>();
     }
 
-    static EmployeeRolesDAO getInstance() throws Exception {
+    static EmployeeRolesDAO getInstance() throws DalException {
         if(instance == null)
             instance = new EmployeeRolesDAO();
         return instance;
@@ -31,7 +32,7 @@ class EmployeeRolesDAO extends DAO {
         return (id).hashCode();
     }
 
-    Set<Role> getAll(String id) throws Exception {
+    Set<Role> getAll(String id) throws DalException {
         if (this.cache.get(getHashCode(id))!=null)
             return this.cache.get(getHashCode(id));
         Set<Role> ans = this.select(id);
@@ -39,10 +40,10 @@ class EmployeeRolesDAO extends DAO {
         return ans;
     }
 
-    void create(Employee emp) throws Exception {
+    void create(Employee emp) throws DalException {
         try {
             if(this.cache.containsKey(getHashCode(emp.getId())))
-                throw new Exception("Key already exists!");
+                throw new DalException("Key already exists!");
             Set<Role> entries = new HashSet<>();
             for(Role str: emp.getRoles()) {
                 String queryString = String.format("INSERT INTO " + TABLE_NAME + "(%s, %s) VALUES(?,?)",
@@ -64,14 +65,14 @@ class EmployeeRolesDAO extends DAO {
                 if (connection != null)
                     connection.close();
             } catch (Exception e) {
-                throw  new Exception("Failed closing connection to DB.");
+                throw new DalException("Failed closing connection to DB.");
             }
         }
     }
 
-    void update(Employee emp) throws Exception {
+    void update(Employee emp) throws DalException {
         if(!this.cache.containsKey(getHashCode(emp.getId())))
-            throw new Exception("Key doesnt exist! Create it first.");
+            throw new DalException("Key doesnt exist! Create it first.");
         this.delete(emp);
         this.create(emp);
     }
@@ -82,7 +83,7 @@ class EmployeeRolesDAO extends DAO {
         super.delete(keys);
     }
 
-    Set<Role> select(String id) throws Exception {
+    Set<Role> select(String id) throws DalException {
         Object[] keys = {id};
         return ((Set<Role>) super.select(keys));
     }

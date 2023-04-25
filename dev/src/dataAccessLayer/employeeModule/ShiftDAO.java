@@ -48,7 +48,7 @@ public class ShiftDAO extends DAO {
     private ShiftDAO(String dbName) throws DalException {
         super(dbName,"SHIFTS", new String[]{ShiftDAO.Columns.ShiftDate.name(), ShiftDAO.Columns.ShiftType.name(), Columns.Branch.name()});
         shiftToNeededRolesDAO = ShiftToNeededRolesDAO.getInstance();
-        shiftToRequestsDAO = ShiftToRequestsDAO.getInstance();
+        shiftToRequestsDAO = ShiftToRequestsDAO.getInstance(); // TODO: update to getTestingInstance(dbName);
         shiftToWorkersDAO = ShiftToWorkersDAO.getInstance();
         shiftToCancelsDAO = ShiftToCancelsDAO.getInstance();
         shiftToActivityDAO = ShiftToActivityDAO.getInstance();

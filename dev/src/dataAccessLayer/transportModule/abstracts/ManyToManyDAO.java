@@ -99,26 +99,6 @@ public abstract class ManyToManyDAO<T>{
             }
         }
 
-//        query.append("CONSTRAINT FK FOREIGN KEY(");
-//        for(int i = 0; i < FOREIGN_KEYS.length ; i++) {
-//            query.append(String.format("'%s'",FOREIGN_KEYS[i]));
-//            if (i != FOREIGN_KEYS.length-1) {
-//                query.append(",");
-//            } else {
-//                query.append(")");
-//            }
-//        }
-//
-//        query.append(String.format(" REFERENCES %s(",PARENT_TABLE_NAME));
-//        for(int i = 0; i < REFERENCES.length ; i++) {
-//            query.append(String.format("'%s'",REFERENCES[i]));
-//            if (i != REFERENCES.length-1) {
-//                query.append(",");
-//            } else {
-//                query.append(")\n");
-//            }
-//        }
-
         query.append(");");
 
         try {
@@ -155,8 +135,7 @@ public abstract class ManyToManyDAO<T>{
 
     /**
      *
-     * @param t_object object with the identifier to delete
-     * @param t_object object with the identifier to delete
+     * @param object object with the identifier to delete
      * @throws DalException if an error occurred while trying to delete the object
      */
     public abstract void delete(T object) throws DalException;

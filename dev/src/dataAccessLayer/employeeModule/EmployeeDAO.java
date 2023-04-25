@@ -5,6 +5,7 @@ import businessLayer.employeeModule.Role;
 import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.dalUtils.OfflineResultSet;
 import dataAccessLayer.transportModule.abstracts.DAO;
+import objects.transportObjects.Truck;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -71,21 +72,20 @@ public class EmployeeDAO extends DAO<Employee> {
         if (cache.containsKey(object.getId())) {
             return cache.get(object.getId());
         }
-        String query = String.format("""
-                SELECT * FROM %s
-                INNER JOIN EMPLOYEE_ROLES ON EMPLOYEE_ROLES.%s = %s.%s
-                WHERE %s = '%s'
-                """,
-                TABLE_NAME, "employee_id",
-                TABLE_NAME, "id",
-                PRIMARY_KEYS[0], object.getId());
+        String query = String.format("SELECT * FROM %s WHERE %s = '%s'", TABLE_NAME, PRIMARY_KEYS[0], object.getId());
         OfflineResultSet resultSet;
         try {
             resultSet = cursor.executeRead(query);
         } catch (SQLException e) {
             throw new DalException("Failed to select Employee from database");
         }
-        Employee ans = getObjectFromResultSet(resultSet);
+
+        Employee ans;
+        if (resultSet.next()) {
+            ans = getObjectFromResultSet(resultSet);
+        } else {
+            throw new DalException("No truck with id " + object.getId() + " was found");
+        }
         cache.put(object.getId(),ans);
         return ans;
     }
@@ -96,13 +96,7 @@ public class EmployeeDAO extends DAO<Employee> {
      */
     @Override
     public List<Employee> selectAll() throws DalException {
-        String query = String.format("""
-                SELECT * FROM %s
-                INNER JOIN EMPLOYEE_ROLES ON EMPLOYEE_ROLES.%s = %s.%s
-                """,
-                TABLE_NAME,
-                "employee_id",
-                TABLE_NAME, "id");
+        String query = "SELECT * FROM " +  TABLE_NAME;
         OfflineResultSet resultSet;
         try {
             resultSet = cursor.executeRead(query);
@@ -125,7 +119,6 @@ public class EmployeeDAO extends DAO<Employee> {
     @Override
     public void insert(Employee object) throws DalException {
         try {
-            this.employeeRolesDAO.create(object);
             String queryString = String.format("""
                 INSERT INTO %s (%s,%s,%s,%s,%s,%s,%s,%s,%s) VALUES ('%s','%s','%s',%f,%f,%f,'%s','%s','%s')
                         """, TABLE_NAME, ALL_COLUMNS[0], ALL_COLUMNS[1], ALL_COLUMNS[2], ALL_COLUMNS[3],
@@ -135,21 +128,14 @@ public class EmployeeDAO extends DAO<Employee> {
                     object.getEmploymentConditions(), object.getDetails());
             cursor.executeWrite(queryString);
             cache.put(object.getId(), object);
+            this.employeeRolesDAO.create(object); // Should insert the dependent values only after creating the employee in the database
         } catch (SQLException e) {
             throw new DalException(e);
         }
     }
 
     public void update(Employee emp) throws DalException {
-        if(!cache.containsValue(emp)) {
-            throw new DalException("Object doesn't exist in the database! Create it first.");
-        }
-        if(!cache.containsKey(emp.getId()) || cache.get(emp.getId())!= emp) {
-            throw new DalException("Cannot change primary key of an object. You must delete it and then create a new one.");
-        }
-        Exception ex = null;
         try {
-            Object[] key = {emp.getId()};
             this.employeeRolesDAO.update(emp);
             String queryString = String.format("""
                                     UPDATE %s
@@ -166,22 +152,37 @@ public class EmployeeDAO extends DAO<Employee> {
                     ALL_COLUMNS[7], emp.getEmploymentConditions(),
                     ALL_COLUMNS[8], emp.getDetails(),
                     PRIMARY_KEYS[0], emp.getId());
-            cursor.executeWrite(queryString);
+            if (cursor.executeWrite(queryString) == 0)
+                throw new DalException("No employee with id " + emp.getId() + " was found");
+            cache.put(emp.getId(),emp);
         } catch(SQLException e) {
             throw new DalException(e);
         }
     }
+
+    /**
+     * @param emp@throws DalException if an error occurred while trying to delete the employee
+     */
+    @Override
     public void delete(Employee emp) throws DalException{
         cache.remove(emp.getId());
         Object[] keys = {emp.getId()};
         this.employeeRolesDAO.delete(emp);
+
+        String query = String.format("DELETE FROM %s WHERE id = '%s';", TABLE_NAME, emp.getId());
+        try {
+            if (cursor.executeWrite(query) == 0)
+                throw new DalException("No employee with id " + emp.getId() + " was found");
+        } catch (SQLException e) {
+            throw new DalException("Failed to delete Employee", e);
+        }
     }
 
     @Override
     protected Employee getObjectFromResultSet(OfflineResultSet resultSet){
         Employee ans = new Employee(
-                resultSet.getString(ALL_COLUMNS[0]),
                 resultSet.getString(ALL_COLUMNS[1]),
+                resultSet.getString(ALL_COLUMNS[0]),
                 resultSet.getString(ALL_COLUMNS[2]),
                 resultSet.getDouble(ALL_COLUMNS[3]),
                 LocalDate.parse(resultSet.getString(ALL_COLUMNS[6])),
@@ -225,7 +226,6 @@ public class EmployeeDAO extends DAO<Employee> {
         try {
             employeeRolesDAO.deleteAll();
             cache.clear();
-            cursor.executeWrite("DELETE FROM EMPLOYEE_ROLES");
             cursor.executeWrite("DELETE FROM EMPLOYEES");
         } catch (SQLException | DalException e) {
             throw new RuntimeException(e);

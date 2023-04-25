@@ -265,6 +265,6 @@ public class Employee {
     //}
 
     public static Employee getLookupObject(String id) {
-        return new Employee(id,null,null,0,null,null,null);
+        return new Employee(null,id,null,0,null,null,null);
     }
 }

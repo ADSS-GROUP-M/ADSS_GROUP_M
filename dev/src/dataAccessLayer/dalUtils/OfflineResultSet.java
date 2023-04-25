@@ -101,6 +101,10 @@ public class OfflineResultSet {
         return LocalTime.parse(getString(columnName), DateTimeFormatter.ISO_LOCAL_TIME);
     }
 
+    public double getDouble(String allColumn) {
+        return (double) currentRowData.get(allColumn);
+    }
+
     public String[] getColumnNames() {
         return columnNames;
     }
@@ -112,5 +116,4 @@ public class OfflineResultSet {
     public int getCurrentRow() {
         return currentRow;
     }
-
 }

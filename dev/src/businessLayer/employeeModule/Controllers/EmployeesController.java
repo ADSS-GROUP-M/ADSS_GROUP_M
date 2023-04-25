@@ -79,7 +79,7 @@ public class EmployeesController {
                 throw new Exception("This employee id already exists in the system.");
         }
         Branch branch = getBranch(branchId);
-        Employee employee = new Employee(fullName, employeeId, hourlyRate, bankDetails, employmentDate, employmentConditions, details);
+        Employee employee = new Employee(fullName, employeeId, bankDetails, hourlyRate, employmentDate, employmentConditions, details);
         this.employees.get(branch).put(employeeId, employee);
         this.certifyEmployee(employee.getId(), Role.GeneralWorker);
     }

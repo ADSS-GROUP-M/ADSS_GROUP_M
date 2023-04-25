@@ -34,24 +34,24 @@ public class Tests {
         s = new Shift(LocalDate.now(), Shift.ShiftType.Evening);
         workers = new HashMap<>();
         List<Employee> generalWorkers = new LinkedList<>();
-        twoEmployee = new Employee("abc","2088",2,"Poalim",LocalDate.now(),"condition","detil");
+        twoEmployee = new Employee("abc","2088", "Poalim", 2, LocalDate.now(),"condition","detil");
         twoEmployee.addRole(Role.GeneralWorker);
         generalWorkers.add(twoEmployee);
-        empDao.create(twoEmployee);
+        empDao.insert(twoEmployee);
         workers.put(Role.GeneralWorker,generalWorkers);
         List<Employee> cashiers = new LinkedList<>();
-        threeEmployee = new Employee("qwerty","1118",2,"Poalim",LocalDate.now(),"condition","detil");
+        threeEmployee = new Employee("qwerty","1118", "Poalim", 2, LocalDate.now(),"condition","detil");
         threeEmployee.addRole(Role.Cashier);
         cashiers.add(threeEmployee);
-        empDao.create(threeEmployee);
+        empDao.insert(threeEmployee);
         workers.put(Role.Cashier,cashiers);
         s.setShiftWorkers(workers);
-        oneEmployee = new Employee("abc","123456",2,"Poalim",LocalDate.now(),"condition","detil");
+        oneEmployee = new Employee("abc","123456", "Poalim", 2, LocalDate.now(),"condition","detil");
         oneEmployee.addRole(Role.GeneralWorker);
-        empDao.create(oneEmployee);
-        fourthEmployee = new Employee("four","1122",32,"Poalim",LocalDate.now(),"conditions","Detedfails");
+        empDao.insert(oneEmployee);
+        fourthEmployee = new Employee("four","1122", "Poalim", 32, LocalDate.now(),"conditions","Detedfails");
         fourthEmployee.addRole(Role.SecurityGuard);
-        empDao.create(fourthEmployee);
+        empDao.insert(fourthEmployee);
         noise = new Shift(LocalDate.of(1893,2,24), Shift.ShiftType.Morning);
         createData(); // To test data persistence, comment this line and run the tests separately after creating the data.
     }

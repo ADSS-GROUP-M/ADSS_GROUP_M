@@ -113,7 +113,7 @@ class ShiftToWorkersDAO extends DAO {
 
             while (reader.next()) {
                 Role r = Role.valueOf(reader.getString(Columns.Role.name()));
-                Employee e = employeeDAO.get(reader.getString(Columns.EmployeeId.name()));
+                Employee e = employeeDAO.select(reader.getString(Columns.EmployeeId.name()));
                 if(r == null || e == null)
                     continue;
                 if (ans.containsKey(r)) {

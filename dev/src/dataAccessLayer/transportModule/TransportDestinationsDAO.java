@@ -12,10 +12,10 @@ import java.util.List;
 public class TransportDestinationsDAO extends ManyToManyDAO<TransportDestination> {
 
     private static final String[] types = {"INTEGER", "INTEGER" , "TEXT", "INTEGER"};
-    public static final String[] parent_tables = {"transports", "sites", "item_lists"};
-    public static final String[] primary_keys = {"transport_id", "index"};
-    public static final String[] references = {"id", "address", "id"};
-    public static final String[] foreign_keys = {"transport_id", "destination_address", "item_list_id"};
+    private static final String[] parent_tables = {"transports", "sites", "item_lists"};
+    private static final String[] primary_keys = {"transport_id", "index"};
+    private static final String[] references = {"id", "address", "id"};
+    private static final String[] foreign_keys = {"transport_id", "destination_address", "item_list_id"};
 
     public TransportDestinationsDAO() throws DalException{
         super("transport_destinations",
@@ -57,11 +57,9 @@ public class TransportDestinationsDAO extends ManyToManyDAO<TransportDestination
      */
     @Override
     public TransportDestination select(TransportDestination object) throws DalException {
-        String query = String.format("SELECT * FROM %s WHERE %s = %s AND %s = %s",
+        String query = String.format("SELECT * FROM %s WHERE transport_id = '%s' AND index = %d",
                 TABLE_NAME,
-                primary_keys[0],
                 object.transportId(),
-                primary_keys[1],
                 object.index()
         );
         OfflineResultSet resultSet;

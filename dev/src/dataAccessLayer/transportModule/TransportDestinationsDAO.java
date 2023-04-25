@@ -57,7 +57,7 @@ public class TransportDestinationsDAO extends ManyToManyDAO<TransportDestination
      */
     @Override
     public TransportDestination select(TransportDestination object) throws DalException {
-        String query = String.format("SELECT * FROM %s WHERE transport_id = '%s' AND index = %d",
+        String query = String.format("SELECT * FROM %s WHERE transport_id = '%s' AND index = %d;",
                 TABLE_NAME,
                 object.transportId(),
                 object.index()
@@ -81,7 +81,7 @@ public class TransportDestinationsDAO extends ManyToManyDAO<TransportDestination
      */
     @Override
     public List<TransportDestination> selectAll() throws DalException {
-        String query = String.format("SELECT * FROM %s", TABLE_NAME);
+        String query = String.format("SELECT * FROM %s;", TABLE_NAME);
         OfflineResultSet resultSet;
         try {
             resultSet = cursor.executeRead(query);
@@ -100,7 +100,7 @@ public class TransportDestinationsDAO extends ManyToManyDAO<TransportDestination
      * @throws DalException if an error occurred while trying to select the objects
      */
     public List<TransportDestination> selectAllRelated(Transport object) throws DalException {
-        String query = String.format("SELECT * FROM %s WHERE transport_id = %s ORDER BY index", TABLE_NAME, object.id());
+        String query = String.format("SELECT * FROM %s WHERE transport_id = %s ORDER BY index;", TABLE_NAME, object.id());
         OfflineResultSet resultSet;
         try {
             resultSet = cursor.executeRead(query);
@@ -120,7 +120,7 @@ public class TransportDestinationsDAO extends ManyToManyDAO<TransportDestination
      */
     @Override
     public void insert(TransportDestination object) throws DalException {
-        String query = String.format("INSERT INTO %s VALUES (%s, %s, %s, %s)",
+        String query = String.format("INSERT INTO %s VALUES (%s, %s, %s, %s);",
                 TABLE_NAME,
                 object.transportId(),
                 object.index(),
@@ -140,7 +140,7 @@ public class TransportDestinationsDAO extends ManyToManyDAO<TransportDestination
      */
     @Override
     public void update(TransportDestination object) throws DalException {
-        String query = String.format("UPDATE %s SET destination_address = '%s', item_list_id = %d WHERE transport_id = %d AND index = %d",
+        String query = String.format("UPDATE %s SET destination_address = '%s', item_list_id = %d WHERE transport_id = %d AND index = %d;",
                 TABLE_NAME,
                 object.address(),
                 object.itemListId(),
@@ -159,7 +159,7 @@ public class TransportDestinationsDAO extends ManyToManyDAO<TransportDestination
      */
     @Override
     public void delete(TransportDestination object) throws DalException {
-        String query = String.format("DELETE FROM %s WHERE transport_id = %d AND index = %d",
+        String query = String.format("DELETE FROM %s WHERE transport_id = %d AND index = %d;",
                 TABLE_NAME,
                 object.transportId(),
                 object.index()

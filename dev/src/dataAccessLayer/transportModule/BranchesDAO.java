@@ -55,7 +55,7 @@ public class BranchesDAO extends ManyToManyDAO<Branch> {
      */
     @Override
     public Branch select(Branch object) throws DalException {
-        String query = String.format("SELECT * FROM %s WHERE address = '%s'",
+        String query = String.format("SELECT * FROM %s WHERE address = '%s';",
                 TABLE_NAME,
                 object.address());
         OfflineResultSet resultSet;
@@ -77,7 +77,7 @@ public class BranchesDAO extends ManyToManyDAO<Branch> {
      */
     @Override
     public List<Branch> selectAll() throws DalException {
-        String query = String.format("SELECT * FROM %s", TABLE_NAME);
+        String query = String.format("SELECT * FROM %s;", TABLE_NAME);
         OfflineResultSet resultSet;
         try {
             resultSet = cursor.executeRead(query);
@@ -97,7 +97,7 @@ public class BranchesDAO extends ManyToManyDAO<Branch> {
      */
     @Override
     public void insert(Branch object) throws DalException {
-        String query = String.format("INSERT INTO %s VALUES ('%s', '%s', '%s', '%s', '%s')",
+        String query = String.format("INSERT INTO %s VALUES ('%s', '%s', '%s', '%s', '%s');",
                 TABLE_NAME,
                 object.address(),
                 object.getMorningStart(),
@@ -117,7 +117,7 @@ public class BranchesDAO extends ManyToManyDAO<Branch> {
      */
     @Override
     public void update(Branch object) throws DalException {
-        String query = String.format("UPDATE %s SET morning_shift_start = '%s', morning_shift_end = '%s', evening_shift_start = '%s', evening_shift_end = '%s' WHERE address = '%s'",
+        String query = String.format("UPDATE %s SET morning_shift_start = '%s', morning_shift_end = '%s', evening_shift_start = '%s', evening_shift_end = '%s' WHERE address = '%s';",
                 TABLE_NAME,
                 object.getMorningStart(),
                 object.getMorningEnd(),
@@ -136,7 +136,7 @@ public class BranchesDAO extends ManyToManyDAO<Branch> {
      */
     @Override
     public void delete(Branch object) throws DalException {
-        String query = String.format("DELETE FROM %s WHERE address = '%s'",
+        String query = String.format("DELETE FROM %s WHERE address = '%s';",
                 TABLE_NAME,
                 object.address());
         try {

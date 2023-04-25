@@ -138,10 +138,10 @@ public class SitesDAO extends DAO<Site> {
     @Override
     protected Site getObjectFromResultSet(OfflineResultSet resultSet) {
         return new Site(
-                resultSet.getString("address"),
                 resultSet.getString("transport_zone"),
-                resultSet.getString("contact_name"),
+                resultSet.getString("address"),
                 resultSet.getString("contact_phone"),
+                resultSet.getString("contact_name"),
                 Site.SiteType.valueOf(resultSet.getString("site_type")));
     }
 }

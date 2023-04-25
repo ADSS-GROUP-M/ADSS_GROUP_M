@@ -1,21 +1,38 @@
 package dataAccessLayer;
 
 import dataAccessLayer.dalUtils.DalException;
+import dataAccessLayer.employeeModule.EmployeeDAO;
+import dataAccessLayer.employeeModule.ShiftDAO;
+import dataAccessLayer.employeeModule.UserDAO;
 import dataAccessLayer.transportModule.*;
 
 public class DalFactory {
 
+    private final EmployeeDAO employeeDAO;
+    private final UserDAO userDAO;
+    private final ShiftDAO shiftDAO;
     private final TrucksDAO trucksDAO;
-    private final DriversDAO driversDAO;
-    private final ItemListsItemsDAO itemListsItemsDAO;
+    private final ItemListsDAO itemListsDAO;
     private final SitesDAO sitesDAO;
     private final BranchesDAO branchesDAO;
+    private final DriversDAO driversDAO;
+    private final TransportsDAO transportsDAO;
+
+
     public DalFactory() throws DalException {
+        try {
+            employeeDAO = EmployeeDAO.getInstance();
+            userDAO = UserDAO.getInstance();
+            shiftDAO = ShiftDAO.getInstance();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         trucksDAO = new TrucksDAO();
         driversDAO = new DriversDAO();
-        itemListsItemsDAO = new ItemListsItemsDAO();
+        itemListsDAO = new ItemListsDAO();
         sitesDAO = new SitesDAO();
         branchesDAO = new BranchesDAO();
+        transportsDAO = new TransportsDAO();
     }
 
     /**
@@ -23,11 +40,30 @@ public class DalFactory {
      * @param dbName the name of the database to connect to
      */
     public DalFactory(String dbName) throws DalException {
+        try {
+            employeeDAO = EmployeeDAO.getInstance();
+            userDAO = UserDAO.getInstance();
+            shiftDAO = ShiftDAO.getInstance();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         trucksDAO = new TrucksDAO(dbName);
         driversDAO = new DriversDAO(dbName);
-        itemListsItemsDAO = new ItemListsItemsDAO(dbName);
+        itemListsDAO = new ItemListsDAO(dbName);
         sitesDAO = new SitesDAO(dbName);
         branchesDAO = new BranchesDAO(dbName);
+        transportsDAO = new TransportsDAO(dbName);
+    }
+    public EmployeeDAO employeeDAO() {
+        return employeeDAO;
+    }
+
+    public UserDAO userDAO() {
+        return userDAO;
+    }
+
+    public ShiftDAO shiftDAO() {
+        return shiftDAO;
     }
 
     public TrucksDAO trucksDAO() {
@@ -38,8 +74,8 @@ public class DalFactory {
         return driversDAO;
     }
 
-    public ItemListsItemsDAO itemListsDAO() {
-        return itemListsItemsDAO;
+    public ItemListsDAO itemListsDAO() {
+        return itemListsDAO;
     }
 
     public SitesDAO sitesDAO() {
@@ -48,5 +84,9 @@ public class DalFactory {
 
     public BranchesDAO branchesDAO() {
         return branchesDAO;
+    }
+
+    public TransportsDAO transportsDAO() {
+        return transportsDAO;
     }
 }

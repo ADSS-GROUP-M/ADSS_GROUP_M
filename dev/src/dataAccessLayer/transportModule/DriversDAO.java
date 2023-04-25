@@ -68,7 +68,7 @@ public class DriversDAO extends ManyToManyDAO<Driver> {
     public List<Driver> selectAll() throws DalException {
         String query = String.format("""
                     SELECT id,name,license_type FROM %s
-                    INNER JOIN %s ON %s.id = %s.id
+                    INNER JOIN %s ON %s.id = %s.id;
                         """, TABLE_NAME, PARENT_TABLE_NAME[0], TABLE_NAME, PARENT_TABLE_NAME[0]);
         OfflineResultSet resultSet;
         try {

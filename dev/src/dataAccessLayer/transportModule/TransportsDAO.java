@@ -67,7 +67,7 @@ public class TransportsDAO extends ManyToManyDAO<Transport> {
     @Override
     public Transport select(Transport object) throws DalException {
         List<TransportDestination> transportDestinations = transportDestinationsDAO.selectAllRelated(object);
-        String query = String.format("SELECT * FROM %s WHERE id = %d",
+        String query = String.format("SELECT * FROM %s WHERE id = %d;",
                 TABLE_NAME,
                 object.id()
         );
@@ -90,7 +90,7 @@ public class TransportsDAO extends ManyToManyDAO<Transport> {
      */
     @Override
     public List<Transport> selectAll() throws DalException {
-        String query = String.format("SELECT * FROM %s", TABLE_NAME);
+        String query = String.format("SELECT * FROM %s;", TABLE_NAME);
         List<Transport> transports = new LinkedList<>();
         OfflineResultSet resultSet;
         try {
@@ -113,7 +113,7 @@ public class TransportsDAO extends ManyToManyDAO<Transport> {
      */
     @Override
     public void insert(Transport object) throws DalException {
-        String query = String.format("INSERT INTO %s VALUES (%d, '%s', '%s', '%s', '%s', %d)",
+        String query = String.format("INSERT INTO %s VALUES (%d, '%s', '%s', '%s', '%s', %d);",
                 TABLE_NAME,
                 object.id(),
                 object.source(),
@@ -144,7 +144,7 @@ public class TransportsDAO extends ManyToManyDAO<Transport> {
      */
     @Override
     public void update(Transport object) throws DalException {
-        String query = String.format("UPDATE %s SET source_address = '%s', driver_id = '%s', truck_id = '%s', departure_time = '%s', weight = %d WHERE id = %d",
+        String query = String.format("UPDATE %s SET source_address = '%s', driver_id = '%s', truck_id = '%s', departure_time = '%s', weight = %d WHERE id = %d;",
                 TABLE_NAME,
                 object.source(),
                 object.driverId(),
@@ -175,7 +175,7 @@ public class TransportsDAO extends ManyToManyDAO<Transport> {
      */
     @Override
     public void delete(Transport object) throws DalException {
-        String query = String.format("DELETE FROM %s WHERE id = %d",
+        String query = String.format("DELETE FROM %s WHERE id = %d;",
                 TABLE_NAME,
                 object.id()
         );

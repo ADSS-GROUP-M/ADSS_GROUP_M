@@ -119,7 +119,7 @@ public class TransportsManagement {
                             newTransport.itemLists(),
                             truckId,
                             driverID,
-                            newTransport.scheduledTime(),
+                            newTransport.departureTime(),
                             newTransport.weight()
                     );
                     Response response2 = createTransportHelperMethod(newTransport);
@@ -139,7 +139,7 @@ public class TransportsManagement {
                             itemsList,
                             newTransport.truckId(),
                             newTransport.driverId(),
-                            newTransport.scheduledTime(),
+                            newTransport.departureTime(),
                             weight
                     );
                     Response response2 = createTransportHelperMethod(newTransport);
@@ -179,7 +179,7 @@ public class TransportsManagement {
             switch (option) {
                 case 1 -> {
                     LocalDate departureDate = LocalDate.parse(transportAppData.readLine("Departure date (format: yyyy-mm-dd): "));
-                    LocalDateTime departureDateTime = LocalDateTime.of(departureDate, transport.scheduledTime().toLocalTime());
+                    LocalDateTime departureDateTime = LocalDateTime.of(departureDate, transport.departureTime().toLocalTime());
                     updateTransportHelperMethod(
                             transport.id(),
                             transport.source(),
@@ -193,7 +193,7 @@ public class TransportsManagement {
                 }
                 case 2 -> {
                     LocalTime departureTime = LocalTime.parse(transportAppData.readLine("Departure time (format: hh:mm): "));
-                    LocalDateTime departureDateTime = LocalDateTime.of(transport.scheduledTime().toLocalDate(), departureTime);
+                    LocalDateTime departureDateTime = LocalDateTime.of(transport.departureTime().toLocalDate(), departureTime);
                     updateTransportHelperMethod(
                             transport.id(),
                             transport.source(),
@@ -215,7 +215,7 @@ public class TransportsManagement {
                             transport.itemLists(),
                             transport.truckId(),
                             driverID,
-                            transport.scheduledTime(),
+                            transport.departureTime(),
                             transport.weight()
                     );
                 }
@@ -229,7 +229,7 @@ public class TransportsManagement {
                             transport.itemLists(),
                             truckId,
                             transport.driverId(),
-                            transport.scheduledTime(),
+                            transport.departureTime(),
                             transport.weight()
                     );
                 }
@@ -243,7 +243,7 @@ public class TransportsManagement {
                             transport.itemLists(),
                             transport.truckId(),
                             transport.driverId(),
-                            transport.scheduledTime(),
+                            transport.departureTime(),
                             transport.weight()
                     );
                 }
@@ -259,7 +259,7 @@ public class TransportsManagement {
                             itemsList,
                             transport.truckId(),
                             transport.driverId(),
-                            transport.scheduledTime(),
+                            transport.departureTime(),
                             transport.weight()
                     );
                 }
@@ -272,7 +272,7 @@ public class TransportsManagement {
                             transport.itemLists(),
                             transport.truckId(),
                             transport.driverId(),
-                            transport.scheduledTime(),
+                            transport.departureTime(),
                             truckWeight
                     );
                 }
@@ -338,8 +338,8 @@ public class TransportsManagement {
 
     private void printTransportDetails(Transport transport) {
         System.out.println("Transport id: "+ transport.id());
-        System.out.println("Date:         "+ transport.scheduledTime().toLocalDate());
-        System.out.println("Time:         "+ transport.scheduledTime().toLocalTime());
+        System.out.println("Date:         "+ transport.departureTime().toLocalDate());
+        System.out.println("Time:         "+ transport.departureTime().toLocalTime());
         System.out.println("DriverId:     "+ transport.driverId());
         System.out.println("TruckId:      "+ transport.truckId());
         System.out.println("Weight:       "+ transport.weight());

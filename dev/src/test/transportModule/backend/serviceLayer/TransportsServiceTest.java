@@ -123,7 +123,7 @@ class TransportsServiceTest {
         assertEquals(newTransport.itemLists(), updatedTransport.itemLists());
         assertEquals(newTransport.truckId(), updatedTransport.truckId());
         assertEquals(newTransport.driverId(), updatedTransport.driverId());
-        assertEquals(newTransport.scheduledTime(), updatedTransport.scheduledTime());
+        assertEquals(newTransport.departureTime(), updatedTransport.departureTime());
         assertEquals(newTransport.weight(), updatedTransport.weight());
     }
 
@@ -187,7 +187,7 @@ class TransportsServiceTest {
         assertEquals(newTransport.itemLists(), updatedTransport.itemLists());
         assertEquals(newTransport.truckId(), updatedTransport.truckId());
         assertEquals(newTransport.driverId(), updatedTransport.driverId());
-        assertEquals(newTransport.scheduledTime(), updatedTransport.scheduledTime());
+        assertEquals(newTransport.departureTime(), updatedTransport.departureTime());
         assertEquals(newTransport.weight(), updatedTransport.weight());
     }
 
@@ -227,7 +227,7 @@ class TransportsServiceTest {
         assertEquals(transport.itemLists(), TransportReceived.itemLists());
         assertEquals(transport.truckId(), TransportReceived.truckId());
         assertEquals(transport.driverId(), TransportReceived.driverId());
-        assertEquals(transport.scheduledTime(), TransportReceived.scheduledTime());
+        assertEquals(transport.departureTime(), TransportReceived.departureTime());
         assertEquals(transport.weight(), TransportReceived.weight());
     }
 

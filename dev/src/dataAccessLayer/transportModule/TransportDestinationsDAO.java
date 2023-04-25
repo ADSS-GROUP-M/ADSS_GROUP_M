@@ -3,6 +3,7 @@ package dataAccessLayer.transportModule;
 import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.dalUtils.OfflineResultSet;
 import dataAccessLayer.transportModule.abstracts.ManyToManyDAO;
+import objects.transportObjects.Transport;
 
 import java.sql.SQLException;
 import java.util.LinkedList;
@@ -97,6 +98,25 @@ public class TransportDestinationsDAO extends ManyToManyDAO<TransportDestination
     }
 
     /**
+     * @return All the objects that are related to the given object
+     * @throws DalException if an error occurred while trying to select the objects
+     */
+    public List<TransportDestination> selectAllRelated(Transport object) throws DalException {
+        String query = String.format("SELECT * FROM %s WHERE transport_id = %s ORDER BY index", TABLE_NAME, object.id());
+        OfflineResultSet resultSet;
+        try {
+            resultSet = cursor.executeRead(query);
+        } catch (SQLException e) {
+            throw new DalException("Failed to select related transport destinations", e);
+        }
+        List<TransportDestination> transportDestinations = new LinkedList<>();
+        while(resultSet.next()) {
+            transportDestinations.add(getObjectFromResultSet(resultSet));
+        }
+        return transportDestinations;
+    }
+
+    /**
      * @param object - the object to insert
      * @throws DalException if an error occurred while trying to insert the object
      */
@@ -150,6 +170,12 @@ public class TransportDestinationsDAO extends ManyToManyDAO<TransportDestination
             cursor.executeWrite(query);
         } catch (SQLException e) {
             throw new DalException("Failed to delete transport destination", e);
+        }
+    }
+
+    public void deleteAllRelated(Transport object) throws DalException{
+        for (TransportDestination destination : selectAllRelated(object)) {
+                delete(destination);
         }
     }
 

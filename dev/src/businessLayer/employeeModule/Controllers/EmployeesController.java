@@ -153,8 +153,9 @@ public class EmployeesController {
         Branch branch = getBranch(branchAddress); // finds a branch by its address / branchId.
         Shift morningShift = shiftsController.getShift(branch.address(), date, ShiftType.Morning);
         Shift eveningShift = shiftsController.getShift(branch.address(), date, ShiftType.Morning);
-        if (!morningShift.isStorekeeperWorking() && !eveningShift.isStorekeeperWorking())
+        if (!morningShift.isStorekeeperWorking() || !eveningShift.isStorekeeperWorking()) {
             throw new Exception("There is no available storekeeper at the given date in this branch.");
+        }
     }
 
     //public void fireEmployee(String empId) throws Exception {

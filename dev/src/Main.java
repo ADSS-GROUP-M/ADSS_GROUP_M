@@ -1,4 +1,4 @@
-import PresentationLayer.employeeModule.View.MenuManager;
+import presentationLayer.employeeModule.View.MenuManager;
 
 public class Main {
     public static void main(String[] args) {

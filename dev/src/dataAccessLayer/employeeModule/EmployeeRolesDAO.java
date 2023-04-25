@@ -22,9 +22,20 @@ class EmployeeRolesDAO extends DAO {
         this.cache = new HashMap<>();
     }
 
+    private EmployeeRolesDAO(String dbName) throws DalException {
+        super(dbName,"EMPLOYEE_ROLES", new String[]{Columns.EmployeeId.name()});
+        this.cache = new HashMap<>();
+    }
+
     static EmployeeRolesDAO getInstance() throws DalException {
         if(instance == null)
             instance = new EmployeeRolesDAO();
+        return instance;
+    }
+
+    static EmployeeRolesDAO getTestingInstance(String dbName) throws DalException {
+        if(instance == null)
+            instance = new EmployeeRolesDAO(dbName);
         return instance;
     }
 
@@ -49,7 +60,9 @@ class EmployeeRolesDAO extends DAO {
                 String queryString = String.format("INSERT INTO " + TABLE_NAME + "(%s, %s) VALUES('%s','%s')",
                         Columns.EmployeeId.name(), Columns.Role.name(),
                         emp.getId(), str.name());
-                cursor.executeWrite(queryString);
+                if(cursor.executeWrite(queryString) != 1){
+                    throw new RuntimeException("Unexpected error while inserting role");
+                }
                 entries.add(str);
             }
             this.cache.put(getHashCode(emp.getId()),entries );

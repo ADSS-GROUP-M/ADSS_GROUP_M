@@ -26,7 +26,7 @@ public class OfflineResultSet {
         columnCount = metaData.getColumnCount();
         columnNames = new String[columnCount];
         for(int i = 0; i < columnCount ; i++){
-            columnNames[i] = metaData.getColumnName(i+1);
+            columnNames[i] = metaData.getColumnName(i+1).toLowerCase();
         }
 
         rows = new LinkedList<>();
@@ -74,35 +74,35 @@ public class OfflineResultSet {
     }
 
     public Object getObject(String columnName) {
-        return currentRowData.get(columnName);
+        return currentRowData.get(columnName.toLowerCase());
     }
 
     public String getString(String columnName) {
-        return (String) currentRowData.get(columnName);
+        return (String) currentRowData.get(columnName.toLowerCase());
     }
 
     public int getInt(String columnName) {
-        return (int) currentRowData.get(columnName);
+        return (int) currentRowData.get(columnName.toLowerCase());
     }
 
     public boolean getBoolean(String columnName) {
-        return (Boolean) currentRowData.get(columnName);
+        return (Boolean) currentRowData.get(columnName.toLowerCase());
     }
 
     public LocalDateTime getLocalDateTime(String columnName) {
-        return LocalDateTime.parse(getString(columnName), DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+        return LocalDateTime.parse(getString(columnName.toLowerCase()), DateTimeFormatter.ISO_LOCAL_DATE_TIME);
     }
 
     public LocalDate getLocalDate(String columnName) {
-        return LocalDate.parse(getString(columnName), DateTimeFormatter.ISO_LOCAL_DATE);
+        return LocalDate.parse(getString(columnName.toLowerCase()), DateTimeFormatter.ISO_LOCAL_DATE);
     }
 
     public LocalTime getLocalTime(String columnName) {
-        return LocalTime.parse(getString(columnName), DateTimeFormatter.ISO_LOCAL_TIME);
+        return LocalTime.parse(getString(columnName.toLowerCase()), DateTimeFormatter.ISO_LOCAL_TIME);
     }
 
-    public double getDouble(String allColumn) {
-        return (double) currentRowData.get(allColumn);
+    public double getDouble(String columnName) {
+        return (double) currentRowData.get(columnName.toLowerCase());
     }
 
     public String[] getColumnNames() {

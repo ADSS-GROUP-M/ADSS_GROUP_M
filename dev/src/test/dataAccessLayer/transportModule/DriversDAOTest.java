@@ -1,6 +1,7 @@
 package dataAccessLayer.transportModule;
 
 import businessLayer.employeeModule.Employee;
+import businessLayer.employeeModule.Role;
 import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.dalUtils.OfflineResultSet;
 import dataAccessLayer.dalUtils.SQLExecutor;
@@ -28,6 +29,8 @@ class DriversDAOTest {
     @BeforeEach
     void setUp() {
         employee = new Employee("name1","12345","Poalim",50, LocalDate.of(1999,10,10),"conditions","details");
+        employee.addRole(Role.Driver);
+        employee.addRole(Role.GeneralWorker);
         driver = new Driver(employee.getId(),employee.getName(), Driver.LicenseType.C3);
         try {
             empDao = EmployeeDAO.getTestingInstance("TestingDB.db");
@@ -42,7 +45,6 @@ class DriversDAOTest {
     @AfterEach
     void tearDown() {
         try {
-            empDao.deleteAll();
             dao.selectAll().forEach(driver ->{
                 try {
                     dao.delete(driver);
@@ -50,6 +52,7 @@ class DriversDAOTest {
                     fail(e);
                 }
             });
+            empDao.deleteAll();
         } catch (DalException e) {
             fail(e);
         }
@@ -70,6 +73,7 @@ class DriversDAOTest {
 
         //set up
         LinkedList<Driver> drivers = new LinkedList<>();
+        drivers.add(driver);
         List.of(2,3,4,5,6).forEach(i ->{
             try {
                 empDao.insert(new Employee("name"+i,i+"2345","Poalim",50, LocalDate.of(1999,10,10),"conditions","details"));
@@ -131,13 +135,13 @@ class DriversDAOTest {
 
     @Test
     void getObjectFromResultSet() {
-        String TABLE_NAME = "drivers";
+        String TABLE_NAME = "truck_drivers";
         String[] PARENT_TABLE_NAME = {"employees"};
         String query = String.format("""
-                    SELECT id,name,license_type FROM %s
+                    SELECT %s.id, %s.name,license_type FROM %s
                     INNER JOIN %s ON %s.id = %s.id
                     WHERE %s.id = '%s';
-                        """, TABLE_NAME, PARENT_TABLE_NAME[0], TABLE_NAME, PARENT_TABLE_NAME[0], TABLE_NAME, driver.id());
+                        """, TABLE_NAME, PARENT_TABLE_NAME[0] ,TABLE_NAME, PARENT_TABLE_NAME[0], TABLE_NAME, PARENT_TABLE_NAME[0], TABLE_NAME, driver.id());
 
         SQLExecutor executor = new SQLExecutor("TestingDB.db");
         try {

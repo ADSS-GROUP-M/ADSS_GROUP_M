@@ -54,7 +54,7 @@ public class EmployeeDAO extends DAO<Employee> {
                 "EmploymentConditions",
                 "Details"
         );
-        employeeRolesDAO = EmployeeRolesDAO.getInstance();
+        employeeRolesDAO = EmployeeRolesDAO.getTestingInstance(dbName);
         cache = new HashMap<>();
     }
 

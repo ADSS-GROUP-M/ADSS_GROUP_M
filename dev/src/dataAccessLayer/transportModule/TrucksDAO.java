@@ -43,6 +43,11 @@ public class TrucksDAO extends DAO<Truck> {
      */
     @Override
     public Truck select(Truck object) throws DalException {
+
+        if(cache.contains(object)) {
+            return cache.get(object);
+        }
+
         String query = String.format("SELECT * FROM %s WHERE id = '%s';", TABLE_NAME, object.id());
         OfflineResultSet resultSet;
         try {
@@ -51,7 +56,9 @@ public class TrucksDAO extends DAO<Truck> {
             throw new DalException("Failed to select Truck", e);
         }
         if (resultSet.next()) {
-            return getObjectFromResultSet(resultSet);
+            Truck selected = getObjectFromResultSet(resultSet);
+            cache.put(selected);
+            return selected;
         } else {
             throw new DalException("No truck with id " + object.id() + " was found");
         }
@@ -74,6 +81,7 @@ public class TrucksDAO extends DAO<Truck> {
         while (resultSet.next()) {
             trucks.add(getObjectFromResultSet(resultSet));
         }
+        cache.putAll(trucks);
         return trucks;
     }
 
@@ -91,7 +99,11 @@ public class TrucksDAO extends DAO<Truck> {
                 object.maxWeight(),
                 object.coolingCapacity().toString());
         try {
-            cursor.executeWrite(query);
+            if(cursor.executeWrite(query) == 1){
+                cache.put(object);
+            } else {
+                throw new RuntimeException("Unexpected error while trying to insert Truck");
+            }
         } catch (SQLException e) {
             throw new DalException("Failed to insert Truck", e);
         }
@@ -111,7 +123,11 @@ public class TrucksDAO extends DAO<Truck> {
                 object.coolingCapacity().toString(),
                 object.id());
         try {
-            cursor.executeWrite(query);
+            if(cursor.executeWrite(query) == 1){
+                cache.put(object);
+            } else {
+                throw new DalException("No truck with id " + object.id() + " was found");
+            }
         } catch (SQLException e) {
             throw new DalException("Failed to update Truck", e);
         }
@@ -124,7 +140,11 @@ public class TrucksDAO extends DAO<Truck> {
     public void delete(Truck object) throws DalException {
         String query = String.format("DELETE FROM %s WHERE id = '%s';", TABLE_NAME, object.id());
         try {
-            cursor.executeWrite(query);
+            if(cursor.executeWrite(query) == 1){
+                cache.remove(object);
+            } else {
+                throw new DalException("No truck with id " + object.id() + " was found");
+            }
         } catch (SQLException e) {
             throw new DalException("Failed to delete Truck", e);
         }

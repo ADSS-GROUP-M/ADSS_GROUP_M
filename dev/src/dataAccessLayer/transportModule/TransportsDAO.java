@@ -66,6 +66,11 @@ public class TransportsDAO extends ManyToManyDAO<Transport> {
      */
     @Override
     public Transport select(Transport object) throws DalException {
+
+        if(cache.contains(object)) {
+            return cache.get(object);
+        }
+
         List<TransportDestination> transportDestinations = transportDestinationsDAO.selectAllRelated(object);
         String query = String.format("SELECT * FROM %s WHERE id = %d;",
                 TABLE_NAME,
@@ -78,7 +83,9 @@ public class TransportsDAO extends ManyToManyDAO<Transport> {
             throw new RuntimeException(e);
         }
         if (resultSet.next()){
-            return getObjectFromResultSet(resultSet, transportDestinations);
+            Transport selected = getObjectFromResultSet(resultSet, transportDestinations);
+            cache.put(selected);
+            return selected;
         } else {
             throw new DalException("No transport with id " + object.id() + " was found");
         }
@@ -104,6 +111,7 @@ public class TransportsDAO extends ManyToManyDAO<Transport> {
                     resultSet,
                     transportDestinationsDAO.selectAllRelated(lookupObject)));
         }
+        cache.putAll(transports);
         return transports;
     }
 
@@ -123,18 +131,15 @@ public class TransportsDAO extends ManyToManyDAO<Transport> {
                 object.weight()
         );
         try {
-            cursor.executeWrite(query);
+            if(cursor.executeWrite(query) == 1){
+                LinkedList<TransportDestination> transportDestinations = generateTransportDestinations(object);
+                transportDestinationsDAO.insertAll(transportDestinations);
+                cache.put(object);
+            } else {
+                throw new RuntimeException("Unexpected error while inserting transport");
+            }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        int i = 1;
-        for(String destination : object.destinations()){
-            transportDestinationsDAO.insert(new TransportDestination(
-                    object.id(),
-                    i++,
-                    destination,
-                    object.itemLists().get(destination)
-            ));
+            throw new DalException("Failed to insert transport");
         }
     }
 
@@ -154,19 +159,16 @@ public class TransportsDAO extends ManyToManyDAO<Transport> {
                 object.id()
         );
         try {
-            cursor.executeWrite(query);
+            if(cursor.executeWrite(query) == 1){
+                transportDestinationsDAO.deleteAllRelated(object);
+                LinkedList<TransportDestination> transportDestinations = generateTransportDestinations(object);
+                transportDestinationsDAO.insertAll(transportDestinations);
+                cache.put(object);
+            } else {
+                throw new DalException("No transport with id " + object.id() + " was found");
+            }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        transportDestinationsDAO.deleteAllRelated(object);
-        int i = 1;
-        for(String destination : object.destinations()){
-            transportDestinationsDAO.insert(new TransportDestination(
-                    object.id(),
-                    i++,
-                    destination,
-                    object.itemLists().get(destination)
-            ));
+            throw new DalException("Failed to update transport");
         }
     }
 
@@ -180,11 +182,15 @@ public class TransportsDAO extends ManyToManyDAO<Transport> {
                 object.id()
         );
         try {
-            cursor.executeWrite(query);
+            if(cursor.executeWrite(query) == 1){
+                transportDestinationsDAO.deleteAllRelated(object);
+                cache.remove(object);
+            } else {
+                throw new DalException("No transport with id " + object.id() + " was found");
+            }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DalException("Failed to delete transport");
         }
-        transportDestinationsDAO.deleteAllRelated(object);
     }
 
     protected Transport getObjectFromResultSet(OfflineResultSet resultSet, List<TransportDestination> transportDestinations){
@@ -205,6 +211,20 @@ public class TransportsDAO extends ManyToManyDAO<Transport> {
                 resultSet.getLocalDateTime("departure_time"),
                 resultSet.getInt("weight")
         );
+    }
+
+    private LinkedList<TransportDestination> generateTransportDestinations(Transport object) {
+        LinkedList<TransportDestination> transportDestinations = new LinkedList<>();
+        int i = 1;
+        for(String destination : object.destinations()){
+            transportDestinations.add(new TransportDestination(
+                    object.id(),
+                    i++,
+                    destination,
+                    object.itemLists().get(destination)
+            ));
+        }
+        return transportDestinations;
     }
 
     /**

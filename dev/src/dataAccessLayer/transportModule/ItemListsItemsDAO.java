@@ -81,7 +81,7 @@ public class ItemListsItemsDAO extends ManyToManyDAO<ItemList> {
     public List<ItemList> selectAll() throws DalException {
         OfflineResultSet resultSet;
 
-        String idsQuery = String.format("SELECT id FROM %s;", PARENT_TABLE_NAME);
+        String idsQuery = String.format("SELECT id FROM %s;", PARENT_TABLE_NAME[0]);
         try{
             resultSet = cursor.executeRead(idsQuery);
         } catch(SQLException e){
@@ -112,11 +112,17 @@ public class ItemListsItemsDAO extends ManyToManyDAO<ItemList> {
      */
     @Override
     public void insert(ItemList object) throws DalException {
+
+        StringBuilder query = new StringBuilder();
+
+        query.append(insertMapToDBQuery(object.id(), LoadingType.loading, object.load()));
+        query.append(insertMapToDBQuery(object.id(), LoadingType.unloading, object.unload()));
+
         try {
-            insertMapToDB(object.id(), LoadingType.loading, object.load());
-            insertMapToDB(object.id(), LoadingType.unloading, object.unload());
+            if(cursor.executeWrite(query.toString()) != query.toString().split("\n").length){
+                throw new RuntimeException("Unexpected error while inserting item list");
+            }
         } catch (SQLException e) {
-            recoverFromInsertError(object.id());
             throw new DalException("Failed to insert item list", e);
         }
     }
@@ -128,11 +134,16 @@ public class ItemListsItemsDAO extends ManyToManyDAO<ItemList> {
     @Override
     public void update(ItemList object) throws DalException {
         ItemList oldObject = select(object);
+
+        StringBuilder query = new StringBuilder();
+        query.append(updateFromMapsQuery(object.id(), oldObject.unload(), object.unload(), LoadingType.unloading));
+        query.append(updateFromMapsQuery(object.id(), oldObject.load(), object.load(), LoadingType.loading));
+
         try {
-            updateFromMaps(object.id(), oldObject.load(), object.load(), LoadingType.loading);
-            updateFromMaps(object.id(), oldObject.unload(), object.unload(), LoadingType.unloading);
+            if(cursor.executeWrite(query.toString()) == 0){
+                throw new DalException("No item list with id " + object.id() + " was found");
+            }
         } catch (SQLException e) {
-            recoverFromUpdateError(object);
             throw new DalException("Failed to update item list", e);
         }
     }
@@ -144,7 +155,9 @@ public class ItemListsItemsDAO extends ManyToManyDAO<ItemList> {
     public void delete(ItemList object) throws DalException {
         String query = String.format("DELETE FROM %s WHERE id = '%s';", TABLE_NAME, object.id());
         try {
-            cursor.executeWrite(query);
+            if(cursor.executeWrite(query) == 0){
+                throw new DalException("No item list with id " + object.id() + " was found");
+            }
         } catch (SQLException e) {
             throw new DalException("Failed to delete item list", e);
         }
@@ -171,21 +184,24 @@ public class ItemListsItemsDAO extends ManyToManyDAO<ItemList> {
     //============================ Helper Methods ==================================== |
     //================================================================================ |
 
-    private void insertMapToDB(int id, LoadingType loadingType, Map<String,Integer> map) throws SQLException {
+    private String insertMapToDBQuery(int id, LoadingType loadingType, Map<String,Integer> map) {
+        StringBuilder query = new StringBuilder();
+        
         for(var item : map.entrySet()){
             String itemName = item.getKey();
             int amount = item.getValue();
-            String query = String.format("INSERT INTO %s VALUES ('%s', '%s', '%s', %d);",
+            query.append(String.format("INSERT INTO %s VALUES ('%s', '%s', '%s', %d);\n",
                     TABLE_NAME,
                     id,
                     loadingType,
                     itemName,
-                    amount);
-            cursor.executeWrite(query);
+                    amount));
         }
+
+        return query.toString();
     }
 
-    private void updateFromMaps(int id, Map<String,Integer> oldMap,Map<String,Integer> newMap, LoadingType loadingType) throws SQLException {
+    private String updateFromMapsQuery(int id, Map<String,Integer> oldMap, Map<String,Integer> newMap, LoadingType loadingType){
 
         List<String> itemsToRemove = oldMap.keySet().stream()
                 .filter(itemName -> newMap.containsKey(itemName) == false)
@@ -198,47 +214,33 @@ public class ItemListsItemsDAO extends ManyToManyDAO<ItemList> {
                 .filter(itemName -> oldMap.containsKey(itemName) == false)
                 .toList();
 
+        StringBuilder query = new StringBuilder();
         for(String itemName: itemsToRemove){
-            String removeQuery = String.format("DELETE FROM %s WHERE id = '%s' AND loading_type = '%s' AND item_name = '%s';",
+            query.append(String.format("DELETE FROM %s WHERE id = '%s' AND loading_type = '%s' AND item_name = '%s';\n",
                     TABLE_NAME,
                     id,
                     loadingType,
-                    itemName);
-            cursor.executeWrite(removeQuery);
+                    itemName));
         }
 
         for(String itemName: itemsToUpdate) {
-            String updateQuery = String.format("UPDATE %s SET amount = %d WHERE id = '%s' AND loading_type = '%s' AND item_name = '%s';",
+            query.append(String.format("UPDATE %s SET amount = %d WHERE id = '%s' AND loading_type = '%s' AND item_name = '%s';\n",
                     TABLE_NAME,
                     newMap.get(itemName),
                     id,
                     loadingType,
-                    itemName);
-            cursor.executeWrite(updateQuery);
+                    itemName));
         }
 
         for(String itemName: itemsToAdd){
-            String addQuery = String.format("INSERT INTO %s VALUES ('%s', '%s', '%s', %d);",
+            query.append(String.format("INSERT INTO %s VALUES ('%s', '%s', '%s', %d);\n",
                     TABLE_NAME,
                     id,
                     loadingType,
                     itemName,
-                    newMap.get(itemName));
-            cursor.executeWrite(addQuery);
+                    newMap.get(itemName)));
         }
-    }
 
-    private void recoverFromInsertError(int id) throws DalException{
-        String query = String.format("DELETE FROM %s WHERE id = '%s';", TABLE_NAME, id);
-        try {
-            cursor.executeWrite(query);
-        } catch (SQLException e) {
-            throw new DalException("Failed to recover from error", e);
-        }
-    }
-
-    private void recoverFromUpdateError(ItemList object) throws DalException {
-        recoverFromInsertError(object.id());
-        insert(object);
+        return query.toString();
     }
 }

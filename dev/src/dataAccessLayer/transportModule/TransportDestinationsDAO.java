@@ -116,7 +116,8 @@ public class TransportDestinationsDAO extends ManyToManyDAO<TransportDestination
 
     /**
      * @param object - the object to insert
-     * @throws DalException if an error occurred while trying to insert the object
+     * @throws RuntimeException if an error occurred while trying to insert the object
+     * @deprecated use insertAll instead
      */
     @Override
     public void insert(TransportDestination object) throws DalException {
@@ -128,7 +129,32 @@ public class TransportDestinationsDAO extends ManyToManyDAO<TransportDestination
                 object.itemListId()
         );
         try {
-            cursor.executeWrite(query);
+            if(cursor.executeWrite(query) != 1){
+                throw new RuntimeException("Unexpected error while trying to insert transport destination");
+            }
+        } catch (SQLException e) {
+            throw new DalException("Failed to insert transport destination", e);
+        }
+    }
+
+    /**
+     * @param objects - the objects to insert
+     * @throws DalException if an error occurred while trying to insert the object
+     */
+    public void insertAll(List<TransportDestination> objects) throws DalException {
+        StringBuilder query = new StringBuilder();
+        for(TransportDestination object : objects) {
+            query.append(String.format("INSERT INTO %s VALUES (%s, %s, %s, %s);\n",
+                    TABLE_NAME,
+                    object.transportId(),
+                    object.index(),
+                    object.address(),
+                    object.itemListId()));
+        }
+        try {
+            if(cursor.executeWrite(query.toString()) != objects.size()){
+                throw new RuntimeException("Unexpected error while trying to insert transport destination");
+            }
         } catch (SQLException e) {
             throw new DalException("Failed to insert transport destination", e);
         }
@@ -148,7 +174,9 @@ public class TransportDestinationsDAO extends ManyToManyDAO<TransportDestination
                 object.index()
         );
         try {
-            cursor.executeWrite(query);
+            if(cursor.executeWrite(query) != 1) {
+                throw new DalException("Failed to update transport destination");
+            }
         } catch (SQLException e) {
             throw new DalException("Failed to update transport destination", e);
         }
@@ -165,15 +193,25 @@ public class TransportDestinationsDAO extends ManyToManyDAO<TransportDestination
                 object.index()
         );
         try {
-            cursor.executeWrite(query);
+            if(cursor.executeWrite(query) != 1){
+                throw new DalException("No transport destination with transport id "
+                        + object.transportId() + " and index " + object.index() + " was found");
+            }
         } catch (SQLException e) {
             throw new DalException("Failed to delete transport destination", e);
         }
     }
 
     public void deleteAllRelated(Transport object) throws DalException{
-        for (TransportDestination destination : selectAllRelated(object)) {
-                delete(destination);
+
+        String query = String.format("DELETE FROM %s WHERE transport_id = %d;", TABLE_NAME, object.id());
+        try {
+            if(cursor.executeWrite(query) == 0){
+                throw new DalException("No transport destination with transport id "
+                        + object.id() + " was found");
+            }
+        } catch (SQLException e) {
+            throw new DalException("Failed to delete transport destination", e);
         }
     }
 

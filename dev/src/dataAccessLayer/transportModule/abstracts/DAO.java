@@ -1,5 +1,6 @@
 package dataAccessLayer.transportModule.abstracts;
 
+import dataAccessLayer.dalUtils.Cache;
 import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.dalUtils.OfflineResultSet;
 import dataAccessLayer.dalUtils.SQLExecutor;
@@ -16,12 +17,15 @@ public abstract class DAO<T> {
     protected final String[] PRIMARY_KEYS;
     protected final String[] TYPES;
 
+    protected final Cache<T> cache;
+
     protected DAO(String tableName,String[] types, String[] primaryKeys, String ... allColumns) throws DalException {
         this.cursor = new SQLExecutor();
         this.TABLE_NAME = tableName;
         this.PRIMARY_KEYS = primaryKeys;
         this.ALL_COLUMNS = allColumns;
         this.TYPES = types;
+        this.cache = new Cache<>();
         initTable();
     }
 
@@ -35,6 +39,7 @@ public abstract class DAO<T> {
         this.PRIMARY_KEYS = primaryKeys;
         this.ALL_COLUMNS = allColumns;
         this.TYPES = types;
+        this.cache = new Cache<>();
         initTable();
     }
 

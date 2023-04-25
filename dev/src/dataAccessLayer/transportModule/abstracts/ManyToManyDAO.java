@@ -1,8 +1,6 @@
 package dataAccessLayer.transportModule.abstracts;
 
-import dataAccessLayer.dalUtils.DalException;
-import dataAccessLayer.dalUtils.OfflineResultSet;
-import dataAccessLayer.dalUtils.SQLExecutor;
+import dataAccessLayer.dalUtils.*;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -22,6 +20,8 @@ public abstract class ManyToManyDAO<T>{
 
     protected final String[] REFERENCES;
 
+    protected final Cache<T> cache;
+
     protected ManyToManyDAO(String tableName,
                             String[] parentTableName,
                             String[] types,
@@ -37,6 +37,7 @@ public abstract class ManyToManyDAO<T>{
         FOREIGN_KEYS = foreignKeys;
         REFERENCES = references;
         ALL_COLUMNS = allColumns;
+        cache = new Cache<>();
         initTable();
     }
 
@@ -60,6 +61,7 @@ public abstract class ManyToManyDAO<T>{
         FOREIGN_KEYS = foreignKeys;
         REFERENCES = references;
         ALL_COLUMNS = allColumns;
+        cache = new Cache<>();
         initTable();
     }
 

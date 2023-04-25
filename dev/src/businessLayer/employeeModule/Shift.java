@@ -240,6 +240,11 @@ public class Shift {
         //}
         return null;
     }
+
+    public boolean isStorekeeperWorking() {
+        return shiftWorkers.containsKey(Role.Storekeeper) && !shiftWorkers.get(Role.Storekeeper).isEmpty();
+    }
+
     public void setShiftDate(LocalDate shiftDate) {
         this.shiftDate = shiftDate;
     }

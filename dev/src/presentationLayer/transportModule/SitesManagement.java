@@ -7,10 +7,10 @@ import utils.Response;
 
 public class SitesManagement {
 
-    private final TransportAppData transportAppData;
+    private final UiData transportAppData;
     private final ResourceManagementService rms;
 
-    public SitesManagement(TransportAppData transportAppData, ResourceManagementService rms) {
+    public SitesManagement(UiData transportAppData, ResourceManagementService rms) {
         this.transportAppData = transportAppData;
         this.rms = rms;
     }

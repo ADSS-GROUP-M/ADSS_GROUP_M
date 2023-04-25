@@ -39,24 +39,24 @@ public abstract class DAO {
     protected String createConditionForPrimaryKey (Object[] idValues) throws DalException{
         String ans = "";
         if(idValues[0] instanceof String)
-           ans =  ans.concat(String.format(" %s = '%s' ",this.primaryKey[0],idValues[0]));
+           ans =  ans.concat(String.format(" %s = '%s' NOT NULL",this.primaryKey[0],idValues[0]));
         else if(idValues[0] instanceof Integer)
-           ans =  ans.concat(String.format(" %s = %d ",this.primaryKey[0],idValues[0]));
+           ans =  ans.concat(String.format(" %s = %d NOT NULL",this.primaryKey[0],idValues[0]));
         else if(idValues[0] instanceof Boolean)
-            ans = ans.concat(String.format(" %s = '%s' ",this.primaryKey[0],String.valueOf((boolean)idValues[0])));
+            ans = ans.concat(String.format(" %s = '%s' NOT NULL",this.primaryKey[0],String.valueOf((boolean)idValues[0])));
         else if(idValues[0] instanceof LocalDate)
-            ans = ans.concat(String.format(" %s = '%s' ",this.primaryKey[0],formatLocalDate((LocalDate)idValues[0])));
+            ans = ans.concat(String.format(" %s = '%s' NOT NULL",this.primaryKey[0],formatLocalDate((LocalDate)idValues[0])));
         else
             throw new DalException("illegal idValues. should be String, Integer or Boolean");
         for(int i =1; i< idValues.length; i++){
             if(idValues[i] instanceof String)
-               ans =  ans.concat(String.format(" AND %s = '%s' ",this.primaryKey[i],idValues[i]));
+               ans =  ans.concat(String.format(" AND %s = '%s' NOT NULL",this.primaryKey[i],idValues[i]));
             else if(idValues[i] instanceof Integer)
-                ans = ans.concat(String.format(" AND %s = %d ",this.primaryKey[i],idValues[i]));
+                ans = ans.concat(String.format(" AND %s = %d NOT NULL",this.primaryKey[i],idValues[i]));
             else if(idValues[i] instanceof Boolean)
-                ans = ans.concat(String.format(" AND %s = '%s' ",this.primaryKey[i],String.valueOf((boolean)idValues[i])));
+                ans = ans.concat(String.format(" AND %s = '%s' NOT NULL",this.primaryKey[i],String.valueOf((boolean)idValues[i])));
             else if(idValues[i] instanceof LocalDate)
-                ans = ans.concat(String.format(" %s = '%s' ",this.primaryKey[i],formatLocalDate((LocalDate)idValues[i])));
+                ans = ans.concat(String.format(" %s = '%s' NOT NULL",this.primaryKey[i],formatLocalDate((LocalDate)idValues[i])));
             else
                 throw new DalException("illegal idValues. Should be String, Integer or Boolean");
         }

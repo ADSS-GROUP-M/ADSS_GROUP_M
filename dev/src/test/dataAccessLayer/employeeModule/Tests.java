@@ -1,4 +1,4 @@
-package dataAccessLayerTests;
+package dataAccessLayer.employeeModule;
 
 
 import dataAccessLayer.employeeModule.EmployeeDAO;

@@ -1,6 +1,7 @@
 package dataAccessLayer;
 
 import dataAccessLayer.dalUtils.DalException;
+import dataAccessLayer.employeeModule.BranchesDAO;
 import dataAccessLayer.employeeModule.EmployeeDAO;
 import dataAccessLayer.employeeModule.ShiftDAO;
 import dataAccessLayer.employeeModule.UserDAO;

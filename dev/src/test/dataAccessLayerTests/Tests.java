@@ -29,7 +29,7 @@ public class Tests {
 
     @BeforeEach
     public void setUp() throws Exception { // cleans empDAO, creates 3 employees in DB, sets up 2 of them as workers shift
-        empDao = EmployeeDAO.getInstance();
+        empDao = EmployeeDAO.getTestingInstance("TestingDB.db");
         empDao.deleteAll();
         s = new Shift(LocalDate.now(), Shift.ShiftType.Evening);
         workers = new HashMap<>();

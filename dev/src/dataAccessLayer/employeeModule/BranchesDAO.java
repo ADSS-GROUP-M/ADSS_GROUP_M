@@ -1,4 +1,4 @@
-package dataAccessLayer.transportModule;
+package dataAccessLayer.employeeModule;
 
 import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.dalUtils.OfflineResultSet;

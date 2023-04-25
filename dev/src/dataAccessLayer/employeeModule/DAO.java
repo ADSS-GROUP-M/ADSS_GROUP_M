@@ -19,7 +19,7 @@ public abstract class DAO {
     public DAO(String tableName, String[] keyFields){
         this.TABLE_NAME = tableName;
         this.primaryKey = keyFields;
-        cursor = new SQLExecutor();
+        cursor = new SQLExecutor("TestingDB.db");
     }
 
     String formatLocalDate (LocalDate dt){

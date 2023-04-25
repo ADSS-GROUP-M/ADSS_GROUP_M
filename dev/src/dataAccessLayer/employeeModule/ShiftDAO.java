@@ -59,8 +59,15 @@ public class ShiftDAO extends DAO {
         if (instance == null)
             instance = new ShiftDAO();
         return instance;
-
     }
+
+    public static ShiftDAO getTestingInstance(String dbName) throws DalException{
+        if (instance == null) {
+            instance = new ShiftDAO(dbName);
+        }
+        return instance;
+    }
+
     private int getHashCode(LocalDate dt, ShiftType st, String branch){
         return (formatLocalDate(dt) + st.name() + branch).hashCode();
     }

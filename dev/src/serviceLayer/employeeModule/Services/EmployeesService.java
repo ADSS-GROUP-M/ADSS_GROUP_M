@@ -1,5 +1,7 @@
 package serviceLayer.employeeModule.Services;
 
+
+import utils.JsonUtils;
 import businessLayer.employeeModule.Authorization;
 import businessLayer.employeeModule.Employee;
 import businessLayer.employeeModule.Role;
@@ -13,9 +15,11 @@ import serviceLayer.employeeModule.Objects.SShiftType;
 import businessLayer.employeeModule.Shift.ShiftType;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class EmployeesService {
     private static EmployeesService instance;
@@ -27,6 +31,41 @@ public class EmployeesService {
         userService = UserService.getInstance();
         employeesController = EmployeesController.getInstance();
         shiftsController = ShiftsController.getInstance();
+    }
+
+    /**
+     * This method returns a list containing the ids of the drivers in the shift that occurs at the specified date and time.
+     * @param atDateTime The needed date and time
+     * @return A serialized response containing a list with all the ids of the available drivers, if any exists.
+     * Otherwise, if no drivers are available at the specified date and time, returns a matching error response.
+     */
+    //TODO: Test this method
+    public String getAvailableDrivers(String atDateTime) {
+        LocalDateTime dateTime = JsonUtils.deserialize(atDateTime,LocalDateTime.class);
+        try {
+            List<Employee> availableDrivers = employeesController.getAvailableDrivers(dateTime);
+            return new Response(true, availableDrivers.stream().map(x->x.getId()).collect(Collectors.toList())).toJson();
+        } catch (Exception e) {
+            return Response.getErrorResponse(e).toJson();
+        }
+    }
+
+    /**
+     * This method checks if there is a storekeeper at the specified date and branch. (DateTime?)
+     * @param dateToCheck The needed date
+     * @param branchAddress The needed branch address
+     * @return A success response if there is an available storekeeper.
+     * Otherwise, returns a matching error response.
+     */
+    //TODO: Test this method
+    public String checkStoreKeeperAvailability(String dateToCheck, String branchAddress) {
+        LocalDate date = JsonUtils.deserialize(dateToCheck,LocalDateTime.class);
+        try {
+            employeesController.checkStoreKeeperAvailability(date, branchAddress);
+            return new Response(true).toJson();
+        } catch (Exception e) {
+            return Response.getErrorResponse(e).toJson();
+        }
     }
 
     public static EmployeesService getInstance() {

@@ -46,7 +46,13 @@ public class DriversDAO extends ManyToManyDAO<Driver> {
      */
     @Override
     public Driver select(Driver object) throws DalException {
-        String query = String.format("SELECT * FROM %s WHERE id = '%s';", TABLE_NAME, object.id());
+        String query = String.format("""
+                    SELECT %s.id,%s.name,license_type FROM %s
+                    INNER JOIN %s ON %s.id = %s.id
+                    WHERE %s.id = '%s';
+                        """,
+            TABLE_NAME,PARENT_TABLE_NAME[0], TABLE_NAME, PARENT_TABLE_NAME[0], TABLE_NAME,
+                PARENT_TABLE_NAME[0], TABLE_NAME, object.id());
         OfflineResultSet resultSet;
         try {
             resultSet = cursor.executeRead(query);
@@ -67,9 +73,10 @@ public class DriversDAO extends ManyToManyDAO<Driver> {
     @Override
     public List<Driver> selectAll() throws DalException {
         String query = String.format("""
-                    SELECT id,name,license_type FROM %s
+                    SELECT %s.id,%s.name,license_type FROM %s
                     INNER JOIN %s ON %s.id = %s.id;
-                        """, TABLE_NAME, PARENT_TABLE_NAME[0], TABLE_NAME, PARENT_TABLE_NAME[0]);
+                        """,
+            TABLE_NAME,PARENT_TABLE_NAME[0], TABLE_NAME, PARENT_TABLE_NAME[0], TABLE_NAME, PARENT_TABLE_NAME[0]);
         OfflineResultSet resultSet;
         try {
             resultSet = cursor.executeRead(query);

@@ -114,7 +114,8 @@ public class Employee {
   //    }
   //}
 
-    public Employee(String name, String id, String bankDetails, double hourlySalaryRate, LocalDate employmentDate, String employmentConditions, String details){
+
+    public Employee(String name, String id,String bankDetails, double hourlySalaryRate, LocalDate employmentDate, String employmentConditions, String details){
        this.name = name;
        this.id = id;
        this.bankDetails = bankDetails;

@@ -1,12 +1,15 @@
 package businessLayer.employeeModule.Controllers;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
 
 import businessLayer.employeeModule.Branch;
 import businessLayer.employeeModule.Employee;
 import businessLayer.employeeModule.Role;
+import businessLayer.employeeModule.Shift;
+import businessLayer.employeeModule.Shift.ShiftType;
 
 public class EmployeesController {
     private Map<String, Branch> branches; //BranchID to branch
@@ -67,7 +70,7 @@ public class EmployeesController {
     public void createBranch(String branchId) throws Exception {
         if (this.branches.containsKey(branchId))
             throw new Exception("The branch " + branchId + " already exists in the system.");
-        Branch branch = new Branch();
+        Branch branch = new Branch(branchId);
         this.branches.put(branchId, branch);
         this.employees.put(branch, new HashMap<>());
         shiftsController.createBranch(branchId);
@@ -79,7 +82,8 @@ public class EmployeesController {
                 throw new Exception("This employee id already exists in the system.");
         }
         Branch branch = getBranch(branchId);
-        Employee employee = new Employee(fullName, employeeId, bankDetails, hourlyRate, employmentDate, employmentConditions, details);
+
+        Employee employee = new Employee(fullName, employeeId,bankDetails,hourlyRate, employmentDate, employmentConditions, details);
         this.employees.get(branch).put(employeeId, employee);
         this.certifyEmployee(employee.getId(), Role.GeneralWorker);
     }
@@ -127,6 +131,30 @@ public class EmployeesController {
 
     public void updateBranchWorkingHours(String branchId, LocalTime morningStart, LocalTime morningEnd, LocalTime eveningStart, LocalTime eveningEnd){
         this.branches.get(branchId).setWorkingHours(morningStart, morningEnd, eveningStart, eveningEnd);
+    }
+
+    public List<Employee> getAvailableDrivers(LocalDateTime dateTime) throws Exception {
+        List<Employee> availableDrivers = new ArrayList<>();
+        for (String branchId : branches.keySet()) {
+            try {
+                ShiftType shiftType = this.branches.get(branchId).getShiftType(dateTime.toLocalTime()); // Could throw an exception if the given time is not in any shift
+                Map<Role, List<Employee>> shiftWorkers = shiftsController.getShift(branchId, dateTime.toLocalDate(), shiftType).getShiftWorkers();
+                if (shiftWorkers.containsKey(Role.Driver))
+                    availableDrivers.addAll(shiftWorkers.get(Role.Driver));
+            } catch (Exception ignore) {}
+        }
+        if (availableDrivers.isEmpty())
+            throw new Exception("Could not find any available driver at the specified dateTime.");
+        return availableDrivers;
+    }
+
+    public void checkStoreKeeperAvailability(LocalDate date, String branchAddress) throws Exception {
+        // TODO: (Could be updated if the id doesn't correspond to its address)
+        Branch branch = getBranch(branchAddress); // finds a branch by its address / branchId.
+        Shift morningShift = shiftsController.getShift(branch.address(), date, ShiftType.Morning);
+        Shift eveningShift = shiftsController.getShift(branch.address(), date, ShiftType.Morning);
+        if (!morningShift.isStorekeeperWorking() && !eveningShift.isStorekeeperWorking())
+            throw new Exception("There is no available storekeeper at the given date in this branch.");
     }
 
     //public void fireEmployee(String empId) throws Exception {

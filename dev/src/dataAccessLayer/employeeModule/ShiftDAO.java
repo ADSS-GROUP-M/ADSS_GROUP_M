@@ -5,8 +5,8 @@ import businessLayer.employeeModule.Role;
 import businessLayer.employeeModule.Shift;
 import businessLayer.employeeModule.Shift.ShiftType;
 import dataAccessLayer.dalUtils.DalException;
+import dataAccessLayer.dalUtils.OfflineResultSet;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -59,26 +59,11 @@ public class ShiftDAO extends DAO {
             this.shiftToActivityDAO.create(shift, branch);
             String queryString = String.format("INSERT INTO " + TABLE_NAME + "(%s, %s, %s, %s) VALUES(?,?,?,?)",
                     Columns.ShiftDate.name(), Columns.ShiftType.name(), ShiftDAO.Columns.Branch.name(),Columns.IsApproved.name());
-            connection = getConnection();
-            ptmt = connection.prepareStatement(queryString);
-            ptmt.setString(1, formatLocalDate(shift.getShiftDate()));
-            ptmt.setString(2, shift.getShiftType().name());
-            ptmt.setString(3, branch);
-            ptmt.setString(4, String.valueOf(shift.getIsApproved()));
-            ptmt.executeUpdate();
+            cursor.executeWrite(queryString);
             this.cache.put(getHashCode(shift.getShiftDate(),shift.getShiftType(),branch), shift);
         } catch (SQLException e) {
-           // e.printStackTrace();
-        } finally {
-            try {
-                if (ptmt != null)
-                    ptmt.close();
-                if (connection != null)
-                    connection.close();
-            } catch (Exception e) {
-                throw new DalException("Failed closing connection to DB.");
-            }
-        }
+           throw new DalException(e);
+        } 
     }
 
     public Shift get(LocalDate dt, ShiftType st, String branch) throws DalException {
@@ -91,20 +76,16 @@ public class ShiftDAO extends DAO {
 
     public List<Shift> getAll() throws DalException {
         List<Shift> list = new LinkedList<>();
-        try {
-            for(Object o: selectAll()) {
-                if(!(o instanceof Shift))
-                    throw new DalException("Something went wrong");
-                Shift s = ((Shift)o);
-                if (this.cache.get(getHashCode(s.getShiftDate(), s.getShiftType(), s.getBranch())) != null)
-                    list.add(this.cache.get(getHashCode(s.getShiftDate(), s.getShiftType(), s.getBranch())));
-                else {
-                    list.add(s);
-                    this.cache.put(getHashCode(s.getShiftDate(), s.getShiftType(), s.getBranch()), s);
-                }
+        for(Object o: selectAll()) {
+            if(!(o instanceof Shift))
+                throw new DalException("Something went wrong");
+            Shift s = ((Shift)o);
+            if (this.cache.get(getHashCode(s.getShiftDate(), s.getShiftType(), s.getBranch())) != null)
+                list.add(this.cache.get(getHashCode(s.getShiftDate(), s.getShiftType(), s.getBranch())));
+            else {
+                list.add(s);
+                this.cache.put(getHashCode(s.getShiftDate(), s.getShiftType(), s.getBranch()), s);
             }
-        } catch (SQLException e) {
-            throw new DalException(e);
         }
         return list;
     }
@@ -125,28 +106,12 @@ public class ShiftDAO extends DAO {
             String queryString = String.format("UPDATE "+TABLE_NAME+" SET %s = '%s' WHERE",
             Columns.IsApproved, s.getIsApproved());
             queryString = queryString.concat(createConditionForPrimaryKey(key));
-            connection = getConnection();
-            ptmt = connection.prepareStatement(queryString);
-            ptmt.executeUpdate();
-        } catch(Exception e) {
-            e.printStackTrace();
-        }finally
-        {
-            try {
-                if (ptmt != null)
-                    ptmt.close();
-                if (connection != null)
-                    connection.close();
-            }
-            catch (SQLException e) {
-                e.printStackTrace();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            cursor.executeWrite(queryString);
+        } catch(SQLException e) {
+            throw new DalException(e);
         }
-
     }
-    public void delete(Shift s, String branch) {// first check if it is in cache, if it is, then delete that object! and remove from cache
+    public void delete(Shift s, String branch) throws DalException {// first check if it is in cache, if it is, then delete that object! and remove from cache
         this.cache.remove(getHashCode(s.getShiftDate(),s.getShiftType(),branch));
         Object[] keys = {s.getShiftDate(),s.getShiftType().name(),branch};
         this.shiftToNeededRolesDAO.delete(s, branch);
@@ -162,7 +127,7 @@ public class ShiftDAO extends DAO {
         return ((Shift) super.select(keys));
     }
 
-    protected Shift convertReaderToObject(ResultSet reader) {
+    protected Shift convertReaderToObject(OfflineResultSet reader) {
         Shift ans = null;
         try{
             LocalDate dt = LocalDate.parse(reader.getString(Columns.ShiftDate.name()));
@@ -191,7 +156,7 @@ public class ShiftDAO extends DAO {
         return ans;
     }
 
-    public void deleteAll(){
+    public void deleteAll() throws DalException{
         this.cache = new HashMap<>();
         this.shiftToNeededRolesDAO.deleteAll();
         this.shiftToRequestsDAO.deleteAll();

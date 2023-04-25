@@ -3,8 +3,8 @@ package dataAccessLayer.employeeModule;
 import businessLayer.employeeModule.Employee;
 import businessLayer.employeeModule.Role;
 import dataAccessLayer.dalUtils.DalException;
+import dataAccessLayer.dalUtils.OfflineResultSet;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 
@@ -51,30 +51,10 @@ public class EmployeeDAO extends DAO {
             String queryString = String.format("INSERT INTO " + TABLE_NAME + "(%s, %s, %s, %s, %s, %s, %s,%s,%s) VALUES(?,?,?,?,?,?,?,?,?)",
                     Columns.Id.name(), Columns.Name.name(), Columns.BankDetails.name(),Columns.HourlySalaryRate.name(),Columns.MonthlyHours.name()
                     ,Columns.SalaryBonus.name(),Columns.EmploymentDate.name(),Columns.EmploymentConditions.name(),Columns.Details.name());
-            connection = getConnection();
-            ptmt = connection.prepareStatement(queryString);
-            ptmt.setString(1, emp.getId());
-            ptmt.setString(2, emp.getName());
-            ptmt.setString(3, emp.getBankDetails());
-            ptmt.setInt(4, (int)emp.getHourlySalaryRate());
-            ptmt.setInt(5, (int)emp.getMonthlyHours());
-            ptmt.setInt(6, (int)emp.getSalaryBonus());
-            ptmt.setString(7, formatLocalDate(emp.getEmploymentDate()));
-            ptmt.setString(8, emp.getEmploymentConditions());
-            ptmt.setString(9, emp.getDetails());
-            ptmt.executeUpdate();
+            cursor.executeWrite(queryString);
             this.cache.put(getHashCode(emp.getId()), emp);
         } catch (SQLException e) {
-           // e.printStackTrace();
-        } finally {
-            try {
-                if (ptmt != null)
-                    ptmt.close();
-                if (connection != null)
-                    connection.close();
-            }  catch (Exception e) {
-                throw new DalException("Failed closing connection to DB.");
-            }
+           throw new DalException(e);
         }
     }
 
@@ -88,20 +68,16 @@ public class EmployeeDAO extends DAO {
 
     public List<Employee> getAll() throws DalException {
         List<Employee> list = new LinkedList<>();
-        try {
-            for(Object o: selectAll()) {
-                if(!(o instanceof Employee))
-                    throw new DalException("Something went wrong");
-                Employee emp = ((Employee)o);
-                if (this.cache.get(getHashCode(emp.getId())) != null)
-                    list.add(this.cache.get(getHashCode(emp.getId())));
-                else {
-                    list.add(emp);
-                    this.cache.put(getHashCode(emp.getId()), emp);
-                }
+        for(Object o: selectAll()) {
+            if (!(o instanceof Employee))
+                throw new DalException("Something went wrong");
+            Employee emp = ((Employee) o);
+            if (this.cache.get(getHashCode(emp.getId())) != null)
+                list.add(this.cache.get(getHashCode(emp.getId())));
+            else {
+                list.add(emp);
+                this.cache.put(getHashCode(emp.getId()), emp);
             }
-        } catch (SQLException e) {
-            throw new DalException(e);
         }
         return list;
     }
@@ -119,37 +95,12 @@ public class EmployeeDAO extends DAO {
                     Columns.Id.name(), Columns.Name.name(), Columns.BankDetails.name(),Columns.HourlySalaryRate.name(),Columns.MonthlyHours.name()
                     ,Columns.SalaryBonus.name(),Columns.EmploymentDate.name(),Columns.EmploymentConditions.name(),Columns.Details.name());
             queryString = queryString.concat(createConditionForPrimaryKey(key));
-            connection = getConnection();
-            ptmt = connection.prepareStatement(queryString);
-            ptmt.setString(1, emp.getId());
-            ptmt.setString(2, emp.getName());
-            ptmt.setString(3, emp.getBankDetails());
-            ptmt.setInt(4, (int)emp.getHourlySalaryRate());
-            ptmt.setInt(5, (int)emp.getMonthlyHours());
-            ptmt.setInt(6, (int)emp.getSalaryBonus());
-            ptmt.setString(7, formatLocalDate(emp.getEmploymentDate()));
-            ptmt.setString(8, emp.getEmploymentConditions());
-            ptmt.setString(9, emp.getDetails());
-            ptmt.executeUpdate();
-        } catch(Exception e) {
-            e.printStackTrace();
-        }finally
-        {
-            try {
-                if (ptmt != null)
-                    ptmt.close();
-                if (connection != null)
-                    connection.close();
-            }
-            catch (SQLException e) {
-                e.printStackTrace();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            cursor.executeWrite(queryString);
+        } catch(SQLException e) {
+            throw new DalException(e);
         }
-
     }
-    public void delete(Employee emp) {
+    public void delete(Employee emp) throws DalException{
         this.cache.remove(getHashCode(emp.getId()));
         Object[] keys = {emp.getId()};
         this.employeeRolesDAO.delete(emp);
@@ -161,7 +112,7 @@ public class EmployeeDAO extends DAO {
         return ((Employee) super.select(keys));
     }
 
-    protected Employee convertReaderToObject(ResultSet reader) {
+    protected Employee convertReaderToObject(OfflineResultSet reader) {
         Employee ans = null;
         try{
             LocalDate dt = LocalDate.parse(reader.getString(Columns.EmploymentDate.name()));

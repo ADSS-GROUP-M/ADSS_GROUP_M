@@ -3,8 +3,8 @@ package dataAccessLayer.employeeModule;
 import businessLayer.employeeModule.Employee;
 import businessLayer.employeeModule.Role;
 import dataAccessLayer.dalUtils.DalException;
+import dataAccessLayer.dalUtils.OfflineResultSet;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
@@ -48,25 +48,12 @@ class EmployeeRolesDAO extends DAO {
             for(Role str: emp.getRoles()) {
                 String queryString = String.format("INSERT INTO " + TABLE_NAME + "(%s, %s) VALUES(?,?)",
                         Columns.EmployeeId.name(), Columns.Role.name());
-                connection = getConnection();
-                ptmt = connection.prepareStatement(queryString);
-                ptmt.setString(1, emp.getId());
-                ptmt.setString(2, str.name());
-                ptmt.executeUpdate();
+                cursor.executeWrite(queryString);
                 entries.add(str);
             }
             this.cache.put(getHashCode(emp.getId()),entries );
-        } catch (SQLException e) {
-           // e.printStackTrace();
-        } finally {
-            try {
-                if (ptmt != null)
-                    ptmt.close();
-                if (connection != null)
-                    connection.close();
-            } catch (Exception e) {
-                throw new DalException("Failed closing connection to DB.");
-            }
+        } catch(SQLException e) {
+            throw new DalException(e);
         }
     }
 
@@ -77,7 +64,7 @@ class EmployeeRolesDAO extends DAO {
         this.create(emp);
     }
 
-    void delete(Employee emp) {
+    void delete(Employee emp) throws DalException{
         this.cache.remove(getHashCode(emp.getId()));
         Object[] keys = {emp.getId()};
         super.delete(keys);
@@ -88,7 +75,7 @@ class EmployeeRolesDAO extends DAO {
         return ((Set<Role>) super.select(keys));
     }
 
-    protected Set<Role> convertReaderToObject(ResultSet reader) {
+    protected Set<Role> convertReaderToObject(OfflineResultSet reader) {
         Set<Role> ans = new HashSet<>();
         try {
 

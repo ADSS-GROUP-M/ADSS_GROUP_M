@@ -2,8 +2,8 @@ package dataAccessLayer.employeeModule;
 
 import businessLayer.employeeModule.Shift;
 import dataAccessLayer.dalUtils.DalException;
+import dataAccessLayer.dalUtils.OfflineResultSet;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -48,27 +48,12 @@ class ShiftToCancelsDAO extends DAO{
             for(String str: shift.getShiftCancels()) {
                 String queryString = String.format("INSERT INTO " + TABLE_NAME + "(%s, %s, %s, %s) VALUES(?,?,?,?)",
                         ShiftToCancelsDAO.Columns.ShiftDate.name(), ShiftToCancelsDAO.Columns.ShiftType.name(), ShiftToCancelsDAO.Columns.Branch.name(), Columns.CancelAction.name());
-                connection = getConnection();
-                ptmt = connection.prepareStatement(queryString);
-                ptmt.setString(1, formatLocalDate(shift.getShiftDate()));
-                ptmt.setString(2, shift.getShiftType().name());
-                ptmt.setString(3, branch);
-                ptmt.setString(4, str);
-                ptmt.executeUpdate();
+                cursor.executeWrite(queryString);
                 entries.add(str);
             }
             this.cache.put(getHashCode(shift.getShiftDate(), shift.getShiftType(), branch),entries );
         } catch (SQLException e) {
-            //e.printStackTrace();
-        } finally {
-            try {
-                if (ptmt != null)
-                    ptmt.close();
-                if (connection != null)
-                    connection.close();
-            } catch (Exception e) {
-                throw new DalException("Failed closing connection to DB.");
-            }
+            throw new DalException(e);
         }
     }
 
@@ -79,7 +64,7 @@ class ShiftToCancelsDAO extends DAO{
         this.create(s,branch);
     }
 
-    void delete(Shift s, String branch) {
+    void delete(Shift s, String branch) throws DalException {
         this.cache.remove(getHashCode(s.getShiftDate(),s.getShiftType(),branch));
         Object[] keys = {s.getShiftDate(),s.getShiftType().name(),branch};
         super.delete(keys);
@@ -90,7 +75,7 @@ class ShiftToCancelsDAO extends DAO{
         return ((List<String>) super.select(keys));
     }
 
-    protected List<String> convertReaderToObject(ResultSet reader) {
+    protected List<String> convertReaderToObject(OfflineResultSet reader) {
         List<String> ans = new LinkedList<>();
         try {
 
@@ -105,7 +90,7 @@ class ShiftToCancelsDAO extends DAO{
         return ans;
     }
 
-    public void deleteAll() {
+    public void deleteAll() throws DalException{
         super.deleteAll();
         cache.clear();
     }

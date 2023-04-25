@@ -11,15 +11,19 @@ import java.util.List;
 
 public class DriversDAO extends ManyToManyDAO<Driver> {
 
-    public static final String[] types = new String[]{"TEXT", "TEXT"};
+    private static final String[] types = new String[]{"TEXT", "TEXT"};
+    private static final String[] parent_table_names = {"EMPLOYEES"};
+    private static final String[] primary_keys = {"id"};
+    private static final String[] foreign_keys = {"id"};
+    private static final String[] references = {"Id"};
 
     public DriversDAO() throws DalException {
         super("truck_drivers",
-                new String[]{"EMPLOYEES"},
+                parent_table_names,
                 types,
-                new String[]{"id"},
-                new String[]{"id"},
-                new String[]{"Id"},
+                primary_keys,
+                foreign_keys,
+                references,
                 "id",
                 "license_type");
     }
@@ -27,11 +31,11 @@ public class DriversDAO extends ManyToManyDAO<Driver> {
     public DriversDAO(String dbName) throws DalException {
         super(dbName,
                 "truck_drivers",
-                new String[]{"EMPLOYEES"},
+                parent_table_names,
                 types,
-                new String[]{"id"},
-                new String[]{"id"},
-                new String[]{"Id"},
+                primary_keys,
+                foreign_keys,
+                references,
                 "id",
                 "license_type");
     }

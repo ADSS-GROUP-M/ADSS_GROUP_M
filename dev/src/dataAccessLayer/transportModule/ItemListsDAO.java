@@ -10,12 +10,14 @@ import java.util.List;
 
 public class ItemListsDAO extends DAO<ItemList> {
 
+    public static final String[] types = {"INTEGER"};
+    public static final String[] primary_keys = {"id"};
     private final ItemListsItemsDAO itemListsItemsDAO;
 
     public ItemListsDAO() throws DalException {
         super("item_lists",
-                new String[]{"INTEGER"},
-                new String[]{"id"},
+                types,
+                primary_keys,
                 "id"
         );
         itemListsItemsDAO = new ItemListsItemsDAO();
@@ -28,8 +30,8 @@ public class ItemListsDAO extends DAO<ItemList> {
     public ItemListsDAO(String dbName) throws DalException {
         super(dbName,
                 "item_lists",
-                new String[]{"INTEGER"},
-                new String[]{"id"},
+                types,
+                primary_keys,
                 "id"
         );
         itemListsItemsDAO = new ItemListsItemsDAO(dbName);

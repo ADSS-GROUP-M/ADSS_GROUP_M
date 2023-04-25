@@ -12,12 +12,13 @@ import java.util.List;
 
 public class SitesDAO extends DAO<Site> {
 
-    public static final String[] types = new String[]{"TEXT", "TEXT", "TEXT", "TEXT", "TEXT"};
+    private static final String[] types = new String[]{"TEXT", "TEXT", "TEXT", "TEXT", "TEXT"};
+    private static final String[] primary_keys = {"address"};
 
     public SitesDAO() throws DalException {
         super("sites",
                 types,
-                new String[]{"address"},
+                primary_keys,
                 "address",
                 "transport_zone",
                 "contact_name",
@@ -33,7 +34,7 @@ public class SitesDAO extends DAO<Site> {
         super(dbName,
                 "sites",
                 types,
-                new String[]{"address"},
+                primary_keys,
                 "address",
                 "transport_zone",
                 "contact_name",

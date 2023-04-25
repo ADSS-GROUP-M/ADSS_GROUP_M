@@ -10,6 +10,11 @@ import java.util.*;
 
 public class ItemListsItemsDAO extends ManyToManyDAO<ItemList> {
 
+    private static final String[] parent_table_names = {"item_lists"};
+    private static final String[] primary_keys = {"id", "loading_type", "item_name"};
+    private static final String[] foreign_keys = {"id"};
+    private static final String[] references = {"Id"};
+
     private enum LoadingType {
         loading,
         unloading
@@ -19,11 +24,11 @@ public class ItemListsItemsDAO extends ManyToManyDAO<ItemList> {
 
     public ItemListsItemsDAO() throws DalException {
         super("item_lists_items",
-                new String[]{"item_lists"},
+                parent_table_names,
                 types,
-                new String[]{"id","loading_type","item_name"},
-                new String[]{"id"},
-                new String[]{"id"},
+                primary_keys,
+                foreign_keys,
+                references,
                 "id",
                 "loading_type",
                 "item_name",
@@ -37,11 +42,11 @@ public class ItemListsItemsDAO extends ManyToManyDAO<ItemList> {
     public ItemListsItemsDAO(String dbName) throws DalException {
         super(dbName,
                 "item_lists_items",
-                new String[]{"item_lists"},
+                parent_table_names,
                 types,
-                new String[]{"id","loading_type","item_name"},
-                new String[]{"id"},
-                new String[]{"Id"},
+                primary_keys,
+                foreign_keys,
+                references,
                 "id",
                 "loading_type",
                 "item_name",

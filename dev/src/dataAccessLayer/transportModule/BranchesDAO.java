@@ -14,14 +14,18 @@ import java.util.List;
 public class BranchesDAO extends ManyToManyDAO<Branch> {
 
     private static final String[] types = new String[]{"TEXT", "TEXT", "TEXT", "TEXT", "TEXT"};
+    private static final String[] parent_table_names = {"sites"};
+    private static final String[] primary_keys = {"address"};
+    private static final String[] foreign_keys = {"address"};
+    private static final String[] references = {"address"};
 
     public BranchesDAO() throws DalException{
         super("branches",
-                new String[]{"sites"},
+                parent_table_names,
                 types,
-                new String[]{"address"},
-                new String[]{"address"},
-                new String[]{"address"},
+                primary_keys,
+                foreign_keys,
+                references,
                 "address",
                 "morning_shift_start",
                 "morning_shift_end",
@@ -32,11 +36,11 @@ public class BranchesDAO extends ManyToManyDAO<Branch> {
     public BranchesDAO(String dbName) throws DalException{
         super(dbName,
                 "branches",
-                new String[]{"sites"},
+                parent_table_names,
                 types,
-                new String[]{"address"},
-                new String[]{"address"},
-                new String[]{"address"},
+                primary_keys,
+                foreign_keys,
+                references,
                 "address",
                 "morning_shift_start",
                 "morning_shift_end",

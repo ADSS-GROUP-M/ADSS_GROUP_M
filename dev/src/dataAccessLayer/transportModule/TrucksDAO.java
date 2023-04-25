@@ -12,11 +12,12 @@ import java.util.List;
 public class TrucksDAO extends DAO<Truck> {
 
     private static final String[] types = new String[]{"TEXT", "TEXT", "INTEGER", "INTEGER", "TEXT"};
+    private static final String[] primary_keys = {"id"};
 
     public TrucksDAO() throws DalException {
         super("trucks",
                 types,
-                new String[]{"id"},
+                primary_keys,
                 "id",
                 "model",
                 "base_weight",
@@ -28,7 +29,7 @@ public class TrucksDAO extends DAO<Truck> {
         super(dbName,
                 "trucks",
                 types,
-                new String[]{"id"},
+                primary_keys,
                 "id",
                 "model",
                 "base_weight",

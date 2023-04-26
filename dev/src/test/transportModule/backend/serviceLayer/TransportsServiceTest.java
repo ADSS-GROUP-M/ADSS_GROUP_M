@@ -69,8 +69,13 @@ class TransportsServiceTest {
                 100
         );
         String json2 = ts.addTransport(transport.toJson());
-        int id2 = Response.fromJson(json2).dataToInt();
-        transport = transport.newId(id2);
+        Response response = Response.fromJson(json2);
+        if(response.success() == false){
+            fail("Setup failed:\n" + response.message() + "\ncause: " + response.data());
+        } else {
+            int id2 = Response.fromJson(json2).dataToInt();
+            transport = transport.newId(id2);
+        }
     }
 
     @AfterEach

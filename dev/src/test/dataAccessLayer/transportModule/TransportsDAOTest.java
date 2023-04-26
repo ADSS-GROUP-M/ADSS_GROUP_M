@@ -112,29 +112,108 @@ class TransportsDAOTest {
             Transport selected = transportsDAO.select(transport);
             assertDeepEquals(transport, selected);
         } catch (DalException e) {
-            throw new RuntimeException(e);
+            fail(e);
         }
-
     }
 
     @Test
     void selectAll() {
+        
+        //set up
+        LinkedList<Transport> transports = new LinkedList<>();
+        transports.add(transport);
+        List.of(2,3,4,5,6).forEach(
+            i -> {
+                try {
+                    Transport toAdd = new Transport(i,
+                            site.address(),
+                            new LinkedList<>(){{
+                                add(site.address());
+                            }} ,
+                            new HashMap<>(){{
+                                put(site.address(), 1);
+                            }},
+                            driver.id(),
+                            truck.id(),
+                            LocalDateTime.of(2020, 1, 1, 1, 1),
+                            15000
+                    );
+                    transports.add(toAdd);
+                    transportsDAO.insert(toAdd);
+                } catch (DalException e) {
+                    fail(e);
+                }
+            }
+        );
+        
+        //test
+        try {
+            List<Transport> selected = transportsDAO.selectAll();
+            assertEquals(transports.size(), selected.size());
+            transports.forEach(
+                    transport -> assertTrue(selected.contains(transport))
+            );
+        } catch (DalException e) {
+            fail(e);
+        }
     }
 
     @Test
     void insert() {
+        try {
+            Transport transport2 = new Transport(2,
+                    site.address(),
+                    new LinkedList<>() {{
+                        add(site.address());
+                    }},
+                    new HashMap<>() {{
+                        put(site.address(), 1);
+                    }},
+                    driver.id(),
+                    truck.id(),
+                    LocalDateTime.of(2020, 1, 1, 1, 1),
+                    15000
+            );
+            transportsDAO.insert(transport2);
+            Transport selected = transportsDAO.select(Transport.getLookupObject(transport2.id()));
+            assertDeepEquals(transport2, selected);
+        } catch (DalException e) {
+            fail(e);
+        }
     }
 
     @Test
     void update() {
+        try {
+            Transport updatedTransport = new Transport(transport.id(),
+                    site.address(),
+                    new LinkedList<>() {{
+                        add(site.address());
+                    }},
+                    new HashMap<>() {{
+                        put(site.address(), 1);
+                    }},
+                    driver.id(),
+                    truck.id(),
+                    LocalDateTime.of(1997, 2, 2, 2, 2),
+                    10000
+            );
+            transportsDAO.update(updatedTransport);
+            Transport selected = transportsDAO.select(Transport.getLookupObject(transport.id()));
+            assertDeepEquals(updatedTransport, selected);
+        } catch (DalException e) {
+            fail(e);
+        }
     }
 
     @Test
     void delete() {
-    }
-
-    @Test
-    void getObjectFromResultSet() {
+        try {
+            transportsDAO.delete(transport);
+            assertThrows(DalException.class, () -> transportsDAO.select(Transport.getLookupObject(transport.id())));
+        } catch (DalException e) {
+            fail(e);
+        }
     }
 
     private void assertDeepEquals(Transport transport1, Transport transport2) {

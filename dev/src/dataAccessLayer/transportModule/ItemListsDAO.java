@@ -2,17 +2,19 @@ package dataAccessLayer.transportModule;
 
 import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.dalUtils.OfflineResultSet;
+import dataAccessLayer.transportModule.abstracts.CounterDAO;
 import dataAccessLayer.transportModule.abstracts.DAO;
 import objects.transportObjects.ItemList;
 
 import java.sql.SQLException;
 import java.util.List;
 
-public class ItemListsDAO extends DAO<ItemList> {
+public class ItemListsDAO extends DAO<ItemList> implements CounterDAO {
 
     public static final String[] types = {"INTEGER"};
     public static final String[] primary_keys = {"id"};
     private final ItemListsItemsDAO itemListsItemsDAO;
+    private final ItemListIdCounterDAO itemListIdCounterDAO;
 
     public ItemListsDAO() throws DalException {
         super("item_lists",
@@ -20,11 +22,13 @@ public class ItemListsDAO extends DAO<ItemList> {
                 primary_keys,
                 "id"
         );
+        itemListIdCounterDAO = new ItemListIdCounterDAO();
         itemListsItemsDAO = new ItemListsItemsDAO();
     }
 
     /**
      * used for testing
+     *
      * @param dbName the name of the database to connect to
      */
     public ItemListsDAO(String dbName) throws DalException {
@@ -34,7 +38,8 @@ public class ItemListsDAO extends DAO<ItemList> {
                 primary_keys,
                 "id"
         );
-        itemListsItemsDAO = new ItemListsItemsDAO(dbName);
+        itemListIdCounterDAO = new ItemListIdCounterDAO();
+        itemListsItemsDAO = new ItemListsItemsDAO();
     }
 
     /**
@@ -127,5 +132,25 @@ public class ItemListsDAO extends DAO<ItemList> {
     public void clearTable(){
         itemListsItemsDAO.clearTable();
         super.clearTable();
+    }
+
+    @Override
+    public Integer selectCounter() throws DalException {
+        return itemListIdCounterDAO.selectCounter();
+    }
+
+    @Override
+    public void insertCounter(Integer value) throws DalException {
+        itemListIdCounterDAO.insertCounter(value);
+    }
+
+    @Override
+    public void incrementCounter() throws DalException {
+        itemListIdCounterDAO.incrementCounter();
+    }
+
+    @Override
+    public void resetCounter() throws DalException {
+        itemListIdCounterDAO.resetCounter();
     }
 }

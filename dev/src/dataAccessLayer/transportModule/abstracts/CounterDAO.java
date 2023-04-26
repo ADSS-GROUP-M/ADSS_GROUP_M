@@ -1,105 +1,13 @@
 package dataAccessLayer.transportModule.abstracts;
 
 import dataAccessLayer.dalUtils.DalException;
-import dataAccessLayer.dalUtils.OfflineResultSet;
-import dataAccessLayer.dalUtils.SQLExecutor;
 
-import java.sql.SQLException;
+public interface CounterDAO {
+    Integer selectCounter() throws DalException;
 
-public class CounterDAO {
-    
-    private final SQLExecutor cursor;
-    private final String TABLE_NAME;
-    private final String COLUMN_NAME;
+    void insertCounter(Integer value) throws DalException;
 
-    public CounterDAO(String tableName, String columnName) throws DalException{
-        TABLE_NAME = tableName;
-        COLUMN_NAME = columnName;
-        cursor = new SQLExecutor();
-        initTable();
-    }
+    void incrementCounter() throws DalException;
 
-    /**
-     * used for testing
-     * @param dbName the name of the database to connect to
-     */
-    public CounterDAO(String dbName, String tableName , String columnName) throws DalException{
-        TABLE_NAME = tableName;
-        COLUMN_NAME = columnName;
-        cursor = new SQLExecutor(dbName);
-        initTable();
-    }
-
-    protected void initTable() throws DalException{
-        String query = String.format("""
-                CREATE TABLE IF NOT EXISTS %s (
-                %s INTEGER NOT NULL;
-                """, TABLE_NAME, COLUMN_NAME);
-        try {
-            cursor.executeWrite(query);
-        } catch (SQLException e) {
-            throw new DalException("Failed to initialize table "+ TABLE_NAME,e);
-        }
-    }
-
-    /**
-     * @return the counter's value
-     * @throws DalException if an error occurred while trying to select the value
-     */
-    public Integer select() throws DalException {
-        String query = String.format("SELECT %s FROM %s", COLUMN_NAME, TABLE_NAME);
-        OfflineResultSet resultSet;
-        try {
-            resultSet = cursor.executeRead(query);
-        } catch (SQLException e) {
-            throw new DalException("Failed to select "+ COLUMN_NAME ,e);
-        }
-        if(resultSet.next()){
-            return resultSet.getInt(COLUMN_NAME);
-        } else {
-            throw new DalException("Failed to select "+ COLUMN_NAME);
-        }
-    }
-
-    /**
-     * @param value - new value for the counter
-     * @throws DalException if an error occurred while trying to insert the value
-     */
-    public void insert(Integer value) throws DalException {
-        String query = String.format("INSERT INTO %s ('%s') VALUES (%d)", TABLE_NAME, COLUMN_NAME, value);
-        try {
-            if(cursor.executeWrite(query) != 1){
-                throw new RuntimeException("Unexpected error while incrementing " + COLUMN_NAME);
-            }
-        } catch (SQLException e) {
-            throw new DalException("Failed to insert " + COLUMN_NAME,e);
-        }
-    }
-
-    /**
-     * @throws DalException if an error occurred while trying to increment the counter
-     */
-    public void increment() throws DalException{
-        String query = String.format("UPDATE %s SET %s = %s + 1", TABLE_NAME, COLUMN_NAME,COLUMN_NAME);
-        try {
-            if(cursor.executeWrite(query) != 1){
-                throw new RuntimeException("Unexpected error while incrementing " + COLUMN_NAME);
-            }
-        } catch (SQLException e) {
-            throw new DalException("Failed to increment " + COLUMN_NAME,e);
-        }
-    }
-
-    /**
-     * @throws DalException if an error occurred while trying to reset the counter
-     */
-    public void resetCounter() throws DalException {
-        String query = String.format("UPDATE %s SET %s = 0", TABLE_NAME, COLUMN_NAME);
-        try {
-            cursor.executeWrite(query);
-        } catch (SQLException e) {
-            throw new DalException("Failed to reset " + COLUMN_NAME,e);
-        }
-    }
-
+    void resetCounter() throws DalException;
 }

@@ -19,18 +19,13 @@ public class DalFactory {
     private final DriversDAO driversDAO;
     private final TransportsDAO transportsDAO;
 
-
     public DalFactory() throws DalException {
-        try {
-            employeeDAO = EmployeeDAO.getInstance();
-            userDAO = UserDAO.getInstance();
-            shiftDAO = ShiftDAO.getInstance();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        employeeDAO = EmployeeDAO.getInstance();
+        userDAO = UserDAO.getInstance();
+        shiftDAO = ShiftDAO.getInstance();
+        itemListsDAO = new ItemListsDAO();
         trucksDAO = new TrucksDAO();
         driversDAO = new DriversDAO();
-        itemListsDAO = new ItemListsDAO();
         sitesDAO = new SitesDAO();
         branchesDAO = new BranchesDAO();
         transportsDAO = new TransportsDAO();

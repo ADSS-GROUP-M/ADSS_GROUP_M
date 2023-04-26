@@ -2,15 +2,17 @@ package dataAccessLayer.transportModule;
 
 import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.dalUtils.OfflineResultSet;
+import dataAccessLayer.transportModule.abstracts.CounterDAO;
 import dataAccessLayer.transportModule.abstracts.ManyToManyDAO;
 import objects.transportObjects.Transport;
+import org.w3c.dom.css.Counter;
 
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-public class TransportsDAO extends ManyToManyDAO<Transport> {
+public class TransportsDAO extends ManyToManyDAO<Transport> implements CounterDAO {
 
     private static final String[] types = {"INTEGER", "TEXT", "TEXT", "TEXT", "TEXT", "INTEGER"};
     private static final String[] parent_tables = {"drivers", "trucks", "sites"};
@@ -18,7 +20,8 @@ public class TransportsDAO extends ManyToManyDAO<Transport> {
     private static final String[] foreign_keys = {"source_address", "driver_id", "truck_id"};
     private static final String[] references = {"id", "id", "address"};
 
-    private final TransportDestinationsDAO transportDestinationsDAO;
+    private final TransportDestinationsDAO destinationsDAO;
+    private final TransportIdCounterDAO counterDAO;
 
     public TransportsDAO() throws DalException{
         super("transports",
@@ -34,7 +37,8 @@ public class TransportsDAO extends ManyToManyDAO<Transport> {
                 "departure_time",
                 "weight"
         );
-        transportDestinationsDAO = new TransportDestinationsDAO();
+        destinationsDAO = new TransportDestinationsDAO();
+        counterDAO = new TransportIdCounterDAO();
     }
 
     /**
@@ -56,7 +60,8 @@ public class TransportsDAO extends ManyToManyDAO<Transport> {
                 "departure_time",
                 "weight"
         );
-        transportDestinationsDAO = new TransportDestinationsDAO(dbName);
+        destinationsDAO = new TransportDestinationsDAO(dbName);
+        counterDAO = new TransportIdCounterDAO();
     }
 
     /**
@@ -71,7 +76,7 @@ public class TransportsDAO extends ManyToManyDAO<Transport> {
             return cache.get(object);
         }
 
-        List<TransportDestination> transportDestinations = transportDestinationsDAO.selectAllRelated(object);
+        List<TransportDestination> transportDestinations = destinationsDAO.selectAllRelated(object);
         String query = String.format("SELECT * FROM %s WHERE id = %d;",
                 TABLE_NAME,
                 object.id()
@@ -109,7 +114,7 @@ public class TransportsDAO extends ManyToManyDAO<Transport> {
             Transport lookupObject = Transport.getLookupObject(resultSet.getInt("id"));
             transports.add(getObjectFromResultSet(
                     resultSet,
-                    transportDestinationsDAO.selectAllRelated(lookupObject)));
+                    destinationsDAO.selectAllRelated(lookupObject)));
         }
         cache.putAll(transports);
         return transports;
@@ -133,7 +138,7 @@ public class TransportsDAO extends ManyToManyDAO<Transport> {
         try {
             if(cursor.executeWrite(query) == 1){
                 LinkedList<TransportDestination> transportDestinations = generateTransportDestinations(object);
-                transportDestinationsDAO.insertAll(transportDestinations);
+                destinationsDAO.insertAll(transportDestinations);
                 cache.put(object);
             } else {
                 throw new RuntimeException("Unexpected error while inserting transport");
@@ -160,9 +165,9 @@ public class TransportsDAO extends ManyToManyDAO<Transport> {
         );
         try {
             if(cursor.executeWrite(query) == 1){
-                transportDestinationsDAO.deleteAllRelated(object);
+                destinationsDAO.deleteAllRelated(object);
                 LinkedList<TransportDestination> transportDestinations = generateTransportDestinations(object);
-                transportDestinationsDAO.insertAll(transportDestinations);
+                destinationsDAO.insertAll(transportDestinations);
                 cache.put(object);
             } else {
                 throw new DalException("No transport with id " + object.id() + " was found");
@@ -183,7 +188,7 @@ public class TransportsDAO extends ManyToManyDAO<Transport> {
         );
         try {
             if(cursor.executeWrite(query) == 1){
-                transportDestinationsDAO.deleteAllRelated(object);
+                destinationsDAO.deleteAllRelated(object);
                 cache.remove(object);
             } else {
                 throw new DalException("No transport with id " + object.id() + " was found");
@@ -228,7 +233,7 @@ public class TransportsDAO extends ManyToManyDAO<Transport> {
     }
     @Override
     public void clearTable(){
-        transportDestinationsDAO.clearTable();
+        destinationsDAO.clearTable();
         super.clearTable();
     }
 
@@ -238,5 +243,25 @@ public class TransportsDAO extends ManyToManyDAO<Transport> {
     @Deprecated
     protected Transport getObjectFromResultSet(OfflineResultSet resultSet) {
         throw new UnsupportedOperationException("Not implemented");
+    }
+
+    @Override
+    public Integer selectCounter() throws DalException {
+        return counterDAO.selectCounter();
+    }
+
+    @Override
+    public void insertCounter(Integer value) throws DalException {
+        counterDAO.insertCounter(value);
+    }
+
+    @Override
+    public void incrementCounter() throws DalException {
+        counterDAO.incrementCounter();
+    }
+
+    @Override
+    public void resetCounter() throws DalException {
+        counterDAO.resetCounter();
     }
 }

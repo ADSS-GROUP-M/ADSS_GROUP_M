@@ -14,7 +14,6 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -74,7 +73,7 @@ class TransportsDAOTest {
             trucksDAO = new TrucksDAO("TestingDB.db");
             employeeDAO = EmployeeDAO.getTestingInstance("TestingDB.db");
             driversDAO = new DriversDAO("TestingDB.db");
-            itemListsDAO = new ItemListsDAO("TestingDB.db");
+            itemListsDAO = new ItemListsDAO();
             transportsDAO = new TransportsDAO("TestingDB.db");
 
             transportsDAO.clearTable();

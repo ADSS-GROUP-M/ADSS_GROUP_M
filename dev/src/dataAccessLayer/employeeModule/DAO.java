@@ -98,28 +98,6 @@ public abstract class DAO {
         }
     }
 
-//    protected void update(Object[] idValues, String attributeName) throws DalException
-//    {
-//        String queryString = "UPDATE "+TABLE_NAME+" SET "+attributeName+"=? WHERE";
-//        queryString = queryString.concat(createConditionForPrimaryKey(idValues));
-//        try {
-//            cursor.executeWrite(queryString);
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//    }
-
-    protected void update(Object[] idValues, String attributeName, boolean attributeValue) throws DalException
-    {
-        String queryString = "UPDATE "+TABLE_NAME+" SET "+attributeName+"=? WHERE";
-        queryString = queryString.concat(createConditionForPrimaryKey(idValues));
-        try {
-            cursor.executeWrite(queryString);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
     protected void delete(Object[] idValues) throws DalException {
         try {
             String queryString = String.format("DELETE FROM %s WHERE", this.TABLE_NAME);

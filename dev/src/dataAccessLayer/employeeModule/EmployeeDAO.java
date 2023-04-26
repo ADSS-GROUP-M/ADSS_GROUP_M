@@ -222,14 +222,14 @@ public class EmployeeDAO extends DAO<Employee> {
         instance = null;
     }
 
-    public void deleteAll() {
+    @Override
+    public void clearTable() {
         try {
             employeeRolesDAO.deleteAll();
-            cache.clear();
-            cursor.executeWrite("DELETE FROM EMPLOYEES");
-        } catch (SQLException | DalException e) {
+        } catch (DalException e) {
             throw new RuntimeException(e);
         }
+        super.clearTable();
     }
 }
 

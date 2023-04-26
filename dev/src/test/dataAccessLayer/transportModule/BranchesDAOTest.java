@@ -30,7 +30,7 @@ class BranchesDAOTest {
         branch4 = new Branch("address1");
         try {
             dao = new BranchesDAO("TestingDB.db");
-            dao.deleteAll();
+            dao.clearTable();
             // Inserting only branch1 and branch2 at setUp
             dao.insert(branch1);
             dao.insert(branch2);
@@ -41,7 +41,7 @@ class BranchesDAOTest {
 
     @AfterEach
     void tearDown() {
-        dao.deleteAll();
+        dao.clearTable();
     }
 
     @Test

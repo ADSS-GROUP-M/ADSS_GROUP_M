@@ -31,7 +31,7 @@ public class Tests {
     @BeforeEach
     public void setUp() throws Exception { // cleans empDAO, creates 3 employees in DB, sets up 2 of them as workers shift
         empDao = EmployeeDAO.getTestingInstance(testDBName);
-        empDao.deleteAll();
+        empDao.clearTable();
         s = new Shift(LocalDate.now(), Shift.ShiftType.Evening);
         workers = new HashMap<>();
         List<Employee> generalWorkers = new LinkedList<>();

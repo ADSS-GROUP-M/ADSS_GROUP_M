@@ -56,7 +56,7 @@ class DriversDAOTest {
                     fail(e);
                 }
             });
-            empDao.deleteAll();
+            empDao.clearTable();
         } catch (DalException e) {
             fail(e);
         }

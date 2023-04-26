@@ -34,7 +34,6 @@ class TransportsDAOTest {
     private Site site;
     private Employee employee;
 
-
     @BeforeEach
     void setUp() {
         site = new Site("zone1","address1","12345","kobi", Site.SiteType.SUPPLIER);
@@ -83,7 +82,7 @@ class TransportsDAOTest {
             driversDAO.clearTable();
             trucksDAO.clearTable();
             sitesDAO.clearTable();
-            employeeDAO.deleteAll();
+            employeeDAO.clearTable();
 
 
             sitesDAO.insert(site);
@@ -99,50 +98,23 @@ class TransportsDAOTest {
 
     @AfterEach
     void tearDown() {
-        try {
-            transportsDAO.selectAll().forEach(transport ->{
-                try {
-                    transportsDAO.delete(transport);
-                } catch (DalException e) {
-                    fail(e);
-                }
-            });
-            itemListsDAO.selectAll().forEach(itemList ->{
-                try {
-                    itemListsDAO.delete(itemList);
-                } catch (DalException e) {
-                    fail(e);
-                }
-            });
-            driversDAO.selectAll().forEach(driver ->{
-                try {
-                    driversDAO.delete(driver);
-                } catch (DalException e) {
-                    fail(e);
-                }
-            });
-            trucksDAO.selectAll().forEach(truck ->{
-                try {
-                    trucksDAO.delete(truck);
-                } catch (DalException e) {
-                    fail(e);
-                }
-            });
-            sitesDAO.selectAll().forEach(site ->{
-                try {
-                    sitesDAO.delete(site);
-                } catch (DalException e) {
-                    fail(e);
-                }
-            });
-            employeeDAO.deleteAll();
-        } catch (DalException e) {
-            fail(e);
-        }
+        transportsDAO.clearTable();
+        itemListsDAO.clearTable();
+        driversDAO.clearTable();
+        trucksDAO.clearTable();
+        sitesDAO.clearTable();
+        employeeDAO.clearTable();
     }
 
     @Test
     void select() {
+        try {
+            Transport selected = transportsDAO.select(transport);
+            assertDeepEquals(transport, selected);
+        } catch (DalException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     @Test
@@ -163,5 +135,16 @@ class TransportsDAOTest {
 
     @Test
     void getObjectFromResultSet() {
+    }
+
+    private void assertDeepEquals(Transport transport1, Transport transport2) {
+        assertEquals(transport1.id(), transport2.id());
+        assertEquals(transport1.source(), transport2.source());
+        assertEquals(transport1.destinations(), transport2.destinations());
+        assertEquals(transport1.itemLists(), transport2.itemLists());
+        assertEquals(transport1.driverId(), transport2.driverId());
+        assertEquals(transport1.truckId(), transport2.truckId());
+        assertEquals(transport1.departureTime(), transport2.departureTime());
+        assertEquals(transport1.weight(), transport2.weight());
     }
 }

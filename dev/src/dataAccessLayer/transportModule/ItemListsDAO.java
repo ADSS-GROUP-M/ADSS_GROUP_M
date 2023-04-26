@@ -122,4 +122,10 @@ public class ItemListsDAO extends DAO<ItemList> {
     protected ItemList getObjectFromResultSet(OfflineResultSet resultSet) {
         return itemListsItemsDAO.getObjectFromResultSet(resultSet);
     }
+
+    @Override
+    public void clearTable(){
+        itemListsItemsDAO.clearTable();
+        super.clearTable();
+    }
 }

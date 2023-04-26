@@ -142,9 +142,6 @@ public class TransportsController {
             ec.addError("Driver is not available", "driverNotAvailable");
         }
 
-
-
-
         // truck validation
         Truck truck = tc.truckExists(transport.truckId()) ? tc.getTruck(transport.truckId()) :  null;
         if(truck == null) {

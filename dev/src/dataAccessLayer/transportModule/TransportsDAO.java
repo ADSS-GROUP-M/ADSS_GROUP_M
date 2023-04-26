@@ -226,6 +226,11 @@ public class TransportsDAO extends ManyToManyDAO<Transport> {
         }
         return transportDestinations;
     }
+    @Override
+    public void clearTable(){
+        transportDestinationsDAO.clearTable();
+        super.clearTable();
+    }
 
     /**
      * @deprecated use {@link #getObjectFromResultSet(OfflineResultSet, List)} instead

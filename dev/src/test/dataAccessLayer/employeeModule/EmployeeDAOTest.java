@@ -31,7 +31,7 @@ class EmployeeDAOTest {
         employee4 = new Employee("Test4", "12345", "TestBank4", 24, LocalDate.now(),"","");
         try {
             dao = EmployeeDAO.getTestingInstance("TestingDB.db");
-            dao.deleteAll();
+            dao.clearTable();
             // Inserting only employee1 and employee2 at setUp
             dao.insert(employee1);
             dao.insert(employee2);
@@ -42,7 +42,7 @@ class EmployeeDAOTest {
 
     @AfterEach
     void tearDown() {
-        dao.deleteAll();
+        dao.clearTable();
     }
 
     @Test

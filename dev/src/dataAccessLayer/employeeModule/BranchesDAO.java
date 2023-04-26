@@ -158,15 +158,6 @@ public class BranchesDAO extends ManyToManyDAO<Branch> {
         }
     }
 
-    public void deleteAll() {
-        try {
-            cache.clear();
-            cursor.executeWrite("DELETE FROM Branches");
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     @Override
     public Branch getObjectFromResultSet(OfflineResultSet resultSet) {
         return new Branch(

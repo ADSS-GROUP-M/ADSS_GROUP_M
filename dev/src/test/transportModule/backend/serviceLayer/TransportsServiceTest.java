@@ -1,6 +1,9 @@
 package transportModule.backend.serviceLayer;
 
 import objects.transportObjects.*;
+import serviceLayer.employeeModule.Objects.SShiftType;
+import serviceLayer.employeeModule.Services.EmployeesService;
+import serviceLayer.employeeModule.Services.UserService;
 import serviceLayer.transportModule.ItemListsService;
 import serviceLayer.transportModule.ModuleFactory;
 import serviceLayer.transportModule.ResourceManagementService;
@@ -10,7 +13,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import utils.Response;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -21,6 +27,8 @@ class TransportsServiceTest {
 
     private Transport transport;
     private TransportsService ts;
+    private EmployeesService es;
+    private UserService us;
 
     private ItemListsService ils;
     private ResourceManagementService rms;
@@ -31,6 +39,9 @@ class TransportsServiceTest {
         ts = mf.getTransportsService();
         ils = mf.getItemListsService();
         rms = mf.getResourceManagementService();
+        // Should probably be refactored to be returned by the ModuleFactory (?)
+        es = EmployeesService.getInstance();
+        us = UserService.getInstance();
 
         Site site1 = new Site("zone a", "123 main st", "(555) 123-4567", "john smith", Site.SiteType.BRANCH);
         Site site2 = new Site("zone b", "456 oak ave", "(555) 234-5678", "jane doe", Site.SiteType.LOGISTICAL_CENTER);
@@ -51,7 +62,8 @@ class TransportsServiceTest {
         int id = Response.fromJson(json).dataToInt();
         itemList1 = itemList1.newId(id);
 
-        rms.addDriver(driver1.toJson());
+        initEmployeesModuleTestData();
+        rms.addDriver(driver1.toJson()); // Should probably be removed if the services are fully integrated, it should create the driver automatically when certifying a driver employee.
         rms.addTruck(truck1.toJson());
         rms.addSite(site1.toJson());
         rms.addSite(site2.toJson());
@@ -334,7 +346,71 @@ class TransportsServiceTest {
         String json = ts.addTransport(newTransport.toJson());
         Response response = Response.fromJson(json);
         assertFalse(response.success());
-        assertEquals("driver,truck,source,destination:0,itemList:0,destination:1,itemList:1",response.data());
+        //assertEquals("driver,truck,source,destination:0,itemList:0,destination:1,itemList:1",response.data());
+        // TODO: Verify that the storekeeper error message should be added as well.
+        assertEquals("driver,truck,source,destination:0,storeKeeper,itemList:0,destination:1,storeKeeper,itemList:1",response.data());
     }
 
+    private void initEmployeesModuleTestData() {
+        String driverId1 = "123", driverId2 = "12345";
+        String storekeeperId1 = "124", storekeeperId2 = "125", storekeeperId3 = "126", storekeeperId4 = "127", storekeeperId5 = "128", storekeeperId6 = "129";
+        String HQAddress = "1", updatedBranchId = "123 main st UPDATED", site1Address = "123 main st", site2Address = "456 oak ave";
+        LocalDate shiftDate = LocalDate.of(2020, 1, 1);
+
+        // Used for testing Employees module integration:
+        // Creating the test branch and shifts, recruiting and certifying the employees
+        es.loadData();
+        us.loadData();
+        es.createBranch("admin123",site1Address); // This method should probably be called automatically when creating a new branch site in the Transport UI.
+        es.createBranch("admin123",site2Address); // This method should probably be called automatically when creating a new branch site in the Transport UI.
+        es.createBranch("admin123",updatedBranchId); // This method should probably be called automatically when creating a new branch site in the Transport UI.
+        es.updateBranchWorkingHours("admin123",HQAddress, LocalTime.of(0,0),LocalTime.of(14,0),LocalTime.of(14,0),LocalTime.of(23,0));
+        es.updateBranchWorkingHours("admin123",site1Address, LocalTime.of(0,0),LocalTime.of(14,0),LocalTime.of(14,0),LocalTime.of(23,0));
+        es.updateBranchWorkingHours("admin123",site2Address, LocalTime.of(0,0),LocalTime.of(14,0),LocalTime.of(14,0),LocalTime.of(23,0));
+        es.updateBranchWorkingHours("admin123",updatedBranchId, LocalTime.of(0,0),LocalTime.of(14,0),LocalTime.of(14,0),LocalTime.of(23,0));
+        es.createWeekShifts("admin123",HQAddress,shiftDate);
+        es.createWeekShifts("admin123",site1Address,shiftDate);
+        es.createWeekShifts("admin123",site2Address,shiftDate);
+        es.createWeekShifts("admin123",updatedBranchId,shiftDate);
+        es.setShiftNeededAmount("admin123",HQAddress,shiftDate,SShiftType.Morning,"Driver",1);
+        es.recruitEmployee("admin123","megan smith", HQAddress,driverId1,"Bank01",15, LocalDate.now(),"","");
+        es.recruitEmployee("admin123","name", HQAddress,driverId2,"Bank02",15, LocalDate.now(),"","");
+        es.recruitEmployee("admin123","Test Storekeeper", site2Address,storekeeperId1,"Bank1",25, LocalDate.now(),"","");
+        es.recruitEmployee("admin123","Test Storekeeper2", site2Address,storekeeperId2,"Bank2",25, LocalDate.now(),"","");
+        es.recruitEmployee("admin123","Test Storekeeper3", updatedBranchId,storekeeperId3,"Bank3",25, LocalDate.now(),"","");
+        es.recruitEmployee("admin123","Test Storekeeper4", updatedBranchId,storekeeperId4,"Bank4",25, LocalDate.now(),"","");
+        es.recruitEmployee("admin123","Test Storekeeper5", site1Address,storekeeperId5,"Bank5",25, LocalDate.now(),"","");
+        es.recruitEmployee("admin123","Test Storekeeper5", site1Address,storekeeperId6,"Bank6",25, LocalDate.now(),"","");
+        es.certifyEmployee("admin123",driverId1,"Driver"); // This call should probably be responsible for calling the rms.addDriver method that adds the driver, when executed normally through the HR Manager Menu (Employees Module CLI).
+        es.certifyEmployee("admin123",driverId2,"Driver"); // This call should probably be responsible for calling the rms.addDriver method that adds the driver, when executed normally through the HR Manager Menu (Employees Module CLI).
+        es.certifyEmployee("admin123",storekeeperId1,"Storekeeper");
+        es.certifyEmployee("admin123",storekeeperId2,"Storekeeper");
+        es.certifyEmployee("admin123",storekeeperId3,"Storekeeper");
+        es.certifyEmployee("admin123",storekeeperId4,"Storekeeper");
+        es.certifyEmployee("admin123",storekeeperId5,"Storekeeper");
+        es.certifyEmployee("admin123",storekeeperId6,"Storekeeper");
+        es.requestShift(driverId1,HQAddress,shiftDate,SShiftType.Morning,"Driver");
+        es.requestShift(driverId2,HQAddress,shiftDate,SShiftType.Morning,"Driver");
+        es.requestShift(storekeeperId1,site2Address,shiftDate,SShiftType.Morning,"Storekeeper");
+        es.requestShift(storekeeperId2,site2Address,shiftDate,SShiftType.Evening,"Storekeeper");
+        es.requestShift(storekeeperId3,updatedBranchId,shiftDate,SShiftType.Morning,"Storekeeper");
+        es.requestShift(storekeeperId4,updatedBranchId,shiftDate,SShiftType.Evening,"Storekeeper");
+        es.requestShift(storekeeperId5,site1Address,shiftDate,SShiftType.Morning,"Storekeeper");
+        es.requestShift(storekeeperId6,site1Address,shiftDate,SShiftType.Evening,"Storekeeper");
+        // Assigning the employees to the relevant shifts.
+        es.setShiftEmployees("admin123",HQAddress,shiftDate, SShiftType.Morning,"Driver",new ArrayList<>(){{add(driverId1);add(driverId2);}});
+        es.setShiftEmployees("admin123",site2Address,shiftDate, SShiftType.Morning,"Storekeeper",new ArrayList<>(){{add(storekeeperId1);}});
+        es.setShiftEmployees("admin123",site2Address,shiftDate, SShiftType.Evening,"Storekeeper",new ArrayList<>(){{add(storekeeperId2);}});
+        es.setShiftEmployees("admin123",updatedBranchId,shiftDate, SShiftType.Morning,"Storekeeper",new ArrayList<>(){{add(storekeeperId3);}});
+        es.setShiftEmployees("admin123",updatedBranchId,shiftDate, SShiftType.Evening,"Storekeeper",new ArrayList<>(){{add(storekeeperId4);}});
+        es.setShiftEmployees("admin123",site1Address,shiftDate, SShiftType.Morning,"Storekeeper",new ArrayList<>(){{add(storekeeperId5);}});
+        es.setShiftEmployees("admin123",site1Address,shiftDate, SShiftType.Evening,"Storekeeper",new ArrayList<>(){{add(storekeeperId6);}});
+        es.approveShift("admin123",HQAddress,shiftDate, SShiftType.Morning);
+        es.approveShift("admin123",site2Address,shiftDate, SShiftType.Morning);
+        es.approveShift("admin123",site2Address,shiftDate, SShiftType.Evening);
+        es.approveShift("admin123",updatedBranchId,shiftDate, SShiftType.Morning);
+        es.approveShift("admin123",updatedBranchId,shiftDate, SShiftType.Evening);
+        es.approveShift("admin123",site1Address,shiftDate, SShiftType.Morning);
+        es.approveShift("admin123",site1Address,shiftDate, SShiftType.Evening);
+    }
 }

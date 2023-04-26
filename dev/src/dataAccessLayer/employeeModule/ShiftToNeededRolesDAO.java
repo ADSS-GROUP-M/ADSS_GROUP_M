@@ -9,7 +9,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.HashMap;
 
-class ShiftToNeededRolesDAO extends DAO{
+public class ShiftToNeededRolesDAO extends DAO{
     private static ShiftToNeededRolesDAO instance;
     private HashMap<Integer, HashMap<Role,Integer>> cache;
     private enum Columns {
@@ -19,15 +19,15 @@ class ShiftToNeededRolesDAO extends DAO{
         Role,
         Amount;
     }
-    private ShiftToNeededRolesDAO() throws DalException {
+    public ShiftToNeededRolesDAO() throws DalException {
         super("SHIFT_ROLES", new String[]{ShiftToNeededRolesDAO.Columns.ShiftDate.name(), ShiftToNeededRolesDAO.Columns.ShiftType.name(), ShiftToNeededRolesDAO.Columns.Branch.name(), ShiftToNeededRolesDAO.Columns.Role.name()});
         this.cache = new HashMap<>();
     }
-    static ShiftToNeededRolesDAO getInstance() throws DalException {
-       if(instance == null)
-          instance = new ShiftToNeededRolesDAO();
-       return instance;
+    public ShiftToNeededRolesDAO(String dbName) throws DalException {
+        super(dbName, "SHIFT_ROLES", new String[]{ShiftToNeededRolesDAO.Columns.ShiftDate.name(), ShiftToNeededRolesDAO.Columns.ShiftType.name(), ShiftToNeededRolesDAO.Columns.Branch.name(), ShiftToNeededRolesDAO.Columns.Role.name()});
+        this.cache = new HashMap<>();
     }
+
     private int getHashCode(LocalDate dt, Shift.ShiftType st, String branch){
         return (formatLocalDate(dt) + st.name() + branch).hashCode();
     }

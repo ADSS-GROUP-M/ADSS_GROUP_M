@@ -13,9 +13,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-class ShiftToWorkersDAO extends DAO {
+public class ShiftToWorkersDAO extends DAO {
 
-    private static ShiftToWorkersDAO instance;
     private HashMap<Integer, HashMap<Role,List<Employee>>> cache;
     private EmployeeDAO employeeDAO;
 
@@ -28,18 +27,18 @@ class ShiftToWorkersDAO extends DAO {
     }
 
     //needed roles HashMap<Role,Integer>, shiftRequests HashMap<Role,List<Employees>>, shiftWorkers Map<Role,List<Employees>>, cancelCardApplies List<String>, shiftActivities List<String>.
-    private ShiftToWorkersDAO() throws DalException {
+    public ShiftToWorkersDAO(EmployeeDAO employeeDAO) throws DalException {
         super("SHIFT_WORKERS", new String[]{Columns.ShiftDate.name(), Columns.ShiftType.name(), Columns.Branch.name(),Columns.EmployeeId.name()});
-        employeeDAO = EmployeeDAO.getInstance();
+        this.employeeDAO = employeeDAO;
         this.cache = new HashMap<>();
     }
 
-    public static ShiftToWorkersDAO getInstance() throws DalException {
-        if (instance == null)
-            instance = new ShiftToWorkersDAO();
-        return instance;
-
+    public ShiftToWorkersDAO(String dbName, EmployeeDAO employeeDAO) throws DalException {
+        super(dbName,"SHIFT_WORKERS", new String[]{Columns.ShiftDate.name(), Columns.ShiftType.name(), Columns.Branch.name(),Columns.EmployeeId.name()});
+        this.employeeDAO = employeeDAO;
+        this.cache = new HashMap<>();
     }
+
     private int getHashCode(LocalDate dt, Shift.ShiftType st, String branch){
         return (formatLocalDate(dt) + st.name() + branch).hashCode();
     }

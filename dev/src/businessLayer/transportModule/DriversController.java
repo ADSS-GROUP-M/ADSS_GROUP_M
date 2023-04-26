@@ -25,7 +25,7 @@ public class DriversController {
      * @throws TransportException If the driver with the same ID already exists in the system.
      */
     public void addDriver(Driver driver) throws TransportException{
-        if (driverExists(driver.id()) != false) {
+        if (driverExists(driver.id())) {
             throw new TransportException("Driver already exists");
         }
 
@@ -44,7 +44,7 @@ public class DriversController {
      * @throws TransportException If the driver with the specified ID is not found.
      */
     public  Driver getDriver(String id) throws TransportException {
-        if (driverExists(id) != false) {
+        if (driverExists(id) == false) {
             throw new TransportException("Driver not found");
         }
 

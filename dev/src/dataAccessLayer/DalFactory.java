@@ -7,6 +7,8 @@ import dataAccessLayer.employeeModule.ShiftDAO;
 import dataAccessLayer.employeeModule.UserDAO;
 import dataAccessLayer.transportModule.*;
 
+import dataAccessLayer.employeeModule.*;
+
 public class DalFactory {
 
     private final EmployeeDAO employeeDAO;
@@ -20,9 +22,17 @@ public class DalFactory {
     private final TransportsDAO transportsDAO;
 
     public DalFactory() throws DalException {
-        userDAO = UserDAO.getInstance();
-        employeeDAO = EmployeeDAO.getInstance();
-        shiftDAO = ShiftDAO.getInstance();
+
+        ShiftToActivityDAO shiftToActivityDAO = new ShiftToActivityDAO();
+        ShiftToCancelsDAO shiftToCancelsDAO = new ShiftToCancelsDAO();
+        ShiftToNeededRolesDAO shiftToNeededRolesDAO = new ShiftToNeededRolesDAO();
+        UserAuthorizationsDAO userAuthorizationsDAO = new UserAuthorizationsDAO();
+
+        userDAO = new UserDAO(userAuthorizationsDAO);
+        employeeDAO = new EmployeeDAO();
+        ShiftToWorkersDAO shiftToWorkersDAO = new ShiftToWorkersDAO(employeeDAO);
+        ShiftToRequestsDAO shiftToRequestsDAO = new ShiftToRequestsDAO(employeeDAO);
+        shiftDAO = new ShiftDAO(shiftToNeededRolesDAO, shiftToRequestsDAO, shiftToWorkersDAO, shiftToCancelsDAO, shiftToActivityDAO);
         itemListsDAO = new ItemListsDAO();
         trucksDAO = new TrucksDAO();
         driversDAO = new DriversDAO();
@@ -37,12 +47,16 @@ public class DalFactory {
      */
     public DalFactory(String dbName) throws DalException {
 
-        //TODO: GET TESTING INSTANCE
-        userDAO = UserDAO.getInstance();
-        employeeDAO = EmployeeDAO.getInstance();
-        shiftDAO = ShiftDAO.getInstance();
-        //TODO: GET TESTING INSTANCE
-        // ===================================== |
+        ShiftToActivityDAO shiftToActivityDAO = new ShiftToActivityDAO(dbName);
+        ShiftToCancelsDAO shiftToCancelsDAO = new ShiftToCancelsDAO(dbName);
+        ShiftToNeededRolesDAO shiftToNeededRolesDAO = new ShiftToNeededRolesDAO(dbName);
+        UserAuthorizationsDAO userAuthorizationsDAO = new UserAuthorizationsDAO(dbName);
+
+        userDAO = new UserDAO(dbName, userAuthorizationsDAO);
+        employeeDAO = new EmployeeDAO(dbName);
+        ShiftToWorkersDAO shiftToWorkersDAO = new ShiftToWorkersDAO(dbName, employeeDAO);
+        ShiftToRequestsDAO shiftToRequestsDAO = new ShiftToRequestsDAO(dbName, employeeDAO);
+        shiftDAO = new ShiftDAO(dbName, shiftToNeededRolesDAO, shiftToRequestsDAO, shiftToWorkersDAO, shiftToCancelsDAO, shiftToActivityDAO);
 
         trucksDAO = new TrucksDAO(dbName);
         driversDAO = new DriversDAO(dbName);

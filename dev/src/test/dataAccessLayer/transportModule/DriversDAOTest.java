@@ -2,6 +2,7 @@ package dataAccessLayer.transportModule;
 
 import businessLayer.employeeModule.Employee;
 import businessLayer.employeeModule.Role;
+import dataAccessLayer.DalFactory;
 import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.dalUtils.OfflineResultSet;
 import dataAccessLayer.dalUtils.SQLExecutor;
@@ -33,8 +34,10 @@ class DriversDAOTest {
         employee.addRole(Role.GeneralWorker);
         driver = new Driver(employee.getId(),employee.getName(), Driver.LicenseType.C3);
         try {
-            empDao = EmployeeDAO.getTestingInstance("TestingDB.db");
-            dao = new DriversDAO("TestingDB.db");
+            DalFactory factory = new DalFactory("TestingDB.db");
+
+            empDao = factory.employeeDAO();
+            dao = factory.driversDAO();
             dao.clearTable();
             empDao.clearTable();
 

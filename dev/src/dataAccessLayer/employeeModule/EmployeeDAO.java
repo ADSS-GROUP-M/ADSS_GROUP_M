@@ -14,14 +14,13 @@ import java.util.*;
 
 public class EmployeeDAO extends DAO<Employee> {
 
-    private static EmployeeDAO instance;
-
     private static final String[] types = new String[]{"TEXT", "TEXT", "TEXT", "REAL", "REAL", "REAL", "TEXT", "TEXT", "TEXT"};
-    private static final String[] primary_keys = {"id"};
-    private EmployeeRolesDAO employeeRolesDAO;
+    private static final String[] primary_keys = {"Id"};
+    private static final String tableName = "EMPLOYEES";
+    private final EmployeeRolesDAO employeeRolesDAO;
 
-    private EmployeeDAO() throws DalException{
-        super("employees",
+    public EmployeeDAO() throws DalException{
+        super(tableName,
                 types,
                 primary_keys,
                 "Id",
@@ -37,9 +36,9 @@ public class EmployeeDAO extends DAO<Employee> {
         employeeRolesDAO = EmployeeRolesDAO.getInstance();
     }
 
-    private EmployeeDAO(String dbName) throws DalException{
+    public EmployeeDAO(String dbName) throws DalException{
         super(dbName,
-                "employees",
+                tableName,
                 types,
                 primary_keys,
                 "Id",
@@ -205,24 +204,6 @@ public class EmployeeDAO extends DAO<Employee> {
         }
         ans.setRoles(roles);
         return ans;
-    }
-
-    public static EmployeeDAO getInstance() throws DalException{
-        if (instance == null) {
-            instance = new EmployeeDAO();
-        }
-        return instance;
-    }
-
-    public static EmployeeDAO getTestingInstance(String dbName) throws DalException{
-        if (instance == null) {
-            instance = new EmployeeDAO(dbName);
-        }
-        return instance;
-    }
-    
-    public static void deleteInstance() {
-        instance = null;
     }
 
     @Override

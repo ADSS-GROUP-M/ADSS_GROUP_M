@@ -31,41 +31,43 @@ public class ShiftDAO extends DAO {
     }
 
     //needed roles HashMap<Role,Integer>, shiftRequests HashMap<Role,List<Employees>>, shiftWorkers Map<Role,List<Employees>>, cancelCardApplies List<String>, shiftActivities List<String>.
-    private ShiftDAO() throws DalException {
+    public ShiftDAO(ShiftToNeededRolesDAO shiftToNeededRolesDAO,
+                    ShiftToRequestsDAO shiftToRequestsDAO,
+                    ShiftToWorkersDAO shiftToWorkersDAO,
+                    ShiftToCancelsDAO shiftToCancelsDAO,
+                    ShiftToActivityDAO shiftToActivityDAO){
         super("SHIFTS", new String[]{ShiftDAO.Columns.ShiftDate.name(), ShiftDAO.Columns.ShiftType.name(), Columns.Branch.name()});
-        shiftToNeededRolesDAO = ShiftToNeededRolesDAO.getInstance();
-        shiftToRequestsDAO = ShiftToRequestsDAO.getInstance();
-         shiftToWorkersDAO = ShiftToWorkersDAO.getInstance();
-         shiftToCancelsDAO = ShiftToCancelsDAO.getInstance();
-         shiftToActivityDAO = ShiftToActivityDAO.getInstance();
-         this.cache = new HashMap<>();
+        this.shiftToNeededRolesDAO = shiftToNeededRolesDAO;
+        this.shiftToRequestsDAO = shiftToRequestsDAO;
+        this.shiftToWorkersDAO = shiftToWorkersDAO;
+        this.shiftToCancelsDAO = shiftToCancelsDAO;
+        this.shiftToActivityDAO = shiftToActivityDAO;
+        this.cache = new HashMap<>();
     }
 
     /**
      * Can be used for testing in a different database
-     * @param dbName the name of the database to connect to
+     *
+     * @param dbName                the name of the database to connect to
+     * @param shiftToNeededRolesDAO
+     * @param shiftToRequestsDAO
+     * @param shiftToWorkersDAO
+     * @param shiftToCancelsDAO
+     * @param shiftToActivityDAO
      */
-    private ShiftDAO(String dbName) throws DalException {
+    public ShiftDAO(String dbName,
+                     ShiftToNeededRolesDAO shiftToNeededRolesDAO,
+                     ShiftToRequestsDAO shiftToRequestsDAO,
+                     ShiftToWorkersDAO shiftToWorkersDAO,
+                     ShiftToCancelsDAO shiftToCancelsDAO,
+                     ShiftToActivityDAO shiftToActivityDAO){
         super(dbName,"SHIFTS", new String[]{ShiftDAO.Columns.ShiftDate.name(), ShiftDAO.Columns.ShiftType.name(), Columns.Branch.name()});
-        shiftToNeededRolesDAO = ShiftToNeededRolesDAO.getInstance();
-        shiftToRequestsDAO = ShiftToRequestsDAO.getInstance(); // TODO: update to getTestingInstance(dbName);
-        shiftToWorkersDAO = ShiftToWorkersDAO.getInstance();
-        shiftToCancelsDAO = ShiftToCancelsDAO.getInstance();
-        shiftToActivityDAO = ShiftToActivityDAO.getInstance();
+        this.shiftToNeededRolesDAO = shiftToNeededRolesDAO;
+        this.shiftToRequestsDAO = shiftToRequestsDAO;
+        this.shiftToWorkersDAO = shiftToWorkersDAO;
+        this.shiftToCancelsDAO = shiftToCancelsDAO;
+        this.shiftToActivityDAO = shiftToActivityDAO;
         this.cache = new HashMap<>();
-    }
-
-    public static ShiftDAO getInstance() throws DalException {
-        if (instance == null)
-            instance = new ShiftDAO();
-        return instance;
-    }
-
-    public static ShiftDAO getTestingInstance(String dbName) throws DalException{
-        if (instance == null) {
-            instance = new ShiftDAO(dbName);
-        }
-        return instance;
     }
 
     private int getHashCode(LocalDate dt, ShiftType st, String branch){
@@ -149,9 +151,8 @@ public class ShiftDAO extends DAO {
         return ((Shift) super.select(keys));
     }
 
-    protected Shift convertReaderToObject(OfflineResultSet reader) {
+    protected Shift convertReaderToObject(OfflineResultSet reader) throws DalException {
         Shift ans = null;
-        try{
             LocalDate dt = LocalDate.parse(reader.getString(Columns.ShiftDate.name()));
             ShiftType st = ShiftType.valueOf(reader.getString(Columns.ShiftType.name()));
             String branch =reader.getString(Columns.Branch.name());
@@ -172,9 +173,6 @@ public class ShiftDAO extends DAO {
         ans.setShiftWorkers(shiftWorkers);
         ans.setCancelCardApplies(cancelApplies);
         ans.setShiftActivities(activities);
-        } catch (Exception throwables) {
-            //throwables.printStackTrace();
-        }
         return ans;
     }
 

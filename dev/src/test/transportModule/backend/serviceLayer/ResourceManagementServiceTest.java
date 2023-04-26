@@ -25,6 +25,7 @@ class ResourceManagementServiceTest {
     void setUp() {
         rms = new ServiceFactory("TestingDB.db").getResourceManagementService();
         //add drivers
+
         driver = new Driver("123456789","John", Driver.LicenseType.C3);
         rms.addDriver(driver.toJson());
 

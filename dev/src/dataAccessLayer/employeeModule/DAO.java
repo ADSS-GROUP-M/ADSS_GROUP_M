@@ -117,6 +117,6 @@ public abstract class DAO {
         }
     }
 
-    protected abstract Object convertReaderToObject(OfflineResultSet reader);
+    protected abstract Object convertReaderToObject(OfflineResultSet reader) throws DalException;
 
 }

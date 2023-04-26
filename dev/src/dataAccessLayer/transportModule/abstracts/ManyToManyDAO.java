@@ -68,7 +68,7 @@ public abstract class ManyToManyDAO<T>{
     /**
      * Initialize the table if it doesn't exist
      */
-    private void initTable() throws DalException{
+    protected void initTable() throws DalException{
         StringBuilder query = new StringBuilder();
 
         query.append(String.format("CREATE TABLE IF NOT EXISTS %s (\n", TABLE_NAME));

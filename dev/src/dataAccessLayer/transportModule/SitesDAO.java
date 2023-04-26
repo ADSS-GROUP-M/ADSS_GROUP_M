@@ -3,6 +3,7 @@ package dataAccessLayer.transportModule;
 import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.dalUtils.OfflineResultSet;
 import dataAccessLayer.transportModule.abstracts.DAO;
+import objects.transportObjects.Driver;
 import objects.transportObjects.Site;
 import objects.transportObjects.Truck;
 
@@ -152,6 +153,29 @@ public class SitesDAO extends DAO<Site> {
             }
         } catch (SQLException e) {
             throw new DalException("Failed to delete site", e);
+        }
+    }
+
+    @Override
+    public boolean exists(Site object) throws DalException {
+
+        if(cache.contains(object)) {
+            return true;
+        }
+
+        String query = String.format("SELECT * FROM %s WHERE address = '%s';", TABLE_NAME, object.address());
+        OfflineResultSet resultSet;
+        try {
+            resultSet = cursor.executeRead(query);
+            if(resultSet.next()) {
+                Site selected = getObjectFromResultSet(resultSet);
+                cache.put(selected);
+                return true;
+            } else {
+                return false;
+            }
+        } catch (SQLException e) {
+            throw new DalException("Failed to check if Site exists", e);
         }
     }
 

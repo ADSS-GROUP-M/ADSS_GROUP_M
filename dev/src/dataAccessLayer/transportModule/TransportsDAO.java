@@ -198,6 +198,24 @@ public class TransportsDAO extends ManyToManyDAO<Transport> implements CounterDA
         }
     }
 
+    @Override
+    public boolean exists(Transport object) throws DalException {
+
+        if(cache.contains(object)) {
+            return true;
+        }
+
+        String query = String.format("SELECT * FROM %s WHERE id = %d;",
+                TABLE_NAME,
+                object.id()
+        );
+        try{
+            return cursor.executeRead(query).isEmpty() == false;
+        } catch (SQLException e) {
+            throw new DalException("Failed to check if transport exists");
+        }
+    }
+
     protected Transport getObjectFromResultSet(OfflineResultSet resultSet, List<TransportDestination> transportDestinations){
         LinkedList<String> destinations = new LinkedList<>();
         HashMap<String,Integer> itemLists = new HashMap<>();

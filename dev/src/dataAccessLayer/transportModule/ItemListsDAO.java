@@ -4,6 +4,7 @@ import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.dalUtils.OfflineResultSet;
 import dataAccessLayer.transportModule.abstracts.CounterDAO;
 import dataAccessLayer.transportModule.abstracts.DAO;
+import objects.transportObjects.Driver;
 import objects.transportObjects.ItemList;
 
 import java.sql.SQLException;
@@ -120,6 +121,29 @@ public class ItemListsDAO extends DAO<ItemList> implements CounterDAO {
             }
         } catch (SQLException e) {
             throw new DalException("Failed to delete item list", e);
+        }
+    }
+
+    @Override
+    public boolean exists(ItemList object) throws DalException {
+
+        if(cache.contains(object)) {
+            return true;
+        }
+
+        String query = String.format("SELECT * FROM %s WHERE id = %d;", TABLE_NAME, object.id());
+        OfflineResultSet resultSet;
+        try {
+            resultSet = cursor.executeRead(query);
+            if(resultSet.next()) {
+                ItemList selected = getObjectFromResultSet(resultSet);
+                cache.put(selected);
+                return true;
+            } else {
+                return false;
+            }
+        } catch (SQLException e) {
+            throw new DalException("Failed to check if item list exists", e);
         }
     }
 

@@ -3,6 +3,7 @@ package businessLayer.transportModule;
 import dataAccessLayer.DalFactory;
 import dataAccessLayer.dalUtils.DalException;
 import serviceLayer.employeeModule.Services.EmployeesService;
+import utils.transportUtils.TransportException;
 
 public class BusinessFactory {
 
@@ -19,18 +20,23 @@ public class BusinessFactory {
         DalFactory dalFactory = new DalFactory();
 
         trucksController = new TrucksController(dalFactory.trucksDAO());
-        itemListsController = new ItemListsController(dalFactory.itemListsDAO());
         sitesController = new SitesController(dalFactory.sitesDAO());
         driversController = new DriversController(dalFactory.driversDAO());
 
         EmployeesService employeesService = EmployeesService.getInstance();
 
-        transportsController = new TransportsController(trucksController,
-                driversController,
-                sitesController,
-                itemListsController,
-                employeesService,
-                dalFactory.transportsDAO());
+        try {
+            itemListsController = new ItemListsController(dalFactory.itemListsDAO());
+            transportsController = new TransportsController(trucksController,
+                    driversController,
+                    sitesController,
+                    itemListsController,
+                    employeesService,
+                    dalFactory.transportsDAO());
+            
+        } catch (TransportException e) {
+            throw new RuntimeException(e);
+        }
 
     }
 

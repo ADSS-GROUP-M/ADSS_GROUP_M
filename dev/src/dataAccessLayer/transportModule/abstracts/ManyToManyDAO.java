@@ -142,6 +142,8 @@ public abstract class ManyToManyDAO<T>{
      */
     public abstract void delete(T object) throws DalException;
 
+    public abstract boolean exists(T object) throws DalException;
+
     protected abstract T getObjectFromResultSet(OfflineResultSet resultSet);
 
     /**

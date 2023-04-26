@@ -164,6 +164,16 @@ public class ItemListsItemsDAO extends ManyToManyDAO<ItemList> {
     }
 
     @Override
+    public boolean exists(ItemList object) throws DalException {
+        String query = String.format("SELECT * FROM %s WHERE id = %d LIMIT 1;", TABLE_NAME, object.id());
+        try {
+            return cursor.executeRead(query).isEmpty() == false;
+        } catch (SQLException e) {
+            throw new DalException("Failed to check if item list exists", e);
+        }
+    }
+
+    @Override
     protected ItemList getObjectFromResultSet(OfflineResultSet resultSet) {
         HashMap<String,Integer> load = new HashMap<>();
         HashMap<String,Integer> unload = new HashMap<>();

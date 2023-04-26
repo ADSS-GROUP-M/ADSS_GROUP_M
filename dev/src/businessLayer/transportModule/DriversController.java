@@ -12,12 +12,10 @@ import java.util.TreeMap;
  * It provides methods for adding, retrieving, updating, and removing drivers from the system.
  */
 public class DriversController {
-    private final TreeMap<String, Driver> drivers;
     private final DriversDAO dao;
 
     public DriversController(DriversDAO dao){
         this.dao = dao;
-        drivers = new TreeMap<>();
     }
 
     /**
@@ -27,8 +25,8 @@ public class DriversController {
      * @throws TransportException If the driver with the same ID already exists in the system.
      */
     public void addDriver(Driver driver) throws TransportException{
-        if (driverExists(driver.id()) == false) {
-            drivers.put(driver.id(), driver);
+        if (dao.(driver) == false) {
+            dao.insert(driver);
         } else {
             throw new TransportException("Driver already exists");
         }

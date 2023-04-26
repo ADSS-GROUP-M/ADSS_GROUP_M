@@ -1,6 +1,7 @@
 package businessLayer.transportModule;
 
 import com.google.gson.reflect.TypeToken;
+import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.transportModule.TransportsDAO;
 import objects.transportObjects.Driver;
 import objects.transportObjects.Transport;
@@ -38,7 +39,7 @@ public class TransportsController {
                                 SitesController sc,
                                 ItemListsController ic,
                                 EmployeesService es,
-                                TransportsDAO dao){
+                                TransportsDAO dao) throws TransportException{
         this.sc = sc;
         this.ilc = ic;
         this.tc = tc;
@@ -46,7 +47,11 @@ public class TransportsController {
         this.es = es;
         this.dao = dao;
         transports = new TreeMap<>();
-        idCounter = 1; //TODO: currently not in use. this will have to be restored from the DB in the future
+        try {
+            idCounter = dao.selectCounter();
+        } catch (DalException e) {
+            throw new TransportException(e.getMessage(),e);
+        }
     }
 
     /**

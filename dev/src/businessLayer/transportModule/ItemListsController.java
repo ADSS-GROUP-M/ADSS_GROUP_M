@@ -1,5 +1,6 @@
 package businessLayer.transportModule;
 
+import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.transportModule.ItemListsDAO;
 import objects.transportObjects.ItemList;
 
@@ -18,10 +19,14 @@ public class ItemListsController {
 
     private int idCounter;
 
-    public ItemListsController(ItemListsDAO dao){
+    public ItemListsController(ItemListsDAO dao) throws TransportException{
         this.dao = dao;
         itemLists = new TreeMap<>();
-        idCounter = 1; //TODO: currently not in use. this will have to be restored from the DB in the future.
+        try {
+            idCounter = dao.selectCounter();
+        } catch (DalException e) {
+            throw new TransportException(e.getMessage(),e);
+        }
     }
 
     /**

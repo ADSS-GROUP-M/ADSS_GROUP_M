@@ -33,11 +33,38 @@ public class BusinessFactory {
                     itemListsController,
                     employeesService,
                     dalFactory.transportsDAO());
-            
+
         } catch (TransportException e) {
             throw new RuntimeException(e);
         }
+    }
 
+    /**
+     * used for testing
+     * @param dbName the name of the database to connect to
+     */
+    public BusinessFactory(String dbName) throws DalException{
+
+        DalFactory dalFactory = new DalFactory(dbName);
+
+        trucksController = new TrucksController(dalFactory.trucksDAO());
+        sitesController = new SitesController(dalFactory.sitesDAO());
+        driversController = new DriversController(dalFactory.driversDAO());
+
+        EmployeesService employeesService = EmployeesService.getInstance();
+
+        try {
+            itemListsController = new ItemListsController(dalFactory.itemListsDAO());
+            transportsController = new TransportsController(trucksController,
+                    driversController,
+                    sitesController,
+                    itemListsController,
+                    employeesService,
+                    dalFactory.transportsDAO());
+
+        } catch (TransportException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public TransportsController transportsController() {

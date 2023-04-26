@@ -176,6 +176,12 @@ public class EmployeeDAO extends DAO<Employee> {
     }
 
     @Override
+    public boolean exists(Employee object) throws DalException {
+        // TODO: implement
+        throw new UnsupportedOperationException("not implemented");
+    }
+
+    @Override
     protected Employee getObjectFromResultSet(OfflineResultSet resultSet){
         Employee ans = new Employee(
                 resultSet.getString(ALL_COLUMNS[1]),

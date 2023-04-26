@@ -65,14 +65,18 @@ public class ResourceManagementService {
         Driver driver = JsonUtils.deserialize(json, Driver.class);
         try{
             driver = driversController.getDriver(driver.id());
-        }catch(Exception e){
+        }catch(TransportException e){
             return Response.getErrorResponse(e).toJson();
         }
         return new Response("Driver found successfully", true, driver).toJson();
     }
 
     public String getAllDrivers(){
-        return new Response("Drivers found successfully", true, driversController.getAllDrivers()).toJson();
+        try {
+            return new Response("Drivers found successfully", true, driversController.getAllDrivers()).toJson();
+        } catch (TransportException e) {
+            return Response.getErrorResponse(e).toJson();
+        }
     }
 
     public String addTruck(String json){

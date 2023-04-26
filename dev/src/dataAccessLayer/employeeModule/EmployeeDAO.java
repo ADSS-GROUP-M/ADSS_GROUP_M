@@ -18,7 +18,6 @@ public class EmployeeDAO extends DAO<Employee> {
 
     private static final String[] types = new String[]{"TEXT", "TEXT", "TEXT", "REAL", "REAL", "REAL", "TEXT", "TEXT", "TEXT"};
     private static final String[] primary_keys = {"id"};
-    private HashMap<String, Employee> cache;
     private EmployeeRolesDAO employeeRolesDAO;
 
     private EmployeeDAO() throws DalException{
@@ -36,7 +35,6 @@ public class EmployeeDAO extends DAO<Employee> {
                 "Details"
         );
         employeeRolesDAO = EmployeeRolesDAO.getInstance();
-        cache = new HashMap<>();
     }
 
     private EmployeeDAO(String dbName) throws DalException{
@@ -55,7 +53,6 @@ public class EmployeeDAO extends DAO<Employee> {
                 "Details"
         );
         employeeRolesDAO = EmployeeRolesDAO.getTestingInstance(dbName);
-        cache = new HashMap<>();
     }
 
     public Employee select(String id) throws DalException {
@@ -69,8 +66,8 @@ public class EmployeeDAO extends DAO<Employee> {
      */
     @Override
     public Employee select(Employee object) throws DalException {
-        if (cache.containsKey(object.getId())) {
-            return cache.get(object.getId());
+        if (cache.contains(object)) {
+            return cache.get(object);
         }
         String query = String.format("SELECT * FROM %s WHERE %s = '%s'", TABLE_NAME, PRIMARY_KEYS[0], object.getId());
         OfflineResultSet resultSet;
@@ -86,7 +83,7 @@ public class EmployeeDAO extends DAO<Employee> {
         } else {
             throw new DalException("No truck with id " + object.getId() + " was found");
         }
-        cache.put(object.getId(),ans);
+        cache.put(ans);
         return ans;
     }
 
@@ -107,7 +104,7 @@ public class EmployeeDAO extends DAO<Employee> {
         while (resultSet.next()) {
             Employee emp = getObjectFromResultSet(resultSet);
             ans.add(emp);
-            cache.put(emp.getId(), emp);
+            cache.put(emp);
         }
         return ans;
     }
@@ -127,7 +124,7 @@ public class EmployeeDAO extends DAO<Employee> {
                     object.getMonthlyHours(), object.getSalaryBonus(), object.getEmploymentDate().toString(),
                     object.getEmploymentConditions(), object.getDetails());
             cursor.executeWrite(queryString);
-            cache.put(object.getId(), object);
+            cache.put(object);
             this.employeeRolesDAO.create(object); // Should insert the dependent values only after creating the employee in the database
         } catch (SQLException e) {
             throw new DalException(e);
@@ -154,7 +151,7 @@ public class EmployeeDAO extends DAO<Employee> {
                     PRIMARY_KEYS[0], emp.getId());
             if (cursor.executeWrite(queryString) == 0)
                 throw new DalException("No employee with id " + emp.getId() + " was found");
-            cache.put(emp.getId(),emp);
+            cache.put(emp);
         } catch(SQLException e) {
             throw new DalException(e);
         }
@@ -165,7 +162,7 @@ public class EmployeeDAO extends DAO<Employee> {
      */
     @Override
     public void delete(Employee emp) throws DalException{
-        cache.remove(emp.getId());
+        cache.remove(emp);
         Object[] keys = {emp.getId()};
         this.employeeRolesDAO.delete(emp);
 

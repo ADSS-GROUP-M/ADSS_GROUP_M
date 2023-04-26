@@ -99,6 +99,10 @@ public class TransportsService {
     }
 
     public String getAllTransports(){
-        return new Response("All Transports found successfully",true, tc.getAllTransports()).toJson();
+        try {
+            return new Response("All Transports found successfully",true, tc.getAllTransports()).toJson();
+        } catch (TransportException e) {
+            return Response.getErrorResponse(e).toJson();
+        }
     }
 }

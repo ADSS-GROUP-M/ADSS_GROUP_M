@@ -158,6 +158,29 @@ public class DriversDAO extends ManyToManyDAO<Driver> {
     }
 
     @Override
+    public boolean exists(Driver object) throws DalException {
+
+        if(cache.contains(object)) {
+            return true;
+        }
+
+        String query = String.format("SELECT * FROM %s WHERE id = '%s';", TABLE_NAME, object.id());
+        OfflineResultSet resultSet;
+        try {
+            resultSet = cursor.executeRead(query);
+            if(resultSet.next()) {
+                Driver selected = getObjectFromResultSet(resultSet);
+                cache.put(selected);
+                return true;
+            } else {
+                return false;
+            }
+        } catch (SQLException e) {
+            throw new DalException("Failed to check if Driver exists", e);
+        }
+    }
+
+    @Override
     protected Driver getObjectFromResultSet(OfflineResultSet resultSet) {
         return new Driver(
                 resultSet.getString("id"),

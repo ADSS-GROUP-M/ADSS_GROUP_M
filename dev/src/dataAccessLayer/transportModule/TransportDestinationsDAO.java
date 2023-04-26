@@ -202,6 +202,20 @@ public class TransportDestinationsDAO extends ManyToManyDAO<TransportDestination
         }
     }
 
+    @Override
+    public boolean exists(TransportDestination object) throws DalException {
+        String query = String.format("SELECT * FROM %s WHERE transport_id = %d AND destination_index = %d;",
+                TABLE_NAME,
+                object.transportId(),
+                object.destination_index()
+        );
+        try {
+            return cursor.executeRead(query).isEmpty() == false;
+        } catch (SQLException e) {
+            throw new DalException("Failed to check if transport destination exists", e);
+        }
+    }
+
     public void deleteAllRelated(Transport object) throws DalException{
 
         String query = String.format("DELETE FROM %s WHERE transport_id = %d;", TABLE_NAME, object.id());

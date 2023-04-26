@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-class ShiftToCancelsDAO extends DAO{
+public class ShiftToCancelsDAO extends DAO{
     private static ShiftToCancelsDAO instance;
     private HashMap<Integer, List<String>> cache;
     private enum Columns {
@@ -19,15 +19,15 @@ class ShiftToCancelsDAO extends DAO{
         Branch,
         CancelAction;
     }
-    private ShiftToCancelsDAO()throws DalException {
+    public ShiftToCancelsDAO()throws DalException {
         super("SHIFT_CANCELS", new String[]{Columns.ShiftDate.name(), Columns.ShiftType.name(), Columns.Branch.name()});
         this.cache = new HashMap<>();
     }
-    static ShiftToCancelsDAO getInstance() throws DalException {
-       if(instance == null)
-          instance = new ShiftToCancelsDAO();
-       return instance;
+    public ShiftToCancelsDAO(String dbname)throws DalException {
+        super(dbname, "SHIFT_CANCELS", new String[]{Columns.ShiftDate.name(), Columns.ShiftType.name(), Columns.Branch.name()});
+        this.cache = new HashMap<>();
     }
+
     private int getHashCode(LocalDate dt, Shift.ShiftType st, String branch){
         return (formatLocalDate(dt) + st.name() + branch).hashCode();
     }

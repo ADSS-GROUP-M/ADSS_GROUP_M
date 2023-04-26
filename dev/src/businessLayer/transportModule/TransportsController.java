@@ -1,6 +1,8 @@
 package businessLayer.transportModule;
 
 import com.google.gson.reflect.TypeToken;
+import dataAccessLayer.dalUtils.DalException;
+import dataAccessLayer.transportModule.TransportsDAO;
 import objects.transportObjects.Driver;
 import objects.transportObjects.Transport;
 import objects.transportObjects.Truck;
@@ -14,7 +16,7 @@ import utils.transportUtils.TransportException;
 import java.lang.reflect.Type;
 import java.time.LocalDateTime;
 import java.util.LinkedList;
-import java.util.TreeMap;
+import java.util.List;
 
 /**
  * The TransportsController class is responsible for managing and controlling transport objects.
@@ -28,17 +30,26 @@ public class TransportsController {
     private final SitesController sc;
     private final ItemListsController ilc;
     private final EmployeesService es;
-    private final TreeMap<Integer, Transport> transports;
+    private final TransportsDAO dao;
     private int idCounter;
 
-    public TransportsController(TrucksController tc, DriversController dc, SitesController sc, ItemListsController ic, EmployeesService es){
+    public TransportsController(TrucksController tc,
+                                DriversController dc,
+                                SitesController sc,
+                                ItemListsController ic,
+                                EmployeesService es,
+                                TransportsDAO dao) throws TransportException{
         this.sc = sc;
         this.ilc = ic;
         this.tc = tc;
         this.dc = dc;
         this.es = es;
-        transports = new TreeMap<>();
-        idCounter = 1; //TODO: currently not in use. this will have to be restored from the DB in the future
+        this.dao = dao;
+        try {
+            idCounter = dao.selectCounter();
+        } catch (DalException e) {
+            throw new TransportException(e.getMessage(),e);
+        }
     }
 
     /**
@@ -54,9 +65,14 @@ public class TransportsController {
         }
 
         validateTransport(transport);
-
-        Transport toAdd = new Transport(idCounter++,transport);
-        transports.put(toAdd.id(), toAdd);
+        Transport toAdd = new Transport(idCounter,transport);
+        try {
+            dao.insert(toAdd);
+            dao.incrementCounter();
+            idCounter++;
+        } catch (DalException e) {
+            throw new TransportException(e.getMessage(),e);
+        }
         return toAdd.id();
     }
 
@@ -72,7 +88,11 @@ public class TransportsController {
             throw new TransportException("Transport not found");
         }
 
-        return transports.get(id);
+        try {
+            return dao.select(Transport.getLookupObject(id));
+        } catch (DalException e) {
+            throw new TransportException(e.getMessage(),e);
+        }
     }
 
     /**
@@ -86,7 +106,11 @@ public class TransportsController {
             throw new TransportException("Transport not found");
         }
 ;
-        transports.remove(id);
+        try {
+            dao.delete(Transport.getLookupObject(id));
+        } catch (DalException e) {
+            throw new TransportException(e.getMessage(),e);
+        }
     }
 
     /**
@@ -103,7 +127,11 @@ public class TransportsController {
 
         validateTransport(newTransport);
 
-        transports.put(id, newTransport);
+        try {
+            dao.update(new Transport(id, newTransport));
+        } catch (DalException e) {
+            throw new TransportException(e.getMessage(),e);
+        }
     }
 
     /**
@@ -111,8 +139,12 @@ public class TransportsController {
      *
      * @return A list of all transport objects.
      */
-    public LinkedList<Transport> getAllTransports(){
-        return new LinkedList<>(transports.values());
+    public List<Transport> getAllTransports() throws TransportException{
+        try {
+            return dao.selectAll();
+        } catch (DalException e) {
+            throw new TransportException(e.getMessage(),e);
+        }
     }
 
     private boolean checkIfDriverIsAvailable(Driver driver, LocalDateTime dateTime){
@@ -201,7 +233,11 @@ public class TransportsController {
         }
     }
 
-    public boolean transportExists(int id) {
-        return transports.containsKey(id);
+    public boolean transportExists(int id) throws TransportException {
+        try {
+            return dao.exists(Transport.getLookupObject(id));
+        } catch (DalException e) {
+            throw new TransportException(e.getMessage(),e);
+        }
     }
 }

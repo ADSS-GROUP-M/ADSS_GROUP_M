@@ -2,6 +2,7 @@ package dataAccessLayer.transportModule;
 
 import businessLayer.employeeModule.Employee;
 import businessLayer.employeeModule.Role;
+import dataAccessLayer.DalFactory;
 import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.employeeModule.EmployeeDAO;
 import objects.transportObjects.*;
@@ -14,7 +15,6 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -70,12 +70,13 @@ class TransportsDAOTest {
         itemList = new ItemList(1, load, unload);
 
         try {
-            sitesDAO = new SitesDAO("TestingDB.db");
-            trucksDAO = new TrucksDAO("TestingDB.db");
-            employeeDAO = EmployeeDAO.getTestingInstance("TestingDB.db");
-            driversDAO = new DriversDAO("TestingDB.db");
-            itemListsDAO = new ItemListsDAO("TestingDB.db");
-            transportsDAO = new TransportsDAO("TestingDB.db");
+            DalFactory factory = new DalFactory("TestingDB.db");
+            sitesDAO = factory.sitesDAO();
+            trucksDAO = factory.trucksDAO();
+            employeeDAO = factory.employeeDAO();
+            driversDAO = factory.driversDAO();
+            itemListsDAO = factory.itemListsDAO();
+            transportsDAO = factory.transportsDAO();
 
             transportsDAO.clearTable();
             itemListsDAO.clearTable();
@@ -83,7 +84,6 @@ class TransportsDAOTest {
             trucksDAO.clearTable();
             sitesDAO.clearTable();
             employeeDAO.clearTable();
-
 
             sitesDAO.insert(site);
             trucksDAO.insert(truck);
@@ -98,12 +98,7 @@ class TransportsDAOTest {
 
     @AfterEach
     void tearDown() {
-        transportsDAO.clearTable();
-        itemListsDAO.clearTable();
-        driversDAO.clearTable();
-        trucksDAO.clearTable();
-        sitesDAO.clearTable();
-        employeeDAO.clearTable();
+        DalFactory.clearTestDB();
     }
 
     @Test

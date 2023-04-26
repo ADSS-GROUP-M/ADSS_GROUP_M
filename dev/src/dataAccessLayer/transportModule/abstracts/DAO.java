@@ -52,12 +52,12 @@ public abstract class DAO<T> {
         query.append(String.format("CREATE TABLE IF NOT EXISTS %s (\n", TABLE_NAME));
 
         for (int i = 0; i < ALL_COLUMNS.length; i++) {
-            query.append(String.format("%s %s NOT NULL,\n", ALL_COLUMNS[i], TYPES[i]));
+            query.append(String.format("\"%s\" %s NOT NULL,\n", ALL_COLUMNS[i], TYPES[i]));
         }
 
         query.append("PRIMARY KEY(");
         for(int i = 0; i < PRIMARY_KEYS.length; i++) {
-            query.append(String.format("'%s'",PRIMARY_KEYS[i]));
+            query.append(String.format("\"%s\"",PRIMARY_KEYS[i]));
             if (i != PRIMARY_KEYS.length-1) {
                 query.append(",");
             } else {
@@ -105,6 +105,8 @@ public abstract class DAO<T> {
      * @throws DalException if an error occurred while trying to delete the object
      */
     public abstract void delete(T object) throws DalException;
+
+    public abstract boolean exists(T object) throws DalException;
 
     protected abstract T getObjectFromResultSet(OfflineResultSet resultSet);
 

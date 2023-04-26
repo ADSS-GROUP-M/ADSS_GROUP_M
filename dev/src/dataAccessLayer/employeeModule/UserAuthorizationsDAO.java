@@ -9,7 +9,7 @@ import dataAccessLayer.dalUtils.OfflineResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
-class UserAuthorizationsDAO extends DAO {
+public class UserAuthorizationsDAO extends DAO {
 
     private static UserAuthorizationsDAO instance;
     private HashMap<Integer, Set<Authorization>> cache;
@@ -18,15 +18,13 @@ class UserAuthorizationsDAO extends DAO {
         Authorization;
     }
 
-    private UserAuthorizationsDAO()throws DalException {
+    public UserAuthorizationsDAO()throws DalException {
         super("USER_AUTHORIZATIONS", new String[]{Columns.Username.name()});
         this.cache = new HashMap<>();
     }
-
-    static UserAuthorizationsDAO getInstance() throws DalException {
-        if(instance == null)
-            instance = new UserAuthorizationsDAO();
-        return instance;
+    public UserAuthorizationsDAO(String dbName)throws DalException {
+        super(dbName,"USER_AUTHORIZATIONS", new String[]{Columns.Username.name()});
+        this.cache = new HashMap<>();
     }
 
     private int getHashCode(String id){

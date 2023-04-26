@@ -2,6 +2,7 @@ package dataAccessLayer.employeeModule;
 
 import businessLayer.employeeModule.Employee;
 import businessLayer.employeeModule.Role;
+import dataAccessLayer.DalFactory;
 import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.dalUtils.OfflineResultSet;
 import dataAccessLayer.dalUtils.SQLExecutor;
@@ -30,7 +31,9 @@ class EmployeeDAOTest {
         employee3 = new Employee("Test3", "1234567", "TestBank3", 23, LocalDate.now(),"","");
         employee4 = new Employee("Test4", "12345", "TestBank4", 24, LocalDate.now(),"","");
         try {
-            dao = EmployeeDAO.getTestingInstance("TestingDB.db");
+            DalFactory factory = new DalFactory("TestingDB.db");
+
+            dao = factory.employeeDAO();
             dao.clearTable();
             // Inserting only employee1 and employee2 at setUp
             dao.insert(employee1);

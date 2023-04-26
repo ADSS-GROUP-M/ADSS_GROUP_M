@@ -177,6 +177,12 @@ public class BranchesDAO extends ManyToManyDAO<Branch> {
     }
 
     @Override
+    public boolean exists(Branch object) throws DalException {
+        //TODO: implement
+        throw new UnsupportedOperationException("Not implemented");
+    }
+
+    @Override
     public Branch getObjectFromResultSet(OfflineResultSet resultSet) {
         return new Branch(
                 resultSet.getString("address"),

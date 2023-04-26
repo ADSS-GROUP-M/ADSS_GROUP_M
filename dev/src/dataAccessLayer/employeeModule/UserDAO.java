@@ -24,18 +24,19 @@ public class UserDAO extends DAO {
     }
 
     //needed roles HashMap<Role,Integer>, shiftRequests HashMap<Role,List<Employees>>, shiftWorkers Map<Role,List<Employees>>, cancelCardApplies List<String>, shiftActivities List<String>.
-    private UserDAO() throws DalException {
+    public UserDAO(UserAuthorizationsDAO userAuthorizationsDAO){
         super("USERS", new String[]{Columns.Username.name()});
-        userAuthorizationsDAO = UserAuthorizationsDAO.getInstance();
+        this.userAuthorizationsDAO = userAuthorizationsDAO;
         this.cache = new HashMap<>();
     }
 
-    public static UserDAO getInstance() throws DalException {
-        if (instance == null)
-            instance = new UserDAO();
-        return instance;
-
+    public UserDAO(String dbName, UserAuthorizationsDAO userAuthorizationsDAO){
+        super(dbName,"USERS", new String[]{Columns.Username.name()});
+        this.userAuthorizationsDAO = userAuthorizationsDAO;
+        this.cache = new HashMap<>();
     }
+
+
     private int getHashCode(String username){
         return (username).hashCode();
     }

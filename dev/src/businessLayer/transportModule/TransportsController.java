@@ -1,6 +1,7 @@
 package businessLayer.transportModule;
 
 import com.google.gson.reflect.TypeToken;
+import dataAccessLayer.transportModule.TransportsDAO;
 import objects.transportObjects.Driver;
 import objects.transportObjects.Transport;
 import objects.transportObjects.Truck;
@@ -28,15 +29,22 @@ public class TransportsController {
     private final SitesController sc;
     private final ItemListsController ilc;
     private final EmployeesService es;
+    private final TransportsDAO dao;
     private final TreeMap<Integer, Transport> transports;
     private int idCounter;
 
-    public TransportsController(TrucksController tc, DriversController dc, SitesController sc, ItemListsController ic, EmployeesService es){
+    public TransportsController(TrucksController tc,
+                                DriversController dc,
+                                SitesController sc,
+                                ItemListsController ic,
+                                EmployeesService es,
+                                TransportsDAO dao){
         this.sc = sc;
         this.ilc = ic;
         this.tc = tc;
         this.dc = dc;
         this.es = es;
+        this.dao = dao;
         transports = new TreeMap<>();
         idCounter = 1; //TODO: currently not in use. this will have to be restored from the DB in the future
     }

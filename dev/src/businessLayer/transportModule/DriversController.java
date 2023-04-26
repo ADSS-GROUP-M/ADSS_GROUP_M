@@ -1,5 +1,6 @@
 package businessLayer.transportModule;
 
+import dataAccessLayer.transportModule.DriversDAO;
 import objects.transportObjects.Driver;
 
 import utils.transportUtils.TransportException;
@@ -12,8 +13,10 @@ import java.util.TreeMap;
  */
 public class DriversController {
     private final TreeMap<String, Driver> drivers;
+    private final DriversDAO dao;
 
-    public DriversController(){
+    public DriversController(DriversDAO dao){
+        this.dao = dao;
         drivers = new TreeMap<>();
     }
 

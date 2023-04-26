@@ -2,7 +2,7 @@ package transportModule.backend.serviceLayer;
 
 import objects.transportObjects.*;
 import serviceLayer.transportModule.ItemListsService;
-import serviceLayer.transportModule.ModuleFactory;
+import serviceLayer.transportModule.ServiceFactory;
 import serviceLayer.transportModule.ResourceManagementService;
 import serviceLayer.transportModule.TransportsService;
 import org.junit.jupiter.api.AfterEach;
@@ -27,7 +27,7 @@ class TransportsServiceTest {
 
     @BeforeEach
     void setUp() {
-        ModuleFactory mf = new ModuleFactory();
+        ServiceFactory mf = new ServiceFactory();
         ts = mf.getTransportsService();
         ils = mf.getItemListsService();
         rms = mf.getResourceManagementService();

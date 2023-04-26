@@ -5,7 +5,7 @@ import presentationLayer.employeeModule.View.LoginMenu;
 import presentationLayer.employeeModule.View.Menu;
 import presentationLayer.employeeModule.View.MenuManager;
 import serviceLayer.employeeModule.Services.EmployeesService;
-import serviceLayer.transportModule.ModuleFactory;
+import serviceLayer.transportModule.ServiceFactory;
 
 public class TransportUI implements Menu {
 
@@ -17,7 +17,7 @@ public class TransportUI implements Menu {
     private final DriversManagement driversManagement;
 
     public TransportUI(){
-        ModuleFactory factory = new ModuleFactory();
+        ServiceFactory factory = new ServiceFactory();
         UIData = new UiData(
                 factory.getResourceManagementService(),
                 factory.getItemListsService(),

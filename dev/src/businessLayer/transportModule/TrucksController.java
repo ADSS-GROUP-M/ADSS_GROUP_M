@@ -1,5 +1,7 @@
 package businessLayer.transportModule;
 
+import dataAccessLayer.transportModule.TransportsDAO;
+import dataAccessLayer.transportModule.TrucksDAO;
 import objects.transportObjects.Truck;
 import utils.transportUtils.ErrorCollection;
 
@@ -14,8 +16,10 @@ import java.util.TreeMap;
 public class TrucksController {
 
     private final TreeMap<String, Truck> trucks;
+    private final TrucksDAO dao;
 
-    public TrucksController(){
+    public TrucksController(TrucksDAO dao){
+        this.dao = dao;
         trucks = new TreeMap<>();
     }
 

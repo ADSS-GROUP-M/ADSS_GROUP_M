@@ -1,5 +1,6 @@
 package businessLayer.transportModule;
 
+import dataAccessLayer.transportModule.SitesDAO;
 import objects.transportObjects.Site;
 
 import utils.transportUtils.TransportException;
@@ -12,8 +13,10 @@ import java.util.TreeMap;
  */
 public class SitesController {
     private final TreeMap<String, Site> sites;
+    private final SitesDAO dao;
 
-    public SitesController(){
+    public SitesController(SitesDAO dao){
+        this.dao = dao;
         sites = new TreeMap<>();
     }
 

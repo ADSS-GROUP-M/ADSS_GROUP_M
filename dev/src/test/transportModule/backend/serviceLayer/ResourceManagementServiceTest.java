@@ -1,6 +1,6 @@
 package transportModule.backend.serviceLayer;
 
-import serviceLayer.transportModule.ModuleFactory;
+import serviceLayer.transportModule.ServiceFactory;
 import serviceLayer.transportModule.ResourceManagementService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,7 +21,7 @@ class ResourceManagementServiceTest {
 
     @BeforeEach
     void setUp() {
-        rms = new ModuleFactory().getResourceManagementService();
+        rms = new ServiceFactory().getResourceManagementService();
 
         //add drivers
         driver = new Driver("123456789","John", Driver.LicenseType.C3);

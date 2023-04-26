@@ -1,7 +1,7 @@
 package transportModule.backend.serviceLayer;
 
 import serviceLayer.transportModule.ItemListsService;
-import serviceLayer.transportModule.ModuleFactory;
+import serviceLayer.transportModule.ServiceFactory;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,7 +19,7 @@ class ItemListsServiceTest {
 
     @BeforeEach
     void setUp() {
-        ils = new ModuleFactory().getItemListsService();
+        ils = new ServiceFactory().getItemListsService();
 
         HashMap<String, Integer> load1 = new HashMap<>();
         load1.put("Shirts", 20);

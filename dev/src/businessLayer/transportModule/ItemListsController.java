@@ -1,5 +1,6 @@
 package businessLayer.transportModule;
 
+import dataAccessLayer.transportModule.ItemListsDAO;
 import objects.transportObjects.ItemList;
 
 import utils.transportUtils.TransportException;
@@ -13,9 +14,12 @@ import java.util.TreeMap;
 public class ItemListsController {
 
     private final TreeMap<Integer, ItemList> itemLists;
+    private final ItemListsDAO dao;
+
     private int idCounter;
 
-    public ItemListsController(){
+    public ItemListsController(ItemListsDAO dao){
+        this.dao = dao;
         itemLists = new TreeMap<>();
         idCounter = 1; //TODO: currently not in use. this will have to be restored from the DB in the future.
     }

@@ -33,7 +33,8 @@ public abstract class CounterDAOBase implements CounterDAO {
     protected void initTable() throws DalException{
         String query = String.format("""
                 CREATE TABLE IF NOT EXISTS %s (
-                %s INTEGER NOT NULL;
+                %s INTEGER NOT NULL
+                );
                 """, TABLE_NAME, COLUMN_NAME);
         try {
             cursor.executeWrite(query);

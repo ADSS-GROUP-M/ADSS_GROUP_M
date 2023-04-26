@@ -20,8 +20,8 @@ public class DalFactory {
     private final TransportsDAO transportsDAO;
 
     public DalFactory() throws DalException {
-        employeeDAO = EmployeeDAO.getInstance();
         userDAO = UserDAO.getInstance();
+        employeeDAO = EmployeeDAO.getInstance();
         shiftDAO = ShiftDAO.getInstance();
         itemListsDAO = new ItemListsDAO();
         trucksDAO = new TrucksDAO();
@@ -36,13 +36,14 @@ public class DalFactory {
      * @param dbName the name of the database to connect to
      */
     public DalFactory(String dbName) throws DalException {
-        try {
-            employeeDAO = EmployeeDAO.getInstance();
-            userDAO = UserDAO.getInstance();
-            shiftDAO = ShiftDAO.getInstance();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+
+        //TODO: GET TESTING INSTANCE
+        userDAO = UserDAO.getInstance();
+        employeeDAO = EmployeeDAO.getInstance();
+        shiftDAO = ShiftDAO.getInstance();
+        //TODO: GET TESTING INSTANCE
+        // ===================================== |
+
         trucksDAO = new TrucksDAO(dbName);
         driversDAO = new DriversDAO(dbName);
         itemListsDAO = new ItemListsDAO(dbName);

@@ -61,7 +61,7 @@ public class TransportsDAO extends ManyToManyDAO<Transport> implements CounterDA
                 "weight"
         );
         destinationsDAO = new TransportDestinationsDAO(dbName);
-        counterDAO = new TransportIdCounterDAO();
+        counterDAO = new TransportIdCounterDAO(dbName);
     }
 
     /**

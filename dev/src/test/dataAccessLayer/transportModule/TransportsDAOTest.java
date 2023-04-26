@@ -73,7 +73,7 @@ class TransportsDAOTest {
             trucksDAO = new TrucksDAO("TestingDB.db");
             employeeDAO = EmployeeDAO.getTestingInstance("TestingDB.db");
             driversDAO = new DriversDAO("TestingDB.db");
-            itemListsDAO = new ItemListsDAO();
+            itemListsDAO = new ItemListsDAO("TestingDB.db");
             transportsDAO = new TransportsDAO("TestingDB.db");
 
             transportsDAO.clearTable();

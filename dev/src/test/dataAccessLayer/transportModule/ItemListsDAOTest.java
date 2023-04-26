@@ -36,7 +36,7 @@ class ItemListsDAOTest {
         itemList = new ItemList(1, load, unload);
 
         try {
-            dao = new ItemListsDAO();
+            dao = new ItemListsDAO("TestingDB.db");
             dao.clearTable();
             dao.insert(itemList);
         } catch (DalException e) {

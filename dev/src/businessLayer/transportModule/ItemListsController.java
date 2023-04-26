@@ -57,15 +57,12 @@ public class ItemListsController {
      * @throws TransportException If the item list with the specified ID is not found.
      */
     public ItemList getItemList(int id) throws TransportException{
-
-        ItemList lookupObject = ItemList.getLookupObject(id);
+        if(listExists(id) == false) {
+            throw new TransportException("Item list not found");
+        }
 
         try {
-            if(dao.exists(lookupObject) == false) {
-                throw new TransportException("Item list not found");
-            } else {
-                return dao.select(lookupObject);
-            }
+            return dao.select(ItemList.getLookupObject(id));
         } catch (DalException e) {
             throw new TransportException(e.getMessage(),e);
         }
@@ -78,14 +75,12 @@ public class ItemListsController {
      * @throws TransportException If the item list with the specified ID is not found.
      */
     public void removeItemList(int id) throws TransportException {
-        ItemList lookupObject = ItemList.getLookupObject(id);
+        if(listExists(id) == false) {
+            throw new TransportException("Item list not found");
+        }
 
         try {
-            if(dao.exists(lookupObject) == false) {
-                throw new TransportException("Item list not found");
-            } else {
-                dao.delete(lookupObject);
-            }
+            dao.delete(ItemList.getLookupObject(id));
         } catch (DalException e) {
             throw new TransportException(e.getMessage(),e);
         }
@@ -99,14 +94,12 @@ public class ItemListsController {
      * @throws TransportException If the item list with the specified ID is not found.
      */
     public void updateItemList(int id, ItemList newItemList) throws TransportException{
-        ItemList lookupObject = ItemList.getLookupObject(id);
+        if(listExists(id) == false) {
+            throw new TransportException("Item list not found");
+        }
 
         try {
-            if(dao.exists(lookupObject) == false) {
-                throw new TransportException("Item list not found");
-            } else {
-                dao.update(newItemList);
-            }
+            dao.update(newItemList);
         } catch (DalException e) {
             throw new TransportException(e.getMessage(),e);
         }

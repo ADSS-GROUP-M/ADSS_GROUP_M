@@ -1,13 +1,13 @@
 package businessLayer.transportModule;
 
-import dataAccessLayer.transportModule.TransportsDAO;
+import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.transportModule.TrucksDAO;
 import objects.transportObjects.Truck;
 import utils.transportUtils.ErrorCollection;
 
 import utils.transportUtils.TransportException;
-import java.util.LinkedList;
-import java.util.TreeMap;
+
+import java.util.List;
 
 /**
  * The TrucksController class is responsible for managing trucks in the transport module.
@@ -15,12 +15,10 @@ import java.util.TreeMap;
  */
 public class TrucksController {
 
-    private final TreeMap<String, Truck> trucks;
     private final TrucksDAO dao;
 
     public TrucksController(TrucksDAO dao){
         this.dao = dao;
-        trucks = new TreeMap<>();
     }
 
     /**
@@ -36,7 +34,11 @@ public class TrucksController {
 
         validateTruck(truck);
 
-        trucks.put(truck.id(), truck);
+        try {
+            dao.insert(truck);
+        } catch (DalException e) {
+            throw new TransportException(e.getMessage(),e);
+        }
     }
 
     /**
@@ -50,7 +52,11 @@ public class TrucksController {
             throw new TransportException("Truck not found");
         }
 
-        trucks.remove(id);
+        try {
+            dao.delete(Truck.getLookupObject(id));
+        } catch (DalException e) {
+            throw new TransportException(e.getMessage(),e);
+        }
     }
 
     /**
@@ -65,7 +71,11 @@ public class TrucksController {
             throw new TransportException("Truck not found");
         }
 
-        return trucks.get(id);
+        try {
+            return dao.select(Truck.getLookupObject(id));
+        } catch (DalException e) {
+            throw new TransportException(e.getMessage(),e);
+        }
     }
 
     /**
@@ -82,7 +92,11 @@ public class TrucksController {
 
         validateTruck(newTruck);
 
-        trucks.put(id, newTruck);
+        try {
+            dao.update(newTruck);
+        } catch (DalException e) {
+            throw new TransportException(e.getMessage(),e);
+        }
     }
 
     /**
@@ -90,8 +104,12 @@ public class TrucksController {
      *
      * @return A linked list of all trucks.
      */
-    public LinkedList<Truck> getAllTrucks(){
-        return new LinkedList<>(trucks.values());
+    public List<Truck> getAllTrucks() throws TransportException{
+        try {
+            return dao.selectAll();
+        } catch (DalException e) {
+            throw new TransportException(e.getMessage(),e);
+        }
     }
 
 
@@ -116,7 +134,11 @@ public class TrucksController {
         }
     }
 
-    public boolean truckExists(String id) {
-        return trucks.containsKey(id);
+    public boolean truckExists(String id) throws TransportException{
+        try {
+            return dao.exists(Truck.getLookupObject(id));
+        } catch (DalException e) {
+            throw new TransportException(e.getMessage(),e);
+        }
     }
 }

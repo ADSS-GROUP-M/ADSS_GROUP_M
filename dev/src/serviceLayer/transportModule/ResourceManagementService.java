@@ -126,7 +126,11 @@ public class ResourceManagementService {
     }
 
     public String getAllTrucks(){
-        return new Response("Trucks found successfully", true, trucksController.getAllTrucks()).toJson();
+        try {
+            return new Response("Trucks found successfully", true, trucksController.getAllTrucks()).toJson();
+        } catch (TransportException e) {
+            return Response.getErrorResponse(e).toJson();
+        }
     }
 
     public String addSite(String json){
@@ -176,7 +180,11 @@ public class ResourceManagementService {
     }
 
     public String getAllSites(){
-        return new Response("Sites found successfully", true, sitesController.getAllSites()).toJson();
+        try {
+            return new Response("Sites found successfully", true, sitesController.getAllSites()).toJson();
+        } catch (TransportException e) {
+            return Response.getErrorResponse(e).toJson();
+        }
     }
 
 }

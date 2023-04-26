@@ -38,6 +38,10 @@ public abstract class CounterDAOBase implements CounterDAO {
                 """, TABLE_NAME, COLUMN_NAME);
         try {
             cursor.executeWrite(query);
+            query = String.format("SELECT * FROM %s;", TABLE_NAME);
+            if(cursor.executeRead(query).isEmpty()){
+                resetCounter();
+            }
         } catch (SQLException e) {
             throw new DalException("Failed to initialize table "+ TABLE_NAME,e);
         }
@@ -49,7 +53,7 @@ public abstract class CounterDAOBase implements CounterDAO {
      */
     @Override
     public Integer selectCounter() throws DalException {
-        String query = String.format("SELECT %s FROM %s", COLUMN_NAME, TABLE_NAME);
+        String query = String.format("SELECT %s FROM %s;", COLUMN_NAME, TABLE_NAME);
         OfflineResultSet resultSet;
         try {
             resultSet = cursor.executeRead(query);
@@ -69,10 +73,10 @@ public abstract class CounterDAOBase implements CounterDAO {
      */
     @Override
     public void insertCounter(Integer value) throws DalException {
-        String query = String.format("INSERT INTO %s ('%s') VALUES (%d)", TABLE_NAME, COLUMN_NAME, value);
+        String query = String.format("DELETE FROM %s; INSERT INTO %s ('%s') VALUES (%d);",TABLE_NAME, TABLE_NAME, COLUMN_NAME, value);
         try {
-            if(cursor.executeWrite(query) != 1){
-                throw new RuntimeException("Unexpected error while incrementing " + COLUMN_NAME);
+            if(cursor.executeWrite(query) == 0){
+                throw new RuntimeException("Unexpected error while inserting " + COLUMN_NAME);
             }
         } catch (SQLException e) {
             throw new DalException("Failed to insert " + COLUMN_NAME,e);
@@ -84,7 +88,11 @@ public abstract class CounterDAOBase implements CounterDAO {
      */
     @Override
     public void incrementCounter() throws DalException{
-        String query = String.format("UPDATE %s SET %s = %s + 1", TABLE_NAME, COLUMN_NAME,COLUMN_NAME);
+        String query = String.format(" UPDATE %s SET %s = (SELECT %s FROM %s) + 1;",
+                TABLE_NAME,
+                COLUMN_NAME,
+                COLUMN_NAME,
+                TABLE_NAME);
         try {
             if(cursor.executeWrite(query) != 1){
                 throw new RuntimeException("Unexpected error while incrementing " + COLUMN_NAME);
@@ -99,12 +107,6 @@ public abstract class CounterDAOBase implements CounterDAO {
      */
     @Override
     public void resetCounter() throws DalException {
-        String query = String.format("UPDATE %s SET %s = 0", TABLE_NAME, COLUMN_NAME);
-        try {
-            cursor.executeWrite(query);
-        } catch (SQLException e) {
-            throw new DalException("Failed to reset " + COLUMN_NAME,e);
-        }
+        insertCounter(1);
     }
-
 }

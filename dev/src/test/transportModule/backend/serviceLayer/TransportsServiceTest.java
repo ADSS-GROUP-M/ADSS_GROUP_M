@@ -1,5 +1,6 @@
 package transportModule.backend.serviceLayer;
 
+import dataAccessLayer.DalFactory;
 import objects.transportObjects.*;
 import serviceLayer.transportModule.ItemListsService;
 import serviceLayer.transportModule.ServiceFactory;
@@ -27,10 +28,10 @@ class TransportsServiceTest {
 
     @BeforeEach
     void setUp() {
-        ServiceFactory mf = new ServiceFactory();
-        ts = mf.getTransportsService();
-        ils = mf.getItemListsService();
-        rms = mf.getResourceManagementService();
+        ServiceFactory factory = new ServiceFactory("TestingDB.db");
+        ts = factory.getTransportsService();
+        ils = factory.getItemListsService();
+        rms = factory.getResourceManagementService();
 
         Site site1 = new Site("zone a", "123 main st", "(555) 123-4567", "john smith", Site.SiteType.BRANCH);
         Site site2 = new Site("zone b", "456 oak ave", "(555) 234-5678", "jane doe", Site.SiteType.LOGISTICAL_CENTER);
@@ -80,7 +81,7 @@ class TransportsServiceTest {
 
     @AfterEach
     void tearDown() {
-
+        DalFactory.clearTestDB();
     }
 
     @Test
@@ -117,7 +118,7 @@ class TransportsServiceTest {
         );
         String json2 = ts.addTransport(newTransport.toJson());
         Response response = Response.fromJson(json2);
-        assertTrue(response.success());
+        assertTrue(response.success(),response.message());
         newTransport = newTransport.newId(response.dataToInt());
         String updatedJson = ts.getTransport(Transport.getLookupObject(response.dataToInt()).toJson());
         Response updatedResponse = Response.fromJson(updatedJson);
@@ -182,7 +183,7 @@ class TransportsServiceTest {
         );
         String json2 = ts.updateTransport(newTransport.toJson());
         Response response = Response.fromJson(json2);
-        assertTrue(response.success());
+        assertTrue(response.success(),response.message());
         String updatedJson = ts.getTransport(Transport.getLookupObject(newTransport.id()).toJson());
         Response updatedResponse = Response.fromJson(updatedJson);
         Transport updatedTransport = updatedResponse.data(Transport.class);
@@ -208,7 +209,7 @@ class TransportsServiceTest {
     void removeTransport() {
         String json = ts.removeTransport(Transport.getLookupObject(transport.id()).toJson());
         Response response = Response.fromJson(json);
-        assertTrue(response.success());
+        assertTrue(response.success(),response.message());
         String updatedJson = ts.getTransport(Transport.getLookupObject(transport.id()).toJson());
         Response updatedResponse = Response.fromJson(updatedJson);
         assertFalse(updatedResponse.success());

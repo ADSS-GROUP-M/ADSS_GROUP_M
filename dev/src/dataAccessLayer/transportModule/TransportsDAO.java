@@ -250,8 +250,13 @@ public class TransportsDAO extends ManyToManyDAO<Transport> implements CounterDA
         return transportDestinations;
     }
     @Override
-    public void clearTable(){
+    public void clearTable() {
         destinationsDAO.clearTable();
+        try {
+            resetCounter();
+        } catch (DalException e) {
+            throw new RuntimeException(e);
+        }
         super.clearTable();
     }
 

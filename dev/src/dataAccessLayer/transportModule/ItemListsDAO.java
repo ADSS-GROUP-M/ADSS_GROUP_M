@@ -155,6 +155,11 @@ public class ItemListsDAO extends DAO<ItemList> implements CounterDAO {
     @Override
     public void clearTable(){
         itemListsItemsDAO.clearTable();
+        try {
+            resetCounter();
+        } catch (DalException e) {
+            throw new RuntimeException(e);
+        }
         super.clearTable();
     }
 

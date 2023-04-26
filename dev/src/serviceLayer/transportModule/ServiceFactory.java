@@ -27,6 +27,22 @@ public class ServiceFactory {
         itemListsService = new ItemListsService(factory.itemListsController());
     }
 
+    public ServiceFactory(String dbName){
+
+        BusinessFactory factory;
+        try {
+            factory = new BusinessFactory(dbName);
+        } catch (DalException e) {
+            throw new RuntimeException(e);
+        }
+
+        transportsService = new TransportsService(factory.transportsController());
+        resourceManagementService = new ResourceManagementService(factory.sitesController(),
+                factory.driversController(),
+                factory.trucksController());
+        itemListsService = new ItemListsService(factory.itemListsController());
+    }
+
     public TransportsService getTransportsService() {
         return transportsService;
     }

@@ -22,9 +22,11 @@ class SitesDAOTest {
 
     @BeforeEach
     void setUp() {
+        site = new Site("zone1","address1","12345","kobi", Site.SiteType.SUPPLIER);
         try {
             dao = new SitesDAO("TestingDB.db");
-            site = new Site("zone1","address1","12345","kobi", Site.SiteType.SUPPLIER);
+            dao.clearTable();
+
             dao.insert(site);
         } catch (DalException e) {
             throw new RuntimeException(e);

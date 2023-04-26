@@ -34,8 +34,12 @@ class DriversDAOTest {
         driver = new Driver(employee.getId(),employee.getName(), Driver.LicenseType.C3);
         try {
             empDao = EmployeeDAO.getTestingInstance("TestingDB.db");
-            empDao.insert(employee);
             dao = new DriversDAO("TestingDB.db");
+            dao.clearTable();
+            empDao.clearTable();
+
+
+            empDao.insert(employee);
             dao.insert(driver);
         } catch (DalException e) {
             fail(e);

@@ -26,6 +26,8 @@ class TrucksDAOTest {
         try {
             dao = new TrucksDAO("TestingDB.db");
             truck = new Truck("1", "model1", 1000, 20000, Truck.CoolingCapacity.FROZEN);
+            dao.clearTable();
+
             dao.insert(truck);
         } catch (DalException e) {
             fail(e);

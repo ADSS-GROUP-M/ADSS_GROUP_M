@@ -143,4 +143,17 @@ public abstract class ManyToManyDAO<T>{
     public abstract void delete(T object) throws DalException;
 
     protected abstract T getObjectFromResultSet(OfflineResultSet resultSet);
+
+    /**
+     * used for testing
+     */
+    public void clearTable(){
+        String query = String.format("DELETE FROM %s", TABLE_NAME);
+        try {
+            cursor.executeWrite(query);
+            cache.clear();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

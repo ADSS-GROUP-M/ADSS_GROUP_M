@@ -78,6 +78,14 @@ class TransportsDAOTest {
             itemListsDAO = new ItemListsDAO("TestingDB.db");
             transportsDAO = new TransportsDAO("TestingDB.db");
 
+            transportsDAO.clearTable();
+            itemListsDAO.clearTable();
+            driversDAO.clearTable();
+            trucksDAO.clearTable();
+            sitesDAO.clearTable();
+            employeeDAO.deleteAll();
+
+
             sitesDAO.insert(site);
             trucksDAO.insert(truck);
             employeeDAO.insert(employee);

@@ -15,7 +15,7 @@ import java.util.List;
 public class TransportsDAO extends ManyToManyDAO<Transport> implements CounterDAO {
 
     private static final String[] types = {"INTEGER", "TEXT", "TEXT", "TEXT", "TEXT", "INTEGER"};
-    private static final String[] parent_tables = {"drivers", "trucks", "sites"};
+    private static final String[] parent_tables = {"truck_drivers", "trucks", "sites"};
     private static final String[] primary_keys = {"id"};
     private static final String[] foreign_keys = {"source_address", "driver_id", "truck_id"};
     private static final String[] references = {"id", "id", "address"};

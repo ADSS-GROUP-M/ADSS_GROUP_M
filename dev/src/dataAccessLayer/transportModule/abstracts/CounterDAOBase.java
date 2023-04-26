@@ -73,7 +73,7 @@ public abstract class CounterDAOBase implements CounterDAO {
      */
     @Override
     public void insertCounter(Integer value) throws DalException {
-        String query = String.format("DELETE FROM %s; INSERT INTO %s ('%s') VALUES (%d);",TABLE_NAME, TABLE_NAME, COLUMN_NAME, value);
+        String query = String.format("DELETE FROM %s; INSERT INTO %s (%s) VALUES (%d);",TABLE_NAME, TABLE_NAME, COLUMN_NAME, value);
         try {
             if(cursor.executeWrite(query) == 0){
                 throw new RuntimeException("Unexpected error while inserting " + COLUMN_NAME);

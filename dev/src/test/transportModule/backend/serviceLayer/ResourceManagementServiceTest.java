@@ -1,6 +1,9 @@
 package transportModule.backend.serviceLayer;
 
+import businessLayer.employeeModule.Employee;
 import dataAccessLayer.DalFactory;
+import dataAccessLayer.dalUtils.DalException;
+import dataAccessLayer.employeeModule.EmployeeDAO;
 import serviceLayer.employeeModule.Services.EmployeesService;
 import serviceLayer.transportModule.ServiceFactory;
 import serviceLayer.transportModule.ResourceManagementService;
@@ -12,19 +15,30 @@ import objects.transportObjects.Site;
 import objects.transportObjects.Truck;
 import utils.Response;
 
+import java.time.LocalDate;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class ResourceManagementServiceTest {
 
-        private ResourceManagementService rms;
-        private Driver driver;
-        private Site site;
-        private Truck truck;
+    private ResourceManagementService rms;
+    private Driver driver;
+    private Site site;
+    private Truck truck;
+    private EmployeeDAO empDao;
 
     @BeforeEach
     void setUp() {
         rms = new ServiceFactory("TestingDB.db").getResourceManagementService();
         //add drivers
+        DalFactory dalFactory;
+        try {
+            dalFactory = new DalFactory("TestingDB.db");
+            empDao = dalFactory.employeeDAO();
+            empDao.insert(new Employee("name","123456789","Poalim",50, LocalDate.of(1999,10,10),"conditions","details"));
+        } catch (DalException e) {
+            throw new RuntimeException(e);
+        }
 
         driver = new Driver("123456789","John", Driver.LicenseType.C3);
         rms.addDriver(driver.toJson());
@@ -47,6 +61,11 @@ class ResourceManagementServiceTest {
 
     @Test
     void addDriver() {
+        try {
+            empDao.insert(new Employee("Jim","111111111","Poalim",50, LocalDate.of(1999,10,10),"conditions","details"));
+        } catch (DalException e) {
+            throw new RuntimeException(e);
+        }
         Driver driver3 = new Driver("111111111","Jim", Driver.LicenseType.C3);
         rms.addDriver(driver3.toJson());
         String responseJson = rms.getDriver(Driver.getLookupObject(driver3.id()).toJson());
@@ -131,6 +150,11 @@ class ResourceManagementServiceTest {
         //generate more drivers
         for (int i = 0; i < 20; i++) {
             Driver driver = new Driver(String.valueOf(i), "driver" + i, Driver.LicenseType.C3);
+            try {
+                empDao.insert(new Employee("driver" + i,String.valueOf(i),"Poalim",50, LocalDate.of(1999,10,10),"conditions","details"));
+            } catch (DalException e) {
+                throw new RuntimeException(e);
+            }
             rms.addDriver(driver.toJson());
         }
 

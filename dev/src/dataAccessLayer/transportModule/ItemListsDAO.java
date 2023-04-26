@@ -113,8 +113,8 @@ public class ItemListsDAO extends DAO<ItemList> implements CounterDAO {
     public void delete(ItemList object) throws DalException {
         String query = String.format("DELETE FROM %s WHERE id = %d;", TABLE_NAME, object.id());
         try {
+            itemListsItemsDAO.delete(object);
             if(cursor.executeWrite(query) == 1){
-                itemListsItemsDAO.delete(object);
                 cache.remove(object);
             } else {
                 throw new DalException("No item list with id " + object.id() + " was found");

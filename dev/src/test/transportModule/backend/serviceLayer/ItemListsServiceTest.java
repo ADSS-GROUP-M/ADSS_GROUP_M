@@ -1,9 +1,11 @@
 package transportModule.backend.serviceLayer;
 
+import serviceLayer.transportModule.ItemListsService;
+import serviceLayer.transportModule.ModuleFactory;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import transportModule.records.ItemList;
+import objects.transportObjects.ItemList;
 import utils.Response;
 
 import java.util.HashMap;

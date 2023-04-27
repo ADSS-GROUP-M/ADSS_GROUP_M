@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.Map;
 
 public class ShiftDAO extends DAO {
+    private static final String[] primaryKeys = {Columns.ShiftDate.name(), Columns.ShiftType.name(), Columns.Branch.name()};
+    private static final String[] types = {"TEXT", "TEXT", "TEXT", "TEXT"};
     private static ShiftDAO instance;
     private HashMap<Integer, Shift> cache;
     private ShiftToNeededRolesDAO shiftToNeededRolesDAO;
@@ -36,7 +38,14 @@ public class ShiftDAO extends DAO {
                     ShiftToWorkersDAO shiftToWorkersDAO,
                     ShiftToCancelsDAO shiftToCancelsDAO,
                     ShiftToActivityDAO shiftToActivityDAO){
-        super("SHIFTS", new String[]{ShiftDAO.Columns.ShiftDate.name(), ShiftDAO.Columns.ShiftType.name(), Columns.Branch.name()});
+        super("SHIFTS",
+                primaryKeys,
+                types,
+                "ShiftDate",
+                "ShiftType",
+                "Branch",
+                "IsApproved"
+        );
         this.shiftToNeededRolesDAO = shiftToNeededRolesDAO;
         this.shiftToRequestsDAO = shiftToRequestsDAO;
         this.shiftToWorkersDAO = shiftToWorkersDAO;
@@ -61,7 +70,15 @@ public class ShiftDAO extends DAO {
                      ShiftToWorkersDAO shiftToWorkersDAO,
                      ShiftToCancelsDAO shiftToCancelsDAO,
                      ShiftToActivityDAO shiftToActivityDAO){
-        super(dbName,"SHIFTS", new String[]{ShiftDAO.Columns.ShiftDate.name(), ShiftDAO.Columns.ShiftType.name(), Columns.Branch.name()});
+        super(dbName,
+                "SHIFTS",
+                primaryKeys,
+                types,
+                "ShiftDate",
+                "ShiftType",
+                "Branch",
+                "IsApproved"
+        );
         this.shiftToNeededRolesDAO = shiftToNeededRolesDAO;
         this.shiftToRequestsDAO = shiftToRequestsDAO;
         this.shiftToWorkersDAO = shiftToWorkersDAO;

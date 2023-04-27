@@ -11,8 +11,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class ShiftToActivityDAO extends DAO{
+    private static final String[] primaryKeys = {Columns.ShiftDate.name(), Columns.ShiftType.name(), Columns.Branch.name()};
+    private static final String[] types = {"TEXT", "TEXT", "TEXT", "TEXT"};
+    private static final String tableName = "SHIFT_ACTIVITIES";
     private static ShiftToActivityDAO instance;
-    private HashMap<Integer, List<String>> cache;
+    private final HashMap<Integer, List<String>> cache;
     private enum Columns {
         ShiftDate,
         ShiftType,
@@ -20,12 +23,27 @@ public class ShiftToActivityDAO extends DAO{
         Activity;
     }
     public ShiftToActivityDAO() throws DalException {
-        super("SHIFT_ACTIVITIES", new String[]{Columns.ShiftDate.name(), Columns.ShiftType.name(),Columns.Branch.name()});
+        super(tableName,
+                primaryKeys,
+                types,
+                "ShiftDate",
+                "ShiftType",
+                "Branch",
+                "Activity"
+        );
         this.cache = new HashMap<>();
     }
 
     public ShiftToActivityDAO(String dbName) throws DalException {
-        super(dbName,"SHIFT_ACTIVITIES", new String[]{Columns.ShiftDate.name(), Columns.ShiftType.name(),Columns.Branch.name()});
+        super(dbName,
+                tableName,
+                primaryKeys,
+                types,
+                "ShiftDate",
+                "ShiftType",
+                "Branch",
+                "Activity"
+        );
         this.cache = new HashMap<>();
     }
 

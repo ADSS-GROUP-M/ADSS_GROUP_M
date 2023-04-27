@@ -8,36 +8,87 @@ import dataAccessLayer.dalUtils.OfflineResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
-class EmployeeRolesDAO extends DAO {
+public class EmployeeRolesDAO extends DAO {
 
+    public static final String[] primaryKeys = {Columns.EmployeeId.name()};
+    public static final String tableName = "EMPLOYEE_ROLES";
+    public static final String[] types = {"TEXT", "TEXT"};
     private static EmployeeRolesDAO instance;
     private HashMap<Integer, Set<Role>> cache;
+    private static final String[] FOREIGN_KEYS = new String[]{"EmployeeId"};
+    private static final String[] PARENT_TABLE_NAME = new String[]{"EMPLOYEES"};
+    private static final String[] REFERENCES = new String[]{"Id"};
+
     private enum Columns {
        EmployeeId,
        Role;
     }
 
-    private EmployeeRolesDAO()throws DalException {
-        super("EMPLOYEE_ROLES", new String[]{Columns.EmployeeId.name()});
+    public EmployeeRolesDAO()throws DalException {
+        super(tableName,
+                primaryKeys,
+                types,
+                "EmployeeId",
+                "Role"
+        );
         this.cache = new HashMap<>();
     }
 
-    private EmployeeRolesDAO(String dbName) throws DalException {
-        super(dbName,"EMPLOYEE_ROLES", new String[]{Columns.EmployeeId.name()});
+    public EmployeeRolesDAO(String dbName) throws DalException {
+        super(dbName,
+                tableName,
+                primaryKeys,
+                types,
+                "EmployeeId",
+                "Role"
+        );
         this.cache = new HashMap<>();
     }
 
-    static EmployeeRolesDAO getInstance() throws DalException {
-        if(instance == null)
-            instance = new EmployeeRolesDAO();
-        return instance;
+    @Override
+    protected void initTable() throws DalException {
+
+        StringBuilder query = new StringBuilder();
+
+        query.append(String.format("CREATE TABLE IF NOT EXISTS %s (\n", TABLE_NAME));
+
+        for (int i = 0; i < ALL_COLUMNS.length; i++) {
+            query.append(String.format("\"%s\" %s NOT NULL,\n", ALL_COLUMNS[i], TYPES[i]));
+        }
+
+        query.append("PRIMARY KEY(");
+        for(int i = 0; i < PRIMARY_KEYS.length; i++) {
+            query.append(String.format("\"%s\"",PRIMARY_KEYS[i]));
+            if (i != PRIMARY_KEYS.length-1) {
+                query.append(",");
+            } else {
+                query.append("),\n");
+            }
+        }
+
+        for(int i = 0; i < FOREIGN_KEYS.length ; i++){
+            query.append(String.format("CONSTRAINT FK_%s FOREIGN KEY(\"%s\") REFERENCES \"%s\"(\"%s\")",
+                    FOREIGN_KEYS[i],
+                    FOREIGN_KEYS[i],
+                    PARENT_TABLE_NAME[i],
+                    REFERENCES[i]
+            ));
+            if(i != FOREIGN_KEYS.length-1){
+                query.append(",\n");
+            } else {
+                query.append("\n");
+            }
+        }
+
+        query.append(");");
+
+        try {
+            cursor.executeWrite(query.toString());
+        } catch (SQLException e) {
+            throw new DalException("Failed to initialize table "+TABLE_NAME, e);
+        }
     }
 
-    static EmployeeRolesDAO getTestingInstance(String dbName) throws DalException {
-        if(instance == null)
-            instance = new EmployeeRolesDAO(dbName);
-        return instance;
-    }
 
     private int getHashCode(String id){
         return (id).hashCode();

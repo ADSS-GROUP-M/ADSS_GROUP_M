@@ -10,7 +10,9 @@ import java.time.LocalDate;
 import java.util.HashMap;
 
 public class ShiftToNeededRolesDAO extends DAO{
-    private static ShiftToNeededRolesDAO instance;
+    private static final String[] primaryKeys = {Columns.ShiftDate.name(), Columns.ShiftType.name(), Columns.Branch.name(), Columns.Role.name()};
+    private static final String[] types = {"TEXT", "TEXT", "TEXT", "TEXT", "INTEGER"};
+    private static final String tableName = "SHIFT_ROLES";
     private HashMap<Integer, HashMap<Role,Integer>> cache;
     private enum Columns {
         ShiftDate,
@@ -20,11 +22,28 @@ public class ShiftToNeededRolesDAO extends DAO{
         Amount;
     }
     public ShiftToNeededRolesDAO() throws DalException {
-        super("SHIFT_ROLES", new String[]{ShiftToNeededRolesDAO.Columns.ShiftDate.name(), ShiftToNeededRolesDAO.Columns.ShiftType.name(), ShiftToNeededRolesDAO.Columns.Branch.name(), ShiftToNeededRolesDAO.Columns.Role.name()});
+        super(tableName,
+                primaryKeys,
+                types,
+                "ShiftDate",
+                "ShiftType",
+                "Branch",
+                "Role",
+                "Amount"
+        );
         this.cache = new HashMap<>();
     }
     public ShiftToNeededRolesDAO(String dbName) throws DalException {
-        super(dbName, "SHIFT_ROLES", new String[]{ShiftToNeededRolesDAO.Columns.ShiftDate.name(), ShiftToNeededRolesDAO.Columns.ShiftType.name(), ShiftToNeededRolesDAO.Columns.Branch.name(), ShiftToNeededRolesDAO.Columns.Role.name()});
+        super(dbName,
+                tableName,
+                primaryKeys,
+                types,
+                "ShiftDate",
+                "ShiftType",
+                "Branch",
+                "Role",
+                "Amount"
+        );
         this.cache = new HashMap<>();
     }
 

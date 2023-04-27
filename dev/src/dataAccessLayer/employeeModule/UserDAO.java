@@ -13,6 +13,8 @@ import java.util.*;
 
 public class UserDAO extends DAO {
 
+    public static final String tableName = "USERS";
+    public static final String[] primaryKeys = {Columns.Username.name()};
     private static UserDAO instance;
     private HashMap<Integer, User> cache;
     private UserAuthorizationsDAO userAuthorizationsDAO;
@@ -20,18 +22,31 @@ public class UserDAO extends DAO {
     private enum Columns {
         Username,
         Password,
-        LoggedIn;
+        isOnline;
     }
 
     //needed roles HashMap<Role,Integer>, shiftRequests HashMap<Role,List<Employees>>, shiftWorkers Map<Role,List<Employees>>, cancelCardApplies List<String>, shiftActivities List<String>.
     public UserDAO(UserAuthorizationsDAO userAuthorizationsDAO){
-        super("USERS", new String[]{Columns.Username.name()});
+        super(tableName,
+                primaryKeys,
+                new String[]{"TEXT", "TEXT", "TEXT"},
+                "Username",
+                "Password",
+                "isOnline"
+        );
         this.userAuthorizationsDAO = userAuthorizationsDAO;
         this.cache = new HashMap<>();
     }
 
     public UserDAO(String dbName, UserAuthorizationsDAO userAuthorizationsDAO){
-        super(dbName,"USERS", new String[]{Columns.Username.name()});
+        super(dbName,
+                tableName,
+                primaryKeys,
+                new String[]{"TEXT", "TEXT", "TEXT"},
+                "Username",
+                "Password",
+                "isOnline"
+        );
         this.userAuthorizationsDAO = userAuthorizationsDAO;
         this.cache = new HashMap<>();
     }
@@ -44,8 +59,8 @@ public class UserDAO extends DAO {
         try {
             this.userAuthorizationsDAO.create(user);
             String queryString = String.format("INSERT INTO " + TABLE_NAME + "(%s, %s, %s) VALUES('%s','%s','%s')",
-                    Columns.Username.name(), Columns.Password.name(), Columns.LoggedIn.name(),
-                    user.getUsername(), user.getPassword(), String.valueOf(user.isLoggedIn()));
+                    Columns.Username.name(), Columns.Password.name(), Columns.isOnline.name(),
+                    user.getUsername(), user.getPassword(), user.isLoggedIn());
             cursor.executeWrite(queryString);
             this.cache.put(getHashCode(user.getUsername()), user);
         } catch (SQLException e) {
@@ -87,7 +102,7 @@ public class UserDAO extends DAO {
             Object[] key = {user.getUsername()};
             this.userAuthorizationsDAO.update(user);
             String queryString = String.format("UPDATE "+TABLE_NAME+" SET %s = ? , %s = ? , %s = ? WHERE",
-                    Columns.Username.name(), Columns.Password.name(), Columns.LoggedIn.name());
+                    Columns.Username.name(), Columns.Password.name(), Columns.isOnline.name());
             queryString = queryString.concat(createConditionForPrimaryKey(key));
             cursor.executeWrite(queryString);
         } catch(SQLException e) {
@@ -111,7 +126,7 @@ public class UserDAO extends DAO {
         try{
             String username = reader.getString(Columns.Username.name());
             String password = reader.getString(Columns.Password.name());
-            String loggedIn = reader.getString(Columns.LoggedIn.name());
+            String loggedIn = reader.getString(Columns.isOnline.name());
 
             ans = new User(username,password);
 

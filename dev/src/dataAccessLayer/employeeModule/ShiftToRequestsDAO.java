@@ -13,6 +13,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class ShiftToRequestsDAO extends DAO{
+    private static final String[] primaryKeys = {Columns.ShiftDate.name(), Columns.ShiftType.name(), Columns.Branch.name(), Columns.EmployeeId.name()};
+    private static final String tableName = "SHIFT_REQUESTS";
+    private static final String[] types = {"TEXT", "TEXT", "TEXT", "TEXT", "TEXT"};
     private HashMap<Integer, HashMap<Role,List<Employee>>> cache;
     private EmployeeDAO employeeDAO;
     private enum Columns {
@@ -23,13 +26,30 @@ public class ShiftToRequestsDAO extends DAO{
         Role;
     }
     public ShiftToRequestsDAO(EmployeeDAO employeeDAO){
-        super("SHIFT_REQUESTS", new String[]{ShiftToRequestsDAO.Columns.ShiftDate.name(), ShiftToRequestsDAO.Columns.ShiftType.name(), ShiftToRequestsDAO.Columns.Branch.name(), ShiftToRequestsDAO.Columns.EmployeeId.name()});
+        super(tableName,
+                primaryKeys,
+                types,
+                "ShiftDate",
+                "ShiftType",
+                "Branch",
+                "EmployeeId",
+                "Role"
+        );
         this.employeeDAO = employeeDAO;
         this.cache = new HashMap<>();
     }
 
     public ShiftToRequestsDAO(String dbName, EmployeeDAO employeeDAO){
-        super(dbName, "SHIFT_REQUESTS", new String[]{ShiftToRequestsDAO.Columns.ShiftDate.name(), ShiftToRequestsDAO.Columns.ShiftType.name(), ShiftToRequestsDAO.Columns.Branch.name(), ShiftToRequestsDAO.Columns.EmployeeId.name()});
+        super(dbName,
+                tableName,
+                primaryKeys,
+                types,
+                "ShiftDate",
+                "ShiftType",
+                "Branch",
+                "EmployeeId",
+                "Role"
+        );
         this.employeeDAO = employeeDAO;
         this.cache = new HashMap<>();
     }

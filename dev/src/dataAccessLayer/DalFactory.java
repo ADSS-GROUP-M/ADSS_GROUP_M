@@ -30,9 +30,10 @@ public class DalFactory {
         ShiftToCancelsDAO shiftToCancelsDAO = new ShiftToCancelsDAO();
         ShiftToNeededRolesDAO shiftToNeededRolesDAO = new ShiftToNeededRolesDAO();
         UserAuthorizationsDAO userAuthorizationsDAO = new UserAuthorizationsDAO();
+        EmployeeRolesDAO employeeRolesDAO = new EmployeeRolesDAO();
 
         userDAO = new UserDAO(userAuthorizationsDAO);
-        employeeDAO = new EmployeeDAO();
+        employeeDAO = new EmployeeDAO(employeeRolesDAO);
         ShiftToWorkersDAO shiftToWorkersDAO = new ShiftToWorkersDAO(employeeDAO);
         ShiftToRequestsDAO shiftToRequestsDAO = new ShiftToRequestsDAO(employeeDAO);
         shiftDAO = new ShiftDAO(shiftToNeededRolesDAO, shiftToRequestsDAO, shiftToWorkersDAO, shiftToCancelsDAO, shiftToActivityDAO);
@@ -55,9 +56,10 @@ public class DalFactory {
         ShiftToCancelsDAO shiftToCancelsDAO = new ShiftToCancelsDAO(dbName);
         ShiftToNeededRolesDAO shiftToNeededRolesDAO = new ShiftToNeededRolesDAO(dbName);
         UserAuthorizationsDAO userAuthorizationsDAO = new UserAuthorizationsDAO(dbName);
+        EmployeeRolesDAO employeeRolesDAO = new EmployeeRolesDAO(dbName);
 
         userDAO = new UserDAO(dbName, userAuthorizationsDAO);
-        employeeDAO = new EmployeeDAO(dbName);
+        employeeDAO = new EmployeeDAO(dbName, employeeRolesDAO);
         ShiftToWorkersDAO shiftToWorkersDAO = new ShiftToWorkersDAO(dbName, employeeDAO);
         ShiftToRequestsDAO shiftToRequestsDAO = new ShiftToRequestsDAO(dbName, employeeDAO);
         shiftDAO = new ShiftDAO(dbName, shiftToNeededRolesDAO, shiftToRequestsDAO, shiftToWorkersDAO, shiftToCancelsDAO, shiftToActivityDAO);

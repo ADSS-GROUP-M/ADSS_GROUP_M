@@ -108,7 +108,7 @@ public abstract class ManyToManyDAO<T>{
         } catch (SQLException e) {
             throw new DalException("Failed to initialize table "+TABLE_NAME, e);
         }
-    };
+    }
 
     /**
      * @param object getLookUpObject(identifier) of the object to select

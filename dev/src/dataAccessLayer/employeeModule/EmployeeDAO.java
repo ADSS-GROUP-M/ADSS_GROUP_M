@@ -18,7 +18,7 @@ public class EmployeeDAO extends DAO<Employee> {
     private static final String tableName = "EMPLOYEES";
     private final EmployeeRolesDAO employeeRolesDAO;
 
-    public EmployeeDAO() throws DalException{
+    public EmployeeDAO(EmployeeRolesDAO employeeRolesDAO) throws DalException{
         super(tableName,
                 types,
                 primary_keys,
@@ -32,10 +32,10 @@ public class EmployeeDAO extends DAO<Employee> {
                 "EmploymentConditions",
                 "Details"
         );
-        employeeRolesDAO = EmployeeRolesDAO.getInstance();
+        this.employeeRolesDAO = employeeRolesDAO;
     }
 
-    public EmployeeDAO(String dbName) throws DalException{
+    public EmployeeDAO(String dbName, EmployeeRolesDAO employeeRolesDAO) throws DalException{
         super(dbName,
                 tableName,
                 types,
@@ -50,7 +50,7 @@ public class EmployeeDAO extends DAO<Employee> {
                 "EmploymentConditions",
                 "Details"
         );
-        employeeRolesDAO = EmployeeRolesDAO.getTestingInstance(dbName);
+        this.employeeRolesDAO = employeeRolesDAO;
     }
 
     public Employee select(String id) throws DalException {

@@ -11,6 +11,8 @@ import java.util.*;
 
 public class UserAuthorizationsDAO extends DAO {
 
+    private static final String[] primaryKeys = {Columns.Username.name()};
+    private static final String tableName = "USER_AUTHORIZATIONS";
     private static UserAuthorizationsDAO instance;
     private HashMap<Integer, Set<Authorization>> cache;
     private enum Columns {
@@ -19,11 +21,22 @@ public class UserAuthorizationsDAO extends DAO {
     }
 
     public UserAuthorizationsDAO()throws DalException {
-        super("USER_AUTHORIZATIONS", new String[]{Columns.Username.name()});
+        super(tableName,
+                primaryKeys,
+                new String[]{"TEXT", "TEXT"},
+                "Username",
+                "Authorization"
+        );
         this.cache = new HashMap<>();
     }
     public UserAuthorizationsDAO(String dbName)throws DalException {
-        super(dbName,"USER_AUTHORIZATIONS", new String[]{Columns.Username.name()});
+        super(dbName,
+                tableName,
+                primaryKeys,
+                new String[]{"TEXT", "TEXT"},
+                "Username",
+                "Authorization"
+        );
         this.cache = new HashMap<>();
     }
 

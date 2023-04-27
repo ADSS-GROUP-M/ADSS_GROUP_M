@@ -15,6 +15,9 @@ import java.util.List;
 
 public class ShiftToWorkersDAO extends DAO {
 
+    private static final String[] primaryKeys = {Columns.ShiftDate.name(), Columns.ShiftType.name(), Columns.Branch.name(), Columns.EmployeeId.name()};
+    private static final String tableName = "SHIFT_WORKERS";
+    private static final String[] types = {"TEXT", "TEXT", "TEXT", "TEXT", "TEXT"};
     private HashMap<Integer, HashMap<Role,List<Employee>>> cache;
     private EmployeeDAO employeeDAO;
 
@@ -28,13 +31,30 @@ public class ShiftToWorkersDAO extends DAO {
 
     //needed roles HashMap<Role,Integer>, shiftRequests HashMap<Role,List<Employees>>, shiftWorkers Map<Role,List<Employees>>, cancelCardApplies List<String>, shiftActivities List<String>.
     public ShiftToWorkersDAO(EmployeeDAO employeeDAO) throws DalException {
-        super("SHIFT_WORKERS", new String[]{Columns.ShiftDate.name(), Columns.ShiftType.name(), Columns.Branch.name(),Columns.EmployeeId.name()});
+        super(tableName,
+                primaryKeys,
+                types,
+                "ShiftDate",
+                "ShiftType",
+                "Branch",
+                "EmployeeId",
+                "Role"
+        );
         this.employeeDAO = employeeDAO;
         this.cache = new HashMap<>();
     }
 
     public ShiftToWorkersDAO(String dbName, EmployeeDAO employeeDAO) throws DalException {
-        super(dbName,"SHIFT_WORKERS", new String[]{Columns.ShiftDate.name(), Columns.ShiftType.name(), Columns.Branch.name(),Columns.EmployeeId.name()});
+        super(dbName,
+                tableName,
+                primaryKeys,
+                types,
+                "ShiftDate",
+                "ShiftType",
+                "Branch",
+                "EmployeeId",
+                "Role"
+        );
         this.employeeDAO = employeeDAO;
         this.cache = new HashMap<>();
     }

@@ -13,41 +13,40 @@ public class ServiceFactory {
     private final ItemListsService itemListsService;
     private final EmployeesService employeesService;
     private final UserService userService;
+    private final BusinessFactory businessFactory;
 
     public ServiceFactory(){
-        userService = new UserService(this);
-        employeesService = new EmployeesService(this);
-
-        BusinessFactory factory;
         try {
-            factory = new BusinessFactory(this);
+            businessFactory = new BusinessFactory(this);
         } catch (DalException e) {
             throw new RuntimeException(e);
         }
 
-        transportsService = new TransportsService(factory.transportsController());
-        resourceManagementService = new ResourceManagementService(factory.sitesController(),
-                factory.driversController(),
-                factory.trucksController());
-        itemListsService = new ItemListsService(factory.itemListsController());
+        transportsService = new TransportsService(businessFactory.transportsController());
+        resourceManagementService = new ResourceManagementService(businessFactory.sitesController(),
+                businessFactory.driversController(),
+                businessFactory.trucksController());
+        itemListsService = new ItemListsService(businessFactory.itemListsController());
+        userService = new UserService(this);
+        employeesService = new EmployeesService(this, businessFactory.employeesController(), businessFactory.shiftsController());
     }
 
     public ServiceFactory(String dbName){
-        userService = new UserService(this);
-        employeesService = new EmployeesService(this);
-
-        BusinessFactory factory;
         try {
-            factory = new BusinessFactory(this,dbName);
+            businessFactory = new BusinessFactory(this,dbName);
         } catch (DalException e) {
             throw new RuntimeException(e);
         }
 
-        transportsService = new TransportsService(factory.transportsController());
-        resourceManagementService = new ResourceManagementService(factory.sitesController(),
-                factory.driversController(),
-                factory.trucksController());
-        itemListsService = new ItemListsService(factory.itemListsController());
+        userService = new UserService(this);
+        employeesService = new EmployeesService(this, businessFactory.employeesController(), businessFactory.shiftsController());
+        businessFactory.updateTransportsController(employeesService);
+
+        transportsService = new TransportsService(businessFactory.transportsController());
+        resourceManagementService = new ResourceManagementService(businessFactory.sitesController(),
+                businessFactory.driversController(),
+                businessFactory.trucksController());
+        itemListsService = new ItemListsService(businessFactory.itemListsController());
     }
 
     public TransportsService getTransportsService() {

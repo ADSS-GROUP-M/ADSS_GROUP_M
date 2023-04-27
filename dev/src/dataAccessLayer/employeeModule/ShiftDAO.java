@@ -156,7 +156,7 @@ public class ShiftDAO extends DAO {
             LocalDate dt = LocalDate.parse(reader.getString(Columns.ShiftDate.name()));
             ShiftType st = ShiftType.valueOf(reader.getString(Columns.ShiftType.name()));
             String branch =reader.getString(Columns.Branch.name());
-        ans = new Shift(dt,st);
+        ans = new Shift(branch,dt,st);
         Map<Role,Integer> neededRoles = null;
         Map<Role,List<Employee>> shiftRequests = null;
         Map<Role,List<Employee>> shiftWorkers = null;

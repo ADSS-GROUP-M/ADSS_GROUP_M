@@ -1,5 +1,7 @@
 package businessLayer;
 
+import businessLayer.employeeModule.Controllers.EmployeesController;
+import businessLayer.employeeModule.Controllers.ShiftsController;
 import businessLayer.transportModule.*;
 import dataAccessLayer.DalFactory;
 import dataAccessLayer.dalUtils.DalException;
@@ -14,6 +16,8 @@ public class BusinessFactory {
     private final SitesController sitesController;
     private final ItemListsController itemListsController;
     private final TrucksController trucksController;
+    private final EmployeesController employeesController;
+    private final ShiftsController shiftsController;
     private final DalFactory dalFactory;
 
     public BusinessFactory(ServiceFactory serviceFactory) throws DalException{
@@ -22,6 +26,8 @@ public class BusinessFactory {
         trucksController = new TrucksController(dalFactory.trucksDAO());
         sitesController = new SitesController(dalFactory.sitesDAO());
         driversController = new DriversController(dalFactory.driversDAO());
+        shiftsController = new ShiftsController(dalFactory.shiftDAO());
+        employeesController = new EmployeesController(shiftsController, dalFactory.branchesDAO(), dalFactory.employeeDAO());
 
         EmployeesService employeesService = serviceFactory.employeesService();
 
@@ -50,6 +56,8 @@ public class BusinessFactory {
         trucksController = new TrucksController(dalFactory.trucksDAO());
         sitesController = new SitesController(dalFactory.sitesDAO());
         driversController = new DriversController(dalFactory.driversDAO());
+        shiftsController = new ShiftsController(dalFactory.shiftDAO());
+        employeesController = new EmployeesController(shiftsController,dalFactory.branchesDAO(), dalFactory.employeeDAO());
 
         EmployeesService employeesService = serviceFactory.employeesService();
 
@@ -71,6 +79,10 @@ public class BusinessFactory {
         return transportsController;
     }
 
+    public void updateTransportsController(EmployeesService employeesService) {
+        transportsController.setEmployeesService(employeesService);
+    }
+
     public DriversController driversController() {
         return driversController;
     }
@@ -85,6 +97,14 @@ public class BusinessFactory {
 
     public TrucksController trucksController() {
         return trucksController;
+    }
+
+    public EmployeesController employeesController() {
+        return employeesController;
+    }
+
+    public ShiftsController shiftsController() {
+        return shiftsController;
     }
 
     public DalFactory dalFactory() {

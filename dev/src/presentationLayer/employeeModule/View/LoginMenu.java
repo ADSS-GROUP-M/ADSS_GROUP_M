@@ -3,6 +3,7 @@ import java.util.*;
 
 import presentationLayer.employeeModule.ViewModel.LoginMenuVM;
 import presentationLayer.transportModule.TransportUI;
+import serviceLayer.transportModule.ServiceFactory;
 
 public class LoginMenu implements Menu {
     private final LoginMenuVM loginMenuVM;
@@ -10,6 +11,12 @@ public class LoginMenu implements Menu {
 
     public LoginMenu() {
         this.loginMenuVM = new LoginMenuVM();
+        scanner = new Scanner(System.in);
+        System.out.println("Please log in to the system.");
+    }
+
+    public LoginMenu(ServiceFactory factory) {
+        this.loginMenuVM = new LoginMenuVM(factory);
         scanner = new Scanner(System.in);
         System.out.println("Please log in to the system.");
     }

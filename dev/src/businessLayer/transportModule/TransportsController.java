@@ -29,7 +29,7 @@ public class TransportsController {
     private final DriversController dc;
     private final SitesController sc;
     private final ItemListsController ilc;
-    private final EmployeesService es;
+    private EmployeesService es;
     private final TransportsDAO dao;
     private int idCounter;
 
@@ -239,5 +239,9 @@ public class TransportsController {
         } catch (DalException e) {
             throw new TransportException(e.getMessage(),e);
         }
+    }
+
+    public void setEmployeesService(EmployeesService es) {
+        this.es = es;
     }
 }

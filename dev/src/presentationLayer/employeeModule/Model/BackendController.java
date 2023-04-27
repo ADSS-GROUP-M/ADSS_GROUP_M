@@ -23,7 +23,7 @@ public class BackendController {
     private static final Type LIST_SSHIFT_ARRAY_TYPE = new TypeToken<List<SShift[]>>(){}.getType();
 
     private static BackendController instance;
-    private final ServiceFactory serviceFactory;
+    private static ServiceFactory serviceFactory;
     private final UserService userService;
     private final EmployeesService employeesService;
     private String loggedUsername;
@@ -35,13 +35,30 @@ public class BackendController {
         loggedUsername = null;
 
         // Data Initialization
-        userService.loadData();
-        employeesService.loadData();
+        userService.createData();
+        employeesService.createData();
+    }
+
+    public BackendController(ServiceFactory factory) {
+        serviceFactory = factory;
+        userService = serviceFactory.userService();
+        employeesService = serviceFactory.employeesService();
+        loggedUsername = null;
+
+        // Data Initialization
+        userService.createData();
+        employeesService.createData();
     }
 
     public static BackendController getInstance() {
-        if (instance == null)
+        if (instance == null || serviceFactory == null)
             instance = new BackendController();
+        return instance;
+    }
+
+    public static BackendController getInstance(ServiceFactory factory) {
+        if (instance == null || serviceFactory == null)
+            instance = new BackendController(factory);
         return instance;
     }
 

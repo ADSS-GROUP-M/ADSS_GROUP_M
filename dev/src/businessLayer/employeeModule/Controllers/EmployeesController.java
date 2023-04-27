@@ -10,135 +10,153 @@ import businessLayer.employeeModule.Employee;
 import businessLayer.employeeModule.Role;
 import businessLayer.employeeModule.Shift;
 import businessLayer.employeeModule.Shift.ShiftType;
+import dataAccessLayer.employeeModule.BranchesDAO;
+import dataAccessLayer.employeeModule.EmployeeDAO;
+import javafx.util.Pair;
 
 public class EmployeesController {
-    private Map<String, Branch> branches; //BranchID to branch
-    private Map<Branch,Map<String, Employee>> employees; // branch to <employeeID to Employee>
-    private static EmployeesController instance;
+    //private Map<String, Branch> branches; //BranchID to branch
+    //private Map<Branch,Map<String, Employee>> employees; // branch to <employeeID to Employee>
+    private BranchesDAO branchesDAO;
+    private EmployeeDAO employeeDAO;
     private ShiftsController shiftsController;
 
-    private EmployeesController(){
-        this.branches = new HashMap<>();
-        this.employees = new HashMap<>();
-        this.shiftsController = ShiftsController.getInstance();
-    }
-
-    public static EmployeesController getInstance() {
-        if(instance == null)
-            instance = new EmployeesController();
-        return instance;
+    public EmployeesController(ShiftsController shiftsController, BranchesDAO branchesDAO, EmployeeDAO employeeDAO){
+        //this.branches = new HashMap<>();
+        //this.employees = new HashMap<>();
+        this.shiftsController = shiftsController;
+        this.branchesDAO = branchesDAO;
+        this.employeeDAO = employeeDAO;
     }
 
     public void resetData() {
-        this.branches.clear();
-        this.employees.clear();
+        this.branchesDAO.clearTable();
+        this.employeeDAO.clearTable();
     }
 
     public Branch getBranch(String branchId) throws Exception {
-        if (!this.branches.containsKey(branchId))
-            throw new Exception("The branch " + branchId + " was not found.");
-        return this.branches.get(branchId);
+        return this.branchesDAO.select(branchId);
     }
 
     public Employee getEmployee(String employeeId) throws Exception {
-        for (Map<String, Employee> branch : employees.values()) {
-            if (branch.containsKey(employeeId))
-                return branch.get(employeeId);
-        }
-        throw new Exception("The employee " + employeeId + " was not found in the system.");
+        //for (Map<String, Employee> branch : employees.values()) {
+        //    if (branch.containsKey(employeeId))
+        //        return branch.get(employeeId);
+        //}
+        //throw new Exception("The employee " + employeeId + " was not found in the system.");
+        return this.employeeDAO.select(employeeId);
     }
 
-    public Employee getEmployee(String branchId, String employeeId) throws Exception {
-        Branch branch = getBranch(branchId);
-        if (!this.employees.containsKey(branch))
-            throw new Exception("The branch " + branchId + " was not found.");
-        Map<String, Employee> branchEmployees = this.employees.get(branch);
-        if (!branchEmployees.containsKey(employeeId))
-            throw new Exception("The employee " + employeeId + " was not found in the branch.");
-        return branchEmployees.get(employeeId);
+    public Employee getBranchEmployee(String branchId, String employeeId) throws Exception {
+        //Branch branch = getBranch(branchId);
+        //if (!this.employees.containsKey(branch))
+        //    throw new Exception("The branch " + branchId + " was not found.");
+        //Map<String, Employee> branchEmployees = this.employees.get(branch);
+        //if (!branchEmployees.containsKey(employeeId))
+        //    throw new Exception("The employee " + employeeId + " was not found in the branch.");
+        //return branchEmployees.get(employeeId);
+        return employeeDAO.select(branchesDAO.selectBranchEmployee(branchId, employeeId).getValue());
     }
 
-    public List<Employee> getEmployees(String branchId, List<String> employeeIds) throws Exception {
+    public List<Employee> getBranchEmployees(String branchId, List<String> employeeIds) throws Exception {
+        //List<Employee> result = new ArrayList<>();
+        //for (String employeeId : employeeIds) {
+        //    Employee employee = getEmployee(branchId, employeeId);
+        //    result.add(employee);
+        //}
+        //return result;
+        List<Pair<String,String>> branchEmployees = branchesDAO.selectBranchEmployees(branchId, employeeIds);
         List<Employee> result = new ArrayList<>();
-        for (String employeeId : employeeIds) {
-            Employee employee = getEmployee(branchId, employeeId);
-            result.add(employee);
+        for (Pair<String,String> branchEmployee : branchEmployees) {
+            result.add(employeeDAO.select(branchEmployee.getValue()));
         }
         return result;
     }
 
     public void createBranch(String branchId) throws Exception {
-        if (this.branches.containsKey(branchId))
-            throw new Exception("The branch " + branchId + " already exists in the system.");
+        //if (this.branches.containsKey(branchId))
+        //    throw new Exception("The branch " + branchId + " already exists in the system.");
         Branch branch = new Branch(branchId);
-        this.branches.put(branchId, branch);
-        this.employees.put(branch, new HashMap<>());
+        //this.branches.put(branchId, branch);
+        //this.employees.put(branch, new HashMap<>());
+        branchesDAO.insert(branch);
         shiftsController.createBranch(branchId);
     }
 
     public void recruitEmployee(String branchId, String fullName, String employeeId, String bankDetails, double hourlyRate, LocalDate employmentDate, String employmentConditions, String details) throws Exception {
-        for(Branch b: this.branches.values()){
-            if(this.employees.get(b).containsKey(employeeId))
-                throw new Exception("This employee id already exists in the system.");
-        }
-        Branch branch = getBranch(branchId);
-
+        //for(Branch b: this.branches.values()){
+        //    if(this.employees.get(b).containsKey(employeeId))
+        //        throw new Exception("This employee id already exists in the system.");
+        //}
+        //Branch branch = getBranch(branchId);
         Employee employee = new Employee(fullName, employeeId,bankDetails,hourlyRate, employmentDate, employmentConditions, details);
-        this.employees.get(branch).put(employeeId, employee);
+        //this.employees.get(branch).put(employeeId, employee);
+        employeeDAO.insert(employee);
+        branchesDAO.insertEmployee(branchId, employeeId);
         this.certifyEmployee(employee.getId(), Role.GeneralWorker);
     }
     
-    public void addEmployeeToBranch(String branchId, String employeeId) throws Exception{
-        Employee e = this.getEmployee(employeeId);
-        Branch b = getBranch(branchId);
-        if(e==null)
-            throw new Exception("This employee is not in the system.");
-        if(this.employees.get(b).containsKey(employeeId))
-            throw new Exception("This employee already belongs to this branch.");
-        this.employees.get(b).put(employeeId,e);
+    public void addEmployeeToBranch(String branchId, String employeeId) throws Exception {
+        //Employee e = this.getEmployee(employeeId);
+        //Branch b = getBranch(branchId);
+        //if(e==null)
+        //    throw new Exception("This employee is not in the system.");
+        //if(this.employees.get(b).containsKey(employeeId))
+        //    throw new Exception("This employee already belongs to this branch.");
+        //this.employees.get(b).put(employeeId,e);
+        this.branchesDAO.insertEmployee(branchId, employeeId);
     }
 
     public void updateEmployeeSalary(String employeeId, double hourlySalaryRate, double salaryBonus) throws Exception {
         Employee employee = getEmployee(employeeId);
         employee.setHourlySalaryRate(hourlySalaryRate);
         employee.setSalaryBonus(salaryBonus);
+        employeeDAO.update(employee);
     }
 
     public void updateEmployeeBankDetails(String employeeId, String bankDetails) throws Exception {
         Employee employee = getEmployee(employeeId);
         employee.setBankDetails(bankDetails);
+        employeeDAO.update(employee);
     }
 
     public void updateEmployeeEmploymentConditions(String employeeId, String employmentConditions) throws Exception {
         Employee employee = getEmployee(employeeId);
         employee.setEmploymentConditions(employmentConditions);
+        employeeDAO.update(employee);
     }
 
     public void updateEmployeeDetails(String employeeId, String details) throws Exception {
         Employee employee = getEmployee(employeeId);
         employee.setDetails(details);
+        employeeDAO.update(employee);
     }
 
     public void certifyEmployee(String employeeId, Role role) throws Exception {
         Employee employee = getEmployee(employeeId);
         employee.addRole(role);
+        employeeDAO.update(employee);
     }
 
     public void uncertifyEmployee(String employeeId, Role role) throws Exception {
         Employee employee = getEmployee(employeeId);
         employee.removeRole(role);
+        employeeDAO.update(employee);
     }
 
-    public void updateBranchWorkingHours(String branchId, LocalTime morningStart, LocalTime morningEnd, LocalTime eveningStart, LocalTime eveningEnd){
-        this.branches.get(branchId).setWorkingHours(morningStart, morningEnd, eveningStart, eveningEnd);
+    public void updateBranchWorkingHours(String branchId, LocalTime morningStart, LocalTime morningEnd, LocalTime eveningStart, LocalTime eveningEnd) throws Exception {
+        //this.branches.get(branchId).setWorkingHours(morningStart, morningEnd, eveningStart, eveningEnd);
+        Branch branch = branchesDAO.select(branchId);
+        branch.setWorkingHours(morningStart, morningEnd, eveningStart, eveningEnd);
+        branchesDAO.update(branch);
     }
 
     public List<Employee> getAvailableDrivers(LocalDateTime dateTime) throws Exception {
         List<Employee> availableDrivers = new ArrayList<>();
-        for (String branchId : branches.keySet()) {
+        for (Branch branch : branchesDAO.selectAll()) {
             try {
-                ShiftType shiftType = this.branches.get(branchId).getShiftType(dateTime.toLocalTime()); // Could throw an exception if the given time is not in any shift
-                Map<Role, List<Employee>> shiftWorkers = shiftsController.getShift(branchId, dateTime.toLocalDate(), shiftType).getShiftWorkers();
+                ShiftType shiftType = branch.getShiftType(dateTime.toLocalTime()); // Could throw an exception if the given time is not in any shift
+                Map<Role, List<Employee>> shiftWorkers = shiftsController.getShift(branch.address(), dateTime.toLocalDate(), shiftType).getShiftWorkers();
                 if (shiftWorkers.containsKey(Role.Driver))
                     availableDrivers.addAll(shiftWorkers.get(Role.Driver));
             } catch (Exception ignore) {}

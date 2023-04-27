@@ -21,7 +21,7 @@ public class UserService {
     /**
      * This method loads the initial user data into the system, during the initial load of the system.
      */
-    public void loadData() {
+    public void createData() {
         resetData();
         try {
             userController.createManagerUser("admin123", "123");

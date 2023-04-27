@@ -1,13 +1,16 @@
 package dataAccessLayer.employeeModule;
 
 import businessLayer.employeeModule.Branch;
+import dataAccessLayer.DalFactory;
 import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.dalUtils.OfflineResultSet;
 import dataAccessLayer.dalUtils.SQLExecutor;
-import dataAccessLayer.employeeModule.BranchesDAO;
+import objects.transportObjects.Site;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import serviceLayer.transportModule.ResourceManagementService;
+import serviceLayer.transportModule.ServiceFactory;
 
 import java.sql.SQLException;
 import java.time.LocalTime;
@@ -19,22 +22,30 @@ import static dataAccessLayer.DalFactory.TESTING_DB_NAME;
 
 class BranchesDAOTest {
 
-    private BranchesDAO dao;
+    private BranchesDAO branchesDAO;
+    private BranchEmployeesDAO branchEmployeesDAO;
+    private ResourceManagementService rms;
 
     private Branch branch1, branch2, branch3, branch4;
 
     @BeforeEach
     void setUp() {
+        DalFactory.clearTestDB();
         branch1 = new Branch("address1");
         branch2 = new Branch("address2");
         branch3 = new Branch("address3", LocalTime.of(9,0),LocalTime.of(13,0),LocalTime.of(13,0),LocalTime.of(20,0));
         branch4 = new Branch("address1");
         try {
-            dao = new BranchesDAO(TESTING_DB_NAME);
-            dao.clearTable();
+            ServiceFactory serviceFactory = new ServiceFactory(TESTING_DB_NAME);
+            rms = serviceFactory.getResourceManagementService();
+            rms.addSite(new Site("Zone1","address1","phone1","contact1", Site.SiteType.BRANCH).toJson());
+            rms.addSite(new Site("Zone2","address2","phone2","contact2", Site.SiteType.BRANCH).toJson());
+            rms.addSite(new Site("Zone3","address3","phone3","contact3", Site.SiteType.BRANCH).toJson());
+            branchEmployeesDAO = new BranchEmployeesDAO(TESTING_DB_NAME);
+            branchesDAO = new BranchesDAO(TESTING_DB_NAME, branchEmployeesDAO);
             // Inserting only branch1 and branch2 at setUp
-            dao.insert(branch1);
-            dao.insert(branch2);
+            branchesDAO.insert(branch1);
+            branchesDAO.insert(branch2);
         } catch (DalException e) {
             throw new RuntimeException(e);
         }
@@ -42,13 +53,13 @@ class BranchesDAOTest {
 
     @AfterEach
     void tearDown() {
-        dao.clearTable();
+        DalFactory.clearTestDB();
     }
 
     @Test
     void select() {
         try {
-            assertDeepEquals(branch1,dao.select(branch1.address()));
+            assertDeepEquals(branch1, branchesDAO.select(branch1.address()));
         } catch (DalException e) {
             fail(e);
         }
@@ -61,7 +72,7 @@ class BranchesDAOTest {
         expectedBranches.add(branch2);
 
         try {
-            List<Branch> selectedBranches = dao.selectAll();
+            List<Branch> selectedBranches = branchesDAO.selectAll();
             assertEquals(expectedBranches.size(), selectedBranches.size());
             for (int i = 0; i < expectedBranches.size(); i++) {
                 assertDeepEquals(expectedBranches.get(i), selectedBranches.get(i));
@@ -74,7 +85,7 @@ class BranchesDAOTest {
     @Test
     void insert() {
         try {
-            dao.insert(branch3);
+            branchesDAO.insert(branch3);
         } catch (DalException e) {
             fail(e);
         }
@@ -83,7 +94,7 @@ class BranchesDAOTest {
     @Test
     void insert_fail() {
         try {
-            dao.insert(branch4);
+            branchesDAO.insert(branch4);
             fail("Expected an error after attempting to insert a branch with the same address.");
         } catch (DalException ignore) { }
     }
@@ -94,8 +105,8 @@ class BranchesDAOTest {
         LocalTime updatedEveningEnd = LocalTime.of(23,0);
         Branch updatedBranch1 = new Branch(branch1.address(),updatedMorningStart,branch1.getMorningEnd(),branch1.getEveningStart(),updatedEveningEnd);
         try {
-            dao.update(updatedBranch1);
-            assertDeepEquals(updatedBranch1, dao.select(updatedBranch1.address()));
+            branchesDAO.update(updatedBranch1);
+            assertDeepEquals(updatedBranch1, branchesDAO.select(updatedBranch1.address()));
         } catch (DalException e) {
             fail(e);
         }
@@ -107,7 +118,7 @@ class BranchesDAOTest {
         LocalTime updatedMorningStart = LocalTime.of(10,0);
         Branch invalidBranch = new Branch(invalidAddress,updatedMorningStart,branch1.getMorningEnd(),branch1.getEveningStart(),branch1.getEveningEnd());
         try {
-            dao.update(invalidBranch);
+            branchesDAO.update(invalidBranch);
             fail("Expected an error after attempting to update a non existent branch.");
         } catch (DalException ignore) { }
     }
@@ -115,11 +126,11 @@ class BranchesDAOTest {
     @Test
     void delete() {
         try {
-            dao.delete(branch2);
+            branchesDAO.delete(branch2);
         } catch (DalException e) {
             fail(e);
         }
-        assertThrows(DalException.class, () -> dao.select(branch2.address()));
+        assertThrows(DalException.class, () -> branchesDAO.select(branch2.address()));
     }
 
     @Test
@@ -128,7 +139,7 @@ class BranchesDAOTest {
         try {
             OfflineResultSet resultSet = cursor.executeRead("SELECT * FROM Branches WHERE address = '" + branch1.address() + "'");
             resultSet.next();
-            assertDeepEquals(branch1, dao.getObjectFromResultSet(resultSet));
+            assertDeepEquals(branch1, branchesDAO.getObjectFromResultSet(resultSet));
         } catch (SQLException e) {
             fail(e);
         }

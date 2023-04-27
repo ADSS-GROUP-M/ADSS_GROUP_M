@@ -4,6 +4,7 @@ import businessLayer.employeeModule.Employee;
 import businessLayer.employeeModule.Role;
 import businessLayer.employeeModule.Shift;
 import businessLayer.employeeModule.Shift.ShiftType;
+import dataAccessLayer.employeeModule.ShiftDAO;
 import utils.employeeUtils.DateUtils;
 
 import java.time.DayOfWeek;
@@ -18,21 +19,19 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 public class ShiftsController {
-    private static ShiftsController instance;
+    private ShiftDAO shiftDAO;
     private Map<String, Map<LocalDate, Map<ShiftType,Shift>>> shifts; // branchID to <Date to <ShiftTime to Shift>>
 
-    private ShiftsController() {
-        this.shifts = new HashMap<>();
-    }
-
-    public static ShiftsController getInstance() {
-        if (instance == null)
-            instance = new ShiftsController();
-        return instance;
+    public ShiftsController(ShiftDAO shiftDAO) {
+        this.shifts = new HashMap<>(); //
+        this.shiftDAO = shiftDAO;
     }
 
     public void resetData() {
-        this.shifts.clear();
+        this.shifts.clear(); //
+        try {
+            this.shiftDAO.deleteAll();
+        } catch (Exception ignore) {}
     }
 
     protected void createBranch(String branchId) throws Exception {
@@ -80,7 +79,7 @@ public class ShiftsController {
         Map<ShiftType, Shift> shiftDay = shiftBranch.get(shiftDate);
         if (shiftDay.containsKey(shiftType))
             throw new Exception("This shift already exists in the system.");
-        Shift shift = new Shift(shiftDate, shiftType);
+        Shift shift = new Shift(branchId, shiftDate, shiftType);
         shiftDay.put(shiftType, shift);
         return shift;
     }

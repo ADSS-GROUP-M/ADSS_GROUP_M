@@ -15,8 +15,10 @@ public class TransportUI implements Menu {
     private final SitesManagement sitesManagement;
     private final TrucksManagement trucksManagement;
     private final DriversManagement driversManagement;
+    private final ServiceFactory factory;
 
     public TransportUI(ServiceFactory factory){
+        this.factory = factory;
         UIData = new UiData(
                 factory.getResourceManagementService(),
                 factory.getItemListsService(),
@@ -40,7 +42,7 @@ public class TransportUI implements Menu {
             case 3 -> manageResources();
             case 4 -> UIData.loadData();
             case 5 -> {
-                return new LoginMenu();
+                return new LoginMenu(factory);
             }
             case 6 -> {
                 MenuManager.terminate();

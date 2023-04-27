@@ -12,6 +12,10 @@ public class LoginMenuVM {
         backendController = BackendController.getInstance();
     }
 
+    public LoginMenuVM(ServiceFactory factory) {
+        backendController = BackendController.getInstance(factory);
+    }
+
     public String login(String username, String password) {
         return backendController.login(username, password);
     }

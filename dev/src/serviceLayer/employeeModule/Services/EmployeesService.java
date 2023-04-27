@@ -2,6 +2,7 @@ package serviceLayer.employeeModule.Services;
 
 
 import objects.transportObjects.Driver;
+import objects.transportObjects.Site;
 import serviceLayer.transportModule.ResourceManagementService;
 import serviceLayer.transportModule.ServiceFactory;
 import utils.JsonUtils;
@@ -17,6 +18,7 @@ import serviceLayer.employeeModule.Objects.SShift;
 import serviceLayer.employeeModule.Objects.SShiftType;
 import businessLayer.employeeModule.Shift.ShiftType;
 
+import java.security.Provider;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -26,15 +28,15 @@ import java.util.stream.Collectors;
 
 public class EmployeesService {
     private static UserService userService;
-    private static ResourceManagementService rms;
+    private ServiceFactory serviceFactory;
     private EmployeesController employeesController;
     private ShiftsController shiftsController;
 
-    public EmployeesService(ServiceFactory serviceFactory) {
-        rms = serviceFactory.getResourceManagementService();
+    public EmployeesService(ServiceFactory serviceFactory, EmployeesController employeesController, ShiftsController shiftsController) {
+        this.serviceFactory = serviceFactory;
         userService = serviceFactory.userService();
-        employeesController = EmployeesController.getInstance();
-        shiftsController = ShiftsController.getInstance();
+        this.employeesController = employeesController;
+        this.shiftsController = shiftsController;
     }
 
     /**
@@ -75,20 +77,25 @@ public class EmployeesService {
     /**
      * This method loads the initial employee data from the system, during the initial load of the system.
      */
-    public void loadData() {
+    public void createData() {
         resetData();
         try {
-            // Initializing Branches
-            for(int i = 1; i <= 9; i++) {
+            // Initializing Branches - TODO: Should be moved to Transport module
+            serviceFactory.getResourceManagementService().addSite(new Site("Headquarters","1","123456789","Headquarters", Site.SiteType.BRANCH).toJson());
+            employeesController.createBranch("1"); // TODO: Should be moved to Transport module
+            for(int i = 2; i <= 9; i++) {
                 String branchId = Integer.toString(i);
+                serviceFactory.getResourceManagementService().addSite(new Site("Zone" + i,branchId, "phone" + i,"contact"+i, Site.SiteType.BRANCH).toJson());
                 employeesController.createBranch(branchId);
             }
-            // TODO: Add initial employees data
+            // TODO: Add initial employees data, after the Transport Sites have already been added
             employeesController.recruitEmployee("1","Moshe Biton", "111","Hapoalim 12 230", 50, LocalDate.of(2023,2,2),"Employment Conditions Test", "More details about Moshe");
             employeesController.certifyEmployee("111", Role.ShiftManager);
             employeesController.certifyEmployee("111",Role.Storekeeper);
             userService.createUser("admin123","111","1234");
-        } catch (Exception ignore) {}
+        } catch (Exception ignore) {
+            Exception x = ignore;
+        }
     }
 
     /**
@@ -150,7 +157,7 @@ public class EmployeesService {
         try {
             employeesController.certifyEmployee(employeeId, Role.Driver);
             Employee driver = employeesController.getEmployee(employeeId);
-            rms.addDriver(new Driver(employeeId,driver.getName(), Driver.LicenseType.valueOf(driverLicense)).toJson());
+            serviceFactory.getResourceManagementService().addDriver(new Driver(employeeId,driver.getName(), Driver.LicenseType.valueOf(driverLicense)).toJson());
             return new Response(true).toJson();
         } catch (Exception e) {
             return Response.getErrorResponse(e).toJson();
@@ -173,7 +180,7 @@ public class EmployeesService {
 
     public String requestShift(String actorUsername, String branchId, LocalDate shiftDate, SShiftType shiftType, String role) {
         try {
-            Employee employee = employeesController.getEmployee(branchId, actorUsername);
+            Employee employee = employeesController.getBranchEmployee(branchId, actorUsername);
             shiftsController.requestShift(employee, branchId, shiftDate, ShiftType.valueOf(shiftType.toString()), Role.valueOf(role));
             return new Response(true).toJson();
         } catch (Exception e) {
@@ -183,7 +190,7 @@ public class EmployeesService {
 
     public String cancelShiftRequest(String actorUsername, String branchId, LocalDate shiftDate, SShiftType shiftType, String role) {
         try {
-            Employee employee = employeesController.getEmployee(branchId, actorUsername);
+            Employee employee = employeesController.getBranchEmployee(branchId, actorUsername);
             shiftsController.cancelShiftRequest(employee, branchId, shiftDate, ShiftType.valueOf(shiftType.toString()), Role.valueOf(role));
             return new Response(true).toJson();
         } catch (Exception e) {
@@ -260,7 +267,7 @@ public class EmployeesService {
         else if(authResponse.dataToBoolean() == false)
             return new Response("User isn't authorized to do this",false).toJson();
         try {
-            List<Employee> employees = employeesController.getEmployees(branchId, employeeIds);
+            List<Employee> employees = employeesController.getBranchEmployees(branchId, employeeIds);
             shiftsController.setShiftEmployees(branchId, shiftDate, ShiftType.valueOf(shiftType.toString()), Role.valueOf(role), employees);
             return new Response(true).toJson();
         } catch (Exception e) {

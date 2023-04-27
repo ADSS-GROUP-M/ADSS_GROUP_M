@@ -20,6 +20,7 @@ public class DalFactory {
     private final ItemListsDAO itemListsDAO;
     private final SitesDAO sitesDAO;
     private final BranchesDAO branchesDAO;
+    private final BranchEmployeesDAO branchEmployeesDAO;
     private final DriversDAO driversDAO;
     private final TransportsDAO transportsDAO;
 
@@ -39,7 +40,8 @@ public class DalFactory {
         trucksDAO = new TrucksDAO();
         driversDAO = new DriversDAO();
         sitesDAO = new SitesDAO();
-        branchesDAO = new BranchesDAO();
+        branchEmployeesDAO = new BranchEmployeesDAO();
+        branchesDAO = new BranchesDAO(branchEmployeesDAO);
         transportsDAO = new TransportsDAO();
     }
 
@@ -64,7 +66,8 @@ public class DalFactory {
         driversDAO = new DriversDAO(dbName);
         itemListsDAO = new ItemListsDAO(dbName);
         sitesDAO = new SitesDAO(dbName);
-        branchesDAO = new BranchesDAO(dbName);
+        branchEmployeesDAO = new BranchEmployeesDAO(dbName);
+        branchesDAO = new BranchesDAO(dbName,branchEmployeesDAO);
         transportsDAO = new TransportsDAO(dbName);
     }
     public EmployeeDAO employeeDAO() {
@@ -97,6 +100,10 @@ public class DalFactory {
 
     public BranchesDAO branchesDAO() {
         return branchesDAO;
+    }
+
+    public BranchEmployeesDAO branchEmployeesDAO() {
+        return branchEmployeesDAO;
     }
 
     public TransportsDAO transportsDAO() {

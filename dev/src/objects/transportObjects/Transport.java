@@ -33,7 +33,7 @@ public record Transport (int id, String source, LinkedList<String> destinations,
      * this constructor sets the id to be -1
      */
     public Transport(String source, LinkedList<String> destinations, HashMap<String, Integer> itemLists,
-                     String truckId, String driverId, LocalDateTime scheduledTime, int weight){
+                     String driverId, String truckId, LocalDateTime scheduledTime, int weight){
         this(
                 -1,
                 source,

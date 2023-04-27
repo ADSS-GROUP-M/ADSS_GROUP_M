@@ -357,8 +357,7 @@ public class TransportsManagement {
                 source,
                 destinations,
                 itemLists,
-                truckId,
-                driverId,
+                driverId, truckId,
                 departureDateTime,
                 weight
         );

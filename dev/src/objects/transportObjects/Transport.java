@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 public record Transport (int id, String source, LinkedList<String> destinations, HashMap<String, Integer> itemLists,
-                         String truckId, String driverId, LocalDateTime departureTime, int weight){
+                         String driverId, String truckId, LocalDateTime departureTime, int weight){
 
 
     /**
@@ -21,8 +21,8 @@ public record Transport (int id, String source, LinkedList<String> destinations,
                 other.source,
                 other.destinations,
                 other.itemLists,
-                other.truckId,
                 other.driverId,
+                other.truckId,
                 other.departureTime,
                 other.weight
         );
@@ -39,8 +39,8 @@ public record Transport (int id, String source, LinkedList<String> destinations,
                 source,
                 destinations,
                 itemLists,
-                truckId,
                 driverId,
+                truckId,
                 scheduledTime,
                 weight
         );

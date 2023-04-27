@@ -5,7 +5,6 @@ import dataAccessLayer.dalUtils.OfflineResultSet;
 import dataAccessLayer.transportModule.abstracts.CounterDAO;
 import dataAccessLayer.transportModule.abstracts.ManyToManyDAO;
 import objects.transportObjects.Transport;
-import org.w3c.dom.css.Counter;
 
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -17,7 +16,7 @@ public class TransportsDAO extends ManyToManyDAO<Transport> implements CounterDA
     private static final String[] types = {"INTEGER", "TEXT", "TEXT", "TEXT", "TEXT", "INTEGER"};
     private static final String[] parent_tables = {"truck_drivers", "trucks", "sites"};
     private static final String[] primary_keys = {"id"};
-    private static final String[] foreign_keys = {"source_address", "driver_id", "truck_id"};
+    private static final String[] foreign_keys = {"driver_id", "truck_id","source_address"};
     private static final String[] references = {"id", "id", "address"};
 
     private final TransportDestinationsDAO destinationsDAO;
@@ -164,8 +163,8 @@ public class TransportsDAO extends ManyToManyDAO<Transport> implements CounterDA
                 object.id()
         );
         try {
+            destinationsDAO.deleteAllRelated(object);
             if(cursor.executeWrite(query) == 1){
-                destinationsDAO.deleteAllRelated(object);
                 LinkedList<TransportDestination> transportDestinations = generateTransportDestinations(object);
                 destinationsDAO.insertAll(transportDestinations);
                 cache.put(object);
@@ -187,8 +186,8 @@ public class TransportsDAO extends ManyToManyDAO<Transport> implements CounterDA
                 object.id()
         );
         try {
+            destinationsDAO.deleteAllRelated(object);
             if(cursor.executeWrite(query) == 1){
-                destinationsDAO.deleteAllRelated(object);
                 cache.remove(object);
             } else {
                 throw new DalException("No transport with id " + object.id() + " was found");
@@ -229,8 +228,7 @@ public class TransportsDAO extends ManyToManyDAO<Transport> implements CounterDA
                 resultSet.getString("source_address"),
                 destinations,
                 itemLists,
-                resultSet.getString("driver_id"),
-                resultSet.getString("truck_id"),
+                resultSet.getString("truck_id"), resultSet.getString("driver_id"),
                 resultSet.getLocalDateTime("departure_time"),
                 resultSet.getInt("weight")
         );

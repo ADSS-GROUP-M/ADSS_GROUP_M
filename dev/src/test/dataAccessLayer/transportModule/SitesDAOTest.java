@@ -13,6 +13,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static dataAccessLayer.DalFactory.TESTING_DB_NAME;
 
 class SitesDAOTest {
 
@@ -24,7 +25,7 @@ class SitesDAOTest {
     void setUp() {
         site = new Site("zone1","address1","12345","kobi", Site.SiteType.SUPPLIER);
         try {
-            dao = new SitesDAO("TestingDB.db");
+            dao = new SitesDAO(TESTING_DB_NAME);
             dao.clearTable();
 
             dao.insert(site);
@@ -121,7 +122,7 @@ class SitesDAOTest {
 
     @Test
     void getObjectFromResultSet() {
-        SQLExecutor cursor = new SQLExecutor("TestingDB.db");
+        SQLExecutor cursor = new SQLExecutor(TESTING_DB_NAME);
         try{
             OfflineResultSet resultSet = cursor.executeRead(String.format("SELECT * FROM Sites WHERE address = '%s';",site.address()));
             resultSet.next();

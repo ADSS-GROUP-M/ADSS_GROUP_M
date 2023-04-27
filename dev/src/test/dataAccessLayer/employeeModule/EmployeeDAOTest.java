@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static dataAccessLayer.DalFactory.TESTING_DB_NAME;
 
 class EmployeeDAOTest {
 
@@ -31,7 +32,7 @@ class EmployeeDAOTest {
         employee3 = new Employee("Test3", "1234567", "TestBank3", 23, LocalDate.now(),"","");
         employee4 = new Employee("Test4", "12345", "TestBank4", 24, LocalDate.now(),"","");
         try {
-            DalFactory factory = new DalFactory("TestingDB.db");
+            DalFactory factory = new DalFactory(TESTING_DB_NAME);
 
             dao = factory.employeeDAO();
             dao.clearTable();
@@ -128,7 +129,7 @@ class EmployeeDAOTest {
 
     @Test
     void getObjectFromResultSet() {
-        SQLExecutor cursor = new SQLExecutor("TestingDB.db");
+        SQLExecutor cursor = new SQLExecutor(TESTING_DB_NAME);
         try {
             OfflineResultSet resultSet = cursor.executeRead("SELECT * FROM Employees WHERE id = '" + employee1.getId() + "'");
             resultSet.next();

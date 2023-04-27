@@ -23,7 +23,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-
+import static dataAccessLayer.DalFactory.TESTING_DB_NAME;
 class TransportsServiceTest {
 
     private Transport transport;
@@ -38,7 +38,7 @@ class TransportsServiceTest {
         // Should probably be refactored to be returned by the ModuleFactory (?)
         es = EmployeesService.getInstance();
         us = UserService.getInstance();
-        ServiceFactory factory = new ServiceFactory("TestingDB.db");
+        ServiceFactory factory = new ServiceFactory(TESTING_DB_NAME);
         ts = factory.getTransportsService();
         ils = factory.getItemListsService();
         rms = factory.getResourceManagementService();

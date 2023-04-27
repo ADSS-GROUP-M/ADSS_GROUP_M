@@ -17,6 +17,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static dataAccessLayer.DalFactory.TESTING_DB_NAME;
 
 class TransportsDAOTest {
 
@@ -70,7 +71,7 @@ class TransportsDAOTest {
         itemList = new ItemList(1, load, unload);
 
         try {
-            DalFactory factory = new DalFactory("TestingDB.db");
+            DalFactory factory = new DalFactory(TESTING_DB_NAME);
             sitesDAO = factory.sitesDAO();
             trucksDAO = factory.trucksDAO();
             employeeDAO = factory.employeeDAO();

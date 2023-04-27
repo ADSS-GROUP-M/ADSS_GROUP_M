@@ -31,7 +31,7 @@
 //
 //    @BeforeEach
 //    public void setUp() throws Exception { // cleans empDAO, creates 3 employees in DB, sets up 2 of them as workers shift
-//        factory = new DalFactory("testingDB.db");
+//        factory = new DalFactory(TESTING_DB_NAME);
 //        empDao = factory.employeeDAO();
 //        empDao.clearTable();
 //        s = new Shift(LocalDate.now(), Shift.ShiftType.Evening);

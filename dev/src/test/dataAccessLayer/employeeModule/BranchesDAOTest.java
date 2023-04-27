@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static dataAccessLayer.DalFactory.TESTING_DB_NAME;
 
 class BranchesDAOTest {
 
@@ -29,7 +30,7 @@ class BranchesDAOTest {
         branch3 = new Branch("address3", LocalTime.of(9,0),LocalTime.of(13,0),LocalTime.of(13,0),LocalTime.of(20,0));
         branch4 = new Branch("address1");
         try {
-            dao = new BranchesDAO("TestingDB.db");
+            dao = new BranchesDAO(TESTING_DB_NAME);
             dao.clearTable();
             // Inserting only branch1 and branch2 at setUp
             dao.insert(branch1);
@@ -123,7 +124,7 @@ class BranchesDAOTest {
 
     @Test
     void getObjectFromResultSet() {
-        SQLExecutor cursor = new SQLExecutor("TestingDB.db");
+        SQLExecutor cursor = new SQLExecutor(TESTING_DB_NAME);
         try {
             OfflineResultSet resultSet = cursor.executeRead("SELECT * FROM Branches WHERE address = '" + branch1.address() + "'");
             resultSet.next();

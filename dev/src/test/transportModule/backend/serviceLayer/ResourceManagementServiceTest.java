@@ -18,6 +18,7 @@ import utils.Response;
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static dataAccessLayer.DalFactory.TESTING_DB_NAME;
 
 class ResourceManagementServiceTest {
 
@@ -29,11 +30,11 @@ class ResourceManagementServiceTest {
 
     @BeforeEach
     void setUp() {
-        rms = new ServiceFactory("TestingDB.db").getResourceManagementService();
+        rms = new ServiceFactory(TESTING_DB_NAME).getResourceManagementService();
         //add drivers
         DalFactory dalFactory;
         try {
-            dalFactory = new DalFactory("TestingDB.db");
+            dalFactory = new DalFactory(TESTING_DB_NAME);
             empDao = dalFactory.employeeDAO();
             empDao.insert(new Employee("name","123456789","Poalim",50, LocalDate.of(1999,10,10),"conditions","details"));
         } catch (DalException e) {

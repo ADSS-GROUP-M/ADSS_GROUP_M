@@ -11,6 +11,8 @@ import dataAccessLayer.employeeModule.*;
 
 public class DalFactory {
 
+    public static String TESTING_DB_NAME = "TestingDB.db";
+
     private final EmployeeDAO employeeDAO;
     private final UserDAO userDAO;
     private final ShiftDAO shiftDAO;
@@ -103,7 +105,7 @@ public class DalFactory {
 
     public static void clearTestDB(){
         try {
-            DalFactory factory = new DalFactory("TestingDB.db");
+            DalFactory factory = new DalFactory(TESTING_DB_NAME);
             factory.transportsDAO().clearTable();
             factory.branchesDAO().clearTable();
             factory.sitesDAO().clearTable();

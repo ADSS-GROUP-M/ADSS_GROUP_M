@@ -12,6 +12,7 @@ import utils.Response;
 import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static dataAccessLayer.DalFactory.TESTING_DB_NAME;
 
 class ItemListsServiceTest {
 
@@ -20,7 +21,7 @@ class ItemListsServiceTest {
 
     @BeforeEach
     void setUp() {
-        ils = new ServiceFactory("TestingDB.db").getItemListsService();
+        ils = new ServiceFactory(TESTING_DB_NAME).getItemListsService();
 
         HashMap<String, Integer> load1 = new HashMap<>();
         load1.put("Shirts", 20);

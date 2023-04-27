@@ -44,7 +44,14 @@ public class ItemListsDAO extends DAO<ItemList> {
      */
     @Override
     public ItemList select(ItemList object) throws DalException {
-        return itemListsItemsDAO.select(object);
+
+        if(cache.contains(object)) {
+            return cache.get(object);
+        }
+
+        ItemList selected = itemListsItemsDAO.select(object);
+        cache.put(selected);
+        return selected;
     }
 
     /**
@@ -53,7 +60,9 @@ public class ItemListsDAO extends DAO<ItemList> {
      */
     @Override
     public List<ItemList> selectAll() throws DalException {
-        return itemListsItemsDAO.selectAll();
+        List<ItemList> itemLists = itemListsItemsDAO.selectAll();
+        cache.putAll(itemLists);
+        return itemLists;
     }
 
     /**
@@ -64,10 +73,19 @@ public class ItemListsDAO extends DAO<ItemList> {
     public void insert(ItemList object) throws DalException {
         String query = String.format("INSERT INTO %s (id) VALUES (%d);", TABLE_NAME, object.id());
         try {
-            cursor.executeWrite(query);
-            itemListsItemsDAO.insert(object);
+            if(cursor.executeWrite(query) == 1){
+                itemListsItemsDAO.insert(object);
+                cache.put(object);
+            } else {
+                throw new RuntimeException("Unexpected error while inserting item list");
+            }
         } catch (SQLException e) {
             throw new DalException("Failed to insert item list", e);
+        } catch (RuntimeException e) {
+            try{
+                itemListsItemsDAO.delete(object);
+            } catch (DalException ignored) {}
+            throw new RuntimeException("Unexpected error while inserting item list");
         }
     }
 
@@ -78,6 +96,7 @@ public class ItemListsDAO extends DAO<ItemList> {
     @Override
     public void update(ItemList object) throws DalException {
         itemListsItemsDAO.update(object);
+        cache.put(object);
     }
 
     /**
@@ -88,8 +107,12 @@ public class ItemListsDAO extends DAO<ItemList> {
     public void delete(ItemList object) throws DalException {
         String query = String.format("DELETE FROM %s WHERE id = %d;", TABLE_NAME, object.id());
         try {
-            cursor.executeWrite(query);
-            itemListsItemsDAO.delete(object);
+            if(cursor.executeWrite(query) == 1){
+                itemListsItemsDAO.delete(object);
+                cache.remove(object);
+            } else {
+                throw new DalException("No item list with id " + object.id() + " was found");
+            }
         } catch (SQLException e) {
             throw new DalException("Failed to delete item list", e);
         }
@@ -98,5 +121,11 @@ public class ItemListsDAO extends DAO<ItemList> {
     @Override
     protected ItemList getObjectFromResultSet(OfflineResultSet resultSet) {
         return itemListsItemsDAO.getObjectFromResultSet(resultSet);
+    }
+
+    @Override
+    public void clearTable(){
+        itemListsItemsDAO.clearTable();
+        super.clearTable();
     }
 }

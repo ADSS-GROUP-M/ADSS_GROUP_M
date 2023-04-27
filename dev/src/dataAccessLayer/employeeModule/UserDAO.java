@@ -4,9 +4,9 @@ import businessLayer.employeeModule.Authorization;
 import businessLayer.employeeModule.Employee;
 import businessLayer.employeeModule.User;
 import dataAccessLayer.dalUtils.DalException;
+import dataAccessLayer.dalUtils.OfflineResultSet;
 
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import java.util.*;
@@ -42,26 +42,13 @@ public class UserDAO extends DAO {
     public void create(User user) throws DalException {
         try {
             this.userAuthorizationsDAO.create(user);
-            String queryString = String.format("INSERT INTO " + TABLE_NAME + "(%s, %s, %s) VALUES(?,?,?)",
-                    Columns.Username.name(), Columns.Password.name(), Columns.LoggedIn.name());
-            connection = getConnection();
-            ptmt = connection.prepareStatement(queryString);
-            ptmt.setString(1, user.getUsername());
-            ptmt.setString(2, user.getPassword());
-            ptmt.setString(3, String.valueOf(user.isLoggedIn()));
-            ptmt.executeUpdate();
+            String queryString = String.format("INSERT INTO " + TABLE_NAME + "(%s, %s, %s) VALUES('%s','%s','%s')",
+                    Columns.Username.name(), Columns.Password.name(), Columns.LoggedIn.name(),
+                    user.getUsername(), user.getPassword(), String.valueOf(user.isLoggedIn()));
+            cursor.executeWrite(queryString);
             this.cache.put(getHashCode(user.getUsername()), user);
         } catch (SQLException e) {
-           // e.printStackTrace();
-        } finally {
-            try {
-                if (ptmt != null)
-                    ptmt.close();
-                if (connection != null)
-                    connection.close();
-            } catch (Exception e) {
-                throw new DalException("Failed closing connection to DB.");
-            }
+            throw new DalException(e);
         }
     }
 
@@ -75,20 +62,16 @@ public class UserDAO extends DAO {
 
     public List<User> getAll() throws DalException {
         List<User> list = new LinkedList<>();
-        try {
-            for(Object o: selectAll()) {
-                if(!(o instanceof Employee))
-                    throw new DalException("Something went wrong");
-                User user = ((User)o);
-                if (this.cache.get(getHashCode(user.getUsername())) != null)
-                    list.add(this.cache.get(getHashCode(user.getUsername())));
-                else {
-                    list.add(user);
-                    this.cache.put(getHashCode(user.getUsername()), user);
-                }
+        for(Object o: selectAll()) {
+            if(!(o instanceof Employee))
+                throw new DalException("Something went wrong");
+            User user = ((User)o);
+            if (this.cache.get(getHashCode(user.getUsername())) != null)
+                list.add(this.cache.get(getHashCode(user.getUsername())));
+            else {
+                list.add(user);
+                this.cache.put(getHashCode(user.getUsername()), user);
             }
-        } catch (SQLException e) {
-            throw new DalException(e);
         }
         return list;
     }
@@ -105,31 +88,12 @@ public class UserDAO extends DAO {
             String queryString = String.format("UPDATE "+TABLE_NAME+" SET %s = ? , %s = ? , %s = ? WHERE",
                     Columns.Username.name(), Columns.Password.name(), Columns.LoggedIn.name());
             queryString = queryString.concat(createConditionForPrimaryKey(key));
-            connection = getConnection();
-            ptmt = connection.prepareStatement(queryString);
-            ptmt.setString(1, user.getUsername());
-            ptmt.setString(2, user.getPassword());
-            ptmt.setString(3, String.valueOf(user.isLoggedIn()));
-            ptmt.executeUpdate();
-        } catch(Exception e) {
-            e.printStackTrace();
-        }finally
-        {
-            try {
-                if (ptmt != null)
-                    ptmt.close();
-                if (connection != null)
-                    connection.close();
-            }
-            catch (SQLException e) {
-                e.printStackTrace();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            cursor.executeWrite(queryString);
+        } catch(SQLException e) {
+            throw new DalException(e);
         }
-
     }
-    public void delete(User user) {
+    public void delete(User user) throws DalException {
         this.cache.remove(getHashCode(user.getUsername()));
         Object[] keys = {user.getUsername()};
         this.userAuthorizationsDAO.delete(user);
@@ -141,7 +105,7 @@ public class UserDAO extends DAO {
         return ((User) super.select(keys));
     }
 
-    protected User convertReaderToObject(ResultSet reader) {
+    protected User convertReaderToObject(OfflineResultSet reader) {
         User ans = null;
         try{
             String username = reader.getString(Columns.Username.name());

@@ -34,10 +34,10 @@ public class SQLExecutor {
         }
     }
 
-    public void executeWrite(String query) throws SQLException {
+    public int executeWrite(String query) throws SQLException {
         try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD)) {
             Statement statement = connection.createStatement();
-            statement.executeUpdate(query);
+            return statement.executeUpdate(query);
         }
     }
 }

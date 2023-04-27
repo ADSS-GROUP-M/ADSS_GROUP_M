@@ -2,33 +2,34 @@ package dataAccessLayer.employeeModule;
 
 //import org.sqlite.SQLiteConnection;
 import dataAccessLayer.dalUtils.DalException;
+import dataAccessLayer.dalUtils.OfflineResultSet;
+import dataAccessLayer.dalUtils.SQLExecutor;
 
-import java.io.File;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.sql.DriverManager;
 
 public abstract class DAO {
-    protected Connection connection = null;
-    protected PreparedStatement ptmt = null;
-    protected ResultSet resultSet = null;
-    private String path;
-    private String connectionString;
+    protected SQLExecutor cursor;
 
     protected final String TABLE_NAME;
     private String[] primaryKey;
 
     public DAO(String tableName, String[] keyFields){
         this.TABLE_NAME = tableName;
-        path = (new File("").getAbsolutePath()).concat("\\SuperLiDB.db");
-        connectionString = "jdbc:sqlite:".concat(path);
         this.primaryKey = keyFields;
+        cursor = new SQLExecutor("SuperLiDB.db");
     }
 
-    protected Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(connectionString);
+    /**
+     * Can be used for testing in a different database
+     * @param dbName the name of the database to connect to
+     */
+    public DAO(String dbName, String tableName, String[] keyFields){
+        this.TABLE_NAME = tableName;
+        this.primaryKey = keyFields;
+        cursor = new SQLExecutor(dbName);
     }
 
     String formatLocalDate (LocalDate dt){
@@ -62,206 +63,60 @@ public abstract class DAO {
         return ans;
     }
     protected Object select(Object[] idValues) throws DalException {
-        Exception ex = null;
-        ResultSet result = null;
         Object ans = null;
         try {
             String queryString = String.format("SELECT * FROM %s WHERE",TABLE_NAME);
             queryString = queryString.concat(createConditionForPrimaryKey(idValues));
-            connection = getConnection();
-            ptmt = connection.prepareStatement(queryString);
-            result = ptmt.executeQuery();
-            ans = convertReaderToObject(result);
+            OfflineResultSet resultSet = cursor.executeRead(queryString);
+            ans = convertReaderToObject(resultSet);
         } catch (SQLException e) {
-            ex = e;
-        } catch (Exception e) {
-            ex = e;
-        } finally {
-            try {
-                if (ptmt != null)
-                    ptmt.close();
-                if (connection != null)
-                    connection.close();
-            }
-            catch (SQLException e) {
-                //e.printStackTrace();
-            } catch (Exception e) {
-                //e.printStackTrace();
-            }
+            throw new DalException(e);
         }
         return ans;
     }
-    protected List<Object> selectAll() throws SQLException {
-        ResultSet result = null;
-        Exception ex = null;
+    protected List<Object> selectAll() throws DalException {
+        String queryString = String.format("SELECT * FROM %s",TABLE_NAME);
+        OfflineResultSet resultSet;
         List<Object> ans = new LinkedList<>();
         try {
-            String queryString = String.format("SELECT * FROM %s",TABLE_NAME);
-            connection = getConnection();
-            ptmt = connection.prepareStatement(queryString);
-            result = ptmt.executeQuery();
-            if(result!= null){
-                while(result.next()){
-                    ans.add(convertReaderToObject(result));
-                }
-            }
+            resultSet = cursor.executeRead(queryString);
         } catch (SQLException e) {
-            e.printStackTrace();
-            ex = e;
-        } finally {
-            try {
-                if (ptmt != null)
-                    ptmt.close();
-                if (connection != null)
-                    connection.close();
-            }
-            catch (SQLException e) {
-               ex = e;
-            } catch (Exception e) {
-                ex = e;
-            }
+            throw new DalException(e);
         }
-
+        while(resultSet.next()){
+            ans.add(convertReaderToObject(resultSet));
+        }
         return ans;
     }
-    protected void update(Object[] idValues, String attributeName, String attributeValue) throws DalException {
-        Exception ex = null;
+    protected void update(Object[] idValues, String attributeName) throws DalException {
+        String queryString = "UPDATE "+TABLE_NAME+" SET "+attributeName+"='?' WHERE";
+        queryString = queryString.concat(createConditionForPrimaryKey(idValues));
         try {
-            String queryString = "UPDATE "+TABLE_NAME+" SET "+attributeName+"='?' WHERE";
-            queryString = queryString.concat(createConditionForPrimaryKey(idValues));
-            connection = getConnection();
-            ptmt = connection.prepareStatement(queryString);
-            ptmt.setString(1, attributeValue);
-            ptmt.executeUpdate();
-        } catch(Exception e) {
-            e.printStackTrace();
-        }finally
-         {
-            try {
-                if (ptmt != null)
-                    ptmt.close();
-                if (connection != null)
-                    connection.close();
-
-            }
-
-            catch (SQLException e) {
-                e.printStackTrace();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            cursor.executeWrite(queryString);
+        } catch(SQLException e) {
+            throw new DalException(e);
         }
     }
 
-    protected void update(Object[] idValues, String attributeName, Integer attributeValue) throws DalException
-    {
-        try {
-            String queryString = "UPDATE "+TABLE_NAME+" SET "+attributeName+"=? WHERE";
-            queryString = queryString.concat(createConditionForPrimaryKey(idValues));
-            connection = getConnection();
-            ptmt = connection.prepareStatement(queryString);
-            ptmt.setInt(1, attributeValue);
-            ptmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (ptmt != null)
-                    ptmt.close();
-                if (connection != null)
-                    connection.close();
-
-            }
-
-            catch (SQLException e) {
-                e.printStackTrace();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
-    protected void update(Object[] idValues, String attributeName, boolean attributeValue) throws DalException
-    {
-        try {
-            String queryString = "UPDATE "+TABLE_NAME+" SET "+attributeName+"=? WHERE";
-            queryString = queryString.concat(createConditionForPrimaryKey(idValues));
-            connection = getConnection();
-            ptmt = connection.prepareStatement(queryString);
-            ptmt.setBoolean(1, attributeValue);
-            ptmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (ptmt != null)
-                    ptmt.close();
-                if (connection != null)
-                    connection.close();
-
-            }
-
-            catch (SQLException e) {
-                e.printStackTrace();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    protected void delete(Object[] idValues)
-    {
+    protected void delete(Object[] idValues) throws DalException {
         try {
             String queryString = String.format("DELETE FROM %s WHERE", this.TABLE_NAME);
             queryString = queryString.concat(createConditionForPrimaryKey(idValues));
-            connection = getConnection();
-            System.out.println(queryString);
-            ptmt = connection.prepareStatement(queryString);
-            ptmt.executeUpdate();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (ptmt != null)
-                    ptmt.close();
-                if (connection != null)
-                    connection.close();
-
-            }
-
-            catch (SQLException e) {
-                e.printStackTrace();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public void deleteAll()
-    {
-        try {
-            String queryString = String.format("DELETE FROM %s ", this.TABLE_NAME);
-            connection = getConnection();
-            ptmt = connection.prepareStatement(queryString);
-            ptmt.executeUpdate();
+            cursor.executeWrite(queryString);
         } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (ptmt != null)
-                    ptmt.close();
-                if (connection != null)
-                    connection.close();
-
-            }
-
-            catch (SQLException e) {
-                e.printStackTrace();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            throw new DalException(e);
         }
     }
 
-    protected abstract Object convertReaderToObject(ResultSet reader);
+    public void deleteAll() throws DalException {
+        String queryString = String.format("DELETE FROM %s ", this.TABLE_NAME);
+        try {
+            cursor.executeWrite(queryString);
+        } catch (SQLException e) {
+            throw new DalException(e);
+        }
+    }
+
+    protected abstract Object convertReaderToObject(OfflineResultSet reader);
 
 }

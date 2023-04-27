@@ -114,6 +114,7 @@ public class Employee {
   //    }
   //}
 
+
     public Employee(String name, String id,String bankDetails, double hourlySalaryRate, LocalDate employmentDate, String employmentConditions, String details){
        this.name = name;
        this.id = id;
@@ -262,4 +263,8 @@ public class Employee {
     //public boolean checkLegality(LocalDate a, LocalDate b){
     //   return this.workingConstraints.checkScheduleLegality(a,b);
     //}
+
+    public static Employee getLookupObject(String id) {
+        return new Employee(null,id,null,0,null,null,null);
+    }
 }

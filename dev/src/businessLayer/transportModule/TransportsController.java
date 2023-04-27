@@ -120,9 +120,12 @@ public class TransportsController {
         String driverJson = es.getAvailableDrivers(JsonUtils.serialize(dateTime));
         Response response = Response.fromJson(driverJson);
         Type type = new TypeToken<LinkedList<String>>(){}.getType();
-        LinkedList<String> driversIds = response.data(type);
-        return driversIds.stream().anyMatch(x -> x.equals(driver.id()));
-
+        if(response.success()){
+            LinkedList<String> driversIds = response.data(type);
+            return driversIds.stream().anyMatch(x -> x.equals(driver.id()));
+        } else {
+            return false;
+        }
     }
 
     private void validateTransport(Transport transport) throws TransportException{
@@ -138,9 +141,6 @@ public class TransportsController {
         if(driver != null && checkIfDriverIsAvailable(driver, transport.departureTime()) == false){
             ec.addError("Driver is not available", "driverNotAvailable");
         }
-
-
-
 
         // truck validation
         Truck truck = tc.truckExists(transport.truckId()) ? tc.getTruck(transport.truckId()) :  null;

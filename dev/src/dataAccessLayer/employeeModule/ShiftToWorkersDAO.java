@@ -4,8 +4,8 @@ import businessLayer.employeeModule.Employee;
 import businessLayer.employeeModule.Role;
 import businessLayer.employeeModule.Shift;
 import dataAccessLayer.dalUtils.DalException;
+import dataAccessLayer.dalUtils.OfflineResultSet;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 
@@ -52,33 +52,18 @@ class ShiftToWorkersDAO extends DAO {
                 List<Employee> list = new LinkedList<>();
                     for(Employee e: shift.getShiftWorkers().get(r)) {
 
-                    String queryString = String.format("INSERT INTO " + TABLE_NAME + "(%s, %s, %s, %s, %s) VALUES(?,?,?,?,?)",
-                            Columns.ShiftDate.name(), Columns.ShiftType.name(), ShiftToWorkersDAO.Columns.Branch.name(), Columns.EmployeeId.name(), Columns.Role.name());
-                    connection = getConnection();
-                    ptmt = connection.prepareStatement(queryString);
-                    ptmt.setString(1, formatLocalDate(shift.getShiftDate()));
-                    ptmt.setString(2, shift.getShiftType().name());
-                    ptmt.setString(3, branch);
-                    ptmt.setString(4, e.getId());
-                    ptmt.setString(5, r.name());
-                    ptmt.executeUpdate();
+                    String queryString = String.format("INSERT INTO " + TABLE_NAME + "(%s, %s, %s, %s, %s) VALUES('%s','%s','%s','%s','%s')",
+                            Columns.ShiftDate.name(), Columns.ShiftType.name(), ShiftToWorkersDAO.Columns.Branch.name(), Columns.EmployeeId.name(), Columns.Role.name(),
+                            formatLocalDate(shift.getShiftDate()), shift.getShiftType().name(), branch, e.getId(), r.name());
+                    cursor.executeWrite(queryString);
                     list.add(e);
                 }
                     entries.put(r,list);
             }
             this.cache.put(getHashCode(shift.getShiftDate(), shift.getShiftType(), branch),entries );
 
-        } catch (SQLException e) {
-            //e.printStackTrace();
-        } finally {
-            try {
-                if (ptmt != null)
-                    ptmt.close();
-                if (connection != null)
-                    connection.close();
-            } catch (Exception e) {
-                throw new DalException("Failed closing connection to DB.");
-            }
+        } catch(SQLException e) {
+            throw new DalException(e);
         }
     }
 
@@ -112,7 +97,7 @@ class ShiftToWorkersDAO extends DAO {
         this.create(s,branch);
     }
 
-    void delete(Shift s, String branch) {// first check if it is in cache, if it is, then delete that object! and remove from cache
+    void delete(Shift s, String branch) throws DalException {// first check if it is in cache, if it is, then delete that object! and remove from cache
         this.cache.remove(getHashCode(s.getShiftDate(),s.getShiftType(),branch));
         Object[] keys = {s.getShiftDate(),s.getShiftType().name(),branch};
         super.delete(keys);
@@ -123,13 +108,13 @@ class ShiftToWorkersDAO extends DAO {
         return ((HashMap<Role,List<Employee>>) super.select(keys));
     }
 
-    protected HashMap<Role,List<Employee>> convertReaderToObject(ResultSet reader) {
+    protected HashMap<Role,List<Employee>> convertReaderToObject(OfflineResultSet reader) {
         HashMap<Role,List<Employee>> ans = new HashMap<>();
         try {
 
             while (reader.next()) {
                 Role r = Role.valueOf(reader.getString(Columns.Role.name()));
-                Employee e = employeeDAO.get(reader.getString(Columns.EmployeeId.name()));
+                Employee e = employeeDAO.select(reader.getString(Columns.EmployeeId.name()));
                 if(r == null || e == null)
                     continue;
                 if (ans.containsKey(r)) {
@@ -144,7 +129,7 @@ class ShiftToWorkersDAO extends DAO {
         return ans;
     }
 
-    public void deleteAll() {
+    public void deleteAll() throws DalException {
         super.deleteAll();
         cache.clear();
     }

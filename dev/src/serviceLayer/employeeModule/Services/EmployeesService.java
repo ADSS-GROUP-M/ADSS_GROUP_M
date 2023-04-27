@@ -59,9 +59,9 @@ public class EmployeesService {
      */
     //TODO: Test this method
     public String checkStoreKeeperAvailability(String dateToCheck, String branchAddress) {
-        LocalDate date = JsonUtils.deserialize(dateToCheck,LocalDateTime.class);
+        LocalDateTime date = JsonUtils.deserialize(dateToCheck,LocalDateTime.class);
         try {
-            employeesController.checkStoreKeeperAvailability(date, branchAddress);
+            employeesController.checkStoreKeeperAvailability(date.toLocalDate(), branchAddress);
             return new Response(true).toJson();
         } catch (Exception e) {
             return Response.getErrorResponse(e).toJson();

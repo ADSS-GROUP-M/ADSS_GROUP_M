@@ -1,5 +1,6 @@
 package dataAccessLayer.transportModule.abstracts;
 
+import dataAccessLayer.dalUtils.Cache;
 import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.dalUtils.OfflineResultSet;
 import dataAccessLayer.dalUtils.SQLExecutor;
@@ -16,12 +17,15 @@ public abstract class DAO<T> {
     protected final String[] PRIMARY_KEYS;
     protected final String[] TYPES;
 
+    protected final Cache<T> cache;
+
     protected DAO(String tableName,String[] types, String[] primaryKeys, String ... allColumns) throws DalException {
         this.cursor = new SQLExecutor();
         this.TABLE_NAME = tableName;
         this.PRIMARY_KEYS = primaryKeys;
         this.ALL_COLUMNS = allColumns;
         this.TYPES = types;
+        this.cache = new Cache<>();
         initTable();
     }
 
@@ -35,13 +39,14 @@ public abstract class DAO<T> {
         this.PRIMARY_KEYS = primaryKeys;
         this.ALL_COLUMNS = allColumns;
         this.TYPES = types;
+        this.cache = new Cache<>();
         initTable();
     }
 
     /**
      * Initialize the table if it doesn't exist
      */
-    private void initTable() throws DalException{
+    protected void initTable() throws DalException{
         StringBuilder query = new StringBuilder();
 
         query.append(String.format("CREATE TABLE IF NOT EXISTS %s (\n", TABLE_NAME));
@@ -102,4 +107,17 @@ public abstract class DAO<T> {
     public abstract void delete(T object) throws DalException;
 
     protected abstract T getObjectFromResultSet(OfflineResultSet resultSet);
+
+    /**
+     * used for testing
+     */
+    public void clearTable(){
+        String query = String.format("DELETE FROM %s", TABLE_NAME);
+        try {
+            cursor.executeWrite(query);
+            cache.clear();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

@@ -1,4 +1,4 @@
 package dataAccessLayer.transportModule;
 
-public record TransportDestination(int transportId,int index ,String address, int itemListId) {
+public record TransportDestination(int transportId, int destination_index, String address, int itemListId) {
 }

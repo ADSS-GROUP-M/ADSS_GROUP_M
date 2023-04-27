@@ -46,6 +46,11 @@ public class DriversDAO extends ManyToManyDAO<Driver> {
      */
     @Override
     public Driver select(Driver object) throws DalException {
+
+        if(cache.contains(object)) {
+            return cache.get(object);
+        }
+
         String query = String.format("""
                     SELECT %s.id,%s.name,license_type FROM %s
                     INNER JOIN %s ON %s.id = %s.id
@@ -60,7 +65,9 @@ public class DriversDAO extends ManyToManyDAO<Driver> {
             throw new DalException("Failed to select Driver", e);
         }
         if (resultSet.next()) {
-            return getObjectFromResultSet(resultSet);
+            Driver selected = getObjectFromResultSet(resultSet);
+            cache.put(selected);
+            return selected;
         } else {
             throw new DalException("No driver with id " + object.id() + " was found");
         }
@@ -87,6 +94,7 @@ public class DriversDAO extends ManyToManyDAO<Driver> {
         while (resultSet.next()) {
             drivers.add(getObjectFromResultSet(resultSet));
         }
+        cache.putAll(drivers);
         return drivers;
     }
 
@@ -101,7 +109,11 @@ public class DriversDAO extends ManyToManyDAO<Driver> {
                 object.id(),
                 object.licenseType());
         try {
-            cursor.executeWrite(query);
+            if(cursor.executeWrite(query) == 1){
+                cache.put(object);
+            } else {
+                throw new RuntimeException("Unexpected error while inserting driver");
+            }
         } catch (SQLException e) {
             throw new DalException("Failed to insert Driver", e);
         }
@@ -118,7 +130,11 @@ public class DriversDAO extends ManyToManyDAO<Driver> {
                 object.licenseType(),
                 object.id());
         try {
-            cursor.executeWrite(query);
+            if(cursor.executeWrite(query) == 1){
+                cache.put(object);
+            } else {
+                throw new DalException("No driver with id " + object.id() + " was found");
+            }
         } catch (SQLException e) {
             throw new DalException("Failed to update Driver", e);
         }
@@ -131,7 +147,11 @@ public class DriversDAO extends ManyToManyDAO<Driver> {
     public void delete(Driver object) throws DalException {
         String query = String.format("DELETE FROM %s WHERE id = '%s';", TABLE_NAME, object.id());
         try {
-            cursor.executeWrite(query);
+            if(cursor.executeWrite(query) == 1){
+                cache.remove(object);
+            } else {
+                throw new DalException("No driver with id " + object.id() + " was found");
+            }
         } catch (SQLException e) {
             throw new DalException("Failed to delete Driver", e);
         }

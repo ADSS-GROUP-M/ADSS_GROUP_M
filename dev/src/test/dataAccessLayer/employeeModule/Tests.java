@@ -26,38 +26,39 @@ public class Tests {
     Employee twoEmployee;
     Employee threeEmployee;
     Employee fourthEmployee;
+    String testDBName = "TestingDB.db";
 
     @BeforeEach
     public void setUp() throws Exception { // cleans empDAO, creates 3 employees in DB, sets up 2 of them as workers shift
-        empDao = EmployeeDAO.getInstance();
-        empDao.deleteAll();
+        empDao = EmployeeDAO.getTestingInstance(testDBName);
+        empDao.clearTable();
         s = new Shift(LocalDate.now(), Shift.ShiftType.Evening);
         workers = new HashMap<>();
         List<Employee> generalWorkers = new LinkedList<>();
-        twoEmployee = new Employee("abc","2088","Poalim",2,LocalDate.now(),"condition","detil");
+        twoEmployee = new Employee("abc","2088", "Poalim", 2, LocalDate.now(),"condition","detil");
         twoEmployee.addRole(Role.GeneralWorker);
         generalWorkers.add(twoEmployee);
-        empDao.create(twoEmployee);
+        empDao.insert(twoEmployee);
         workers.put(Role.GeneralWorker,generalWorkers);
         List<Employee> cashiers = new LinkedList<>();
-        threeEmployee = new Employee("qwerty","1118","Poalim",2,LocalDate.now(),"condition","detil");
+        threeEmployee = new Employee("qwerty","1118", "Poalim", 2, LocalDate.now(),"condition","detil");
         threeEmployee.addRole(Role.Cashier);
         cashiers.add(threeEmployee);
-        empDao.create(threeEmployee);
+        empDao.insert(threeEmployee);
         workers.put(Role.Cashier,cashiers);
         s.setShiftWorkers(workers);
-        oneEmployee = new Employee("abc","123456","Poalim",2,LocalDate.now(),"condition","detil");
+        oneEmployee = new Employee("abc","123456", "Poalim", 2, LocalDate.now(),"condition","detil");
         oneEmployee.addRole(Role.GeneralWorker);
-        empDao.create(oneEmployee);
-        fourthEmployee = new Employee("four","1122","Poalim",32,LocalDate.now(),"conditions","Detedfails");
+        empDao.insert(oneEmployee);
+        fourthEmployee = new Employee("four","1122", "Poalim", 32, LocalDate.now(),"conditions","Detedfails");
         fourthEmployee.addRole(Role.SecurityGuard);
-        empDao.create(fourthEmployee);
+        empDao.insert(fourthEmployee);
         noise = new Shift(LocalDate.of(1893,2,24), Shift.ShiftType.Morning);
         createData(); // To test data persistence, comment this line and run the tests separately after creating the data.
     }
 
     private void createData() throws Exception {
-        dao = ShiftDAO.getInstance();
+        dao = ShiftDAO.getTestingInstance(testDBName);
         dao.deleteAll();
         dao.create(noise, "branch2");
         dao.create(s,"branch1");
@@ -65,7 +66,7 @@ public class Tests {
 
     @Test
     public void testCreateData() throws Exception {//resets shifts table, creates 2 shifts in DB
-        dao = ShiftDAO.getInstance();
+        dao = ShiftDAO.getTestingInstance(testDBName);
         assertTrue(dao!=null);
         dao.deleteAll();
         try{
@@ -82,7 +83,7 @@ public class Tests {
     //To test data persistence, run after 'createData'
     @Test
     public void delete() throws Exception { // deletes shift from DB
-        dao = ShiftDAO.getInstance();
+        dao = ShiftDAO.getTestingInstance(testDBName);
         assertTrue(dao!=null);
         try{
             dao.delete(s,"branch1");
@@ -93,7 +94,7 @@ public class Tests {
     //To test data persistence, run after 'createData'
     @Test
     public void get() throws Exception {// gets the shift from DB and confirms its' state
-        dao = ShiftDAO.getInstance();
+        dao = ShiftDAO.getTestingInstance(testDBName);
         assertTrue(dao!=null);
         try{
            Shift sh = dao.get(s.getShiftDate(), s.getShiftType(),s.getBranch());
@@ -105,7 +106,7 @@ public class Tests {
     //To test data persistence, run after 'createData'
     @Test
     public void update() throws Exception {
-        dao = ShiftDAO.getInstance();
+        dao = ShiftDAO.getTestingInstance(testDBName);
         assertTrue(dao!=null);
        // dao.deleteAll();
 
@@ -126,7 +127,7 @@ public class Tests {
     //To test data persistence, run after 'createData'
     @Test
     public void update2() throws Exception {
-        dao = ShiftDAO.getInstance();
+        dao = ShiftDAO.getTestingInstance(testDBName);
         assertTrue(dao!=null);
         // dao.deleteAll();
 
@@ -147,7 +148,7 @@ public class Tests {
 
     @Test
     public void selectAllCacheTest() throws Exception{
-        dao = ShiftDAO.getInstance();
+        dao = ShiftDAO.getTestingInstance(testDBName);
         assertTrue(dao!=null);
         dao.deleteAll();
         Shift s2 = new Shift(LocalDate.now(), Shift.ShiftType.Morning);
@@ -164,7 +165,7 @@ public class Tests {
     //To test data persistence, run after 'createData'
     @Test
     public void selectAllSQLTest() throws Exception{ // tries to get all shifts from DB without relying on cache.
-        dao = ShiftDAO.getInstance();
+        dao = ShiftDAO.getTestingInstance(testDBName);
         assertTrue(dao!=null);
         //dao.deleteAll();
         try{
@@ -184,7 +185,7 @@ public class Tests {
 
     @Test
     public void checkCachedObjects() throws Exception{ // tests wether changes in object's state is visible to other dao clients without updating it in the database.
-        dao = ShiftDAO.getInstance();
+        dao = ShiftDAO.getTestingInstance(testDBName);
         assertTrue(dao!=null);
         dao.deleteAll();
         LocalDate dt = LocalDate.now();

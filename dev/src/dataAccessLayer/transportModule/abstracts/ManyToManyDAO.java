@@ -1,8 +1,6 @@
 package dataAccessLayer.transportModule.abstracts;
 
-import dataAccessLayer.dalUtils.DalException;
-import dataAccessLayer.dalUtils.OfflineResultSet;
-import dataAccessLayer.dalUtils.SQLExecutor;
+import dataAccessLayer.dalUtils.*;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -22,6 +20,8 @@ public abstract class ManyToManyDAO<T>{
 
     protected final String[] REFERENCES;
 
+    protected final Cache<T> cache;
+
     protected ManyToManyDAO(String tableName,
                             String[] parentTableName,
                             String[] types,
@@ -37,6 +37,7 @@ public abstract class ManyToManyDAO<T>{
         FOREIGN_KEYS = foreignKeys;
         REFERENCES = references;
         ALL_COLUMNS = allColumns;
+        cache = new Cache<>();
         initTable();
     }
 
@@ -60,13 +61,14 @@ public abstract class ManyToManyDAO<T>{
         FOREIGN_KEYS = foreignKeys;
         REFERENCES = references;
         ALL_COLUMNS = allColumns;
+        cache = new Cache<>();
         initTable();
     }
 
     /**
      * Initialize the table if it doesn't exist
      */
-    private void initTable() throws DalException{
+    protected void initTable() throws DalException{
         StringBuilder query = new StringBuilder();
 
         query.append(String.format("CREATE TABLE IF NOT EXISTS %s (\n", TABLE_NAME));
@@ -81,7 +83,7 @@ public abstract class ManyToManyDAO<T>{
             if (i != PRIMARY_KEYS.length-1) {
                 query.append(",");
             } else {
-                query.append(")\n");
+                query.append("),\n");
             }
         }
 
@@ -98,26 +100,6 @@ public abstract class ManyToManyDAO<T>{
                 query.append("\n");
             }
         }
-
-//        query.append("CONSTRAINT FK FOREIGN KEY(");
-//        for(int i = 0; i < FOREIGN_KEYS.length ; i++) {
-//            query.append(String.format("'%s'",FOREIGN_KEYS[i]));
-//            if (i != FOREIGN_KEYS.length-1) {
-//                query.append(",");
-//            } else {
-//                query.append(")");
-//            }
-//        }
-//
-//        query.append(String.format(" REFERENCES %s(",PARENT_TABLE_NAME));
-//        for(int i = 0; i < REFERENCES.length ; i++) {
-//            query.append(String.format("'%s'",REFERENCES[i]));
-//            if (i != REFERENCES.length-1) {
-//                query.append(",");
-//            } else {
-//                query.append(")\n");
-//            }
-//        }
 
         query.append(");");
 
@@ -155,11 +137,23 @@ public abstract class ManyToManyDAO<T>{
 
     /**
      *
-     * @param t_object object with the identifier to delete
-     * @param t_object object with the identifier to delete
+     * @param object object with the identifier to delete
      * @throws DalException if an error occurred while trying to delete the object
      */
     public abstract void delete(T object) throws DalException;
 
     protected abstract T getObjectFromResultSet(OfflineResultSet resultSet);
+
+    /**
+     * used for testing
+     */
+    public void clearTable(){
+        String query = String.format("DELETE FROM %s", TABLE_NAME);
+        try {
+            cursor.executeWrite(query);
+            cache.clear();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

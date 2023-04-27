@@ -13,7 +13,7 @@ public class TransportDestinationsDAO extends ManyToManyDAO<TransportDestination
 
     private static final String[] types = {"INTEGER", "INTEGER" , "TEXT", "INTEGER"};
     private static final String[] parent_tables = {"transports", "sites", "item_lists"};
-    private static final String[] primary_keys = {"transport_id", "index"};
+    private static final String[] primary_keys = {"transport_id", "destination_index"};
     private static final String[] references = {"id", "address", "id"};
     private static final String[] foreign_keys = {"transport_id", "destination_address", "item_list_id"};
 
@@ -25,7 +25,7 @@ public class TransportDestinationsDAO extends ManyToManyDAO<TransportDestination
                 foreign_keys,
                 references,
                 "transport_id",
-                "index",
+                "destination_index",
                 "destination_address",
                 "item_list_id"
         );
@@ -44,7 +44,7 @@ public class TransportDestinationsDAO extends ManyToManyDAO<TransportDestination
                 foreign_keys,
                 references,
                 "transport_id",
-                "index",
+                "destination_index",
                 "destination_address",
                 "item_list_id"
         );
@@ -57,10 +57,10 @@ public class TransportDestinationsDAO extends ManyToManyDAO<TransportDestination
      */
     @Override
     public TransportDestination select(TransportDestination object) throws DalException {
-        String query = String.format("SELECT * FROM %s WHERE transport_id = '%s' AND index = %d;",
+        String query = String.format("SELECT * FROM %s WHERE transport_id = %d AND destination_index = %d;",
                 TABLE_NAME,
                 object.transportId(),
-                object.index()
+                object.destination_index()
         );
         OfflineResultSet resultSet;
         try {
@@ -71,7 +71,7 @@ public class TransportDestinationsDAO extends ManyToManyDAO<TransportDestination
         if(resultSet.next()) {
             return getObjectFromResultSet(resultSet);
         } else {
-            throw new DalException("No transport destination with transport id " + object.transportId() + " and index " + object.index() + " was found");
+            throw new DalException("No transport destination with transport id " + object.transportId() + " and index " + object.destination_index() + " was found");
         }
     }
 
@@ -100,7 +100,7 @@ public class TransportDestinationsDAO extends ManyToManyDAO<TransportDestination
      * @throws DalException if an error occurred while trying to select the objects
      */
     public List<TransportDestination> selectAllRelated(Transport object) throws DalException {
-        String query = String.format("SELECT * FROM %s WHERE transport_id = %s ORDER BY index;", TABLE_NAME, object.id());
+        String query = String.format("SELECT * FROM %s WHERE transport_id = %d ORDER BY destination_index;", TABLE_NAME, object.id());
         OfflineResultSet resultSet;
         try {
             resultSet = cursor.executeRead(query);
@@ -116,19 +116,45 @@ public class TransportDestinationsDAO extends ManyToManyDAO<TransportDestination
 
     /**
      * @param object - the object to insert
-     * @throws DalException if an error occurred while trying to insert the object
+     * @throws RuntimeException if an error occurred while trying to insert the object
+     * @deprecated use insertAll instead
      */
     @Override
     public void insert(TransportDestination object) throws DalException {
-        String query = String.format("INSERT INTO %s VALUES (%s, %s, %s, %s);",
+        String query = String.format("INSERT INTO %s VALUES (%d, %d, '%s', %d);",
                 TABLE_NAME,
                 object.transportId(),
-                object.index(),
+                object.destination_index(),
                 object.address(),
                 object.itemListId()
         );
         try {
-            cursor.executeWrite(query);
+            if(cursor.executeWrite(query) != 1){
+                throw new RuntimeException("Unexpected error while trying to insert transport destination");
+            }
+        } catch (SQLException e) {
+            throw new DalException("Failed to insert transport destination", e);
+        }
+    }
+
+    /**
+     * @param objects - the objects to insert
+     * @throws DalException if an error occurred while trying to insert the object
+     */
+    public void insertAll(List<TransportDestination> objects) throws DalException {
+        StringBuilder query = new StringBuilder();
+        for(TransportDestination object : objects) {
+            query.append(String.format("INSERT INTO %s VALUES (%d, %d, '%s', %d);\n",
+                    TABLE_NAME,
+                    object.transportId(),
+                    object.destination_index(),
+                    object.address(),
+                    object.itemListId()));
+        }
+        try {
+            if(cursor.executeWrite(query.toString()) != objects.size()){
+                throw new RuntimeException("Unexpected error while trying to insert transport destination");
+            }
         } catch (SQLException e) {
             throw new DalException("Failed to insert transport destination", e);
         }
@@ -140,15 +166,17 @@ public class TransportDestinationsDAO extends ManyToManyDAO<TransportDestination
      */
     @Override
     public void update(TransportDestination object) throws DalException {
-        String query = String.format("UPDATE %s SET destination_address = '%s', item_list_id = %d WHERE transport_id = %d AND index = %d;",
+        String query = String.format("UPDATE %s SET destination_address = '%s', item_list_id = %d WHERE transport_id = %d AND destination_index = %d;",
                 TABLE_NAME,
                 object.address(),
                 object.itemListId(),
                 object.transportId(),
-                object.index()
+                object.destination_index()
         );
         try {
-            cursor.executeWrite(query);
+            if(cursor.executeWrite(query) != 1) {
+                throw new DalException("Failed to update transport destination");
+            }
         } catch (SQLException e) {
             throw new DalException("Failed to update transport destination", e);
         }
@@ -159,21 +187,31 @@ public class TransportDestinationsDAO extends ManyToManyDAO<TransportDestination
      */
     @Override
     public void delete(TransportDestination object) throws DalException {
-        String query = String.format("DELETE FROM %s WHERE transport_id = %d AND index = %d;",
+        String query = String.format("DELETE FROM %s WHERE transport_id = %d AND destination_index = %d;",
                 TABLE_NAME,
                 object.transportId(),
-                object.index()
+                object.destination_index()
         );
         try {
-            cursor.executeWrite(query);
+            if(cursor.executeWrite(query) != 1){
+                throw new DalException("No transport destination with transport id "
+                        + object.transportId() + " and index " + object.destination_index() + " was found");
+            }
         } catch (SQLException e) {
             throw new DalException("Failed to delete transport destination", e);
         }
     }
 
     public void deleteAllRelated(Transport object) throws DalException{
-        for (TransportDestination destination : selectAllRelated(object)) {
-                delete(destination);
+
+        String query = String.format("DELETE FROM %s WHERE transport_id = %d;", TABLE_NAME, object.id());
+        try {
+            if(cursor.executeWrite(query) == 0){
+                throw new DalException("No transport destination with transport_id "
+                        + object.id() + " was found");
+            }
+        } catch (SQLException e) {
+            throw new DalException("Failed to delete transport destination", e);
         }
     }
 
@@ -181,7 +219,7 @@ public class TransportDestinationsDAO extends ManyToManyDAO<TransportDestination
     protected TransportDestination getObjectFromResultSet(OfflineResultSet resultSet) {
         return new TransportDestination(
                 resultSet.getInt("transport_id"),
-                resultSet.getInt("index"),
+                resultSet.getInt("destination_index"),
                 resultSet.getString("destination_address"),
                 resultSet.getInt("item_list_id")
         );

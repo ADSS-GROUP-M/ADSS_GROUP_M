@@ -4,6 +4,7 @@ import businessLayer.transportModule.*;
 import dataAccessLayer.DalFactory;
 import dataAccessLayer.dalUtils.DalException;
 import serviceLayer.employeeModule.Services.EmployeesService;
+import serviceLayer.transportModule.ServiceFactory;
 import utils.transportUtils.TransportException;
 
 public class BusinessFactory {
@@ -13,16 +14,16 @@ public class BusinessFactory {
     private final SitesController sitesController;
     private final ItemListsController itemListsController;
     private final TrucksController trucksController;
+    private final DalFactory dalFactory;
 
-    public BusinessFactory() throws DalException{
-
-        DalFactory dalFactory = new DalFactory();
+    public BusinessFactory(ServiceFactory serviceFactory) throws DalException{
+        dalFactory = new DalFactory();
 
         trucksController = new TrucksController(dalFactory.trucksDAO());
         sitesController = new SitesController(dalFactory.sitesDAO());
         driversController = new DriversController(dalFactory.driversDAO());
 
-        EmployeesService employeesService = EmployeesService.getInstance();
+        EmployeesService employeesService = serviceFactory.employeesService();
 
         try {
             itemListsController = new ItemListsController(dalFactory.itemListsDAO());
@@ -42,15 +43,15 @@ public class BusinessFactory {
      * used for testing
      * @param dbName the name of the database to connect to
      */
-    public BusinessFactory(String dbName) throws DalException{
+    public BusinessFactory(ServiceFactory serviceFactory, String dbName) throws DalException{
 
-        DalFactory dalFactory = new DalFactory(dbName);
+        dalFactory = new DalFactory(dbName);
 
         trucksController = new TrucksController(dalFactory.trucksDAO());
         sitesController = new SitesController(dalFactory.sitesDAO());
         driversController = new DriversController(dalFactory.driversDAO());
 
-        EmployeesService employeesService = EmployeesService.getInstance();
+        EmployeesService employeesService = serviceFactory.employeesService();
 
         try {
             itemListsController = new ItemListsController(dalFactory.itemListsDAO());
@@ -84,5 +85,9 @@ public class BusinessFactory {
 
     public TrucksController trucksController() {
         return trucksController;
+    }
+
+    public DalFactory dalFactory() {
+        return dalFactory;
     }
 }

@@ -5,10 +5,12 @@ import businessLayer.employeeModule.User;
 import serviceLayer.employeeModule.Services.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import serviceLayer.transportModule.ServiceFactory;
 import utils.Response;
 
 import java.util.List;
 
+import static dataAccessLayer.DalFactory.TESTING_DB_NAME;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class UserTest {
@@ -20,7 +22,8 @@ public class UserTest {
 
     @BeforeEach
     public void setUp() throws Exception {
-        userService = UserService.getInstance();
+        ServiceFactory serviceFactory = new ServiceFactory(TESTING_DB_NAME);
+        userService = serviceFactory.userService();
         userService.loadData(); // Loads the HR Manager user: "admin123" "123", clears the data in each test
         user = Response.fromJson(userService.getUser(username)).data(User.class);
     }

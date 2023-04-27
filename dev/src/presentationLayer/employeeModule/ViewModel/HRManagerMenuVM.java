@@ -130,6 +130,10 @@ public class HRManagerMenuVM {
         return backendController.certifyEmployee(employeeId, role);
     }
 
+    public String certifyDriver(String employeeId, String driverLicense) {
+        return backendController.certifyDriver(employeeId, driverLicense);
+    }
+
     public String uncertifyEmployee(String employeeId, String role) {
         return backendController.uncertifyEmployee(employeeId, role);
     }

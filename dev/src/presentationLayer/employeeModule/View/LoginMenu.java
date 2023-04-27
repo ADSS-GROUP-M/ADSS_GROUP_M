@@ -45,7 +45,7 @@ public class LoginMenu implements Menu {
                     if (authorizations.contains("HRManager"))
                         return new HRManagerMenu();
                     else if (authorizations.contains("LogisticsManager"))
-                        return new TransportUI();
+                        return new TransportUI(loginMenuVM.serviceFactory());
                     else
                         return new EmployeeMenu();
                 }

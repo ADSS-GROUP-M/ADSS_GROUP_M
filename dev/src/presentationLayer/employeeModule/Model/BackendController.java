@@ -5,6 +5,7 @@ import serviceLayer.employeeModule.Objects.SEmployee;
 import serviceLayer.employeeModule.Objects.SShift;
 import serviceLayer.employeeModule.Objects.SShiftType;
 import serviceLayer.employeeModule.Services.EmployeesService;
+import serviceLayer.transportModule.ServiceFactory;
 import utils.Response;
 import serviceLayer.employeeModule.Services.UserService;
 
@@ -22,13 +23,15 @@ public class BackendController {
     private static final Type LIST_SSHIFT_ARRAY_TYPE = new TypeToken<List<SShift[]>>(){}.getType();
 
     private static BackendController instance;
+    private final ServiceFactory serviceFactory;
     private final UserService userService;
     private final EmployeesService employeesService;
     private String loggedUsername;
 
     public BackendController() {
-        userService = UserService.getInstance();
-        employeesService = EmployeesService.getInstance();
+        serviceFactory = new ServiceFactory();
+        userService = serviceFactory.userService();
+        employeesService = serviceFactory.employeesService();
         loggedUsername = null;
 
         // Data Initialization
@@ -214,6 +217,14 @@ public class BackendController {
             return "Certified employee successfully.";
     }
 
+    public String certifyDriver(String employeeId, String driverLicense) {
+        Response response = Response.fromJson(employeesService.certifyDriver(loggedUsername, employeeId, driverLicense));
+        if (response.success() == false)
+            return response.message();
+        else
+            return "Certified employee successfully.";
+    }
+
     public String uncertifyEmployee(String employeeId, String role) {
         Response response = Response.fromJson(employeesService.uncertifyEmployee(loggedUsername, employeeId, role));
         if (response.success() == false)
@@ -344,5 +355,9 @@ public class BackendController {
         } catch (IllegalArgumentException e) {
             return "Invalid ShiftType value, expected `Morning` or `Evening`.";
         }
+    }
+
+    public ServiceFactory serviceFactory() {
+        return serviceFactory;
     }
 }

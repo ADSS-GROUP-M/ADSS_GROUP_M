@@ -16,14 +16,13 @@ public class TransportUI implements Menu {
     private final TrucksManagement trucksManagement;
     private final DriversManagement driversManagement;
 
-    public TransportUI(){
-        ServiceFactory factory = new ServiceFactory();
+    public TransportUI(ServiceFactory factory){
         UIData = new UiData(
                 factory.getResourceManagementService(),
                 factory.getItemListsService(),
                 factory.getTransportsService()
         );
-        EmployeesService employeesService = EmployeesService.getInstance();
+        EmployeesService employeesService = factory.employeesService();
         itemListsManagement = new ItemListsManagement(UIData,factory.getItemListsService());
         sitesManagement = new SitesManagement(UIData,factory.getResourceManagementService());
         trucksManagement = new TrucksManagement(UIData,factory.getResourceManagementService());

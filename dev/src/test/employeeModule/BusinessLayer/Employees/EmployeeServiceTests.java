@@ -3,6 +3,7 @@ import businessLayer.employeeModule.Authorization;
 import businessLayer.employeeModule.Role;
 import businessLayer.employeeModule.User;
 import com.google.gson.reflect.TypeToken;
+import serviceLayer.transportModule.ServiceFactory;
 import utils.Response;
 import serviceLayer.employeeModule.Objects.SEmployee;
 import serviceLayer.employeeModule.Objects.SShift;
@@ -12,6 +13,7 @@ import serviceLayer.employeeModule.Services.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import utils.employeeUtils.DateUtils;
+import static dataAccessLayer.DalFactory.TESTING_DB_NAME;
 
 import java.lang.reflect.Type;
 import java.time.LocalDate;
@@ -41,8 +43,9 @@ public class EmployeeServiceTests {
 
     @BeforeEach
     public void setUp() throws Exception {
-        userService = UserService.getInstance();
-        empService = EmployeesService.getInstance();
+        ServiceFactory serviceFactory = new ServiceFactory(TESTING_DB_NAME);
+        userService = serviceFactory.userService();
+        empService = serviceFactory.employeesService();
         userService.loadData(); // Loads the HR Manager user: "admin123" "123", clears the data in each test
         empService.loadData();
         admin = Response.fromJson(userService.getUser(adminUsername)).data(User.class);

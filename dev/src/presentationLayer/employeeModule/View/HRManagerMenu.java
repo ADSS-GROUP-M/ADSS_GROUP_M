@@ -167,7 +167,13 @@ public class HRManagerMenu implements Menu {
         else if (command[0].equals("certify") && command.length == 3) {
             String employeeId = command[1];
             String role = command[2];
-            output = hrManagerMenuVM.certifyEmployee(employeeId, role);
+            if (role.equals("Driver")) {
+                System.out.println("Please enter the driver's license: (A1,A2,B1,B2,B3,C1,C2,C3)");
+                String driverLicense = scanner.nextLine();
+                output = hrManagerMenuVM.certifyDriver(employeeId, driverLicense);
+            }
+            else
+                output = hrManagerMenuVM.certifyEmployee(employeeId, role);
         }
         else if (command[0].equals("uncertify") && command.length == 3) {
             String employeeId = command[1];

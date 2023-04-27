@@ -1,6 +1,9 @@
 package serviceLayer.employeeModule.Services;
 
 
+import objects.transportObjects.Driver;
+import serviceLayer.transportModule.ResourceManagementService;
+import serviceLayer.transportModule.ServiceFactory;
 import utils.JsonUtils;
 import businessLayer.employeeModule.Authorization;
 import businessLayer.employeeModule.Employee;
@@ -22,13 +25,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class EmployeesService {
-    private static EmployeesService instance;
     private static UserService userService;
+    private static ResourceManagementService rms;
     private EmployeesController employeesController;
     private ShiftsController shiftsController;
 
-    private EmployeesService() {
-        userService = UserService.getInstance();
+    public EmployeesService(ServiceFactory serviceFactory) {
+        rms = serviceFactory.getResourceManagementService();
+        userService = serviceFactory.userService();
         employeesController = EmployeesController.getInstance();
         shiftsController = ShiftsController.getInstance();
     }
@@ -66,12 +70,6 @@ public class EmployeesService {
         } catch (Exception e) {
             return Response.getErrorResponse(e).toJson();
         }
-    }
-
-    public static EmployeesService getInstance() {
-        if (instance == null)
-            instance = new EmployeesService();
-        return instance;
     }
 
     /**
@@ -137,6 +135,22 @@ public class EmployeesService {
             return new Response("User isn't authorized to do this",false).toJson();
         try {
             employeesController.certifyEmployee(employeeId, Role.valueOf(role));
+            return new Response(true).toJson();
+        } catch (Exception e) {
+            return Response.getErrorResponse(e).toJson();
+        }
+    }
+
+    public String certifyDriver(String actorUsername, String employeeId, String driverLicense) {
+        Response authResponse = Response.fromJson(userService.isAuthorized(actorUsername, Authorization.HRManager));
+        if (authResponse.success() == false)
+            return new Response(authResponse.message(),false).toJson();
+        else if(authResponse.dataToBoolean() == false)
+            return new Response("User isn't authorized to do this",false).toJson();
+        try {
+            employeesController.certifyEmployee(employeeId, Role.Driver);
+            Employee driver = employeesController.getEmployee(employeeId);
+            rms.addDriver(new Driver(employeeId,driver.getName(), Driver.LicenseType.valueOf(driverLicense)).toJson());
             return new Response(true).toJson();
         } catch (Exception e) {
             return Response.getErrorResponse(e).toJson();

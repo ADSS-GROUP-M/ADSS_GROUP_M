@@ -1,6 +1,7 @@
 package presentationLayer.employeeModule.ViewModel;
 
 import presentationLayer.employeeModule.Model.BackendController;
+import serviceLayer.transportModule.ServiceFactory;
 
 import java.util.List;
 
@@ -21,5 +22,9 @@ public class LoginMenuVM {
 
     public List<String> getUserAuthorizations() {
         return backendController.getUserAuthorizations();
+    }
+
+    public ServiceFactory serviceFactory() {
+        return backendController.serviceFactory();
     }
 }

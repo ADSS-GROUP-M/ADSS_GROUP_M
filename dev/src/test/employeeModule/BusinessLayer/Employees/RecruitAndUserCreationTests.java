@@ -2,6 +2,7 @@ package employeeModule.BusinessLayer.Employees;
 
 import businessLayer.employeeModule.User;
 import serviceLayer.employeeModule.Objects.SEmployee;
+import serviceLayer.transportModule.ServiceFactory;
 import utils.Response;
 import serviceLayer.employeeModule.Services.EmployeesService;
 import serviceLayer.employeeModule.Services.UserService;
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 
+import static dataAccessLayer.DalFactory.TESTING_DB_NAME;
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -26,8 +28,9 @@ public class RecruitAndUserCreationTests {
 
     @BeforeEach
     public void setUp() throws Exception {
-        userService = UserService.getInstance();
-        empService = EmployeesService.getInstance();
+        ServiceFactory serviceFactory = new ServiceFactory(TESTING_DB_NAME);
+        userService = serviceFactory.userService();
+        empService = serviceFactory.employeesService();
         userService.loadData(); // Loads the HR Manager user: "admin123" "123", clears the data in each test
         empService.loadData();
         admin = Response.fromJson(userService.getUser(adminUsername)).data(User.class);

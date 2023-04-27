@@ -3,6 +3,7 @@ package serviceLayer.employeeModule.Services;
 import businessLayer.employeeModule.Authorization;
 import businessLayer.employeeModule.Controllers.UserController;
 import businessLayer.employeeModule.User;
+import serviceLayer.transportModule.ServiceFactory;
 import utils.Response;
 
 import java.util.List;
@@ -10,17 +11,11 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class UserService {
-    private static UserService instance;
     private UserController userController;
 
-    private UserService() {
+    public UserService(ServiceFactory serviceFactory) {
+        // Can get any needed service through the serviceFactory
         userController = UserController.getInstance();
-    }
-
-    public static UserService getInstance() {
-        if (instance == null)
-            instance = new UserService();
-        return instance;
     }
 
     /**

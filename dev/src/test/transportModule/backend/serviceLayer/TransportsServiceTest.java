@@ -26,7 +26,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static dataAccessLayer.DalFactory.TESTING_DB_NAME;
 class TransportsServiceTest {
 
-    private ServiceFactory serviceFactory;
     private Transport transport;
     private TransportsService ts;
     private EmployeesService es;
@@ -42,8 +41,8 @@ class TransportsServiceTest {
         ts = factory.getTransportsService();
         ils = factory.getItemListsService();
         rms = factory.getResourceManagementService();
-        es = serviceFactory.employeesService();
-        us = serviceFactory.userService();
+        es = factory.employeesService();
+        us = factory.userService();
 
         Site site1 = new Site("zone a", "123 main st", "(555) 123-4567", "john smith", Site.SiteType.BRANCH);
         Site site2 = new Site("zone b", "456 oak ave", "(555) 234-5678", "jane doe", Site.SiteType.LOGISTICAL_CENTER);

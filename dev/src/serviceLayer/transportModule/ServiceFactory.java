@@ -15,6 +15,8 @@ public class ServiceFactory {
     private final UserService userService;
 
     public ServiceFactory(){
+        userService = new UserService(this);
+        employeesService = new EmployeesService(this);
 
         BusinessFactory factory;
         try {
@@ -28,11 +30,11 @@ public class ServiceFactory {
                 factory.driversController(),
                 factory.trucksController());
         itemListsService = new ItemListsService(factory.itemListsController());
-        userService = new UserService(this);
-        employeesService = new EmployeesService(this);
     }
 
     public ServiceFactory(String dbName){
+        userService = new UserService(this);
+        employeesService = new EmployeesService(this);
 
         BusinessFactory factory;
         try {
@@ -46,8 +48,6 @@ public class ServiceFactory {
                 factory.driversController(),
                 factory.trucksController());
         itemListsService = new ItemListsService(factory.itemListsController());
-        userService = new UserService(this);
-        employeesService = new EmployeesService(this);
     }
 
     public TransportsService getTransportsService() {

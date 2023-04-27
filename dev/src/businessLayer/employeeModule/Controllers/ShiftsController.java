@@ -11,7 +11,6 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import static java.time.temporal.TemporalAdjusters.next;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,7 +29,7 @@ public class ShiftsController {
     public void resetData() {
         this.shifts.clear(); //
         try {
-            this.shiftDAO.deleteAll();
+            this.shiftDAO.clearTable();
         } catch (Exception ignore) {}
     }
 

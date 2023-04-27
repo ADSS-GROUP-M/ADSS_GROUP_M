@@ -176,14 +176,14 @@ public class ShiftDAO extends DAO {
         return ans;
     }
 
-    public void deleteAll() throws DalException{
+    public void clearTable() throws DalException{
         this.cache = new HashMap<>();
-        this.shiftToNeededRolesDAO.deleteAll();
-        this.shiftToRequestsDAO.deleteAll();
-        this.shiftToWorkersDAO.deleteAll();
-        this.shiftToCancelsDAO.deleteAll();
-        this.shiftToActivityDAO.deleteAll();
-        super.deleteAll();
+        this.shiftToNeededRolesDAO.clearTable();
+        this.shiftToRequestsDAO.clearTable();
+        this.shiftToWorkersDAO.clearTable();
+        this.shiftToCancelsDAO.clearTable();
+        this.shiftToActivityDAO.clearTable();
+        super.clearTable();
     }
 
      /*void update(String date, String shiftType, String branch, String attributeName, String attributeValue) throws DalException {

@@ -113,13 +113,21 @@ public class DalFactory {
     public static void clearTestDB(){
         try {
             DalFactory factory = new DalFactory(TESTING_DB_NAME);
+            factory.shiftDAO().clearTable();
+            factory.userDAO().clearTable();
+
             factory.transportsDAO().clearTable();
-            factory.branchesDAO().clearTable();
-            factory.sitesDAO().clearTable();
-            factory.driversDAO().clearTable();
+
             factory.trucksDAO().clearTable();
             factory.itemListsDAO().clearTable();
+
+            factory.branchEmployeesDAO().clearTable();
+            factory.branchesDAO().clearTable();
+            factory.sitesDAO().clearTable();
+
+            factory.driversDAO().clearTable();
             factory.employeeDAO().clearTable();
+
         } catch (DalException e) {
             e.printStackTrace();
         }

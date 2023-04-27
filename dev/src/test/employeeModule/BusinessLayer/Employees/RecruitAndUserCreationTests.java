@@ -1,6 +1,8 @@
 package employeeModule.BusinessLayer.Employees;
 
 import businessLayer.employeeModule.User;
+import dataAccessLayer.DalFactory;
+import org.junit.jupiter.api.AfterEach;
 import serviceLayer.employeeModule.Objects.SEmployee;
 import serviceLayer.transportModule.ServiceFactory;
 import utils.Response;
@@ -39,6 +41,11 @@ public class RecruitAndUserCreationTests {
         if(Response.fromJson(empService.getEmployee(username2)).success() == false)
             empService.recruitEmployee(admin.getUsername(),"Moshe Biton", "1", username2,"Hapoalim 12 230", 50, LocalDate.of(2023,2,2),"Employment Conditions Test", "More details about Moshe");
         user = Response.fromJson(userService.getUser(username2)).data(User.class);
+    }
+
+    @AfterEach
+    void tearDown() {
+        DalFactory.clearTestDB();
     }
 
     @Test

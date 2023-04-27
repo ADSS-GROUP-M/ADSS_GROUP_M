@@ -3,6 +3,8 @@ import businessLayer.employeeModule.Authorization;
 import businessLayer.employeeModule.Role;
 import businessLayer.employeeModule.User;
 import com.google.gson.reflect.TypeToken;
+import dataAccessLayer.DalFactory;
+import org.junit.jupiter.api.AfterEach;
 import serviceLayer.transportModule.ServiceFactory;
 import utils.Response;
 import serviceLayer.employeeModule.Objects.SEmployee;
@@ -60,49 +62,52 @@ public class EmployeeServiceTests {
         String employmentConditioner = "slave";
         String detailer = "nothing";
         int counter = 0;
-        for(int i=0; i<30;i++){
-        usernames[i] = usernamer;
-        passwords[i] = passworder;
-        fullnames[i] = namer;
-        branches[i] = brancher;
-        bankDetails[i] = bankDetailer;
-        hourlyRates[i] = hourlyRater;
-        employmentDates[i] = employmentDater;
-        employmentConditions[i] = employmentConditioner;
-        details[i] = detailer;
+        for(int i=0; i<30;i++) {
+            usernames[i] = usernamer;
+            passwords[i] = passworder;
+            fullnames[i] = namer;
+            branches[i] = brancher;
+            bankDetails[i] = bankDetailer;
+            hourlyRates[i] = hourlyRater;
+            employmentDates[i] = employmentDater;
+            employmentConditions[i] = employmentConditioner;
+            details[i] = detailer;
 
-        if(Response.fromJson(userService.getUser(usernames[i])).success() == false)
-            userService.createUser(admin.getUsername(), usernames[i], passwords[i]);
-        if(Response.fromJson(empService.getEmployee(usernames[i])).success() == false)
-            empService.recruitEmployee(admin.getUsername(),fullnames[i], branches[i], usernames[i],bankDetails[i], hourlyRates[i], employmentDates[i],employmentConditions[i], details[i]);
-        users[i] = Response.fromJson(userService.getUser(usernames[i])).data(User.class);
-        users[i].login(passwords[i]);
+            if (Response.fromJson(userService.getUser(usernames[i])).success() == false)
+                userService.createUser(admin.getUsername(), usernames[i], passwords[i]);
+            if (Response.fromJson(empService.getEmployee(usernames[i])).success() == false)
+                empService.recruitEmployee(admin.getUsername(), fullnames[i], branches[i], usernames[i], bankDetails[i], hourlyRates[i], employmentDates[i], employmentConditions[i], details[i]);
+            users[i] = Response.fromJson(userService.getUser(usernames[i])).data(User.class);
+            users[i].login(passwords[i]);
 
-        counter++;        
-        usernamer = Integer.toString(counter);
-        passworder = Integer.toString(counter);
-      
-        if(i>=10)
-            brancher = "1";
-        if(i>=20)
-            brancher = "1";
-        Response ans = null;
-        if(i<10){
-            Response.fromJson(userService.authorizeUser(adminUsername, usernames[i], Authorization.ShiftManager.name()));
-            empService.certifyEmployee(adminUsername, usernames[i], Role.ShiftManager.name());
+            counter++;
+            usernamer = Integer.toString(counter);
+            passworder = Integer.toString(counter);
+
+            if (i >= 10)
+                brancher = "1";
+            if (i >= 20)
+                brancher = "1";
+            Response ans = null;
+            if (i < 10) {
+                Response.fromJson(userService.authorizeUser(adminUsername, usernames[i], Authorization.ShiftManager.name()));
+                empService.certifyEmployee(adminUsername, usernames[i], Role.ShiftManager.name());
+            } else if (i >= 10 && i < 20) {
+                userService.authorizeUser(adminUsername, usernames[i], Authorization.Cashier.name());
+                empService.certifyEmployee(adminUsername, usernames[i], Role.Cashier.name());
+            } else if (i >= 20 && i <= 25) {
+                userService.authorizeUser(adminUsername, usernames[i], Authorization.Storekeeper.name());
+                empService.certifyEmployee(adminUsername, usernames[i], Role.Storekeeper.name());
+            }
+
         }
-        else if(i>=10 && i<20){
-            userService.authorizeUser(adminUsername, usernames[i], Authorization.Cashier.name());
-            empService.certifyEmployee(adminUsername, usernames[i], Role.Cashier.name());
-        }
-        else if(i>=20 && i<=25){
-            userService.authorizeUser(adminUsername, usernames[i], Authorization.Storekeeper.name());
-            empService.certifyEmployee(adminUsername, usernames[i], Role.Storekeeper.name());
-        }
-        
     }
-        
+
+    @AfterEach
+    void tearDown() {
+        DalFactory.clearTestDB();
     }
+
     // 0-9 shiftmanager, 10-19 cashier, 20-25 storekeeper
     @Test
     public void situation1() { // 

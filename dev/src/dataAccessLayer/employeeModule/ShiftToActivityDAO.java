@@ -25,7 +25,7 @@ public class ShiftToActivityDAO extends DAO{
     }
 
     public ShiftToActivityDAO(String dbName) throws DalException {
-        super(dbName, new String[]{Columns.ShiftDate.name(), Columns.ShiftType.name(),Columns.Branch.name()});
+        super(dbName,"SHIFT_ACTIVITIES", new String[]{Columns.ShiftDate.name(), Columns.ShiftType.name(),Columns.Branch.name()});
         this.cache = new HashMap<>();
     }
 
@@ -88,8 +88,8 @@ public class ShiftToActivityDAO extends DAO{
         return ans;
     }
 
-    public void deleteAll() throws DalException{
-        super.deleteAll();
+    public void clearTable() throws DalException{
+        super.clearTable();
         cache.clear();
     }
 }

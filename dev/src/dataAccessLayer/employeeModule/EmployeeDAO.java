@@ -5,7 +5,6 @@ import businessLayer.employeeModule.Role;
 import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.dalUtils.OfflineResultSet;
 import dataAccessLayer.transportModule.abstracts.DAO;
-import objects.transportObjects.Truck;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -209,7 +208,7 @@ public class EmployeeDAO extends DAO<Employee> {
     @Override
     public void clearTable() {
         try {
-            employeeRolesDAO.deleteAll();
+            employeeRolesDAO.clearTable();
         } catch (DalException e) {
             throw new RuntimeException(e);
         }

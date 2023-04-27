@@ -2,6 +2,8 @@ package employeeModule.BusinessLayer.Employees;
 
 import businessLayer.employeeModule.Authorization;
 import businessLayer.employeeModule.User;
+import dataAccessLayer.DalFactory;
+import org.junit.jupiter.api.AfterEach;
 import serviceLayer.employeeModule.Services.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,6 +28,11 @@ public class UserTest {
         userService = serviceFactory.userService();
         userService.createData(); // Loads the HR Manager user: "admin123" "123", clears the data in each test
         user = Response.fromJson(userService.getUser(username)).data(User.class);
+    }
+
+    @AfterEach
+    void tearDown() {
+        DalFactory.clearTestDB();
     }
 
     @Test

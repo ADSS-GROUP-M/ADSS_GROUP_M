@@ -68,7 +68,9 @@ public abstract class DAO {
             String queryString = String.format("SELECT * FROM %s WHERE",TABLE_NAME);
             queryString = queryString.concat(createConditionForPrimaryKey(idValues));
             OfflineResultSet resultSet = cursor.executeRead(queryString);
-            ans = convertReaderToObject(resultSet);
+            if(resultSet.next()){
+                ans = convertReaderToObject(resultSet);
+            }
         } catch (SQLException e) {
             throw new DalException(e);
         }
@@ -108,8 +110,8 @@ public abstract class DAO {
         }
     }
 
-    public void deleteAll() throws DalException {
-        String queryString = String.format("DELETE FROM %s ", this.TABLE_NAME);
+    public void clearTable() throws DalException {
+        String queryString = String.format("DELETE FROM %s;", this.TABLE_NAME);
         try {
             cursor.executeWrite(queryString);
         } catch (SQLException e) {

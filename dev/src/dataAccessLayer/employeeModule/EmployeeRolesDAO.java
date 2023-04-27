@@ -103,8 +103,8 @@ class EmployeeRolesDAO extends DAO {
         return ans;
     }
 
-    public void deleteAll() throws DalException {
-        super.deleteAll();
+    public void clearTable() throws DalException {
+        super.clearTable();
         this.cache.clear();
     }
 }

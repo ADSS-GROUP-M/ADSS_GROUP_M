@@ -46,7 +46,7 @@ class EmployeeDAOTest {
 
     @AfterEach
     void tearDown() {
-        dao.clearTable();
+        DalFactory.clearTestDB();
     }
 
     @Test

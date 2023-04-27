@@ -1,5 +1,6 @@
 package dataAccessLayer.transportModule;
 
+import dataAccessLayer.DalFactory;
 import dataAccessLayer.dalUtils.DalException;
 import objects.transportObjects.ItemList;
 import org.junit.jupiter.api.AfterEach;
@@ -26,6 +27,7 @@ class ForeignKeyTest {
 
     @AfterEach
     void tearDown() {
+        DalFactory.clearTestDB();
     }
 
     @Test

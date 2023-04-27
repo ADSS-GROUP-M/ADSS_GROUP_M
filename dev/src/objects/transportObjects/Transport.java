@@ -5,12 +5,10 @@ import utils.JsonUtils;
 
 import java.lang.reflect.Type;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Objects;
+import java.util.*;
 
 public record Transport (int id, String source, LinkedList<String> destinations, HashMap<String, Integer> itemLists,
-                         String truckId, String driverId, LocalDateTime scheduledTime, int weight){
+                         String truckId, String driverId, LocalDateTime departureTime, int weight){
 
 
     /**
@@ -25,7 +23,7 @@ public record Transport (int id, String source, LinkedList<String> destinations,
                 other.itemLists,
                 other.truckId,
                 other.driverId,
-                other.scheduledTime,
+                other.departureTime,
                 other.weight
         );
     }

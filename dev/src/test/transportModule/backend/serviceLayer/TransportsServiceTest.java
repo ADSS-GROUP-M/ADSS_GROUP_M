@@ -1,9 +1,13 @@
 package transportModule.backend.serviceLayer;
 
+import objects.transportObjects.*;
+import ServiceLayer.transportModule.ItemListsService;
+import ServiceLayer.transportModule.ModuleFactory;
+import ServiceLayer.transportModule.ResourceManagementService;
+import ServiceLayer.transportModule.TransportsService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import transportModule.records.*;
 import utils.Response;
 
 import java.time.LocalDateTime;
@@ -30,7 +34,7 @@ class TransportsServiceTest {
 
         Site site1 = new Site("zone a", "123 main st", "(555) 123-4567", "john smith", Site.SiteType.BRANCH);
         Site site2 = new Site("zone b", "456 oak ave", "(555) 234-5678", "jane doe", Site.SiteType.LOGISTICAL_CENTER);
-        Driver driver1 = new Driver(123, "megan smith", Driver.LicenseType.C3);
+        Driver driver1 = new Driver("123", "megan smith", Driver.LicenseType.C3);
         Truck truck1 = new Truck("abc123", "ford", 1500, 10000, Truck.CoolingCapacity.FROZEN);
         HashMap<String, Integer> load1 = new HashMap<>();
         load1.put("shirts", 20);
@@ -102,7 +106,7 @@ class TransportsServiceTest {
                 destinations,
                 hm,
                 "abc123",
-                123,
+                "123",
                 LocalDateTime.of(2020, 1, 1, 0, 0),
                 2000
         );
@@ -167,7 +171,7 @@ class TransportsServiceTest {
                 destinations,
                 hm,
                 "abc123",
-                123,
+                "123",
                 LocalDateTime.of(2020, 1, 1, 0, 0),
                 2000
         );
@@ -252,7 +256,7 @@ class TransportsServiceTest {
                 new LinkedList<>(),
                 new HashMap<>(),
                 "abcd1234",
-                123,
+                "123",
                 LocalDateTime.of(2020, 1, 1, 0, 0),
                 30000
         );
@@ -264,7 +268,7 @@ class TransportsServiceTest {
 
     @Test
     void createTransportWithBadLicense(){
-        Driver driver = new Driver(12345,"name", Driver.LicenseType.A1);
+        Driver driver = new Driver("12345","name", Driver.LicenseType.A1);
         Truck truck1 = new Truck("abcd1234", "ford", 1500, 15000, Truck.CoolingCapacity.FROZEN);
         rms.addDriver(driver.toJson());
         rms.addTruck(truck1.toJson());
@@ -274,7 +278,7 @@ class TransportsServiceTest {
                 new LinkedList<>(),
                 new HashMap<>(),
                 "abcd1234",
-                12345,
+                "12345",
                 LocalDateTime.of(2020, 1, 1, 0, 0),
                 10000
         );
@@ -285,7 +289,7 @@ class TransportsServiceTest {
     }
     @Test
     void createTransportWithBadLicenseAndTooMuchWeight(){
-        Driver driver = new Driver(12345,"name", Driver.LicenseType.A1);
+        Driver driver = new Driver("12345","name", Driver.LicenseType.A1);
         Truck truck1 = new Truck("abcd1234", "ford", 1500, 15000, Truck.CoolingCapacity.FROZEN);
         rms.addDriver(driver.toJson());
         rms.addTruck(truck1.toJson());
@@ -295,7 +299,7 @@ class TransportsServiceTest {
                 new LinkedList<>(),
                 new HashMap<>(),
                 "abcd1234",
-                12345,
+                "12345",
                 LocalDateTime.of(2020, 1, 1, 0, 0),
                 30000
         );
@@ -318,7 +322,7 @@ class TransportsServiceTest {
                     put("some other address2", 20);
                 }},
                 "some driver",
-                9999999,
+                "9999999",
                 LocalDateTime.of(2020, 1, 1, 0, 0),
                 10000
         );

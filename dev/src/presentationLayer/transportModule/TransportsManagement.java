@@ -95,8 +95,8 @@ public class TransportsManagement {
                 source.address(),
                 destinations,
                 itemsList,
-                truckId,
                 driverID,
+                truckId,
                 departureDateTime,
                 truckWeight
         );
@@ -141,8 +141,8 @@ public class TransportsManagement {
                             newTransport.source(),
                             newTransport.destinations(),
                             newTransport.itemLists(),
-                            truckId,
                             driverID,
+                            truckId,
                             newTransport.departureTime(),
                             newTransport.weight()
                     );
@@ -161,8 +161,8 @@ public class TransportsManagement {
                             newTransport.source(),
                             destinations,
                             itemsList,
-                            newTransport.truckId(),
                             newTransport.driverId(),
+                            newTransport.truckId(),
                             newTransport.departureTime(),
                             weight
                     );
@@ -357,7 +357,8 @@ public class TransportsManagement {
                 source,
                 destinations,
                 itemLists,
-                driverId, truckId,
+                driverId,
+                truckId,
                 departureDateTime,
                 weight
         );

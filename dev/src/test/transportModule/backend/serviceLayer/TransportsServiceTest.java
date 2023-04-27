@@ -32,6 +32,7 @@ class TransportsServiceTest {
     private UserService us;
     private ItemListsService ils;
     private ResourceManagementService rms;
+    private Site site1;
 
     @BeforeEach
     void setUp() {
@@ -75,8 +76,8 @@ class TransportsServiceTest {
                 site1.address(),
                 new LinkedList<>(List.of(site2.address())),
                 hm,
-                truck1.id(),
                 driver1.id(),
+                truck1.id(),
                 LocalDateTime.of(2020, 1, 1, 0, 0),
                 100
         );
@@ -122,8 +123,8 @@ class TransportsServiceTest {
                 source.address(),
                 destinations,
                 hm,
-                "abc123",
                 "123",
+                "abc123",
                 LocalDateTime.of(2020, 1, 1, 0, 0),
                 2000
         );
@@ -187,7 +188,8 @@ class TransportsServiceTest {
                 source.address(),
                 destinations,
                 hm,
-                "123", "abc123",
+                "123",
+                "abc123",
                 LocalDateTime.of(2020, 1, 1, 0, 0),
                 2000
         );
@@ -271,8 +273,8 @@ class TransportsServiceTest {
                 "123 main st",
                 new LinkedList<>(),
                 new HashMap<>(),
-                "abcd1234",
                 "123",
+                "abcd1234",
                 LocalDateTime.of(2020, 1, 1, 0, 0),
                 30000
         );
@@ -293,8 +295,8 @@ class TransportsServiceTest {
                 "123 main st",
                 new LinkedList<>(),
                 new HashMap<>(),
-                "abcd1234",
                 "12345",
+                "abcd1234",
                 LocalDateTime.of(2020, 1, 1, 0, 0),
                 10000
         );
@@ -314,8 +316,8 @@ class TransportsServiceTest {
                 "123 main st",
                 new LinkedList<>(),
                 new HashMap<>(),
-                "abcd1234",
                 "12345",
+                "abcd1234",
                 LocalDateTime.of(2020, 1, 1, 0, 0),
                 30000
         );

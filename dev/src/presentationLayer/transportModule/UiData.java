@@ -230,8 +230,8 @@ public class UiData {
                     put(site2.address(), 1);
                     put(site3.address(), 2);
                 }},
-                truck1.id(),
                 driver1.id(),
+                truck1.id(),
                 LocalDateTime.of(2023, 4, 5, 8, 30),
                 truck1.maxWeight()
         );
@@ -243,8 +243,8 @@ public class UiData {
                     put(site1.address(), 3);
                     put(site4.address(), 4);
                 }},
-                truck2.id(),
                 driver2.id(),
+                truck2.id(),
                 LocalDateTime.of(2023, 4, 7, 12, 0),
                 truck2.maxWeight()
         );
@@ -256,8 +256,8 @@ public class UiData {
                     put(site1.address(), 2);
                     put(site5.address(), 5);
                 }},
-                truck3.id(),
                 driver3.id(),
+                truck3.id(),
                 LocalDateTime.of(2023, 4, 10, 9, 30),
                 truck3.maxWeight()
         );
@@ -270,8 +270,8 @@ public class UiData {
                     put(site3.address(), 1);
                     put(site5.address(), 3);
                 }},
-                truck4.id(),
                 driver4.id(),
+                truck4.id(),
                 LocalDateTime.of(2023, 4, 12, 14, 0),
                 truck4.maxWeight()
         );
@@ -282,8 +282,8 @@ public class UiData {
                 new HashMap<>() {{
                     put(site4.address(), 2);
                 }},
-                truck5.id(),
                 driver5.id(),
+                truck5.id(),
                 LocalDateTime.of(2023, 4, 15, 10, 0),
                 truck5.maxWeight()
         );

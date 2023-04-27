@@ -228,7 +228,8 @@ public class TransportsDAO extends ManyToManyDAO<Transport> implements CounterDA
                 resultSet.getString("source_address"),
                 destinations,
                 itemLists,
-                resultSet.getString("truck_id"), resultSet.getString("driver_id"),
+                resultSet.getString("driver_id"),
+                resultSet.getString("truck_id"),
                 resultSet.getLocalDateTime("departure_time"),
                 resultSet.getInt("weight")
         );

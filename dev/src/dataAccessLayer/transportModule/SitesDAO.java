@@ -25,6 +25,7 @@ public class SitesDAO extends DAO<Site> {
                 "contact_name",
                 "contact_phone",
                 "site_type");
+        initTable();
     }
 
     /**
@@ -41,6 +42,7 @@ public class SitesDAO extends DAO<Site> {
                 "contact_name",
                 "contact_phone",
                 "site_type");
+        initTable();
     }
 
     /**

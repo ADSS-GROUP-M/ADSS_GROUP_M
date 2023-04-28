@@ -12,8 +12,8 @@ public class ItemListsItemsDAO extends ManyToManyDAO<ItemList> {
 
     private static final String[] parent_table_names = {"item_lists"};
     private static final String[] primary_keys = {"id", "loading_type", "item_name"};
-    private static final String[] foreign_keys = {"id"};
-    private static final String[] references = {"Id"};
+    private static final String[][] foreign_keys = {{"id"}};
+    private static final String[][] references = {{"Id"}};
 
     private enum LoadingType {
         loading,
@@ -33,6 +33,7 @@ public class ItemListsItemsDAO extends ManyToManyDAO<ItemList> {
                 "loading_type",
                 "item_name",
                 "amount");
+        initTable();
     }
 
     /**
@@ -51,6 +52,7 @@ public class ItemListsItemsDAO extends ManyToManyDAO<ItemList> {
                 "loading_type",
                 "item_name",
                 "amount");
+        initTable();
     }
 
     /**

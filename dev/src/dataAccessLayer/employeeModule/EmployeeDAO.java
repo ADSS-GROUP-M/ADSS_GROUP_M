@@ -32,6 +32,7 @@ public class EmployeeDAO extends DAO<Employee> {
                 "EmploymentConditions",
                 "Details"
         );
+        initTable();
         this.employeeRolesDAO = employeeRolesDAO;
     }
 
@@ -50,6 +51,7 @@ public class EmployeeDAO extends DAO<Employee> {
                 "EmploymentConditions",
                 "Details"
         );
+        initTable();
         this.employeeRolesDAO = employeeRolesDAO;
     }
 

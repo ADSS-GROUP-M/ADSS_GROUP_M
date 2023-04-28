@@ -14,8 +14,8 @@ public class TransportDestinationsDAO extends ManyToManyDAO<TransportDestination
     private static final String[] types = {"INTEGER", "INTEGER" , "TEXT", "INTEGER"};
     private static final String[] parent_tables = {"transports", "sites", "item_lists"};
     private static final String[] primary_keys = {"transport_id", "destination_index"};
-    private static final String[] references = {"id", "address", "id"};
-    private static final String[] foreign_keys = {"transport_id", "destination_address", "item_list_id"};
+    private static final String[][] foreign_keys = {{"transport_id"}, {"destination_address"}, {"item_list_id"}};
+    private static final String[][] references = {{"id"}, {"address"}, {"id"}};
 
     public TransportDestinationsDAO() throws DalException{
         super("transport_destinations",
@@ -29,6 +29,7 @@ public class TransportDestinationsDAO extends ManyToManyDAO<TransportDestination
                 "destination_address",
                 "item_list_id"
         );
+        initTable();
     }
 
     /**
@@ -48,6 +49,7 @@ public class TransportDestinationsDAO extends ManyToManyDAO<TransportDestination
                 "destination_address",
                 "item_list_id"
         );
+        initTable();
     }
 
     /**

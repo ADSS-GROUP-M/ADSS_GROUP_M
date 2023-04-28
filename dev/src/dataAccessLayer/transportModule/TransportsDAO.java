@@ -16,8 +16,8 @@ public class TransportsDAO extends ManyToManyDAO<Transport> implements CounterDA
     private static final String[] types = {"INTEGER", "TEXT", "TEXT", "TEXT", "TEXT", "INTEGER"};
     private static final String[] parent_tables = {"truck_drivers", "trucks", "sites"};
     private static final String[] primary_keys = {"id"};
-    private static final String[] foreign_keys = {"driver_id", "truck_id","source_address"};
-    private static final String[] references = {"id", "id", "address"};
+    private static final String[][] foreign_keys = {{"driver_id"}, {"truck_id"},{"source_address"}};
+    private static final String[][] references = {{"id"}, {"id"}, {"address"}};
 
     private final TransportDestinationsDAO destinationsDAO;
     private final TransportIdCounterDAO counterDAO;
@@ -36,6 +36,7 @@ public class TransportsDAO extends ManyToManyDAO<Transport> implements CounterDA
                 "departure_time",
                 "weight"
         );
+        initTable();
         destinationsDAO = new TransportDestinationsDAO();
         counterDAO = new TransportIdCounterDAO();
     }
@@ -59,6 +60,7 @@ public class TransportsDAO extends ManyToManyDAO<Transport> implements CounterDA
                 "departure_time",
                 "weight"
         );
+        initTable();
         destinationsDAO = new TransportDestinationsDAO(dbName);
         counterDAO = new TransportIdCounterDAO(dbName);
     }

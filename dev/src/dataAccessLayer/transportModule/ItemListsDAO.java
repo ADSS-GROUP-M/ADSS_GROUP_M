@@ -23,6 +23,7 @@ public class ItemListsDAO extends DAO<ItemList> implements CounterDAO {
                 primary_keys,
                 "id"
         );
+        initTable();
         itemListIdCounterDAO = new ItemListIdCounterDAO();
         itemListsItemsDAO = new ItemListsItemsDAO();
     }
@@ -39,6 +40,7 @@ public class ItemListsDAO extends DAO<ItemList> implements CounterDAO {
                 primary_keys,
                 "id"
         );
+        initTable();
         itemListIdCounterDAO = new ItemListIdCounterDAO(dbName);
         itemListsItemsDAO = new ItemListsItemsDAO(dbName);
     }

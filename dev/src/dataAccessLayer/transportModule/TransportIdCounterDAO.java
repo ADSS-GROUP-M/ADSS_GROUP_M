@@ -11,6 +11,7 @@ public class TransportIdCounterDAO extends CounterDAOBase {
     public TransportIdCounterDAO() throws DalException {
         super(TABLE_NAME,
                 COLUMN_NAME);
+        initTable();
     }
 
     /**
@@ -21,5 +22,6 @@ public class TransportIdCounterDAO extends CounterDAOBase {
         super(dbName,
                 TABLE_NAME,
                 COLUMN_NAME);
+        initTable();
     }
 }

@@ -24,6 +24,7 @@ public class TrucksDAO extends DAO<Truck> {
                 "base_weight",
                 "max_weight",
                 "cooling_capacity");
+        initTable();
     }
 
     public TrucksDAO(String dbName) throws DalException {
@@ -36,6 +37,7 @@ public class TrucksDAO extends DAO<Truck> {
                 "base_weight",
                 "max_weight",
                 "cooling_capacity");
+        initTable();
     }
 
     /**

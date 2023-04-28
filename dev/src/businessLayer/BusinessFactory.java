@@ -31,13 +31,16 @@ public class BusinessFactory {
         shiftsController = new ShiftsController(dalFactory.shiftDAO());
         employeesController = new EmployeesController(shiftsController, dalFactory.branchesDAO(), dalFactory.employeeDAO());
 
+
         try {
-            itemListsController = new ItemListsController(dalFactory.itemListsDAO());
-            transportsController = new TransportsController(trucksController,
-                    driversController,
-                    sitesController,
-                    itemListsController,
-                    dalFactory.transportsDAO());
+            // ======================== Dependents ===================== |
+            /*(1)*/ itemListsController = new ItemListsController(dalFactory.itemListsDAO());
+            /*(2)*/ transportsController = new TransportsController(trucksController,
+                        driversController,
+                        sitesController,
+                        itemListsController,
+                        dalFactory.transportsDAO());
+            //========================================================= |
         } catch (TransportException e) {
             throw new RuntimeException(e);
         }

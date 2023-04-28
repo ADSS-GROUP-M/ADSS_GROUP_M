@@ -14,8 +14,8 @@ public class BranchEmployeesDAO extends ManyToManyDAO<Pair<String,String>> {
     private static final String[] types = new String[]{"TEXT", "TEXT"};
     private static final String[] parent_table_names = {"branches","employees"};
     private static final String[] primary_keys = {"address","employee_id"};
-    private static final String[] foreign_keys = {"address","employee_id"};
-    private static final String[] references = {"address","id"};
+    private static final String[][] foreign_keys = {{"address"},{"employee_id"}};
+    private static final String[][] references = {{"address"},{"id"}};
 
     public BranchEmployeesDAO() throws DalException {
         super("branch_employees",
@@ -26,6 +26,7 @@ public class BranchEmployeesDAO extends ManyToManyDAO<Pair<String,String>> {
                 references,
                 "address",
                 "employee_id");
+        initTable();
     }
 
     public BranchEmployeesDAO(String dbName) throws DalException{
@@ -38,6 +39,7 @@ public class BranchEmployeesDAO extends ManyToManyDAO<Pair<String,String>> {
                 references,
                 "address",
                 "employee_id");
+        initTable();
     }
 
     /**

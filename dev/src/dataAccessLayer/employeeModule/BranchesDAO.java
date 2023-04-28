@@ -18,10 +18,10 @@ public class BranchesDAO extends ManyToManyDAO<Branch> {
     private static final String[] types = new String[]{"TEXT", "TEXT", "TEXT", "TEXT", "TEXT"};
     private static final String[] parent_table_names = {"sites"};
     private static final String[] primary_keys = {"address"};
-    private static final String[] foreign_keys = {"address"};
-    private static final String[] references = {"address"};
+    private static final String[][] foreign_keys = {{"address"}};
+    private static final String[][] references = {{"address"}};
 
-    private BranchEmployeesDAO branchEmployeesDAO;
+    private final BranchEmployeesDAO branchEmployeesDAO;
 
     public BranchesDAO(BranchEmployeesDAO branchEmployeesDAO) throws DalException {
         super("branches",
@@ -35,6 +35,7 @@ public class BranchesDAO extends ManyToManyDAO<Branch> {
                 "morning_shift_end",
                 "evening_shift_start",
                 "evening_shift_end");
+        initTable();
         this.branchEmployeesDAO = branchEmployeesDAO;
     }
 
@@ -51,6 +52,7 @@ public class BranchesDAO extends ManyToManyDAO<Branch> {
                 "morning_shift_end",
                 "evening_shift_start",
                 "evening_shift_end");
+        initTable();
         this.branchEmployeesDAO = branchEmployeesDAO;
     }
 

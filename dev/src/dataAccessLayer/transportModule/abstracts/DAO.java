@@ -26,7 +26,6 @@ public abstract class DAO<T> {
         this.ALL_COLUMNS = allColumns;
         this.TYPES = types;
         this.cache = new Cache<>();
-        initTable();
     }
 
     /**
@@ -40,7 +39,6 @@ public abstract class DAO<T> {
         this.ALL_COLUMNS = allColumns;
         this.TYPES = types;
         this.cache = new Cache<>();
-        initTable();
     }
 
     /**

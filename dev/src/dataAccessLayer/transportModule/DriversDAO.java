@@ -14,8 +14,8 @@ public class DriversDAO extends ManyToManyDAO<Driver> {
     private static final String[] types = new String[]{"TEXT", "TEXT"};
     private static final String[] parent_table_names = {"EMPLOYEES"};
     private static final String[] primary_keys = {"id"};
-    private static final String[] foreign_keys = {"id"};
-    private static final String[] references = {"Id"};
+    private static final String[][] foreign_keys = {{"id"}};
+    private static final String[][] references = {{"Id"}};
 
     public DriversDAO() throws DalException {
         super("truck_drivers",
@@ -26,6 +26,7 @@ public class DriversDAO extends ManyToManyDAO<Driver> {
                 references,
                 "id",
                 "license_type");
+        initTable();
     }
 
     public DriversDAO(String dbName) throws DalException {
@@ -38,6 +39,7 @@ public class DriversDAO extends ManyToManyDAO<Driver> {
                 references,
                 "id",
                 "license_type");
+        initTable();
     }
 
     /**

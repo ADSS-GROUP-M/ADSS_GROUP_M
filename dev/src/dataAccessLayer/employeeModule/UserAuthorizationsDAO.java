@@ -61,7 +61,8 @@ public class UserAuthorizationsDAO extends DAO {
                 String queryString = String.format("INSERT INTO " + TABLE_NAME + "(%s, %s) VALUES('%s','%s')",
                         Columns.Username.name(), Columns.Authorization.name(),
                         user.getUsername(), auth.name());
-                cursor.executeWrite(queryString);
+                if (cursor.executeWrite(queryString) != 1)
+                    throw new DalException("Could not create the user authorization for username " + user.getUsername());
                 entries.add(auth);
             }
             this.cache.put(getHashCode(user.getUsername()),entries );
@@ -78,9 +79,9 @@ public class UserAuthorizationsDAO extends DAO {
     }
 
     void delete(User user) throws DalException{
-        this.cache.remove(getHashCode(user.getUsername()));
         Object[] keys = {user.getUsername()};
         super.delete(keys);
+        this.cache.remove(getHashCode(user.getUsername()));
     }
 
     private Set<Authorization> select(String username) throws DalException {

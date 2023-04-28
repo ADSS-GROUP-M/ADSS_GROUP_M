@@ -15,14 +15,12 @@ public class UserDAO extends DAO {
 
     public static final String tableName = "USERS";
     public static final String[] primaryKeys = {Columns.Username.name()};
-    private static UserDAO instance;
     private HashMap<Integer, User> cache;
     private UserAuthorizationsDAO userAuthorizationsDAO;
 
     private enum Columns {
         Username,
-        Password,
-        isOnline;
+        Password
     }
 
     //needed roles HashMap<Role,Integer>, shiftRequests HashMap<Role,List<Employees>>, shiftWorkers Map<Role,List<Employees>>, cancelCardApplies List<String>, shiftActivities List<String>.
@@ -31,8 +29,7 @@ public class UserDAO extends DAO {
                 primaryKeys,
                 new String[]{"TEXT", "TEXT", "TEXT"},
                 "Username",
-                "Password",
-                "isOnline"
+                "Password"
         );
         this.userAuthorizationsDAO = userAuthorizationsDAO;
         this.cache = new HashMap<>();
@@ -44,8 +41,7 @@ public class UserDAO extends DAO {
                 primaryKeys,
                 new String[]{"TEXT", "TEXT", "TEXT"},
                 "Username",
-                "Password",
-                "isOnline"
+                "Password"
         );
         this.userAuthorizationsDAO = userAuthorizationsDAO;
         this.cache = new HashMap<>();
@@ -57,11 +53,12 @@ public class UserDAO extends DAO {
     }
     public void create(User user) throws DalException {
         try {
+            String queryString = String.format("INSERT INTO " + TABLE_NAME + "(%s, %s) VALUES('%s','%s')",
+                    Columns.Username.name(), Columns.Password.name(),
+                    user.getUsername(), user.getPassword());
+            if (cursor.executeWrite(queryString) != 1)
+                throw new DalException("Could not create the user with username " + user.getUsername());
             this.userAuthorizationsDAO.create(user);
-            String queryString = String.format("INSERT INTO " + TABLE_NAME + "(%s, %s, %s) VALUES('%s','%s','%s')",
-                    Columns.Username.name(), Columns.Password.name(), Columns.isOnline.name(),
-                    user.getUsername(), user.getPassword(), user.isLoggedIn());
-            cursor.executeWrite(queryString);
             this.cache.put(getHashCode(user.getUsername()), user);
         } catch (SQLException e) {
             throw new DalException(e);
@@ -101,19 +98,28 @@ public class UserDAO extends DAO {
         try {
             Object[] key = {user.getUsername()};
             this.userAuthorizationsDAO.update(user);
-            String queryString = String.format("UPDATE "+TABLE_NAME+" SET %s = ? , %s = ? , %s = ? WHERE",
-                    Columns.Username.name(), Columns.Password.name(), Columns.isOnline.name());
+            String queryString = String.format("UPDATE "+TABLE_NAME+" SET %s = ? , %s = ? WHERE",
+                    Columns.Username.name(), Columns.Password.name());
             queryString = queryString.concat(createConditionForPrimaryKey(key));
-            cursor.executeWrite(queryString);
+            if (cursor.executeWrite(queryString) != 1)
+                throw new DalException("No user with username " + user.getUsername() + " was found");
         } catch(SQLException e) {
             throw new DalException(e);
         }
     }
     public void delete(User user) throws DalException {
-        this.cache.remove(getHashCode(user.getUsername()));
-        Object[] keys = {user.getUsername()};
         this.userAuthorizationsDAO.delete(user);
+        Object[] keys = {user.getUsername()};
         super.delete(keys);
+        this.cache.remove(getHashCode(user.getUsername()));
+    }
+
+    @Override
+    public void clearTable() throws DalException {
+        try {
+            userAuthorizationsDAO.clearTable();
+        } catch (Exception ignore) {}
+        super.clearTable();
     }
 
     User select(String id) throws DalException {
@@ -126,7 +132,6 @@ public class UserDAO extends DAO {
         try{
             String username = reader.getString(Columns.Username.name());
             String password = reader.getString(Columns.Password.name());
-            String loggedIn = reader.getString(Columns.isOnline.name());
 
             ans = new User(username,password);
 

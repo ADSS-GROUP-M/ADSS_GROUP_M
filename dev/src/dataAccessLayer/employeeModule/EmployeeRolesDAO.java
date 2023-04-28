@@ -129,9 +129,9 @@ public class EmployeeRolesDAO extends DAO {
     }
 
     void delete(Employee emp) throws DalException{
-        this.cache.remove(getHashCode(emp.getId()));
         Object[] keys = {emp.getId()};
         super.delete(keys);
+        this.cache.remove(getHashCode(emp.getId()));
     }
 
     Set<Role> select(String id) throws DalException {

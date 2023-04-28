@@ -37,7 +37,7 @@ public class ServiceFactory {
     }
 
     private void buildInstances() {
-        userService = new UserService(this);
+        userService = new UserService(this, businessFactory.userController());
         itemListsService = new ItemListsService(businessFactory.itemListsController());
         transportsService = new TransportsService(businessFactory.transportsController());
 

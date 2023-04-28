@@ -17,7 +17,7 @@ import java.util.Map;
 import static dataAccessLayer.DalFactory.TESTING_DB_NAME;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class ShiftTest {
+public class ShiftDAOTest {
 
     ShiftDAO shiftDAO;
     EmployeeDAO empDao;
@@ -71,8 +71,8 @@ public class ShiftTest {
 
             shift1.setShiftWorkers(workers);
 
-            shiftDAO.create(shift1,"branch1");
-            shiftDAO.create(shift2, "branch2");
+            shiftDAO.create(shift1);
+            shiftDAO.create(shift2);
         } catch (Exception e) {
             fail(e);
         }
@@ -85,15 +85,15 @@ public class ShiftTest {
 
     @Test
     public void testCreateData(){// creates 2 shifts in DB
-        assertThrows(DalException.class, () -> shiftDAO.create(shift1,"branch1")); // cannot create same object with existing key
+        assertThrows(DalException.class, () -> shiftDAO.create(shift1)); // cannot create same object with existing key
     }
 
     //To test data persistence, run after 'createData'
     @Test
     public void delete(){ // deletes shift from DB
         try{
-            shiftDAO.delete(shift1,"branch1");
-            assertNull(shiftDAO.get(shift1.getShiftDate(), shift1.getShiftType(), shift1.getBranch()));
+            shiftDAO.delete(shift1);
+            assertNull(shiftDAO.get(shift1.getBranch(), shift1.getShiftDate(), shift1.getShiftType()));
         } catch(Exception e) {
             fail(e);
         }
@@ -103,7 +103,7 @@ public class ShiftTest {
     @Test
     public void get(){// gets the shift from DB and confirms its' state
         try{
-           Shift sh = shiftDAO.get(shift1.getShiftDate(), shift1.getShiftType(), shift1.getBranch());
+           Shift sh = shiftDAO.get(shift1.getBranch(), shift1.getShiftDate(), shift1.getShiftType());
             assertEquals(sh.getShiftDate().getDayOfYear(),shift1.getShiftDate().getDayOfYear());
             assertEquals(sh.getShiftWorkers().get(Role.GeneralWorker).get(0).getId(), shift1.getShiftWorkers().get(Role.GeneralWorker).get(0).getId());
         } catch(Exception e) {
@@ -115,15 +115,15 @@ public class ShiftTest {
     @Test
     public void update(){
         try{
-            shift1 = shiftDAO.get(shift1.getShiftDate(), shift1.getShiftType(),"branch1");
+            shift1 = shiftDAO.get("branch1", shift1.getShiftDate(), shift1.getShiftType());
             HashMap<Role,List<Employee>> newWorkers = new HashMap<>();
             List<Employee> worker = new LinkedList<>();
             worker.add(employee1);
             newWorkers.put(Role.GeneralWorker, worker);
             shift1.setShiftWorkers(newWorkers);
             shift1.setApproved(true);
-            shiftDAO.update(shift1,"branch1");
-            Shift s2 = shiftDAO.get(shift1.getShiftDate(), shift1.getShiftType(),"branch1");
+            shiftDAO.update(shift1);
+            Shift s2 = shiftDAO.get("branch1", shift1.getShiftDate(), shift1.getShiftType());
             assertEquals(s2.getShiftWorkers().get(Role.GeneralWorker).get(0).getId(), worker.get(0).getId());
         } catch(Exception e) {
             fail(e);
@@ -135,14 +135,14 @@ public class ShiftTest {
     public void update2(){
 
         try{
-            shift1 = shiftDAO.get(shift1.getShiftDate(), shift1.getShiftType(),"branch1");
+            shift1 = shiftDAO.get("branch1", shift1.getShiftDate(), shift1.getShiftType());
             workers = shift1.getShiftWorkers();
             workers.get(Role.GeneralWorker).remove(workers.get(Role.GeneralWorker).get(0)); // removes twoEmployee
             List<Employee> security = new LinkedList<>();
             security.add(employee4);
             workers.put(Role.SecurityGuard, security);
-            shiftDAO.update(shift1,"branch1");
-            Shift s2 = shiftDAO.get(shift1.getShiftDate(), shift1.getShiftType(),"branch1");
+            shiftDAO.update(shift1);
+            Shift s2 = shiftDAO.get("branch1", shift1.getShiftDate(), shift1.getShiftType());
             assertEquals(s2.getShiftWorkers().get(Role.GeneralWorker).size(), 0);
             assertEquals(s2.getShiftWorkers().get(Role.SecurityGuard).get(0).getId(), employee4.getId());
             assertTrue(s2.getShiftWorkers().get(Role.SecurityGuard).get(0).getRoles().contains(Role.SecurityGuard));
@@ -191,10 +191,10 @@ public class ShiftTest {
         s2.setApproved(false);
         Shift s3 = new Shift("branch1",LocalDate.of(2022,3,1), Shift.ShiftType.Morning);
         try{
-            shiftDAO.create(s2,"branch1");
-            shiftDAO.create(s3,"branch1");
+            shiftDAO.create(s2);
+            shiftDAO.create(s3);
             s2.setApproved(true);
-            Shift testShift = shiftDAO.get(dt,st,branch);
+            Shift testShift = shiftDAO.get(branch, dt,st);
             assertTrue(testShift.getIsApproved());
         } catch(Exception e) {
             fail(e);

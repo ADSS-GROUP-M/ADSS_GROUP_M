@@ -2,6 +2,7 @@ package businessLayer;
 
 import businessLayer.employeeModule.Controllers.EmployeesController;
 import businessLayer.employeeModule.Controllers.ShiftsController;
+import businessLayer.employeeModule.Controllers.UserController;
 import businessLayer.transportModule.*;
 import dataAccessLayer.DalFactory;
 import dataAccessLayer.dalUtils.DalException;
@@ -17,6 +18,7 @@ public class BusinessFactory {
     private TrucksController trucksController;
     private EmployeesController employeesController;
     private ShiftsController shiftsController;
+    private UserController userController;
     private final DalFactory dalFactory;
 
     public BusinessFactory() throws DalException{
@@ -30,7 +32,7 @@ public class BusinessFactory {
         driversController = new DriversController(dalFactory.driversDAO());
         shiftsController = new ShiftsController(dalFactory.shiftDAO());
         employeesController = new EmployeesController(shiftsController, dalFactory.branchesDAO(), dalFactory.employeeDAO());
-
+        userController = new UserController(dalFactory.userDAO());
 
         try {
             // ======================== Dependents ===================== |
@@ -87,6 +89,10 @@ public class BusinessFactory {
 
     public ShiftsController shiftsController() {
         return shiftsController;
+    }
+
+    public UserController userController() {
+        return userController;
     }
 
     public DalFactory dalFactory() {

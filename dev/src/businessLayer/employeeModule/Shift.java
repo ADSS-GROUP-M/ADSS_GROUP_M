@@ -286,7 +286,23 @@ public class Shift {
         this.shiftActivities = shiftActivities;
     }
     public String getBranch() {
-        //return "branch1";
         return this.branchId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Shift shift = (Shift) o;
+        return branchId.equals(shift.branchId) && shiftDate.equals(shift.shiftDate) && shiftType.equals(shift.shiftType);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(branchId,shiftDate,shiftType);
     }
 }

@@ -3,7 +3,7 @@ import java.util.*;
 
 import presentationLayer.employeeModule.ViewModel.LoginMenuVM;
 import presentationLayer.transportModule.TransportUI;
-import serviceLayer.transportModule.ServiceFactory;
+import serviceLayer.ServiceFactory;
 
 public class LoginMenu implements Menu {
     private final LoginMenuVM loginMenuVM;

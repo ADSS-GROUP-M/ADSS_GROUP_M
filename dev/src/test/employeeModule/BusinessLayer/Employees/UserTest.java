@@ -7,7 +7,7 @@ import org.junit.jupiter.api.AfterEach;
 import serviceLayer.employeeModule.Services.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import serviceLayer.transportModule.ServiceFactory;
+import serviceLayer.ServiceFactory;
 import utils.Response;
 
 import java.util.List;

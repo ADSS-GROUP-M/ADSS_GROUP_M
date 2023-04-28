@@ -37,7 +37,6 @@ public class TransportsController {
                                 DriversController dc,
                                 SitesController sc,
                                 ItemListsController ic,
-                                EmployeesService es,
                                 TransportsDAO dao) throws TransportException{
         this.sc = sc;
         this.ilc = ic;
@@ -50,6 +49,10 @@ public class TransportsController {
         } catch (DalException e) {
             throw new TransportException(e.getMessage(),e);
         }
+    }
+
+    public void injectDependencies(EmployeesService es){
+        this.es = es;
     }
 
     /**
@@ -239,9 +242,5 @@ public class TransportsController {
         } catch (DalException e) {
             throw new TransportException(e.getMessage(),e);
         }
-    }
-
-    public void setEmployeesService(EmployeesService es) {
-        this.es = es;
     }
 }

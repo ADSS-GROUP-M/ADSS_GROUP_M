@@ -1,7 +1,7 @@
 package presentationLayer.employeeModule.ViewModel;
 
 import presentationLayer.employeeModule.Model.BackendController;
-import serviceLayer.transportModule.ServiceFactory;
+import serviceLayer.ServiceFactory;
 
 import java.util.List;
 

@@ -6,30 +6,30 @@ import businessLayer.transportModule.*;
 import dataAccessLayer.DalFactory;
 import dataAccessLayer.dalUtils.DalException;
 import serviceLayer.employeeModule.Services.EmployeesService;
-import serviceLayer.transportModule.ServiceFactory;
 import utils.transportUtils.TransportException;
 
 public class BusinessFactory {
 
-    private final TransportsController transportsController;
-    private final DriversController driversController;
-    private final SitesController sitesController;
-    private final ItemListsController itemListsController;
-    private final TrucksController trucksController;
-    private final EmployeesController employeesController;
-    private final ShiftsController shiftsController;
+    private TransportsController transportsController;
+    private DriversController driversController;
+    private SitesController sitesController;
+    private ItemListsController itemListsController;
+    private TrucksController trucksController;
+    private EmployeesController employeesController;
+    private ShiftsController shiftsController;
     private final DalFactory dalFactory;
 
-    public BusinessFactory(ServiceFactory serviceFactory) throws DalException{
+    public BusinessFactory() throws DalException{
         dalFactory = new DalFactory();
+        buildInstances();
+    }
 
+    private void buildInstances() {
         trucksController = new TrucksController(dalFactory.trucksDAO());
         sitesController = new SitesController(dalFactory.sitesDAO());
         driversController = new DriversController(dalFactory.driversDAO());
         shiftsController = new ShiftsController(dalFactory.shiftDAO());
         employeesController = new EmployeesController(shiftsController, dalFactory.branchesDAO(), dalFactory.employeeDAO());
-
-        EmployeesService employeesService = serviceFactory.employeesService();
 
         try {
             itemListsController = new ItemListsController(dalFactory.itemListsDAO());
@@ -37,9 +37,7 @@ public class BusinessFactory {
                     driversController,
                     sitesController,
                     itemListsController,
-                    employeesService,
                     dalFactory.transportsDAO());
-
         } catch (TransportException e) {
             throw new RuntimeException(e);
         }
@@ -49,38 +47,19 @@ public class BusinessFactory {
      * used for testing
      * @param dbName the name of the database to connect to
      */
-    public BusinessFactory(ServiceFactory serviceFactory, String dbName) throws DalException{
+    public BusinessFactory(String dbName) throws DalException{
 
         dalFactory = new DalFactory(dbName);
-
-        trucksController = new TrucksController(dalFactory.trucksDAO());
-        sitesController = new SitesController(dalFactory.sitesDAO());
-        driversController = new DriversController(dalFactory.driversDAO());
-        shiftsController = new ShiftsController(dalFactory.shiftDAO());
-        employeesController = new EmployeesController(shiftsController,dalFactory.branchesDAO(), dalFactory.employeeDAO());
-
-        EmployeesService employeesService = serviceFactory.employeesService();
-
-        try {
-            itemListsController = new ItemListsController(dalFactory.itemListsDAO());
-            transportsController = new TransportsController(trucksController,
-                    driversController,
-                    sitesController,
-                    itemListsController,
-                    employeesService,
-                    dalFactory.transportsDAO());
-
-        } catch (TransportException e) {
-            throw new RuntimeException(e);
-        }
+        buildInstances();
     }
 
     public TransportsController transportsController() {
         return transportsController;
     }
 
-    public void updateTransportsController(EmployeesService employeesService) {
-        transportsController.setEmployeesService(employeesService);
+    public void injectDependencies(EmployeesService employeesService) {
+        transportsController.injectDependencies(employeesService);
+        sitesController.injectDependencies(employeesService);
     }
 
     public DriversController driversController() {

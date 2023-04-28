@@ -12,7 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import serviceLayer.transportModule.ResourceManagementService;
-import serviceLayer.transportModule.ServiceFactory;
+import serviceLayer.ServiceFactory;
 
 import java.sql.SQLException;
 import java.time.LocalTime;

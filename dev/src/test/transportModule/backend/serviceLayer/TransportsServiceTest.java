@@ -6,7 +6,7 @@ import serviceLayer.employeeModule.Objects.SShiftType;
 import serviceLayer.employeeModule.Services.EmployeesService;
 import serviceLayer.employeeModule.Services.UserService;
 import serviceLayer.transportModule.ItemListsService;
-import serviceLayer.transportModule.ServiceFactory;
+import serviceLayer.ServiceFactory;
 import serviceLayer.transportModule.ResourceManagementService;
 import serviceLayer.transportModule.TransportsService;
 import org.junit.jupiter.api.AfterEach;

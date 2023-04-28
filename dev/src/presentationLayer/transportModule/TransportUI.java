@@ -5,7 +5,7 @@ import presentationLayer.employeeModule.View.LoginMenu;
 import presentationLayer.employeeModule.View.Menu;
 import presentationLayer.employeeModule.View.MenuManager;
 import serviceLayer.employeeModule.Services.EmployeesService;
-import serviceLayer.transportModule.ServiceFactory;
+import serviceLayer.ServiceFactory;
 
 public class TransportUI implements Menu {
 

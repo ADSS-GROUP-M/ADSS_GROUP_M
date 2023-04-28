@@ -13,7 +13,6 @@ public class EmployeeRolesDAO extends DAO {
     public static final String[] primaryKeys = {Columns.EmployeeId.name(), Columns.Role.name()};
     public static final String tableName = "EMPLOYEE_ROLES";
     public static final String[] types = {"TEXT", "TEXT"};
-    private static EmployeeRolesDAO instance;
     private HashMap<Integer, Set<Role>> cache;
     private static final String[] FOREIGN_KEYS = new String[]{"EmployeeId"};
     private static final String[] PARENT_TABLE_NAME = new String[]{"EMPLOYEES"};

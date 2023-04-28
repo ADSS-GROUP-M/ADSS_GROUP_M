@@ -6,6 +6,7 @@ import businessLayer.transportModule.TrucksController;
 import objects.transportObjects.Driver;
 import objects.transportObjects.Site;
 import objects.transportObjects.Truck;
+import serviceLayer.employeeModule.Services.EmployeesService;
 import utils.JsonUtils;
 import utils.Response;
 
@@ -13,13 +14,14 @@ import utils.transportUtils.TransportException;
 
 public class ResourceManagementService {
 
-    private final SitesController sitesController;
-    private final DriversController driversController;
-    private final TrucksController trucksController;
+    private SitesController sitesController;
+    private DriversController driversController;
+    private TrucksController trucksController;
 
-
-
-    public ResourceManagementService(SitesController sitesController, DriversController driversController, TrucksController trucksController) {
+    public ResourceManagementService(SitesController sitesController,
+                                     DriversController driversController,
+                                     TrucksController trucksController)
+    {
         this.sitesController = sitesController;
         this.driversController = driversController;
         this.trucksController = trucksController;

@@ -4,6 +4,7 @@ import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.transportModule.SitesDAO;
 import objects.transportObjects.Site;
 
+import serviceLayer.employeeModule.Services.EmployeesService;
 import utils.transportUtils.TransportException;
 
 import java.util.List;
@@ -14,9 +15,15 @@ import java.util.List;
  */
 public class SitesController {
     private final SitesDAO dao;
+    private EmployeesService employeesService;
+
 
     public SitesController(SitesDAO dao){
         this.dao = dao;
+    }
+
+    public void injectDependencies(EmployeesService employeesService) {
+        this.employeesService = employeesService;
     }
 
     /**
@@ -29,7 +36,6 @@ public class SitesController {
         if (siteExists(site.address()) != false) {
             throw new TransportException("Site already exists");
         }
-
         try {
             dao.insert(site);
         } catch (DalException e) {

@@ -12,7 +12,8 @@ import java.util.stream.Collectors;
 
 public class UserService {
 
-    public static final String TRANSPORT_MANAGER_USERNAME = "logistic";
+    public static final String TRANSPORT_MANAGER_USERNAME = "transport";
+    public static final String HR_MANAGER_USERNAME = "admin123";
 
     private final UserController userController;
 
@@ -27,9 +28,9 @@ public class UserService {
     public void createData() {
         resetData();
         try {
-            userController.createManagerUser("admin123", "123");
-            userController.createUser("logistic", "123");
-            userController.authorizeUser("logistic", Authorization.TransportManager);
+            userController.createManagerUser(HR_MANAGER_USERNAME, "123");
+            userController.createUser(TRANSPORT_MANAGER_USERNAME, "123");
+            userController.authorizeUser(TRANSPORT_MANAGER_USERNAME, Authorization.TransportManager);
         }
         catch (Exception ignore) {}
     }

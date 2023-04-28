@@ -4,6 +4,7 @@ import com.google.gson.reflect.TypeToken;
 import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.transportModule.TransportsDAO;
 import objects.transportObjects.Driver;
+import objects.transportObjects.Site;
 import objects.transportObjects.Transport;
 import objects.transportObjects.Truck;
 import serviceLayer.employeeModule.Services.EmployeesService;
@@ -210,10 +211,13 @@ public class TransportsController {
             if(sc.siteExists(address) == false){
                 ec.addError("Site with address " + address + " does not exist", "destination:"+destIndex);
             }
-            String destinationJson = es.checkStoreKeeperAvailability(JsonUtils.serialize(transport.departureTime()),address);
-            Response response = Response.fromJson(destinationJson);
-            if(response.success()==false){
-                ec.addError("Store keeper is not available on site with address " + address, "storeKeeper");
+            //store keeper validation
+            else if(sc.getSite(address).siteType() == Site.SiteType.BRANCH){
+                String destinationJson = es.checkStoreKeeperAvailability(JsonUtils.serialize(transport.departureTime()),address);
+                Response response = Response.fromJson(destinationJson);
+                if(response.success()==false){
+                    ec.addError("Store keeper is not available on site with address " + address, "storeKeeper");
+                }
             }
 
             //itemList validation

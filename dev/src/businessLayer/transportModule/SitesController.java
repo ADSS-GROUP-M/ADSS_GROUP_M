@@ -38,11 +38,10 @@ public class SitesController {
             throw new TransportException("Site already exists");
         }
         try {
+            dao.insert(site);
             if(site.siteType() == Site.SiteType.BRANCH){
                 employeesService.createBranch(TRANSPORT_MANAGER_USERNAME,site.address());
             }
-
-            dao.insert(site);
         } catch (DalException e) {
             throw new RuntimeException(e);
         }

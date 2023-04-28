@@ -1,6 +1,7 @@
 package businessLayer.employeeModule;
 
 import java.time.LocalTime;
+import java.util.Objects;
 
 public class Branch {
     private String address;
@@ -68,5 +69,22 @@ public class Branch {
 
     public static Branch getLookupObject(String address) {
         return new Branch(address);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Branch branch = (Branch) o;
+        return address == branch.address;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(address);
     }
 }

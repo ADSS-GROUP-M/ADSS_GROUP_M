@@ -32,7 +32,7 @@ public class EmployeesService {
     private ShiftsController shiftsController;
 
     public EmployeesService(ServiceFactory serviceFactory, EmployeesController employeesController, ShiftsController shiftsController) {
-        rms = rms;
+        rms = serviceFactory.getResourceManagementService();
         userService = serviceFactory.userService();
         this.employeesController = employeesController;
         this.shiftsController = shiftsController;
@@ -81,11 +81,9 @@ public class EmployeesService {
         try {
             // Initializing Branches - TODO: Should be moved to Transport module
             rms.addSite(new Site("Headquarters","1","123456789","Headquarters", Site.SiteType.BRANCH).toJson());
-//            employeesController.createBranch("1"); // TODO: Should be moved to Transport module
             for(int i = 2; i <= 9; i++) {
                 String branchId = Integer.toString(i);
                 rms.addSite(new Site("Zone" + i,branchId, "phone" + i,"contact"+i, Site.SiteType.BRANCH).toJson());
-//                employeesController.createBranch(branchId);
             }
             // TODO: Add initial employees data, after the Transport Sites have already been added
             employeesController.recruitEmployee("1","Moshe Biton", "111","Hapoalim 12 230", 50, LocalDate.of(2023,2,2),"Employment Conditions Test", "More details about Moshe");
@@ -275,11 +273,12 @@ public class EmployeesService {
     }
 
     public String createBranch(String actorUsername, String branchId) {
-        Response authResponse = Response.fromJson(userService.isAuthorized(actorUsername, Authorization.TransportManager));
-        if (authResponse.success() == false)
-            return new Response(authResponse.message(),false).toJson();
-        else if(authResponse.dataToBoolean() == false)
-            return new Response("User isn't authorized to do this",false).toJson();
+        Response authResponse1 = Response.fromJson(userService.isAuthorized(actorUsername, Authorization.TransportManager));
+        Response authResponse2 = Response.fromJson(userService.isAuthorized(actorUsername, Authorization.HRManager));
+        if (authResponse1.success() == false && authResponse2.success() == false)
+            return new Response(authResponse1.message() + ", " + authResponse2.message(),false).toJson();
+        else if(authResponse1.dataToBoolean() == false && authResponse2.dataToBoolean() == false)
+            return new Response("User isn't authorized to create branches",false).toJson();
         try {
             employeesController.createBranch(branchId);
             return new Response(true).toJson();

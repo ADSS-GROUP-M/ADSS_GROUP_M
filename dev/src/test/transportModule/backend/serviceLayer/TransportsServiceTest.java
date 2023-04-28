@@ -36,7 +36,6 @@ class TransportsServiceTest {
 
     @BeforeEach
     void setUp() {
-        // Should probably be refactored to be returned by the ModuleFactory (?)
         ServiceFactory factory = new ServiceFactory(TESTING_DB_NAME);
         ts = factory.getTransportsService();
         ils = factory.getItemListsService();
@@ -68,9 +67,8 @@ class TransportsServiceTest {
         rms.addDriver(driver1.toJson()); // Should probably be removed if the services are fully integrated, it should create the driver automatically when certifying a driver employee.
         rms.addTruck(truck1.toJson());
         rms.addSite(site1.toJson());
-        initBranchSite1(); // This method should not be called here, the transport module should call createBranch() automatically when creating a new branch site.
+        initBranchSite1();
         rms.addSite(site2.toJson());
-        initBranchSite2(); // This method should not be called here, the transport module should call createBranch() automatically when creating a new branch site.
 
         HashMap<String,Integer> hm = new HashMap<>();
         hm.put(site2.address(), itemList1.id());
@@ -79,7 +77,7 @@ class TransportsServiceTest {
                 site1.address(),
                 new LinkedList<>(List.of(site2.address())),
                 hm,
-                driver1.id(), // Notice that the parameters order was flipped, it failed the test before.
+                driver1.id(),
                 truck1.id(),
                 LocalDateTime.of(2020, 1, 1, 0, 0),
                 100
@@ -182,9 +180,8 @@ class TransportsServiceTest {
         Site destination = new Site("zone a", "123 main st UPDATED", "(555) 123-4567", "john smith", Site.SiteType.BRANCH);
 
         rms.addSite(source.toJson());
-        initBranchSiteSource(); // This method should not be called here, the transport module should call createBranch() automatically when creating a new branch site.
         rms.addSite(destination.toJson());
-        initBranchSiteDestination(); // This method should not be called here, the transport module should call createBranch() automatically when creating a new branch site.
+        initBranchSiteDestination();
 
         hm.put(destination.address(), itemList.id());
         LinkedList<String> destinations = new LinkedList<>(List.of(destination.address()));
@@ -352,21 +349,19 @@ class TransportsServiceTest {
         String json = ts.addTransport(newTransport.toJson());
         Response response = Response.fromJson(json);
         assertFalse(response.success());
-        //assertEquals("driver,truck,source,destination:0,itemList:0,destination:1,itemList:1",response.data());
-        // TODO: Verify that the storekeeper error message should be added as well.
-        assertEquals("driver,truck,source,destination:0,storeKeeper,itemList:0,destination:1,storeKeeper,itemList:1",response.data());
+        assertEquals("driver,truck,source,destination:0,itemList:0,destination:1,itemList:1",response.data());
     }
 
     String driverId1 = "123", driverId2 = "12345";
-    String storekeeperId1 = "124", storekeeperId2 = "125", storekeeperId3 = "126", storekeeperId4 = "127", storekeeperId5 = "128", storekeeperId6 = "129";
-    String HQAddress = "1", updatedBranchId1 = "456 oak ave UPDATED", updatedBranchId2 = "123 main st UPDATED", site1Address = "123 main st", site2Address = "456 oak ave";
+    String storekeeperId1 = "126", storekeeperId2 = "127", storekeeperId3 = "128", storekeeperId4 = "129";
+    String HQAddress = "1", updatedBranchDestination = "123 main st UPDATED", site1Address = "123 main st";
     LocalDate shiftDate = LocalDate.of(2020, 1, 1);
 
     private void initEmployeesModuleTestData() {
         // Used for testing Employees module integration:
         // Creating the test branch and shifts, recruiting and certifying the employees
-        es.createData();
         us.createData();
+        es.createData();
         es.updateBranchWorkingHours("admin123",HQAddress, LocalTime.of(0,0),LocalTime.of(14,0),LocalTime.of(14,0),LocalTime.of(23,0));
         es.createWeekShifts("admin123",HQAddress,shiftDate);
         es.setShiftNeededAmount("admin123",HQAddress,shiftDate,SShiftType.Morning,"Driver",1);
@@ -382,54 +377,32 @@ class TransportsServiceTest {
     }
 
     private void initBranchSite1() {
-        es.createBranch("admin123",site1Address); // This method should probably be called automatically when creating a new branch site in the Transport UI.
         es.updateBranchWorkingHours("admin123",site1Address, LocalTime.of(0,0),LocalTime.of(14,0),LocalTime.of(14,0),LocalTime.of(23,0));
         es.createWeekShifts("admin123",site1Address,shiftDate);
-        es.recruitEmployee("admin123","Test Storekeeper5", site1Address,storekeeperId5,"Bank5",25, LocalDate.now(),"","");
-        es.recruitEmployee("admin123","Test Storekeeper6", site1Address,storekeeperId6,"Bank6",25, LocalDate.now(),"","");
-        es.certifyEmployee("admin123",storekeeperId5,"Storekeeper");
-        es.certifyEmployee("admin123",storekeeperId6,"Storekeeper");
-        es.requestShift(storekeeperId5,site1Address,shiftDate,SShiftType.Morning,"Storekeeper");
-        es.requestShift(storekeeperId6,site1Address,shiftDate,SShiftType.Evening,"Storekeeper");
-        es.setShiftEmployees("admin123",site1Address,shiftDate, SShiftType.Morning,"Storekeeper",new ArrayList<>(){{add(storekeeperId5);}});
-        es.setShiftEmployees("admin123",site1Address,shiftDate, SShiftType.Evening,"Storekeeper",new ArrayList<>(){{add(storekeeperId6);}});
+        es.recruitEmployee("admin123","Test Storekeeper5", site1Address, storekeeperId3,"Bank5",25, LocalDate.now(),"","");
+        es.recruitEmployee("admin123","Test Storekeeper6", site1Address, storekeeperId4,"Bank6",25, LocalDate.now(),"","");
+        es.certifyEmployee("admin123", storekeeperId3,"Storekeeper");
+        es.certifyEmployee("admin123", storekeeperId4,"Storekeeper");
+        es.requestShift(storekeeperId3,site1Address,shiftDate,SShiftType.Morning,"Storekeeper");
+        es.requestShift(storekeeperId4,site1Address,shiftDate,SShiftType.Evening,"Storekeeper");
+        es.setShiftEmployees("admin123",site1Address,shiftDate, SShiftType.Morning,"Storekeeper",new ArrayList<>(){{add(storekeeperId3);}});
+        es.setShiftEmployees("admin123",site1Address,shiftDate, SShiftType.Evening,"Storekeeper",new ArrayList<>(){{add(storekeeperId4);}});
         es.approveShift("admin123",site1Address,shiftDate, SShiftType.Morning);
         es.approveShift("admin123",site1Address,shiftDate, SShiftType.Evening);
     }
 
-    private void initBranchSite2() {
-        es.createBranch("admin123",site2Address); // This method should probably be called automatically when creating a new branch site in the Transport UI.
-        es.updateBranchWorkingHours("admin123",site2Address, LocalTime.of(0,0),LocalTime.of(14,0),LocalTime.of(14,0),LocalTime.of(23,0));
-        es.createWeekShifts("admin123",site2Address,shiftDate);
-        es.recruitEmployee("admin123","Test Storekeeper", site2Address,storekeeperId1,"Bank1",25, LocalDate.now(),"","");
-        es.recruitEmployee("admin123","Test Storekeeper2", site2Address,storekeeperId2,"Bank2",25, LocalDate.now(),"","");
-        es.certifyEmployee("admin123",storekeeperId1,"Storekeeper");
-        es.certifyEmployee("admin123",storekeeperId2,"Storekeeper");
-        es.requestShift(storekeeperId1,site2Address,shiftDate,SShiftType.Morning,"Storekeeper");
-        es.requestShift(storekeeperId2,site2Address,shiftDate,SShiftType.Evening,"Storekeeper");
-        es.setShiftEmployees("admin123",site2Address,shiftDate, SShiftType.Morning,"Storekeeper",new ArrayList<>(){{add(storekeeperId1);}});
-        es.setShiftEmployees("admin123",site2Address,shiftDate, SShiftType.Evening,"Storekeeper",new ArrayList<>(){{add(storekeeperId2);}});
-        es.approveShift("admin123",site2Address,shiftDate, SShiftType.Morning);
-        es.approveShift("admin123",site2Address,shiftDate, SShiftType.Evening);
-    }
-
-    private void initBranchSiteSource() {
-        es.createBranch("admin123",updatedBranchId1); // This method should probably be called automatically when creating a new branch site in the Transport UI.
-    }
-
     private void initBranchSiteDestination() {
-        es.createBranch("admin123",updatedBranchId2); // This method should probably be called automatically when creating a new branch site in the Transport UI.
-        es.updateBranchWorkingHours("admin123",updatedBranchId2, LocalTime.of(0,0),LocalTime.of(14,0),LocalTime.of(14,0),LocalTime.of(23,0));
-        es.createWeekShifts("admin123",updatedBranchId2,shiftDate);
-        es.recruitEmployee("admin123","Test Storekeeper3", updatedBranchId2,storekeeperId3,"Bank3",25, LocalDate.now(),"","");
-        es.recruitEmployee("admin123","Test Storekeeper4", updatedBranchId2,storekeeperId4,"Bank4",25, LocalDate.now(),"","");
-        es.certifyEmployee("admin123",storekeeperId3,"Storekeeper");
-        es.certifyEmployee("admin123",storekeeperId4,"Storekeeper");
-        es.requestShift(storekeeperId3,updatedBranchId2,shiftDate,SShiftType.Morning,"Storekeeper");
-        es.requestShift(storekeeperId4,updatedBranchId2,shiftDate,SShiftType.Evening,"Storekeeper");
-        es.setShiftEmployees("admin123",updatedBranchId2,shiftDate, SShiftType.Morning,"Storekeeper",new ArrayList<>(){{add(storekeeperId3);}});
-        es.setShiftEmployees("admin123",updatedBranchId2,shiftDate, SShiftType.Evening,"Storekeeper",new ArrayList<>(){{add(storekeeperId4);}});
-        es.approveShift("admin123",updatedBranchId2,shiftDate, SShiftType.Morning);
-        es.approveShift("admin123",updatedBranchId2,shiftDate, SShiftType.Evening);
+        es.updateBranchWorkingHours("admin123", updatedBranchDestination, LocalTime.of(0,0),LocalTime.of(14,0),LocalTime.of(14,0),LocalTime.of(23,0));
+        es.createWeekShifts("admin123", updatedBranchDestination,shiftDate);
+        es.recruitEmployee("admin123","Test Storekeeper3", updatedBranchDestination, storekeeperId1,"Bank3",25, LocalDate.now(),"","");
+        es.recruitEmployee("admin123","Test Storekeeper4", updatedBranchDestination, storekeeperId2,"Bank4",25, LocalDate.now(),"","");
+        es.certifyEmployee("admin123", storekeeperId1,"Storekeeper");
+        es.certifyEmployee("admin123", storekeeperId2,"Storekeeper");
+        es.requestShift(storekeeperId1, updatedBranchDestination,shiftDate,SShiftType.Morning,"Storekeeper");
+        es.requestShift(storekeeperId2, updatedBranchDestination,shiftDate,SShiftType.Evening,"Storekeeper");
+        es.setShiftEmployees("admin123", updatedBranchDestination,shiftDate, SShiftType.Morning,"Storekeeper",new ArrayList<>(){{add(storekeeperId1);}});
+        es.setShiftEmployees("admin123", updatedBranchDestination,shiftDate, SShiftType.Evening,"Storekeeper",new ArrayList<>(){{add(storekeeperId2);}});
+        es.approveShift("admin123", updatedBranchDestination,shiftDate, SShiftType.Morning);
+        es.approveShift("admin123", updatedBranchDestination,shiftDate, SShiftType.Evening);
     }
 }

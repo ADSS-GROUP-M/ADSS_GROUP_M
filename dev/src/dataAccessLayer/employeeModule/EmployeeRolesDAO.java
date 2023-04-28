@@ -10,7 +10,7 @@ import java.util.*;
 
 public class EmployeeRolesDAO extends DAO {
 
-    public static final String[] primaryKeys = {Columns.EmployeeId.name()};
+    public static final String[] primaryKeys = {Columns.EmployeeId.name(), Columns.Role.name()};
     public static final String tableName = "EMPLOYEE_ROLES";
     public static final String[] types = {"TEXT", "TEXT"};
     private static EmployeeRolesDAO instance;

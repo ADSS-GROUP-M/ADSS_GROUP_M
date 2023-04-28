@@ -80,12 +80,12 @@ public class RecruitAndUserCreationTests {
             String employeeName = "Alex Turner";
             String employeeId = "989";
             Response ans = Response.fromJson(userService.createUser(adminUsername, employeeId, password));
-            assertFalse(ans.success() == false);
+            assertTrue(ans.success());
             ans = Response.fromJson(empService.recruitEmployee(admin.getUsername(),employeeName,"2", employeeId,"Hapoalim 12 221", 50, LocalDate.of(2023,2,2),"Employment Conditions Test", "about me"));
-            assertFalse(ans.success() == false);
+            assertTrue(ans.success());
             try{
             User us = Response.fromJson(userService.getUser(employeeId)).data(User.class);
-            assertTrue( us != null);
+            assertNotNull(us);
             Response as = Response.fromJson(empService.getEmployee(employeeId));
             assertTrue(as.success(), as.message());
             assertTrue(as.<SEmployee>data(SEmployee.class).getFullName().equals(employeeName));

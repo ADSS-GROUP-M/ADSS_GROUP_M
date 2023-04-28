@@ -4,6 +4,7 @@ package serviceLayer.employeeModule.Services;
 import objects.transportObjects.Driver;
 import objects.transportObjects.Site;
 import serviceLayer.ServiceFactory;
+import serviceLayer.transportModule.ResourceManagementService;
 import utils.JsonUtils;
 import businessLayer.employeeModule.Authorization;
 import businessLayer.employeeModule.Employee;
@@ -26,12 +27,12 @@ import java.util.stream.Collectors;
 
 public class EmployeesService {
     private static UserService userService;
-    private ServiceFactory serviceFactory;
+    private ResourceManagementService rms;
     private EmployeesController employeesController;
     private ShiftsController shiftsController;
 
     public EmployeesService(ServiceFactory serviceFactory, EmployeesController employeesController, ShiftsController shiftsController) {
-        this.serviceFactory = serviceFactory;
+        rms = rms;
         userService = serviceFactory.userService();
         this.employeesController = employeesController;
         this.shiftsController = shiftsController;
@@ -79,12 +80,12 @@ public class EmployeesService {
         resetData();
         try {
             // Initializing Branches - TODO: Should be moved to Transport module
-            serviceFactory.getResourceManagementService().addSite(new Site("Headquarters","1","123456789","Headquarters", Site.SiteType.BRANCH).toJson());
-            employeesController.createBranch("1"); // TODO: Should be moved to Transport module
+            rms.addSite(new Site("Headquarters","1","123456789","Headquarters", Site.SiteType.BRANCH).toJson());
+//            employeesController.createBranch("1"); // TODO: Should be moved to Transport module
             for(int i = 2; i <= 9; i++) {
                 String branchId = Integer.toString(i);
-                serviceFactory.getResourceManagementService().addSite(new Site("Zone" + i,branchId, "phone" + i,"contact"+i, Site.SiteType.BRANCH).toJson());
-                employeesController.createBranch(branchId);
+                rms.addSite(new Site("Zone" + i,branchId, "phone" + i,"contact"+i, Site.SiteType.BRANCH).toJson());
+//                employeesController.createBranch(branchId);
             }
             // TODO: Add initial employees data, after the Transport Sites have already been added
             employeesController.recruitEmployee("1","Moshe Biton", "111","Hapoalim 12 230", 50, LocalDate.of(2023,2,2),"Employment Conditions Test", "More details about Moshe");
@@ -155,7 +156,7 @@ public class EmployeesService {
         try {
             employeesController.certifyEmployee(employeeId, Role.Driver);
             Employee driver = employeesController.getEmployee(employeeId);
-            serviceFactory.getResourceManagementService().addDriver(new Driver(employeeId,driver.getName(), Driver.LicenseType.valueOf(driverLicense)).toJson());
+            rms.addDriver(new Driver(employeeId,driver.getName(), Driver.LicenseType.valueOf(driverLicense)).toJson());
             return new Response(true).toJson();
         } catch (Exception e) {
             return Response.getErrorResponse(e).toJson();
@@ -274,7 +275,7 @@ public class EmployeesService {
     }
 
     public String createBranch(String actorUsername, String branchId) {
-        Response authResponse = Response.fromJson(userService.isAuthorized(actorUsername, Authorization.HRManager));
+        Response authResponse = Response.fromJson(userService.isAuthorized(actorUsername, Authorization.TransportManager));
         if (authResponse.success() == false)
             return new Response(authResponse.message(),false).toJson();
         else if(authResponse.dataToBoolean() == false)

@@ -9,6 +9,8 @@ import utils.transportUtils.TransportException;
 
 import java.util.List;
 
+import static serviceLayer.employeeModule.Services.UserService.TRANSPORT_MANAGER_USERNAME;
+
 /**
  * The `SitesController` class is responsible for managing the sites in the TransportModule.
  * It provides methods for adding, removing, updating, and retrieving sites.
@@ -16,8 +18,7 @@ import java.util.List;
 public class SitesController {
     private final SitesDAO dao;
     private EmployeesService employeesService;
-
-
+    
     public SitesController(SitesDAO dao){
         this.dao = dao;
     }
@@ -37,6 +38,10 @@ public class SitesController {
             throw new TransportException("Site already exists");
         }
         try {
+            if(site.siteType() == Site.SiteType.BRANCH){
+                employeesService.createBranch(TRANSPORT_MANAGER_USERNAME,site.address());
+            }
+
             dao.insert(site);
         } catch (DalException e) {
             throw new RuntimeException(e);

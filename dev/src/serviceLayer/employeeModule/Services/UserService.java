@@ -11,7 +11,10 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class UserService {
-    private UserController userController;
+
+    public static final String TRANSPORT_MANAGER_USERNAME = "logistic";
+
+    private final UserController userController;
 
     public UserService(ServiceFactory serviceFactory) {
         // Can get any needed service through the serviceFactory
@@ -26,7 +29,7 @@ public class UserService {
         try {
             userController.createManagerUser("admin123", "123");
             userController.createUser("logistic", "123");
-            userController.authorizeUser("logistic", Authorization.LogisticsManager);
+            userController.authorizeUser("logistic", Authorization.TransportManager);
         }
         catch (Exception ignore) {}
     }

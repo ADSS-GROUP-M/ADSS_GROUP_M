@@ -119,7 +119,6 @@ public class TransportDestinationsDAO extends ManyToManyDAO<TransportDestination
     /**
      * @param object - the object to insert
      * @throws RuntimeException if an error occurred while trying to insert the object
-     * @deprecated use insertAll instead
      */
     @Override
     public void insert(TransportDestination object) throws DalException {

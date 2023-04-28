@@ -1,7 +1,5 @@
 package dataAccessLayer.dalUtils;
 
-import org.sqlite.SQLiteConfig;
-
 import java.sql.*;
 
 public class SQLExecutor {

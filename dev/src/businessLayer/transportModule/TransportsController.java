@@ -43,7 +43,6 @@ public class TransportsController {
         this.ilc = ic;
         this.tc = tc;
         this.dc = dc;
-        this.es = es;
         this.dao = dao;
         try {
             idCounter = dao.selectCounter();

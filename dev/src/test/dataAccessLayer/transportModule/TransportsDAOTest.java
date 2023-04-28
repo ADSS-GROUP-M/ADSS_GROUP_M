@@ -44,6 +44,18 @@ class TransportsDAOTest {
         employee.addRole(Role.GeneralWorker);
         driver = new Driver(employee.getId(),employee.getName(), Driver.LicenseType.C3);
 
+        HashMap<String, Integer> load = new HashMap<>(){{
+            put("item1", 1);
+            put("item2", 2);
+            put("item3", 3);
+        }};
+        HashMap<String, Integer> unload = new HashMap<>(){{
+            put("item4", 4);
+            put("item5", 5);
+            put("item6", 6);
+        }};
+        itemList = new ItemList(1, load, unload);
+
         transport = new Transport(1,
                 site.address(),
                 new LinkedList<>(){{
@@ -58,17 +70,6 @@ class TransportsDAOTest {
                 15000
         );
 
-        HashMap<String, Integer> load = new HashMap<>(){{
-            put("item1", 1);
-            put("item2", 2);
-            put("item3", 3);
-        }};
-        HashMap<String, Integer> unload = new HashMap<>(){{
-            put("item4", 4);
-            put("item5", 5);
-            put("item6", 6);
-        }};
-        itemList = new ItemList(1, load, unload);
 
         try {
             DalFactory factory = new DalFactory(TESTING_DB_NAME);

@@ -13,9 +13,11 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class ShiftDAO extends DAO {
-    private static ShiftDAO instance;
+    private static final String[] primaryKeys = {Columns.ShiftDate.name(), Columns.ShiftType.name(), Columns.Branch.name()};
+    private static final String[] types = {"TEXT", "TEXT", "TEXT", "TEXT"};
     private HashMap<Integer, Shift> cache;
     private ShiftToNeededRolesDAO shiftToNeededRolesDAO;
     private ShiftToRequestsDAO shiftToRequestsDAO;
@@ -31,68 +33,86 @@ public class ShiftDAO extends DAO {
     }
 
     //needed roles HashMap<Role,Integer>, shiftRequests HashMap<Role,List<Employees>>, shiftWorkers Map<Role,List<Employees>>, cancelCardApplies List<String>, shiftActivities List<String>.
-    private ShiftDAO() throws DalException {
-        super("SHIFTS", new String[]{ShiftDAO.Columns.ShiftDate.name(), ShiftDAO.Columns.ShiftType.name(), Columns.Branch.name()});
-        shiftToNeededRolesDAO = ShiftToNeededRolesDAO.getInstance();
-        shiftToRequestsDAO = ShiftToRequestsDAO.getInstance();
-         shiftToWorkersDAO = ShiftToWorkersDAO.getInstance();
-         shiftToCancelsDAO = ShiftToCancelsDAO.getInstance();
-         shiftToActivityDAO = ShiftToActivityDAO.getInstance();
-         this.cache = new HashMap<>();
+    public ShiftDAO(ShiftToNeededRolesDAO shiftToNeededRolesDAO,
+                    ShiftToRequestsDAO shiftToRequestsDAO,
+                    ShiftToWorkersDAO shiftToWorkersDAO,
+                    ShiftToCancelsDAO shiftToCancelsDAO,
+                    ShiftToActivityDAO shiftToActivityDAO){
+        super("SHIFTS",
+                primaryKeys,
+                types,
+                "ShiftDate",
+                "ShiftType",
+                "Branch",
+                "IsApproved"
+        );
+        this.shiftToNeededRolesDAO = shiftToNeededRolesDAO;
+        this.shiftToRequestsDAO = shiftToRequestsDAO;
+        this.shiftToWorkersDAO = shiftToWorkersDAO;
+        this.shiftToCancelsDAO = shiftToCancelsDAO;
+        this.shiftToActivityDAO = shiftToActivityDAO;
+        this.cache = new HashMap<>();
     }
 
     /**
      * Can be used for testing in a different database
-     * @param dbName the name of the database to connect to
+     *
+     * @param dbName                the name of the database to connect to
+     * @param shiftToNeededRolesDAO
+     * @param shiftToRequestsDAO
+     * @param shiftToWorkersDAO
+     * @param shiftToCancelsDAO
+     * @param shiftToActivityDAO
      */
-    private ShiftDAO(String dbName) throws DalException {
-        super(dbName,"SHIFTS", new String[]{ShiftDAO.Columns.ShiftDate.name(), ShiftDAO.Columns.ShiftType.name(), Columns.Branch.name()});
-        shiftToNeededRolesDAO = ShiftToNeededRolesDAO.getInstance();
-        shiftToRequestsDAO = ShiftToRequestsDAO.getInstance(); // TODO: update to getTestingInstance(dbName);
-        shiftToWorkersDAO = ShiftToWorkersDAO.getInstance();
-        shiftToCancelsDAO = ShiftToCancelsDAO.getInstance();
-        shiftToActivityDAO = ShiftToActivityDAO.getInstance();
+    public ShiftDAO(String dbName,
+                     ShiftToNeededRolesDAO shiftToNeededRolesDAO,
+                     ShiftToRequestsDAO shiftToRequestsDAO,
+                     ShiftToWorkersDAO shiftToWorkersDAO,
+                     ShiftToCancelsDAO shiftToCancelsDAO,
+                     ShiftToActivityDAO shiftToActivityDAO){
+        super(dbName,
+                "SHIFTS",
+                primaryKeys,
+                types,
+                "ShiftDate",
+                "ShiftType",
+                "Branch",
+                "IsApproved"
+        );
+        this.shiftToNeededRolesDAO = shiftToNeededRolesDAO;
+        this.shiftToRequestsDAO = shiftToRequestsDAO;
+        this.shiftToWorkersDAO = shiftToWorkersDAO;
+        this.shiftToCancelsDAO = shiftToCancelsDAO;
+        this.shiftToActivityDAO = shiftToActivityDAO;
         this.cache = new HashMap<>();
-    }
-
-    public static ShiftDAO getInstance() throws DalException {
-        if (instance == null)
-            instance = new ShiftDAO();
-        return instance;
-    }
-
-    public static ShiftDAO getTestingInstance(String dbName) throws DalException{
-        if (instance == null) {
-            instance = new ShiftDAO(dbName);
-        }
-        return instance;
     }
 
     private int getHashCode(LocalDate dt, ShiftType st, String branch){
         return (formatLocalDate(dt) + st.name() + branch).hashCode();
     }
-    public void create(Shift shift, String branch) throws DalException {
+    public void create(Shift shift) throws DalException {
         try {
-            this.shiftToNeededRolesDAO.create(shift, branch);
-            this.shiftToRequestsDAO.create(shift, branch);
-            this.shiftToWorkersDAO.create(shift, branch);
-            this.shiftToCancelsDAO.create(shift, branch);
-            this.shiftToActivityDAO.create(shift, branch);
+            this.shiftToNeededRolesDAO.create(shift);
+            this.shiftToRequestsDAO.create(shift);
+            this.shiftToWorkersDAO.create(shift);
+            this.shiftToCancelsDAO.create(shift);
+            this.shiftToActivityDAO.create(shift);
             String queryString = String.format("INSERT INTO " + TABLE_NAME + "(%s, %s, %s, %s) VALUES('%s','%s','%s','%s')",
                     Columns.ShiftDate.name(), Columns.ShiftType.name(), ShiftDAO.Columns.Branch.name(),Columns.IsApproved.name(),
-                    formatLocalDate(shift.getShiftDate()), shift.getShiftType().name(), branch, String.valueOf(shift.getIsApproved()));
+                    formatLocalDate(shift.getShiftDate()), shift.getShiftType().name(), shift.getBranch(), String.valueOf(shift.getIsApproved()));
             cursor.executeWrite(queryString);
-            this.cache.put(getHashCode(shift.getShiftDate(),shift.getShiftType(),branch), shift);
+            this.cache.put(getHashCode(shift.getShiftDate(),shift.getShiftType(),shift.getBranch()), shift);
         } catch (SQLException e) {
            throw new DalException(e);
         } 
     }
 
-    public Shift get(LocalDate dt, ShiftType st, String branch) throws DalException {
+    public Shift get(String branch, LocalDate dt, ShiftType st) throws DalException {
         if (this.cache.get(getHashCode(dt,st,branch))!=null)
             return this.cache.get(getHashCode(dt,st,branch));
         Shift ans = this.select(dt,st.name(),branch);
-        this.cache.put(getHashCode(dt,st,branch),ans);
+        if (ans != null)
+            this.cache.put(getHashCode(dt,st,branch),ans);
         return ans;
     }
 
@@ -112,19 +132,27 @@ public class ShiftDAO extends DAO {
         return list;
     }
 
-    public void update(Shift s, String branch) throws DalException {
+    public List<Shift> getEmployeeShifts(Employee employee) throws DalException {
+        return getAll().stream().filter(s->s.isEmployeeWorking(employee)).collect(Collectors.toList());
+    }
+
+    public List<Shift> getEmployeeRequests(Employee employee) throws DalException {
+        return getAll().stream().filter(s->s.isEmployeeRequesting(employee)).collect(Collectors.toList());
+    }
+
+    public void update(Shift s) throws DalException {
         if(!this.cache.containsValue(s))
             throw new DalException("Object doesn't exist in the database! Create it first.");
-        if(!this.cache.containsKey(getHashCode(s.getShiftDate(),s.getShiftType(),branch)) || this.cache.get(getHashCode(s.getShiftDate(),s.getShiftType(),branch)) != s)
+        if(!this.cache.containsKey(getHashCode(s.getShiftDate(),s.getShiftType(),s.getBranch())) || this.cache.get(getHashCode(s.getShiftDate(),s.getShiftType(),s.getBranch())) != s)
             throw new DalException("Cannot change primary key of an object. You must delete it and then create a new one.");
         Exception ex = null;
         try {
-            Object[] key = {s.getShiftDate(), s.getShiftType().name(), branch};
-            this.shiftToNeededRolesDAO.update(s, branch);
-            this.shiftToRequestsDAO.update(s, branch);
-            this.shiftToWorkersDAO.update(s, branch);
-            this.shiftToCancelsDAO.update(s, branch);
-            this.shiftToActivityDAO.update(s, branch);
+            Object[] key = {s.getShiftDate(), s.getShiftType().name(), s.getBranch()};
+            this.shiftToNeededRolesDAO.update(s);
+            this.shiftToRequestsDAO.update(s);
+            this.shiftToWorkersDAO.update(s);
+            this.shiftToCancelsDAO.update(s);
+            this.shiftToActivityDAO.update(s);
             String queryString = String.format("UPDATE "+TABLE_NAME+" SET %s = '%s' WHERE",
             Columns.IsApproved, s.getIsApproved());
             queryString = queryString.concat(createConditionForPrimaryKey(key));
@@ -133,15 +161,15 @@ public class ShiftDAO extends DAO {
             throw new DalException(e);
         }
     }
-    public void delete(Shift s, String branch) throws DalException {// first check if it is in cache, if it is, then delete that object! and remove from cache
-        this.cache.remove(getHashCode(s.getShiftDate(),s.getShiftType(),branch));
-        Object[] keys = {s.getShiftDate(),s.getShiftType().name(),branch};
-        this.shiftToNeededRolesDAO.delete(s, branch);
-        this.shiftToRequestsDAO.delete(s, branch);
-        this.shiftToWorkersDAO.delete(s, branch);
-        this.shiftToCancelsDAO.delete(s, branch);
-        this.shiftToActivityDAO.delete(s, branch);
+    public void delete(Shift s) throws DalException {// first check if it is in cache, if it is, then delete that object! and remove from cache
+        Object[] keys = {s.getShiftDate(),s.getShiftType().name(),s.getBranch()};
+        this.shiftToNeededRolesDAO.delete(s);
+        this.shiftToRequestsDAO.delete(s);
+        this.shiftToWorkersDAO.delete(s);
+        this.shiftToCancelsDAO.delete(s);
+        this.shiftToActivityDAO.delete(s);
         super.delete(keys);
+        this.cache.remove(getHashCode(s.getShiftDate(),s.getShiftType(),s.getBranch()));
     }
 
     Shift select(LocalDate date, String shiftType, String branch) throws DalException {
@@ -149,13 +177,12 @@ public class ShiftDAO extends DAO {
         return ((Shift) super.select(keys));
     }
 
-    protected Shift convertReaderToObject(OfflineResultSet reader) {
+    protected Shift convertReaderToObject(OfflineResultSet reader) throws DalException {
         Shift ans = null;
-        try{
             LocalDate dt = LocalDate.parse(reader.getString(Columns.ShiftDate.name()));
             ShiftType st = ShiftType.valueOf(reader.getString(Columns.ShiftType.name()));
             String branch =reader.getString(Columns.Branch.name());
-        ans = new Shift(dt,st);
+        ans = new Shift(branch,dt,st);
         Map<Role,Integer> neededRoles = null;
         Map<Role,List<Employee>> shiftRequests = null;
         Map<Role,List<Employee>> shiftWorkers = null;
@@ -172,20 +199,17 @@ public class ShiftDAO extends DAO {
         ans.setShiftWorkers(shiftWorkers);
         ans.setCancelCardApplies(cancelApplies);
         ans.setShiftActivities(activities);
-        } catch (Exception throwables) {
-            //throwables.printStackTrace();
-        }
         return ans;
     }
 
-    public void deleteAll() throws DalException{
+    public void clearTable() throws DalException{
         this.cache = new HashMap<>();
-        this.shiftToNeededRolesDAO.deleteAll();
-        this.shiftToRequestsDAO.deleteAll();
-        this.shiftToWorkersDAO.deleteAll();
-        this.shiftToCancelsDAO.deleteAll();
-        this.shiftToActivityDAO.deleteAll();
-        super.deleteAll();
+        this.shiftToNeededRolesDAO.clearTable();
+        this.shiftToRequestsDAO.clearTable();
+        this.shiftToWorkersDAO.clearTable();
+        this.shiftToCancelsDAO.clearTable();
+        this.shiftToActivityDAO.clearTable();
+        super.clearTable();
     }
 
      /*void update(String date, String shiftType, String branch, String attributeName, String attributeValue) throws DalException {

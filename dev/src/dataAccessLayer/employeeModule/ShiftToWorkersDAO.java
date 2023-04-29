@@ -8,14 +8,15 @@ import dataAccessLayer.dalUtils.OfflineResultSet;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
-
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-class ShiftToWorkersDAO extends DAO {
+public class ShiftToWorkersDAO extends DAO {
 
-    private static ShiftToWorkersDAO instance;
+    private static final String[] primaryKeys = {Columns.ShiftDate.name(), Columns.ShiftType.name(), Columns.Branch.name(), Columns.EmployeeId.name()};
+    private static final String tableName = "SHIFT_WORKERS";
+    private static final String[] types = {"TEXT", "TEXT", "TEXT", "TEXT", "TEXT"};
     private HashMap<Integer, HashMap<Role,List<Employee>>> cache;
     private EmployeeDAO employeeDAO;
 
@@ -28,24 +29,41 @@ class ShiftToWorkersDAO extends DAO {
     }
 
     //needed roles HashMap<Role,Integer>, shiftRequests HashMap<Role,List<Employees>>, shiftWorkers Map<Role,List<Employees>>, cancelCardApplies List<String>, shiftActivities List<String>.
-    private ShiftToWorkersDAO() throws DalException {
-        super("SHIFT_WORKERS", new String[]{Columns.ShiftDate.name(), Columns.ShiftType.name(), Columns.Branch.name(),Columns.EmployeeId.name()});
-        employeeDAO = EmployeeDAO.getInstance();
+    public ShiftToWorkersDAO(EmployeeDAO employeeDAO) throws DalException {
+        super(tableName,
+                primaryKeys,
+                types,
+                "ShiftDate",
+                "ShiftType",
+                "Branch",
+                "EmployeeId",
+                "Role"
+        );
+        this.employeeDAO = employeeDAO;
         this.cache = new HashMap<>();
     }
 
-    public static ShiftToWorkersDAO getInstance() throws DalException {
-        if (instance == null)
-            instance = new ShiftToWorkersDAO();
-        return instance;
-
+    public ShiftToWorkersDAO(String dbName, EmployeeDAO employeeDAO) throws DalException {
+        super(dbName,
+                tableName,
+                primaryKeys,
+                types,
+                "ShiftDate",
+                "ShiftType",
+                "Branch",
+                "EmployeeId",
+                "Role"
+        );
+        this.employeeDAO = employeeDAO;
+        this.cache = new HashMap<>();
     }
+
     private int getHashCode(LocalDate dt, Shift.ShiftType st, String branch){
         return (formatLocalDate(dt) + st.name() + branch).hashCode();
     }
-    void create(Shift shift, String branch) throws DalException {
+    void create(Shift shift) throws DalException {
         try {
-            if(this.cache.containsKey(getHashCode(shift.getShiftDate(), shift.getShiftType(), branch)))
+            if(this.cache.containsKey(getHashCode(shift.getShiftDate(), shift.getShiftType(), shift.getBranch())))
                 throw new DalException("Key already exists!");
         HashMap<Role,List<Employee>> entries = new HashMap<>();
             for(Role r: shift.getShiftWorkers().keySet()) {
@@ -54,13 +72,13 @@ class ShiftToWorkersDAO extends DAO {
 
                     String queryString = String.format("INSERT INTO " + TABLE_NAME + "(%s, %s, %s, %s, %s) VALUES('%s','%s','%s','%s','%s')",
                             Columns.ShiftDate.name(), Columns.ShiftType.name(), ShiftToWorkersDAO.Columns.Branch.name(), Columns.EmployeeId.name(), Columns.Role.name(),
-                            formatLocalDate(shift.getShiftDate()), shift.getShiftType().name(), branch, e.getId(), r.name());
+                            formatLocalDate(shift.getShiftDate()), shift.getShiftType().name(), shift.getBranch(), e.getId(), r.name());
                     cursor.executeWrite(queryString);
                     list.add(e);
                 }
                     entries.put(r,list);
             }
-            this.cache.put(getHashCode(shift.getShiftDate(), shift.getShiftType(), branch),entries );
+            this.cache.put(getHashCode(shift.getShiftDate(), shift.getShiftType(), shift.getBranch()),entries );
 
         } catch(SQLException e) {
             throw new DalException(e);
@@ -90,17 +108,17 @@ class ShiftToWorkersDAO extends DAO {
         }
         return list;
     }*/
-    void update(Shift s, String branch) throws DalException {
-        if(!this.cache.containsKey(getHashCode(s.getShiftDate(), s.getShiftType(), branch)))
+    void update(Shift s) throws DalException {
+        if(!this.cache.containsKey(getHashCode(s.getShiftDate(), s.getShiftType(), s.getBranch())))
             throw new DalException("Key doesnt exist! Create it first.");
-        this.delete(s,branch);
-        this.create(s,branch);
+        this.delete(s);
+        this.create(s);
     }
 
-    void delete(Shift s, String branch) throws DalException {// first check if it is in cache, if it is, then delete that object! and remove from cache
-        this.cache.remove(getHashCode(s.getShiftDate(),s.getShiftType(),branch));
-        Object[] keys = {s.getShiftDate(),s.getShiftType().name(),branch};
+    void delete(Shift s) throws DalException {// first check if it is in cache, if it is, then delete that object! and remove from cache
+        Object[] keys = {s.getShiftDate(),s.getShiftType().name(),s.getBranch()};
         super.delete(keys);
+        this.cache.remove(getHashCode(s.getShiftDate(),s.getShiftType(),s.getBranch()));
     }
 
     HashMap<Role,List<Employee>> select(LocalDate date, String shiftType, String branch) throws DalException {
@@ -129,8 +147,8 @@ class ShiftToWorkersDAO extends DAO {
         return ans;
     }
 
-    public void deleteAll() throws DalException {
-        super.deleteAll();
+    public void clearTable() throws DalException {
+        super.clearTable();
         cache.clear();
     }
 }

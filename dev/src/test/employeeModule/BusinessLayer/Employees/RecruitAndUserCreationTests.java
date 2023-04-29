@@ -1,16 +1,19 @@
 package employeeModule.BusinessLayer.Employees;
 
 import businessLayer.employeeModule.User;
-import serviceLayer.employeeModule.Objects.SEmployee;
-import utils.Response;
-import serviceLayer.employeeModule.Services.EmployeesService;
-import serviceLayer.employeeModule.Services.UserService;
+import dataAccessLayer.DalFactory;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
+import serviceLayer.ServiceFactory;
+import serviceLayer.employeeModule.Objects.SEmployee;
+import serviceLayer.employeeModule.Services.EmployeesService;
+import serviceLayer.employeeModule.Services.UserService;
+import utils.Response;
 
 import java.time.LocalDate;
 
+import static dataAccessLayer.DalFactory.TESTING_DB_NAME;
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -26,16 +29,22 @@ public class RecruitAndUserCreationTests {
 
     @BeforeEach
     public void setUp() throws Exception {
-        userService = UserService.getInstance();
-        empService = EmployeesService.getInstance();
-        userService.loadData(); // Loads the HR Manager user: "admin123" "123", clears the data in each test
-        empService.loadData();
+        ServiceFactory serviceFactory = new ServiceFactory(TESTING_DB_NAME);
+        userService = serviceFactory.userService();
+        empService = serviceFactory.employeesService();
+        userService.createData(); // Loads the HR Manager user: "admin123" "123", clears the data in each test
+        empService.createData();
         admin = Response.fromJson(userService.getUser(adminUsername)).data(User.class);
         if(Response.fromJson(userService.getUser(username2)).success() == false)
             userService.createUser(admin.getUsername(), username2, password2);
         if(Response.fromJson(empService.getEmployee(username2)).success() == false)
             empService.recruitEmployee(admin.getUsername(),"Moshe Biton", "1", username2,"Hapoalim 12 230", 50, LocalDate.of(2023,2,2),"Employment Conditions Test", "More details about Moshe");
         user = Response.fromJson(userService.getUser(username2)).data(User.class);
+    }
+
+    @AfterEach
+    void tearDown() {
+        DalFactory.clearTestDB();
     }
 
     @Test
@@ -70,12 +79,12 @@ public class RecruitAndUserCreationTests {
             String employeeName = "Alex Turner";
             String employeeId = "989";
             Response ans = Response.fromJson(userService.createUser(adminUsername, employeeId, password));
-            assertFalse(ans.success() == false);
+            assertTrue(ans.success());
             ans = Response.fromJson(empService.recruitEmployee(admin.getUsername(),employeeName,"2", employeeId,"Hapoalim 12 221", 50, LocalDate.of(2023,2,2),"Employment Conditions Test", "about me"));
-            assertFalse(ans.success() == false);
+            assertTrue(ans.success());
             try{
             User us = Response.fromJson(userService.getUser(employeeId)).data(User.class);
-            assertTrue( us != null);
+            assertNotNull(us);
             Response as = Response.fromJson(empService.getEmployee(employeeId));
             assertTrue(as.success(), as.message());
             assertTrue(as.<SEmployee>data(SEmployee.class).getFullName().equals(employeeName));

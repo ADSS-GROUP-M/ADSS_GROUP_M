@@ -9,8 +9,10 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.HashMap;
 
-class ShiftToNeededRolesDAO extends DAO{
-    private static ShiftToNeededRolesDAO instance;
+public class ShiftToNeededRolesDAO extends DAO{
+    private static final String[] primaryKeys = {Columns.ShiftDate.name(), Columns.ShiftType.name(), Columns.Branch.name(), Columns.Role.name()};
+    private static final String[] types = {"TEXT", "TEXT", "TEXT", "TEXT", "INTEGER"};
+    private static final String tableName = "SHIFT_ROLES";
     private HashMap<Integer, HashMap<Role,Integer>> cache;
     private enum Columns {
         ShiftDate,
@@ -19,15 +21,32 @@ class ShiftToNeededRolesDAO extends DAO{
         Role,
         Amount;
     }
-    private ShiftToNeededRolesDAO() throws DalException {
-        super("SHIFT_ROLES", new String[]{ShiftToNeededRolesDAO.Columns.ShiftDate.name(), ShiftToNeededRolesDAO.Columns.ShiftType.name(), ShiftToNeededRolesDAO.Columns.Branch.name(), ShiftToNeededRolesDAO.Columns.Role.name()});
+    public ShiftToNeededRolesDAO() throws DalException {
+        super(tableName,
+                primaryKeys,
+                types,
+                "ShiftDate",
+                "ShiftType",
+                "Branch",
+                "Role",
+                "Amount"
+        );
         this.cache = new HashMap<>();
     }
-    static ShiftToNeededRolesDAO getInstance() throws DalException {
-       if(instance == null)
-          instance = new ShiftToNeededRolesDAO();
-       return instance;
+    public ShiftToNeededRolesDAO(String dbName) throws DalException {
+        super(dbName,
+                tableName,
+                primaryKeys,
+                types,
+                "ShiftDate",
+                "ShiftType",
+                "Branch",
+                "Role",
+                "Amount"
+        );
+        this.cache = new HashMap<>();
     }
+
     private int getHashCode(LocalDate dt, Shift.ShiftType st, String branch){
         return (formatLocalDate(dt) + st.name() + branch).hashCode();
     }
@@ -39,35 +58,35 @@ class ShiftToNeededRolesDAO extends DAO{
         this.cache.put(getHashCode(dt,st,branch),ans);
         return ans;
     }
-    void create(Shift shift, String branch) throws DalException {
+    void create(Shift shift) throws DalException {
         try {
-            if(this.cache.containsKey(getHashCode(shift.getShiftDate(), shift.getShiftType(), branch)))
+            if(this.cache.containsKey(getHashCode(shift.getShiftDate(), shift.getShiftType(), shift.getBranch())))
                 throw new DalException("Key already exists!");
             HashMap<Role,Integer> entries = new HashMap<>();
             for(Role r: shift.getShiftNeededRoles().keySet()) {
                     String queryString = String.format("INSERT INTO " + TABLE_NAME + "(%s, %s, %s, %s, %s) VALUES('%s','%s','%s','%s',%d)",
                             Columns.ShiftDate.name(), Columns.ShiftType.name(), Columns.Branch.name(),Columns.Role.name(), Columns.Amount.name(),
-                            formatLocalDate(shift.getShiftDate()), shift.getShiftType().name(), branch, r.name(), shift.getShiftNeededRoles().get(r));
+                            formatLocalDate(shift.getShiftDate()), shift.getShiftType().name(), shift.getBranch(), r.name(), shift.getShiftNeededRoles().get(r));
                     cursor.executeWrite(queryString);
                     entries.put(r,shift.getShiftNeededRoles().get(r));
             }
-            this.cache.put(getHashCode(shift.getShiftDate(), shift.getShiftType(), branch),entries );
+            this.cache.put(getHashCode(shift.getShiftDate(), shift.getShiftType(), shift.getBranch()),entries );
         } catch(SQLException e) {
             throw new DalException(e);
         }
     }
 
-    void update(Shift s, String branch) throws DalException {
-        if(!this.cache.containsKey(getHashCode(s.getShiftDate(), s.getShiftType(), branch)))
+    void update(Shift s) throws DalException {
+        if(!this.cache.containsKey(getHashCode(s.getShiftDate(), s.getShiftType(), s.getBranch())))
             throw new DalException("Key doesnt exist! Create it first.");
-        this.delete(s,branch);
-        this.create(s,branch);
+        this.delete(s);
+        this.create(s);
     }
 
-    void delete(Shift s, String branch) throws DalException {// first check if it is in cache, if it is, then delete that object! and remove from cache
-        this.cache.remove(getHashCode(s.getShiftDate(),s.getShiftType(),branch));
-        Object[] keys = {s.getShiftDate(),s.getShiftType().name(),branch};
+    void delete(Shift s) throws DalException {// first check if it is in cache, if it is, then delete that object! and remove from cache
+        Object[] keys = {s.getShiftDate(),s.getShiftType().name(),s.getBranch()};
         super.delete(keys);
+        this.cache.remove(getHashCode(s.getShiftDate(),s.getShiftType(),s.getBranch()));
     }
     HashMap<Role,Integer> select(LocalDate date, String shiftType, String branch) throws DalException {
         Object[] keys = {date,shiftType, branch};
@@ -88,8 +107,8 @@ class ShiftToNeededRolesDAO extends DAO{
         return ans;
     }
 
-    public void deleteAll() throws DalException {
-        super.deleteAll();
+    public void clearTable() throws DalException {
+        super.clearTable();
         cache.clear();
     }
 }

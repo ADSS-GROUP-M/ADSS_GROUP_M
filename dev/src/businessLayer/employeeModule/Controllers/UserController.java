@@ -2,27 +2,22 @@ package businessLayer.employeeModule.Controllers;
 
 import businessLayer.employeeModule.Authorization;
 import businessLayer.employeeModule.User;
+import dataAccessLayer.employeeModule.UserDAO;
 
-import java.util.*;
+import java.util.List;
 
 public class UserController {
 
-    private Map<String, User> users;
-    private static UserController instance;
+    UserDAO userDAO;
 
-    private UserController(){
-        users = new HashMap<>();
-    }
-
-    public static UserController getInstance() {
-        if(instance == null){
-            instance = new UserController();
-        }
-        return instance;
+    public UserController(UserDAO userDAO){
+        this.userDAO = userDAO;
     }
 
     public void resetData() {
-        this.users.clear();
+        try {
+            this.userDAO.clearTable();
+        } catch (Exception ignore) {}
     }
 
     public void login(String username, String password) throws Exception {
@@ -37,23 +32,20 @@ public class UserController {
     }
 
     public User getUser(String username) throws Exception {
-        if (users.containsKey(username))
-            return users.get(username);
-        throw new Exception ("The given username doesn't exist.");
+        User user = userDAO.get(username);
+        if (user == null)
+            throw new Exception("The given username doesn't exist.");
+        return user;
     }
 
     public void createUser(String username, String password) throws Exception {
-        if (users.containsKey(username))
-            throw new Exception("Username " + username + " already exists in the system.");
         User user = new User(username, password);
-        users.put(username, user);
+        userDAO.create(user);
     }
 
     public void createManagerUser(String username, String password) throws Exception {
-        if (users.containsKey(username))
-            throw new Exception("Username already exists.");
         User user = new User(username, password, Authorization.HRManager);
-        users.put(username,user);
+        userDAO.create(user);
     }
 
     public boolean isAuthorized(String username, Authorization auth) throws Exception {

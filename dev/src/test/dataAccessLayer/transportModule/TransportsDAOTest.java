@@ -2,6 +2,7 @@ package dataAccessLayer.transportModule;
 
 import businessLayer.employeeModule.Employee;
 import businessLayer.employeeModule.Role;
+import dataAccessLayer.DalFactory;
 import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.employeeModule.EmployeeDAO;
 import objects.transportObjects.*;
@@ -14,8 +15,8 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
+import static dataAccessLayer.DalFactory.TESTING_DB_NAME;
 import static org.junit.jupiter.api.Assertions.*;
 
 class TransportsDAOTest {
@@ -43,6 +44,18 @@ class TransportsDAOTest {
         employee.addRole(Role.GeneralWorker);
         driver = new Driver(employee.getId(),employee.getName(), Driver.LicenseType.C3);
 
+        HashMap<String, Integer> load = new HashMap<>(){{
+            put("item1", 1);
+            put("item2", 2);
+            put("item3", 3);
+        }};
+        HashMap<String, Integer> unload = new HashMap<>(){{
+            put("item4", 4);
+            put("item5", 5);
+            put("item6", 6);
+        }};
+        itemList = new ItemList(1, load, unload);
+
         transport = new Transport(1,
                 site.address(),
                 new LinkedList<>(){{
@@ -57,25 +70,15 @@ class TransportsDAOTest {
                 15000
         );
 
-        HashMap<String, Integer> load = new HashMap<>(){{
-            put("item1", 1);
-            put("item2", 2);
-            put("item3", 3);
-        }};
-        HashMap<String, Integer> unload = new HashMap<>(){{
-            put("item4", 4);
-            put("item5", 5);
-            put("item6", 6);
-        }};
-        itemList = new ItemList(1, load, unload);
 
         try {
-            sitesDAO = new SitesDAO("TestingDB.db");
-            trucksDAO = new TrucksDAO("TestingDB.db");
-            employeeDAO = EmployeeDAO.getTestingInstance("TestingDB.db");
-            driversDAO = new DriversDAO("TestingDB.db");
-            itemListsDAO = new ItemListsDAO("TestingDB.db");
-            transportsDAO = new TransportsDAO("TestingDB.db");
+            DalFactory factory = new DalFactory(TESTING_DB_NAME);
+            sitesDAO = factory.sitesDAO();
+            trucksDAO = factory.trucksDAO();
+            employeeDAO = factory.employeeDAO();
+            driversDAO = factory.driversDAO();
+            itemListsDAO = factory.itemListsDAO();
+            transportsDAO = factory.transportsDAO();
 
             transportsDAO.clearTable();
             itemListsDAO.clearTable();
@@ -83,7 +86,6 @@ class TransportsDAOTest {
             trucksDAO.clearTable();
             sitesDAO.clearTable();
             employeeDAO.clearTable();
-
 
             sitesDAO.insert(site);
             trucksDAO.insert(truck);
@@ -98,12 +100,7 @@ class TransportsDAOTest {
 
     @AfterEach
     void tearDown() {
-        transportsDAO.clearTable();
-        itemListsDAO.clearTable();
-        driversDAO.clearTable();
-        trucksDAO.clearTable();
-        sitesDAO.clearTable();
-        employeeDAO.clearTable();
+        DalFactory.clearTestDB();
     }
 
     @Test

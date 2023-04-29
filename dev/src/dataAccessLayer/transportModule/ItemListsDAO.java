@@ -2,17 +2,19 @@ package dataAccessLayer.transportModule;
 
 import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.dalUtils.OfflineResultSet;
+import dataAccessLayer.transportModule.abstracts.CounterDAO;
 import dataAccessLayer.transportModule.abstracts.DAO;
 import objects.transportObjects.ItemList;
 
 import java.sql.SQLException;
 import java.util.List;
 
-public class ItemListsDAO extends DAO<ItemList> {
+public class ItemListsDAO extends DAO<ItemList> implements CounterDAO {
 
     public static final String[] types = {"INTEGER"};
     public static final String[] primary_keys = {"id"};
     private final ItemListsItemsDAO itemListsItemsDAO;
+    private final ItemListIdCounterDAO itemListIdCounterDAO;
 
     public ItemListsDAO() throws DalException {
         super("item_lists",
@@ -20,11 +22,14 @@ public class ItemListsDAO extends DAO<ItemList> {
                 primary_keys,
                 "id"
         );
+        initTable();
+        itemListIdCounterDAO = new ItemListIdCounterDAO();
         itemListsItemsDAO = new ItemListsItemsDAO();
     }
 
     /**
      * used for testing
+     *
      * @param dbName the name of the database to connect to
      */
     public ItemListsDAO(String dbName) throws DalException {
@@ -34,6 +39,8 @@ public class ItemListsDAO extends DAO<ItemList> {
                 primary_keys,
                 "id"
         );
+        initTable();
+        itemListIdCounterDAO = new ItemListIdCounterDAO(dbName);
         itemListsItemsDAO = new ItemListsItemsDAO(dbName);
     }
 
@@ -107,14 +114,37 @@ public class ItemListsDAO extends DAO<ItemList> {
     public void delete(ItemList object) throws DalException {
         String query = String.format("DELETE FROM %s WHERE id = %d;", TABLE_NAME, object.id());
         try {
+            itemListsItemsDAO.delete(object);
             if(cursor.executeWrite(query) == 1){
-                itemListsItemsDAO.delete(object);
                 cache.remove(object);
             } else {
                 throw new DalException("No item list with id " + object.id() + " was found");
             }
         } catch (SQLException e) {
             throw new DalException("Failed to delete item list", e);
+        }
+    }
+
+    @Override
+    public boolean exists(ItemList object) throws DalException {
+
+        if(cache.contains(object)) {
+            return true;
+        }
+
+        String query = String.format("SELECT * FROM %s WHERE id = %d;", TABLE_NAME, object.id());
+        OfflineResultSet resultSet;
+        try {
+            resultSet = cursor.executeRead(query);
+            if(resultSet.next()) {
+                ItemList selected = getObjectFromResultSet(resultSet);
+                cache.put(selected);
+                return true;
+            } else {
+                return false;
+            }
+        } catch (SQLException e) {
+            throw new DalException("Failed to check if item list exists", e);
         }
     }
 
@@ -126,6 +156,31 @@ public class ItemListsDAO extends DAO<ItemList> {
     @Override
     public void clearTable(){
         itemListsItemsDAO.clearTable();
+        try {
+            resetCounter();
+        } catch (DalException e) {
+            throw new RuntimeException(e);
+        }
         super.clearTable();
+    }
+
+    @Override
+    public Integer selectCounter() throws DalException {
+        return itemListIdCounterDAO.selectCounter();
+    }
+
+    @Override
+    public void insertCounter(Integer value) throws DalException {
+        itemListIdCounterDAO.insertCounter(value);
+    }
+
+    @Override
+    public void incrementCounter() throws DalException {
+        itemListIdCounterDAO.incrementCounter();
+    }
+
+    @Override
+    public void resetCounter() throws DalException {
+        itemListIdCounterDAO.resetCounter();
     }
 }

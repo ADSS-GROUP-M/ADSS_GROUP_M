@@ -1,18 +1,22 @@
 package serviceLayer.employeeModule.Services;
 
 
-import utils.JsonUtils;
 import businessLayer.employeeModule.Authorization;
+import businessLayer.employeeModule.Controllers.EmployeesController;
+import businessLayer.employeeModule.Controllers.ShiftsController;
 import businessLayer.employeeModule.Employee;
 import businessLayer.employeeModule.Role;
 import businessLayer.employeeModule.Shift;
-import businessLayer.employeeModule.Controllers.EmployeesController;
-import businessLayer.employeeModule.Controllers.ShiftsController;
-import utils.Response;
+import businessLayer.employeeModule.Shift.ShiftType;
+import objects.transportObjects.Driver;
+import objects.transportObjects.Site;
+import serviceLayer.ServiceFactory;
 import serviceLayer.employeeModule.Objects.SEmployee;
 import serviceLayer.employeeModule.Objects.SShift;
 import serviceLayer.employeeModule.Objects.SShiftType;
-import businessLayer.employeeModule.Shift.ShiftType;
+import serviceLayer.transportModule.ResourceManagementService;
+import utils.JsonUtils;
+import utils.Response;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -22,15 +26,16 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class EmployeesService {
-    private static EmployeesService instance;
     private static UserService userService;
+    private ResourceManagementService rms;
     private EmployeesController employeesController;
     private ShiftsController shiftsController;
 
-    private EmployeesService() {
-        userService = UserService.getInstance();
-        employeesController = EmployeesController.getInstance();
-        shiftsController = ShiftsController.getInstance();
+    public EmployeesService(ServiceFactory serviceFactory, EmployeesController employeesController, ShiftsController shiftsController) {
+        rms = serviceFactory.getResourceManagementService();
+        userService = serviceFactory.userService();
+        this.employeesController = employeesController;
+        this.shiftsController = shiftsController;
     }
 
     /**
@@ -68,29 +73,26 @@ public class EmployeesService {
         }
     }
 
-    public static EmployeesService getInstance() {
-        if (instance == null)
-            instance = new EmployeesService();
-        return instance;
-    }
-
     /**
      * This method loads the initial employee data from the system, during the initial load of the system.
      */
-    public void loadData() {
+    public void createData() {
         resetData();
         try {
-            // Initializing Branches
-            for(int i = 1; i <= 9; i++) {
+            // Initializing Branches - TODO: Should be moved to Transport module
+            rms.addSite(new Site("Headquarters","1","123456789","Headquarters", Site.SiteType.BRANCH).toJson());
+            for(int i = 2; i <= 9; i++) {
                 String branchId = Integer.toString(i);
-                employeesController.createBranch(branchId);
+                rms.addSite(new Site("Zone" + i,branchId, "phone" + i,"contact"+i, Site.SiteType.BRANCH).toJson());
             }
-            // TODO: Add initial employees data
+            // TODO: Add initial employees data, after the Transport Sites have already been added
             employeesController.recruitEmployee("1","Moshe Biton", "111","Hapoalim 12 230", 50, LocalDate.of(2023,2,2),"Employment Conditions Test", "More details about Moshe");
             employeesController.certifyEmployee("111", Role.ShiftManager);
             employeesController.certifyEmployee("111",Role.Storekeeper);
             userService.createUser("admin123","111","1234");
-        } catch (Exception ignore) {}
+        } catch (Exception ignore) {
+            Exception x = ignore;
+        }
     }
 
     /**
@@ -143,6 +145,22 @@ public class EmployeesService {
         }
     }
 
+    public String certifyDriver(String actorUsername, String employeeId, String driverLicense) {
+        Response authResponse = Response.fromJson(userService.isAuthorized(actorUsername, Authorization.HRManager));
+        if (authResponse.success() == false)
+            return new Response(authResponse.message(),false).toJson();
+        else if(authResponse.dataToBoolean() == false)
+            return new Response("User isn't authorized to do this",false).toJson();
+        try {
+            employeesController.certifyEmployee(employeeId, Role.Driver);
+            Employee driver = employeesController.getEmployee(employeeId);
+            rms.addDriver(new Driver(employeeId,driver.getName(), Driver.LicenseType.valueOf(driverLicense)).toJson());
+            return new Response(true).toJson();
+        } catch (Exception e) {
+            return Response.getErrorResponse(e).toJson();
+        }
+    }
+
     public String uncertifyEmployee(String actorUsername, String employeeId, String role) {
         Response authResponse = Response.fromJson(userService.isAuthorized(actorUsername, Authorization.HRManager));
         if (authResponse.success() == false)
@@ -159,7 +177,7 @@ public class EmployeesService {
 
     public String requestShift(String actorUsername, String branchId, LocalDate shiftDate, SShiftType shiftType, String role) {
         try {
-            Employee employee = employeesController.getEmployee(branchId, actorUsername);
+            Employee employee = employeesController.getBranchEmployee(branchId, actorUsername);
             shiftsController.requestShift(employee, branchId, shiftDate, ShiftType.valueOf(shiftType.toString()), Role.valueOf(role));
             return new Response(true).toJson();
         } catch (Exception e) {
@@ -169,7 +187,7 @@ public class EmployeesService {
 
     public String cancelShiftRequest(String actorUsername, String branchId, LocalDate shiftDate, SShiftType shiftType, String role) {
         try {
-            Employee employee = employeesController.getEmployee(branchId, actorUsername);
+            Employee employee = employeesController.getBranchEmployee(branchId, actorUsername);
             shiftsController.cancelShiftRequest(employee, branchId, shiftDate, ShiftType.valueOf(shiftType.toString()), Role.valueOf(role));
             return new Response(true).toJson();
         } catch (Exception e) {
@@ -246,7 +264,7 @@ public class EmployeesService {
         else if(authResponse.dataToBoolean() == false)
             return new Response("User isn't authorized to do this",false).toJson();
         try {
-            List<Employee> employees = employeesController.getEmployees(branchId, employeeIds);
+            List<Employee> employees = employeesController.getBranchEmployees(branchId, employeeIds);
             shiftsController.setShiftEmployees(branchId, shiftDate, ShiftType.valueOf(shiftType.toString()), Role.valueOf(role), employees);
             return new Response(true).toJson();
         } catch (Exception e) {
@@ -255,11 +273,12 @@ public class EmployeesService {
     }
 
     public String createBranch(String actorUsername, String branchId) {
-        Response authResponse = Response.fromJson(userService.isAuthorized(actorUsername, Authorization.HRManager));
-        if (authResponse.success() == false)
-            return new Response(authResponse.message(),false).toJson();
-        else if(authResponse.dataToBoolean() == false)
-            return new Response("User isn't authorized to do this",false).toJson();
+        Response authResponse1 = Response.fromJson(userService.isAuthorized(actorUsername, Authorization.TransportManager));
+        Response authResponse2 = Response.fromJson(userService.isAuthorized(actorUsername, Authorization.HRManager));
+        if (authResponse1.success() == false && authResponse2.success() == false)
+            return new Response(authResponse1.message() + ", " + authResponse2.message(),false).toJson();
+        else if(authResponse1.dataToBoolean() == false && authResponse2.dataToBoolean() == false)
+            return new Response("User isn't authorized to create branches",false).toJson();
         try {
             employeesController.createBranch(branchId);
             return new Response(true).toJson();

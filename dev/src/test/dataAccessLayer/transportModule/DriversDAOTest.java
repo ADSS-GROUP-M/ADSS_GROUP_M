@@ -2,6 +2,7 @@ package dataAccessLayer.transportModule;
 
 import businessLayer.employeeModule.Employee;
 import businessLayer.employeeModule.Role;
+import dataAccessLayer.DalFactory;
 import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.dalUtils.OfflineResultSet;
 import dataAccessLayer.dalUtils.SQLExecutor;
@@ -16,6 +17,7 @@ import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 
+import static dataAccessLayer.DalFactory.TESTING_DB_NAME;
 import static org.junit.jupiter.api.Assertions.*;
 
 class DriversDAOTest {
@@ -33,8 +35,10 @@ class DriversDAOTest {
         employee.addRole(Role.GeneralWorker);
         driver = new Driver(employee.getId(),employee.getName(), Driver.LicenseType.C3);
         try {
-            empDao = EmployeeDAO.getTestingInstance("TestingDB.db");
-            dao = new DriversDAO("TestingDB.db");
+            DalFactory factory = new DalFactory(TESTING_DB_NAME);
+
+            empDao = factory.employeeDAO();
+            dao = factory.driversDAO();
             dao.clearTable();
             empDao.clearTable();
 
@@ -147,7 +151,7 @@ class DriversDAOTest {
                     WHERE %s.id = '%s';
                         """, TABLE_NAME, PARENT_TABLE_NAME[0] ,TABLE_NAME, PARENT_TABLE_NAME[0], TABLE_NAME, PARENT_TABLE_NAME[0], TABLE_NAME, driver.id());
 
-        SQLExecutor executor = new SQLExecutor("TestingDB.db");
+        SQLExecutor executor = new SQLExecutor(TESTING_DB_NAME);
         try {
             OfflineResultSet resultSet = executor.executeRead(query);
             resultSet.next();

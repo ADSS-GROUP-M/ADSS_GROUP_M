@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 public class Shift {
-
+    private String branchId;
     private LocalDate shiftDate;
     private ShiftType shiftType;
     private boolean isApproved; // approved by HR manager
@@ -21,8 +21,9 @@ public class Shift {
         Morning,
         Evening;
     }
-    
-    public Shift(LocalDate shiftDate, ShiftType shiftType) {
+
+    public Shift(String branchId, LocalDate shiftDate, ShiftType shiftType) {
+        this.branchId = branchId;
         this.shiftType = shiftType;
         this.shiftDate = shiftDate;
         this.neededRoles = new HashMap<>();
@@ -34,31 +35,32 @@ public class Shift {
         this.shiftRequests = new HashMap<>();
         this.shiftWorkers = new HashMap<>();
         this.cancelCardApplies = new ArrayList<>();
-        this.shiftActivities = new LinkedList<>();
+        this.shiftActivities = new ArrayList<>();
     }
-
     public boolean checkLegality() { // are all constraints of the shift are met?
         for(Role role : neededRoles.keySet()){
-            if (!shiftWorkers.containsKey(role) || shiftWorkers.get(role).size() < neededRoles.get(role))
+            if (!shiftWorkers.containsKey(role) || shiftWorkers.get(role) == null || shiftWorkers.get(role).size() < neededRoles.get(role))
                 return false;
         }
         // Checks if any employee is signed to work in two different roles at the same shift. (According to the requirements, he should be able to request it, but it isn't legal as the final shift configuration)
         List<Employee> duplicateEmployees = getDuplicateEmployees();
         return duplicateEmployees.isEmpty();
     }
-
     private String getLegalityProblems() {
         String result = "";
         for(Role role : neededRoles.keySet()){
-            if (!shiftWorkers.containsKey(role) || shiftWorkers.get(role).size() < neededRoles.get(role))
+            if (!shiftWorkers.containsKey(role)) {
+                result += "There are 0/" + neededRoles.get(role) + " employees in the role " + role + "\n";
+            }
+            else if (shiftWorkers.get(role).size() < neededRoles.get(role)) {
                 result += "There are only " + shiftWorkers.get(role).size() + " / " + neededRoles.get(role) + " employees in the role " + role + "\n";
+            }
         }
         for(Employee employee : getDuplicateEmployees()) {
             result += "The employee " + employee.getId() + " is assigned to multiple roles in this shift.\n";
         }
         return result;
     }
-
     private List<Employee> getDuplicateEmployees() {
         Set<Employee> employees = new HashSet<>();
         Set<Employee> duplicateEmployees = new HashSet<>();
@@ -72,13 +74,12 @@ public class Shift {
         }
         return duplicateEmployees.stream().toList();
     }
-
     public void approve() throws Exception {
         if (this.isApproved)
             throw new Exception("This shift is already approved.");
         this.isApproved = true;
         if (!this.checkLegality())
-            throw new Exception("Shift approved, but notice that the shift constraints are not met! " + getLegalityProblems());
+            throw new Exception("Shift approved, but notice that the shift constraints are not met! \n" + getLegalityProblems());
     }
 
     public void disapprove(){
@@ -285,6 +286,23 @@ public class Shift {
         this.shiftActivities = shiftActivities;
     }
     public String getBranch() {
-        return "branch1";
+        return this.branchId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Shift shift = (Shift) o;
+        return branchId.equals(shift.branchId) && shiftDate.equals(shift.shiftDate) && shiftType.equals(shift.shiftType);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(branchId,shiftDate,shiftType);
     }
 }

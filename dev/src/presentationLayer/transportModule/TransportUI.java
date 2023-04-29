@@ -4,8 +4,8 @@ package presentationLayer.transportModule;
 import presentationLayer.employeeModule.View.LoginMenu;
 import presentationLayer.employeeModule.View.Menu;
 import presentationLayer.employeeModule.View.MenuManager;
+import serviceLayer.ServiceFactory;
 import serviceLayer.employeeModule.Services.EmployeesService;
-import serviceLayer.transportModule.ModuleFactory;
 
 public class TransportUI implements Menu {
 
@@ -15,15 +15,16 @@ public class TransportUI implements Menu {
     private final SitesManagement sitesManagement;
     private final TrucksManagement trucksManagement;
     private final DriversManagement driversManagement;
+    private final ServiceFactory factory;
 
-    public TransportUI(){
-        ModuleFactory factory = new ModuleFactory();
+    public TransportUI(ServiceFactory factory){
+        this.factory = factory;
         UIData = new UiData(
                 factory.getResourceManagementService(),
                 factory.getItemListsService(),
                 factory.getTransportsService()
         );
-        EmployeesService employeesService = EmployeesService.getInstance();
+        EmployeesService employeesService = factory.employeesService();
         itemListsManagement = new ItemListsManagement(UIData,factory.getItemListsService());
         sitesManagement = new SitesManagement(UIData,factory.getResourceManagementService());
         trucksManagement = new TrucksManagement(UIData,factory.getResourceManagementService());
@@ -41,7 +42,7 @@ public class TransportUI implements Menu {
             case 3 -> manageResources();
             case 4 -> UIData.loadData();
             case 5 -> {
-                return new LoginMenu();
+                return new LoginMenu(factory);
             }
             case 6 -> {
                 MenuManager.terminate();

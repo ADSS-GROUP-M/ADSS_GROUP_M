@@ -2,6 +2,7 @@ package dataAccessLayer.employeeModule;
 
 import businessLayer.employeeModule.Employee;
 import businessLayer.employeeModule.Role;
+import dataAccessLayer.DalFactory;
 import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.dalUtils.OfflineResultSet;
 import dataAccessLayer.dalUtils.SQLExecutor;
@@ -14,6 +15,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import static dataAccessLayer.DalFactory.TESTING_DB_NAME;
 import static org.junit.jupiter.api.Assertions.*;
 
 class EmployeeDAOTest {
@@ -30,7 +32,9 @@ class EmployeeDAOTest {
         employee3 = new Employee("Test3", "1234567", "TestBank3", 23, LocalDate.now(),"","");
         employee4 = new Employee("Test4", "12345", "TestBank4", 24, LocalDate.now(),"","");
         try {
-            dao = EmployeeDAO.getTestingInstance("TestingDB.db");
+            DalFactory factory = new DalFactory(TESTING_DB_NAME);
+
+            dao = factory.employeeDAO();
             dao.clearTable();
             // Inserting only employee1 and employee2 at setUp
             dao.insert(employee1);
@@ -42,7 +46,7 @@ class EmployeeDAOTest {
 
     @AfterEach
     void tearDown() {
-        dao.clearTable();
+        DalFactory.clearTestDB();
     }
 
     @Test
@@ -125,7 +129,7 @@ class EmployeeDAOTest {
 
     @Test
     void getObjectFromResultSet() {
-        SQLExecutor cursor = new SQLExecutor("TestingDB.db");
+        SQLExecutor cursor = new SQLExecutor(TESTING_DB_NAME);
         try {
             OfflineResultSet resultSet = cursor.executeRead("SELECT * FROM Employees WHERE id = '" + employee1.getId() + "'");
             resultSet.next();

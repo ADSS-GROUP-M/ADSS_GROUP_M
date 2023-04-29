@@ -1,8 +1,11 @@
 package presentationLayer.employeeModule.View;
-import java.util.*;
 
 import presentationLayer.employeeModule.ViewModel.LoginMenuVM;
 import presentationLayer.transportModule.TransportUI;
+import serviceLayer.ServiceFactory;
+
+import java.util.List;
+import java.util.Scanner;
 
 public class LoginMenu implements Menu {
     private final LoginMenuVM loginMenuVM;
@@ -10,6 +13,12 @@ public class LoginMenu implements Menu {
 
     public LoginMenu() {
         this.loginMenuVM = new LoginMenuVM();
+        scanner = new Scanner(System.in);
+        System.out.println("Please log in to the system.");
+    }
+
+    public LoginMenu(ServiceFactory factory) {
+        this.loginMenuVM = new LoginMenuVM(factory);
         scanner = new Scanner(System.in);
         System.out.println("Please log in to the system.");
     }
@@ -44,8 +53,8 @@ public class LoginMenu implements Menu {
                     List<String> authorizations = loginMenuVM.getUserAuthorizations();
                     if (authorizations.contains("HRManager"))
                         return new HRManagerMenu();
-                    else if (authorizations.contains("LogisticsManager"))
-                        return new TransportUI();
+                    else if (authorizations.contains("TransportManager"))
+                        return new TransportUI(loginMenuVM.serviceFactory());
                     else
                         return new EmployeeMenu();
                 }

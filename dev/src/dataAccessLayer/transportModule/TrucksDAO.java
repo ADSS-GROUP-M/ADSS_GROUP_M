@@ -23,6 +23,7 @@ public class TrucksDAO extends DAO<Truck> {
                 "base_weight",
                 "max_weight",
                 "cooling_capacity");
+        initTable();
     }
 
     public TrucksDAO(String dbName) throws DalException {
@@ -35,6 +36,7 @@ public class TrucksDAO extends DAO<Truck> {
                 "base_weight",
                 "max_weight",
                 "cooling_capacity");
+        initTable();
     }
 
     /**
@@ -147,6 +149,29 @@ public class TrucksDAO extends DAO<Truck> {
             }
         } catch (SQLException e) {
             throw new DalException("Failed to delete Truck", e);
+        }
+    }
+
+    @Override
+    public boolean exists(Truck object) throws DalException {
+
+        if(cache.contains(object)) {
+            return true;
+        }
+
+        String query = String.format("SELECT * FROM %s WHERE id = '%s';", TABLE_NAME, object.id());
+        OfflineResultSet resultSet;
+        try {
+            resultSet = cursor.executeRead(query);
+            if(resultSet.next()) {
+                Truck selected = getObjectFromResultSet(resultSet);
+                cache.put(selected);
+                return true;
+            } else {
+                return false;
+            }
+        } catch (SQLException e) {
+            throw new DalException("Failed to check if Truck exists", e);
         }
     }
 

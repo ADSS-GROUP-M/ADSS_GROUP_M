@@ -1,9 +1,10 @@
 package dataAccessLayer.employeeModule;
 
+import businessLayer.employeeModule.Branch;
 import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.dalUtils.OfflineResultSet;
 import dataAccessLayer.transportModule.abstracts.ManyToManyDAO;
-import businessLayer.employeeModule.Branch;
+import javafx.util.Pair;
 
 import java.sql.SQLException;
 import java.util.LinkedList;
@@ -16,10 +17,12 @@ public class BranchesDAO extends ManyToManyDAO<Branch> {
     private static final String[] types = new String[]{"TEXT", "TEXT", "TEXT", "TEXT", "TEXT"};
     private static final String[] parent_table_names = {"sites"};
     private static final String[] primary_keys = {"address"};
-    private static final String[] foreign_keys = {"address"};
-    private static final String[] references = {"address"};
+    private static final String[][] foreign_keys = {{"address"}};
+    private static final String[][] references = {{"address"}};
 
-    public BranchesDAO() throws DalException{
+    private final BranchEmployeesDAO branchEmployeesDAO;
+
+    public BranchesDAO(BranchEmployeesDAO branchEmployeesDAO) throws DalException {
         super("branches",
                 parent_table_names,
                 types,
@@ -31,9 +34,11 @@ public class BranchesDAO extends ManyToManyDAO<Branch> {
                 "morning_shift_end",
                 "evening_shift_start",
                 "evening_shift_end");
+        initTable();
+        this.branchEmployeesDAO = branchEmployeesDAO;
     }
 
-    public BranchesDAO(String dbName) throws DalException{
+    public BranchesDAO(String dbName, BranchEmployeesDAO branchEmployeesDAO) throws DalException{
         super(dbName,
                 "branches",
                 parent_table_names,
@@ -46,6 +51,8 @@ public class BranchesDAO extends ManyToManyDAO<Branch> {
                 "morning_shift_end",
                 "evening_shift_start",
                 "evening_shift_end");
+        initTable();
+        this.branchEmployeesDAO = branchEmployeesDAO;
     }
 
     /**
@@ -177,6 +184,22 @@ public class BranchesDAO extends ManyToManyDAO<Branch> {
     }
 
     @Override
+    public void clearTable() {
+        try {
+            branchEmployeesDAO.deleteAll();
+        } catch (DalException e) {
+            throw new RuntimeException(e);
+        }
+        super.clearTable();
+    }
+
+    @Override
+    public boolean exists(Branch object) throws DalException {
+        //TODO: implement
+        throw new UnsupportedOperationException("Not implemented");
+    }
+
+    @Override
     public Branch getObjectFromResultSet(OfflineResultSet resultSet) {
         return new Branch(
                 resultSet.getString("address"),
@@ -184,5 +207,17 @@ public class BranchesDAO extends ManyToManyDAO<Branch> {
                 resultSet.getLocalTime("morning_shift_end"),
                 resultSet.getLocalTime("evening_shift_start"),
                 resultSet.getLocalTime("evening_shift_end"));
+    }
+
+    public Pair<String,String> selectBranchEmployee(String branchId, String employeeId) throws DalException {
+        return branchEmployeesDAO.select(branchId, employeeId);
+    }
+
+    public List<Pair<String, String>> selectBranchEmployees(String branchId, List<String> employeeIds) throws DalException {
+        return branchEmployeesDAO.select(branchId, employeeIds);
+    }
+
+    public void insertEmployee(String branchId, String employeeId) throws DalException {
+        branchEmployeesDAO.insert(new Pair(branchId, employeeId));
     }
 }

@@ -1,15 +1,17 @@
 package transportModule.backend.serviceLayer;
 
-import serviceLayer.transportModule.ItemListsService;
-import serviceLayer.transportModule.ModuleFactory;
+import dataAccessLayer.DalFactory;
+import objects.transportObjects.ItemList;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import objects.transportObjects.ItemList;
+import serviceLayer.ServiceFactory;
+import serviceLayer.transportModule.ItemListsService;
 import utils.Response;
 
 import java.util.HashMap;
 
+import static dataAccessLayer.DalFactory.TESTING_DB_NAME;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ItemListsServiceTest {
@@ -19,7 +21,7 @@ class ItemListsServiceTest {
 
     @BeforeEach
     void setUp() {
-        ils = new ModuleFactory().getItemListsService();
+        ils = new ServiceFactory(TESTING_DB_NAME).getItemListsService();
 
         HashMap<String, Integer> load1 = new HashMap<>();
         load1.put("Shirts", 20);
@@ -39,7 +41,7 @@ class ItemListsServiceTest {
 
     @AfterEach
     void tearDown() {
-
+        DalFactory.clearTestDB();
     }
 
     @Test
@@ -57,7 +59,7 @@ class ItemListsServiceTest {
         ItemList itemList2 = new ItemList(load2, unload2);
         String json1 = ils.addItemList(itemList2.toJson());
         Response response1 = Response.fromJson(json1);
-        assertTrue(response1.success());
+        assertTrue(response1.success(),response1.message());
 
         String json2 = ils.getItemList(ItemList.getLookupObject(response1.dataToInt()).toJson());
         Response response2 = Response.fromJson(json2);
@@ -81,7 +83,7 @@ class ItemListsServiceTest {
     void removeItemList() {
         String json1 = ils.removeItemList(itemList.toJson());
         Response response1 = Response.fromJson(json1);
-        assertTrue(response1.success());
+        assertTrue(response1.success(),response1.message());
 
         String json2 = ils.getItemList(ItemList.getLookupObject(itemList.id()).toJson());
         Response response2 = Response.fromJson(json2);
@@ -102,11 +104,11 @@ class ItemListsServiceTest {
         itemList.unload().put("Jackets", 15);
         String json1 = ils.updateItemList(itemList.toJson());
         Response response1 = Response.fromJson(json1);
-        assertTrue(response1.success());
+        assertTrue(response1.success(),response1.message());
 
         String json2 = ils.getItemList(ItemList.getLookupObject(itemList.id()).toJson());
         Response response2 = Response.fromJson(json2);
-        assertTrue(response2.success());
+        assertTrue(response2.success(),response2.message());
         ItemList updatedItemList = response2.data(ItemList.class);
         assertEquals(itemList.load(), updatedItemList.load());
         assertEquals(itemList.unload(), updatedItemList.unload());
@@ -124,7 +126,7 @@ class ItemListsServiceTest {
     void getItemList() {
         String json1 = ils.getItemList(ItemList.getLookupObject(itemList.id()).toJson());
         Response response1 = Response.fromJson(json1);
-        assertTrue(response1.success());
+        assertTrue(response1.success(),response1.message());
 
         ItemList retrievedItemList = response1.data(ItemList.class);
         assertEquals(itemList.load(), retrievedItemList.load());
@@ -159,7 +161,7 @@ class ItemListsServiceTest {
 
         String json1 = ils.getAllItemLists();
         Response response1 = Response.fromJson(json1);
-        assertTrue(response1.success());
+        assertTrue(response1.success(),response1.message());
         assertEquals(21, ItemList.listFromJson(response1.data()).size());
 
     }

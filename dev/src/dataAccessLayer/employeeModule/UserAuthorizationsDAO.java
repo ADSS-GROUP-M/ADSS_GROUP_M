@@ -2,15 +2,19 @@ package dataAccessLayer.employeeModule;
 
 
 import businessLayer.employeeModule.Authorization;
-import businessLayer.employeeModule.*;
+import businessLayer.employeeModule.User;
 import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.dalUtils.OfflineResultSet;
 
 import java.sql.SQLException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
-class UserAuthorizationsDAO extends DAO {
+public class UserAuthorizationsDAO extends DAO {
 
+    private static final String[] primaryKeys = {Columns.Username.name()};
+    private static final String tableName = "USER_AUTHORIZATIONS";
     private static UserAuthorizationsDAO instance;
     private HashMap<Integer, Set<Authorization>> cache;
     private enum Columns {
@@ -18,15 +22,24 @@ class UserAuthorizationsDAO extends DAO {
         Authorization;
     }
 
-    private UserAuthorizationsDAO()throws DalException {
-        super("USER_AUTHORIZATIONS", new String[]{Columns.Username.name()});
+    public UserAuthorizationsDAO()throws DalException {
+        super(tableName,
+                primaryKeys,
+                new String[]{"TEXT", "TEXT"},
+                "Username",
+                "Authorization"
+        );
         this.cache = new HashMap<>();
     }
-
-    static UserAuthorizationsDAO getInstance() throws DalException {
-        if(instance == null)
-            instance = new UserAuthorizationsDAO();
-        return instance;
+    public UserAuthorizationsDAO(String dbName)throws DalException {
+        super(dbName,
+                tableName,
+                primaryKeys,
+                new String[]{"TEXT", "TEXT"},
+                "Username",
+                "Authorization"
+        );
+        this.cache = new HashMap<>();
     }
 
     private int getHashCode(String id){
@@ -50,7 +63,8 @@ class UserAuthorizationsDAO extends DAO {
                 String queryString = String.format("INSERT INTO " + TABLE_NAME + "(%s, %s) VALUES('%s','%s')",
                         Columns.Username.name(), Columns.Authorization.name(),
                         user.getUsername(), auth.name());
-                cursor.executeWrite(queryString);
+                if (cursor.executeWrite(queryString) != 1)
+                    throw new DalException("Could not create the user authorization for username " + user.getUsername());
                 entries.add(auth);
             }
             this.cache.put(getHashCode(user.getUsername()),entries );
@@ -67,9 +81,9 @@ class UserAuthorizationsDAO extends DAO {
     }
 
     void delete(User user) throws DalException{
-        this.cache.remove(getHashCode(user.getUsername()));
         Object[] keys = {user.getUsername()};
         super.delete(keys);
+        this.cache.remove(getHashCode(user.getUsername()));
     }
 
     private Set<Authorization> select(String username) throws DalException {

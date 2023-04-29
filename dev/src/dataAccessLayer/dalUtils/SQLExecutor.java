@@ -6,8 +6,6 @@ public class SQLExecutor {
 
     private static final String DEFAULT_DB_NAME = "SuperLiDB.db";
     private static final String URL_PREFIX = "jdbc:sqlite:";
-    private static final String USER = "";
-    private static final String PASSWORD = "";
     private final String URL;
 
     /**
@@ -27,7 +25,7 @@ public class SQLExecutor {
 
     public OfflineResultSet executeRead(String query) throws SQLException {
 
-        try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD)) {
+        try (Connection connection = DriverManager.getConnection(URL)) {
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(query);
             return new OfflineResultSet(resultSet);
@@ -35,8 +33,9 @@ public class SQLExecutor {
     }
 
     public int executeWrite(String query) throws SQLException {
-        try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD)) {
+        try (Connection connection = DriverManager.getConnection(URL)) {
             Statement statement = connection.createStatement();
+            query = "PRAGMA foreign_keys = ON;"+query;
             return statement.executeUpdate(query);
         }
     }

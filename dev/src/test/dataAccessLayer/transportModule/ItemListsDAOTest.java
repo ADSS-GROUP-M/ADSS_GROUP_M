@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+import static dataAccessLayer.DalFactory.TESTING_DB_NAME;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ItemListsDAOTest {
@@ -36,7 +37,7 @@ class ItemListsDAOTest {
         itemList = new ItemList(1, load, unload);
 
         try {
-            dao = new ItemListsDAO("TestingDB.db");
+            dao = new ItemListsDAO(TESTING_DB_NAME);
             dao.clearTable();
             dao.insert(itemList);
         } catch (DalException e) {
@@ -163,7 +164,7 @@ class ItemListsDAOTest {
 
     @Test
     void getObjectFromResultSet() {
-        SQLExecutor cursor = new SQLExecutor("TestingDB.db");
+        SQLExecutor cursor = new SQLExecutor(TESTING_DB_NAME);
         try {
             OfflineResultSet resultSet = cursor.executeRead("SELECT * FROM item_lists_items WHERE id = "+itemList.id());
             assertDeepEquals(itemList, dao.getObjectFromResultSet(resultSet));

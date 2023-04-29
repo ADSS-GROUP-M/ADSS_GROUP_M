@@ -5,23 +5,22 @@ import businessLayer.employeeModule.Role;
 import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.dalUtils.OfflineResultSet;
 import dataAccessLayer.transportModule.abstracts.DAO;
-import objects.transportObjects.Truck;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
-
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 
 public class EmployeeDAO extends DAO<Employee> {
 
-    private static EmployeeDAO instance;
-
     private static final String[] types = new String[]{"TEXT", "TEXT", "TEXT", "REAL", "REAL", "REAL", "TEXT", "TEXT", "TEXT"};
-    private static final String[] primary_keys = {"id"};
-    private EmployeeRolesDAO employeeRolesDAO;
+    private static final String[] primary_keys = {"Id"};
+    private static final String tableName = "EMPLOYEES";
+    private final EmployeeRolesDAO employeeRolesDAO;
 
-    private EmployeeDAO() throws DalException{
-        super("employees",
+    public EmployeeDAO(EmployeeRolesDAO employeeRolesDAO) throws DalException{
+        super(tableName,
                 types,
                 primary_keys,
                 "Id",
@@ -34,12 +33,13 @@ public class EmployeeDAO extends DAO<Employee> {
                 "EmploymentConditions",
                 "Details"
         );
-        employeeRolesDAO = EmployeeRolesDAO.getInstance();
+        initTable();
+        this.employeeRolesDAO = employeeRolesDAO;
     }
 
-    private EmployeeDAO(String dbName) throws DalException{
+    public EmployeeDAO(String dbName, EmployeeRolesDAO employeeRolesDAO) throws DalException{
         super(dbName,
-                "employees",
+                tableName,
                 types,
                 primary_keys,
                 "Id",
@@ -52,7 +52,8 @@ public class EmployeeDAO extends DAO<Employee> {
                 "EmploymentConditions",
                 "Details"
         );
-        employeeRolesDAO = EmployeeRolesDAO.getTestingInstance(dbName);
+        initTable();
+        this.employeeRolesDAO = employeeRolesDAO;
     }
 
     public Employee select(String id) throws DalException {
@@ -176,6 +177,12 @@ public class EmployeeDAO extends DAO<Employee> {
     }
 
     @Override
+    public boolean exists(Employee object) throws DalException {
+        // TODO: implement
+        throw new UnsupportedOperationException("not implemented");
+    }
+
+    @Override
     protected Employee getObjectFromResultSet(OfflineResultSet resultSet){
         Employee ans = new Employee(
                 resultSet.getString(ALL_COLUMNS[1]),
@@ -201,28 +208,10 @@ public class EmployeeDAO extends DAO<Employee> {
         return ans;
     }
 
-    public static EmployeeDAO getInstance() throws DalException{
-        if (instance == null) {
-            instance = new EmployeeDAO();
-        }
-        return instance;
-    }
-
-    public static EmployeeDAO getTestingInstance(String dbName) throws DalException{
-        if (instance == null) {
-            instance = new EmployeeDAO(dbName);
-        }
-        return instance;
-    }
-    
-    public static void deleteInstance() {
-        instance = null;
-    }
-
     @Override
     public void clearTable() {
         try {
-            employeeRolesDAO.deleteAll();
+            employeeRolesDAO.clearTable();
         } catch (DalException e) {
             throw new RuntimeException(e);
         }

@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
+import static dataAccessLayer.DalFactory.TESTING_DB_NAME;
 import static org.junit.jupiter.api.Assertions.*;
 
 class TrucksDAOTest {
@@ -24,7 +25,7 @@ class TrucksDAOTest {
     @BeforeEach
     void setUp() {
         try {
-            dao = new TrucksDAO("TestingDB.db");
+            dao = new TrucksDAO(TESTING_DB_NAME);
             truck = new Truck("1", "model1", 1000, 20000, Truck.CoolingCapacity.FROZEN);
             dao.clearTable();
 
@@ -120,7 +121,7 @@ class TrucksDAOTest {
 
     @Test
     void getObjectFromResultSet() {
-        SQLExecutor cursor = new SQLExecutor("TestingDB.db");
+        SQLExecutor cursor = new SQLExecutor(TESTING_DB_NAME);
         try {
             OfflineResultSet resultSet = cursor.executeRead("SELECT * FROM Trucks WHERE id = "+truck.id());
             resultSet.next();

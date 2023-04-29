@@ -10,7 +10,11 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-class ShiftToCancelsDAO extends DAO{
+public class ShiftToCancelsDAO extends DAO{
+    private static final String[] primaryKeys = {
+            Columns.ShiftDate.name(), Columns.ShiftType.name(), Columns.Branch.name(), Columns.CancelAction.name()
+    };
+    private static final String tableName = "SHIFT_CANCELS";
     private static ShiftToCancelsDAO instance;
     private HashMap<Integer, List<String>> cache;
     private enum Columns {
@@ -19,15 +23,30 @@ class ShiftToCancelsDAO extends DAO{
         Branch,
         CancelAction;
     }
-    private ShiftToCancelsDAO()throws DalException {
-        super("SHIFT_CANCELS", new String[]{Columns.ShiftDate.name(), Columns.ShiftType.name(), Columns.Branch.name()});
+    public ShiftToCancelsDAO()throws DalException {
+        super(tableName,
+                primaryKeys,
+                new String[]{"TEXT", "TEXT", "TEXT", "TEXT"},
+                "ShiftDate",
+                "ShiftType",
+                "Branch",
+                "CancelAction"
+        );
         this.cache = new HashMap<>();
     }
-    static ShiftToCancelsDAO getInstance() throws DalException {
-       if(instance == null)
-          instance = new ShiftToCancelsDAO();
-       return instance;
+    public ShiftToCancelsDAO(String dbname)throws DalException {
+        super(dbname,
+                tableName,
+                primaryKeys,
+                new String[]{"TEXT", "TEXT", "TEXT", "TEXT"},
+                "ShiftDate",
+                "ShiftType",
+                "Branch",
+                "CancelAction"
+        );
+        this.cache = new HashMap<>();
     }
+
     private int getHashCode(LocalDate dt, Shift.ShiftType st, String branch){
         return (formatLocalDate(dt) + st.name() + branch).hashCode();
     }
@@ -40,35 +59,35 @@ class ShiftToCancelsDAO extends DAO{
         return ans;
     }
 
-    void create(Shift shift, String branch) throws DalException {
+    void create(Shift shift) throws DalException {
         try {
-            if(this.cache.containsKey(getHashCode(shift.getShiftDate(), shift.getShiftType(), branch)))
+            if(this.cache.containsKey(getHashCode(shift.getShiftDate(), shift.getShiftType(), shift.getBranch())))
                 throw new DalException("Key already exists!");
             List<String> entries = new LinkedList<>();
             for(String str: shift.getShiftCancels()) {
                 String queryString = String.format("INSERT INTO " + TABLE_NAME + "(%s, %s, %s, %s) VALUES('%s','%s','%s','%s')",
                         ShiftToCancelsDAO.Columns.ShiftDate.name(), ShiftToCancelsDAO.Columns.ShiftType.name(), ShiftToCancelsDAO.Columns.Branch.name(), Columns.CancelAction.name(),
-                        formatLocalDate(shift.getShiftDate()), shift.getShiftType().name(), branch, str);
+                        formatLocalDate(shift.getShiftDate()), shift.getShiftType().name(), shift.getBranch(), str);
                 cursor.executeWrite(queryString);
                 entries.add(str);
             }
-            this.cache.put(getHashCode(shift.getShiftDate(), shift.getShiftType(), branch),entries );
+            this.cache.put(getHashCode(shift.getShiftDate(), shift.getShiftType(), shift.getBranch()),entries );
         } catch (SQLException e) {
             throw new DalException(e);
         }
     }
 
-    void update(Shift s, String branch) throws DalException {
-        if(!this.cache.containsKey(getHashCode(s.getShiftDate(), s.getShiftType(), branch)))
+    void update(Shift s) throws DalException {
+        if(!this.cache.containsKey(getHashCode(s.getShiftDate(), s.getShiftType(), s.getBranch())))
             throw new DalException("Key doesnt exist! Create it first.");
-        this.delete(s,branch);
-        this.create(s,branch);
+        this.delete(s);
+        this.create(s);
     }
 
-    void delete(Shift s, String branch) throws DalException {
-        this.cache.remove(getHashCode(s.getShiftDate(),s.getShiftType(),branch));
-        Object[] keys = {s.getShiftDate(),s.getShiftType().name(),branch};
+    void delete(Shift s) throws DalException {
+        Object[] keys = {s.getShiftDate(),s.getShiftType().name(),s.getBranch()};
         super.delete(keys);
+        this.cache.remove(getHashCode(s.getShiftDate(),s.getShiftType(),s.getBranch()));
     }
 
     List<String> select(LocalDate date, String shiftType, String branch) throws DalException {
@@ -91,8 +110,8 @@ class ShiftToCancelsDAO extends DAO{
         return ans;
     }
 
-    public void deleteAll() throws DalException{
-        super.deleteAll();
+    public void clearTable() throws DalException{
+        super.clearTable();
         cache.clear();
     }
 }

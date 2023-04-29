@@ -1,20 +1,20 @@
 package businessLayer.transportModule;
 
+import dataAccessLayer.dalUtils.DalException;
+import dataAccessLayer.transportModule.DriversDAO;
 import objects.transportObjects.Driver;
-
 import utils.transportUtils.TransportException;
-import java.util.LinkedList;
-import java.util.TreeMap;
+
+import java.util.List;
 
 /**
  * The DriversController class is responsible for managing the drivers in the transport system.
  * It provides methods for adding, retrieving, updating, and removing drivers from the system.
  */
 public class DriversController {
-    private final TreeMap<String, Driver> drivers;
-
-    public DriversController(){
-        drivers = new TreeMap<>();
+    private final DriversDAO dao;
+    public DriversController(DriversDAO dao){
+        this.dao = dao;
     }
 
     /**
@@ -24,10 +24,14 @@ public class DriversController {
      * @throws TransportException If the driver with the same ID already exists in the system.
      */
     public void addDriver(Driver driver) throws TransportException{
-        if (driverExists(driver.id()) == false) {
-            drivers.put(driver.id(), driver);
-        } else {
+        if (driverExists(driver.id())) {
             throw new TransportException("Driver already exists");
+        }
+
+        try {
+            dao.insert(driver);
+        } catch (DalException e) {
+            throw new TransportException(e.getMessage(),e);
         }
     }
 
@@ -43,7 +47,11 @@ public class DriversController {
             throw new TransportException("Driver not found");
         }
 
-        return drivers.get(id);
+        try {
+            return dao.select(Driver.getLookupObject(id));
+        } catch (DalException e) {
+            throw new TransportException(e.getMessage(),e);
+        }
     }
 
     /**
@@ -57,7 +65,11 @@ public class DriversController {
             throw new TransportException("Driver not found");
         }
 
-        drivers.remove(id);
+        try {
+            dao.delete(Driver.getLookupObject(id));
+        } catch (DalException e) {
+            throw new TransportException(e.getMessage(),e);
+        }
     }
 
     /**
@@ -68,11 +80,15 @@ public class DriversController {
      * @throws TransportException If the driver with the specified ID is not found.
      */
     public void updateDriver(String id, Driver newDriver) throws TransportException{
-        if(driverExists(id) == false) {
+        if (driverExists(id) == false) {
             throw new TransportException("Driver not found");
         }
 
-        drivers.put(id, newDriver);
+        try {
+            dao.update(newDriver);
+        } catch (DalException e) {
+            throw new TransportException(e.getMessage(),e);
+        }
     }
 
     /**
@@ -80,12 +96,20 @@ public class DriversController {
      *
      * @return A linked list of all drivers in the system.
      */
-    public LinkedList<Driver> getAllDrivers(){
-        return new LinkedList<>(drivers.values());
+    public List<Driver> getAllDrivers() throws TransportException{
+        try {
+            return dao.selectAll();
+        } catch (DalException e) {
+            throw new TransportException(e.getMessage(),e);
+        }
     }
 
-    public boolean driverExists(String id){
-        return drivers.containsKey(id);
+    public boolean driverExists(String id) throws TransportException{
+        try {
+            return dao.exists(Driver.getLookupObject(id));
+        } catch (DalException e) {
+            throw new TransportException(e.getMessage(),e);
+        }
     }
 }
 

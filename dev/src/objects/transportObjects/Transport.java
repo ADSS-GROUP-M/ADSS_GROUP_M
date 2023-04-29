@@ -5,10 +5,12 @@ import utils.JsonUtils;
 
 import java.lang.reflect.Type;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Objects;
 
 public record Transport (int id, String source, LinkedList<String> destinations, HashMap<String, Integer> itemLists,
-                         String truckId, String driverId, LocalDateTime departureTime, int weight){
+                         String driverId, String truckId, LocalDateTime departureTime, int weight){
 
 
     /**
@@ -21,8 +23,8 @@ public record Transport (int id, String source, LinkedList<String> destinations,
                 other.source,
                 other.destinations,
                 other.itemLists,
-                other.truckId,
                 other.driverId,
+                other.truckId,
                 other.departureTime,
                 other.weight
         );
@@ -33,14 +35,14 @@ public record Transport (int id, String source, LinkedList<String> destinations,
      * this constructor sets the id to be -1
      */
     public Transport(String source, LinkedList<String> destinations, HashMap<String, Integer> itemLists,
-                     String truckId, String driverId, LocalDateTime scheduledTime, int weight){
+                     String driverId, String truckId, LocalDateTime scheduledTime, int weight){
         this(
                 -1,
                 source,
                 destinations,
                 itemLists,
-                truckId,
                 driverId,
+                truckId,
                 scheduledTime,
                 weight
         );

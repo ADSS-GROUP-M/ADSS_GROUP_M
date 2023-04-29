@@ -14,8 +14,8 @@ public class TransportDestinationsDAO extends ManyToManyDAO<TransportDestination
     private static final String[] types = {"INTEGER", "INTEGER" , "TEXT", "INTEGER"};
     private static final String[] parent_tables = {"transports", "sites", "item_lists"};
     private static final String[] primary_keys = {"transport_id", "destination_index"};
-    private static final String[] references = {"id", "address", "id"};
-    private static final String[] foreign_keys = {"transport_id", "destination_address", "item_list_id"};
+    private static final String[][] foreign_keys = {{"transport_id"}, {"destination_address"}, {"item_list_id"}};
+    private static final String[][] references = {{"id"}, {"address"}, {"id"}};
 
     public TransportDestinationsDAO() throws DalException{
         super("transport_destinations",
@@ -29,6 +29,7 @@ public class TransportDestinationsDAO extends ManyToManyDAO<TransportDestination
                 "destination_address",
                 "item_list_id"
         );
+        initTable();
     }
 
     /**
@@ -48,6 +49,7 @@ public class TransportDestinationsDAO extends ManyToManyDAO<TransportDestination
                 "destination_address",
                 "item_list_id"
         );
+        initTable();
     }
 
     /**
@@ -117,7 +119,6 @@ public class TransportDestinationsDAO extends ManyToManyDAO<TransportDestination
     /**
      * @param object - the object to insert
      * @throws RuntimeException if an error occurred while trying to insert the object
-     * @deprecated use insertAll instead
      */
     @Override
     public void insert(TransportDestination object) throws DalException {
@@ -199,6 +200,20 @@ public class TransportDestinationsDAO extends ManyToManyDAO<TransportDestination
             }
         } catch (SQLException e) {
             throw new DalException("Failed to delete transport destination", e);
+        }
+    }
+
+    @Override
+    public boolean exists(TransportDestination object) throws DalException {
+        String query = String.format("SELECT * FROM %s WHERE transport_id = %d AND destination_index = %d;",
+                TABLE_NAME,
+                object.transportId(),
+                object.destination_index()
+        );
+        try {
+            return cursor.executeRead(query).isEmpty() == false;
+        } catch (SQLException e) {
+            throw new DalException("Failed to check if transport destination exists", e);
         }
     }
 

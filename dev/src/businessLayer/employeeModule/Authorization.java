@@ -5,5 +5,5 @@ public enum Authorization {
     Cashier,
     Storekeeper,
     ShiftManager,
-    LogisticsManager
+    TransportManager
 }

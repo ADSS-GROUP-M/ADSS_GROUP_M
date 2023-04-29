@@ -8,18 +8,18 @@ import objects.transportObjects.Site;
 import objects.transportObjects.Truck;
 import utils.JsonUtils;
 import utils.Response;
-
 import utils.transportUtils.TransportException;
 
 public class ResourceManagementService {
 
-    private final SitesController sitesController;
-    private final DriversController driversController;
-    private final TrucksController trucksController;
+    private SitesController sitesController;
+    private DriversController driversController;
+    private TrucksController trucksController;
 
-
-
-    public ResourceManagementService(SitesController sitesController, DriversController driversController, TrucksController trucksController) {
+    public ResourceManagementService(SitesController sitesController,
+                                     DriversController driversController,
+                                     TrucksController trucksController)
+    {
         this.sitesController = sitesController;
         this.driversController = driversController;
         this.trucksController = trucksController;
@@ -65,14 +65,18 @@ public class ResourceManagementService {
         Driver driver = JsonUtils.deserialize(json, Driver.class);
         try{
             driver = driversController.getDriver(driver.id());
-        }catch(Exception e){
+        }catch(TransportException e){
             return Response.getErrorResponse(e).toJson();
         }
         return new Response("Driver found successfully", true, driver).toJson();
     }
 
     public String getAllDrivers(){
-        return new Response("Drivers found successfully", true, driversController.getAllDrivers()).toJson();
+        try {
+            return new Response("Drivers found successfully", true, driversController.getAllDrivers()).toJson();
+        } catch (TransportException e) {
+            return Response.getErrorResponse(e).toJson();
+        }
     }
 
     public String addTruck(String json){
@@ -122,7 +126,11 @@ public class ResourceManagementService {
     }
 
     public String getAllTrucks(){
-        return new Response("Trucks found successfully", true, trucksController.getAllTrucks()).toJson();
+        try {
+            return new Response("Trucks found successfully", true, trucksController.getAllTrucks()).toJson();
+        } catch (TransportException e) {
+            return Response.getErrorResponse(e).toJson();
+        }
     }
 
     public String addSite(String json){
@@ -172,7 +180,11 @@ public class ResourceManagementService {
     }
 
     public String getAllSites(){
-        return new Response("Sites found successfully", true, sitesController.getAllSites()).toJson();
+        try {
+            return new Response("Sites found successfully", true, sitesController.getAllSites()).toJson();
+        } catch (TransportException e) {
+            return Response.getErrorResponse(e).toJson();
+        }
     }
 
 }

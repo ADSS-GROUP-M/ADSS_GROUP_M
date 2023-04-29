@@ -14,8 +14,8 @@ public class DriversDAO extends ManyToManyDAO<Driver> {
     private static final String[] types = new String[]{"TEXT", "TEXT"};
     private static final String[] parent_table_names = {"EMPLOYEES"};
     private static final String[] primary_keys = {"id"};
-    private static final String[] foreign_keys = {"id"};
-    private static final String[] references = {"Id"};
+    private static final String[][] foreign_keys = {{"id"}};
+    private static final String[][] references = {{"Id"}};
 
     public DriversDAO() throws DalException {
         super("truck_drivers",
@@ -26,6 +26,7 @@ public class DriversDAO extends ManyToManyDAO<Driver> {
                 references,
                 "id",
                 "license_type");
+        initTable();
     }
 
     public DriversDAO(String dbName) throws DalException {
@@ -38,6 +39,7 @@ public class DriversDAO extends ManyToManyDAO<Driver> {
                 references,
                 "id",
                 "license_type");
+        initTable();
     }
 
     /**
@@ -154,6 +156,29 @@ public class DriversDAO extends ManyToManyDAO<Driver> {
             }
         } catch (SQLException e) {
             throw new DalException("Failed to delete Driver", e);
+        }
+    }
+
+    @Override
+    public boolean exists(Driver object) throws DalException {
+
+        if(cache.contains(object)) {
+            return true;
+        }
+
+        String query = String.format("SELECT * FROM %s WHERE id = '%s';", TABLE_NAME, object.id());
+        OfflineResultSet resultSet;
+        try {
+            resultSet = cursor.executeRead(query);
+            if(resultSet.next()) {
+                Driver selected = getObjectFromResultSet(resultSet);
+                cache.put(selected);
+                return true;
+            } else {
+                return false;
+            }
+        } catch (SQLException e) {
+            throw new DalException("Failed to check if Driver exists", e);
         }
     }
 

@@ -3,6 +3,7 @@ package serviceLayer.employeeModule.Services;
 import businessLayer.employeeModule.Authorization;
 import businessLayer.employeeModule.Controllers.UserController;
 import businessLayer.employeeModule.User;
+import serviceLayer.ServiceFactory;
 import utils.Response;
 
 import java.util.List;
@@ -10,28 +11,26 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class UserService {
-    private static UserService instance;
-    private UserController userController;
 
-    private UserService() {
-        userController = UserController.getInstance();
-    }
+    public static final String TRANSPORT_MANAGER_USERNAME = "transport";
+    public static final String HR_MANAGER_USERNAME = "admin123";
 
-    public static UserService getInstance() {
-        if (instance == null)
-            instance = new UserService();
-        return instance;
+    private final UserController userController;
+
+    public UserService(ServiceFactory serviceFactory, UserController userController) {
+        // Can get any needed service through the serviceFactory
+        this.userController = userController;
     }
 
     /**
      * This method loads the initial user data into the system, during the initial load of the system.
      */
-    public void loadData() {
+    public void createData() {
         resetData();
         try {
-            userController.createManagerUser("admin123", "123");
-            userController.createUser("logistic", "123");
-            userController.authorizeUser("logistic", Authorization.LogisticsManager);
+            userController.createManagerUser(HR_MANAGER_USERNAME, "123");
+            userController.createUser(TRANSPORT_MANAGER_USERNAME, "123");
+            userController.authorizeUser(TRANSPORT_MANAGER_USERNAME, Authorization.TransportManager);
         }
         catch (Exception ignore) {}
     }

@@ -1,12 +1,13 @@
 package presentationLayer.employeeModule.Model;
 
 import com.google.gson.reflect.TypeToken;
+import serviceLayer.ServiceFactory;
 import serviceLayer.employeeModule.Objects.SEmployee;
 import serviceLayer.employeeModule.Objects.SShift;
 import serviceLayer.employeeModule.Objects.SShiftType;
 import serviceLayer.employeeModule.Services.EmployeesService;
-import utils.Response;
 import serviceLayer.employeeModule.Services.UserService;
+import utils.Response;
 
 import java.lang.reflect.Type;
 import java.time.DayOfWeek;
@@ -22,23 +23,42 @@ public class BackendController {
     private static final Type LIST_SSHIFT_ARRAY_TYPE = new TypeToken<List<SShift[]>>(){}.getType();
 
     private static BackendController instance;
+    private static ServiceFactory serviceFactory;
     private final UserService userService;
     private final EmployeesService employeesService;
     private String loggedUsername;
 
     public BackendController() {
-        userService = UserService.getInstance();
-        employeesService = EmployeesService.getInstance();
+        serviceFactory = new ServiceFactory();
+        userService = serviceFactory.userService();
+        employeesService = serviceFactory.employeesService();
         loggedUsername = null;
 
         // Data Initialization
-        userService.loadData();
-        employeesService.loadData();
+        userService.createData();
+        employeesService.createData();
+    }
+
+    public BackendController(ServiceFactory factory) {
+        serviceFactory = factory;
+        userService = serviceFactory.userService();
+        employeesService = serviceFactory.employeesService();
+        loggedUsername = null;
+
+        // Data Initialization
+        userService.createData();
+        employeesService.createData();
     }
 
     public static BackendController getInstance() {
-        if (instance == null)
+        if (instance == null || serviceFactory == null)
             instance = new BackendController();
+        return instance;
+    }
+
+    public static BackendController getInstance(ServiceFactory factory) {
+        if (instance == null || serviceFactory == null)
+            instance = new BackendController(factory);
         return instance;
     }
 
@@ -214,6 +234,14 @@ public class BackendController {
             return "Certified employee successfully.";
     }
 
+    public String certifyDriver(String employeeId, String driverLicense) {
+        Response response = Response.fromJson(employeesService.certifyDriver(loggedUsername, employeeId, driverLicense));
+        if (response.success() == false)
+            return response.message();
+        else
+            return "Certified employee successfully.";
+    }
+
     public String uncertifyEmployee(String employeeId, String role) {
         Response response = Response.fromJson(employeesService.uncertifyEmployee(loggedUsername, employeeId, role));
         if (response.success() == false)
@@ -344,5 +372,9 @@ public class BackendController {
         } catch (IllegalArgumentException e) {
             return "Invalid ShiftType value, expected `Morning` or `Evening`.";
         }
+    }
+
+    public ServiceFactory serviceFactory() {
+        return serviceFactory;
     }
 }

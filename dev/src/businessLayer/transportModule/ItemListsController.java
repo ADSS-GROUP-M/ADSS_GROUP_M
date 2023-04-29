@@ -1,23 +1,28 @@
 package businessLayer.transportModule;
 
+import dataAccessLayer.dalUtils.DalException;
+import dataAccessLayer.transportModule.ItemListsDAO;
 import objects.transportObjects.ItemList;
-
 import utils.transportUtils.TransportException;
-import java.util.LinkedList;
-import java.util.TreeMap;
+
+import java.util.List;
 
 /**
  * The ItemListsController class is responsible for managing item lists in the transport module.
  * It provides methods to add, retrieve, update, and remove item lists from the system.
  */
 public class ItemListsController {
+    private final ItemListsDAO dao;
 
-    private final TreeMap<Integer, ItemList> itemLists;
     private int idCounter;
 
-    public ItemListsController(){
-        itemLists = new TreeMap<>();
-        idCounter = 1; //TODO: currently not in use. this will have to be restored from the DB in the future.
+    public ItemListsController(ItemListsDAO dao) throws TransportException{
+        this.dao = dao;
+        try {
+            idCounter = dao.selectCounter();
+        } catch (DalException e) {
+            throw new TransportException(e.getMessage(),e);
+        }
     }
 
     /**
@@ -27,14 +32,19 @@ public class ItemListsController {
      * @return The ID of the added item list.
      * @throws TransportException If the item list already exists in the system.
      */
-    public Integer addItemList(ItemList itemList){
+    public Integer addItemList(ItemList itemList) throws TransportException {
 
         if(itemList.id() != -1){
             throw new UnsupportedOperationException("Pre-defined IDs are not supported");
         }
-
-        ItemList toAdd = new ItemList(idCounter++, itemList);
-        itemLists.put(toAdd.id(), toAdd);
+        ItemList toAdd = new ItemList(idCounter, itemList);
+        try {
+            dao.insert(toAdd);
+            dao.incrementCounter();
+            idCounter++;
+        } catch (DalException e) {
+            throw new TransportException(e.getMessage(),e);
+        }
         return toAdd.id();
     }
 
@@ -50,7 +60,11 @@ public class ItemListsController {
             throw new TransportException("Item list not found");
         }
 
-        return itemLists.get(id);
+        try {
+            return dao.select(ItemList.getLookupObject(id));
+        } catch (DalException e) {
+            throw new TransportException(e.getMessage(),e);
+        }
     }
 
     /**
@@ -60,11 +74,15 @@ public class ItemListsController {
      * @throws TransportException If the item list with the specified ID is not found.
      */
     public void removeItemList(int id) throws TransportException {
-        if (listExists(id) == false) {
+        if(listExists(id) == false) {
             throw new TransportException("Item list not found");
         }
 
-        itemLists.remove(id);
+        try {
+            dao.delete(ItemList.getLookupObject(id));
+        } catch (DalException e) {
+            throw new TransportException(e.getMessage(),e);
+        }
     }
 
     /**
@@ -79,7 +97,11 @@ public class ItemListsController {
             throw new TransportException("Item list not found");
         }
 
-        itemLists.put(id, newItemList);
+        try {
+            dao.update(newItemList);
+        } catch (DalException e) {
+            throw new TransportException(e.getMessage(),e);
+        }
     }
 
     /**
@@ -87,11 +109,19 @@ public class ItemListsController {
      *
      * @return A linked list of all item lists in the system.
      */
-    public LinkedList<ItemList> getAllItemLists() {
-        return new LinkedList<>(itemLists.values());
+    public List<ItemList> getAllItemLists() throws TransportException{
+        try {
+            return dao.selectAll();
+        } catch (DalException e) {
+            throw new TransportException(e.getMessage(),e);
+        }
     }
 
-    public boolean listExists(int id) {
-        return itemLists.containsKey(id);
+    public boolean listExists(int id) throws TransportException{
+        try {
+            return dao.exists(ItemList.getLookupObject(id));
+        } catch (DalException e) {
+            throw new TransportException(e.getMessage(),e);
+        }
     }
 }

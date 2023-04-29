@@ -6,14 +6,17 @@ import dataAccessLayer.transportModule.abstracts.ManyToManyDAO;
 import objects.transportObjects.ItemList;
 
 import java.sql.SQLException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 public class ItemListsItemsDAO extends ManyToManyDAO<ItemList> {
 
     private static final String[] parent_table_names = {"item_lists"};
     private static final String[] primary_keys = {"id", "loading_type", "item_name"};
-    private static final String[] foreign_keys = {"id"};
-    private static final String[] references = {"Id"};
+    private static final String[][] foreign_keys = {{"id"}};
+    private static final String[][] references = {{"Id"}};
 
     private enum LoadingType {
         loading,
@@ -33,6 +36,7 @@ public class ItemListsItemsDAO extends ManyToManyDAO<ItemList> {
                 "loading_type",
                 "item_name",
                 "amount");
+        initTable();
     }
 
     /**
@@ -51,6 +55,7 @@ public class ItemListsItemsDAO extends ManyToManyDAO<ItemList> {
                 "loading_type",
                 "item_name",
                 "amount");
+        initTable();
     }
 
     /**
@@ -160,6 +165,16 @@ public class ItemListsItemsDAO extends ManyToManyDAO<ItemList> {
             }
         } catch (SQLException e) {
             throw new DalException("Failed to delete item list", e);
+        }
+    }
+
+    @Override
+    public boolean exists(ItemList object) throws DalException {
+        String query = String.format("SELECT * FROM %s WHERE id = %d LIMIT 1;", TABLE_NAME, object.id());
+        try {
+            return cursor.executeRead(query).isEmpty() == false;
+        } catch (SQLException e) {
+            throw new DalException("Failed to check if item list exists", e);
         }
     }
 

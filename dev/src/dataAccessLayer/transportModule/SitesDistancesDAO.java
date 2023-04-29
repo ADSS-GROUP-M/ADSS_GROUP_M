@@ -5,6 +5,7 @@ import dataAccessLayer.dalUtils.OfflineResultSet;
 import dataAccessLayer.transportModule.abstracts.ManyToManyDAO;
 
 import java.sql.SQLException;
+import java.util.LinkedList;
 import java.util.List;
 
 public class SitesDistancesDAO extends ManyToManyDAO<DistanceBetweenSites> {
@@ -77,8 +78,20 @@ public class SitesDistancesDAO extends ManyToManyDAO<DistanceBetweenSites> {
      */
     @Override
     public List<DistanceBetweenSites> selectAll() throws DalException {
-        return null;
+        String query = String.format("SELECT * FROM %s;", TABLE_NAME);
+        OfflineResultSet resultSet;
+        try {
+            resultSet = cursor.executeRead(query);
+        } catch (SQLException e) {
+            throw new DalException("Failed to select all distance between sites", e);
+        }
+        List<DistanceBetweenSites> distanceBetweenSites = new LinkedList<>();
+        while(resultSet.next()) {
+            distanceBetweenSites.add(getObjectFromResultSet(resultSet));
+        }
+        return distanceBetweenSites;
     }
+
 
     /**
      * @param object - the object to insert
@@ -86,7 +99,19 @@ public class SitesDistancesDAO extends ManyToManyDAO<DistanceBetweenSites> {
      */
     @Override
     public void insert(DistanceBetweenSites object) throws DalException {
-
+        String query = String.format("INSERT INTO %s VALUES ('%s','%s', %d);",
+                TABLE_NAME,
+                object.source(),
+                object.destination(),
+                object.distance()
+        );
+        try {
+            if(cursor.executeWrite(query) != 1){
+                throw new RuntimeException("Unexpected error while trying to insert distance between sites");
+            }
+        } catch (SQLException e) {
+            throw new DalException("Failed to insert distance between sites", e);
+        }
     }
 
     /**
@@ -95,7 +120,20 @@ public class SitesDistancesDAO extends ManyToManyDAO<DistanceBetweenSites> {
      */
     @Override
     public void update(DistanceBetweenSites object) throws DalException {
+        String query = String.format("UPDATE %s SET distance = %d WHERE source = '%s' AND destination = '%s';",
+                TABLE_NAME,
+                object.distance(),
+                object.source(),
+                object.destination()
 
+        );
+        try {
+            if(cursor.executeWrite(query) != 1) {
+                throw new DalException("Failed to update distance between sites with source " + object.source()+ " and destination " + object.destination());
+            }
+        } catch (SQLException e) {
+            throw new DalException("Failed to update distance between sites", e);
+        }
     }
 
     /**
@@ -104,16 +142,40 @@ public class SitesDistancesDAO extends ManyToManyDAO<DistanceBetweenSites> {
      */
     @Override
     public void delete(DistanceBetweenSites object) throws DalException {
-
+        String query = String.format("DELETE FROM %s WHERE source = '%s' AND destination = '%s';",
+                TABLE_NAME,
+                object.source(),
+                object.destination()
+        );
+        try {
+            if(cursor.executeWrite(query) != 1){
+                throw new DalException("Failed to delete distance between sites with source " + object.source()+ " and destination " + object.destination());
+            }
+        } catch (SQLException e) {
+            throw new DalException("Failed to delete distance between sites", e);
+        }
     }
 
     @Override
     public boolean exists(DistanceBetweenSites object) throws DalException {
-        return false;
+        String query = String.format("SELECT * FROM %s WHERE source = '%s' AND destination = '%s';",
+                TABLE_NAME,
+                object.source(),
+                object.destination()
+        );
+        try {
+            return cursor.executeRead(query).isEmpty() == false;
+        } catch (SQLException e) {
+            throw new DalException("Failed to check if transport destination exists", e);
+        }
     }
 
     @Override
     protected DistanceBetweenSites getObjectFromResultSet(OfflineResultSet resultSet) {
-        return null;
+        return new DistanceBetweenSites(
+                resultSet.getString("source"),
+                resultSet.getString("destination"),
+                resultSet.getInt("distance")
+        );
     }
 }

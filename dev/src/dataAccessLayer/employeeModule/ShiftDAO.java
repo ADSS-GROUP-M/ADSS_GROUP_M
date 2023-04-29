@@ -37,7 +37,7 @@ public class ShiftDAO extends DAO {
                     ShiftToRequestsDAO shiftToRequestsDAO,
                     ShiftToWorkersDAO shiftToWorkersDAO,
                     ShiftToCancelsDAO shiftToCancelsDAO,
-                    ShiftToActivityDAO shiftToActivityDAO){
+                    ShiftToActivityDAO shiftToActivityDAO) throws DalException {
         super("SHIFTS",
                 primaryKeys,
                 types,
@@ -69,7 +69,7 @@ public class ShiftDAO extends DAO {
                      ShiftToRequestsDAO shiftToRequestsDAO,
                      ShiftToWorkersDAO shiftToWorkersDAO,
                      ShiftToCancelsDAO shiftToCancelsDAO,
-                     ShiftToActivityDAO shiftToActivityDAO){
+                     ShiftToActivityDAO shiftToActivityDAO) throws DalException {
         super(dbName,
                 "SHIFTS",
                 primaryKeys,

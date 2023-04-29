@@ -25,7 +25,7 @@ public class ShiftToRequestsDAO extends DAO{
         EmployeeId,
         Role;
     }
-    public ShiftToRequestsDAO(EmployeeDAO employeeDAO){
+    public ShiftToRequestsDAO(EmployeeDAO employeeDAO) throws DalException {
         super(tableName,
                 primaryKeys,
                 types,
@@ -39,7 +39,7 @@ public class ShiftToRequestsDAO extends DAO{
         this.cache = new HashMap<>();
     }
 
-    public ShiftToRequestsDAO(String dbName, EmployeeDAO employeeDAO){
+    public ShiftToRequestsDAO(String dbName, EmployeeDAO employeeDAO) throws DalException {
         super(dbName,
                 tableName,
                 primaryKeys,

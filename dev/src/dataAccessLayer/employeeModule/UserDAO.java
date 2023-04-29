@@ -25,7 +25,7 @@ public class UserDAO extends DAO {
     }
 
     //needed roles HashMap<Role,Integer>, shiftRequests HashMap<Role,List<Employees>>, shiftWorkers Map<Role,List<Employees>>, cancelCardApplies List<String>, shiftActivities List<String>.
-    public UserDAO(UserAuthorizationsDAO userAuthorizationsDAO){
+    public UserDAO(UserAuthorizationsDAO userAuthorizationsDAO) throws DalException{
         super(tableName,
                 primaryKeys,
                 new String[]{"TEXT", "TEXT", "TEXT"},
@@ -36,7 +36,7 @@ public class UserDAO extends DAO {
         this.cache = new HashMap<>();
     }
 
-    public UserDAO(String dbName, UserAuthorizationsDAO userAuthorizationsDAO){
+    public UserDAO(String dbName, UserAuthorizationsDAO userAuthorizationsDAO) throws DalException {
         super(dbName,
                 tableName,
                 primaryKeys,

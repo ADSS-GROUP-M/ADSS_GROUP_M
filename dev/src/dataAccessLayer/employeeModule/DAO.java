@@ -20,34 +20,26 @@ public abstract class DAO {
     protected final String[] TYPES;
     protected final String[] ALL_COLUMNS;
 
-    public DAO(String tableName, String[] keyFields, String[] types, String ... allColumns){
+    public DAO(String tableName, String[] keyFields, String[] types, String ... allColumns) throws DalException {
         this.TABLE_NAME = tableName;
         this.PRIMARY_KEYS = keyFields;
         this.TYPES = types;
         this.ALL_COLUMNS = allColumns;
         cursor = new SQLExecutor();
-        try {
-            initTable();
-        } catch (DalException e) {
-            throw new RuntimeException(e);
-        }
+        initTable();
     }
 
     /**
      * Can be used for testing in a different database
      * @param dbName the name of the database to connect to
      */
-    public DAO(String dbName, String tableName, String[] keyFields, String[] types, String ... allColumns){
+    public DAO(String dbName, String tableName, String[] keyFields, String[] types, String ... allColumns) throws DalException {
         this.TABLE_NAME = tableName;
         this.PRIMARY_KEYS = keyFields;
         this.TYPES = types;
         this.ALL_COLUMNS = allColumns;
         cursor = new SQLExecutor(dbName);
-        try {
-            initTable();
-        } catch (DalException e) {
-            throw new RuntimeException(e);
-        }
+        initTable();
     }
 
     protected void initTable() throws DalException{

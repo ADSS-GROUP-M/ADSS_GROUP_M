@@ -1,5 +1,6 @@
 package presentationLayer.transportModule;
 
+import objects.transportObjects.DeliveryRoute;
 import objects.transportObjects.Driver;
 import objects.transportObjects.Site;
 import objects.transportObjects.Transport;
@@ -11,10 +12,7 @@ import utils.Response;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Objects;
+import java.util.*;
 
 public class TransportsManagement {
     
@@ -92,9 +90,12 @@ public class TransportsManagement {
         int truckWeight = uiData.readInt("Truck weight: ");
 
         Transport newTransport = new Transport(
-                source.address(),
-                destinations,
-                itemsList,
+                new DeliveryRoute(
+                        source.address(),
+                        departureTime,
+                        destinations,
+                        itemsList
+                ),
                 driverID,
                 truckId,
                 departureDateTime,
@@ -138,9 +139,11 @@ public class TransportsManagement {
                     System.out.println("Driver: ");
                     String driverID = uiData.pickDriver(false).id();
                     newTransport = new Transport(
-                            newTransport.source(),
-                            newTransport.destinations(),
-                            newTransport.itemLists(),
+                            new DeliveryRoute(
+                                    newTransport.source(),
+                                    newTransport.departureTime().toLocalTime(),
+                                    newTransport.destinations(),
+                                    newTransport.itemLists()),
                             driverID,
                             truckId,
                             newTransport.departureTime(),
@@ -158,9 +161,11 @@ public class TransportsManagement {
                     System.out.println("New weight :");
                     int weight = uiData.readInt();
                     newTransport = new Transport(
-                            newTransport.source(),
-                            destinations,
-                            itemsList,
+                            new DeliveryRoute(
+                                    newTransport.source(),
+                                    newTransport.departureTime().toLocalTime(),
+                                    destinations,
+                                    itemsList),
                             newTransport.driverId(),
                             newTransport.truckId(),
                             newTransport.departureTime(),
@@ -184,11 +189,11 @@ public class TransportsManagement {
         while(true) {
             System.out.println("=========================================");
             System.out.println("Select transport to update:");
-            Transport transport = getTransport();
-            if(transport == null) {
+            Transport oldtransport = getTransport();
+            if(oldtransport == null) {
                 return;
             }
-            printTransportDetails(transport);
+            printTransportDetails(oldtransport);
             System.out.println("=========================================");
             System.out.println("Please select an option:");
             System.out.println("1. Update driver");
@@ -202,77 +207,77 @@ public class TransportsManagement {
 
                 case 1 -> {
                     System.out.println("Select driver: ");
-                    String driverID = pickFromAvailableDrivers(transport.departureTime());
+                    String driverID = pickFromAvailableDrivers(oldtransport.departureTime());
                     if(driverID == null) {
                         continue;
                     }
 
                     updateTransportHelperMethod(
-                            transport.id(),
-                            transport.source(),
-                            transport.destinations(),
-                            transport.itemLists(),
-                            transport.truckId(),
+                            oldtransport.id(),
+                            oldtransport.source(),
+                            oldtransport.destinations(),
+                            oldtransport.itemLists(),
+                            oldtransport.truckId(),
                             driverID,
-                            transport.departureTime(),
-                            transport.weight()
+                            oldtransport.departureTime(),
+                            oldtransport.weight()
                     );
                 }
                 case 2 -> {
                     System.out.println("Select truck: ");
                     String truckId = uiData.pickTruck(false).id();
                     updateTransportHelperMethod(
-                            transport.id(),
-                            transport.source(),
-                            transport.destinations(),
-                            transport.itemLists(),
+                            oldtransport.id(),
+                            oldtransport.source(),
+                            oldtransport.destinations(),
+                            oldtransport.itemLists(),
                             truckId,
-                            transport.driverId(),
-                            transport.departureTime(),
-                            transport.weight()
+                            oldtransport.driverId(),
+                            oldtransport.departureTime(),
+                            oldtransport.weight()
                     );
                 }
                 case 3 -> {
                     System.out.println("Select source: ");
                     Site source = uiData.pickSite(false);
                     updateTransportHelperMethod(
-                            transport.id(),
+                            oldtransport.id(),
                             source.address(),
-                            transport.destinations(),
-                            transport.itemLists(),
-                            transport.truckId(),
-                            transport.driverId(),
-                            transport.departureTime(),
-                            transport.weight()
+                            oldtransport.destinations(),
+                            oldtransport.itemLists(),
+                            oldtransport.truckId(),
+                            oldtransport.driverId(),
+                            oldtransport.departureTime(),
+                            oldtransport.weight()
                     );
                 }
                 case 4 ->{
                     System.out.println("Select new destinations and item lists: ");
                     HashMap<String, Integer> itemsList = new HashMap<>();
                     LinkedList<String> destinations = new LinkedList<>();
-                    destinationsMaker(destinations, itemsList, transport.departureTime());
+                    destinationsMaker(destinations, itemsList, oldtransport.departureTime());
 
                     updateTransportHelperMethod(
-                            transport.id(),
-                            transport.source(),
+                            oldtransport.id(),
+                            oldtransport.source(),
                             destinations,
                             itemsList,
-                            transport.truckId(),
-                            transport.driverId(),
-                            transport.departureTime(),
-                            transport.weight()
+                            oldtransport.truckId(),
+                            oldtransport.driverId(),
+                            oldtransport.departureTime(),
+                            oldtransport.weight()
                     );
                 }
                 case 5 -> {
                     int truckWeight = uiData.readInt("Truck weight: ");
                     updateTransportHelperMethod(
-                            transport.id(),
-                            transport.source(),
-                            transport.destinations(),
-                            transport.itemLists(),
-                            transport.truckId(),
-                            transport.driverId(),
-                            transport.departureTime(),
+                            oldtransport.id(),
+                            oldtransport.source(),
+                            oldtransport.destinations(),
+                            oldtransport.itemLists(),
+                            oldtransport.truckId(),
+                            oldtransport.driverId(),
+                            oldtransport.departureTime(),
                             truckWeight
                     );
                 }
@@ -351,12 +356,17 @@ public class TransportsManagement {
         }
     }
 
-    private void updateTransportHelperMethod(int id, String source, LinkedList<String> destinations, HashMap<String, Integer> itemLists, String truckId, String driverId, LocalDateTime departureDateTime, int weight) {
+    private void updateTransportHelperMethod(int id,
+                                             String source,
+                                             List<String> destinations,
+                                             Map<String, Integer> itemLists,
+                                             String truckId,
+                                             String driverId,
+                                             LocalDateTime departureDateTime,
+                                             int weight) {
         Transport newTransport = new Transport(
                 id,
-                source,
-                destinations,
-                itemLists,
+                new DeliveryRoute(source, departureDateTime.toLocalTime(), destinations, itemLists),
                 driverId,
                 truckId,
                 departureDateTime,
@@ -367,7 +377,8 @@ public class TransportsManagement {
         String responseJson = ts.updateTransport(json);
         Response response = JsonUtils.deserialize(responseJson, Response.class);
         if(response.success()){
-            uiData.transports().put(id, newTransport);
+            Transport _transport = Transport.fromJson(response.data());
+            uiData.transports().put(id, _transport);
         }
         System.out.println("\n"+response.message());
     }
@@ -404,9 +415,6 @@ public class TransportsManagement {
 
             }
 
-
-
-
             int listId = uiData.readInt("Items list id: ");
             if (uiData.itemLists().containsKey(listId) == false) {
                 System.out.println("\nItems list with ID " + listId + " does not exist!");
@@ -428,9 +436,9 @@ public class TransportsManagement {
         System.out.println("\n"+response.message());
 
         if(response.success()){
-            int id = response.dataToInt();
-            newTransport = newTransport.newId(id);
-            uiData.transports().put(id, newTransport);
+            Integer id = response.dataToInt();
+            Transport _transport = fetchAddedTransport(id);
+            uiData.transports().put(id, _transport);
         }
         return response;
     }
@@ -471,5 +479,12 @@ public class TransportsManagement {
             System.out.println(errorMessage);
         }
         return isMissingData;
+    }
+
+    private Transport fetchAddedTransport(int _id) {
+        String _json = Transport.getLookupObject(_id).toJson();
+        String _responseJson = ts.getTransport(_json);
+        Response _response = JsonUtils.deserialize(_responseJson, Response.class);
+        return Transport.fromJson(_response.data());
     }
 }

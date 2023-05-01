@@ -12,6 +12,7 @@ import serviceLayer.employeeModule.Services.UserService;
 import serviceLayer.transportModule.ItemListsService;
 import serviceLayer.transportModule.ResourceManagementService;
 import serviceLayer.transportModule.TransportsService;
+import utils.JsonUtils;
 import utils.Response;
 
 import java.time.LocalDate;
@@ -73,7 +74,7 @@ class TransportsServiceTest {
         HashMap<String,Integer> hm = new HashMap<>();
         hm.put(site2.address(), itemList1.id());
 
-        transport = new Transport(
+        Transport transportToAdd = new Transport(
                 site1.address(),
                 new LinkedList<>(List.of(site2.address())),
                 hm,
@@ -82,13 +83,13 @@ class TransportsServiceTest {
                 LocalDateTime.of(2020, 1, 1, 0, 0),
                 100
         );
-        String json2 = ts.addTransport(transport.toJson());
+        String json2 = ts.addTransport(transportToAdd.toJson());
         Response response = Response.fromJson(json2);
         if(response.success() == false){
             fail("Setup failed:\n" + response.message() + "\ncause: " + response.data());
         } else {
-            int id2 = Response.fromJson(json2).dataToInt();
-            transport = transport.newId(id2);
+            int _id = response.dataToInt();
+            transport = fetchAddedTransport(_id);
         }
     }
 
@@ -132,7 +133,7 @@ class TransportsServiceTest {
         String json2 = ts.addTransport(newTransport.toJson());
         Response response = Response.fromJson(json2);
         assertTrue(response.success(),response.message());
-        newTransport = newTransport.newId(response.dataToInt());
+        newTransport = fetchAddedTransport(response.dataToInt());
         String updatedJson = ts.getTransport(Transport.getLookupObject(response.dataToInt()).toJson());
         Response updatedResponse = Response.fromJson(updatedJson);
         Transport updatedTransport = updatedResponse.data(Transport.class);
@@ -307,6 +308,7 @@ class TransportsServiceTest {
         assertFalse(response.success());
         assertEquals("license",response.data());
     }
+
     @Test
     void createTransportWithBadLicenseAndTooMuchWeight(){
         Driver driver = new Driver("12345","name", Driver.LicenseType.A1);
@@ -328,7 +330,6 @@ class TransportsServiceTest {
         assertFalse(response.success());
         assertEquals("license,weight",response.data());
     }
-
     @Test
     void createTransportEverythingDoesNotExist(){
         Transport newTransport = new Transport(
@@ -353,10 +354,10 @@ class TransportsServiceTest {
     }
 
     String driverId1 = "123", driverId2 = "12345";
+
     String storekeeperId1 = "126", storekeeperId2 = "127", storekeeperId3 = "128", storekeeperId4 = "129";
     String HQAddress = "1", updatedBranchDestination = "123 main st UPDATED", site1Address = "123 main st";
     LocalDate shiftDate = LocalDate.of(2020, 1, 1);
-
     private void initEmployeesModuleTestData() {
         // Used for testing Employees module integration:
         // Creating the test branch and shifts, recruiting and certifying the employees
@@ -404,5 +405,12 @@ class TransportsServiceTest {
         es.setShiftEmployees("admin123", updatedBranchDestination,shiftDate, SShiftType.Evening,"Storekeeper",new ArrayList<>(){{add(storekeeperId2);}});
         es.approveShift("admin123", updatedBranchDestination,shiftDate, SShiftType.Morning);
         es.approveShift("admin123", updatedBranchDestination,shiftDate, SShiftType.Evening);
+    }
+
+    private Transport fetchAddedTransport(int _id) {
+        String _json = Transport.getLookupObject(_id).toJson();
+        String _responseJson = ts.getTransport(_json);
+        Response _response = JsonUtils.deserialize(_responseJson, Response.class);
+        return Transport.fromJson(_response.data());
     }
 }

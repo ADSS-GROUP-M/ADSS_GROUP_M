@@ -5,42 +5,58 @@ import utils.JsonUtils;
 
 import java.lang.reflect.Type;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Objects;
+import java.util.*;
 
-public record Transport (int id, String source, LinkedList<String> destinations, HashMap<String, Integer> itemLists,
-                         String driverId, String truckId, LocalDateTime departureTime, int weight){
+public record Transport (
+        int id,
+        DeliveryRoute deliveryRoute,
+        String driverId,
+        String truckId,
+        LocalDateTime departureTime,
+        int weight) {
 
-
-    /**
-     * @param id new id of the transport
-     * @param other transport to copy from
-     */
-    public Transport(int id, Transport other){
+    public Transport(int id, String source, List<String> destinations,Map<String,Integer> itemLists , String driverId, String truckId, LocalDateTime departureTime, int weight){
         this(
                 id,
-                other.source,
-                other.destinations,
-                other.itemLists,
-                other.driverId,
-                other.truckId,
-                other.departureTime,
-                other.weight
+                new DeliveryRoute(source,departureTime.toLocalTime(), destinations, itemLists),
+                driverId,
+                truckId,
+                departureTime,
+                weight
         );
     }
 
+    public Transport(int id, Transport transport) {
+        this(
+                id,
+                transport.deliveryRoute(),
+                transport.driverId(),
+                transport.truckId(),
+                transport.departureTime(),
+                transport.weight()
+        );
+    }
 
     /**
      * this constructor sets the id to be -1
      */
-    public Transport(String source, LinkedList<String> destinations, HashMap<String, Integer> itemLists,
-                     String driverId, String truckId, LocalDateTime scheduledTime, int weight){
+    public Transport(String source, List<String> destinations,Map<String,Integer> itemLists , String driverId, String truckId, LocalDateTime departureTime, int weight){
+        this(
+                new DeliveryRoute(source,departureTime.toLocalTime(), destinations, itemLists),
+                driverId,
+                truckId,
+                departureTime,
+                weight
+        );
+    }
+
+    /**
+     * this constructor sets the id to be -1
+     */
+    public Transport(DeliveryRoute deliveryRoute, String driverId, String truckId, LocalDateTime scheduledTime, int weight){
         this(
                 -1,
-                source,
-                destinations,
-                itemLists,
+                deliveryRoute,
                 driverId,
                 truckId,
                 scheduledTime,
@@ -48,8 +64,20 @@ public record Transport (int id, String source, LinkedList<String> destinations,
         );
     }
 
+    public String source(){
+        return deliveryRoute.source();
+    }
+
+    public List<String> destinations(){
+        return deliveryRoute.destinations();
+    }
+
+    public Map<String,Integer> itemLists(){
+        return deliveryRoute.itemLists();
+    }
+
     public static Transport getLookupObject(int id){
-        return new Transport(id, null, null, null, null, null, null, 0);
+        return new Transport(id, null, null, null, null, 0);
     }
 
     public String toJson(){
@@ -80,10 +108,6 @@ public record Transport (int id, String source, LinkedList<String> destinations,
     @Override
     public int hashCode() {
         return Objects.hash(id);
-    }
-
-    public Transport newId(int id) {
-        return new Transport(id, this);
     }
 }
 

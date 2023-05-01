@@ -4,6 +4,7 @@ import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.dalUtils.OfflineResultSet;
 import dataAccessLayer.transportModule.abstracts.CounterDAO;
 import dataAccessLayer.transportModule.abstracts.ManyToManyDAO;
+import objects.transportObjects.DeliveryRoute;
 import objects.transportObjects.Transport;
 
 import java.sql.SQLException;

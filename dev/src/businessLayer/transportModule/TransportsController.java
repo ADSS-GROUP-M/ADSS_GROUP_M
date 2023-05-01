@@ -3,10 +3,7 @@ package businessLayer.transportModule;
 import com.google.gson.reflect.TypeToken;
 import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.transportModule.TransportsDAO;
-import objects.transportObjects.Driver;
-import objects.transportObjects.Site;
-import objects.transportObjects.Transport;
-import objects.transportObjects.Truck;
+import objects.transportObjects.*;
 import serviceLayer.employeeModule.Services.EmployeesService;
 import utils.JsonUtils;
 import utils.Response;
@@ -67,6 +64,7 @@ public class TransportsController {
         }
 
         validateTransport(transport);
+        initializeDeliveryRouteDistances(transport);
         Transport toAdd = new Transport(idCounter,transport);
         try {
             dao.insert(toAdd);
@@ -128,6 +126,7 @@ public class TransportsController {
         }
 
         validateTransport(newTransport);
+        initializeDeliveryRouteDistances(newTransport);
 
         try {
             dao.update(new Transport(id, newTransport));
@@ -244,5 +243,9 @@ public class TransportsController {
         } catch (DalException e) {
             throw new TransportException(e.getMessage(),e);
         }
+    }
+
+    private void initializeDeliveryRouteDistances(Transport transport) {
+        //TODO: implement
     }
 }

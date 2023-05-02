@@ -12,9 +12,7 @@ public class DeliveryRoute {
 
     private final String source;
     private final LocalTime departureHour;
-
     private final List<String> destinations;
-
     private final Set<String> destinationsSet;
     private final Map<String,Integer> destinations_itemListIds;
     private Map<String, LocalTime> estimatedArrivalTimes;
@@ -33,17 +31,12 @@ public class DeliveryRoute {
     }
 
     public void initializeArrivalTimes(Map<String,LocalTime> estimatedArrivalTimes){
-        if(estimatedArrivalTimes == null){
-            throw new RuntimeException("Estimated arrival times have not been initialized");
-        }
-
         // check there is an arrival time for each destination
         for(String destination : destinations){
             if(estimatedArrivalTimes.containsKey(destination) == false){
                 throw new RuntimeException("Incomplete estimated arrival times");
             }
         }
-
         this.estimatedArrivalTimes = estimatedArrivalTimes;
     }
 
@@ -52,6 +45,13 @@ public class DeliveryRoute {
             throw new RuntimeException("Estimated arrival times have not been initialized");
         }
         return estimatedArrivalTimes.get(destination);
+    }
+
+    public void overrideArrivalTime(String destination, LocalTime arrivalTime){
+        if(estimatedArrivalTimes == null){
+            throw new RuntimeException("Estimated arrival times have not been initialized");
+        }
+        estimatedArrivalTimes.put(destination,arrivalTime);
     }
 
     public String source() {

@@ -69,9 +69,8 @@ public class TransportsController {
         if(transport.id() != -1){
             throw new UnsupportedOperationException("Pre-defined IDs are not supported");
         }
-
         validateTransport(transport);
-        initializeDeliveryRouteDistances(transport);
+        initializeEstimatedArrivalTimes(transport);
         Transport toAdd = new Transport(idCounter,transport);
         try {
             dao.insert(toAdd);
@@ -133,7 +132,7 @@ public class TransportsController {
         }
 
         validateTransport(newTransport);
-        initializeDeliveryRouteDistances(newTransport);
+        //initializeDeliveryRouteDistances(newTransport);
 
         try {
             dao.update(new Transport(id, newTransport));
@@ -252,11 +251,10 @@ public class TransportsController {
         }
     }
 
-    private Map<String,LocalTime> buildEstimatedArrivalTimes(Transport transport) throws TransportException{
+    private void initializeEstimatedArrivalTimes(Transport transport) throws TransportException{
 
-        DeliveryRoute route = transport.deliveryRoute();
         Map<String,LocalTime> estimatedArrivalTimes = new HashMap<>();
-        Map<Pair<String,String>,Integer> distances = buildDeliveryRouteDistances(transport);
+        Map<Pair<String,String>,Integer> distances = buildSitesDistances(transport);
 
         ListIterator<String> destinationsIterator = transport.destinations().listIterator();
         LocalTime time = transport.departureTime().toLocalTime();
@@ -266,16 +264,17 @@ public class TransportsController {
         if(destinationsIterator.hasNext()){
             next = destinationsIterator.next();
             time = addTravelTime(time, curr, next, distances);
+            estimatedArrivalTimes.put(next, time);
         }
 
         while(destinationsIterator.hasNext()){
             time = time.plusMinutes(DeliveryRoute.AVERAGE_TIME_PER_VISIT);
             next = destinationsIterator.next();
             time = addTravelTime(time, curr, next,distances);
+            estimatedArrivalTimes.put(next, time);
             curr = next;
         }
-
-        return route;
+        transport.deliveryRoute().initializeArrivalTimes(estimatedArrivalTimes);
     }
 
     private static LocalTime addTravelTime(LocalTime time, String curr, String next, Map<Pair<String,String>,Integer> distances){
@@ -283,7 +282,7 @@ public class TransportsController {
         return time;
     }
 
-    private Map<Pair<String,String>,Integer> buildDeliveryRouteDistances(Transport transport) throws TransportException {
+    private Map<Pair<String,String>,Integer> buildSitesDistances(Transport transport) throws TransportException {
         DeliveryRoute route = transport.deliveryRoute();
         HashMap<Pair<String,String>,Integer> distances = new HashMap<>();
 
@@ -302,16 +301,46 @@ public class TransportsController {
         }
         return distances;
     }
-    /**
-     * used for testing
-     */
-    public static void initDistances(Transport transport) {
+
+    //============================================================================== |
+    //=============================== USED FOR TESTING ============================= |
+    //============================================================================== |
+
+    public static void testing_initArrivalTimes(Transport transport) {
+
+        Map<String, LocalTime> estimatedArrivalTimes = new HashMap<>();
+        Map<Pair<String, String>, Integer> distances = testing_buildDistances(transport);
+
+        ListIterator<String> destinationsIterator = transport.destinations().listIterator();
+        LocalTime time = transport.departureTime().toLocalTime();
+        String curr = transport.source();
+        String next;
+
+        if (destinationsIterator.hasNext()) {
+            next = destinationsIterator.next();
+            time = addTravelTime(time, curr, next, distances);
+            estimatedArrivalTimes.put(next, time);
+        }
+
+        while (destinationsIterator.hasNext()) {
+            time = time.plusMinutes(DeliveryRoute.AVERAGE_TIME_PER_VISIT);
+            next = destinationsIterator.next();
+            time = addTravelTime(time, curr, next, distances);
+            estimatedArrivalTimes.put(next, time);
+            curr = next;
+        }
+        transport.deliveryRoute().initializeArrivalTimes(estimatedArrivalTimes);
+    }
+
+    private static Map<Pair<String,String>,Integer> testing_buildDistances(Transport transport){
+
         SitesDistancesDAO distancesDAO = null;
         try {
             distancesDAO = new SitesDistancesDAO(TESTING_DB_NAME);
         } catch (DalException e) {
-            throw new RuntimeException(e.getMessage(),e);
+            throw new RuntimeException(e);
         }
+
         DeliveryRoute route = transport.deliveryRoute();
         HashMap<Pair<String,String>,Integer> distances = new HashMap<>();
 
@@ -324,11 +353,14 @@ public class TransportsController {
             try {
                 distance = distancesDAO.select(lookUpObject).distance();
             } catch (DalException e) {
-                throw new RuntimeException(e.getMessage(),e);
+                throw new RuntimeException(e);
             }
             distances.put(new Pair<>(source,destination),distance);
         }
-
-        route.initializeDistances(distances);
+        return distances;
     }
+
+
+
+
 }

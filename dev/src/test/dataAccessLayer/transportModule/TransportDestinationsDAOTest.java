@@ -99,7 +99,7 @@ class TransportDestinationsDAOTest {
             driversDAO.insert(driver);
             itemListsDAO.insert(itemList);
             sitesDistancesDAO.insert(distance);
-            TransportsController.initDistances(transport);
+            TransportsController.testing_initArrivalTimes(transport);
             transportsDAO.insert(transport);
 
             dao = new TransportDestinationsDAO(TESTING_DB_NAME);

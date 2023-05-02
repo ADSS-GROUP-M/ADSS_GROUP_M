@@ -1,146 +1,168 @@
-<mxfile host="app.diagrams.net" modified="2023-04-27T10:54:38.265Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36" etag="spy8gMvoxeErAMRYP3AT" version="21.2.3" type="device">
+<mxfile host="Electron" modified="2023-05-02T21:27:33.644Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.1.2 Chrome/106.0.5249.199 Electron/21.4.3 Safari/537.36" etag="9m686BS_hLXOjigYYf2S" version="21.1.2" type="device">
   <diagram name="Page-1" id="uHN6ZnfaQdteIbiYkisC">
-    <mxGraphModel dx="1188" dy="496" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="875" dy="524" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="PGV5-ihLe_tvBiudfZSY-1" value="Driver" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="1">
-          <mxGeometry x="120" y="298" width="30" height="60" as="geometry" />
+        <mxCell id="PGV5-ihLe_tvBiudfZSY-1" value="Driver" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" parent="1" vertex="1">
+          <mxGeometry x="140" y="400" width="30" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="PGV5-ihLe_tvBiudfZSY-16" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="PGV5-ihLe_tvBiudfZSY-2" target="PGV5-ihLe_tvBiudfZSY-11">
+        <mxCell id="PGV5-ihLe_tvBiudfZSY-16" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="PGV5-ihLe_tvBiudfZSY-2" target="PGV5-ihLe_tvBiudfZSY-11" edge="1">
           <mxGeometry relative="1" as="geometry">
-            <Array as="points" />
+            <Array as="points">
+              <mxPoint x="245" y="75" />
+            </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="PGV5-ihLe_tvBiudfZSY-2" value="Employee" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="1">
-          <mxGeometry x="110" y="40" width="30" height="60" as="geometry" />
+        <mxCell id="PGV5-ihLe_tvBiudfZSY-2" value="Employee" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" parent="1" vertex="1">
+          <mxGeometry x="230" y="140" width="30" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="PGV5-ihLe_tvBiudfZSY-15" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="PGV5-ihLe_tvBiudfZSY-3" target="PGV5-ihLe_tvBiudfZSY-8">
-          <mxGeometry relative="1" as="geometry" />
+        <mxCell id="PGV5-ihLe_tvBiudfZSY-15" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;edgeStyle=orthogonalEdgeStyle;" parent="1" target="PGV5-ihLe_tvBiudfZSY-8" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="520" y="270" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="585" y="270" />
+            </Array>
+          </mxGeometry>
         </mxCell>
-        <mxCell id="PGV5-ihLe_tvBiudfZSY-17" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="PGV5-ihLe_tvBiudfZSY-3" target="PGV5-ihLe_tvBiudfZSY-9">
+        <mxCell id="PGV5-ihLe_tvBiudfZSY-17" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" target="PGV5-ihLe_tvBiudfZSY-9" edge="1">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="380" y="260" />
+              <mxPoint x="380" y="125" />
             </Array>
+            <mxPoint x="470" y="260" as="sourcePoint" />
+            <mxPoint x="380" y="160" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="PGV5-ihLe_tvBiudfZSY-25" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="PGV5-ihLe_tvBiudfZSY-3" target="PGV5-ihLe_tvBiudfZSY-10">
+        <mxCell id="PGV5-ihLe_tvBiudfZSY-25" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;edgeStyle=orthogonalEdgeStyle;" parent="1" target="PGV5-ihLe_tvBiudfZSY-10" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="520" y="280" />
+              <mxPoint x="645" y="280" />
+            </Array>
+            <mxPoint x="520" y="280" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="PGV5-ihLe_tvBiudfZSY-39" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" target="PGV5-ihLe_tvBiudfZSY-38" edge="1">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="540" y="310" />
-              <mxPoint x="540" y="310" />
+              <mxPoint x="540" y="460" />
+              <mxPoint x="765" y="460" />
             </Array>
+            <mxPoint x="520" y="310" as="sourcePoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="PGV5-ihLe_tvBiudfZSY-39" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="PGV5-ihLe_tvBiudfZSY-3" target="PGV5-ihLe_tvBiudfZSY-38">
+        <mxCell id="PGV5-ihLe_tvBiudfZSY-40" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" target="PGV5-ihLe_tvBiudfZSY-37" edge="1">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="510" y="390" />
-              <mxPoint x="600" y="390" />
-              <mxPoint x="600" y="583" />
+              <mxPoint x="520" y="300" />
+              <mxPoint x="560" y="300" />
+              <mxPoint x="560" y="427" />
             </Array>
+            <mxPoint x="520" y="300" as="sourcePoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="PGV5-ihLe_tvBiudfZSY-40" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="PGV5-ihLe_tvBiudfZSY-3" target="PGV5-ihLe_tvBiudfZSY-37">
+        <mxCell id="PGV5-ihLe_tvBiudfZSY-42" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" target="PGV5-ihLe_tvBiudfZSY-36" edge="1">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="480" y="390" />
-              <mxPoint x="370" y="390" />
-              <mxPoint x="370" y="625" />
+              <mxPoint x="520" y="290" />
+              <mxPoint x="580" y="290" />
+              <mxPoint x="580" y="355" />
             </Array>
+            <mxPoint x="520" y="290" as="sourcePoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="PGV5-ihLe_tvBiudfZSY-42" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="PGV5-ihLe_tvBiudfZSY-3" target="PGV5-ihLe_tvBiudfZSY-36">
-          <mxGeometry relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="360" y="283" />
-              <mxPoint x="360" y="553" />
-            </Array>
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="PGV5-ihLe_tvBiudfZSY-3" value="HR Manager" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="1">
+        <mxCell id="PGV5-ihLe_tvBiudfZSY-3" value="HR Manager" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" parent="1" vertex="1">
           <mxGeometry x="480" y="253" width="30" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="PGV5-ihLe_tvBiudfZSY-6" value="Recruiting A New Employee To A Role" style="swimlane;whiteSpace=wrap;html=1;startSize=30;" vertex="1" parent="1">
-          <mxGeometry x="640" y="208" width="200" height="150" as="geometry" />
+        <mxCell id="PGV5-ihLe_tvBiudfZSY-6" value="Recruiting a new employee to a role" style="swimlane;whiteSpace=wrap;html=1;startSize=30;" parent="1" vertex="1">
+          <mxGeometry x="510" y="10" width="200" height="150" as="geometry" />
         </mxCell>
-        <mxCell id="PGV5-ihLe_tvBiudfZSY-19" value="סעיף א" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="PGV5-ihLe_tvBiudfZSY-6">
+        <mxCell id="PGV5-ihLe_tvBiudfZSY-19" value="סעיף א" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="PGV5-ihLe_tvBiudfZSY-6" vertex="1">
           <mxGeometry x="140" y="30" width="60" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="PGV5-ihLe_tvBiudfZSY-10" value="Recruit Employee" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="PGV5-ihLe_tvBiudfZSY-6">
-          <mxGeometry x="65" y="95" width="70" height="50" as="geometry" />
+        <mxCell id="PGV5-ihLe_tvBiudfZSY-10" value="Recruit Employee" style="ellipse;whiteSpace=wrap;html=1;" parent="PGV5-ihLe_tvBiudfZSY-6" vertex="1">
+          <mxGeometry x="100" y="90" width="70" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="PGV5-ihLe_tvBiudfZSY-8" value="Certify Employee" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="PGV5-ihLe_tvBiudfZSY-6">
-          <mxGeometry x="45" y="40" width="90" height="50" as="geometry" />
+        <mxCell id="PGV5-ihLe_tvBiudfZSY-8" value="Certify Employee" style="ellipse;whiteSpace=wrap;html=1;" parent="PGV5-ihLe_tvBiudfZSY-6" vertex="1">
+          <mxGeometry x="30" y="40" width="90" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="PGV5-ihLe_tvBiudfZSY-13" value="" style="endArrow=block;endSize=16;endFill=0;html=1;rounded=0;" edge="1" parent="1" source="PGV5-ihLe_tvBiudfZSY-3" target="PGV5-ihLe_tvBiudfZSY-2">
+        <mxCell id="PGV5-ihLe_tvBiudfZSY-13" value="" style="endArrow=block;endSize=16;endFill=0;html=1;rounded=0;edgeStyle=elbowEdgeStyle;" parent="1" edge="1">
           <mxGeometry width="160" relative="1" as="geometry">
-            <mxPoint x="240" y="320" as="sourcePoint" />
-            <mxPoint x="170" y="110" as="targetPoint" />
+            <mxPoint x="470" y="270" as="sourcePoint" />
+            <mxPoint x="260" y="230" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="260" y="260" />
+            </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="PGV5-ihLe_tvBiudfZSY-18" value="Update Employee Details And Availability" style="swimlane;whiteSpace=wrap;html=1;startSize=30;" vertex="1" parent="1">
-          <mxGeometry x="290" y="10" width="210" height="150" as="geometry" />
+        <mxCell id="PGV5-ihLe_tvBiudfZSY-18" value="Update employee details and availability" style="swimlane;whiteSpace=wrap;html=1;startSize=30;" parent="1" vertex="1">
+          <mxGeometry x="310" y="10" width="190" height="150" as="geometry" />
         </mxCell>
-        <mxCell id="PGV5-ihLe_tvBiudfZSY-9" value="Update Employee Details" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="PGV5-ihLe_tvBiudfZSY-18">
-          <mxGeometry x="55" y="90" width="80" height="50" as="geometry" />
+        <mxCell id="PGV5-ihLe_tvBiudfZSY-9" value="Update Employee Details" style="ellipse;whiteSpace=wrap;html=1;" parent="PGV5-ihLe_tvBiudfZSY-18" vertex="1">
+          <mxGeometry x="110" y="90" width="80" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="PGV5-ihLe_tvBiudfZSY-11" value="Request Shift" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="PGV5-ihLe_tvBiudfZSY-18">
-          <mxGeometry x="60" y="40" width="70" height="50" as="geometry" />
+        <mxCell id="PGV5-ihLe_tvBiudfZSY-11" value="Request Shift" style="ellipse;whiteSpace=wrap;html=1;" parent="PGV5-ihLe_tvBiudfZSY-18" vertex="1">
+          <mxGeometry x="40" y="40" width="70" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="PGV5-ihLe_tvBiudfZSY-20" value="סעיף ב" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="PGV5-ihLe_tvBiudfZSY-18">
+        <mxCell id="PGV5-ihLe_tvBiudfZSY-20" value="סעיף ב" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="PGV5-ihLe_tvBiudfZSY-18" vertex="1">
           <mxGeometry x="150" y="30" width="60" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="PGV5-ihLe_tvBiudfZSY-21" value="Update Stock And Notify Shortages" style="swimlane;whiteSpace=wrap;html=1;startSize=35;" vertex="1" parent="1">
+        <mxCell id="PGV5-ihLe_tvBiudfZSY-21" value="Update stock and notify shortages" style="swimlane;whiteSpace=wrap;html=1;startSize=35;" parent="1" vertex="1">
           <mxGeometry x="360" y="870" width="200" height="100" as="geometry" />
         </mxCell>
-        <mxCell id="PGV5-ihLe_tvBiudfZSY-22" value="סעיף ג" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="PGV5-ihLe_tvBiudfZSY-21">
+        <mxCell id="PGV5-ihLe_tvBiudfZSY-22" value="סעיף ג" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="PGV5-ihLe_tvBiudfZSY-21" vertex="1">
           <mxGeometry x="145" y="30" width="50" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="PGV5-ihLe_tvBiudfZSY-23" value="Adding A New Supplier" style="swimlane;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="PGV5-ihLe_tvBiudfZSY-23" value="Adding a new supplier" style="swimlane;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="610" y="750" width="200" height="100" as="geometry" />
         </mxCell>
-        <mxCell id="PGV5-ihLe_tvBiudfZSY-24" value="סעיף ד" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="PGV5-ihLe_tvBiudfZSY-23">
+        <mxCell id="PGV5-ihLe_tvBiudfZSY-24" value="סעיף ד" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="PGV5-ihLe_tvBiudfZSY-23" vertex="1">
           <mxGeometry x="140" y="30" width="60" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="PGV5-ihLe_tvBiudfZSY-26" value="Recieve A Regular Order From A Supplier" style="swimlane;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="160" y="780" width="200" height="100" as="geometry" />
+        <mxCell id="PGV5-ihLe_tvBiudfZSY-26" value="Sending a periodic order from a supplier" style="swimlane;whiteSpace=wrap;html=1;startSize=30;" parent="1" vertex="1">
+          <mxGeometry x="160" y="770" width="200" height="110" as="geometry" />
         </mxCell>
-        <mxCell id="PGV5-ihLe_tvBiudfZSY-27" value="סעיף ה" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="PGV5-ihLe_tvBiudfZSY-26">
+        <mxCell id="PGV5-ihLe_tvBiudfZSY-27" value="סעיף ה" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="PGV5-ihLe_tvBiudfZSY-26" vertex="1">
           <mxGeometry x="140" y="30" width="60" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="PGV5-ihLe_tvBiudfZSY-28" value="Recieve A Deliberate Order From A Supplier" style="swimlane;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="PGV5-ihLe_tvBiudfZSY-28" value="Sending a delivery from a supplier due to a shortage" style="swimlane;whiteSpace=wrap;html=1;startSize=30;" parent="1" vertex="1">
           <mxGeometry x="600" y="860" width="200" height="100" as="geometry" />
         </mxCell>
-        <mxCell id="PGV5-ihLe_tvBiudfZSY-29" value="סעיף ו" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="PGV5-ihLe_tvBiudfZSY-28">
+        <mxCell id="PGV5-ihLe_tvBiudfZSY-29" value="סעיף ו" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="PGV5-ihLe_tvBiudfZSY-28" vertex="1">
           <mxGeometry x="145" y="30" width="50" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="PGV5-ihLe_tvBiudfZSY-30" value="Assigning Employees To Shifts" style="swimlane;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="380" y="498" width="200" height="172" as="geometry" />
+        <mxCell id="PGV5-ihLe_tvBiudfZSY-30" value="Assigning employees to shifts" style="swimlane;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="610" y="300" width="200" height="172" as="geometry" />
         </mxCell>
-        <mxCell id="PGV5-ihLe_tvBiudfZSY-31" value="סעיף ז" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="PGV5-ihLe_tvBiudfZSY-30">
+        <mxCell id="PGV5-ihLe_tvBiudfZSY-31" value="סעיף ז" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="PGV5-ihLe_tvBiudfZSY-30" vertex="1">
           <mxGeometry x="150" y="22" width="50" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="PGV5-ihLe_tvBiudfZSY-36" value="Get Requesting Employees" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="PGV5-ihLe_tvBiudfZSY-30">
-          <mxGeometry x="10" y="30" width="80" height="50" as="geometry" />
+        <mxCell id="PGV5-ihLe_tvBiudfZSY-36" value="Get Requesting Employees" style="ellipse;whiteSpace=wrap;html=1;" parent="PGV5-ihLe_tvBiudfZSY-30" vertex="1">
+          <mxGeometry x="20" y="30" width="80" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="PGV5-ihLe_tvBiudfZSY-37" value="Register Employees To A Shift" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="PGV5-ihLe_tvBiudfZSY-30">
-          <mxGeometry x="10" y="102" width="80" height="50" as="geometry" />
+        <mxCell id="PGV5-ihLe_tvBiudfZSY-37" value="Register Employees To A Shift" style="ellipse;whiteSpace=wrap;html=1;" parent="PGV5-ihLe_tvBiudfZSY-30" vertex="1">
+          <mxGeometry x="20" y="102" width="80" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="PGV5-ihLe_tvBiudfZSY-38" value="Remove An Employee From A Shift" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="PGV5-ihLe_tvBiudfZSY-30">
-          <mxGeometry x="115" y="60" width="80" height="50" as="geometry" />
+        <mxCell id="PGV5-ihLe_tvBiudfZSY-38" value="Remove An Employee From A Shift" style="ellipse;whiteSpace=wrap;html=1;" parent="PGV5-ihLe_tvBiudfZSY-30" vertex="1">
+          <mxGeometry x="110" y="50" width="85" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="PGV5-ihLe_tvBiudfZSY-33" value="Sending A Transport" style="swimlane;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="PGV5-ihLe_tvBiudfZSY-33" value="Sending a transport" style="swimlane;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="380" y="760" width="200" height="100" as="geometry" />
         </mxCell>
-        <mxCell id="PGV5-ihLe_tvBiudfZSY-34" value="סעיף ח" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="PGV5-ihLe_tvBiudfZSY-33">
+        <mxCell id="PGV5-ihLe_tvBiudfZSY-34" value="סעיף ח" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="PGV5-ihLe_tvBiudfZSY-33" vertex="1">
           <mxGeometry x="140" y="30" width="60" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="PGV5-ihLe_tvBiudfZSY-43" value="" style="endArrow=block;endSize=16;endFill=0;html=1;rounded=0;" edge="1" parent="1" source="PGV5-ihLe_tvBiudfZSY-1" target="PGV5-ihLe_tvBiudfZSY-2">
+        <mxCell id="PGV5-ihLe_tvBiudfZSY-43" value="" style="endArrow=block;endSize=16;endFill=0;html=1;rounded=0;edgeStyle=orthogonalEdgeStyle;exitX=0.5;exitY=0;exitDx=0;exitDy=0;exitPerimeter=0;" parent="1" source="PGV5-ihLe_tvBiudfZSY-1" edge="1">
           <mxGeometry width="160" relative="1" as="geometry">
-            <mxPoint x="450" y="325" as="sourcePoint" />
-            <mxPoint x="110" y="130" as="targetPoint" />
+            <mxPoint x="130" y="390" as="sourcePoint" />
+            <mxPoint x="230" y="230" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="155" y="315" />
+              <mxPoint x="230" y="315" />
+            </Array>
           </mxGeometry>
         </mxCell>
       </root>

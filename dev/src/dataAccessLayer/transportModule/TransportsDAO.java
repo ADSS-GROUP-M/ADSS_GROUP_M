@@ -243,7 +243,8 @@ public class TransportsDAO extends ManyToManyDAO<Transport> implements CounterDA
     private LinkedList<TransportDestination> generateTransportDestinations(Transport object) {
         LinkedList<TransportDestination> transportDestinations = new LinkedList<>();
         int i = 1;
-        for(Pair<String, LocalTime> destination : object.deliveryRoute().getAllEstimatedArrivalTimes()){
+        List<Pair<String, LocalTime>> allEstimatedArrivalTimes = object.deliveryRoute().getAllEstimatedArrivalTimes();
+        for(Pair<String, LocalTime> destination : allEstimatedArrivalTimes){
             transportDestinations.add(new TransportDestination(
                     object.id(),
                     i++,

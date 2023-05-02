@@ -2,19 +2,23 @@ package dataAccessLayer.transportModule;
 
 import businessLayer.employeeModule.Employee;
 import businessLayer.employeeModule.Role;
+import businessLayer.transportModule.TransportsController;
 import dataAccessLayer.DalFactory;
 import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.dalUtils.OfflineResultSet;
 import dataAccessLayer.dalUtils.SQLExecutor;
 import dataAccessLayer.employeeModule.EmployeeDAO;
+import javafx.util.Pair;
 import objects.transportObjects.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import utils.transportUtils.TransportException;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -36,7 +40,7 @@ class TransportDestinationsDAOTest {
     @BeforeEach
     void setUp() {
         try {
-            Site site = new Site("zone1", SITE_ADDRESS1, "12345", "kobi", Site.SiteType.SUPPLIER);
+            Site site1 = new Site("zone1", SITE_ADDRESS1, "12345", "kobi", Site.SiteType.SUPPLIER);
             Site site2 = new Site("zone1", SITE_ADDRESS2, "12345", "kobi", Site.SiteType.SUPPLIER);
             Truck truck = new Truck("1", "model1", 1000, 20000, Truck.CoolingCapacity.FROZEN);
             Employee employee = new Employee("name1", "12345", "Poalim", 50, LocalDate.of(1999, 10, 10), "conditions", "details");
@@ -57,14 +61,20 @@ class TransportDestinationsDAOTest {
             ItemList itemList = new ItemList(LIST_ID, load, unload);
 
             Transport transport = new Transport(TRANSPORT_ID,
-                    site.address(),
-                    new LinkedList<>(),
-                    new HashMap<>(),
+                    site1.address(),
+                    new LinkedList<>(){{
+                        add(site2.address());
+                    }},
+                    new HashMap<>(){{
+                        put(site2.address(), LIST_ID);
+                    }},
                     driver.id(),
                     truck.id(),
                     LocalDateTime.of(2020, 1, 1, 1, 1),
                     15000
             );
+
+            DistanceBetweenSites distance = new DistanceBetweenSites(site1.address(), site2.address(), 40);
 
             DalFactory factory = new DalFactory(TESTING_DB_NAME);
             SitesDAO sitesDAO = factory.sitesDAO();
@@ -73,6 +83,7 @@ class TransportDestinationsDAOTest {
             DriversDAO driversDAO = factory.driversDAO();
             ItemListsDAO itemListsDAO = factory.itemListsDAO();
             TransportsDAO transportsDAO = factory.transportsDAO();
+            SitesDistancesDAO sitesDistancesDAO = factory.sitesDistancesDAO();
 
             transportsDAO.clearTable();
             itemListsDAO.clearTable();
@@ -81,19 +92,21 @@ class TransportDestinationsDAOTest {
             sitesDAO.clearTable();
             employeeDAO.clearTable();
 
-            sitesDAO.insert(site);
+            sitesDAO.insert(site1);
             sitesDAO.insert(site2);
             trucksDAO.insert(truck);
             employeeDAO.insert(employee);
             driversDAO.insert(driver);
             itemListsDAO.insert(itemList);
+            sitesDistancesDAO.insert(distance);
+            TransportsController.initDistances(transport);
             transportsDAO.insert(transport);
 
             dao = new TransportDestinationsDAO(TESTING_DB_NAME);
 
-            transportDestination1 = new TransportDestination(TRANSPORT_ID, 1, SITE_ADDRESS1, LIST_ID);
-            transportDestination2 = new TransportDestination(TRANSPORT_ID, 2, SITE_ADDRESS1, LIST_ID);
-            transportDestination3 = new TransportDestination(TRANSPORT_ID, 3, SITE_ADDRESS1, LIST_ID);
+            transportDestination1 = new TransportDestination(TRANSPORT_ID, 1, SITE_ADDRESS1, LIST_ID, LocalTime.now());
+            transportDestination2 = new TransportDestination(TRANSPORT_ID, 2, SITE_ADDRESS1, LIST_ID, LocalTime.now());
+            transportDestination3 = new TransportDestination(TRANSPORT_ID, 3, SITE_ADDRESS1, LIST_ID, LocalTime.now());
 
             dao.insert(transportDestination1);
             dao.insert(transportDestination2);
@@ -128,7 +141,7 @@ class TransportDestinationsDAOTest {
         expected.add(transportDestination3);
         List.of(4,5,6,7).forEach(i -> {
             try {
-                TransportDestination newDestination = new TransportDestination(TRANSPORT_ID, i, SITE_ADDRESS1, LIST_ID);
+                TransportDestination newDestination = new TransportDestination(TRANSPORT_ID, i, SITE_ADDRESS1, LIST_ID, LocalTime.now());
                 expected.add(newDestination);
                 dao.insert(newDestination);
             } catch (DalException e) {
@@ -157,7 +170,7 @@ class TransportDestinationsDAOTest {
         expected.add(transportDestination3);
         List.of(4,5,6,7).forEach(i -> {
             try {
-                TransportDestination newDestination = new TransportDestination(TRANSPORT_ID, i, SITE_ADDRESS1, LIST_ID);
+                TransportDestination newDestination = new TransportDestination(TRANSPORT_ID, i, SITE_ADDRESS1, LIST_ID, LocalTime.now());
                 dao.insert(newDestination);
                 expected.add(newDestination);
             } catch (DalException e) {
@@ -180,7 +193,7 @@ class TransportDestinationsDAOTest {
     @Test
     void insert() {
         try {
-            TransportDestination newDestination = new TransportDestination(TRANSPORT_ID, 4, SITE_ADDRESS1, LIST_ID);
+            TransportDestination newDestination = new TransportDestination(TRANSPORT_ID, 4, SITE_ADDRESS1, LIST_ID, LocalTime.now());
             dao.insert(newDestination);
             TransportDestination selected = dao.select(TransportDestination.getLookupObject(
                     newDestination.transportId(),
@@ -196,7 +209,7 @@ class TransportDestinationsDAOTest {
         //set up
         LinkedList<TransportDestination> expected = new LinkedList<>();
         List.of(4,5,6,7).forEach(i -> {
-            TransportDestination newDestination = new TransportDestination(TRANSPORT_ID, i, SITE_ADDRESS1, LIST_ID);
+            TransportDestination newDestination = new TransportDestination(TRANSPORT_ID, i, SITE_ADDRESS1, LIST_ID, LocalTime.now());
             expected.add(newDestination);
         });
         try {
@@ -228,7 +241,7 @@ class TransportDestinationsDAOTest {
                     TRANSPORT_ID,
                     transportDestination1.destination_index(),
                     SITE_ADDRESS2,
-                    LIST_ID);
+                    LIST_ID, LocalTime.now());
             dao.update(newDestination);
             TransportDestination selected = dao.select(TransportDestination.getLookupObject(
                     newDestination.transportId(),
@@ -294,7 +307,7 @@ class TransportDestinationsDAOTest {
         assertEquals(transportDestination1.destination_index(), transportDestination2.destination_index());
         assertEquals(transportDestination1.address(), transportDestination2.address());
         assertEquals(transportDestination1.itemListId(), transportDestination2.itemListId());
-
-
+        assertEquals(transportDestination1.expectedArrivalTime(), transportDestination2.expectedArrivalTime());
     }
+
 }

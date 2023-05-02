@@ -2,7 +2,10 @@ package businessLayer.transportModule;
 
 import com.google.gson.reflect.TypeToken;
 import dataAccessLayer.dalUtils.DalException;
+import dataAccessLayer.transportModule.DistanceBetweenSites;
+import dataAccessLayer.transportModule.SitesDistancesDAO;
 import dataAccessLayer.transportModule.TransportsDAO;
+import javafx.util.Pair;
 import objects.transportObjects.*;
 import serviceLayer.employeeModule.Services.EmployeesService;
 import utils.JsonUtils;
@@ -12,8 +15,11 @@ import utils.transportUtils.TransportException;
 
 import java.lang.reflect.Type;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+
+import static dataAccessLayer.DalFactory.TESTING_DB_NAME;
 
 /**
  * The TransportsController class is responsible for managing and controlling transport objects.
@@ -28,18 +34,20 @@ public class TransportsController {
     private final ItemListsController ilc;
     private EmployeesService es;
     private final TransportsDAO dao;
+    private final SitesDistancesDAO distancesDAO;
     private int idCounter;
 
     public TransportsController(TrucksController tc,
                                 DriversController dc,
                                 SitesController sc,
                                 ItemListsController ic,
-                                TransportsDAO dao) throws TransportException{
+                                TransportsDAO dao, SitesDistancesDAO distancesDAO) throws TransportException{
         this.sc = sc;
         this.ilc = ic;
         this.tc = tc;
         this.dc = dc;
         this.dao = dao;
+        this.distancesDAO = distancesDAO;
         try {
             idCounter = dao.selectCounter();
         } catch (DalException e) {
@@ -245,7 +253,54 @@ public class TransportsController {
         }
     }
 
-    private void initializeDeliveryRouteDistances(Transport transport) {
-        //TODO: implement
+    private void initializeDeliveryRouteDistances(Transport transport) throws TransportException {
+        DeliveryRoute route = transport.deliveryRoute();
+        HashMap<Pair<String,String>,Integer> distances = new HashMap<>();
+
+        // map distances between following sites
+        for(int i = 0; i < route.destinations().size()-1; i++) {
+            String source = route.destinations().get(i);
+            String destination = route.destinations().get(i+1);
+            DistanceBetweenSites lookUpObject = DistanceBetweenSites.getLookupObject(source,destination);
+            int distance;
+            try {
+                distance = distancesDAO.select(lookUpObject).distance();
+            } catch (DalException e) {
+                throw new TransportException(e.getMessage(),e);
+            }
+            distances.put(new Pair<>(source,destination),distance);
+        }
+
+        route.initializeDistances(distances);
+    }
+
+    /**
+     * used for testing
+     */
+    public static void initDistances(Transport transport) {
+        SitesDistancesDAO distancesDAO = null;
+        try {
+            distancesDAO = new SitesDistancesDAO(TESTING_DB_NAME);
+        } catch (DalException e) {
+            throw new RuntimeException(e.getMessage(),e);
+        }
+        DeliveryRoute route = transport.deliveryRoute();
+        HashMap<Pair<String,String>,Integer> distances = new HashMap<>();
+
+        // map distances between following sites
+        for(int i = 0; i < route.destinations().size()-1; i++) {
+            String source = route.destinations().get(i);
+            String destination = route.destinations().get(i+1);
+            DistanceBetweenSites lookUpObject = DistanceBetweenSites.getLookupObject(source,destination);
+            int distance;
+            try {
+                distance = distancesDAO.select(lookUpObject).distance();
+            } catch (DalException e) {
+                throw new RuntimeException(e.getMessage(),e);
+            }
+            distances.put(new Pair<>(source,destination),distance);
+        }
+
+        route.initializeDistances(distances);
     }
 }

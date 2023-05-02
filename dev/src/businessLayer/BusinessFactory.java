@@ -41,7 +41,8 @@ public class BusinessFactory {
                         driversController,
                         sitesController,
                         itemListsController,
-                        dalFactory.transportsDAO());
+                        dalFactory.transportsDAO(),
+                        dalFactory.sitesDistancesDAO());
             //========================================================= |
         } catch (TransportException e) {
             throw new RuntimeException(e);

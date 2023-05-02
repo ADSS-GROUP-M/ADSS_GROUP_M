@@ -14,6 +14,8 @@ public class SitesDistancesDAO extends ManyToManyDAO<DistanceBetweenSites> {
     private static final String[] parent_tables = {"sites", "sites"};
     private static final String[] primary_keys = {"source", "destination"};
     private static final String[][] foreign_keys = {{"source"}, {"destination"}};
+    private static final String[][] references = {{"address"}, {"address"}};
+
     public SitesDistancesDAO() throws DalException{
         super("sites_distances",
                 parent_tables,
@@ -24,11 +26,9 @@ public class SitesDistancesDAO extends ManyToManyDAO<DistanceBetweenSites> {
                 "source",
                 "destination",
                 "distance"
-
         );
         initTable();
     }
-
     public SitesDistancesDAO(String dbName) throws DalException{
         super("sites_distances",
                 parent_tables,
@@ -43,7 +43,6 @@ public class SitesDistancesDAO extends ManyToManyDAO<DistanceBetweenSites> {
         );
         initTable();
     }
-    private static final String[][] references = {{"address"}, {"address"}};
 
 
     /**

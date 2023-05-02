@@ -18,6 +18,7 @@ public class DalFactory {
     private final BranchEmployeesDAO branchEmployeesDAO;
     private final DriversDAO driversDAO;
     private final TransportsDAO transportsDAO;
+    private final SitesDistancesDAO sitesDistancesDAO;
 
     public DalFactory() throws DalException {
 
@@ -39,6 +40,7 @@ public class DalFactory {
         branchEmployeesDAO = new BranchEmployeesDAO();
         branchesDAO = new BranchesDAO(branchEmployeesDAO);
         transportsDAO = new TransportsDAO();
+        sitesDistancesDAO = new SitesDistancesDAO();
     }
 
     /**
@@ -66,6 +68,7 @@ public class DalFactory {
         branchEmployeesDAO = new BranchEmployeesDAO(dbName);
         branchesDAO = new BranchesDAO(dbName,branchEmployeesDAO);
         transportsDAO = new TransportsDAO(dbName);
+        sitesDistancesDAO = new SitesDistancesDAO(dbName);
     }
     public EmployeeDAO employeeDAO() {
         return employeeDAO;
@@ -105,6 +108,10 @@ public class DalFactory {
 
     public TransportsDAO transportsDAO() {
         return transportsDAO;
+    }
+
+    public SitesDistancesDAO sitesDistancesDAO() {
+        return sitesDistancesDAO;
     }
 
     public static void clearTestDB(){

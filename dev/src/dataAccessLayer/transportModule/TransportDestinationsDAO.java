@@ -11,7 +11,7 @@ import java.util.List;
 
 public class TransportDestinationsDAO extends ManyToManyDAO<TransportDestination> {
 
-    private static final String[] types = {"INTEGER", "INTEGER" , "TEXT", "INTEGER"};
+    private static final String[] types = {"INTEGER", "INTEGER" , "TEXT", "INTEGER", "TEXT"};
     private static final String[] parent_tables = {"transports", "sites", "item_lists"};
     private static final String[] primary_keys = {"transport_id", "destination_index"};
     private static final String[][] foreign_keys = {{"transport_id"}, {"destination_address"}, {"item_list_id"}};
@@ -27,7 +27,8 @@ public class TransportDestinationsDAO extends ManyToManyDAO<TransportDestination
                 "transport_id",
                 "destination_index",
                 "destination_address",
-                "item_list_id"
+                "item_list_id",
+                "expected_arrival_time"
         );
         initTable();
     }
@@ -47,7 +48,8 @@ public class TransportDestinationsDAO extends ManyToManyDAO<TransportDestination
                 "transport_id",
                 "destination_index",
                 "destination_address",
-                "item_list_id"
+                "item_list_id",
+                "expected_arrival_time"
         );
         initTable();
     }
@@ -122,12 +124,13 @@ public class TransportDestinationsDAO extends ManyToManyDAO<TransportDestination
      */
     @Override
     public void insert(TransportDestination object) throws DalException {
-        String query = String.format("INSERT INTO %s VALUES (%d, %d, '%s', %d);",
+        String query = String.format("INSERT INTO %s VALUES (%d,%d,'%s',%d,'%s');",
                 TABLE_NAME,
                 object.transportId(),
                 object.destination_index(),
                 object.address(),
-                object.itemListId()
+                object.itemListId(),
+                object.expectedArrivalTime()
         );
         try {
             if(cursor.executeWrite(query) != 1){
@@ -145,12 +148,13 @@ public class TransportDestinationsDAO extends ManyToManyDAO<TransportDestination
     public void insertAll(List<TransportDestination> objects) throws DalException {
         StringBuilder query = new StringBuilder();
         for(TransportDestination object : objects) {
-            query.append(String.format("INSERT INTO %s VALUES (%d, %d, '%s', %d);\n",
+            query.append(String.format("INSERT INTO %s VALUES (%d, %d, '%s', %d, '%s');\n",
                     TABLE_NAME,
                     object.transportId(),
                     object.destination_index(),
                     object.address(),
-                    object.itemListId()));
+                    object.itemListId(),
+                    object.expectedArrivalTime()));
         }
         try {
             if(cursor.executeWrite(query.toString()) != objects.size()){
@@ -167,10 +171,11 @@ public class TransportDestinationsDAO extends ManyToManyDAO<TransportDestination
      */
     @Override
     public void update(TransportDestination object) throws DalException {
-        String query = String.format("UPDATE %s SET destination_address = '%s', item_list_id = %d WHERE transport_id = %d AND destination_index = %d;",
+        String query = String.format("UPDATE %s SET destination_address = '%s', item_list_id = %d, expected_arrival_time = '%s' WHERE transport_id = %d AND destination_index = %d;",
                 TABLE_NAME,
                 object.address(),
                 object.itemListId(),
+                object.expectedArrivalTime(),
                 object.transportId(),
                 object.destination_index()
         );
@@ -236,7 +241,8 @@ public class TransportDestinationsDAO extends ManyToManyDAO<TransportDestination
                 resultSet.getInt("transport_id"),
                 resultSet.getInt("destination_index"),
                 resultSet.getString("destination_address"),
-                resultSet.getInt("item_list_id")
-        );
+                resultSet.getInt("item_list_id"),
+                resultSet.getLocalTime("expected_arrival_time")
+                );
     }
 }

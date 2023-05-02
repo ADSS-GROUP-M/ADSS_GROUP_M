@@ -4,10 +4,12 @@ import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.dalUtils.OfflineResultSet;
 import dataAccessLayer.transportModule.abstracts.CounterDAO;
 import dataAccessLayer.transportModule.abstracts.ManyToManyDAO;
+import javafx.util.Pair;
 import objects.transportObjects.DeliveryRoute;
 import objects.transportObjects.Transport;
 
 import java.sql.SQLException;
+import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -241,12 +243,13 @@ public class TransportsDAO extends ManyToManyDAO<Transport> implements CounterDA
     private LinkedList<TransportDestination> generateTransportDestinations(Transport object) {
         LinkedList<TransportDestination> transportDestinations = new LinkedList<>();
         int i = 1;
-        for(String destination : object.destinations()){
+        for(Pair<String, LocalTime> destination : object.deliveryRoute().getAllEstimatedArrivalTimes()){
             transportDestinations.add(new TransportDestination(
                     object.id(),
                     i++,
-                    destination,
-                    object.itemLists().get(destination)
+                    destination.getKey(),
+                    object.itemLists().get(destination.getKey()),
+                    destination.getValue()
             ));
         }
         return transportDestinations;

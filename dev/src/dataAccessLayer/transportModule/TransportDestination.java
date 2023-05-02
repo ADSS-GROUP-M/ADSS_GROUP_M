@@ -1,7 +1,9 @@
 package dataAccessLayer.transportModule;
 
-public record TransportDestination(int transportId, int destination_index, String address, int itemListId) {
+import java.time.LocalTime;
+
+public record TransportDestination(int transportId, int destination_index, String address, int itemListId, LocalTime expectedArrivalTime) {
     public static TransportDestination getLookupObject(int transportId, int destination_index) {
-        return new TransportDestination(transportId, destination_index, null, 0);
+        return new TransportDestination(transportId, destination_index, null, 0 , null);
     }
 }

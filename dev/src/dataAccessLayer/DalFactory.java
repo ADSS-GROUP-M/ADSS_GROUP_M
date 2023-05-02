@@ -127,6 +127,7 @@ public class DalFactory {
 
             factory.branchEmployeesDAO().clearTable();
             factory.branchesDAO().clearTable();
+            factory.sitesDistancesDAO().clearTable();
             factory.sitesDAO().clearTable();
 
             factory.driversDAO().clearTable();

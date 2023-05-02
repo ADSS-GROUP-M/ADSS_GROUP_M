@@ -30,7 +30,8 @@ public class SitesDistancesDAO extends ManyToManyDAO<DistanceBetweenSites> {
         initTable();
     }
     public SitesDistancesDAO(String dbName) throws DalException{
-        super("sites_distances",
+        super(dbName,
+                "sites_distances",
                 parent_tables,
                 types,
                 primary_keys,

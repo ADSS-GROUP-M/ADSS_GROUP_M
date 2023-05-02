@@ -92,7 +92,6 @@ public class TransportsManagement {
         Transport newTransport = new Transport(
                 new DeliveryRoute(
                         source.address(),
-                        departureTime,
                         destinations,
                         itemsList
                 ),
@@ -141,7 +140,6 @@ public class TransportsManagement {
                     newTransport = new Transport(
                             new DeliveryRoute(
                                     newTransport.source(),
-                                    newTransport.departureTime().toLocalTime(),
                                     newTransport.destinations(),
                                     newTransport.itemLists()),
                             driverID,
@@ -163,7 +161,6 @@ public class TransportsManagement {
                     newTransport = new Transport(
                             new DeliveryRoute(
                                     newTransport.source(),
-                                    newTransport.departureTime().toLocalTime(),
                                     destinations,
                                     itemsList),
                             newTransport.driverId(),
@@ -366,7 +363,7 @@ public class TransportsManagement {
                                              int weight) {
         Transport newTransport = new Transport(
                 id,
-                new DeliveryRoute(source, departureDateTime.toLocalTime(), destinations, itemLists),
+                new DeliveryRoute(source, destinations, itemLists),
                 driverId,
                 truckId,
                 departureDateTime,

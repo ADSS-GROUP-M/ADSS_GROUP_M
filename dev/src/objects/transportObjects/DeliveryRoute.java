@@ -1,7 +1,5 @@
 package objects.transportObjects;
 
-import javafx.util.Pair;
-
 import java.time.LocalTime;
 import java.util.*;
 
@@ -11,20 +9,15 @@ public class DeliveryRoute {
     public static final long AVERAGE_TIME_PER_VISIT = 30;
 
     private final String source;
-    private final LocalTime departureHour;
     private final List<String> destinations;
     private final Set<String> destinationsSet;
     private final Map<String,Integer> destinations_itemListIds;
     private Map<String, LocalTime> estimatedArrivalTimes;
 
-    private Map<Pair<String,String>,Integer> distancesBetweenDestinations;
-
     public DeliveryRoute(String source,
-                         LocalTime departureHour,
                          List<String> destinations,
                          Map<String, Integer> destinations_itemListIds){
         this.source = source;
-        this.departureHour = departureHour;
         this.destinations = destinations;
         this.destinationsSet = new HashSet<>(destinations);
         this.destinations_itemListIds = destinations_itemListIds;
@@ -44,6 +37,11 @@ public class DeliveryRoute {
         if(estimatedArrivalTimes == null){
             throw new RuntimeException("Estimated arrival times have not been initialized");
         }
+
+        if(destinationsSet.contains(destination) == false){
+            throw new RuntimeException("Destination not found");
+        }
+
         return estimatedArrivalTimes.get(destination);
     }
 
@@ -64,5 +62,9 @@ public class DeliveryRoute {
 
     public Map<String, Integer> itemLists() {
         return destinations_itemListIds;
+    }
+
+    public Map<String, LocalTime> estimatedArrivalTimes() {
+        return estimatedArrivalTimes;
     }
 }

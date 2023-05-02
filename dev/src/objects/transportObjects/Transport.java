@@ -18,7 +18,7 @@ public record Transport (
     public Transport(int id, String source, List<String> destinations,Map<String,Integer> itemLists , String driverId, String truckId, LocalDateTime departureTime, int weight){
         this(
                 id,
-                new DeliveryRoute(source,departureTime.toLocalTime(), destinations, itemLists),
+                new DeliveryRoute(source, destinations, itemLists),
                 driverId,
                 truckId,
                 departureTime,
@@ -42,7 +42,7 @@ public record Transport (
      */
     public Transport(String source, List<String> destinations,Map<String,Integer> itemLists , String driverId, String truckId, LocalDateTime departureTime, int weight){
         this(
-                new DeliveryRoute(source,departureTime.toLocalTime(), destinations, itemLists),
+                new DeliveryRoute(source, destinations, itemLists),
                 driverId,
                 truckId,
                 departureTime,

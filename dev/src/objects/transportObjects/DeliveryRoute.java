@@ -5,7 +5,7 @@ import java.util.*;
 
 public class DeliveryRoute {
 
-    public static final int AVERAGE_SPEED = 80;
+    public static final double AVERAGE_SPEED = 80;
     public static final long AVERAGE_TIME_PER_VISIT = 30;
 
     private final String source;

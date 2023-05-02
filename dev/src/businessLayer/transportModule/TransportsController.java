@@ -70,7 +70,7 @@ public class TransportsController {
             throw new UnsupportedOperationException("Pre-defined IDs are not supported");
         }
         validateTransport(transport);
-        initializeEstimatedArrivalTimes(transport);
+        initializeEstimatedArrivalTimes(distancesDAO,transport);
         Transport toAdd = new Transport(idCounter,transport);
         try {
             dao.insert(toAdd);
@@ -251,10 +251,10 @@ public class TransportsController {
         }
     }
 
-    private void initializeEstimatedArrivalTimes(Transport transport) throws TransportException{
+    public static void initializeEstimatedArrivalTimes(SitesDistancesDAO distancesDAO, Transport transport) throws TransportException{
 
         Map<String,LocalTime> estimatedArrivalTimes = new HashMap<>();
-        Map<Pair<String,String>,Integer> distances = buildSitesDistances(transport);
+        Map<Pair<String,String>,Double> distances = buildSitesDistances(distancesDAO,transport);
 
         ListIterator<String> destinationsIterator = transport.destinations().listIterator();
         LocalTime time = transport.departureTime().toLocalTime();
@@ -265,6 +265,7 @@ public class TransportsController {
             next = destinationsIterator.next();
             time = addTravelTime(time, curr, next, distances);
             estimatedArrivalTimes.put(next, time);
+            curr = next;
         }
 
         while(destinationsIterator.hasNext()){
@@ -277,90 +278,32 @@ public class TransportsController {
         transport.deliveryRoute().initializeArrivalTimes(estimatedArrivalTimes);
     }
 
-    private static LocalTime addTravelTime(LocalTime time, String curr, String next, Map<Pair<String,String>,Integer> distances){
-        time = time.plusMinutes((long)distances.get(new Pair<>(curr, next)) / DeliveryRoute.AVERAGE_SPEED);
-        return time;
-    }
-
-    private Map<Pair<String,String>,Integer> buildSitesDistances(Transport transport) throws TransportException {
+    private static Map<Pair<String,String>,Double> buildSitesDistances(SitesDistancesDAO distancesDAO, Transport transport) throws TransportException {
         DeliveryRoute route = transport.deliveryRoute();
-        HashMap<Pair<String,String>,Integer> distances = new HashMap<>();
+        HashMap<Pair<String,String>,Double> distances = new HashMap<>();
+        ListIterator<String> destinationsIterator = route.destinations().listIterator();
+        String curr = transport.source();
+        String next;
 
         // map distances between following sites
-        for(int i = 0; i < route.destinations().size()-1; i++) {
-            String source = route.destinations().get(i);
-            String destination = route.destinations().get(i+1);
-            DistanceBetweenSites lookUpObject = DistanceBetweenSites.getLookupObject(source,destination);
-            int distance;
+        while (destinationsIterator.hasNext()) {
+            next = destinationsIterator.next();
+            DistanceBetweenSites lookUpObject = DistanceBetweenSites.getLookupObject(curr,next);
+            double distance;
             try {
                 distance = distancesDAO.select(lookUpObject).distance();
             } catch (DalException e) {
                 throw new TransportException(e.getMessage(),e);
             }
-            distances.put(new Pair<>(source,destination),distance);
-        }
-        return distances;
-    }
-
-    //============================================================================== |
-    //=============================== USED FOR TESTING ============================= |
-    //============================================================================== |
-
-    public static void testing_initArrivalTimes(Transport transport) {
-
-        Map<String, LocalTime> estimatedArrivalTimes = new HashMap<>();
-        Map<Pair<String, String>, Integer> distances = testing_buildDistances(transport);
-
-        ListIterator<String> destinationsIterator = transport.destinations().listIterator();
-        LocalTime time = transport.departureTime().toLocalTime();
-        String curr = transport.source();
-        String next;
-
-        if (destinationsIterator.hasNext()) {
-            next = destinationsIterator.next();
-            time = addTravelTime(time, curr, next, distances);
-            estimatedArrivalTimes.put(next, time);
-        }
-
-        while (destinationsIterator.hasNext()) {
-            time = time.plusMinutes(DeliveryRoute.AVERAGE_TIME_PER_VISIT);
-            next = destinationsIterator.next();
-            time = addTravelTime(time, curr, next, distances);
-            estimatedArrivalTimes.put(next, time);
+            distances.put(new Pair<>(curr,next),distance);
             curr = next;
         }
-        transport.deliveryRoute().initializeArrivalTimes(estimatedArrivalTimes);
-    }
-
-    private static Map<Pair<String,String>,Integer> testing_buildDistances(Transport transport){
-
-        SitesDistancesDAO distancesDAO = null;
-        try {
-            distancesDAO = new SitesDistancesDAO(TESTING_DB_NAME);
-        } catch (DalException e) {
-            throw new RuntimeException(e);
-        }
-
-        DeliveryRoute route = transport.deliveryRoute();
-        HashMap<Pair<String,String>,Integer> distances = new HashMap<>();
-
-        // map distances between following sites
-        for(int i = 0; i < route.destinations().size()-1; i++) {
-            String source = route.destinations().get(i);
-            String destination = route.destinations().get(i+1);
-            DistanceBetweenSites lookUpObject = DistanceBetweenSites.getLookupObject(source,destination);
-            int distance;
-            try {
-                distance = distancesDAO.select(lookUpObject).distance();
-            } catch (DalException e) {
-                throw new RuntimeException(e);
-            }
-            distances.put(new Pair<>(source,destination),distance);
-        }
         return distances;
     }
 
-
-
-
+    private static LocalTime addTravelTime(LocalTime time, String curr, String next, Map<Pair<String,String>,Double> distances){
+        long minutesToAdd = (long)((distances.get(new Pair<>(curr, next)) / DeliveryRoute.AVERAGE_SPEED)*60);
+        time = time.plusMinutes(minutesToAdd);
+        return time;
+    }
 }

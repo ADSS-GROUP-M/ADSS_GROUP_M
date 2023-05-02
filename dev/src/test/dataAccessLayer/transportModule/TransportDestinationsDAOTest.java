@@ -99,7 +99,7 @@ class TransportDestinationsDAOTest {
             driversDAO.insert(driver);
             itemListsDAO.insert(itemList);
             sitesDistancesDAO.insert(distance);
-            TransportsController.testing_initArrivalTimes(transport);
+            TransportsController.initializeEstimatedArrivalTimes(sitesDistancesDAO,transport);
             transportsDAO.insert(transport);
 
             dao = new TransportDestinationsDAO(TESTING_DB_NAME);
@@ -112,7 +112,7 @@ class TransportDestinationsDAOTest {
             dao.insert(transportDestination2);
             dao.insert(transportDestination3);
 
-        } catch (DalException e) {
+        } catch (DalException | TransportException e) {
             fail(e);
         }
     }

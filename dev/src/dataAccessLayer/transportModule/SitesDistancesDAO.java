@@ -99,7 +99,7 @@ public class SitesDistancesDAO extends ManyToManyDAO<DistanceBetweenSites> {
      */
     @Override
     public void insert(DistanceBetweenSites object) throws DalException {
-        String query = String.format("INSERT INTO %s VALUES ('%s','%s', %d);",
+        String query = String.format("INSERT INTO %s VALUES ('%s','%s', %f);",
                 TABLE_NAME,
                 object.source(),
                 object.destination(),

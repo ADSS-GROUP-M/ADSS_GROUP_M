@@ -15,9 +15,8 @@ import utils.transportUtils.TransportException;
 
 import java.lang.reflect.Type;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
+import java.time.LocalTime;
+import java.util.*;
 
 import static dataAccessLayer.DalFactory.TESTING_DB_NAME;
 
@@ -253,7 +252,38 @@ public class TransportsController {
         }
     }
 
-    private void initializeDeliveryRouteDistances(Transport transport) throws TransportException {
+    private Map<String,LocalTime> buildEstimatedArrivalTimes(Transport transport) throws TransportException{
+
+        DeliveryRoute route = transport.deliveryRoute();
+        Map<String,LocalTime> estimatedArrivalTimes = new HashMap<>();
+        Map<Pair<String,String>,Integer> distances = buildDeliveryRouteDistances(transport);
+
+        ListIterator<String> destinationsIterator = transport.destinations().listIterator();
+        LocalTime time = transport.departureTime().toLocalTime();
+        String curr = transport.source();
+        String next;
+
+        if(destinationsIterator.hasNext()){
+            next = destinationsIterator.next();
+            time = addTravelTime(time, curr, next, distances);
+        }
+
+        while(destinationsIterator.hasNext()){
+            time = time.plusMinutes(DeliveryRoute.AVERAGE_TIME_PER_VISIT);
+            next = destinationsIterator.next();
+            time = addTravelTime(time, curr, next,distances);
+            curr = next;
+        }
+
+        return route;
+    }
+
+    private static LocalTime addTravelTime(LocalTime time, String curr, String next, Map<Pair<String,String>,Integer> distances){
+        time = time.plusMinutes((long)distances.get(new Pair<>(curr, next)) / DeliveryRoute.AVERAGE_SPEED);
+        return time;
+    }
+
+    private Map<Pair<String,String>,Integer> buildDeliveryRouteDistances(Transport transport) throws TransportException {
         DeliveryRoute route = transport.deliveryRoute();
         HashMap<Pair<String,String>,Integer> distances = new HashMap<>();
 
@@ -270,10 +300,8 @@ public class TransportsController {
             }
             distances.put(new Pair<>(source,destination),distance);
         }
-
-        route.initializeDistances(distances);
+        return distances;
     }
-
     /**
      * used for testing
      */

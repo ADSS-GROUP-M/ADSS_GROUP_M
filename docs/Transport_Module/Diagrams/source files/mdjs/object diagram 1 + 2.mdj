@@ -9,7 +9,7 @@
 			"_parent": {
 				"$ref": "AAAAAAFF+h6SjaM2Hec="
 			},
-			"name": "Model",
+			"name": "oldie",
 			"ownedElements": [
 				{
 					"_type": "UMLPackage",
@@ -2400,7 +2400,8 @@
 							"_parent": {
 								"$ref": "AAAAAAGHKkXt24o0g/o="
 							},
-							"name": "deliveryRoute"
+							"name": "deliveryRoute",
+							"type": ""
 						}
 					]
 				},
@@ -5048,6 +5049,7 @@
 								"$ref": "AAAAAAGHWuX7az5NOAw="
 							},
 							"name": "dataGenerated",
+							"type": "",
 							"value": "true"
 						},
 						{
@@ -5087,6 +5089,7 @@
 								"$ref": "AAAAAAGHWuX7az5NOAw="
 							},
 							"name": "sites",
+							"type": "",
 							"value": "map of all the sites by addresses in the system"
 						},
 						{
@@ -5096,6 +5099,7 @@
 								"$ref": "AAAAAAGHWuX7az5NOAw="
 							},
 							"name": "drivers",
+							"type": "",
 							"value": "map of all the drivers by ids in the system"
 						},
 						{
@@ -5105,6 +5109,7 @@
 								"$ref": "AAAAAAGHWuX7az5NOAw="
 							},
 							"name": "trucks",
+							"type": "",
 							"value": "map of all the trucks by ids in the system"
 						},
 						{
@@ -5114,6 +5119,7 @@
 								"$ref": "AAAAAAGHWuX7az5NOAw="
 							},
 							"name": "itemLists",
+							"type": "",
 							"value": "map of all the items lists by ids in the system"
 						},
 						{
@@ -5123,6 +5129,7 @@
 								"$ref": "AAAAAAGHWuX7az5NOAw="
 							},
 							"name": "transports",
+							"type": "",
 							"value": "map of all the transports by ids in the system"
 						}
 					]
@@ -6138,7 +6145,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
 					},
-					"name": "Main",
+					"name": "oldie",
 					"defaultDiagram": true,
 					"ownedViews": [
 						{
@@ -6209,7 +6216,7 @@
 											"top": 944,
 											"width": 73.67724609375,
 											"height": 13,
-											"text": "(from Model)"
+											"text": "(from oldie)"
 										},
 										{
 											"_type": "LabelView",
@@ -6454,7 +6461,7 @@
 											"top": 848,
 											"width": 73.67724609375,
 											"height": 13,
-											"text": "(from Model)"
+											"text": "(from oldie)"
 										},
 										{
 											"_type": "LabelView",
@@ -6628,7 +6635,7 @@
 											"top": 652,
 											"width": 73.67724609375,
 											"height": 13,
-											"text": "(from Model)"
+											"text": "(from oldie)"
 										},
 										{
 											"_type": "LabelView",
@@ -6836,7 +6843,7 @@
 											"top": 988,
 											"width": 73.67724609375,
 											"height": 13,
-											"text": "(from Model)"
+											"text": "(from oldie)"
 										},
 										{
 											"_type": "LabelView",
@@ -7044,7 +7051,7 @@
 											"top": 908,
 											"width": 73.67724609375,
 											"height": 13,
-											"text": "(from Model)"
+											"text": "(from oldie)"
 										},
 										{
 											"_type": "LabelView",
@@ -7252,7 +7259,7 @@
 											"top": 1596,
 											"width": 73.67724609375,
 											"height": 13,
-											"text": "(from Model)"
+											"text": "(from oldie)"
 										},
 										{
 											"_type": "LabelView",
@@ -7460,7 +7467,7 @@
 											"top": 972,
 											"width": 73.67724609375,
 											"height": 13,
-											"text": "(from Model)"
+											"text": "(from oldie)"
 										},
 										{
 											"_type": "LabelView",
@@ -7668,7 +7675,7 @@
 											"top": 688,
 											"width": 73.67724609375,
 											"height": 13,
-											"text": "(from Model)"
+											"text": "(from oldie)"
 										},
 										{
 											"_type": "LabelView",
@@ -7910,7 +7917,7 @@
 											"top": -560,
 											"width": 73.67724609375,
 											"height": 13,
-											"text": "(from Model)"
+											"text": "(from oldie)"
 										},
 										{
 											"_type": "LabelView",
@@ -8050,7 +8057,7 @@
 											"top": -352,
 											"width": 73.67724609375,
 											"height": 13,
-											"text": "(from Model)"
+											"text": "(from oldie)"
 										},
 										{
 											"_type": "LabelView",
@@ -8207,7 +8214,7 @@
 											"top": -944,
 											"width": 73.67724609375,
 											"height": 13,
-											"text": "(from Model)"
+											"text": "(from oldie)"
 										},
 										{
 											"_type": "LabelView",
@@ -8347,7 +8354,7 @@
 											"top": -170,
 											"width": 73.67724609375,
 											"height": 13,
-											"text": "(from Model)"
+											"text": "(from oldie)"
 										},
 										{
 											"_type": "LabelView",
@@ -8521,7 +8528,7 @@
 											"top": 70,
 											"width": 73.67724609375,
 											"height": 13,
-											"text": "(from Model)"
+											"text": "(from oldie)"
 										},
 										{
 											"_type": "LabelView",
@@ -8695,7 +8702,7 @@
 											"top": 1600,
 											"width": 73.67724609375,
 											"height": 13,
-											"text": "(from Model)"
+											"text": "(from oldie)"
 										},
 										{
 											"_type": "LabelView",
@@ -8869,7 +8876,7 @@
 											"top": -1088,
 											"width": 73.67724609375,
 											"height": 13,
-											"text": "(from Model)"
+											"text": "(from oldie)"
 										},
 										{
 											"_type": "LabelView",
@@ -9009,7 +9016,7 @@
 											"top": -96,
 											"width": 73.67724609375,
 											"height": 13,
-											"text": "(from Model)"
+											"text": "(from oldie)"
 										},
 										{
 											"_type": "LabelView",
@@ -9249,7 +9256,7 @@
 											"top": -384,
 											"width": 73.67724609375,
 											"height": 13,
-											"text": "(from Model)"
+											"text": "(from oldie)"
 										},
 										{
 											"_type": "LabelView",
@@ -9542,7 +9549,7 @@
 											"top": -80,
 											"width": 73.67724609375,
 											"height": 13,
-											"text": "(from Model)"
+											"text": "(from oldie)"
 										},
 										{
 											"_type": "LabelView",
@@ -9699,7 +9706,7 @@
 											"top": -192,
 											"width": 73.67724609375,
 											"height": 13,
-											"text": "(from Model)"
+											"text": "(from oldie)"
 										},
 										{
 											"_type": "LabelView",
@@ -9856,7 +9863,7 @@
 											"top": -480,
 											"width": 73.67724609375,
 											"height": 13,
-											"text": "(from Model)"
+											"text": "(from oldie)"
 										},
 										{
 											"_type": "LabelView",
@@ -10013,7 +10020,7 @@
 											"top": -592,
 											"width": 73.67724609375,
 											"height": 13,
-											"text": "(from Model)"
+											"text": "(from oldie)"
 										},
 										{
 											"_type": "LabelView",
@@ -10170,7 +10177,7 @@
 											"top": -592,
 											"width": 73.67724609375,
 											"height": 13,
-											"text": "(from Model)"
+											"text": "(from oldie)"
 										},
 										{
 											"_type": "LabelView",
@@ -10327,7 +10334,7 @@
 											"top": -16,
 											"width": 73.67724609375,
 											"height": 13,
-											"text": "(from Model)"
+											"text": "(from oldie)"
 										},
 										{
 											"_type": "LabelView",
@@ -10602,7 +10609,7 @@
 											"top": 128,
 											"width": 73.67724609375,
 											"height": 13,
-											"text": "(from Model)"
+											"text": "(from oldie)"
 										},
 										{
 											"_type": "LabelView",
@@ -10734,7 +10741,7 @@
 											"top": -144,
 											"width": 73.67724609375,
 											"height": 13,
-											"text": "(from Model)"
+											"text": "(from oldie)"
 										},
 										{
 											"_type": "LabelView",
@@ -11116,7 +11123,7 @@
 											"top": -128,
 											"width": 73.67724609375,
 											"height": 13,
-											"text": "(from Model)"
+											"text": "(from oldie)"
 										},
 										{
 											"_type": "LabelView",
@@ -11290,7 +11297,7 @@
 											"top": 384,
 											"width": 73.67724609375,
 											"height": 13,
-											"text": "(from Model)"
+											"text": "(from oldie)"
 										},
 										{
 											"_type": "LabelView",
@@ -11441,7 +11448,7 @@
 											"top": 32,
 											"width": 73.67724609375,
 											"height": 13,
-											"text": "(from Model)"
+											"text": "(from oldie)"
 										},
 										{
 											"_type": "LabelView",
@@ -11563,7 +11570,7 @@
 											"top": 32,
 											"width": 73.67724609375,
 											"height": 13,
-											"text": "(from Model)"
+											"text": "(from oldie)"
 										},
 										{
 											"_type": "LabelView",
@@ -11685,7 +11692,7 @@
 											"top": -32,
 											"width": 73.67724609375,
 											"height": 13,
-											"text": "(from Model)"
+											"text": "(from oldie)"
 										},
 										{
 											"_type": "LabelView",
@@ -11807,7 +11814,7 @@
 											"top": -64,
 											"width": 73.67724609375,
 											"height": 13,
-											"text": "(from Model)"
+											"text": "(from oldie)"
 										},
 										{
 											"_type": "LabelView",
@@ -11929,7 +11936,7 @@
 											"top": 128,
 											"width": 73.67724609375,
 											"height": 13,
-											"text": "(from Model)"
+											"text": "(from oldie)"
 										},
 										{
 											"_type": "LabelView",
@@ -12049,7 +12056,7 @@
 											"left": 224,
 											"width": 73.67724609375,
 											"height": 13,
-											"text": "(from Model)"
+											"text": "(from oldie)"
 										},
 										{
 											"_type": "LabelView",
@@ -13163,7 +13170,7 @@
 											"top": -55,
 											"width": 73.67724609375,
 											"height": 13,
-											"text": "(from Model)"
+											"text": "(from oldie)"
 										},
 										{
 											"_type": "LabelView",
@@ -13285,7 +13292,7 @@
 											"top": -16,
 											"width": 73.67724609375,
 											"height": 13,
-											"text": "(from Model)"
+											"text": "(from oldie)"
 										},
 										{
 											"_type": "LabelView",
@@ -13407,7 +13414,7 @@
 											"top": -32,
 											"width": 73.67724609375,
 											"height": 13,
-											"text": "(from Model)"
+											"text": "(from oldie)"
 										},
 										{
 											"_type": "LabelView",
@@ -15161,6 +15168,7 @@
 								"$ref": "AAAAAAGH3V8TFJZEUQI="
 							},
 							"name": "AVERAGE_SPEED",
+							"type": "",
 							"value": "80"
 						},
 						{
@@ -15170,6 +15178,7 @@
 								"$ref": "AAAAAAGH3V8TFJZEUQI="
 							},
 							"name": "AVERAGE_TIME_PER_VISIT",
+							"type": "",
 							"value": "30"
 						},
 						{
@@ -15179,6 +15188,7 @@
 								"$ref": "AAAAAAGH3V8TFJZEUQI="
 							},
 							"name": "source",
+							"type": "",
 							"value": "\"Hashalom 15\""
 						},
 						{
@@ -15188,6 +15198,7 @@
 								"$ref": "AAAAAAGH3V8TFJZEUQI="
 							},
 							"name": "departureTime",
+							"type": "",
 							"value": "09:00"
 						},
 						{
@@ -15207,6 +15218,7 @@
 								"$ref": "AAAAAAGH3V8TFJZEUQI="
 							},
 							"name": "destinationsSet",
+							"type": "",
 							"value": "{\"Sisu 36\",\"Rager 30\",\"Hashalom 15\"}"
 						},
 						{
@@ -15225,7 +15237,8 @@
 							"_parent": {
 								"$ref": "AAAAAAGH3V8TFJZEUQI="
 							},
-							"name": "distancesBetweenDestinations"
+							"name": "distancesBetweenDestinations",
+							"type": ""
 						}
 					]
 				},
@@ -15245,6 +15258,7 @@
 								"$ref": "AAAAAAGH3blAkFb1t6w="
 							},
 							"name": "map",
+							"type": "",
 							"value": "holds the relevant data from given table"
 						}
 					]
@@ -15265,6 +15279,7 @@
 								"$ref": "AAAAAAGH3bohOXW0NHY="
 							},
 							"name": "DEFAULT_DB_NAME",
+							"type": "",
 							"value": "\"SuperLiDB.db\""
 						},
 						{
@@ -15283,7 +15298,8 @@
 							"_parent": {
 								"$ref": "AAAAAAGH3bohOXW0NHY="
 							},
-							"name": "URL"
+							"name": "URL",
+							"type": ""
 						}
 					]
 				},
@@ -15358,6 +15374,7 @@
 								"$ref": "AAAAAAGH3jBc6CXphHI="
 							},
 							"name": "transportId",
+							"type": "",
 							"value": "0"
 						},
 						{
@@ -15366,7 +15383,8 @@
 							"_parent": {
 								"$ref": "AAAAAAGH3jBc6CXphHI="
 							},
-							"name": "destenation_index"
+							"name": "destenation_index",
+							"type": ""
 						},
 						{
 							"_type": "UMLSlot",
@@ -15374,7 +15392,8 @@
 							"_parent": {
 								"$ref": "AAAAAAGH3jBc6CXphHI="
 							},
-							"name": "address"
+							"name": "address",
+							"type": ""
 						},
 						{
 							"_type": "UMLSlot",
@@ -15382,7 +15401,8 @@
 							"_parent": {
 								"$ref": "AAAAAAGH3jBc6CXphHI="
 							},
-							"name": "itemListId"
+							"name": "itemListId",
+							"type": ""
 						},
 						{
 							"_type": "UMLSlot",
@@ -15390,7 +15410,8 @@
 							"_parent": {
 								"$ref": "AAAAAAGH3jBc6CXphHI="
 							},
-							"name": "expectedArrivalTime"
+							"name": "expectedArrivalTime",
+							"type": ""
 						}
 					]
 				},
@@ -15439,7 +15460,8 @@
 							"_parent": {
 								"$ref": "AAAAAAGH3jCztGO7Dvk="
 							},
-							"name": "source"
+							"name": "source",
+							"type": ""
 						},
 						{
 							"_type": "UMLSlot",
@@ -15447,7 +15469,8 @@
 							"_parent": {
 								"$ref": "AAAAAAGH3jCztGO7Dvk="
 							},
-							"name": "destination"
+							"name": "destination",
+							"type": ""
 						},
 						{
 							"_type": "UMLSlot",
@@ -15455,7 +15478,8 @@
 							"_parent": {
 								"$ref": "AAAAAAGH3jCztGO7Dvk="
 							},
-							"name": "distance"
+							"name": "distance",
+							"type": ""
 						}
 					]
 				},
@@ -15526,7 +15550,7 @@
 											"top": 2320,
 											"width": 73.67724609375,
 											"height": 13,
-											"text": "(from Model)"
+											"text": "(from oldie)"
 										},
 										{
 											"_type": "LabelView",
@@ -15771,7 +15795,7 @@
 											"top": 2960,
 											"width": 73.67724609375,
 											"height": 13,
-											"text": "(from Model)"
+											"text": "(from oldie)"
 										},
 										{
 											"_type": "LabelView",
@@ -15945,7 +15969,7 @@
 											"top": 2300,
 											"width": 73.67724609375,
 											"height": 13,
-											"text": "(from Model)"
+											"text": "(from oldie)"
 										},
 										{
 											"_type": "LabelView",
@@ -16153,7 +16177,7 @@
 											"top": 2924,
 											"width": 73.67724609375,
 											"height": 13,
-											"text": "(from Model)"
+											"text": "(from oldie)"
 										},
 										{
 											"_type": "LabelView",
@@ -16361,7 +16385,7 @@
 											"top": 2572,
 											"width": 73.67724609375,
 											"height": 13,
-											"text": "(from Model)"
+											"text": "(from oldie)"
 										},
 										{
 											"_type": "LabelView",
@@ -16567,7 +16591,7 @@
 											"top": 2924,
 											"width": 73.67724609375,
 											"height": 13,
-											"text": "(from Model)"
+											"text": "(from oldie)"
 										},
 										{
 											"_type": "LabelView",
@@ -16774,7 +16798,7 @@
 											"top": 2572,
 											"width": 73.67724609375,
 											"height": 13,
-											"text": "(from Model)"
+											"text": "(from oldie)"
 										},
 										{
 											"_type": "LabelView",
@@ -16982,7 +17006,7 @@
 											"top": 880,
 											"width": 73.67724609375,
 											"height": 13,
-											"text": "(from Model)"
+											"text": "(from oldie)"
 										},
 										{
 											"_type": "LabelView",
@@ -17224,7 +17248,7 @@
 											"top": 192,
 											"width": 73.67724609375,
 											"height": 13,
-											"text": "(from Model)"
+											"text": "(from oldie)"
 										},
 										{
 											"_type": "LabelView",
@@ -17364,7 +17388,7 @@
 											"top": -288,
 											"width": 73.67724609375,
 											"height": 13,
-											"text": "(from Model)"
+											"text": "(from oldie)"
 										},
 										{
 											"_type": "LabelView",
@@ -17521,7 +17545,7 @@
 											"top": -192,
 											"width": 73.67724609375,
 											"height": 13,
-											"text": "(from Model)"
+											"text": "(from oldie)"
 										},
 										{
 											"_type": "LabelView",
@@ -17661,7 +17685,7 @@
 											"top": 1174,
 											"width": 73.67724609375,
 											"height": 13,
-											"text": "(from Model)"
+											"text": "(from oldie)"
 										},
 										{
 											"_type": "LabelView",
@@ -17835,7 +17859,7 @@
 											"top": 1574,
 											"width": 73.67724609375,
 											"height": 13,
-											"text": "(from Model)"
+											"text": "(from oldie)"
 										},
 										{
 											"_type": "LabelView",
@@ -18009,7 +18033,7 @@
 											"top": 2688,
 											"width": 73.67724609375,
 											"height": 13,
-											"text": "(from Model)"
+											"text": "(from oldie)"
 										},
 										{
 											"_type": "LabelView",
@@ -18183,7 +18207,7 @@
 											"top": -688,
 											"width": 73.67724609375,
 											"height": 13,
-											"text": "(from Model)"
+											"text": "(from oldie)"
 										},
 										{
 											"_type": "LabelView",
@@ -18323,7 +18347,7 @@
 											"top": 112,
 											"width": 73.67724609375,
 											"height": 13,
-											"text": "(from Model)"
+											"text": "(from oldie)"
 										},
 										{
 											"_type": "LabelView",
@@ -18565,7 +18589,7 @@
 											"top": -176,
 											"width": 73.67724609375,
 											"height": 13,
-											"text": "(from Model)"
+											"text": "(from oldie)"
 										},
 										{
 											"_type": "LabelView",
@@ -18858,7 +18882,7 @@
 											"top": 432,
 											"width": 73.67724609375,
 											"height": 13,
-											"text": "(from Model)"
+											"text": "(from oldie)"
 										},
 										{
 											"_type": "LabelView",
@@ -19015,7 +19039,7 @@
 											"top": 160,
 											"width": 73.67724609375,
 											"height": 13,
-											"text": "(from Model)"
+											"text": "(from oldie)"
 										},
 										{
 											"_type": "LabelView",
@@ -19172,7 +19196,7 @@
 											"top": -128,
 											"width": 73.67724609375,
 											"height": 13,
-											"text": "(from Model)"
+											"text": "(from oldie)"
 										},
 										{
 											"_type": "LabelView",
@@ -19329,7 +19353,7 @@
 											"top": -256,
 											"width": 73.67724609375,
 											"height": 13,
-											"text": "(from Model)"
+											"text": "(from oldie)"
 										},
 										{
 											"_type": "LabelView",
@@ -19486,7 +19510,7 @@
 											"top": -240,
 											"width": 73.67724609375,
 											"height": 13,
-											"text": "(from Model)"
+											"text": "(from oldie)"
 										},
 										{
 											"_type": "LabelView",
@@ -19643,7 +19667,7 @@
 											"top": -64,
 											"width": 73.67724609375,
 											"height": 13,
-											"text": "(from Model)"
+											"text": "(from oldie)"
 										},
 										{
 											"_type": "LabelView",
@@ -19928,7 +19952,7 @@
 											"top": 64,
 											"width": 73.67724609375,
 											"height": 13,
-											"text": "(from Model)"
+											"text": "(from oldie)"
 										},
 										{
 											"_type": "LabelView",
@@ -20068,7 +20092,7 @@
 											"top": 512,
 											"width": 73.67724609375,
 											"height": 13,
-											"text": "(from Model)"
+											"text": "(from oldie)"
 										},
 										{
 											"_type": "LabelView",
@@ -20242,7 +20266,7 @@
 											"top": 1008,
 											"width": 73.67724609375,
 											"height": 13,
-											"text": "(from Model)"
+											"text": "(from oldie)"
 										},
 										{
 											"_type": "LabelView",
@@ -30496,17 +30520,17 @@
 										"$ref": "AAAAAAGH15eqXCKoqmw="
 									},
 									"font": "Arial;13;0",
-									"left": 616,
-									"top": 600,
-									"width": 93.08837890625,
+									"left": 680,
+									"top": 599,
+									"width": 111.16015625,
 									"height": 13,
-									"alpha": -2.3177518004665685,
-									"distance": 73.59347797189639,
+									"alpha": -0.7086261936963049,
+									"distance": 82.97590011563598,
 									"hostEdge": {
 										"$ref": "AAAAAAGH3jzH6z9n8CQ="
 									},
 									"edgePosition": 1,
-									"text": "+addTransport()"
+									"text": "+updateTransport()"
 								},
 								{
 									"_type": "EdgeLabelView",
@@ -30519,7 +30543,7 @@
 									},
 									"visible": null,
 									"font": "Arial;13;0",
-									"left": 712,
+									"left": 672,
 									"top": 516,
 									"height": 13,
 									"alpha": 1.5707963267948966,
@@ -30540,7 +30564,7 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": 712,
+									"left": 672,
 									"top": 561,
 									"height": 13,
 									"alpha": -1.5707963267948966,
@@ -30561,7 +30585,7 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": 697,
+									"left": 657,
 									"top": 584,
 									"height": 13,
 									"alpha": 0.5235987755982988,
@@ -30582,7 +30606,7 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": 683,
+									"left": 643,
 									"top": 581,
 									"height": 13,
 									"alpha": 0.7853981633974483,
@@ -30603,7 +30627,7 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": 724,
+									"left": 684,
 									"top": 588,
 									"height": 13,
 									"alpha": -0.5235987755982988,
@@ -30682,7 +30706,7 @@
 							"tail": {
 								"$ref": "AAAAAAGH3jzH5zzMgn0="
 							},
-							"points": "712:616;712:552;1056:552",
+							"points": "672:616;672:552;1056:552",
 							"showVisibility": true,
 							"nameLabel": {
 								"$ref": "AAAAAAGH3jzH6z9ocg8="
@@ -35707,9 +35731,9 @@
 										"$ref": "AAAAAAGH3ZZJfh0W9MM="
 									},
 									"font": "Arial;13;0",
-									"left": 952,
+									"left": 943,
 									"top": 512,
-									"width": 93.08837890625,
+									"width": 111.16015625,
 									"height": 13,
 									"alpha": 0.04874184893604447,
 									"distance": 205.24375751773792,
@@ -35717,7 +35741,7 @@
 										"$ref": "AAAAAAGH3jzH7EBM9WQ="
 									},
 									"edgePosition": 1,
-									"text": "+addTransport()"
+									"text": "+updateTransport()"
 								},
 								{
 									"_type": "EdgeLabelView",
@@ -36180,9 +36204,9 @@
 										"$ref": "AAAAAAGH3Z6yyuxTTl8="
 									},
 									"font": "Arial;13;0",
-									"left": 688,
+									"left": 670,
 									"top": 1087,
-									"width": 99.3408203125,
+									"width": 134.7734375,
 									"height": 13,
 									"alpha": -2.810833222872522,
 									"distance": 175.5135322418189,
@@ -36190,7 +36214,7 @@
 										"$ref": "AAAAAAGH3jzH7EBgdCs="
 									},
 									"edgePosition": 1,
-									"text": "+insert(transport)"
+									"text": "+update(new transport)"
 								},
 								{
 									"_type": "EdgeLabelView",
@@ -71935,6 +71959,7 @@
 								"$ref": "AAAAAAGH3kTRIE72bi4="
 							},
 							"name": "id",
+							"type": "",
 							"value": "\"6754\""
 						},
 						{
@@ -71944,6 +71969,7 @@
 								"$ref": "AAAAAAGH3kTRIE72bi4="
 							},
 							"name": "model",
+							"type": "",
 							"value": "Mazda"
 						},
 						{
@@ -71953,6 +71979,7 @@
 								"$ref": "AAAAAAGH3kTRIE72bi4="
 							},
 							"name": "baseWeight",
+							"type": "",
 							"value": "1 Tone"
 						},
 						{
@@ -71962,6 +71989,7 @@
 								"$ref": "AAAAAAGH3kTRIE72bi4="
 							},
 							"name": "maxWeight",
+							"type": "",
 							"value": "3.7 Tone"
 						},
 						{
@@ -71971,6 +71999,7 @@
 								"$ref": "AAAAAAGH3kTRIE72bi4="
 							},
 							"name": "coolingCapacity",
+							"type": "",
 							"value": "COLD"
 						}
 					]

@@ -33,11 +33,13 @@ class TransportsDAOTest {
     private Driver driver;
     private Truck truck;
     private Site site;
+    private Site source;
     private Employee employee;
 
     @BeforeEach
     void setUp() {
         site = new Site("zone1","address1","12345","kobi", Site.SiteType.SUPPLIER);
+        source = new Site("zone1","address1","12345","kobi", Site.SiteType.BRANCH);
         truck = new Truck("1", "model1", 1000, 20000, Truck.CoolingCapacity.FROZEN);
         employee = new Employee("name1","12345","Poalim",50, LocalDate.of(1999,10,10),"conditions","details");
         employee.addRole(Role.Driver);
@@ -136,6 +138,7 @@ class TransportsDAOTest {
                             15000
                     );
                     transports.add(toAdd);
+
                     transportsDAO.insert(toAdd);
                 } catch (DalException e) {
                     fail(e);

@@ -168,7 +168,7 @@ class TransportDestinationsDAOTest {
         expected.add(transportDestination1);
         expected.add(transportDestination2);
         expected.add(transportDestination3);
-        List.of(4,5,6,7).forEach(i -> {
+        List.of(5,6,7,8).forEach(i -> {
             try {
                 TransportDestination newDestination = new TransportDestination(TRANSPORT_ID, i, SITE_ADDRESS1, LIST_ID, LocalTime.now());
                 dao.insert(newDestination);
@@ -193,7 +193,7 @@ class TransportDestinationsDAOTest {
     @Test
     void insert() {
         try {
-            TransportDestination newDestination = new TransportDestination(TRANSPORT_ID, 4, SITE_ADDRESS1, LIST_ID, LocalTime.now());
+            TransportDestination newDestination = new TransportDestination(TRANSPORT_ID, 5, SITE_ADDRESS1, LIST_ID, LocalTime.now());
             dao.insert(newDestination);
             TransportDestination selected = dao.select(TransportDestination.getLookupObject(
                     newDestination.transportId(),
@@ -208,7 +208,7 @@ class TransportDestinationsDAOTest {
     void insertAll() {
         //set up
         LinkedList<TransportDestination> expected = new LinkedList<>();
-        List.of(4,5,6,7).forEach(i -> {
+        List.of(5,6,7,8).forEach(i -> {
             TransportDestination newDestination = new TransportDestination(TRANSPORT_ID, i, SITE_ADDRESS1, LIST_ID, LocalTime.now());
             expected.add(newDestination);
         });
@@ -257,7 +257,7 @@ class TransportDestinationsDAOTest {
         try {
             dao.delete(transportDestination3);
             List<TransportDestination> selected = dao.selectAllRelated(Transport.getLookupObject(TRANSPORT_ID));
-            assertEquals(2, selected.size());
+            assertEquals(4, selected.size());
             assertDeepEquals(transportDestination1, selected.get(0));
             assertDeepEquals(transportDestination2, selected.get(1));
         } catch (DalException e) {

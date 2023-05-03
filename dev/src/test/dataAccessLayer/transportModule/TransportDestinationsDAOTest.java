@@ -104,9 +104,9 @@ class TransportDestinationsDAOTest {
 
             dao = new TransportDestinationsDAO(TESTING_DB_NAME);
 
-            transportDestination1 = new TransportDestination(TRANSPORT_ID, 1, SITE_ADDRESS1, LIST_ID, LocalTime.now());
-            transportDestination2 = new TransportDestination(TRANSPORT_ID, 2, SITE_ADDRESS1, LIST_ID, LocalTime.now());
-            transportDestination3 = new TransportDestination(TRANSPORT_ID, 3, SITE_ADDRESS1, LIST_ID, LocalTime.now());
+            transportDestination1 = new TransportDestination(TRANSPORT_ID, 2, SITE_ADDRESS1, LIST_ID, LocalTime.now());
+            transportDestination2 = new TransportDestination(TRANSPORT_ID, 3, SITE_ADDRESS1, LIST_ID, LocalTime.now());
+            transportDestination3 = new TransportDestination(TRANSPORT_ID, 4, SITE_ADDRESS1, LIST_ID, LocalTime.now());
 
             dao.insert(transportDestination1);
             dao.insert(transportDestination2);
@@ -139,7 +139,7 @@ class TransportDestinationsDAOTest {
         expected.add(transportDestination1);
         expected.add(transportDestination2);
         expected.add(transportDestination3);
-        List.of(4,5,6,7).forEach(i -> {
+        List.of(5,6,7,8).forEach(i -> {
             try {
                 TransportDestination newDestination = new TransportDestination(TRANSPORT_ID, i, SITE_ADDRESS1, LIST_ID, LocalTime.now());
                 expected.add(newDestination);

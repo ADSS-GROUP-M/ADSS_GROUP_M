@@ -15,17 +15,15 @@ import com.google.gson.reflect.TypeToken;
 
 public class OrderService {
     private OrderController orderController;
-    private SupplierController supplierController;
     private Gson gson;
     public OrderService(){
-        this.supplierController = SupplierController.getInstance();
         orderController = new OrderController();
         gson = new Gson();
     }
 
     public String order(Map<Integer, Integer> order){
         try {
-            Map<String, Pair<Map<Integer, Integer>, Double>> fullOrder = orderController.order(order, supplierController.getCopyOfSuppliers());
+            Map<String, Pair<Map<Integer, Integer>, Double>> fullOrder = orderController.order(order);
             Response<Map<String, Pair<Map<Integer, Integer>, Double>>> r = new Response<>(fullOrder);
             return gson.toJson(r);
         }

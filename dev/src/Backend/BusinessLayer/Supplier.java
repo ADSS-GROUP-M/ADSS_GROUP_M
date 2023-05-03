@@ -10,8 +10,8 @@ public class Supplier {
     private String name;
     public String bnNumber;
     private BankAccount bankAccount;
-    private String paymentMethod;
     private List<String> fields;
+    private String paymentMethod;
     /***
      * maps between the name of the contact person and his contact info - email, phone number
      */
@@ -30,16 +30,16 @@ public class Supplier {
         this.name = name;
         this.bnNumber = bnNumber;
         this.bankAccount = bankAccount;
-        this.paymentMethod = paymentMethod;
         this.fields = fields;
         this.contactsInfo = contactsInfo;
-        agreement = new Agreement(paymentMethod, productList, deliveryAgreement);
+        this.paymentMethod = paymentMethod;
+        agreement = new Agreement(productList, deliveryAgreement);
     }
     public Supplier(String name, String bnNumber, BankAccount bankAccount, String paymentMethod,
                     List<String> fields, Map<String,Pair<String, String>> contactsInfo,
                     List<Product> productList, DeliveryAgreement deliveryAgreement, BillOfQuantities billOfQuantities){
         this(name, bnNumber, bankAccount, paymentMethod, fields, contactsInfo, productList, deliveryAgreement);
-        agreement = new Agreement(paymentMethod, productList, deliveryAgreement, billOfQuantities);
+        agreement = new Agreement(productList, deliveryAgreement, billOfQuantities);
     }
 
     public void setName(String name){
@@ -78,11 +78,6 @@ public class Supplier {
         agreement.addProduct(new Product(name, catalogNumber, price, numberOfUnits));
     }
 
-    public void setPaymentMethod(String paymentMethod){
-        this.paymentMethod = paymentMethod;
-        agreement.setPaymentMethod(paymentMethod);
-    }
-
     public void addField(String field){
         if(!fields.contains(field))
             fields.add(field);
@@ -113,6 +108,9 @@ public class Supplier {
         return name;
     }
 
+    public void setPaymentMethod(String paymentMethod) {
+        this.paymentMethod = paymentMethod;
+    }
 
 
     public String toString(){
@@ -125,7 +123,7 @@ public class Supplier {
         String bankAccount = "BANK ACCOUNT:\n\t\t" + this.bankAccount.toString();
 
         String res = "SUPPLIER:\n\tNAME: " + name +"\n\tBN NUMBER: " + bnNumber + "\n\t" + bankAccount + "\n\t" + fields
-                + "\n\t" + contactsInfo + "\n\t" + agreement.toString();
+                + "\n\t" + contactsInfo + "\n\t" + "PAYMENT METHOD: " + paymentMethod +"\n\t" + agreement.toString();
         return res;
     }
 }

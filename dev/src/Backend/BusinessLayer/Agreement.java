@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 public class Agreement {
-    private String paymentMethod;
+
     /***
      * products on the agreement - maps between product's id to the product and its amount
      */
@@ -17,16 +17,15 @@ public class Agreement {
     private BillOfQuantities billOfQuantities;
     private DeliveryAgreement deliveryAgreement;
 
-    public Agreement(String paymentMethod, List<Product> productsList, DeliveryAgreement deliveryAgreement){
-        this.paymentMethod = paymentMethod;
+    public Agreement(List<Product> productsList, DeliveryAgreement deliveryAgreement){
         products = new HashMap<>();
         for (Product p : productsList)
             products.put(p.getId(), p);
         this.deliveryAgreement = deliveryAgreement;
     }
 
-    public Agreement(String paymentMethod, List<Product> productsList, DeliveryAgreement deliveryAgreement, BillOfQuantities billOfQuantities){
-        this(paymentMethod, productsList, deliveryAgreement);
+    public Agreement(List<Product> productsList, DeliveryAgreement deliveryAgreement, BillOfQuantities billOfQuantities){
+        this(productsList, deliveryAgreement);
         this.billOfQuantities = billOfQuantities;
     }
 
@@ -68,10 +67,6 @@ public class Agreement {
 
     public void setBillOfQuantities(BillOfQuantities billOfQuantities) {
         this.billOfQuantities = billOfQuantities;
-    }
-
-    public void setPaymentMethod(String paymentMethod) {
-        this.paymentMethod = paymentMethod;
     }
 
     public String toString(){

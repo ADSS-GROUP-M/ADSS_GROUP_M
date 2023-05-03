@@ -7,13 +7,19 @@ import java.util.stream.Collectors;
 
 
 public class OrderController {
+    private SupplierController supplierController;
+
+
+    public OrderController(){
+        this.supplierController = SupplierController.getInstance();
+    }
     /***
      *
      * @param order maps between productId to the amount to be ordered
-     * @param suppliers all available suppliers
      * @return map between supplier to the products he supplies from the orer
      */
-    public Map<String, Pair<Map<Integer, Integer>, Double>> order(Map<Integer, Integer> order, List<Supplier> suppliers){
+    public Map<String, Pair<Map<Integer, Integer>, Double>> order(Map<Integer, Integer> order){
+        List<Supplier> suppliers = supplierController.getCopyOfSuppliers();
         Map<Integer, Map<Supplier, Integer>> cantBeOrderedByOneSupplier = findProductsWithoutSupplierToFullySupply(order, suppliers);
         Map<Integer, Integer> notOneSupplierOrder = new HashMap<>();
         for(Integer productId : cantBeOrderedByOneSupplier.keySet()) {
@@ -145,6 +151,14 @@ public class OrderController {
         }
         return productToSuppliers;
     }
+
+    /***
+     * divide the products that can be fully ordered from one supplier - to the best supplier by price
+     * @param order the order
+     * @param alreadySupplied products that already been supplied
+     * @param suppliersToUse the suppliers that can be used
+     * @return map between the best supplier to the products of the order that he will supply
+     */
 
     private Map<Supplier, List<Integer>> divideOrder(Map<Integer, Integer> order, List<Integer> alreadySupplied, List<Supplier> suppliersToUse){
         if(suppliersToUse.size() == 0 | alreadySupplied.size() == order.size())

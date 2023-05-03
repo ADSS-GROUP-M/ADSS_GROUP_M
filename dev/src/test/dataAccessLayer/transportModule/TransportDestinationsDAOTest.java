@@ -8,7 +8,6 @@ import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.dalUtils.OfflineResultSet;
 import dataAccessLayer.dalUtils.SQLExecutor;
 import dataAccessLayer.employeeModule.EmployeeDAO;
-import javafx.util.Pair;
 import objects.transportObjects.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,10 +31,12 @@ class TransportDestinationsDAOTest {
     public static final int LIST_ID = 1;
     public static final String SITE_ADDRESS1 = "address1";
     public static final String SITE_ADDRESS2 = "address2";
-    TransportDestinationsDAO dao;
-    TransportDestination transportDestination1;
-    TransportDestination transportDestination2;
-    TransportDestination transportDestination3;
+    public static final LocalTime ARRIVAL_TIME = LocalTime.of(20, 20);
+    private TransportDestinationsDAO dao;
+    private TransportDestination transportDestination1;
+    private TransportDestination transportDestination2;
+    private TransportDestination transportDestination3;
+    private TransportDestination transportDestination4;
 
     @BeforeEach
     void setUp() {
@@ -60,6 +61,8 @@ class TransportDestinationsDAOTest {
             }};
             ItemList itemList = new ItemList(LIST_ID, load, unload);
 
+            transportDestination1 = new TransportDestination(TRANSPORT_ID, 1, SITE_ADDRESS2, LIST_ID, ARRIVAL_TIME);
+
             Transport transport = new Transport(TRANSPORT_ID,
                     site1.address(),
                     new LinkedList<>(){{
@@ -70,7 +73,7 @@ class TransportDestinationsDAOTest {
                     }},
                     driver.id(),
                     truck.id(),
-                    LocalDateTime.of(2020, 1, 1, 1, 1),
+                    LocalDateTime.of(2020, 1, 1, 19, 50),
                     15000
             );
 
@@ -104,13 +107,13 @@ class TransportDestinationsDAOTest {
 
             dao = new TransportDestinationsDAO(TESTING_DB_NAME);
 
-            transportDestination1 = new TransportDestination(TRANSPORT_ID, 2, SITE_ADDRESS1, LIST_ID, LocalTime.now());
-            transportDestination2 = new TransportDestination(TRANSPORT_ID, 3, SITE_ADDRESS1, LIST_ID, LocalTime.now());
-            transportDestination3 = new TransportDestination(TRANSPORT_ID, 4, SITE_ADDRESS1, LIST_ID, LocalTime.now());
+            transportDestination2 = new TransportDestination(TRANSPORT_ID, 2, SITE_ADDRESS1, LIST_ID, ARRIVAL_TIME);
+            transportDestination3 = new TransportDestination(TRANSPORT_ID, 3, SITE_ADDRESS1, LIST_ID, ARRIVAL_TIME);
+            transportDestination4 = new TransportDestination(TRANSPORT_ID, 4, SITE_ADDRESS1, LIST_ID, ARRIVAL_TIME);
 
-            dao.insert(transportDestination1);
             dao.insert(transportDestination2);
             dao.insert(transportDestination3);
+            dao.insert(transportDestination4);
 
         } catch (DalException | TransportException e) {
             fail(e);
@@ -125,8 +128,8 @@ class TransportDestinationsDAOTest {
     @Test
     void select() {
         try {
-            TransportDestination selected = dao.select(transportDestination1);
-            assertDeepEquals(transportDestination1, selected);
+            TransportDestination selected = dao.select(transportDestination2);
+            assertDeepEquals(transportDestination2, selected);
         } catch (DalException e) {
             fail(e);
         }
@@ -139,9 +142,10 @@ class TransportDestinationsDAOTest {
         expected.add(transportDestination1);
         expected.add(transportDestination2);
         expected.add(transportDestination3);
+        expected.add(transportDestination4);
         List.of(5,6,7,8).forEach(i -> {
             try {
-                TransportDestination newDestination = new TransportDestination(TRANSPORT_ID, i, SITE_ADDRESS1, LIST_ID, LocalTime.now());
+                TransportDestination newDestination = new TransportDestination(TRANSPORT_ID, i, SITE_ADDRESS1, LIST_ID, ARRIVAL_TIME);
                 expected.add(newDestination);
                 dao.insert(newDestination);
             } catch (DalException e) {
@@ -168,9 +172,10 @@ class TransportDestinationsDAOTest {
         expected.add(transportDestination1);
         expected.add(transportDestination2);
         expected.add(transportDestination3);
+        expected.add(transportDestination4);
         List.of(5,6,7,8).forEach(i -> {
             try {
-                TransportDestination newDestination = new TransportDestination(TRANSPORT_ID, i, SITE_ADDRESS1, LIST_ID, LocalTime.now());
+                TransportDestination newDestination = new TransportDestination(TRANSPORT_ID, i, SITE_ADDRESS1, LIST_ID, ARRIVAL_TIME);
                 dao.insert(newDestination);
                 expected.add(newDestination);
             } catch (DalException e) {
@@ -193,7 +198,7 @@ class TransportDestinationsDAOTest {
     @Test
     void insert() {
         try {
-            TransportDestination newDestination = new TransportDestination(TRANSPORT_ID, 5, SITE_ADDRESS1, LIST_ID, LocalTime.now());
+            TransportDestination newDestination = new TransportDestination(TRANSPORT_ID, 5, SITE_ADDRESS1, LIST_ID, ARRIVAL_TIME);
             dao.insert(newDestination);
             TransportDestination selected = dao.select(TransportDestination.getLookupObject(
                     newDestination.transportId(),
@@ -209,7 +214,7 @@ class TransportDestinationsDAOTest {
         //set up
         LinkedList<TransportDestination> expected = new LinkedList<>();
         List.of(5,6,7,8).forEach(i -> {
-            TransportDestination newDestination = new TransportDestination(TRANSPORT_ID, i, SITE_ADDRESS1, LIST_ID, LocalTime.now());
+            TransportDestination newDestination = new TransportDestination(TRANSPORT_ID, i, SITE_ADDRESS1, LIST_ID, ARRIVAL_TIME);
             expected.add(newDestination);
         });
         try {
@@ -217,6 +222,7 @@ class TransportDestinationsDAOTest {
         } catch (DalException e) {
             fail(e);
         }
+        expected.addFirst(transportDestination4);
         expected.addFirst(transportDestination3);
         expected.addFirst(transportDestination2);
         expected.addFirst(transportDestination1);
@@ -239,9 +245,9 @@ class TransportDestinationsDAOTest {
 
             TransportDestination newDestination = new TransportDestination(
                     TRANSPORT_ID,
-                    transportDestination1.destination_index(),
+                    transportDestination2.destination_index(),
                     SITE_ADDRESS2,
-                    LIST_ID, LocalTime.now());
+                    LIST_ID, ARRIVAL_TIME);
             dao.update(newDestination);
             TransportDestination selected = dao.select(TransportDestination.getLookupObject(
                     newDestination.transportId(),
@@ -255,11 +261,12 @@ class TransportDestinationsDAOTest {
     @Test
     void delete() {
         try {
-            dao.delete(transportDestination3);
+            dao.delete(transportDestination4);
             List<TransportDestination> selected = dao.selectAllRelated(Transport.getLookupObject(TRANSPORT_ID));
-            assertEquals(4, selected.size());
+            assertEquals(3, selected.size());
             assertDeepEquals(transportDestination1, selected.get(0));
             assertDeepEquals(transportDestination2, selected.get(1));
+            assertDeepEquals(transportDestination3, selected.get(2));
         } catch (DalException e) {
             fail(e);
         }
@@ -268,7 +275,7 @@ class TransportDestinationsDAOTest {
     @Test
     void exists() {
         try {
-            assertTrue(dao.exists(transportDestination1));
+            assertTrue(dao.exists(transportDestination2));
             assertFalse(dao.exists(TransportDestination.getLookupObject(TRANSPORT_ID, 10)));
         } catch (DalException e) {
             fail(e);
@@ -291,12 +298,12 @@ class TransportDestinationsDAOTest {
         SQLExecutor cursor = new SQLExecutor(TESTING_DB_NAME);
         try{
             String query = String.format("SELECT * FROM transport_destinations WHERE transport_id = %d AND destination_index = %d",
-                    transportDestination1.transportId(),
-                    transportDestination1.destination_index());
+                    transportDestination2.transportId(),
+                    transportDestination2.destination_index());
             OfflineResultSet resultSet = cursor.executeRead(query);
             resultSet.next();
             TransportDestination selected = dao.getObjectFromResultSet(resultSet);
-            assertDeepEquals(transportDestination1, selected);
+            assertDeepEquals(transportDestination2, selected);
         } catch (SQLException e){
             fail(e);
         }

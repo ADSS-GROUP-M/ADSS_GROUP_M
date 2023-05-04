@@ -106026,8 +106026,8 @@
 							"left": 1408,
 							"top": 88,
 							"width": 609,
-							"height": 377,
-							"text": "                                          READ ME\n\nOn 13-05-23 the logistics center called Dani the transport manager and informed him that truck identification number 4354 had a flat tire, Dani looked in the system to see if there a truck that suitable for the transport that should be carried out on 14-05-23 and indeed found that truck number 6754 was suitable for that transport, so he updated in the system the new data about this transport. \nThe following assumptions must be made about the scenario:\n1) The driver has a driver's license suitable for the new truck\n2) The transport start from the logistics center\n3) The system is described after the update - describes a snapshot of the system\n4)It is assumed that truck number 6754 is exist in the system in addition to all the objects of the existing transport\n"
+							"height": 404,
+							"text": "                                          READ ME\n\nOn 13-05-23 the logistics center called Dani the transport manager and informed him that truck identification number 4354 had a flat tire, Dani looked in the system to see if there a truck that suitable for the transport that should be carried out on 14-05-23 and indeed found that truck number 6754 was suitable for that transport, so he updated in the system the new data about this transport. \nThe following assumptions must be made about the scenario:\n1) The driver has a driver's license suitable for the new truck\n2) The transport start from the logistics center\n3) The system is described after the update - describes a snapshot of the system\n4)It is assumed that truck number 6754 is exist in the system in addition to all the objects of the existing transport\n5) store keeper is available to pickup the transport\n6) the driver is available at that point in time"
 						}
 					]
 				},

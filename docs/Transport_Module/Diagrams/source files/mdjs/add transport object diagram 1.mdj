@@ -45201,8 +45201,8 @@
 							"left": 1416,
 							"top": 184,
 							"width": 769,
-							"height": 609,
-							"text": "\n                                                 READ ME\n\nThe following diagram describes the transport that take place on \n14-05-23, performe by driver named Moshe (his id = 0), the transport will be carried out by a Toyota truck whose identification number is 4354 and will be at 09:00 in the morning .\nThe following assumptions must be made about the scenario:\n1) The driver has a driver's license suitable for the truck\n2) The transport start from the logistics center\n3) The system is described at the end of the transport - describes a snapshot of the system\n4)It is assumed that all objects added to the transport exist in the system\n\n\nThe following diagram describes the transport that take place on \n14-05-23, performe by driver named Moshe (his id = 0), the transport will be carried out by a Toyota truck whose identification number is 4354 and will be at 09:00 in the morning .\nThe following assumptions must be made about the scenario:\n1) The driver has a driver's license suitable for the truck\n2) The transport start from the logistics center\n3) The system is described at the end of the transport - describes a snapshot of the system\n4)It is assumed that all objects added to the transport exist in the system\n"
+							"height": 377,
+							"text": "\n                                                 READ ME\n\nThe following diagram describes the transport that take place on \n14-05-23, performe by driver named Moshe (his id = 0), the transport will be carried out by a Toyota truck whose identification number is 4354 and will be at 09:00 in the morning .\nThe following assumptions must be made about the scenario:\n1) The driver has a driver's license suitable for the truck\n2) The transport start from the logistics center\n3) The system is described at the end of the transport - describes a snapshot of the system\n4)It is assumed that all objects added to the transport exist in the system\n5) store keeper is available to pickup the transport\n6) the driver is available at that point in time\n"
 						}
 					]
 				},

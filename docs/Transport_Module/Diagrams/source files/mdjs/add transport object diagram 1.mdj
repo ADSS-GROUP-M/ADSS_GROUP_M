@@ -2348,6 +2348,7 @@
 							},
 							"name": "id",
 							"visibility": "private",
+							"type": "",
 							"value": "1"
 						},
 						{
@@ -2358,6 +2359,7 @@
 							},
 							"name": "truckID",
 							"visibility": "private",
+							"type": "",
 							"value": "\"6754\""
 						},
 						{
@@ -2973,6 +2975,7 @@
 							},
 							"name": "licenseType",
 							"visibility": "private",
+							"type": "",
 							"value": "C3"
 						}
 					]
@@ -4083,6 +4086,7 @@
 							},
 							"name": "loadingItems",
 							"visibility": "private",
+							"type": "",
 							"value": "empty map"
 						},
 						{
@@ -4166,6 +4170,7 @@
 							},
 							"name": "unloadingItems",
 							"visibility": "private",
+							"type": "",
 							"value": "empty map"
 						}
 					]
@@ -4266,6 +4271,7 @@
 							},
 							"name": "unloadingItems",
 							"visibility": "private",
+							"type": "",
 							"value": "empty map"
 						}
 					]
@@ -6392,7 +6398,7 @@
 											"top": 701,
 											"width": 364.8125,
 											"height": 13,
-											"text": "-truckID = \"4354\"",
+											"text": "-truckID = \"6754\"",
 											"horizontalAlignment": 0
 										},
 										{
@@ -8786,7 +8792,7 @@
 											"font": "Arial;13;1",
 											"left": 341,
 											"top": 991,
-											"width": 165.47705078125,
+											"width": 171.615234375,
 											"height": 13,
 											"underline": true,
 											"text": "Item list 3: Item List"
@@ -8822,7 +8828,7 @@
 									"font": "Arial;13;0",
 									"left": 336,
 									"top": 984,
-									"width": 175.47705078125,
+									"width": 181.615234375,
 									"height": 25,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAGHLpNcmMeTowM="
@@ -8859,7 +8865,7 @@
 											"font": "Arial;13;0",
 											"left": 341,
 											"top": 1014,
-											"width": 165.47705078125,
+											"width": 171.615234375,
 											"height": 13,
 											"text": "-id = 2",
 											"horizontalAlignment": 0
@@ -8876,7 +8882,7 @@
 											"font": "Arial;13;0",
 											"left": 341,
 											"top": 1029,
-											"width": 165.47705078125,
+											"width": 171.615234375,
 											"height": 13,
 											"text": "-loadingItems = {cola:4}",
 											"horizontalAlignment": 0
@@ -8893,7 +8899,7 @@
 											"font": "Arial;13;0",
 											"left": 341,
 											"top": 1044,
-											"width": 165.47705078125,
+											"width": 171.615234375,
 											"height": 13,
 											"text": "-unloadingItems = empty map",
 											"horizontalAlignment": 0
@@ -8910,7 +8916,7 @@
 							"containerChangeable": true,
 							"left": 336,
 							"top": 984,
-							"width": 175.47705078125,
+							"width": 181.615234375,
 							"height": 78,
 							"nameCompartment": {
 								"$ref": "AAAAAAGHLpNcmMeSbRk="
@@ -15220,6 +15226,7 @@
 								"$ref": "AAAAAAGH3V8TFJZEUQI="
 							},
 							"name": "source",
+							"type": "",
 							"value": "\" Emek Sarah 36\""
 						},
 						{
@@ -15269,6 +15276,7 @@
 								"$ref": "AAAAAAGH3V8TFJZEUQI="
 							},
 							"name": "estimatedArrivalTimes",
+							"type": "",
 							"value": "{<\"Sisu 36\",9:30>,<\"Rager 30\",12:30>,<\"Hashlom 15\",14:30>}"
 						}
 					]
@@ -15405,6 +15413,7 @@
 								"$ref": "AAAAAAGH3jBc6CXphHI="
 							},
 							"name": "transportId",
+							"type": "",
 							"value": "1"
 						},
 						{
@@ -15414,6 +15423,7 @@
 								"$ref": "AAAAAAGH3jBc6CXphHI="
 							},
 							"name": "destenation_index",
+							"type": "",
 							"value": "0"
 						},
 						{
@@ -15423,6 +15433,7 @@
 								"$ref": "AAAAAAGH3jBc6CXphHI="
 							},
 							"name": "address",
+							"type": "",
 							"value": "\"Sisu 36\""
 						},
 						{
@@ -15432,6 +15443,7 @@
 								"$ref": "AAAAAAGH3jBc6CXphHI="
 							},
 							"name": "itemListId",
+							"type": "",
 							"value": "1"
 						},
 						{
@@ -15492,6 +15504,7 @@
 								"$ref": "AAAAAAGH3jCztGO7Dvk="
 							},
 							"name": "source",
+							"type": "",
 							"value": "\" Emek Sarah 36\""
 						},
 						{
@@ -15501,6 +15514,7 @@
 								"$ref": "AAAAAAGH3jCztGO7Dvk="
 							},
 							"name": "destination",
+							"type": "",
 							"value": "\"Hashlom 15\""
 						},
 						{
@@ -15510,6 +15524,7 @@
 								"$ref": "AAAAAAGH3jCztGO7Dvk="
 							},
 							"name": "distance",
+							"type": "",
 							"value": "40km"
 						}
 					]
@@ -15523,6 +15538,18 @@
 					"name": "add transport object diagram 1",
 					"defaultDiagram": true,
 					"ownedViews": [
+						{
+							"_type": "RectangleView",
+							"_id": "AAAAAAGH6DjVWUftKaY=",
+							"_parent": {
+								"$ref": "AAAAAAGH3jzH5jx2TVA="
+							},
+							"font": "Arial;13;0",
+							"left": 16,
+							"top": 16,
+							"width": 2200,
+							"height": 1936
+						},
 						{
 							"_type": "UMLObjectView",
 							"_id": "AAAAAAGH3jzH5jx3Oqc=",
@@ -45163,6 +45190,19 @@
 							"headMultiplicityLabel": {
 								"$ref": "AAAAAAGH54RjAPGdWV0="
 							}
+						},
+						{
+							"_type": "UMLTextBoxView",
+							"_id": "AAAAAAGH6DYWoO8WArU=",
+							"_parent": {
+								"$ref": "AAAAAAGH3jzH5jx2TVA="
+							},
+							"font": "Arial;24;0",
+							"left": 1416,
+							"top": 184,
+							"width": 769,
+							"height": 609,
+							"text": "\n                                                 READ ME\n\nThe following diagram describes the transport that take place on \n14-05-23, performe by driver named Moshe (his id = 0), the transport will be carried out by a Toyota truck whose identification number is 4354 and will be at 09:00 in the morning .\nThe following assumptions must be made about the scenario:\n1) The driver has a driver's license suitable for the truck\n2) The transport start from the logistics center\n3) The system is described at the end of the transport - describes a snapshot of the system\n4)It is assumed that all objects added to the transport exist in the system\n\n\nThe following diagram describes the transport that take place on \n14-05-23, performe by driver named Moshe (his id = 0), the transport will be carried out by a Toyota truck whose identification number is 4354 and will be at 09:00 in the morning .\nThe following assumptions must be made about the scenario:\n1) The driver has a driver's license suitable for the truck\n2) The transport start from the logistics center\n3) The system is described at the end of the transport - describes a snapshot of the system\n4)It is assumed that all objects added to the transport exist in the system\n"
 						}
 					]
 				},
@@ -45334,6 +45374,7 @@
 								"$ref": "AAAAAAGH539tDB2U5TM="
 							},
 							"name": "itemListId",
+							"type": "",
 							"value": "0"
 						},
 						{
@@ -45425,6 +45466,7 @@
 								"$ref": "AAAAAAGH538YIw+cSwE="
 							},
 							"name": "itemListId",
+							"type": "",
 							"value": "2"
 						},
 						{

@@ -82,7 +82,7 @@ public class EmployeeDAO extends DAO<Employee> {
         if (resultSet.next()) {
             ans = getObjectFromResultSet(resultSet);
         } else {
-            throw new DalException("No truck with id " + object.getId() + " was found");
+            throw new DalException("No truck with id " + object.getId() + " was found");//TODO: Is this a mistake?
         }
         cache.put(ans);
         return ans;

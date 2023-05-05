@@ -11,6 +11,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import serviceLayer.ServiceFactory;
+import serviceLayer.transportModule.ResourceManagementService;
 import utils.Response;
 
 import java.time.LocalDate;
@@ -18,7 +19,7 @@ import java.time.LocalDate;
 import static dataAccessLayer.DalFactory.TESTING_DB_NAME;
 import static org.junit.jupiter.api.Assertions.*;
 
-class ResourceManagementServiceTest {
+class ResourceManagementServiceIT {
 
     private ResourceManagementService rms;
     private Driver driver;

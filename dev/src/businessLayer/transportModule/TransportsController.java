@@ -132,7 +132,7 @@ public class TransportsController {
         }
 
         validateTransport(newTransport);
-        //initializeDeliveryRouteDistances(newTransport);
+        initializeEstimatedArrivalTimes(distancesDAO,newTransport);
 
         try {
             dao.update(new Transport(id, newTransport));

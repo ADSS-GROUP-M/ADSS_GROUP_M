@@ -95,8 +95,7 @@ class TransportsServiceTest {
         try {
             siteDistancesDAO = new SitesDistancesDAO(TESTING_DB_NAME);
             siteDistancesDAO.insert(distance);
-            TransportsController.initializeEstimatedArrivalTimes(siteDistancesDAO, transportToAdd);
-        } catch (DalException | TransportException e) {
+        } catch (DalException e) {
             fail(e);
         }
         String json2 = ts.addTransport(transportToAdd.toJson());
@@ -155,8 +154,7 @@ class TransportsServiceTest {
 
         try {
             siteDistancesDAO.insert(distance2);
-            TransportsController.initializeEstimatedArrivalTimes(siteDistancesDAO,newTransport);
-        } catch (TransportException | DalException e) {
+        } catch (DalException e) {
             fail(e);
         }
         String json2 = ts.addTransport(newTransport.toJson());
@@ -234,8 +232,7 @@ class TransportsServiceTest {
 
         try {
             siteDistancesDAO.insert(distance2);
-            TransportsController.initializeEstimatedArrivalTimes(siteDistancesDAO,newTransport);
-        } catch (TransportException | DalException e) {
+        } catch (DalException e) {
             fail(e);
         }
         String json2 = ts.updateTransport(newTransport.toJson());

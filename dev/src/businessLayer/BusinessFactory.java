@@ -28,7 +28,7 @@ public class BusinessFactory {
 
     private void buildInstances() {
         trucksController = new TrucksController(dalFactory.trucksDAO());
-        sitesController = new SitesController(dalFactory.sitesDAO());
+        sitesController = new SitesController(dalFactory.sitesDAO(), dalFactory.sitesDistancesDAO());
         driversController = new DriversController(dalFactory.driversDAO());
         shiftsController = new ShiftsController(dalFactory.shiftDAO());
         employeesController = new EmployeesController(shiftsController, dalFactory.branchesDAO(), dalFactory.employeeDAO());

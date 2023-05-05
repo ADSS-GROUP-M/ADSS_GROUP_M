@@ -1,12 +1,15 @@
 package businessLayer.transportModule;
 
 import dataAccessLayer.dalUtils.DalException;
+import dataAccessLayer.transportModule.DistanceBetweenSites;
 import dataAccessLayer.transportModule.SitesDAO;
+import dataAccessLayer.transportModule.SitesDistancesDAO;
 import objects.transportObjects.Site;
 import serviceLayer.employeeModule.Services.EmployeesService;
 import utils.transportUtils.TransportException;
 
 import java.util.List;
+import java.util.Random;
 
 import static serviceLayer.employeeModule.Services.UserService.TRANSPORT_MANAGER_USERNAME;
 
@@ -16,10 +19,12 @@ import static serviceLayer.employeeModule.Services.UserService.TRANSPORT_MANAGER
  */
 public class SitesController {
     private final SitesDAO dao;
+    private final SitesDistancesDAO distancesDAO;
     private EmployeesService employeesService;
     
-    public SitesController(SitesDAO dao){
+    public SitesController(SitesDAO dao, SitesDistancesDAO distancesDAO){
         this.dao = dao;
+        this.distancesDAO = distancesDAO;
     }
 
     public void injectDependencies(EmployeesService employeesService) {
@@ -38,11 +43,32 @@ public class SitesController {
         }
         try {
             dao.insert(site);
+            addDistances(site);
             if(site.siteType() == Site.SiteType.BRANCH){
                 employeesService.createBranch(TRANSPORT_MANAGER_USERNAME,site.address());
             }
         } catch (DalException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    private void addDistances(Site site) throws TransportException {
+
+        //TODO: replace with real distances
+
+        Random rand = new Random();
+        List<Site> sites = getAllSites();
+        for(Site s : sites){
+            if(s.address().equals(site.address())) continue;
+            try {
+                int distance = rand.nextInt(1,10); //TODO: temporary random distance
+                DistanceBetweenSites to = new DistanceBetweenSites(s.address(),site.address(),distance);
+                DistanceBetweenSites from = new DistanceBetweenSites(site.address(),s.address(),distance);
+                distancesDAO.insert(to);
+                distancesDAO.insert(from);
+            } catch (DalException e) {
+                throw new TransportException(e.getMessage(),e);
+            }
         }
     }
 

@@ -43,6 +43,11 @@ class TransportsServiceTest {
     private DistanceBetweenSites distance;
     private SitesDistancesDAO siteDistancesDAO;
 
+    @AfterEach
+    void tearDown() {
+        DalFactory.clearTestDB();
+    }
+
     @BeforeEach
     void setUp() {
         DalFactory.clearTestDB();
@@ -92,12 +97,6 @@ class TransportsServiceTest {
                 LocalDateTime.of(2020, 1, 1, 0, 0),
                 100
         );
-        try {
-            siteDistancesDAO = new SitesDistancesDAO(TESTING_DB_NAME);
-            siteDistancesDAO.insert(distance);
-        } catch (DalException e) {
-            fail(e);
-        }
         String json2 = ts.addTransport(transportToAdd.toJson());
         Response response = Response.fromJson(json2);
         if(response.success() == false){
@@ -106,11 +105,6 @@ class TransportsServiceTest {
             int _id = response.dataToInt();
             transport = fetchAddedTransport(_id);
         }
-    }
-
-    @AfterEach
-    void tearDown() {
-        DalFactory.clearTestDB();
     }
 
     @Test
@@ -132,12 +126,10 @@ class TransportsServiceTest {
 
         HashMap<String,Integer> hm = new HashMap<>();
 
-        Site source = new Site("zone b", "456 oak ave", "(555) 234-5678", "jane doe", Site.SiteType.LOGISTICAL_CENTER);
-        Site destination = new Site("zone a", "123 main st", "(555) 123-4567", "john smith", Site.SiteType.BRANCH);
-        hm.put(destination.address(), itemList.id());
-        LinkedList<String> destinations = new LinkedList<>(List.of(destination.address()));
+        hm.put(site2.address(), itemList.id());
+        LinkedList<String> destinations = new LinkedList<>(List.of(site2.address()));
         Transport newTransport = new Transport(
-                source.address(),
+                site1.address(),
                 destinations,
                 hm,
                 "123",
@@ -146,17 +138,6 @@ class TransportsServiceTest {
                 2000
         );
 
-        DistanceBetweenSites distance2 = new DistanceBetweenSites(
-                source.address(),
-                destination.address(),
-                100
-        );
-
-        try {
-            siteDistancesDAO.insert(distance2);
-        } catch (DalException e) {
-            fail(e);
-        }
         String json2 = ts.addTransport(newTransport.toJson());
         Response response = Response.fromJson(json2);
         assertTrue(response.success(),response.message());
@@ -224,17 +205,6 @@ class TransportsServiceTest {
                 2000
         );
 
-        DistanceBetweenSites distance2 = new DistanceBetweenSites(
-                source.address(),
-                destination.address(),
-                100
-        );
-
-        try {
-            siteDistancesDAO.insert(distance2);
-        } catch (DalException e) {
-            fail(e);
-        }
         String json2 = ts.updateTransport(newTransport.toJson());
         Response response = Response.fromJson(json2);
         assertTrue(response.success(),response.message());

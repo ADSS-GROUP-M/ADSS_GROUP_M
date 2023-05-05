@@ -18,8 +18,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
 
-import static dataAccessLayer.DalFactory.TESTING_DB_NAME;
-
 /**
  * The TransportsController class is responsible for managing and controlling transport objects.
  * It provides methods to add, remove, update, and retrieve transport objects, as well as validate
@@ -40,7 +38,8 @@ public class TransportsController {
                                 DriversController dc,
                                 SitesController sc,
                                 ItemListsController ic,
-                                TransportsDAO dao, SitesDistancesDAO distancesDAO) throws TransportException{
+                                TransportsDAO dao,
+                                SitesDistancesDAO distancesDAO) throws TransportException{
         this.sc = sc;
         this.ilc = ic;
         this.tc = tc;

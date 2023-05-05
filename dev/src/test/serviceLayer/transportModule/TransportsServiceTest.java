@@ -1,8 +1,6 @@
 package serviceLayer.transportModule;
 
-import businessLayer.transportModule.TransportsController;
 import dataAccessLayer.DalFactory;
-import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.transportModule.DistanceBetweenSites;
 import dataAccessLayer.transportModule.SitesDistancesDAO;
 import objects.transportObjects.*;
@@ -13,12 +11,8 @@ import serviceLayer.ServiceFactory;
 import serviceLayer.employeeModule.Objects.SShiftType;
 import serviceLayer.employeeModule.Services.EmployeesService;
 import serviceLayer.employeeModule.Services.UserService;
-import serviceLayer.transportModule.ItemListsService;
-import serviceLayer.transportModule.ResourceManagementService;
-import serviceLayer.transportModule.TransportsService;
 import utils.JsonUtils;
 import utils.Response;
-import utils.transportUtils.TransportException;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -40,8 +34,6 @@ class TransportsServiceTest {
     private ResourceManagementService rms;
     private Site site1;
     private Site site2;
-    private DistanceBetweenSites distance;
-    private SitesDistancesDAO siteDistancesDAO;
 
     @AfterEach
     void tearDown() {
@@ -60,7 +52,6 @@ class TransportsServiceTest {
 
         site1 = new Site("zone a", "123 main st", "(555) 123-4567", "john smith", Site.SiteType.BRANCH);
         site2 = new Site("zone b", "456 oak ave", "(555) 234-5678", "jane doe", Site.SiteType.LOGISTICAL_CENTER);
-        distance = new DistanceBetweenSites(site1.address(), site2.address(), 100);
         Driver driver1 = new Driver("123", "megan smith", Driver.LicenseType.C3);
         Truck truck1 = new Truck("abc123", "ford", 1500, 10000, Truck.CoolingCapacity.FROZEN);
         HashMap<String, Integer> load1 = new HashMap<>();

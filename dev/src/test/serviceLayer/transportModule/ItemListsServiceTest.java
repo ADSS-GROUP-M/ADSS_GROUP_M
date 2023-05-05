@@ -6,7 +6,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import serviceLayer.ServiceFactory;
-import serviceLayer.transportModule.ItemListsService;
 import utils.Response;
 
 import java.util.HashMap;

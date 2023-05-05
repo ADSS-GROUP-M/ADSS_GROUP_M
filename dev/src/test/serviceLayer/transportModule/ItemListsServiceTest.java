@@ -1,4 +1,4 @@
-package transportModule.backend.serviceLayer;
+package serviceLayer.transportModule;
 
 import dataAccessLayer.DalFactory;
 import objects.transportObjects.ItemList;

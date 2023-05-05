@@ -1,4 +1,4 @@
-package transportModule.backend.serviceLayer;
+package serviceLayer.transportModule;
 
 import businessLayer.transportModule.TransportsController;
 import dataAccessLayer.DalFactory;
@@ -39,7 +39,9 @@ class TransportsServiceTest {
     private ItemListsService ils;
     private ResourceManagementService rms;
     private Site site1;
+    private Site site2;
     private DistanceBetweenSites distance;
+    private SitesDistancesDAO siteDistancesDAO;
 
     @BeforeEach
     void setUp() {
@@ -51,8 +53,8 @@ class TransportsServiceTest {
         es = factory.employeesService();
         us = factory.userService();
 
-        Site site1 = new Site("zone a", "123 main st", "(555) 123-4567", "john smith", Site.SiteType.BRANCH);
-        Site site2 = new Site("zone b", "456 oak ave", "(555) 234-5678", "jane doe", Site.SiteType.LOGISTICAL_CENTER);
+        site1 = new Site("zone a", "123 main st", "(555) 123-4567", "john smith", Site.SiteType.BRANCH);
+        site2 = new Site("zone b", "456 oak ave", "(555) 234-5678", "jane doe", Site.SiteType.LOGISTICAL_CENTER);
         distance = new DistanceBetweenSites(site1.address(), site2.address(), 100);
         Driver driver1 = new Driver("123", "megan smith", Driver.LicenseType.C3);
         Truck truck1 = new Truck("abc123", "ford", 1500, 10000, Truck.CoolingCapacity.FROZEN);
@@ -91,11 +93,11 @@ class TransportsServiceTest {
                 100
         );
         try {
-            SitesDistancesDAO siteDistancesDAO = new SitesDistancesDAO(TESTING_DB_NAME);
+            siteDistancesDAO = new SitesDistancesDAO(TESTING_DB_NAME);
             siteDistancesDAO.insert(distance);
             TransportsController.initializeEstimatedArrivalTimes(siteDistancesDAO, transportToAdd);
         } catch (DalException | TransportException e) {
-            throw new RuntimeException(e);
+            fail(e);
         }
         String json2 = ts.addTransport(transportToAdd.toJson());
         Response response = Response.fromJson(json2);
@@ -144,6 +146,19 @@ class TransportsServiceTest {
                 LocalDateTime.of(2020, 1, 1, 0, 0),
                 2000
         );
+
+        DistanceBetweenSites distance2 = new DistanceBetweenSites(
+                source.address(),
+                destination.address(),
+                100
+        );
+
+        try {
+            siteDistancesDAO.insert(distance2);
+            TransportsController.initializeEstimatedArrivalTimes(siteDistancesDAO,newTransport);
+        } catch (TransportException | DalException e) {
+            fail(e);
+        }
         String json2 = ts.addTransport(newTransport.toJson());
         Response response = Response.fromJson(json2);
         assertTrue(response.success(),response.message());
@@ -210,6 +225,19 @@ class TransportsServiceTest {
                 LocalDateTime.of(2020, 1, 1, 0, 0),
                 2000
         );
+
+        DistanceBetweenSites distance2 = new DistanceBetweenSites(
+                source.address(),
+                destination.address(),
+                100
+        );
+
+        try {
+            siteDistancesDAO.insert(distance2);
+            TransportsController.initializeEstimatedArrivalTimes(siteDistancesDAO,newTransport);
+        } catch (TransportException | DalException e) {
+            fail(e);
+        }
         String json2 = ts.updateTransport(newTransport.toJson());
         Response response = Response.fromJson(json2);
         assertTrue(response.success(),response.message());

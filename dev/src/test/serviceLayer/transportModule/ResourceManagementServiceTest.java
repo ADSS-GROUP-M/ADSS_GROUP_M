@@ -1,4 +1,4 @@
-package transportModule.backend.serviceLayer;
+package serviceLayer.transportModule;
 
 import businessLayer.employeeModule.Employee;
 import dataAccessLayer.DalFactory;

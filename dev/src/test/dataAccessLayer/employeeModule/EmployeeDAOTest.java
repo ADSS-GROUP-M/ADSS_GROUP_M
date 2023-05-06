@@ -23,6 +23,7 @@ class EmployeeDAOTest {
 
     private EmployeeDAO dao;
     private Employee employee1, employee2, employee3, employee4;
+    private DalFactory factory;
 
     @BeforeEach
     void setUp() {
@@ -33,7 +34,7 @@ class EmployeeDAOTest {
         employee3 = new Employee("Test3", "1234567", "TestBank3", 23, LocalDate.now(),"","");
         employee4 = new Employee("Test4", "12345", "TestBank4", 24, LocalDate.now(),"","");
         try {
-            DalFactory factory = new DalFactory(TESTING_DB_NAME);
+            factory = new DalFactory(TESTING_DB_NAME);
 
             dao = factory.employeeDAO();
             dao.clearTable();
@@ -130,7 +131,7 @@ class EmployeeDAOTest {
 
     @Test
     void getObjectFromResultSet() {
-        SQLExecutor cursor = new SQLExecutorProductionImpl(TESTING_DB_NAME);
+        SQLExecutor cursor = factory.cursor();
         try {
             OfflineResultSet resultSet = cursor.executeRead("SELECT * FROM Employees WHERE id = '" + employee1.getId() + "'");
             resultSet.next();

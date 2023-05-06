@@ -22,12 +22,13 @@ class SitesDAOTest {
     private SitesDAO dao;
 
     private Site site;
+    private DalFactory factory;
 
     @BeforeEach
     void setUp() {
         site = new Site("zone1","address1","12345","kobi", Site.SiteType.SUPPLIER);
         try {
-            DalFactory factory = new DalFactory(TESTING_DB_NAME);
+            factory = new DalFactory(TESTING_DB_NAME);
             dao = factory.sitesDAO();
             dao.clearTable();
 
@@ -125,7 +126,7 @@ class SitesDAOTest {
 
     @Test
     void getObjectFromResultSet() {
-        SQLExecutor cursor = new SQLExecutorProductionImpl(TESTING_DB_NAME);
+        SQLExecutor cursor = factory.cursor();
         try{
             OfflineResultSet resultSet = cursor.executeRead(String.format("SELECT * FROM Sites WHERE address = '%s';",site.address()));
             resultSet.next();

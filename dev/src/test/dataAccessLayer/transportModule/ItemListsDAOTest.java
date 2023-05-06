@@ -23,6 +23,7 @@ class ItemListsDAOTest {
     private ItemListsDAO dao;
 
     private ItemList itemList;
+    private DalFactory factory;
 
     @BeforeEach
     void setUp() {
@@ -39,7 +40,7 @@ class ItemListsDAOTest {
         itemList = new ItemList(1, load, unload);
 
         try {
-            DalFactory factory = new DalFactory(TESTING_DB_NAME);
+            factory = new DalFactory(TESTING_DB_NAME);
             dao = factory.itemListsDAO();
             dao.clearTable();
             dao.insert(itemList);
@@ -167,7 +168,7 @@ class ItemListsDAOTest {
 
     @Test
     void getObjectFromResultSet() {
-        SQLExecutor cursor = new SQLExecutorProductionImpl(TESTING_DB_NAME);
+        SQLExecutor cursor = factory.cursor();
         try {
             OfflineResultSet resultSet = cursor.executeRead("SELECT * FROM item_lists_items WHERE id = "+itemList.id());
             assertDeepEquals(itemList, dao.getObjectFromResultSet(resultSet));

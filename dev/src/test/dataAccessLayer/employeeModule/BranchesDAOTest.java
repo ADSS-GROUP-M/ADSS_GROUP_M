@@ -27,6 +27,7 @@ class BranchesDAOTest {
     private SitesDAO sitesDAO;
 
     private Branch branch1, branch2, branch3, branch4;
+    private DalFactory factory;
 
     @BeforeEach
     void setUp() {
@@ -41,7 +42,7 @@ class BranchesDAOTest {
         branch4 = new Branch("address2"); // Same address as branch2
 
         try {
-            DalFactory factory = new DalFactory(TESTING_DB_NAME);
+            factory = new DalFactory(TESTING_DB_NAME);
             sitesDAO = factory.sitesDAO();
             sitesDAO.insert(site1);
             sitesDAO.insert(site2);
@@ -140,7 +141,7 @@ class BranchesDAOTest {
 
     @Test
     void getObjectFromResultSet() {
-        SQLExecutor cursor = new SQLExecutorProductionImpl(TESTING_DB_NAME);
+        SQLExecutor cursor = factory.cursor();
         try {
             OfflineResultSet resultSet = cursor.executeRead("SELECT * FROM Branches WHERE address = '" + branch1.address() + "'");
             resultSet.next();

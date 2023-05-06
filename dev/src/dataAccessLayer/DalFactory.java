@@ -27,8 +27,10 @@ public class DalFactory {
 
     private ItemListsItemsDAO itemListsItemsDAO;
 
+    private SQLExecutor cursor;
+
     public DalFactory() throws DalException {
-        SQLExecutor cursor = new SQLExecutorProductionImpl();
+        cursor = new SQLExecutorProductionImpl();
         buildInstances(cursor);
     }
 
@@ -37,7 +39,7 @@ public class DalFactory {
      * @param dbName the name of the database to connect to
      */
     public DalFactory(String dbName) throws DalException {
-        SQLExecutor cursor = new SQLExecutorTestingImpl(dbName);
+        cursor = new SQLExecutorTestingImpl(dbName);
         buildInstances(cursor);
     }
 
@@ -74,10 +76,10 @@ public class DalFactory {
     public UserDAO userDAO() {
         return userDAO;
     }
+
     public ShiftDAO shiftDAO() {
         return shiftDAO;
     }
-
     public TrucksDAO trucksDAO() {
         return trucksDAO;
     }
@@ -116,6 +118,10 @@ public class DalFactory {
 
     public ItemListsItemsDAO itemListsItemsDAO() {
         return itemListsItemsDAO;
+    }
+
+    public SQLExecutor cursor() {
+        return cursor;
     }
 
     public static void clearTestDB(){

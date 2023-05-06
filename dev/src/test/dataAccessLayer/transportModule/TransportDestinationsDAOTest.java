@@ -38,6 +38,7 @@ class TransportDestinationsDAOTest {
     private TransportDestination transportDestination2;
     private TransportDestination transportDestination3;
     private TransportDestination transportDestination4;
+    private DalFactory factory;
 
     @BeforeEach
     void setUp() {
@@ -80,7 +81,7 @@ class TransportDestinationsDAOTest {
 
             DistanceBetweenSites distance = new DistanceBetweenSites(site1.address(), site2.address(), 40);
 
-            DalFactory factory = new DalFactory(TESTING_DB_NAME);
+            factory = new DalFactory(TESTING_DB_NAME);
             dao = factory.transportDestinationsDAO();
             SitesDAO sitesDAO = factory.sitesDAO();
             TrucksDAO trucksDAO = factory.trucksDAO();
@@ -296,7 +297,7 @@ class TransportDestinationsDAOTest {
 
     @Test
     void getObjectFromResultSet() {
-        SQLExecutor cursor = new SQLExecutorProductionImpl(TESTING_DB_NAME);
+        SQLExecutor cursor = factory.cursor();
         try{
             String query = String.format("SELECT * FROM transport_destinations WHERE transport_id = %d AND destination_index = %d",
                     transportDestination2.transportId(),

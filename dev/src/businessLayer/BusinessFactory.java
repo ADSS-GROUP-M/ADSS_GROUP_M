@@ -27,22 +27,26 @@ public class BusinessFactory {
     }
 
     private void buildInstances() {
-        trucksController = new TrucksController(dalFactory.trucksDAO());
-        sitesController = new SitesController(dalFactory.sitesDAO(), dalFactory.sitesDistancesDAO());
-        driversController = new DriversController(dalFactory.driversDAO());
-        shiftsController = new ShiftsController(dalFactory.shiftDAO());
-        employeesController = new EmployeesController(shiftsController, dalFactory.branchesDAO(), dalFactory.employeeDAO());
         userController = new UserController(dalFactory.userDAO());
 
+
+        //==================== Dependencies ======================= |
+        /*(1)*/ shiftsController = new ShiftsController(dalFactory.shiftDAO());
+        /*(2)*/ employeesController = new EmployeesController(shiftsController, dalFactory.branchesDAO(), dalFactory.employeeDAO());
+        //========================================================= |
+
         try {
-            // ======================== Dependents ===================== |
+            // ======================== Dependencies ===================== |
+            /*(1)*/ trucksController = new TrucksController(dalFactory.trucksDAO());
+            /*(1)*/ sitesController = new SitesController(dalFactory.sitesDAO(), dalFactory.sitesDistancesDAO());
+            /*(1)*/ driversController = new DriversController(dalFactory.driversDAO());
             /*(1)*/ itemListsController = new ItemListsController(dalFactory.itemListsDAO());
             /*(2)*/ transportsController = new TransportsController(trucksController,
-                        driversController,
-                        sitesController,
-                        itemListsController,
-                        dalFactory.transportsDAO(),
-                        dalFactory.sitesDistancesDAO());
+                                                                        driversController,
+                                                                        sitesController,
+                                                                        itemListsController,
+                                                                        dalFactory.transportsDAO(),
+                                                                        dalFactory.sitesDistancesDAO());
             //========================================================= |
         } catch (TransportException e) {
             throw new RuntimeException(e);

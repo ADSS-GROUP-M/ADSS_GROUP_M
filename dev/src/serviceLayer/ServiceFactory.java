@@ -37,19 +37,16 @@ public class ServiceFactory {
     }
 
     private void buildInstances() {
+
         userService = new UserService(this, businessFactory.userController());
         itemListsService = new ItemListsService(businessFactory.itemListsController());
         transportsService = new TransportsService(businessFactory.transportsController());
 
-
-        //======================== Dependents ===================== |
-        /*(1)*/ resourceManagementService = new ResourceManagementService(businessFactory.sitesController(),
-                    businessFactory.driversController(),
-                    businessFactory.trucksController());
+        //==================== Dependencies ======================= |
+        /*(1)*/ resourceManagementService = new ResourceManagementService(businessFactory.sitesController(), businessFactory.driversController(), businessFactory.trucksController());
         /*(2)*/ employeesService = new EmployeesService(this, businessFactory.employeesController(), businessFactory.shiftsController());
         /*(3)*/ businessFactory.injectDependencies(employeesService);
         //========================================================= |
-
     }
 
     public TransportsService getTransportsService() {

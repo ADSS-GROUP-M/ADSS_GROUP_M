@@ -27,7 +27,7 @@ public class DalFactory {
 
     private ItemListsItemsDAO itemListsItemsDAO;
 
-    private SQLExecutor cursor;
+    private final SQLExecutor cursor;
 
     public DalFactory() throws DalException {
         cursor = new SQLExecutorProductionImpl();
@@ -44,29 +44,44 @@ public class DalFactory {
     }
 
     private void buildInstances(SQLExecutor cursor) throws DalException {
-        ShiftToActivityDAO shiftToActivityDAO = new ShiftToActivityDAO(cursor);
-        ShiftToCancelsDAO shiftToCancelsDAO = new ShiftToCancelsDAO(cursor);
-        ShiftToNeededRolesDAO shiftToNeededRolesDAO = new ShiftToNeededRolesDAO(cursor);
-        UserAuthorizationsDAO userAuthorizationsDAO = new UserAuthorizationsDAO(cursor);
-        EmployeeRolesDAO employeeRolesDAO = new EmployeeRolesDAO(cursor);
 
-        userDAO = new UserDAO(cursor,userAuthorizationsDAO);
-        employeeDAO = new EmployeeDAO(cursor,employeeRolesDAO);
-        ShiftToWorkersDAO shiftToWorkersDAO = new ShiftToWorkersDAO(cursor,employeeDAO);
-        ShiftToRequestsDAO shiftToRequestsDAO = new ShiftToRequestsDAO(cursor,employeeDAO);
-        shiftDAO = new ShiftDAO(cursor, shiftToNeededRolesDAO, shiftToRequestsDAO, shiftToWorkersDAO, shiftToCancelsDAO, shiftToActivityDAO);
         itemListsItemsDAO = new ItemListsItemsDAO(cursor);
-        ItemListIdCounterDAO itemListIdCounterDAO = new ItemListIdCounterDAO(cursor);
-        itemListsDAO = new ItemListsDAO(cursor, itemListsItemsDAO, itemListIdCounterDAO);
         trucksDAO = new TrucksDAO(cursor);
         driversDAO = new DriversDAO(cursor);
-        sitesDAO = new SitesDAO(cursor);
-        branchEmployeesDAO = new BranchEmployeesDAO(cursor);
-        branchesDAO = new BranchesDAO(cursor,branchEmployeesDAO);
-        transportDestinationsDAO = new TransportDestinationsDAO(cursor);
-        TransportIdCounterDAO transportIdCounterDAO = new TransportIdCounterDAO(cursor);
-        transportsDAO = new TransportsDAO(cursor, transportDestinationsDAO, transportIdCounterDAO);
-        sitesDistancesDAO = new SitesDistancesDAO(cursor);
+
+        //============== dependencies ============== |
+        /*(1)*/ UserAuthorizationsDAO userAuthorizationsDAO = new UserAuthorizationsDAO(cursor);
+        /*(2)*/ userDAO = new UserDAO(cursor,userAuthorizationsDAO);
+        //========================================== |
+
+        //============== dependencies ============== |
+        /*(1)*/ ShiftToActivityDAO shiftToActivityDAO = new ShiftToActivityDAO(cursor);
+        /*(1)*/ ShiftToCancelsDAO shiftToCancelsDAO = new ShiftToCancelsDAO(cursor);
+        /*(1)*/ ShiftToNeededRolesDAO shiftToNeededRolesDAO = new ShiftToNeededRolesDAO(cursor);
+        /*(1)*/ EmployeeRolesDAO employeeRolesDAO = new EmployeeRolesDAO(cursor);
+        /*(2)*/ employeeDAO = new EmployeeDAO(cursor,employeeRolesDAO);
+        /*(3)*/ ShiftToWorkersDAO shiftToWorkersDAO = new ShiftToWorkersDAO(cursor,employeeDAO);
+        /*(3)*/ ShiftToRequestsDAO shiftToRequestsDAO = new ShiftToRequestsDAO(cursor,employeeDAO);
+        /*(4)*/ shiftDAO = new ShiftDAO(cursor, shiftToNeededRolesDAO, shiftToRequestsDAO, shiftToWorkersDAO, shiftToCancelsDAO, shiftToActivityDAO);
+        //========================================== |
+
+        //============== dependencies ============== |
+        /*(1)*/ ItemListIdCounterDAO itemListIdCounterDAO = new ItemListIdCounterDAO(cursor);
+        /*(2)*/ itemListsDAO = new ItemListsDAO(cursor, itemListsItemsDAO, itemListIdCounterDAO);
+        //========================================== |
+
+        //============== dependencies ============== |
+        /*(1)*/ sitesDAO = new SitesDAO(cursor);
+        /*(2)*/ sitesDistancesDAO = new SitesDistancesDAO(cursor);
+        /*(2)*/ branchEmployeesDAO = new BranchEmployeesDAO(cursor);
+        /*(3)*/ branchesDAO = new BranchesDAO(cursor,branchEmployeesDAO);
+        //========================================== |
+
+        //============== dependencies ============== |
+        /*(1)*/ transportDestinationsDAO = new TransportDestinationsDAO(cursor);
+        /*(1)*/ TransportIdCounterDAO transportIdCounterDAO = new TransportIdCounterDAO(cursor);
+        /*(2)*/ transportsDAO = new TransportsDAO(cursor, transportDestinationsDAO, transportIdCounterDAO);
+        //========================================== |
     }
 
     public EmployeeDAO employeeDAO() {

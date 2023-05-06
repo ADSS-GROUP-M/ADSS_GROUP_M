@@ -1,8 +1,10 @@
 package dataAccessLayer.transportModule;
 
+import dataAccessLayer.DalFactory;
 import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.dalUtils.OfflineResultSet;
 import dataAccessLayer.dalUtils.SQLExecutor;
+import dataAccessLayer.dalUtils.SQLExecutorProductionImpl;
 import objects.transportObjects.Site;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,12 +22,14 @@ class SitesDAOTest {
     private SitesDAO dao;
 
     private Site site;
+    private DalFactory factory;
 
     @BeforeEach
     void setUp() {
         site = new Site("zone1","address1","12345","kobi", Site.SiteType.SUPPLIER);
         try {
-            dao = new SitesDAO(TESTING_DB_NAME);
+            factory = new DalFactory(TESTING_DB_NAME);
+            dao = factory.sitesDAO();
             dao.clearTable();
 
             dao.insert(site);
@@ -122,7 +126,7 @@ class SitesDAOTest {
 
     @Test
     void getObjectFromResultSet() {
-        SQLExecutor cursor = new SQLExecutor(TESTING_DB_NAME);
+        SQLExecutor cursor = factory.cursor();
         try{
             OfflineResultSet resultSet = cursor.executeRead(String.format("SELECT * FROM Sites WHERE address = '%s';",site.address()));
             resultSet.next();

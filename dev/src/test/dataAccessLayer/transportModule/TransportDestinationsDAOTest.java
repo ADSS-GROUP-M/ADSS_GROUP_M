@@ -7,6 +7,7 @@ import dataAccessLayer.DalFactory;
 import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.dalUtils.OfflineResultSet;
 import dataAccessLayer.dalUtils.SQLExecutor;
+import dataAccessLayer.dalUtils.SQLExecutorProductionImpl;
 import dataAccessLayer.employeeModule.EmployeeDAO;
 import objects.transportObjects.*;
 import org.junit.jupiter.api.AfterEach;
@@ -37,6 +38,7 @@ class TransportDestinationsDAOTest {
     private TransportDestination transportDestination2;
     private TransportDestination transportDestination3;
     private TransportDestination transportDestination4;
+    private DalFactory factory;
 
     @BeforeEach
     void setUp() {
@@ -79,7 +81,8 @@ class TransportDestinationsDAOTest {
 
             DistanceBetweenSites distance = new DistanceBetweenSites(site1.address(), site2.address(), 40);
 
-            DalFactory factory = new DalFactory(TESTING_DB_NAME);
+            factory = new DalFactory(TESTING_DB_NAME);
+            dao = factory.transportDestinationsDAO();
             SitesDAO sitesDAO = factory.sitesDAO();
             TrucksDAO trucksDAO = factory.trucksDAO();
             EmployeeDAO employeeDAO = factory.employeeDAO();
@@ -105,7 +108,6 @@ class TransportDestinationsDAOTest {
             TransportsController.initializeEstimatedArrivalTimes(sitesDistancesDAO,transport);
             transportsDAO.insert(transport);
 
-            dao = new TransportDestinationsDAO(TESTING_DB_NAME);
 
             transportDestination2 = new TransportDestination(TRANSPORT_ID, 2, SITE_ADDRESS1, LIST_ID, ARRIVAL_TIME);
             transportDestination3 = new TransportDestination(TRANSPORT_ID, 3, SITE_ADDRESS1, LIST_ID, ARRIVAL_TIME);
@@ -295,7 +297,7 @@ class TransportDestinationsDAOTest {
 
     @Test
     void getObjectFromResultSet() {
-        SQLExecutor cursor = new SQLExecutor(TESTING_DB_NAME);
+        SQLExecutor cursor = factory.cursor();
         try{
             String query = String.format("SELECT * FROM transport_destinations WHERE transport_id = %d AND destination_index = %d",
                     transportDestination2.transportId(),

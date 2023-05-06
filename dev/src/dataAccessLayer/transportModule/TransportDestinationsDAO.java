@@ -2,6 +2,7 @@ package dataAccessLayer.transportModule;
 
 import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.dalUtils.OfflineResultSet;
+import dataAccessLayer.dalUtils.SQLExecutor;
 import dataAccessLayer.transportModule.abstracts.ManyToManyDAO;
 import objects.transportObjects.Transport;
 
@@ -16,30 +17,11 @@ public class TransportDestinationsDAO extends ManyToManyDAO<TransportDestination
     private static final String[] primary_keys = {"transport_id", "destination_index"};
     private static final String[][] foreign_keys = {{"transport_id"}, {"destination_address"}, {"item_list_id"}};
     private static final String[][] references = {{"id"}, {"address"}, {"id"}};
+    public static final String tableName = "transport_destinations";
 
-    public TransportDestinationsDAO() throws DalException{
-        super("transport_destinations",
-                parent_tables,
-                types,
-                primary_keys,
-                foreign_keys,
-                references,
-                "transport_id",
-                "destination_index",
-                "destination_address",
-                "item_list_id",
-                "expected_arrival_time"
-        );
-        initTable();
-    }
-
-    /**
-     * used for testing
-     * @param dbName the name of the database to connect to
-     */
-    public TransportDestinationsDAO(String dbName) throws DalException{
-        super(dbName,
-                "transport_destinations",
+    public TransportDestinationsDAO(SQLExecutor cursor) throws DalException{
+        super(cursor,
+				tableName,
                 parent_tables,
                 types,
                 primary_keys,

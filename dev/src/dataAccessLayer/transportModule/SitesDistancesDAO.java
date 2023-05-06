@@ -2,6 +2,7 @@ package dataAccessLayer.transportModule;
 
 import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.dalUtils.OfflineResultSet;
+import dataAccessLayer.dalUtils.SQLExecutor;
 import dataAccessLayer.transportModule.abstracts.ManyToManyDAO;
 
 import java.sql.SQLException;
@@ -15,9 +16,11 @@ public class SitesDistancesDAO extends ManyToManyDAO<DistanceBetweenSites> {
     private static final String[] primary_keys = {"source", "destination"};
     private static final String[][] foreign_keys = {{"source"}, {"destination"}};
     private static final String[][] references = {{"address"}, {"address"}};
+    public static final String tableName = "sites_distances";
 
-    public SitesDistancesDAO() throws DalException{
-        super("sites_distances",
+    public SitesDistancesDAO(SQLExecutor cursor) throws DalException{
+        super(cursor,
+                tableName,
                 parent_tables,
                 types,
                 primary_keys,
@@ -29,22 +32,6 @@ public class SitesDistancesDAO extends ManyToManyDAO<DistanceBetweenSites> {
         );
         initTable();
     }
-    public SitesDistancesDAO(String dbName) throws DalException{
-        super(dbName,
-                "sites_distances",
-                parent_tables,
-                types,
-                primary_keys,
-                foreign_keys,
-                references,
-                "source",
-                "destination",
-                "distance"
-
-        );
-        initTable();
-    }
-
 
     /**
      * @param object getLookUpObject(identifier) of the object to select

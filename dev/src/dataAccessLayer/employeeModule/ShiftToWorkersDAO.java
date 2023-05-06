@@ -5,6 +5,7 @@ import businessLayer.employeeModule.Role;
 import businessLayer.employeeModule.Shift;
 import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.dalUtils.OfflineResultSet;
+import dataAccessLayer.dalUtils.SQLExecutor;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -29,23 +30,9 @@ public class ShiftToWorkersDAO extends DAO {
     }
 
     //needed roles HashMap<Role,Integer>, shiftRequests HashMap<Role,List<Employees>>, shiftWorkers Map<Role,List<Employees>>, cancelCardApplies List<String>, shiftActivities List<String>.
-    public ShiftToWorkersDAO(EmployeeDAO employeeDAO) throws DalException {
-        super(tableName,
-                primaryKeys,
-                types,
-                "ShiftDate",
-                "ShiftType",
-                "Branch",
-                "EmployeeId",
-                "Role"
-        );
-        this.employeeDAO = employeeDAO;
-        this.cache = new HashMap<>();
-    }
-
-    public ShiftToWorkersDAO(String dbName, EmployeeDAO employeeDAO) throws DalException {
-        super(dbName,
-                tableName,
+    public ShiftToWorkersDAO(SQLExecutor cursor, EmployeeDAO employeeDAO) throws DalException {
+        super(cursor,
+				tableName,
                 primaryKeys,
                 types,
                 "ShiftDate",

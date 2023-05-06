@@ -2,6 +2,7 @@ package dataAccessLayer.transportModule;
 
 import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.dalUtils.OfflineResultSet;
+import dataAccessLayer.dalUtils.SQLExecutor;
 import dataAccessLayer.transportModule.abstracts.DAO;
 import objects.transportObjects.Site;
 
@@ -13,26 +14,11 @@ public class SitesDAO extends DAO<Site> {
 
     private static final String[] types = new String[]{"TEXT", "TEXT", "TEXT", "TEXT", "TEXT"};
     private static final String[] primary_keys = {"address"};
+    public static final String tableName = "sites";
 
-    public SitesDAO() throws DalException {
-        super("sites",
-                types,
-                primary_keys,
-                "address",
-                "transport_zone",
-                "contact_name",
-                "contact_phone",
-                "site_type");
-        initTable();
-    }
-
-    /**
-     *  used for testing
-     *  @param dbName the name of the database to connect to
-     */
-    public SitesDAO(String dbName) throws DalException {
-        super(dbName,
-                "sites",
+    public SitesDAO(SQLExecutor cursor) throws DalException {
+        super(cursor,
+				tableName,
                 types,
                 primary_keys,
                 "address",

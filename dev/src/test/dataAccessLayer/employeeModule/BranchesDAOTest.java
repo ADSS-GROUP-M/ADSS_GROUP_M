@@ -5,6 +5,7 @@ import dataAccessLayer.DalFactory;
 import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.dalUtils.OfflineResultSet;
 import dataAccessLayer.dalUtils.SQLExecutor;
+import dataAccessLayer.dalUtils.SQLExecutorProductionImpl;
 import dataAccessLayer.transportModule.SitesDAO;
 import objects.transportObjects.Site;
 import org.junit.jupiter.api.AfterEach;
@@ -26,6 +27,7 @@ class BranchesDAOTest {
     private SitesDAO sitesDAO;
 
     private Branch branch1, branch2, branch3, branch4;
+    private DalFactory factory;
 
     @BeforeEach
     void setUp() {
@@ -40,12 +42,13 @@ class BranchesDAOTest {
         branch4 = new Branch("address2"); // Same address as branch2
 
         try {
-            sitesDAO = new SitesDAO(TESTING_DB_NAME);
+            factory = new DalFactory(TESTING_DB_NAME);
+            sitesDAO = factory.sitesDAO();
             sitesDAO.insert(site1);
             sitesDAO.insert(site2);
             sitesDAO.insert(site3);
-            branchEmployeesDAO = new BranchEmployeesDAO(TESTING_DB_NAME);
-            branchesDAO = new BranchesDAO(TESTING_DB_NAME, branchEmployeesDAO);
+            branchEmployeesDAO = factory.branchEmployeesDAO();
+            branchesDAO = factory.branchesDAO();
             // Inserting only branch1 and branch2 at setUp
             branchesDAO.insert(branch1);
             branchesDAO.insert(branch2);
@@ -138,7 +141,7 @@ class BranchesDAOTest {
 
     @Test
     void getObjectFromResultSet() {
-        SQLExecutor cursor = new SQLExecutor(TESTING_DB_NAME);
+        SQLExecutor cursor = factory.cursor();
         try {
             OfflineResultSet resultSet = cursor.executeRead("SELECT * FROM Branches WHERE address = '" + branch1.address() + "'");
             resultSet.next();

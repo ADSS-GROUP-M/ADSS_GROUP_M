@@ -1,8 +1,10 @@
 package dataAccessLayer.transportModule;
 
+import dataAccessLayer.DalFactory;
 import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.dalUtils.OfflineResultSet;
 import dataAccessLayer.dalUtils.SQLExecutor;
+import dataAccessLayer.dalUtils.SQLExecutorProductionImpl;
 import objects.transportObjects.Truck;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,13 +21,15 @@ class TrucksDAOTest {
 
     private TrucksDAO dao;
     private Truck truck;
+    private DalFactory factory;
 
     //TODO: Tests that are supposed to fail
 
     @BeforeEach
     void setUp() {
         try {
-            dao = new TrucksDAO(TESTING_DB_NAME);
+            factory = new DalFactory(TESTING_DB_NAME);
+            dao = factory.trucksDAO();
             truck = new Truck("1", "model1", 1000, 20000, Truck.CoolingCapacity.FROZEN);
             dao.clearTable();
 
@@ -121,7 +125,7 @@ class TrucksDAOTest {
 
     @Test
     void getObjectFromResultSet() {
-        SQLExecutor cursor = new SQLExecutor(TESTING_DB_NAME);
+        SQLExecutor cursor = factory.cursor();
         try {
             OfflineResultSet resultSet = cursor.executeRead("SELECT * FROM Trucks WHERE id = "+truck.id());
             resultSet.next();

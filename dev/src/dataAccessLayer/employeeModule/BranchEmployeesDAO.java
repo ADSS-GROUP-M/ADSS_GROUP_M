@@ -2,6 +2,7 @@ package dataAccessLayer.employeeModule;
 
 import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.dalUtils.OfflineResultSet;
+import dataAccessLayer.dalUtils.SQLExecutor;
 import dataAccessLayer.transportModule.abstracts.ManyToManyDAO;
 import javafx.util.Pair;
 
@@ -16,22 +17,11 @@ public class BranchEmployeesDAO extends ManyToManyDAO<Pair<String,String>> {
     private static final String[] primary_keys = {"address","employee_id"};
     private static final String[][] foreign_keys = {{"address"},{"employee_id"}};
     private static final String[][] references = {{"address"},{"id"}};
+    public static final String tableName = "branch_employees";
 
-    public BranchEmployeesDAO() throws DalException {
-        super("branch_employees",
-                parent_table_names,
-                types,
-                primary_keys,
-                foreign_keys,
-                references,
-                "address",
-                "employee_id");
-        initTable();
-    }
-
-    public BranchEmployeesDAO(String dbName) throws DalException{
-        super(dbName,
-                "branch_employees",
+    public BranchEmployeesDAO(SQLExecutor cursor) throws DalException {
+        super(cursor,
+                tableName,
                 parent_table_names,
                 types,
                 primary_keys,

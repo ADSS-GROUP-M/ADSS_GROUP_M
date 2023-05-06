@@ -2,6 +2,7 @@ package dataAccessLayer.transportModule;
 
 import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.dalUtils.OfflineResultSet;
+import dataAccessLayer.dalUtils.SQLExecutor;
 import dataAccessLayer.transportModule.abstracts.CounterDAO;
 import dataAccessLayer.transportModule.abstracts.ManyToManyDAO;
 import objects.transportObjects.DeliveryRoute;
@@ -19,12 +20,14 @@ public class TransportsDAO extends ManyToManyDAO<Transport> implements CounterDA
     private static final String[] primary_keys = {"id"};
     private static final String[][] foreign_keys = {{"driver_id"}, {"truck_id"},{"source_address"}};
     private static final String[][] references = {{"id"}, {"id"}, {"address"}};
+    public static final String tableName = "transports";
 
     private final TransportDestinationsDAO destinationsDAO;
     private final TransportIdCounterDAO counterDAO;
 
-    public TransportsDAO() throws DalException{
-        super("transports",
+    public TransportsDAO(SQLExecutor cursor, TransportDestinationsDAO destinationsDAO, TransportIdCounterDAO counterDAO) throws DalException{
+        super(cursor,
+				tableName,
                 parent_tables,
                 types,
                 primary_keys,
@@ -37,33 +40,9 @@ public class TransportsDAO extends ManyToManyDAO<Transport> implements CounterDA
                 "departure_time",
                 "weight"
         );
+        this.destinationsDAO = destinationsDAO;
+        this.counterDAO = counterDAO;
         initTable();
-        destinationsDAO = new TransportDestinationsDAO();
-        counterDAO = new TransportIdCounterDAO();
-    }
-
-    /**
-     * used for testing
-     * @param dbName the name of the database to connect to
-     */
-    public TransportsDAO(String dbName) throws DalException{
-        super(dbName,
-                "transports",
-                parent_tables,
-                types,
-                primary_keys,
-                foreign_keys,
-                references,
-                "id",
-                "source_address",
-                "driver_id",
-                "truck_id",
-                "departure_time",
-                "weight"
-        );
-        initTable();
-        destinationsDAO = new TransportDestinationsDAO(dbName);
-        counterDAO = new TransportIdCounterDAO(dbName);
     }
 
     /**

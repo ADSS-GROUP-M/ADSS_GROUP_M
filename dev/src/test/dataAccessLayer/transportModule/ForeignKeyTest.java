@@ -20,7 +20,8 @@ class ForeignKeyTest {
     @BeforeEach
     void setUp() {
         try {
-            dao = new ItemListsItemsDAO(TESTING_DB_NAME);
+            DalFactory factory = new DalFactory(TESTING_DB_NAME);
+            dao = factory.itemListsItemsDAO();
         } catch (DalException e) {
             fail(e);
         }

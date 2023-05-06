@@ -6,6 +6,7 @@ import businessLayer.employeeModule.Shift;
 import businessLayer.employeeModule.Shift.ShiftType;
 import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.dalUtils.OfflineResultSet;
+import dataAccessLayer.dalUtils.SQLExecutor;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 public class ShiftDAO extends DAO {
     private static final String[] primaryKeys = {Columns.ShiftDate.name(), Columns.ShiftType.name(), Columns.Branch.name()};
     private static final String[] types = {"TEXT", "TEXT", "TEXT", "TEXT"};
+    public static final String tableName = "SHIFTS";
     private HashMap<Integer, Shift> cache;
     private ShiftToNeededRolesDAO shiftToNeededRolesDAO;
     private ShiftToRequestsDAO shiftToRequestsDAO;
@@ -33,45 +35,13 @@ public class ShiftDAO extends DAO {
     }
 
     //needed roles HashMap<Role,Integer>, shiftRequests HashMap<Role,List<Employees>>, shiftWorkers Map<Role,List<Employees>>, cancelCardApplies List<String>, shiftActivities List<String>.
-    public ShiftDAO(ShiftToNeededRolesDAO shiftToNeededRolesDAO,
+    public ShiftDAO(SQLExecutor cursor, ShiftToNeededRolesDAO shiftToNeededRolesDAO,
                     ShiftToRequestsDAO shiftToRequestsDAO,
                     ShiftToWorkersDAO shiftToWorkersDAO,
                     ShiftToCancelsDAO shiftToCancelsDAO,
                     ShiftToActivityDAO shiftToActivityDAO) throws DalException {
-        super("SHIFTS",
-                primaryKeys,
-                types,
-                "ShiftDate",
-                "ShiftType",
-                "Branch",
-                "IsApproved"
-        );
-        this.shiftToNeededRolesDAO = shiftToNeededRolesDAO;
-        this.shiftToRequestsDAO = shiftToRequestsDAO;
-        this.shiftToWorkersDAO = shiftToWorkersDAO;
-        this.shiftToCancelsDAO = shiftToCancelsDAO;
-        this.shiftToActivityDAO = shiftToActivityDAO;
-        this.cache = new HashMap<>();
-    }
-
-    /**
-     * Can be used for testing in a different database
-     *
-     * @param dbName                the name of the database to connect to
-     * @param shiftToNeededRolesDAO
-     * @param shiftToRequestsDAO
-     * @param shiftToWorkersDAO
-     * @param shiftToCancelsDAO
-     * @param shiftToActivityDAO
-     */
-    public ShiftDAO(String dbName,
-                     ShiftToNeededRolesDAO shiftToNeededRolesDAO,
-                     ShiftToRequestsDAO shiftToRequestsDAO,
-                     ShiftToWorkersDAO shiftToWorkersDAO,
-                     ShiftToCancelsDAO shiftToCancelsDAO,
-                     ShiftToActivityDAO shiftToActivityDAO) throws DalException {
-        super(dbName,
-                "SHIFTS",
+        super(cursor,
+                tableName,
                 primaryKeys,
                 types,
                 "ShiftDate",

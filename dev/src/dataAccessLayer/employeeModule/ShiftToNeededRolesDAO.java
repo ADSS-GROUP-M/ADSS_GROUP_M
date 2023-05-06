@@ -4,6 +4,7 @@ import businessLayer.employeeModule.Role;
 import businessLayer.employeeModule.Shift;
 import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.dalUtils.OfflineResultSet;
+import dataAccessLayer.dalUtils.SQLExecutor;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -21,21 +22,9 @@ public class ShiftToNeededRolesDAO extends DAO{
         Role,
         Amount;
     }
-    public ShiftToNeededRolesDAO() throws DalException {
-        super(tableName,
-                primaryKeys,
-                types,
-                "ShiftDate",
-                "ShiftType",
-                "Branch",
-                "Role",
-                "Amount"
-        );
-        this.cache = new HashMap<>();
-    }
-    public ShiftToNeededRolesDAO(String dbName) throws DalException {
-        super(dbName,
-                tableName,
+    public ShiftToNeededRolesDAO(SQLExecutor cursor) throws DalException {
+        super(cursor,
+				tableName,
                 primaryKeys,
                 types,
                 "ShiftDate",

@@ -2,7 +2,10 @@ package dev.Inventory.PresentationLayer;
 
 public class InventoryProductsManu extends MainMenu {
 
-    public void run() {
+    private String branch;
+
+    public void run(String branch) {
+        this.branch = branch;
         System.out.println("Please select an option:");
         System.out.println("1. create new product");
         System.out.println("2. create new item");
@@ -18,7 +21,7 @@ public class InventoryProductsManu extends MainMenu {
             case 3 -> updateProduct();
             case 4 -> updateItem();
             case 5 -> getProductDetails();
-            case 6 -> super.run();
+            case 6 -> new MainMenu().run();
             case 7 -> System.exit(0);
             default -> System.out.println("\nInvalid command");
         }
@@ -26,19 +29,20 @@ public class InventoryProductsManu extends MainMenu {
 
     private void createNewProduct() {
         System.out.println("Enter the following product details:");
-        System.out.println("Catalog Number: ");
+        System.out.println("Catalog Number: (number)");
         int catalog_num = in.nextInt();
-        System.out.println("Name: ");
+        System.out.println("Name: (string)");
         String name = in.nextLine();
-        System.out.println("Manufacturer: ");
+        in.nextLine();
+        System.out.println("Manufacturer: (string)");
         String manufacturer = in.nextLine();
-        System.out.println("Supplier Price: ");
+        System.out.println("Supplier Price: (double)");
         double supplier_price = in.nextDouble();
-        System.out.println("Store Price: ");
+        System.out.println("Store Price: (double)");
         double store_price = in.nextDouble();
-        System.out.println("Amount in store: ");
+        System.out.println("Amount in store: (int)");
         int amount_store = in.nextInt();
-        System.out.println("Amount in warehouse: ");
+        System.out.println("Amount in warehouse: (int)");
         int amount_warehouse = in.nextInt();
         System.out.println(inventoryService.addProductType(catalog_num, name, manufacturer, supplier_price, store_price, branch, amount_store, amount_warehouse).getReturnValue());
     }
@@ -46,33 +50,35 @@ public class InventoryProductsManu extends MainMenu {
     private void createNewItem() {
         //supplier should be ID
         System.out.println("Enter the following product details:");
-        System.out.println("Catalog Number: ");
+        System.out.println("Catalog Number: (int)");
         int catalog_num = in.nextInt();
-        System.out.println("Serial Number: ");
+        System.out.println("Serial Number: (int)");
         int serial_num = in.nextInt();
-        System.out.println("Supplier: ");
+        System.out.println("Supplier: (int)");
         int supplier = in.nextInt();
-        System.out.println("Supplier Price: ");
+        System.out.println("Supplier Price: (int)");
         int supplier_price = in.nextInt();
-        System.out.println("location: ");
+        in.nextLine();
+        System.out.println("location: (string)");
         String location = in.nextLine();
         System.out.println(inventoryService.addProduct(serial_num, catalog_num, supplier, supplier_price, branch, location).getReturnValue());
     }
 
     private void updateProduct() {
-        System.out.println("what is the product's catalog num?:");
+        System.out.println("what is the product's catalog num?: (int)");
         int catalog_num = in.nextInt();
         System.out.println("Choose details to update:");
-        System.out.println("1. name");
-        System.out.println("2. manufacturer");
-        System.out.println("3. supplier price");
-        System.out.println("4. store price");
-        System.out.println("5. category");
-        System.out.println("6. sub category");
-        System.out.println("7. minimum amount for notification about running out of products");
+        System.out.println("1. name (String)");
+        System.out.println("2. manufacturer (String)");
+        System.out.println("3. supplier price (double)");
+        System.out.println("4. store price (double)");
+        System.out.println("5. category (string)");
+        System.out.println("6. sub category (string)");
+        System.out.println("7. minimum amount for notification about running out of products (int)");
         System.out.println("8. Back to main manu");
         System.out.println("9. Exit");
         int option = in.nextInt();
+        in.nextLine();
         System.out.println("the new value is:");
         String new_val = in.nextLine();
         switch (option) {
@@ -95,16 +101,17 @@ public class InventoryProductsManu extends MainMenu {
         System.out.println("what is the product's serial number?");
         int serial_number = in.nextInt();
         System.out.println("Choose details to update:");
-        System.out.println("1. is defective?");
-        System.out.println("2. is sold?");
-        System.out.println("3. supplier");
+        System.out.println("1. is defective? (0 - no, 1- yes)");
+        System.out.println("2. is sold? (0 - no, 1- yes)");
+        System.out.println("3. supplier (int)");
         System.out.println("4. supplier price");
         System.out.println("5. sold price");
-        System.out.println("6. location");
+        System.out.println("6. location (String)");
         System.out.println("7. Back to main manu");
         System.out.println("8. Exit");
         int option = in.nextInt();
-        System.out.println("the new value is: [[for condition question -> 1 is yes and 2 is no]]");
+        in.nextLine();
+        System.out.println("the new value is: ");
         String new_val = in.nextLine();
         switch (option) {
             case 1 -> inventoryService.updateProduct(Integer.parseInt(new_val), catalog_num, serial_number, -1, -1, -1, -1, null, branch);
@@ -120,9 +127,10 @@ public class InventoryProductsManu extends MainMenu {
     }
 
     private void getProductDetails() {
-        System.out.println("what is the product's catalog num?");
+        System.out.println("what is the product's catalog num? (int)");
         int catalog_num = in.nextInt();
-
-
+        System.out.println("what is the product's serial num? (int)");
+        int serial_num = in.nextInt();
+        System.out.println(inventoryService.getProductDetails(catalog_num, serial_num, branch).getReturnValue().toString());
     }
 }

@@ -5,7 +5,9 @@ import java.util.List;
 
 public class ReportsMenu extends MainMenu {
 
-    public void run() {
+    private String branch;
+    public void run(String branch) {
+        this.branch = branch;
         System.out.println("Please select an option:");
         System.out.println("1. Inventory products report");
         System.out.println("2. Inventory running-out products report");
@@ -17,7 +19,7 @@ public class ReportsMenu extends MainMenu {
 //            case 1 -> inventoryReport();
 //            case 2 -> inventoryRunningOutReport();
             case 3 -> inventoryDefectiveReport();
-            case 4 -> super.run();
+            case 4 -> new MainMenu().run();
             case 5 -> System.exit(0);
             default -> System.out.println("\nInvalid command");
         }

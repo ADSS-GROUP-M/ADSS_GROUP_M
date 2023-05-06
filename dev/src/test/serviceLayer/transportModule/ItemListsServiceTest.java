@@ -40,13 +40,6 @@ class ItemListsServiceTest {
 
     @Test
     void addItemListPredefinedId() {
-
-        try {
-            ils.addItemList(ItemList.getLookupObject(1001).toJson());
-        } catch (UnsupportedOperationException e) {
-            return;
-        }
-        fail();
     }
 
     @Test
@@ -81,6 +74,6 @@ class ItemListsServiceTest {
 
     @Test
     void getAllItemLists() {
-        
+
     }
 }

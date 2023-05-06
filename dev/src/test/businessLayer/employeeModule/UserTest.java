@@ -1,4 +1,4 @@
-package employeeModule.BusinessLayer.Employees;
+package businessLayer.employeeModule;
 
 import businessLayer.employeeModule.Authorization;
 import businessLayer.employeeModule.User;

@@ -1,19 +1,13 @@
-package serviceLayer.transportModule;
+package businessLayer.transportModule;
 
-import dataAccessLayer.DalFactory;
 import objects.transportObjects.ItemList;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import serviceLayer.ServiceFactory;
-import utils.Response;
+import serviceLayer.transportModule.ItemListsService;
 
 import java.util.HashMap;
 
-import static dataAccessLayer.DalFactory.TESTING_DB_NAME;
-import static org.junit.jupiter.api.Assertions.*;
-
-class ItemListsServiceTest {
+class ItemListsControllerTest {
 
     private ItemList itemList;
     private ItemListsService ils;

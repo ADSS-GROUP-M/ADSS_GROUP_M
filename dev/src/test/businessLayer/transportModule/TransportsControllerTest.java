@@ -1,4 +1,4 @@
-package serviceLayer.transportModule;
+package businessLayer.transportModule;
 
 import businessLayer.transportModule.*;
 import dataAccessLayer.dalUtils.DalException;
@@ -6,10 +6,10 @@ import dataAccessLayer.transportModule.DistanceBetweenSites;
 import dataAccessLayer.transportModule.SitesDistancesDAO;
 import dataAccessLayer.transportModule.TransportsDAO;
 import objects.transportObjects.*;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import serviceLayer.employeeModule.Services.EmployeesService;
+import serviceLayer.transportModule.TransportsService;
 import utils.JsonUtils;
 import utils.Response;
 import utils.transportUtils.TransportException;
@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
 
-class TransportsServiceTest {
+class TransportsControllerTest {
 
     public static final String SOURCE_ADDRESS = "sourceAddress";
     public static final String DESTINATION_ADDRESS_1 = "destinationAddress1";
@@ -33,7 +33,6 @@ class TransportsServiceTest {
     public static final int ITEM_LIST_ID_1 = 1;
     public static final int ITEM_LIST_ID_2 = 2;
     public static final LocalDateTime DEPARTURE_TIME = LocalDateTime.of(LocalDate.of(2020, 1, 1), LocalTime.of(12, 0));
-    TransportsService transportsService;
     TransportsController transportController;
     ItemListsController itemListsController;
     TrucksController trucksController;
@@ -82,7 +81,6 @@ class TransportsServiceTest {
 
         employeesService = mock(EmployeesService.class);
         transportController.injectDependencies(employeesService);
-        transportsService = new TransportsService(transportController);
 
         source = new Site("zone1", SOURCE_ADDRESS, "0545555550", "contactNameSource", Site.SiteType.LOGISTICAL_CENTER);
         destination1 = new Site("zone1", DESTINATION_ADDRESS_1, "0545555551", "contactNameDest1", Site.SiteType.BRANCH);
@@ -132,15 +130,11 @@ class TransportsServiceTest {
 
         try {
             initializeMocksToPassTransportValidation();
-        } catch (DalException | TransportException e) {
-            throw new RuntimeException(e);
+            int id = assertDoesNotThrow(() -> transportController.addTransport(transport));
+            assertEquals(1, id);
+        } catch (TransportException | DalException e) {
+            fail(e);
         }
-
-        String json = transportsService.addTransport(transport.toJson());
-        Response response = JsonUtils.deserialize(json, Response.class);
-        assertTrue(response.success());
-        assertEquals(1, response.dataToInt());
-
     }
 
     @Test
@@ -161,40 +155,35 @@ class TransportsServiceTest {
                 DEPARTURE_TIME,
                 15000
         );
-        assertThrows(UnsupportedOperationException.class,() -> transportsService.addTransport(transport.toJson()));
+        assertThrows(UnsupportedOperationException.class,() -> transportController.addTransport(transport));
     }
 
     @Test
     void updateTransport() {
-        Transport updatedTransport = new Transport(
-                1,
-                destination1.address(),
-                new LinkedList<>() {{
-                    add(destination2.address());
-                }},
-                new HashMap<>() {{
-                    put(destination2.address(), itemList1.id());
-                }},
-                driver.id(),
-                truck.id(),
-                DEPARTURE_TIME,
-                25000
-        );
         try {
+            //set up
+            Transport updatedTransport = new Transport(
+                    1,
+                    destination1.address(),
+                    new LinkedList<>() {{
+                        add(destination2.address());
+                    }},
+                    new HashMap<>() {{
+                        put(destination2.address(), itemList1.id());
+                    }},
+                    driver.id(),
+                    truck.id(),
+                    DEPARTURE_TIME,
+                    25000
+            );
             initializeMocksToPassTransportValidation();
             when(transportsDAO.exists(updatedTransport)).thenReturn(true);
-            when(transportsDAO.select(updatedTransport)).thenReturn(updatedTransport);
+
+            //test
+            assertDoesNotThrow(() -> transportController.updateTransport(updatedTransport.id(), updatedTransport));
         } catch (DalException | TransportException e) {
-            throw new RuntimeException(e);
+            fail(e);
         }
-        String json = transportsService.updateTransport(updatedTransport.toJson());
-        Response response = JsonUtils.deserialize(json, Response.class);
-        assertTrue(response.success());
-        json = transportsService.getTransport(Transport.getLookupObject(1).toJson());
-        response = JsonUtils.deserialize(json, Response.class);
-        assertTrue(response.success());
-        Transport fetchedTransport = Transport.fromJson(response.data());
-        assertDeepEquals(updatedTransport, fetchedTransport);
     }
 
     @Test
@@ -204,9 +193,7 @@ class TransportsServiceTest {
         } catch (DalException e) {
             fail(e);
         }
-        String json = transportsService.updateTransport(transport.toJson());
-        Response response = JsonUtils.deserialize(json, Response.class);
-        assertFalse(response.success());
+        assertThrows(TransportException.class,() -> transportController.updateTransport(transport.id(), transport));
     }
 
     @Test
@@ -216,9 +203,7 @@ class TransportsServiceTest {
         } catch (DalException e) {
             fail(e);
         }
-        String json = transportsService.removeTransport(Transport.getLookupObject(transport.id()).toJson());
-        Response response = JsonUtils.deserialize(json, Response.class);
-        assertTrue(response.success());
+        assertDoesNotThrow(() -> transportController.removeTransport(transport.id()));
     }
 
     @Test
@@ -228,24 +213,20 @@ class TransportsServiceTest {
         } catch (DalException e) {
             fail(e);
         }
-        String json = transportsService.removeTransport(Transport.getLookupObject(5).toJson());
-        Response response = JsonUtils.deserialize(json, Response.class);
-        assertFalse(response.success());
+        assertThrows(TransportException.class,() -> transportController.removeTransport(5));
     }
 
     @Test
     void getTransport() {
         try{
-            when(transportsDAO.exists(Transport.getLookupObject(transport.id()))).thenReturn(true);
-            when(transportsDAO.select(Transport.getLookupObject(transport.id()))).thenReturn(transport);
-        } catch (DalException e) {
+            when(transportsDAO.exists(Transport.getLookupObject(1))).thenReturn(true);
+            when(transportsDAO.select(Transport.getLookupObject(1))).thenReturn(transport);
+
+            Transport fetchedTransport = transportController.getTransport(1);
+            assertDeepEquals(transport, fetchedTransport);
+        } catch (DalException | TransportException e) {
             fail(e);
         }
-        String json = transportsService.getTransport(Transport.getLookupObject(transport.id()).toJson());
-        Response response = JsonUtils.deserialize(json, Response.class);
-        assertTrue(response.success());
-        Transport fetchedTransport = Transport.fromJson(response.data());
-        assertDeepEquals(transport, fetchedTransport);
     }
 
     @Test
@@ -255,48 +236,47 @@ class TransportsServiceTest {
         } catch (DalException e) {
             fail(e);
         }
-        String json = transportsService.getTransport(Transport.getLookupObject(transport.id()).toJson());
-        Response response = JsonUtils.deserialize(json, Response.class);
-        assertFalse(response.success());
+        assertThrows(TransportException.class,() -> transportController.getTransport(transport.id()));
     }
 
     @Test
     void getAllTransports() {
-        //set up
-        Transport transport2 = new Transport(
-                2,
-                source.address(),
-                new LinkedList<>() {{
-                    add(destination1.address());
-                    add(destination2.address());
-                }},
-                new HashMap<>() {{
-                    put(destination1.address(), itemList1.id());
-                    put(destination2.address(), itemList2.id());
-                }},
-                driver.id(),
-                truck.id(),
-                DEPARTURE_TIME,
-                15000
-        );
-        List<Transport> transports = List.of(transport, transport2);
         try{
+            //set up
+            Transport transport2 = new Transport(
+                    2,
+                    source.address(),
+                    new LinkedList<>() {{
+                        add(destination1.address());
+                        add(destination2.address());
+                    }},
+                    new HashMap<>() {{
+                        put(destination1.address(), itemList1.id());
+                        put(destination2.address(), itemList2.id());
+                    }},
+                    driver.id(),
+                    truck.id(),
+                    DEPARTURE_TIME,
+                    15000
+            );
+            List<Transport> transports = List.of(transport, transport2);
             when(transportsDAO.selectAll()).thenReturn(transports);
-        } catch (DalException e) {
+
+            //test
+            List<Transport> fetchedTransports = transportController.getAllTransports();
+            assertDeepEquals(transports.get(0), fetchedTransports.get(0));
+            assertDeepEquals(transports.get(1), fetchedTransports.get(1));
+
+        } catch (DalException | TransportException e) {
             fail(e);
         }
 
-        //test
-        String json = transportsService.getAllTransports();
-        Response response = JsonUtils.deserialize(json, Response.class);
-        assertTrue(response.success());
-        List<Transport> fetchedTransports = Transport.listFromJson(response.data());
-        assertDeepEquals(transports.get(0), fetchedTransports.get(0));
-        assertDeepEquals(transports.get(1), fetchedTransports.get(1));
     }
 
     @Test
     void createTransportWithTooMuchWeight(){
+
+        //set up
         Transport badTransport = new Transport(
                 source.address(),
                 new LinkedList<>() {{
@@ -312,16 +292,19 @@ class TransportsServiceTest {
                 DEPARTURE_TIME,
                 50000
         );
-
         try{
             initializeMocksToPassTransportValidation();
         } catch (DalException | TransportException e) {
-            throw new RuntimeException(e);
+            fail(e);
         }
-        String json = transportsService.addTransport(badTransport.toJson());
-        Response response = JsonUtils.deserialize(json, Response.class);
-        assertFalse(response.success());
-        assertEquals("weight",response.data());
+
+        //test
+        try {
+            transportController.addTransport(badTransport);
+            fail("TransportException expected");
+        } catch (TransportException e) {
+            assertEquals("weight",e.getCause().getMessage());
+        }
     }
 
     @Test
@@ -348,10 +331,14 @@ class TransportsServiceTest {
         } catch (DalException | TransportException e) {
             throw new RuntimeException(e);
         }
-        String json = transportsService.addTransport(badTransport.toJson());
-        Response response = JsonUtils.deserialize(json, Response.class);
-        assertFalse(response.success());
-        assertEquals("license",response.data());
+
+        //test
+        try {
+            transportController.addTransport(badTransport);
+            fail("TransportException expected");
+        } catch (TransportException e) {
+            assertEquals("license",e.getCause().getMessage());
+        }
     }
 
     @Test
@@ -378,18 +365,29 @@ class TransportsServiceTest {
         } catch (DalException | TransportException e) {
             throw new RuntimeException(e);
         }
-        String json = transportsService.addTransport(badTransport.toJson());
-        Response response = JsonUtils.deserialize(json, Response.class);
-        assertFalse(response.success());
-        assertEquals("license,weight",response.data());
+
+        //test
+        try {
+            transportController.addTransport(badTransport);
+            fail("TransportException expected");
+        } catch (TransportException e) {
+            assertEquals("license,weight",e.getCause().getMessage());
+        }
     }
 
     @Test
     void createTransportEverythingDoesNotExist(){
-        String json = transportsService.addTransport(transport.toJson());
-        Response response = JsonUtils.deserialize(json, Response.class);
-        assertFalse(response.success());
-        assertEquals("driver,truck,source,destination:0,itemList:0,destination:1,itemList:1",response.data());
+
+        try {
+            transportController.addTransport(transport);
+            fail("TransportException expected");
+        } catch (TransportException e) {
+            assertEquals("driver,truck,source,destination:0,itemList:0,destination:1,itemList:1",e.getCause().getMessage());
+        }
+    }
+    @Test
+    void initializeEstimatedArrivalTimes() {
+        fail("Test not implemented");
     }
 
     private void initializeMocksToPassTransportValidation() throws DalException, TransportException {
@@ -420,6 +418,7 @@ class TransportsServiceTest {
         when(sitesDistancesDAO.select(distance2)).thenReturn(new DistanceBetweenSites(distance2, 100));
 
     }
+
     private void assertDeepEquals(Transport transport1, Transport transport2) {
         assertEquals(transport1.id(), transport2.id());
         assertEquals(transport1.source(), transport2.source());
@@ -430,4 +429,5 @@ class TransportsServiceTest {
         assertEquals(transport1.departureTime(), transport2.departureTime());
         assertEquals(transport1.weight(), transport2.weight());
     }
+
 }

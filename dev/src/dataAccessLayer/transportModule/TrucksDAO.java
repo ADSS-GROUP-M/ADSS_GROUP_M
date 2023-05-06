@@ -2,6 +2,7 @@ package dataAccessLayer.transportModule;
 
 import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.dalUtils.OfflineResultSet;
+import dataAccessLayer.dalUtils.SQLExecutor;
 import dataAccessLayer.transportModule.abstracts.DAO;
 import objects.transportObjects.Truck;
 
@@ -13,22 +14,11 @@ public class TrucksDAO extends DAO<Truck> {
 
     private static final String[] types = new String[]{"TEXT", "TEXT", "INTEGER", "INTEGER", "TEXT"};
     private static final String[] primary_keys = {"id"};
+    public static final String tableName = "trucks";
 
-    public TrucksDAO() throws DalException {
-        super("trucks",
-                types,
-                primary_keys,
-                "id",
-                "model",
-                "base_weight",
-                "max_weight",
-                "cooling_capacity");
-        initTable();
-    }
-
-    public TrucksDAO(String dbName) throws DalException {
-        super(dbName,
-                "trucks",
+    public TrucksDAO(SQLExecutor cursor) throws DalException {
+        super(cursor,
+				tableName,
                 types,
                 primary_keys,
                 "id",

@@ -6,6 +6,7 @@ import dataAccessLayer.DalFactory;
 import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.dalUtils.OfflineResultSet;
 import dataAccessLayer.dalUtils.SQLExecutor;
+import dataAccessLayer.dalUtils.SQLExecutorProductionImpl;
 import dataAccessLayer.employeeModule.EmployeeDAO;
 import objects.transportObjects.Driver;
 import org.junit.jupiter.api.AfterEach;
@@ -151,7 +152,7 @@ class DriversDAOTest {
                     WHERE %s.id = '%s';
                         """, TABLE_NAME, PARENT_TABLE_NAME[0] ,TABLE_NAME, PARENT_TABLE_NAME[0], TABLE_NAME, PARENT_TABLE_NAME[0], TABLE_NAME, driver.id());
 
-        SQLExecutor executor = new SQLExecutor(TESTING_DB_NAME);
+        SQLExecutor executor = new SQLExecutorProductionImpl(TESTING_DB_NAME);
         try {
             OfflineResultSet resultSet = executor.executeRead(query);
             resultSet.next();

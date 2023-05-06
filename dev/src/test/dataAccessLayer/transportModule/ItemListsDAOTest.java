@@ -1,8 +1,10 @@
 package dataAccessLayer.transportModule;
 
+import dataAccessLayer.DalFactory;
 import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.dalUtils.OfflineResultSet;
 import dataAccessLayer.dalUtils.SQLExecutor;
+import dataAccessLayer.dalUtils.SQLExecutorProductionImpl;
 import objects.transportObjects.ItemList;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,7 +39,8 @@ class ItemListsDAOTest {
         itemList = new ItemList(1, load, unload);
 
         try {
-            dao = new ItemListsDAO(TESTING_DB_NAME);
+            DalFactory factory = new DalFactory(TESTING_DB_NAME);
+            dao = factory.itemListsDAO();
             dao.clearTable();
             dao.insert(itemList);
         } catch (DalException e) {
@@ -164,7 +167,7 @@ class ItemListsDAOTest {
 
     @Test
     void getObjectFromResultSet() {
-        SQLExecutor cursor = new SQLExecutor(TESTING_DB_NAME);
+        SQLExecutor cursor = new SQLExecutorProductionImpl(TESTING_DB_NAME);
         try {
             OfflineResultSet resultSet = cursor.executeRead("SELECT * FROM item_lists_items WHERE id = "+itemList.id());
             assertDeepEquals(itemList, dao.getObjectFromResultSet(resultSet));

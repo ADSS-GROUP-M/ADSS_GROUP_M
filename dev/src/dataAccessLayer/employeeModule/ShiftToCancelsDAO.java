@@ -3,6 +3,7 @@ package dataAccessLayer.employeeModule;
 import businessLayer.employeeModule.Shift;
 import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.dalUtils.OfflineResultSet;
+import dataAccessLayer.dalUtils.SQLExecutor;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -23,20 +24,9 @@ public class ShiftToCancelsDAO extends DAO{
         Branch,
         CancelAction;
     }
-    public ShiftToCancelsDAO()throws DalException {
-        super(tableName,
-                primaryKeys,
-                new String[]{"TEXT", "TEXT", "TEXT", "TEXT"},
-                "ShiftDate",
-                "ShiftType",
-                "Branch",
-                "CancelAction"
-        );
-        this.cache = new HashMap<>();
-    }
-    public ShiftToCancelsDAO(String dbname)throws DalException {
-        super(dbname,
-                tableName,
+    public ShiftToCancelsDAO(SQLExecutor cursor)throws DalException {
+        super(cursor,
+				tableName,
                 primaryKeys,
                 new String[]{"TEXT", "TEXT", "TEXT", "TEXT"},
                 "ShiftDate",

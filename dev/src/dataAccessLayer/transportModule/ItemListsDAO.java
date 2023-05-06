@@ -2,6 +2,7 @@ package dataAccessLayer.transportModule;
 
 import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.dalUtils.OfflineResultSet;
+import dataAccessLayer.dalUtils.SQLExecutor;
 import dataAccessLayer.transportModule.abstracts.CounterDAO;
 import dataAccessLayer.transportModule.abstracts.DAO;
 import objects.transportObjects.ItemList;
@@ -13,35 +14,20 @@ public class ItemListsDAO extends DAO<ItemList> implements CounterDAO {
 
     public static final String[] types = {"INTEGER"};
     public static final String[] primary_keys = {"id"};
+    public static final String tableName = "item_lists";
     private final ItemListsItemsDAO itemListsItemsDAO;
     private final ItemListIdCounterDAO itemListIdCounterDAO;
 
-    public ItemListsDAO() throws DalException {
-        super("item_lists",
+    public ItemListsDAO(SQLExecutor cursor, ItemListsItemsDAO itemListsItemsDAO, ItemListIdCounterDAO itemListIdCounterDAO) throws DalException {
+        super(cursor,
+				tableName,
                 types,
                 primary_keys,
                 "id"
         );
+        this.itemListsItemsDAO = itemListsItemsDAO;
+        this.itemListIdCounterDAO = itemListIdCounterDAO;
         initTable();
-        itemListIdCounterDAO = new ItemListIdCounterDAO();
-        itemListsItemsDAO = new ItemListsItemsDAO();
-    }
-
-    /**
-     * used for testing
-     *
-     * @param dbName the name of the database to connect to
-     */
-    public ItemListsDAO(String dbName) throws DalException {
-        super(dbName,
-                "item_lists",
-                types,
-                primary_keys,
-                "id"
-        );
-        initTable();
-        itemListIdCounterDAO = new ItemListIdCounterDAO(dbName);
-        itemListsItemsDAO = new ItemListsItemsDAO(dbName);
     }
 
     /**

@@ -5,6 +5,7 @@ import businessLayer.employeeModule.Employee;
 import businessLayer.employeeModule.User;
 import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.dalUtils.OfflineResultSet;
+import dataAccessLayer.dalUtils.SQLExecutor;
 
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -25,8 +26,9 @@ public class UserDAO extends DAO {
     }
 
     //needed roles HashMap<Role,Integer>, shiftRequests HashMap<Role,List<Employees>>, shiftWorkers Map<Role,List<Employees>>, cancelCardApplies List<String>, shiftActivities List<String>.
-    public UserDAO(UserAuthorizationsDAO userAuthorizationsDAO) throws DalException{
-        super(tableName,
+    public UserDAO(SQLExecutor cursor, UserAuthorizationsDAO userAuthorizationsDAO) throws DalException{
+        super(cursor,
+				tableName,
                 primaryKeys,
                 new String[]{"TEXT", "TEXT", "TEXT"},
                 "Username",
@@ -35,19 +37,6 @@ public class UserDAO extends DAO {
         this.userAuthorizationsDAO = userAuthorizationsDAO;
         this.cache = new HashMap<>();
     }
-
-    public UserDAO(String dbName, UserAuthorizationsDAO userAuthorizationsDAO) throws DalException {
-        super(dbName,
-                tableName,
-                primaryKeys,
-                new String[]{"TEXT", "TEXT", "TEXT"},
-                "Username",
-                "Password"
-        );
-        this.userAuthorizationsDAO = userAuthorizationsDAO;
-        this.cache = new HashMap<>();
-    }
-
 
     private int getHashCode(String username){
         return (username).hashCode();

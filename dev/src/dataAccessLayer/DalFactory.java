@@ -1,46 +1,35 @@
 package dataAccessLayer;
 
 import dataAccessLayer.dalUtils.DalException;
+import dataAccessLayer.dalUtils.SQLExecutor;
+import dataAccessLayer.dalUtils.SQLExecutorProductionImpl;
+import dataAccessLayer.dalUtils.SQLExecutorTestingImpl;
 import dataAccessLayer.employeeModule.*;
 import dataAccessLayer.transportModule.*;
 
 public class DalFactory {
 
-    public static String TESTING_DB_NAME = "TestingDB.db";
+    public static String TESTING_DB_NAME = ":memory:";
 
-    private final EmployeeDAO employeeDAO;
-    private final UserDAO userDAO;
-    private final ShiftDAO shiftDAO;
-    private final TrucksDAO trucksDAO;
-    private final ItemListsDAO itemListsDAO;
-    private final SitesDAO sitesDAO;
-    private final BranchesDAO branchesDAO;
-    private final BranchEmployeesDAO branchEmployeesDAO;
-    private final DriversDAO driversDAO;
-    private final TransportsDAO transportsDAO;
-    private final SitesDistancesDAO sitesDistancesDAO;
+    private EmployeeDAO employeeDAO;
+    private UserDAO userDAO;
+    private ShiftDAO shiftDAO;
+    private TrucksDAO trucksDAO;
+    private ItemListsDAO itemListsDAO;
+    private SitesDAO sitesDAO;
+    private BranchesDAO branchesDAO;
+    private BranchEmployeesDAO branchEmployeesDAO;
+    private DriversDAO driversDAO;
+    private TransportsDAO transportsDAO;
+    private SitesDistancesDAO sitesDistancesDAO;
+
+    private TransportDestinationsDAO transportDestinationsDAO;
+
+    private ItemListsItemsDAO itemListsItemsDAO;
 
     public DalFactory() throws DalException {
-
-        ShiftToActivityDAO shiftToActivityDAO = new ShiftToActivityDAO();
-        ShiftToCancelsDAO shiftToCancelsDAO = new ShiftToCancelsDAO();
-        ShiftToNeededRolesDAO shiftToNeededRolesDAO = new ShiftToNeededRolesDAO();
-        UserAuthorizationsDAO userAuthorizationsDAO = new UserAuthorizationsDAO();
-        EmployeeRolesDAO employeeRolesDAO = new EmployeeRolesDAO();
-
-        userDAO = new UserDAO(userAuthorizationsDAO);
-        employeeDAO = new EmployeeDAO(employeeRolesDAO);
-        ShiftToWorkersDAO shiftToWorkersDAO = new ShiftToWorkersDAO(employeeDAO);
-        ShiftToRequestsDAO shiftToRequestsDAO = new ShiftToRequestsDAO(employeeDAO);
-        shiftDAO = new ShiftDAO(shiftToNeededRolesDAO, shiftToRequestsDAO, shiftToWorkersDAO, shiftToCancelsDAO, shiftToActivityDAO);
-        itemListsDAO = new ItemListsDAO();
-        trucksDAO = new TrucksDAO();
-        driversDAO = new DriversDAO();
-        sitesDAO = new SitesDAO();
-        branchEmployeesDAO = new BranchEmployeesDAO();
-        branchesDAO = new BranchesDAO(branchEmployeesDAO);
-        transportsDAO = new TransportsDAO();
-        sitesDistancesDAO = new SitesDistancesDAO();
+        SQLExecutor cursor = new SQLExecutorProductionImpl();
+        buildInstances(cursor);
     }
 
     /**
@@ -48,28 +37,36 @@ public class DalFactory {
      * @param dbName the name of the database to connect to
      */
     public DalFactory(String dbName) throws DalException {
-
-        ShiftToActivityDAO shiftToActivityDAO = new ShiftToActivityDAO(dbName);
-        ShiftToCancelsDAO shiftToCancelsDAO = new ShiftToCancelsDAO(dbName);
-        ShiftToNeededRolesDAO shiftToNeededRolesDAO = new ShiftToNeededRolesDAO(dbName);
-        UserAuthorizationsDAO userAuthorizationsDAO = new UserAuthorizationsDAO(dbName);
-        EmployeeRolesDAO employeeRolesDAO = new EmployeeRolesDAO(dbName);
-
-        userDAO = new UserDAO(dbName, userAuthorizationsDAO);
-        employeeDAO = new EmployeeDAO(dbName, employeeRolesDAO);
-        ShiftToWorkersDAO shiftToWorkersDAO = new ShiftToWorkersDAO(dbName, employeeDAO);
-        ShiftToRequestsDAO shiftToRequestsDAO = new ShiftToRequestsDAO(dbName, employeeDAO);
-        shiftDAO = new ShiftDAO(dbName, shiftToNeededRolesDAO, shiftToRequestsDAO, shiftToWorkersDAO, shiftToCancelsDAO, shiftToActivityDAO);
-
-        trucksDAO = new TrucksDAO(dbName);
-        driversDAO = new DriversDAO(dbName);
-        itemListsDAO = new ItemListsDAO(dbName);
-        sitesDAO = new SitesDAO(dbName);
-        branchEmployeesDAO = new BranchEmployeesDAO(dbName);
-        branchesDAO = new BranchesDAO(dbName,branchEmployeesDAO);
-        transportsDAO = new TransportsDAO(dbName);
-        sitesDistancesDAO = new SitesDistancesDAO(dbName);
+        SQLExecutor cursor = new SQLExecutorTestingImpl(dbName);
+        buildInstances(cursor);
     }
+
+    private void buildInstances(SQLExecutor cursor) throws DalException {
+        ShiftToActivityDAO shiftToActivityDAO = new ShiftToActivityDAO(cursor);
+        ShiftToCancelsDAO shiftToCancelsDAO = new ShiftToCancelsDAO(cursor);
+        ShiftToNeededRolesDAO shiftToNeededRolesDAO = new ShiftToNeededRolesDAO(cursor);
+        UserAuthorizationsDAO userAuthorizationsDAO = new UserAuthorizationsDAO(cursor);
+        EmployeeRolesDAO employeeRolesDAO = new EmployeeRolesDAO(cursor);
+
+        userDAO = new UserDAO(cursor,userAuthorizationsDAO);
+        employeeDAO = new EmployeeDAO(cursor,employeeRolesDAO);
+        ShiftToWorkersDAO shiftToWorkersDAO = new ShiftToWorkersDAO(cursor,employeeDAO);
+        ShiftToRequestsDAO shiftToRequestsDAO = new ShiftToRequestsDAO(cursor,employeeDAO);
+        shiftDAO = new ShiftDAO(cursor, shiftToNeededRolesDAO, shiftToRequestsDAO, shiftToWorkersDAO, shiftToCancelsDAO, shiftToActivityDAO);
+        itemListsItemsDAO = new ItemListsItemsDAO(cursor);
+        ItemListIdCounterDAO itemListIdCounterDAO = new ItemListIdCounterDAO(cursor);
+        itemListsDAO = new ItemListsDAO(cursor, itemListsItemsDAO, itemListIdCounterDAO);
+        trucksDAO = new TrucksDAO(cursor);
+        driversDAO = new DriversDAO(cursor);
+        sitesDAO = new SitesDAO(cursor);
+        branchEmployeesDAO = new BranchEmployeesDAO(cursor);
+        branchesDAO = new BranchesDAO(cursor,branchEmployeesDAO);
+        transportDestinationsDAO = new TransportDestinationsDAO(cursor);
+        TransportIdCounterDAO transportIdCounterDAO = new TransportIdCounterDAO(cursor);
+        transportsDAO = new TransportsDAO(cursor, transportDestinationsDAO, transportIdCounterDAO);
+        sitesDistancesDAO = new SitesDistancesDAO(cursor);
+    }
+
     public EmployeeDAO employeeDAO() {
         return employeeDAO;
     }
@@ -77,7 +74,6 @@ public class DalFactory {
     public UserDAO userDAO() {
         return userDAO;
     }
-
     public ShiftDAO shiftDAO() {
         return shiftDAO;
     }
@@ -112,6 +108,14 @@ public class DalFactory {
 
     public SitesDistancesDAO sitesDistancesDAO() {
         return sitesDistancesDAO;
+    }
+
+    public TransportDestinationsDAO transportDestinationsDAO() {
+        return transportDestinationsDAO;
+    }
+
+    public ItemListsItemsDAO itemListsItemsDAO() {
+        return itemListsItemsDAO;
     }
 
     public static void clearTestDB(){

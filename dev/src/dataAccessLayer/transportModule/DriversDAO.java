@@ -2,6 +2,7 @@ package dataAccessLayer.transportModule;
 
 import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.dalUtils.OfflineResultSet;
+import dataAccessLayer.dalUtils.SQLExecutor;
 import dataAccessLayer.transportModule.abstracts.ManyToManyDAO;
 import objects.transportObjects.Driver;
 
@@ -16,22 +17,11 @@ public class DriversDAO extends ManyToManyDAO<Driver> {
     private static final String[] primary_keys = {"id"};
     private static final String[][] foreign_keys = {{"id"}};
     private static final String[][] references = {{"Id"}};
+    public static final String tableName = "truck_drivers";
 
-    public DriversDAO() throws DalException {
-        super("truck_drivers",
-                parent_table_names,
-                types,
-                primary_keys,
-                foreign_keys,
-                references,
-                "id",
-                "license_type");
-        initTable();
-    }
-
-    public DriversDAO(String dbName) throws DalException {
-        super(dbName,
-                "truck_drivers",
+    public DriversDAO(SQLExecutor cursor) throws DalException {
+        super(cursor,
+				tableName,
                 parent_table_names,
                 types,
                 primary_keys,

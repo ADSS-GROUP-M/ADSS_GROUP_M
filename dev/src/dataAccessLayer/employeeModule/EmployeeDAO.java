@@ -4,6 +4,7 @@ import businessLayer.employeeModule.Employee;
 import businessLayer.employeeModule.Role;
 import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.dalUtils.OfflineResultSet;
+import dataAccessLayer.dalUtils.SQLExecutor;
 import dataAccessLayer.transportModule.abstracts.DAO;
 
 import java.sql.SQLException;
@@ -19,26 +20,8 @@ public class EmployeeDAO extends DAO<Employee> {
     private static final String tableName = "EMPLOYEES";
     private final EmployeeRolesDAO employeeRolesDAO;
 
-    public EmployeeDAO(EmployeeRolesDAO employeeRolesDAO) throws DalException{
-        super(tableName,
-                types,
-                primary_keys,
-                "Id",
-                "Name",
-                "BankDetails",
-                "HourlySalaryRate",
-                "MonthlyHours",
-                "SalaryBonus",
-                "EmploymentDate",
-                "EmploymentConditions",
-                "Details"
-        );
-        initTable();
-        this.employeeRolesDAO = employeeRolesDAO;
-    }
-
-    public EmployeeDAO(String dbName, EmployeeRolesDAO employeeRolesDAO) throws DalException{
-        super(dbName,
+    public EmployeeDAO(SQLExecutor cursor, EmployeeRolesDAO employeeRolesDAO) throws DalException{
+        super(cursor,
                 tableName,
                 types,
                 primary_keys,

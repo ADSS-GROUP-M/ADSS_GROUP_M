@@ -5,6 +5,7 @@ package dataAccessLayer.employeeModule;
 import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.dalUtils.OfflineResultSet;
 import dataAccessLayer.dalUtils.SQLExecutor;
+import dataAccessLayer.dalUtils.SQLExecutorProductionImpl;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -20,25 +21,12 @@ public abstract class DAO {
     protected final String[] TYPES;
     protected final String[] ALL_COLUMNS;
 
-    public DAO(String tableName, String[] keyFields, String[] types, String ... allColumns) throws DalException {
+    public DAO(SQLExecutor cursor, String tableName, String[] keyFields, String[] types, String ... allColumns) throws DalException {
+        this.cursor = cursor;
         this.TABLE_NAME = tableName;
         this.PRIMARY_KEYS = keyFields;
         this.TYPES = types;
         this.ALL_COLUMNS = allColumns;
-        cursor = new SQLExecutor();
-        initTable();
-    }
-
-    /**
-     * Can be used for testing in a different database
-     * @param dbName the name of the database to connect to
-     */
-    public DAO(String dbName, String tableName, String[] keyFields, String[] types, String ... allColumns) throws DalException {
-        this.TABLE_NAME = tableName;
-        this.PRIMARY_KEYS = keyFields;
-        this.TYPES = types;
-        this.ALL_COLUMNS = allColumns;
-        cursor = new SQLExecutor(dbName);
         initTable();
     }
 

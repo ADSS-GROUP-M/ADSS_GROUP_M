@@ -2,6 +2,7 @@ package dataAccessLayer.transportModule;
 
 import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.dalUtils.OfflineResultSet;
+import dataAccessLayer.dalUtils.SQLExecutor;
 import dataAccessLayer.transportModule.abstracts.ManyToManyDAO;
 import objects.transportObjects.ItemList;
 
@@ -17,6 +18,7 @@ public class ItemListsItemsDAO extends ManyToManyDAO<ItemList> {
     private static final String[] primary_keys = {"id", "loading_type", "item_name"};
     private static final String[][] foreign_keys = {{"id"}};
     private static final String[][] references = {{"Id"}};
+    public static final String tableName = "item_lists_items";
 
     private enum LoadingType {
         loading,
@@ -25,27 +27,9 @@ public class ItemListsItemsDAO extends ManyToManyDAO<ItemList> {
 
     public static final String[] types = new String[]{"INTEGER", "TEXT", "TEXT", "INTEGER"};
 
-    public ItemListsItemsDAO() throws DalException {
-        super("item_lists_items",
-                parent_table_names,
-                types,
-                primary_keys,
-                foreign_keys,
-                references,
-                "id",
-                "loading_type",
-                "item_name",
-                "amount");
-        initTable();
-    }
-
-    /**
-     *  used for testing
-     *  @param dbName the name of the database to connect to
-     */
-    public ItemListsItemsDAO(String dbName) throws DalException {
-        super(dbName,
-                "item_lists_items",
+    public ItemListsItemsDAO(SQLExecutor cursor) throws DalException {
+        super(cursor,
+				tableName,
                 parent_table_names,
                 types,
                 primary_keys,

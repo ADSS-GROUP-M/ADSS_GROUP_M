@@ -1,6 +1,7 @@
 package dataAccessLayer.transportModule.abstracts;
 
 import dataAccessLayer.dalUtils.DalException;
+import dataAccessLayer.dalUtils.SQLExecutor;
 
 import java.sql.SQLException;
 
@@ -13,24 +14,7 @@ public abstract class ManyToManyDAO<T> extends DAO<T>{
     protected final String[][] FOREIGN_KEYS;
     protected final String[][] REFERENCES;
 
-    protected ManyToManyDAO(String tableName,
-                            String[] parentTableName,
-                            String[] types,
-                            String[] primaryKeys,
-                            String[][] foreignKeys,
-                            String[][] references,
-                            String ... allColumns) throws DalException{
-        super(tableName,types,primaryKeys,allColumns);
-        PARENT_TABLE_NAME = parentTableName;
-        FOREIGN_KEYS = foreignKeys;
-        REFERENCES = references;
-    }
-
-    /**
-     * used for testing
-     * @param dbName the name of the database to connect to
-     */
-    protected ManyToManyDAO(String dbName,
+    protected ManyToManyDAO(SQLExecutor cursor,
                             String tableName,
                             String[] parentTableName,
                             String[] types,
@@ -38,7 +22,7 @@ public abstract class ManyToManyDAO<T> extends DAO<T>{
                             String[][] foreignKeys,
                             String[][] references,
                             String ... allColumns) throws DalException{
-        super(dbName,tableName,types,primaryKeys,allColumns);
+        super(cursor,tableName,types,primaryKeys,allColumns);
         PARENT_TABLE_NAME = parentTableName;
         FOREIGN_KEYS = foreignKeys;
         REFERENCES = references;

@@ -5,6 +5,7 @@ import businessLayer.employeeModule.Authorization;
 import businessLayer.employeeModule.User;
 import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.dalUtils.OfflineResultSet;
+import dataAccessLayer.dalUtils.SQLExecutor;
 
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -22,18 +23,9 @@ public class UserAuthorizationsDAO extends DAO {
         Authorization;
     }
 
-    public UserAuthorizationsDAO()throws DalException {
-        super(tableName,
-                primaryKeys,
-                new String[]{"TEXT", "TEXT"},
-                "Username",
-                "Authorization"
-        );
-        this.cache = new HashMap<>();
-    }
-    public UserAuthorizationsDAO(String dbName)throws DalException {
-        super(dbName,
-                tableName,
+    public UserAuthorizationsDAO(SQLExecutor cursor)throws DalException {
+        super(cursor,
+				tableName,
                 primaryKeys,
                 new String[]{"TEXT", "TEXT"},
                 "Username",

@@ -1,6 +1,7 @@
 package presentationLayer.employeeModule.Model;
 
 import com.google.gson.reflect.TypeToken;
+import dataAccessLayer.DalFactory;
 import serviceLayer.ServiceFactory;
 import serviceLayer.employeeModule.Objects.SEmployee;
 import serviceLayer.employeeModule.Objects.SShift;
@@ -34,9 +35,9 @@ public class BackendController {
         employeesService = serviceFactory.employeesService();
         loggedUsername = null;
 
-        // Data Initialization
-        userService.createData();
-        employeesService.createData();
+        // Data Initialization - Use these lines after deleting the database, if you want to initialize the employees & transport module data
+        //userService.createData();
+        //employeesService.createData();
     }
 
     public BackendController(ServiceFactory factory) {
@@ -45,9 +46,9 @@ public class BackendController {
         employeesService = serviceFactory.employeesService();
         loggedUsername = null;
 
-        // Data Initialization
-        userService.createData();
-        employeesService.createData();
+        // Data Initialization - Use these lines after deleting the database, if you want to initalize the employees & transport module data
+        //userService.createData();
+        //employeesService.createData();
     }
 
     public static BackendController getInstance() {

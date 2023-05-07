@@ -140,20 +140,20 @@ public class UiData {
         Truck truck5 = new Truck("mno345", "nissan", 3500, 30000, Truck.CoolingCapacity.FROZEN);
 
 
-        rms.addDriver(driver1.toJson());
-        rms.addDriver(driver2.toJson());
-        rms.addDriver(driver3.toJson());
-        rms.addDriver(driver4.toJson());
-        rms.addDriver(driver5.toJson());
+        //rms.addDriver(driver1.toJson());
+        //rms.addDriver(driver2.toJson());
+        //rms.addDriver(driver3.toJson());
+        //rms.addDriver(driver4.toJson());
+        //rms.addDriver(driver5.toJson());
         rms.addTruck(truck1.toJson());
         rms.addTruck(truck2.toJson());
         rms.addTruck(truck3.toJson());
         rms.addTruck(truck4.toJson());
         rms.addTruck(truck5.toJson());
-        rms.addSite(site1.toJson());
+        //rms.addSite(site1.toJson());
         rms.addSite(site2.toJson());
         rms.addSite(site3.toJson());
-        rms.addSite(site4.toJson());
+        //rms.addSite(site4.toJson());
         rms.addSite(site5.toJson());
 
         // generate item lists with random data:

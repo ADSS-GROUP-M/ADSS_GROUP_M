@@ -61,6 +61,7 @@ public class UserController {
     public void authorizeUser(String username, Authorization auth) throws Exception {
         User user = getUser(username);
         user.authorize(auth);
+        userDAO.update(user);
     }
 
     public boolean isLoggedIn(String username) throws Exception {

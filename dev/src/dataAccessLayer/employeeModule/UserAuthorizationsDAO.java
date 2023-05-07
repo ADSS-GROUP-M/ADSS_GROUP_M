@@ -86,12 +86,12 @@ public class UserAuthorizationsDAO extends DAO {
     protected Set<Authorization> convertReaderToObject(OfflineResultSet reader) {
         Set<Authorization> ans = new HashSet<>();
         try {
-            while (reader.next()) {
+            do {
                 String authString = reader.getString(Columns.Authorization.name());
                 if(authString == null)
                     continue;
                 ans.add(Authorization.valueOf(reader.getString(Columns.Authorization.name())));
-            }
+            } while (reader.next());
         }catch (Exception e){ }
         return ans;
     }

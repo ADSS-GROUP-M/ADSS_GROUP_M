@@ -1,30 +1,27 @@
 package dev.Inventory.BusinessLayer;
 
-import javax.swing.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class DiscountCategoryController {
+public class DiscountController {
     //Map<branch,Map<supplierID, List<ProductDiscountSupplier>>>
     public Map<String, Map<Integer,List<ProductDiscountSupplier>>> supplierDiscount;
-    //Map<branch,Map<productTypeID, List<ProductStoreDiscount>>>
-    public Map<String, Map<Integer,List<ProductStoreDiscount>>> storeDiscounts;
+    //Map<branch,Map<catalog_number, List<ProductStoreDiscount>>>
+    public Map<String, Map<String,List<ProductStoreDiscount>>> storeDiscounts;
 
-    public Map<String,Map<String,Category>> categoriesPerBranch;
 
     //create the controller as Singleton
-    private static DiscountCategoryController discountCategoryController = null;
-    private DiscountCategoryController() {
-        this.storeDiscounts = new HashMap<String, Map<Integer,List<ProductStoreDiscount>>>();
-        this.supplierDiscount = new HashMap<String, Map<Integer,List<ProductDiscountSupplier>>>();
-        this.categoriesPerBranch = new HashMap<String, Map<String,Category>>();}
-    public static DiscountCategoryController DiscountCategoryController(){
-        if(discountCategoryController == null)
-            discountCategoryController = new DiscountCategoryController();
-        return discountCategoryController;
+    private static DiscountController discountController = null;
+    private DiscountController() {
+        this.storeDiscounts = new HashMap<String, Map<String,List<ProductStoreDiscount>>>();
+        this.supplierDiscount = new HashMap<String, Map<Integer,List<ProductDiscountSupplier>>>();}
+    public static DiscountController DiscountController(){
+        if(discountController == null)
+            discountController = new DiscountController();
+        return discountController;
     }
 
     private Boolean checkIfBranchExistStoreDiscount(String branch){
@@ -33,72 +30,48 @@ public class DiscountCategoryController {
     private Boolean checkIfBranchExistSupplierDiscount(String branch){
         return supplierDiscount.containsKey(branch);
     }
-    private Boolean checkIfBranchExistCategory(String branch){
-        return categoriesPerBranch.containsKey(branch);
-    }
-    public Boolean checkIfCategoryExist(String branch, String categoryName){
-        if(checkIfBranchExistCategory(branch))
-            return categoriesPerBranch.get(branch).containsKey(categoryName);
-        else
-            throw new RuntimeException("Brunch does not exist, please create discount in order to continue");
-    }
+
     private Boolean checkIfSupplierExist(String branch, int supplierID){
         if(checkIfBranchExistSupplierDiscount(branch))
             return supplierDiscount.get(branch).containsKey(supplierID);
         return false;
     }
-    private Boolean checkIfProductIDExist(String branch, int productTypeID){
+    private Boolean checkIfProductExist(String branch, String catalog_number){
         if(checkIfBranchExistStoreDiscount(branch))
-            return storeDiscounts.get(branch).containsKey(productTypeID);
+            return storeDiscounts.get(branch).containsKey(catalog_number);
         return false;
     }
-    public void createCategory(String branch,String categoryName, int categoryType){
-        if(!checkIfBranchExistCategory(branch))
-            categoriesPerBranch.put(branch,new HashMap<String,Category>());
-        categoriesPerBranch.get(branch).put(categoryName,new Category(categoryName,categoryType));
-    }
-    public void removeCategory(String branch, String categoryName){
-        if(checkIfCategoryExist(branch,categoryName)){
-            if(!categoriesPerBranch.get(branch).get(categoryName).isRelatedProductEmpty())
-                categoriesPerBranch.get(branch).remove(categoryName);
-            else
-                throw new RuntimeException("Category related to other products, please update before remove");
-        }
-        else{
-            throw new RuntimeException("Category does not exist");
-        }
 
-    }
-
-    public Category getCategory(String branch, String categoryName){return categoriesPerBranch.get(branch).get(categoryName);}
-    public void createSupplierDiscount(int productTypeID, String branch,double discount, int supplierID, LocalDateTime startDate, LocalDateTime endDate){
+    public void createSupplierDiscount(String catalog_number, String branch,double discount, int supplierID, LocalDateTime startDate, LocalDateTime endDate){
         if(!checkIfBranchExistSupplierDiscount(branch))
             supplierDiscount.put(branch,new HashMap<Integer,List<ProductDiscountSupplier>>());
         if(!checkIfSupplierExist(branch,supplierID))
             supplierDiscount.get(branch).put(supplierID,new ArrayList<ProductDiscountSupplier>());
-        supplierDiscount.get(branch).get(supplierID).add(new ProductDiscountSupplier(productTypeID,branch,startDate,endDate,discount,supplierID));
+        supplierDiscount.get(branch).get(supplierID).add(new ProductDiscountSupplier(catalog_number,branch,startDate,endDate,discount,supplierID));
     }
-    public void createStoreDiscount(int productTypeID, String branch,double discount, LocalDateTime startDate, LocalDateTime endDate){
+    public void createStoreDiscount(String catalog_number, String branch,double discount, LocalDateTime startDate, LocalDateTime endDate){
         if(!checkIfBranchExistStoreDiscount(branch))
-            storeDiscounts.put(branch, new HashMap<Integer,List<ProductStoreDiscount>>());
-        if(!checkIfProductIDExist(branch,productTypeID))
-            storeDiscounts.get(branch).put(productTypeID,new ArrayList<ProductStoreDiscount>());
-        storeDiscounts.get(branch).get(productTypeID).add(new ProductStoreDiscount(productTypeID,branch,startDate,endDate,discount));
+            storeDiscounts.put(branch, new HashMap<String,List<ProductStoreDiscount>>());
+        if(!checkIfProductExist(branch,catalog_number))
+            storeDiscounts.get(branch).put(catalog_number,new ArrayList<ProductStoreDiscount>());
+        storeDiscounts.get(branch).get(catalog_number).add(new ProductStoreDiscount(catalog_number,branch,startDate,endDate,discount));
     }
+
     public void createCategoryDiscount(String categoryName, String branch,double discount, LocalDateTime startDate, LocalDateTime endDate){
-        if(checkIfCategoryExist(branch,categoryName)){
-            Map<Integer,ProductType> relatedProducts = categoriesPerBranch.get(branch).get(categoryName).getProductsRelated();
-            for(ProductType productType: relatedProducts.values()){
-               createStoreDiscount(productType.getProductTypeID(),branch,discount,startDate,endDate);
+        CategoryController categoryController = CategoryController.CategoryController();
+        if(categoryController.checkIfCategoryExist(branch,categoryName)){
+            Map<Integer, Product> relatedProducts = categoryController.getCategoryProducts(branch,categoryName);
+            for(Product product: relatedProducts.values()){
+               createStoreDiscount(product.getCatalogNumber(),branch,discount,startDate,endDate);
             }
         }
         else
             throw new RuntimeException("Category does not exist, please create category in order to continue");
     }
-    public double getTodayBiggestStoreDiscountI(int productTypeID, String branch){
+    public double getTodayBiggestStoreDiscountI(String catalog_number, String branch){
         if(checkIfBranchExistStoreDiscount(branch)){
             double maxDiscount = -1;
-            for(ProductStoreDiscount PDS: storeDiscounts.get(branch).get(productTypeID)){
+            for(ProductStoreDiscount PDS: storeDiscounts.get(branch).get(catalog_number)){
                double currentDiscount = PDS.getDiscount(LocalDateTime.now());
                if(currentDiscount > maxDiscount)
                    maxDiscount= currentDiscount;
@@ -108,12 +81,12 @@ public class DiscountCategoryController {
         else
             throw new RuntimeException("Branch does not exist, please create discount in order to continue");
     }
-    public double getTodaySupplierDiscountI(int productID, String branch, int supplierID){
+    public double getTodaySupplierDiscountI(String catalog_number, String branch, int supplierID){
         if(checkIfSupplierExist(branch,supplierID)){
             List<ProductDiscountSupplier> supplierDiscountList = supplierDiscount.get(branch).get(supplierID);
             double maxDisxount =-1;
             for(ProductDiscountSupplier PDS: supplierDiscountList){
-                double currentDiscount = PDS.getDiscountPerDate(LocalDateTime.now(),productID);
+                double currentDiscount = PDS.getDiscountPerDate(LocalDateTime.now(),catalog_number);
                 if(currentDiscount > maxDisxount)
                     maxDisxount = currentDiscount;
             }
@@ -125,9 +98,11 @@ public class DiscountCategoryController {
         else
             throw new RuntimeException("Supplier or branch does not exist, please create discount in order to continue");
     }
+
+    // need to edit
     // check if there is a discount today on the current product and calculate to final price
-    public double calcSoldPrice(String branch, int productTypeID, double originalStorePrice){
-        double currentDiscount = getTodayBiggestStoreDiscountI(productTypeID,branch);
+    public double calcSoldPrice(String branch, String catalog_number, double originalStorePrice){
+        double currentDiscount = getTodayBiggestStoreDiscountI(catalog_number,branch);
         if(currentDiscount != -1)
             return (100-currentDiscount)*originalStorePrice;
         return originalStorePrice;
@@ -147,12 +122,12 @@ public class DiscountCategoryController {
             throw new RuntimeException("Branch does not exist, please create discount in order to continue");
     }
 
-    public List<ProductDiscountSupplier> getSupplierDiscountPerDate(int productID, String branch, int supplierID, LocalDateTime startDate, LocalDateTime endDate){
+    public List<ProductDiscountSupplier> getSupplierDiscountPerDate(String catalog_number, String branch, int supplierID, LocalDateTime startDate, LocalDateTime endDate){
         if(checkIfSupplierExist(branch,supplierID)){
             List<ProductDiscountSupplier> supplierDiscountList = supplierDiscount.get(branch).get(supplierID);
             List<ProductDiscountSupplier> supplierDiscountResults = new ArrayList<ProductDiscountSupplier>();
             for(ProductDiscountSupplier PDS: supplierDiscountList){
-                PDS.addDiscountSupplier(supplierDiscountResults,startDate,endDate,productID);
+                PDS.addDiscountSupplier(supplierDiscountResults,startDate,endDate,catalog_number);
             }
             if(!supplierDiscountResults.isEmpty())
                 return supplierDiscountResults;
@@ -163,23 +138,25 @@ public class DiscountCategoryController {
             throw new RuntimeException("supplier or branch does not exist, please create discount in order to continue");
 
     }
+
+    //TODO : remove
 // Report Category function - inorder to receive all category product details
     public List<Record> getProductsPerCategory(List<Category> categories, String branch){
         if(checkIfBranchExistStoreDiscount(branch)){
             List<Record> productsCategoryRecords = new ArrayList<Record>();
             for(Category category: categories){
-                for(ProductType productType: category.getProductsRelated().values()){
-                    for(Product product: productType.getProducts().values()){
-                        int productTypeID = productType.getProductTypeID();
-                        int productID = product.getProductID();
+                for(Product productType: category.getProductsRelated().values()){
+                    for(ProductItem product: productType.getProductItems().values()){
+                        String catalog_number = productType.getCatalogNumber();
+                        int productID = product.getSerial_number();
                         String name = productType.getName();
                         String manufacture = productType.getManufacturer();
                         double supplierPrice = productType.getOriginalSupplierPrice();
-                        double storePrice = calcSoldPrice(branch,productTypeID,productType.getOriginalStorePrice());
+                        double storePrice = calcSoldPrice(branch,catalog_number,productType.getOriginalStorePrice());
                         List<Category> subCategory = productType.getSubCategory();
                         String location = product.getLocation();
                         //create Record
-                        Record record = new Record(productTypeID,productID,name,branch,manufacture,supplierPrice,storePrice,category,subCategory,location);
+                        Record record = new Record(catalog_number,productID,name,branch,manufacture,supplierPrice,storePrice,category,subCategory,location);
                         productsCategoryRecords.add(record);
                     }
                 }

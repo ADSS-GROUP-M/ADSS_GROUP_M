@@ -4,14 +4,14 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class ProductStoreDiscount {
-    private int productTypeID;
+    private String catalog_number;
     private String branch;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     private double discount;
 
-    public ProductStoreDiscount(int productTypeID, String branch, LocalDateTime startDate, LocalDateTime endDate, double discount){
-        this.productTypeID= productTypeID;
+    public ProductStoreDiscount(String catalog_number, String branch, LocalDateTime startDate, LocalDateTime endDate, double discount){
+        this.catalog_number= catalog_number;
         this.branch = branch;
         this.startDate = startDate;
         this.endDate = endDate;

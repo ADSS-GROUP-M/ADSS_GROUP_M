@@ -1,27 +1,27 @@
 package dev.Inventory.BusinessLayer;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class Category {
-    private String nameCategory;
+    private String categoryName;
     // map<productTypeID, Product obj>
-    private Map<Integer, ProductType> productsRelated;
+    private Map<String, Product> productsRelated;
     //0 - subCategory , 1 - main Category
+
+    private List<Category> subCategories;
     private int categoryType;
 //    public List<CategoryDiscount> categoriesDiscount;
 
     public Category(String nameCategory, int categoryType){
-        this.nameCategory = nameCategory;
+        this.categoryName = nameCategory;
         this.categoryType = categoryType;
-        this.productsRelated = new HashMap<Integer,ProductType>();
+        this.productsRelated = new HashMap<String, Product>();
     }
 
-    public void addProduct(ProductType product){
-        productsRelated.put(product.getProductTypeID(),product);
+    public void addProduct(Product product){
+        productsRelated.put(product.getCatalogNumber(),product);
     }
 
 //    public void addDiscountCategory(String categoryName, String branch, double discount, LocalDateTime startDate, LocalDateTime endDate){
@@ -32,11 +32,11 @@ public class Category {
         return this.productsRelated.containsKey(productTypeID);
     }
 
-    public String getNameCategory(){return this.nameCategory;}
+    public String getCategoryName(){return this.categoryName;}
 
     public Boolean isRelatedProductEmpty(){return productsRelated.isEmpty();}
 
-    public Map<Integer,ProductType> getProductsRelated(){return this.productsRelated;}
+    public Map<Integer, Product> getProductsRelated(){return this.productsRelated;}
 
     public void removeProduct(int productID){
         productsRelated.remove(productID);
@@ -45,7 +45,7 @@ public class Category {
     @Override
     public String toString() {
         return "Category{" +
-                "nameCategory='" + nameCategory + '\'' +
+                "nameCategory='" + categoryName + '\'' +
                 ", categoryType=" + categoryType +
                 '}';
     }

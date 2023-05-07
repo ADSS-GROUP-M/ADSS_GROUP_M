@@ -4,15 +4,15 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class ProductDiscountSupplier {
-    private int productTypeID;
+    private String catalog_number;
     private String branch;
     private double discount;
     private int supplierID;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
 
-    public ProductDiscountSupplier(int productTypeID, String branch, LocalDateTime startDate, LocalDateTime endDate, double discount, int supplierID){
-        this.productTypeID= productTypeID;
+    public ProductDiscountSupplier(String catalog_number, String branch, LocalDateTime startDate, LocalDateTime endDate, double discount, int supplierID){
+        this.catalog_number= catalog_number;
         this.branch = branch;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -23,14 +23,14 @@ public class ProductDiscountSupplier {
     public Boolean isDateInRange(LocalDateTime dateToValidate){
         return dateToValidate.isAfter(startDate) && dateToValidate.isBefore(endDate);
     }
-    public double getDiscountPerDate(LocalDateTime dateToValidate, int productTypeID){
-        if(isDateInRange(dateToValidate) && productTypeID == this.productTypeID)
+    public double getDiscountPerDate(LocalDateTime dateToValidate, String catalog_number){
+        if(isDateInRange(dateToValidate) && catalog_number == this.catalog_number)
             return discount;
         else
             return -1;
     }
-    public double getDiscount(int productTypeID){
-        if(productTypeID == this.productTypeID)
+    public double getDiscount(String catalog_number){
+        if(catalog_number == this.catalog_number)
             return discount;
         else
             return -1;
@@ -46,8 +46,8 @@ public class ProductDiscountSupplier {
             return -1;
     }
 
-    public List<ProductDiscountSupplier> addDiscountSupplier(List<ProductDiscountSupplier> discountSuppliersList,LocalDateTime startDate, LocalDateTime endDate, int productTypeID){
-        if(isDateInRange(startDate,endDate) && productTypeID == this.productTypeID)
+    public List<ProductDiscountSupplier> addDiscountSupplier(List<ProductDiscountSupplier> discountSuppliersList,LocalDateTime startDate, LocalDateTime endDate, String catalog_number){
+        if(isDateInRange(startDate,endDate) && catalog_number == this.catalog_number)
             discountSuppliersList.add(this);
         return discountSuppliersList;
     }

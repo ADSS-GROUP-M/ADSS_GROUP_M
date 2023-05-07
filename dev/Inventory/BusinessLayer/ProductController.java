@@ -1,5 +1,6 @@
 package dev.Inventory.BusinessLayer;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -7,14 +8,15 @@ import java.util.Map;
 
 public class ProductController {
 
-    Map<String, Map<Integer,ProductType>> productTypes; // <branch, <productTYPEID, ProductType>
-    DiscountCategoryController DCContoller;
+    Map<String, Map<String, Product>> products; // <branch, <productTYPEID, ProductType>
+    DiscountController DCController;
 
     //create the controller as Singleton
     private static ProductController productController = null;
     private ProductController() {
-        this.productTypes = new HashMap<String, Map<Integer,ProductType>>();
-        this.DCContoller = DiscountCategoryController.DiscountCategoryController();
+        //Map<branch, Map<catalog_number, Product>
+        this.products = new HashMap<String, Map<String, Product>>();
+        this.DCController = DiscountController.DiscountController();
     }
 
     public static ProductController ProductController(){
@@ -23,10 +25,10 @@ public class ProductController {
         return productController;
     }
 
-    private Boolean checkIfProductTypeExist(String branch, int productTypeID){
+    private Boolean checkIfProductExist(String branch, String catalog_number){
         if(checkIfBranchExist(branch)){
-            Map<Integer,ProductType> branchProductsType = productTypes.get(branch);
-            if(branchProductsType.containsKey(productTypeID)){
+            Map<String, Product> branchProductsType = products.get(branch);
+            if(branchProductsType.containsKey(catalog_number)){
                 return true;
             }
             else {throw new RuntimeException("ProductType does not exist, please create the ProductType first");}
@@ -34,7 +36,7 @@ public class ProductController {
         return false;
     }
     private Boolean checkIfBranchExist(String branch){
-        if(productTypes.containsKey(branch)){
+        if(products.containsKey(branch)){
             return true;
         }
         else{
@@ -42,27 +44,27 @@ public class ProductController {
         }
     }
     // Add new product
-    public void createProduct(int productID, int productTypeID, String branch, int supplierID, double supplierPrice, String location) {
-        if(checkIfProductTypeExist(branch,productTypeID))
-            productTypes.get(branch).get(productTypeID).addProduct(productID,supplierID,supplierPrice,location);
+    public void createProductItem(int serial_number, String catalog_number, String branch, int supplierID, double supplierPrice, String location, Double supplierDiscount, LocalDateTime expirationDate) {
+        if(checkIfProductExist(branch,catalog_number))
+            products.get(branch).get(catalog_number).addProductItem(serial_number,supplierID,supplierPrice,location, supplierDiscount, expirationDate);
         else{
-            throw new RuntimeException(String.format("Product type does not exist with the ID : %s",productTypeID));
+            throw new RuntimeException(String.format("Product type does not exist with the ID : %s",catalog_number));
         }
     }
     // Add new product type
-    public void createProductType(int productTypeID, String branch, String name, String manufacture, int storeAmount, int warehouseAmount, double originalSupplierPrice, double originalStorePrice){
-        if(!productTypes.containsKey(branch)){
-            productTypes.put(branch, new HashMap<Integer,ProductType>());
+    public void createProduct(String catalog_number, String branch, String name, String manufacture, int storeAmount, int warehouseAmount, double originalSupplierPrice, double originalStorePrice){
+        if(!products.containsKey(branch)){
+            products.put(branch, new HashMap<String, Product>());
         }
-        ProductType newProductType = new ProductType(productTypeID,name,manufacture,storeAmount,warehouseAmount,originalSupplierPrice,originalStorePrice, branch);
-        productTypes.get(branch).put(productTypeID,newProductType);
+        Product newProductType = new Product(catalog_number,name,manufacture,storeAmount,warehouseAmount,originalSupplierPrice,originalStorePrice, branch);
+        products.get(branch).put(catalog_number,newProductType);
     }
-    public void updateProduct(String branch, int isDefective,int productID, int productTypeID, int isSold,int newSupplier, double newSupplierPrice, double newSoldPrice, String newLocation) {
-        if(checkIfProductTypeExist(branch,productID)){
-            Product currentProduct = productTypes.get(branch).get(productTypeID).getProduct(productID);
-            if(isDefective != -1){currentProduct.setIsDefective();}
+    public void updateProductItem(String branch, int isDefective, int serial_number, String catalog_number, int isSold, int newSupplier, double newSupplierPrice, double newSoldPrice, String newLocation) {
+        if(checkIfProductExist(branch,catalog_number)){
+            ProductItem currentProduct = products.get(branch).get(catalog_number).getProduct(serial_number);
+            if(isDefective != -1){currentProduct.reportAsDefective();}
             if(isSold != -1){
-                currentProduct.updateIsSold(DCContoller.getTodayBiggestStoreDiscountI(productTypeID,branch));
+                currentProduct.reportAsSold(DCController.getTodayBiggestStoreDiscountI(catalog_number,branch));
             }
             if(newSupplier != -1){currentProduct.setSupplierID(newSupplier);}
             if(newSupplierPrice != -1){currentProduct.setSupplierPrice(newSupplierPrice);}
@@ -70,91 +72,83 @@ public class ProductController {
             if(newLocation != null){currentProduct.setLocation(newLocation);}
         }
         else
-            throw new RuntimeException(String.format("Product type does not exist with the ID : %s",productTypeID));
+            throw new RuntimeException(String.format("Product type does not exist with the ID : %s",catalog_number));
     }
-    public void updateProductType(String branch, String newName, int productTypeID, String newManufacturer, double newSupplierPrice,double newStorePrice, String newCategory, String newSubCategory, int newMinAmount ){
-        if(checkIfProductTypeExist(branch,productTypeID)){
-            ProductType currentProductType = productTypes.get(branch).get(productTypeID);
+    public void updateProduct(String branch, String newName, String catalog_number, String newManufacturer, double newSupplierPrice, double newStorePrice, String newCategory, String newSubCategory, int newMinAmount ){
+        CategoryController categoryController = CategoryController.CategoryController();
+        if(checkIfProductExist(branch,catalog_number)){
+            Product product = products.get(branch).get(catalog_number);
             //set name
-            if(newName != null){currentProductType.setName(newName);}
-            if (newManufacturer != null){currentProductType.setManufacturer(newManufacturer);}
-            if(newSupplierPrice != -1){currentProductType.setOriginalSupplierPrice(newSupplierPrice);}
-            if(newStorePrice != -1){currentProductType.setOriginalStorePrice(newStorePrice);}
-            if(newMinAmount != -1){currentProductType.setNotificationMin(newMinAmount);}
+            if(newName != null){product.setName(newName);}
+            if (newManufacturer != null){product.setManufacturer(newManufacturer);}
+            if(newSupplierPrice != -1){product.setOriginalSupplierPrice(newSupplierPrice);}
+            if(newStorePrice != -1){product.setOriginalStorePrice(newStorePrice);}
+            if(newMinAmount != -1){product.setNotificationMin(newMinAmount);}
             if(newCategory != null){
-                if(DCContoller.checkIfCategoryExist(branch,newCategory))
-                    currentProductType.setCategory(DCContoller.getCategory(branch,newCategory));
+                if(categoryController.checkIfCategoryExist(branch,newCategory))
+                    product.setCategory(categoryController.getCategory(branch,newCategory));
                 else
-                    DCContoller.createCategory(branch,newCategory,1);
+                    categoryController.createCategory(branch,newCategory,1);
             }
             if(newSubCategory != null){
-                if(DCContoller.checkIfCategoryExist(branch,newCategory))
-                    currentProductType.setCategory(DCContoller.getCategory(branch,newSubCategory));
+                if(categoryController.checkIfCategoryExist(branch,newCategory))
+                    product.setCategory(categoryController.getCategory(branch,newSubCategory));
                 else
-                    DCContoller.createCategory(branch,newSubCategory,0);
+                    categoryController.createCategory(branch,newSubCategory,0);
             }
         }
         else
-            throw new RuntimeException(String.format("Product type does not exist with the ID : %s",productTypeID));
+            throw new RuntimeException(String.format("Product type does not exist with the ID : %s",catalog_number));
 
     }
 
     // update products to defective
-    public void updateDefectiveProduct(int productTypeID, List<Integer> productsID, String branch){
-        if(checkIfProductTypeExist(branch,productTypeID)){
-            ProductType productType = productTypes.get(branch).get(productTypeID);
-            productType.setDefective(productsID);
+    public void reportProductAsDefective(String catalog_number, List<Integer> serialNumbers, String branch){
+        if(checkIfProductExist(branch,catalog_number)){
+            Product productType = products.get(branch).get(catalog_number);
+            productType.reportAsDefective(serialNumbers);
         }
         else
-            throw new RuntimeException(String.format("Unable to update defective products,\nproduct type does not exist with the ID : %s",productTypeID));
+            throw new RuntimeException(String.format("Unable to update defective products,\nproduct type does not exist with the ID : %s",catalog_number));
     }
 
 
     // update products status to sold
-    public void updateSoldProduct(int productTypeID, List<Integer> productsID, String branch){
-        if(checkIfProductTypeExist(branch,productTypeID)){
-            ProductType productType = productTypes.get(branch).get(productTypeID);
-            productType.setToSold(productsID, DCContoller.calcSoldPrice(branch,productTypeID,productType.getOriginalStorePrice()));
+    public void reportProductAsSold(String catalog_number, List<Integer> serialNumbers, String branch){
+        if(checkIfProductExist(branch,catalog_number)){
+            Product productType = products.get(branch).get(catalog_number);
+            productType.reportAsSold(serialNumbers, DCController.calcSoldPrice(branch,catalog_number,productType.getOriginalStorePrice()));
         }
         else
-            throw new RuntimeException(String.format("Unable to update sold products,\n product type does not exist with the ID : %s",productTypeID));
+            throw new RuntimeException(String.format("Unable to update sold products,\n product type does not exist with the ID : %s",catalog_number));
     }
 
-    public void updateProductNotificationMin(int productTypeID, int newVal, String branch){
-        if(checkIfProductTypeExist(branch,productTypeID)){
-            ProductType productType = productTypes.get(branch).get(productTypeID);
-            productType.setNotificationMin(newVal);
-        }
-        else
-            throw new RuntimeException(String.format("Unable to update product Min notification,\n product type does not exist with the ID : %s",productTypeID));
-
-    }
 
     //in chosen branch, for each ProductType return all related products to the return Map
-    public Map<Integer,List<Product>> getStockProductsDetails(String branch){
-        Map<Integer,List<Product>> allProductsList = new HashMap<Integer,List<Product>>();
+    public Map<String,List<ProductItem>> getStockProductsDetails(String branch){
+        Map<String,List<ProductItem>> allProductsList = new HashMap<String,List<ProductItem>>();
         if(checkIfBranchExist(branch)){
-            for (ProductType productType: productTypes.get(branch).values()){
-                productType.getAllProducts(allProductsList);
+            for (Product productType: products.get(branch).values()){
+                productType.getAllProductItems(allProductsList);
             }
         }
         return allProductsList;
     }
 
-    public Record getProductDetails(String branch, int productTypeID, int productID){
-        if(checkIfProductTypeExist(branch,productTypeID)){
-            ProductType productType = productTypes.get(branch).get(productTypeID);
-            Product product = productType.getProducts().get(productID);
+    public Record getProductDetails(String branch, String catalog_number, int serial_number){
+        if(checkIfProductExist(branch,catalog_number)){
+            Product productType = products.get(branch).get(catalog_number);
+            ProductItem product = productType.getProductItems().get(serial_number);
             String name = productType.getName();
             String manufacture = productType.getManufacturer();
             double supplierPrice = productType.getOriginalSupplierPrice();
-//            double storePrice = DCContoller.calcSoldPrice(branch,productTypeID,productType.getOriginalStorePrice());
+//            double storePrice = DCController.calcSoldPrice(branch,productTypeID,productType.getOriginalStorePrice());
             double storePrice = productType.getOriginalStorePrice();
             Category category = productType.getCategory();
             List<Category> subCategory = productType.getSubCategory();
             String location = product.getLocation();
             //create Record
-            Record record = new Record(productTypeID,productID,name,branch,manufacture,supplierPrice,storePrice,category,subCategory,location);
+            Record record = new Record(catalog_number,serial_number,name,branch,manufacture,supplierPrice,storePrice,category,subCategory,location);
             return record;
         }
         return null;
@@ -164,21 +158,21 @@ public class ProductController {
     public List<Record> getInventoryShortages(String branch){
         List<Record> shortagesProductsRecord = new ArrayList<Record>();
         if(checkIfBranchExist(branch)){
-            Map<Integer, ProductType> branchProductsType = productTypes.get(branch);
-            for (ProductType productType: branchProductsType.values()){
-                if(productType.productIsShortage()){
-                    for(Product product: productType.getProducts().values()){
-                        int productTypeID = productType.getProductTypeID();
-                        int productID = product.getProductID();
-                        String name = productType.getName();
-                        String manufacture = productType.getManufacturer();
-                        double supplierPrice = productType.getOriginalSupplierPrice();
-                        double storePrice = DCContoller.calcSoldPrice(branch,productTypeID,productType.getOriginalStorePrice());
-                        Category category = productType.getCategory();
-                        List<Category> subCategory = productType.getSubCategory();
-                        String location = product.getLocation();
+            Map<String, Product> branchCatalogNumber = products.get(branch);
+            for (Product product: branchCatalogNumber.values()){
+                if(product.isProductLack()){
+                    for(ProductItem productItem: product.getProductItems().values()){
+                        String productCatalogNumber = product.getCatalogNumber();
+                        int productID = productItem.getSerial_number();
+                        String name = product.getName();
+                        String manufacture = product.getManufacturer();
+                        double supplierPrice = product.getOriginalSupplierPrice();
+                        double storePrice = DCController.calcSoldPrice(branch,productCatalogNumber,product.getOriginalStorePrice());
+                        Category category = product.getCategory();
+                        List<Category> subCategory = product.getSubCategory();
+                        String location = productItem.getLocation();
                         //create Record
-                        Record record = new Record(productTypeID,productID,name,branch,manufacture,supplierPrice,storePrice,category,subCategory,location);
+                        Record record = new Record(productCatalogNumber,productID,name,branch,manufacture,supplierPrice,storePrice,category,subCategory,location);
                         shortagesProductsRecord.add(record);
                     }
                 }
@@ -192,20 +186,20 @@ public class ProductController {
     public List<Record> getDefectiveProducts(String branch){
         List<Record> defectiveRecords = new ArrayList<Record>();
         if(checkIfBranchExist(branch)) {
-            Map<Integer, ProductType> branchProductsType = productTypes.get(branch);
-            for (ProductType productType: branchProductsType.values())
-                for(Product product : productType.getDefectiveProducts()){
-                    int productTypeID = productType.getProductTypeID();
-                    int productID = product.getProductID();
-                    String name = productType.getName();
-                    String manufacture = productType.getManufacturer();
-                    double supplierPrice = productType.getOriginalSupplierPrice();
-                    double storePrice = productType.getOriginalStorePrice();
-                    Category category = productType.getCategory();
-                    List<Category> subCategory = productType.getSubCategory();
-                    String location = product.getLocation();
+            Map<String, Product> branchCatalogNumber = products.get(branch);
+            for (Product product: branchCatalogNumber.values())
+                for(ProductItem productItem : product.getDefectiveProductItems()){
+                    String productCatalogNumber = product.getCatalogNumber();
+                    int productID = productItem.getSerial_number();
+                    String name = product.getName();
+                    String manufacture = product.getManufacturer();
+                    double supplierPrice = product.getOriginalSupplierPrice();
+                    double storePrice = product.getOriginalStorePrice();
+                    Category category = product.getCategory();
+                    List<Category> subCategory = product.getSubCategory();
+                    String location = productItem.getLocation();
                     //create Record
-                    Record record = new Record(productTypeID,productID,name,branch,manufacture,supplierPrice,storePrice,category,subCategory,location);
+                    Record record = new Record(productCatalogNumber,productID,name,branch,manufacture,supplierPrice,storePrice,category,subCategory,location);
                     defectiveRecords.add(record);
                 }
         }

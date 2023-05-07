@@ -30,7 +30,7 @@ public class InventoryProductsManu extends MainMenu {
     private void createNewProduct() {
         System.out.println("Enter the following product details:");
         System.out.println("Catalog Number: (number)");
-        int catalog_num = in.nextInt();
+        String catalog_num = in.nextInt();
         System.out.println("Name: (string)");
         String name = in.nextLine();
         in.nextLine();
@@ -44,14 +44,14 @@ public class InventoryProductsManu extends MainMenu {
         int amount_store = in.nextInt();
         System.out.println("Amount in warehouse: (int)");
         int amount_warehouse = in.nextInt();
-        System.out.println(inventoryService.addProductType(catalog_num, name, manufacturer, supplier_price, store_price, branch, amount_store, amount_warehouse).getReturnValue());
+        System.out.println(inventoryService.addProduct(catalog_num, name, manufacturer, supplier_price, store_price, branch, amount_store, amount_warehouse).getReturnValue());
     }
 
     private void createNewItem() {
         //supplier should be ID
         System.out.println("Enter the following product details:");
         System.out.println("Catalog Number: (int)");
-        int catalog_num = in.nextInt();
+        String catalog_num = in.nextInt();
         System.out.println("Serial Number: (int)");
         int serial_num = in.nextInt();
         System.out.println("Supplier: (int)");
@@ -61,7 +61,7 @@ public class InventoryProductsManu extends MainMenu {
         in.nextLine();
         System.out.println("location: (string)");
         String location = in.nextLine();
-        System.out.println(inventoryService.addProduct(serial_num, catalog_num, supplier, supplier_price, branch, location).getReturnValue());
+        System.out.println(inventoryService.addProductItem(serial_num, catalog_num, supplier, supplier_price, branch, location).getReturnValue());
     }
 
     private void updateProduct() {
@@ -128,7 +128,7 @@ public class InventoryProductsManu extends MainMenu {
 
     private void getProductDetails() {
         System.out.println("what is the product's catalog num? (int)");
-        int catalog_num = in.nextInt();
+        String catalog_num = in.nextInt();
         System.out.println("what is the product's serial num? (int)");
         int serial_num = in.nextInt();
         System.out.println(inventoryService.getProductDetails(catalog_num, serial_num, branch).getReturnValue().toString());

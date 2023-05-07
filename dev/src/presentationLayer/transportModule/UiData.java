@@ -139,6 +139,7 @@ public class UiData {
         Truck truck4 = new Truck("jkl012", "honda", 3000, 25000, Truck.CoolingCapacity.FROZEN);
         Truck truck5 = new Truck("mno345", "nissan", 3500, 30000, Truck.CoolingCapacity.FROZEN);
 
+
         rms.addDriver(driver1.toJson());
         rms.addDriver(driver2.toJson());
         rms.addDriver(driver3.toJson());

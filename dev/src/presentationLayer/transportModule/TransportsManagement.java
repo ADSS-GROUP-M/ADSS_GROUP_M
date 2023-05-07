@@ -66,16 +66,17 @@ public class TransportsManagement {
         LocalTime departureTime = LocalTime.parse(uiData.readLine("Departure time (format: hh:mm): "));
         LocalDateTime departureDateTime = LocalDateTime.of(departureDate, departureTime);
 
-        // truck
-        System.out.println("Truck: ");
-        String truckId = uiData.pickTruck(false).id();
-
         // driver
         System.out.println("Driver: ");
         String driverID = pickFromAvailableDrivers(departureDateTime);
         if(driverID == null){
             return;
         }
+
+        // truck
+        System.out.println("Truck: ");
+        String truckId = uiData.pickTruck(false).id();
+
 
         // source
         System.out.println("Source: ");
@@ -111,15 +112,15 @@ public class TransportsManagement {
     private String pickFromAvailableDrivers(LocalDateTime departureDateTime) {
         String json = es.getAvailableDrivers(JsonUtils.serialize(departureDateTime));
         Response response = Response.fromJson(json);
+        if(response.success() == false){
+            System.out.println("No available drivers for "+departureDateTime.toString()+", aborting...");
+            return null;
+        }
         Driver[] availableDrivers = Arrays.stream(
                 response.<String[]>data(String[].class))
                 .map(driver -> uiData.drivers().get(driver))
                 .filter(Objects::nonNull)
                 .toArray(Driver[]::new);
-        if(availableDrivers.length == 0){
-            System.out.println("No available drivers for "+departureDateTime.toString()+", aborting...");
-            return null;
-        }
         return uiData.pickDriver(false,availableDrivers).id();
     }
 
@@ -349,7 +350,9 @@ public class TransportsManagement {
         System.out.println("Destinations: ");
         for(String address : transport.destinations()){
             Site destination = uiData.sites().get(address);
-            System.out.println("   "+ destination + " (items list id: "+ transport.itemLists().get(address)+")");
+            LocalTime arrivalTime = transport.deliveryRoute().getEstimatedTimeOfArrival(address);
+            String time = String.format("[%02d:%02d]", arrivalTime.getHour(), arrivalTime.getMinute());
+            System.out.println(time+destination + " (items list id: "+ transport.itemLists().get(address)+")");
         }
     }
 
@@ -403,13 +406,12 @@ public class TransportsManagement {
             }
             //validate the site if it is a branch
              if(site.siteType() == Site.SiteType.BRANCH) {
-               String stokeKeeperMassageJson =  es.checkStoreKeeperAvailability(site.address(), JsonUtils.serialize(departureDateTime));
-                 Response response = JsonUtils.deserialize(stokeKeeperMassageJson, Response.class);
-                 if(response.success() == false){
-                     System.out.println("\n"+response.message());
-                     continue;
-                 }
-
+                String stokeKeeperMassageJson =  es.checkStoreKeeperAvailability(site.address(), JsonUtils.serialize(departureDateTime));
+                Response response = JsonUtils.deserialize(stokeKeeperMassageJson, Response.class);
+                if(response.success() == false){
+                 System.out.println("\n"+response.message());
+                 continue;
+                }
             }
 
             int listId = uiData.readInt("Items list id: ");

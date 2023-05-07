@@ -12,6 +12,7 @@ import utils.Response;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeParseException;
 import java.util.*;
 
 public class TransportsManagement {
@@ -199,7 +200,8 @@ public class TransportsManagement {
             System.out.println("3. Update source");
             System.out.println("4. Update destinations");
             System.out.println("5. Update weight");
-            System.out.println("6. Return to previous menu");
+            System.out.println("6. Update arrival times");
+            System.out.println("7. Return to previous menu");
             int option = uiData.readInt();
             switch (option) {
 
@@ -280,6 +282,17 @@ public class TransportsManagement {
                     );
                 }
                 case 6 -> {
+                    updateArrivalTimes(oldtransport);
+                    updateTransportHelperMethod(
+                            oldtransport.id(),
+                            oldtransport.deliveryRoute(),
+                            oldtransport.truckId(),
+                            oldtransport.driverId(),
+                            oldtransport.departureTime(),
+                            oldtransport.weight()
+                    );
+                }
+                case 7 -> {
                     return;
                 }
                 default -> {
@@ -289,6 +302,37 @@ public class TransportsManagement {
             }
             break;
         }
+    }
+
+    private void updateArrivalTimes(Transport oldtransport) {
+        System.out.println("Select new arrival times: ");
+        HashMap<String, LocalTime> arrivalTimes = new HashMap<>();
+        for (String destination : oldtransport.destinations()) {
+            System.out.println("Arrival time for " + destination + "(enter 'cancel!' to cancel): ");
+            LocalTime arrivalTime = readTime();
+            if(arrivalTime == null) {
+                return;
+            }
+            arrivalTimes.put(destination, arrivalTime);
+        }
+        oldtransport.deliveryRoute().initializeArrivalTimes(arrivalTimes);
+    }
+
+    private LocalTime readTime() {
+        LocalTime arrivalTime;
+        while(true) {
+            try{
+                String line = uiData.readLine();
+                if(line.equals("cancel!")) {
+                    return null;
+                }
+                arrivalTime = LocalTime.parse(line);
+                break;
+            }catch(DateTimeParseException e) {
+                System.out.println("Invalid time format, please try again");
+            }
+        }
+        return arrivalTime;
     }
 
     private void removeTransport() {
@@ -326,6 +370,7 @@ public class TransportsManagement {
         }
         printTransportDetails(transport);
         System.out.println("\nEnter 'done!' to return to previous menu");
+        uiData.readLine();
     }
 
     private void viewAllTransports() {
@@ -351,9 +396,34 @@ public class TransportsManagement {
         for(String address : transport.destinations()){
             Site destination = uiData.sites().get(address);
             LocalTime arrivalTime = transport.deliveryRoute().getEstimatedTimeOfArrival(address);
-            String time = String.format("[%02d:%02d]", arrivalTime.getHour(), arrivalTime.getMinute());
+            String time = String.format("[%02d:%02d] ", arrivalTime.getHour(), arrivalTime.getMinute());
             System.out.println(time+destination + " (items list id: "+ transport.itemLists().get(address)+")");
         }
+    }
+
+    private void updateTransportHelperMethod(int id,
+                                             DeliveryRoute deliveryRoute,
+                                             String truckId,
+                                             String driverId,
+                                             LocalDateTime departureDateTime,
+                                             int weight) {
+        Transport newTransport = new Transport(
+                id,
+                deliveryRoute,
+                driverId,
+                truckId,
+                departureDateTime,
+                weight
+        );
+
+        String json = newTransport.toJson();
+        String responseJson = ts.updateTransport(json);
+        Response response = JsonUtils.deserialize(responseJson, Response.class);
+        if(response.success()){
+            Transport _transport = Transport.fromJson(response.data());
+            uiData.transports().put(id, _transport);
+        }
+        System.out.println("\n"+response.message());
     }
 
     private void updateTransportHelperMethod(int id,

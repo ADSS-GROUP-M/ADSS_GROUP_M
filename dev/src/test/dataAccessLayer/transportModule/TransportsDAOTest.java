@@ -4,16 +4,21 @@ import businessLayer.employeeModule.Employee;
 import businessLayer.employeeModule.Role;
 import businessLayer.transportModule.*;
 import dataAccessLayer.DalFactory;
+import dataAccessLayer.dalUtils.Cache;
 import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.employeeModule.EmployeeDAO;
 import objects.transportObjects.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.platform.commons.util.CollectionUtils;
 import utils.transportUtils.TransportException;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -133,6 +138,7 @@ class TransportsDAOTest {
     @Test
     void select() {
         try {
+            transportsDAO.clearCache();
             Transport selected = transportsDAO.select(transport);
             assertDeepEquals(transport, selected);
         } catch (DalException e) {
@@ -181,15 +187,18 @@ class TransportsDAOTest {
                 }
             }
         );
-        
+        transportsDAO.clearCache();
+
         //test
         try {
             List<Transport> selected = transportsDAO.selectAll();
             assertEquals(transports.size(), selected.size());
             transports.forEach(
-                    transport -> assertTrue(selected.contains(transport))
-            );
-        } catch (DalException e) {
+                    transport ->{
+                        assertTrue(selected.contains(transport));
+                        assertDeepEquals(transport, selected.get(selected.indexOf(transport)));
+                    });
+        } catch (DalException | IndexOutOfBoundsException e) {
             fail(e);
         }
     }
@@ -272,5 +281,6 @@ class TransportsDAOTest {
         assertEquals(transport1.truckId(), transport2.truckId());
         assertEquals(transport1.departureTime(), transport2.departureTime());
         assertEquals(transport1.weight(), transport2.weight());
+        assertEquals(transport1.deliveryRoute().estimatedArrivalTimes(), transport2.deliveryRoute().estimatedArrivalTimes());
     }
 }

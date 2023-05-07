@@ -23,6 +23,9 @@ import java.util.*;
  */
 public class TransportsController {
 
+    public static final int MINIMUM_DRIVING_TIME = 5;
+    public static final double AVERAGE_SPEED = 80;
+    public static final long AVERAGE_TIME_PER_VISIT = 30;
     private final TrucksController tc;
     private final DriversController dc;
     private final SitesController sc;
@@ -89,11 +92,7 @@ public class TransportsController {
         }
 
         try {
-            Transport fetched = dao.select(Transport.getLookupObject(id));
-            if(fetched.deliveryRoute().estimatedArrivalTimes() == null){
-                initializeEstimatedArrivalTimes(fetched);
-            }
-            return fetched;
+            return dao.select(Transport.getLookupObject(id));
         } catch (DalException e) {
             throw new TransportException(e.getMessage(),e);
         }
@@ -130,7 +129,9 @@ public class TransportsController {
         }
 
         validateTransport(newTransport);
-        initializeEstimatedArrivalTimes(newTransport);
+        if(newTransport.deliveryRoute().manuallyOverrideEstimatedArrivalTimes() == false){
+            initializeEstimatedArrivalTimes(newTransport);
+        }
 
         try {
             dao.update(new Transport(id, newTransport));
@@ -146,17 +147,10 @@ public class TransportsController {
      */
     public List<Transport> getAllTransports() throws TransportException{
         try {
-            List<Transport> fetched = dao.selectAll();
-            for (Transport x : fetched) {
-                if (x.deliveryRoute().estimatedArrivalTimes() == null) {
-                    initializeEstimatedArrivalTimes(x);
-                }
-            }
-            return fetched;
+            return dao.selectAll();
         } catch (DalException e) {
             throw new TransportException(e.getMessage(),e);
         }
-
     }
 
     private boolean checkIfDriverIsAvailable(Driver driver, LocalDateTime dateTime){
@@ -278,7 +272,7 @@ public class TransportsController {
         }
 
         while(destinationsIterator.hasNext()){
-            time = time.plusMinutes(DeliveryRoute.AVERAGE_TIME_PER_VISIT);
+            time = time.plusMinutes(AVERAGE_TIME_PER_VISIT);
             next = destinationsIterator.next();
             time = addTravelTime(time, curr, next,distances);
             estimatedArrivalTimes.put(next, time);
@@ -288,7 +282,7 @@ public class TransportsController {
     }
 
     private static LocalTime addTravelTime(LocalTime time, String curr, String next, Map<Pair<String,String>,Double> distances){
-        long minutesToAdd = (long)((distances.get(new Pair<>(curr, next)) / DeliveryRoute.AVERAGE_SPEED)*60);
+        long minutesToAdd = Math.max(MINIMUM_DRIVING_TIME,(long)((distances.get(new Pair<>(curr, next)) / AVERAGE_SPEED)*60));
         time = time.plusMinutes(minutesToAdd);
         return time;
     }

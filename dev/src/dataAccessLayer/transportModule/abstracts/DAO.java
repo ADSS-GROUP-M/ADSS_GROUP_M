@@ -103,4 +103,8 @@ public abstract class DAO<T> {
             e.printStackTrace();
         }
     }
+
+    public void clearCache() {
+    	cache.clear();
+    }
 }

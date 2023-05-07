@@ -8,22 +8,28 @@ import java.util.Set;
 
 public class DeliveryRoute {
 
-    public static final double AVERAGE_SPEED = 80;
-    public static final long AVERAGE_TIME_PER_VISIT = 30;
-
     private final String source;
     private final List<String> destinations;
     private final Set<String> destinationsSet;
     private final Map<String,Integer> destinations_itemListIds;
     private Map<String, LocalTime> estimatedArrivalTimes;
+    private boolean manualOverride;
 
     public DeliveryRoute(String source,
                          List<String> destinations,
-                         Map<String, Integer> destinations_itemListIds){
+                         Map<String, Integer> destinations_itemListIds,
+                         Map<String, LocalTime> estimatedArrivalTimes){
         this.source = source;
         this.destinations = destinations;
         this.destinationsSet = new HashSet<>(destinations);
         this.destinations_itemListIds = destinations_itemListIds;
+        this.estimatedArrivalTimes = estimatedArrivalTimes;
+    }
+
+    public DeliveryRoute(String source,
+                         List<String> destinations,
+                         Map<String, Integer> destinations_itemListIds){
+        this(source,destinations,destinations_itemListIds,null);
     }
 
     public void initializeArrivalTimes(Map<String,LocalTime> estimatedArrivalTimes){
@@ -53,6 +59,7 @@ public class DeliveryRoute {
             throw new RuntimeException("Estimated arrival times have not been initialized");
         }
         estimatedArrivalTimes.put(destination,arrivalTime);
+        manualOverride = true;
     }
 
     public String source() {
@@ -69,5 +76,9 @@ public class DeliveryRoute {
 
     public Map<String, LocalTime> estimatedArrivalTimes() {
         return estimatedArrivalTimes;
+    }
+
+    public boolean manuallyOverrideEstimatedArrivalTimes() {
+        return manualOverride;
     }
 }

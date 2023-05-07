@@ -9,6 +9,8 @@ import objects.transportObjects.DeliveryRoute;
 import objects.transportObjects.Transport;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -200,16 +202,17 @@ public class TransportsDAO extends ManyToManyDAO<Transport> implements CounterDA
     protected Transport getObjectFromResultSet(OfflineResultSet resultSet, List<TransportDestination> transportDestinations){
         LinkedList<String> destinations = new LinkedList<>();
         HashMap<String,Integer> itemLists = new HashMap<>();
+        HashMap<String, LocalTime> estimatedTimesOfArrival = new HashMap<>();
         for(TransportDestination transportDestination : transportDestinations){
             destinations.add(transportDestination.address());
             itemLists.put(transportDestination.address(), transportDestination.itemListId());
+            estimatedTimesOfArrival.put(transportDestination.address(), transportDestination.expectedArrivalTime());
         }
 
+        String sourceAddress = resultSet.getString("source_address");
         return new Transport(
                 resultSet.getInt("id"),
-                resultSet.getString("source_address"),
-                destinations,
-                itemLists,
+                new DeliveryRoute(sourceAddress, destinations,itemLists, estimatedTimesOfArrival),
                 resultSet.getString("driver_id"),
                 resultSet.getString("truck_id"),
                 resultSet.getLocalDateTime("departure_time"),

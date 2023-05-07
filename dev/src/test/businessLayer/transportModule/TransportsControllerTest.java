@@ -8,6 +8,7 @@ import javafx.util.Pair;
 import objects.transportObjects.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import serviceLayer.employeeModule.Services.EmployeesService;
 import utils.JsonUtils;
 import utils.Response;
@@ -32,6 +33,7 @@ class TransportsControllerTest {
     public static final int ITEM_LIST_ID_1 = 1;
     public static final int ITEM_LIST_ID_2 = 2;
     public static final LocalDateTime DEPARTURE_TIME = LocalDateTime.of(LocalDate.of(2020, 1, 1), LocalTime.of(12, 0));
+    private static final int TRANSPORT_ID = 1;
     TransportsController transportController;
     ItemListsController itemListsController;
     TrucksController trucksController;
@@ -198,6 +200,29 @@ class TransportsControllerTest {
             fail(e);
         }
         assertThrows(TransportException.class,() -> transportController.updateTransport(transport.id(), transport));
+    }
+
+    @Test
+    void updateTransportManualOverride(){
+
+        //set up
+        try{
+            transportController = spy(transportController);
+            initializeMocksToPassTransportValidation();
+            when(transportsDAO.exists(Transport.getLookupObject(TRANSPORT_ID))).thenReturn(true);
+            transportController.initializeEstimatedArrivalTimes(transport);
+            transport.deliveryRoute().overrideArrivalTime(destination2.address(), LocalTime.of(16,0));
+            Mockito.doThrow(new RuntimeException("Entered arrival time init when not supposed to")).when(transportController).initializeEstimatedArrivalTimes(transport);
+        } catch (DalException | TransportException e) {
+            fail(e);
+        }
+
+        //test
+        try {
+            transportController.updateTransport(TRANSPORT_ID, transport);
+        } catch (TransportException | RuntimeException e) {
+            fail(e);
+        }
     }
 
     @Test
@@ -406,17 +431,18 @@ class TransportsControllerTest {
         try {
             when(sitesController.buildSitesDistances(route)).thenReturn(siteDistances);
 
-
             //test
             transportController.initializeEstimatedArrivalTimes(transport);
             assertEquals(
                     transport.deliveryRoute().getEstimatedTimeOfArrival(destination1.address()),
-                    DEPARTURE_TIME.plusMinutes((long)((100.0/DeliveryRoute.AVERAGE_SPEED)*60)).toLocalTime()
-            );
+                    DEPARTURE_TIME.plusMinutes(Math.max(TransportsController.MINIMUM_DRIVING_TIME,
+                            (long)((100.0/TransportsController.AVERAGE_SPEED)*60))).toLocalTime());
             assertEquals(
                     transport.deliveryRoute().getEstimatedTimeOfArrival(destination2.address()),
-                    DEPARTURE_TIME.plusMinutes((long)((200.0/DeliveryRoute.AVERAGE_SPEED)*60 + DeliveryRoute.AVERAGE_TIME_PER_VISIT)).toLocalTime()
-            );
+                    DEPARTURE_TIME.plusMinutes((long)(
+                            Math.max(TransportsController.MINIMUM_DRIVING_TIME,
+                                    (200.0/TransportsController.AVERAGE_SPEED)*60 +
+                                            TransportsController.AVERAGE_TIME_PER_VISIT))).toLocalTime());
         } catch (TransportException e) {
             throw new RuntimeException(e);
         }

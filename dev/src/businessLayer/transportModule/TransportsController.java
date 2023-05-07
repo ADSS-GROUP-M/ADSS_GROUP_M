@@ -89,7 +89,11 @@ public class TransportsController {
         }
 
         try {
-            return dao.select(Transport.getLookupObject(id));
+            Transport fetched = dao.select(Transport.getLookupObject(id));
+            if(fetched.deliveryRoute().estimatedArrivalTimes() == null){
+                initializeEstimatedArrivalTimes(fetched);
+            }
+            return fetched;
         } catch (DalException e) {
             throw new TransportException(e.getMessage(),e);
         }
@@ -142,10 +146,17 @@ public class TransportsController {
      */
     public List<Transport> getAllTransports() throws TransportException{
         try {
-            return dao.selectAll();
+            List<Transport> fetched = dao.selectAll();
+            for (Transport x : fetched) {
+                if (x.deliveryRoute().estimatedArrivalTimes() == null) {
+                    initializeEstimatedArrivalTimes(x);
+                }
+            }
+            return fetched;
         } catch (DalException e) {
             throw new TransportException(e.getMessage(),e);
         }
+
     }
 
     private boolean checkIfDriverIsAvailable(Driver driver, LocalDateTime dateTime){

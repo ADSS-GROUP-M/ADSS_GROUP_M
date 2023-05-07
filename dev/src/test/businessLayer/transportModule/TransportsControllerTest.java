@@ -4,6 +4,7 @@ import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.transportModule.DistanceBetweenSites;
 import dataAccessLayer.transportModule.SitesDistancesDAO;
 import dataAccessLayer.transportModule.TransportsDAO;
+import javafx.util.Pair;
 import objects.transportObjects.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -174,7 +175,13 @@ class TransportsControllerTest {
                     25000
             );
             initializeMocksToPassTransportValidation();
+            List<String> route = List.of(destination1.address(), destination2.address());
+            HashMap<Pair<String,String>, Double> siteDistances = new HashMap<>(){{
+                put(new Pair<>(destination1.address(), destination2.address()), 100.0);
+            }};
+            when(sitesController.buildSitesDistances(route)).thenReturn(siteDistances);
             when(transportsDAO.exists(updatedTransport)).thenReturn(true);
+
 
             //test
             assertDoesNotThrow(() -> transportController.updateTransport(updatedTransport.id(), updatedTransport));
@@ -216,6 +223,7 @@ class TransportsControllerTest {
     @Test
     void getTransport() {
         try{
+            initializeMocksToPassTransportValidation();
             when(transportsDAO.exists(Transport.getLookupObject(1))).thenReturn(true);
             when(transportsDAO.select(Transport.getLookupObject(1))).thenReturn(transport);
 
@@ -256,6 +264,8 @@ class TransportsControllerTest {
                     DEPARTURE_TIME,
                     15000
             );
+            initializeMocksToPassTransportValidation();
+
             List<Transport> transports = List.of(transport, transport2);
             when(transportsDAO.selectAll()).thenReturn(transports);
 
@@ -384,7 +394,34 @@ class TransportsControllerTest {
     }
     @Test
     void initializeEstimatedArrivalTimes() {
-        fail("Test not implemented");
+
+        //set up
+        List<String> route = new LinkedList<>();
+        route.add(transport.source());
+        route.addAll(transport.destinations());
+        HashMap<Pair<String,String>, Double> siteDistances = new HashMap<>(){{
+            put(new Pair<>(source.address(), destination1.address()), 100.0);
+            put(new Pair<>(destination1.address(), destination2.address()), 100.0);
+        }};
+        try {
+            when(sitesController.buildSitesDistances(route)).thenReturn(siteDistances);
+
+
+            //test
+            transportController.initializeEstimatedArrivalTimes(transport);
+            assertEquals(
+                    transport.deliveryRoute().getEstimatedTimeOfArrival(destination1.address()),
+                    DEPARTURE_TIME.plusMinutes((long)((100.0/DeliveryRoute.AVERAGE_SPEED)*60)).toLocalTime()
+            );
+            assertEquals(
+                    transport.deliveryRoute().getEstimatedTimeOfArrival(destination2.address()),
+                    DEPARTURE_TIME.plusMinutes((long)((200.0/DeliveryRoute.AVERAGE_SPEED)*60 + DeliveryRoute.AVERAGE_TIME_PER_VISIT)).toLocalTime()
+            );
+        } catch (TransportException e) {
+            throw new RuntimeException(e);
+        }
+
+
     }
 
     private void initializeMocksToPassTransportValidation() throws DalException, TransportException {
@@ -409,11 +446,14 @@ class TransportsControllerTest {
         when(itemListsController.listExists(itemList1.id())).thenReturn(true);
         when(itemListsController.listExists(itemList2.id())).thenReturn(true);
 
-        DistanceBetweenSites distance1 = DistanceBetweenSites.getLookupObject(source.address(), destination1.address());
-        DistanceBetweenSites distance2 = DistanceBetweenSites.getLookupObject(destination1.address(), destination2.address());
-        when(sitesDistancesDAO.select(distance1)).thenReturn(new DistanceBetweenSites(distance1, 100));
-        when(sitesDistancesDAO.select(distance2)).thenReturn(new DistanceBetweenSites(distance2, 100));
-
+        List<String> route = new LinkedList<>();
+        route.add(transport.source());
+        route.addAll(transport.destinations());
+        HashMap<Pair<String,String>, Double> siteDistances = new HashMap<>(){{
+            put(new Pair<>(source.address(), destination1.address()), 100.0);
+            put(new Pair<>(destination1.address(), destination2.address()), 100.0);
+        }};
+        when(sitesController.buildSitesDistances(route)).thenReturn(siteDistances);
     }
 
     private void assertDeepEquals(Transport transport1, Transport transport2) {
@@ -425,6 +465,6 @@ class TransportsControllerTest {
         assertEquals(transport1.truckId(), transport2.truckId());
         assertEquals(transport1.departureTime(), transport2.departureTime());
         assertEquals(transport1.weight(), transport2.weight());
+        assertEquals(transport1.deliveryRoute().estimatedArrivalTimes(),transport2.deliveryRoute().estimatedArrivalTimes());
     }
-
 }

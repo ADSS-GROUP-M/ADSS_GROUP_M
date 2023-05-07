@@ -2,8 +2,6 @@ package businessLayer.transportModule;
 
 import com.google.gson.reflect.TypeToken;
 import dataAccessLayer.dalUtils.DalException;
-import dataAccessLayer.transportModule.DistanceBetweenSites;
-import dataAccessLayer.transportModule.SitesDistancesDAO;
 import dataAccessLayer.transportModule.TransportsDAO;
 import javafx.util.Pair;
 import objects.transportObjects.*;
@@ -31,21 +29,18 @@ public class TransportsController {
     private final ItemListsController ilc;
     private EmployeesService es;
     private final TransportsDAO dao;
-    private final SitesDistancesDAO distancesDAO;
     private int idCounter;
 
     public TransportsController(TrucksController tc,
                                 DriversController dc,
                                 SitesController sc,
                                 ItemListsController ic,
-                                TransportsDAO dao,
-                                SitesDistancesDAO distancesDAO) throws TransportException{
+                                TransportsDAO dao) throws TransportException{
         this.sc = sc;
         this.ilc = ic;
         this.tc = tc;
         this.dc = dc;
         this.dao = dao;
-        this.distancesDAO = distancesDAO;
         try {
             idCounter = dao.selectCounter();
         } catch (DalException e) {
@@ -69,7 +64,7 @@ public class TransportsController {
             throw new UnsupportedOperationException("Pre-defined IDs are not supported");
         }
         validateTransport(transport);
-        initializeEstimatedArrivalTimes(distancesDAO,transport);
+        initializeEstimatedArrivalTimes(transport);
         Transport toAdd = new Transport(idCounter,transport);
         try {
             dao.insert(toAdd);
@@ -131,7 +126,7 @@ public class TransportsController {
         }
 
         validateTransport(newTransport);
-        initializeEstimatedArrivalTimes(distancesDAO,newTransport);
+        initializeEstimatedArrivalTimes(newTransport);
 
         try {
             dao.update(new Transport(id, newTransport));
@@ -250,10 +245,14 @@ public class TransportsController {
         }
     }
 
-    public static void initializeEstimatedArrivalTimes(SitesDistancesDAO distancesDAO, Transport transport) throws TransportException{
+    public void initializeEstimatedArrivalTimes(Transport transport) throws TransportException{
 
         Map<String,LocalTime> estimatedArrivalTimes = new HashMap<>();
-        Map<Pair<String,String>,Double> distances = buildSitesDistances(distancesDAO,transport);
+
+        List<String> route = new LinkedList<>();
+        route.add(transport.source());
+        route.addAll(transport.destinations());
+        Map<Pair<String,String>,Double> distances = sc.buildSitesDistances(route);
 
         ListIterator<String> destinationsIterator = transport.destinations().listIterator();
         LocalTime time = transport.departureTime().toLocalTime();
@@ -275,29 +274,6 @@ public class TransportsController {
             curr = next;
         }
         transport.deliveryRoute().initializeArrivalTimes(estimatedArrivalTimes);
-    }
-
-    private static Map<Pair<String,String>,Double> buildSitesDistances(SitesDistancesDAO distancesDAO, Transport transport) throws TransportException {
-        DeliveryRoute route = transport.deliveryRoute();
-        HashMap<Pair<String,String>,Double> distances = new HashMap<>();
-        ListIterator<String> destinationsIterator = route.destinations().listIterator();
-        String curr = transport.source();
-        String next;
-
-        // map distances between following sites
-        while (destinationsIterator.hasNext()) {
-            next = destinationsIterator.next();
-            DistanceBetweenSites lookUpObject = DistanceBetweenSites.getLookupObject(curr,next);
-            double distance;
-            try {
-                distance = distancesDAO.select(lookUpObject).distance();
-            } catch (DalException e) {
-                throw new TransportException(e.getMessage(),e);
-            }
-            distances.put(new Pair<>(curr,next),distance);
-            curr = next;
-        }
-        return distances;
     }
 
     private static LocalTime addTravelTime(LocalTime time, String curr, String next, Map<Pair<String,String>,Double> distances){

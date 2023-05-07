@@ -2,7 +2,7 @@ package dataAccessLayer.transportModule;
 
 import businessLayer.employeeModule.Employee;
 import businessLayer.employeeModule.Role;
-import businessLayer.transportModule.TransportsController;
+import businessLayer.transportModule.*;
 import dataAccessLayer.DalFactory;
 import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.employeeModule.EmployeeDAO;
@@ -20,6 +20,7 @@ import java.util.List;
 
 import static dataAccessLayer.DalFactory.TESTING_DB_NAME;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
 class TransportsDAOTest {
 
@@ -38,6 +39,7 @@ class TransportsDAOTest {
     private Site source;
     private Employee employee;
     private SitesDistancesDAO distancesDAO;
+    private TransportsController transportsController;
 
     @BeforeEach
     void setUp() {
@@ -90,6 +92,17 @@ class TransportsDAOTest {
             itemListsDAO = factory.itemListsDAO();
             transportsDAO = factory.transportsDAO();
             distancesDAO = factory.sitesDistancesDAO();
+            TrucksController trucksController = mock(TrucksController.class);
+            ItemListsController itemListsController = mock(ItemListsController.class);
+            DriversController driversController = mock(DriversController.class);
+            SitesController sitesController =  new SitesController(sitesDAO, distancesDAO);
+            transportsController = new TransportsController(
+                    trucksController,
+                    driversController,
+                    sitesController,
+                    itemListsController,
+                    transportsDAO
+            );
 
             transportsDAO.clearTable();
             itemListsDAO.clearTable();
@@ -105,7 +118,7 @@ class TransportsDAOTest {
             employeeDAO.insert(employee);
             driversDAO.insert(driver);
             itemListsDAO.insert(itemList);
-            TransportsController.initializeEstimatedArrivalTimes(distancesDAO, transport);
+            transportsController.initializeEstimatedArrivalTimes(transport);
             transportsDAO.insert(transport);
         } catch (DalException | TransportException e) {
             fail(e);
@@ -161,7 +174,7 @@ class TransportsDAOTest {
                             15000
                     );
                     transports.add(toAdd);
-                    TransportsController.initializeEstimatedArrivalTimes(distancesDAO, toAdd);
+                    transportsController.initializeEstimatedArrivalTimes(toAdd);
                     transportsDAO.insert(toAdd);
                 } catch (DalException | TransportException e) {
                     fail(e);
@@ -198,7 +211,7 @@ class TransportsDAOTest {
                     15000
             );
             try {
-                TransportsController.initializeEstimatedArrivalTimes(distancesDAO, transport2);
+                transportsController.initializeEstimatedArrivalTimes(transport2);
             } catch (TransportException e) {
                 fail(e);
             }
@@ -227,7 +240,7 @@ class TransportsDAOTest {
                     10000
             );
             try {
-                TransportsController.initializeEstimatedArrivalTimes(distancesDAO, updatedTransport);
+                transportsController.initializeEstimatedArrivalTimes(updatedTransport);
             } catch (TransportException e) {
                 fail(e);
             }

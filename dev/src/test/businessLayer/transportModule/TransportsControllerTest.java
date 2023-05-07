@@ -1,6 +1,5 @@
 package businessLayer.transportModule;
 
-import businessLayer.transportModule.*;
 import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.transportModule.DistanceBetweenSites;
 import dataAccessLayer.transportModule.SitesDistancesDAO;
@@ -9,7 +8,6 @@ import objects.transportObjects.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import serviceLayer.employeeModule.Services.EmployeesService;
-import serviceLayer.transportModule.TransportsService;
 import utils.JsonUtils;
 import utils.Response;
 import utils.transportUtils.TransportException;
@@ -72,8 +70,7 @@ class TransportsControllerTest {
                     driversController,
                     sitesController,
                     itemListsController,
-                    transportsDAO,
-                    sitesDistancesDAO
+                    transportsDAO
             );
         } catch (TransportException e) {
             fail(e);

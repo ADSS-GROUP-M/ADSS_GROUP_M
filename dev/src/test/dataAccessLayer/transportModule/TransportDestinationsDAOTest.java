@@ -2,7 +2,7 @@ package dataAccessLayer.transportModule;
 
 import businessLayer.employeeModule.Employee;
 import businessLayer.employeeModule.Role;
-import businessLayer.transportModule.TransportsController;
+import businessLayer.transportModule.*;
 import dataAccessLayer.DalFactory;
 import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.dalUtils.OfflineResultSet;
@@ -25,6 +25,7 @@ import java.util.List;
 
 import static dataAccessLayer.DalFactory.TESTING_DB_NAME;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
 class TransportDestinationsDAOTest {
 
@@ -39,6 +40,7 @@ class TransportDestinationsDAOTest {
     private TransportDestination transportDestination3;
     private TransportDestination transportDestination4;
     private DalFactory factory;
+    private TransportsController transportsController;
 
     @BeforeEach
     void setUp() {
@@ -90,6 +92,17 @@ class TransportDestinationsDAOTest {
             ItemListsDAO itemListsDAO = factory.itemListsDAO();
             TransportsDAO transportsDAO = factory.transportsDAO();
             SitesDistancesDAO sitesDistancesDAO = factory.sitesDistancesDAO();
+            TrucksController trucksController = mock(TrucksController.class);
+            ItemListsController itemListsController = mock(ItemListsController.class);
+            DriversController driversController = mock(DriversController.class);
+            SitesController sitesController =  new SitesController(sitesDAO, sitesDistancesDAO);
+            transportsController = new TransportsController(
+                    trucksController,
+                    driversController,
+                    sitesController,
+                    itemListsController,
+                    transportsDAO
+            );
 
             transportsDAO.clearTable();
             itemListsDAO.clearTable();
@@ -105,7 +118,7 @@ class TransportDestinationsDAOTest {
             driversDAO.insert(driver);
             itemListsDAO.insert(itemList);
             sitesDistancesDAO.insert(distance);
-            TransportsController.initializeEstimatedArrivalTimes(sitesDistancesDAO,transport);
+            transportsController.initializeEstimatedArrivalTimes(transport);
             transportsDAO.insert(transport);
 
 

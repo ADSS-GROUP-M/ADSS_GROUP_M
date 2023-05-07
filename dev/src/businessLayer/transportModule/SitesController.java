@@ -4,12 +4,14 @@ import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.transportModule.DistanceBetweenSites;
 import dataAccessLayer.transportModule.SitesDAO;
 import dataAccessLayer.transportModule.SitesDistancesDAO;
+import javafx.util.Pair;
+import objects.transportObjects.DeliveryRoute;
 import objects.transportObjects.Site;
+import objects.transportObjects.Transport;
 import serviceLayer.employeeModule.Services.EmployeesService;
 import utils.transportUtils.TransportException;
 
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 import static serviceLayer.employeeModule.Services.UserService.TRANSPORT_MANAGER_USERNAME;
 
@@ -148,5 +150,27 @@ public class SitesController {
         } catch (DalException e) {
             throw new TransportException(e.getMessage(),e);
         }
+    }
+
+    public Map<Pair<String,String>,Double> buildSitesDistances(List<String> route) throws TransportException {
+        HashMap<Pair<String,String>,Double> distances = new HashMap<>();
+        ListIterator<String> destinationsIterator = route.listIterator();
+        String curr = destinationsIterator.next();
+        String next;
+
+        // map distances between following sites
+        while (destinationsIterator.hasNext()) {
+            next = destinationsIterator.next();
+            DistanceBetweenSites lookUpObject = DistanceBetweenSites.getLookupObject(curr,next);
+            double distance;
+            try {
+                distance = distancesDAO.select(lookUpObject).distance();
+            } catch (DalException e) {
+                throw new TransportException(e.getMessage(),e);
+            }
+            distances.put(new Pair<>(curr,next),distance);
+            curr = next;
+        }
+        return distances;
     }
 }

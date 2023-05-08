@@ -61,15 +61,14 @@ public class ProductController {
         products.get(branch).put(catalog_number,newProductType);
     }
 
-    public void updateProductItem(String branch, int isDefective, String serial_number, String catalog_number, int isSold, int newSupplier, double newSupplierPrice, double newSoldPrice, String newLocation) {
+    public void updateProductItem(String branch, int isDefective, String serial_number, String catalog_number, int isSold, String newSupplier, double newSoldPrice, String newLocation) {
         if(checkIfProductExist(branch,catalog_number)){
             ProductItem currentProduct = products.get(branch).get(catalog_number).getProduct(serial_number);
             if(isDefective != -1){currentProduct.reportAsDefective();}
             if(isSold != -1){
                 currentProduct.reportAsSold(DCController.getTodayBiggestStoreDiscountI(catalog_number,branch));
             }
-            if(newSupplier != -1){currentProduct.setSupplierID(newSupplier);}
-            if(newSupplierPrice != -1){currentProduct.setSupplierPrice(newSupplierPrice);}
+            if(newSupplier != null){currentProduct.setSupplierID(newSupplier);}
             if(newSoldPrice != -1){currentProduct.setSoldPrice(newSoldPrice);}
             if(newLocation != null){currentProduct.setLocation(newLocation);}
         }

@@ -63,7 +63,7 @@ public class ProductItem {
 
     public void setLocation(String newLocation){this.location = newLocation;}
     public void setSupplierPrice(double newPrice){this.supplierPrice = newPrice;}
-    public void setSupplierID(int newSupplierID){this.supplierID = newSupplierID;}
+    public void setSupplierID(String newSupplierID){this.supplierID = newSupplierID;}
     public void setSoldPrice(double newSoldPrice){this.soldPrice = newSoldPrice;}
     public String getSerial_number(){return this.serial_number;}
     public String getLocation(){return this.location;}

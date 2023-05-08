@@ -66,25 +66,22 @@ public class StockService {
         }
     }
 
-    public Response updateProduct(int is_defective, int catalog_number, int serial_num, int is_sold, int supplier, int supplier_price, int sold_price, String location, String branch) {
+    public Response updateProduct(int is_defective, String catalog_number, String serial_num, int is_sold, String supplier, int sold_price, String location, String branch) {
         try {
             if (is_defective != -1) {
-                productController.updateProductItem(branch, is_defective, catalog_number, serial_num, -1, -1, -1, -1, null);
+                productController.updateProductItem(branch, is_defective, serial_num,  catalog_number,-1, null, -1, null);
                 return new Response<>("Product type updated successfully");
             } else if (is_sold != -1) {
-                productController.updateProductItem(branch, -1, catalog_number, serial_num, is_sold, -1, -1, -1, null);
+                productController.updateProductItem(branch, -1, serial_num,  catalog_number, is_sold, null, -1,  null);
                 return new Response<>("Product type updated successfully");
-            } else if (supplier != -1) {
-                productController.updateProductItem(branch, -1, catalog_number, serial_num, -1, supplier, -1, -1, null);
-                return new Response<>("Product type updated successfully");
-            } else if (supplier_price != -1) {
-                productController.updateProductItem(branch, -1, catalog_number, serial_num, -1, -1, supplier_price, -1, null);
+            } else if (supplier != null) {
+                productController.updateProductItem(branch, -1, serial_num,  catalog_number,-1, supplier, -1, null);
                 return new Response<>("Product type updated successfully");
             } else if (sold_price != -1) {
-                productController.updateProductItem(branch, -1, catalog_number, serial_num, -1, -1, -1, sold_price, null);
+                productController.updateProductItem(branch, -1, serial_num, catalog_number, -1, null, sold_price, null);
                 return new Response<>("Product type updated successfully");
             } else if (location != null) {
-                productController.updateProductItem(branch, -1, catalog_number, serial_num, -1, -1, -1, -1, location);
+                productController.updateProductItem(branch, -1, catalog_number, serial_num, -1, null, -1,  location);
                 return new Response<>("Product type updated successfully");
             } else {
                 return Response.createErrorResponse("Invalid input parameters");

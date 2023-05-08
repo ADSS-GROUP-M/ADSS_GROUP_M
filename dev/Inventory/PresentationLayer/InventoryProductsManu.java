@@ -129,7 +129,7 @@ public class InventoryProductsManu extends MainMenu {
 
     private void getProductDetails() {
         System.out.println("what is the product's catalog num? (int)");
-        String catalog_num = in.nextInt();
+        String catalog_num = in.nextLine();
         System.out.println("what is the product's serial num? (int)");
         int serial_num = in.nextInt();
         System.out.println(stockService.getProductDetails(catalog_num, serial_num, branch).getReturnValue().toString());

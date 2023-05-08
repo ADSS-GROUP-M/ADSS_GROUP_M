@@ -1,18 +1,16 @@
+import businessLayer.transportModule.bingRestApi.LocationByQueryResponse;
 import dataAccessLayer.DalFactory;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import presentationLayer.employeeModule.View.MenuManager;
 import presentationLayer.transportModule.UiData;
 import serviceLayer.ServiceFactory;
 import serviceLayer.employeeModule.Services.EmployeesService;
 import serviceLayer.employeeModule.Services.UserService;
+import utils.JsonUtils;
 
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
-
-import static org.junit.jupiter.api.Assertions.fail;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.Scanner;
 
 @SuppressWarnings("NewClassNamingConvention")
 public class Main {
@@ -38,21 +36,61 @@ public class Main {
     }
 
     @Test
-    public void test_js(){
-        // Create a ScriptEngineManager object
-        ScriptEngineManager manager = new ScriptEngineManager();
-
-        // Get the JavaScript engine
-        ScriptEngine engine = manager.getEngineByName("javascript");
+    public void api_connection(){
 
         try {
-            // Execute JavaScript code
-            String script = "var a = 1 + 2; a;";
-            Object result = engine.eval(script);
 
-            // Print the result
-            System.out.println(result);
-        } catch (ScriptException e) {
+            String key = "Ap_rzOWHxjXVKTzD5kXxfWSj_9LN2Vpr7LSFWv53tgAbvU9iBWl4SqqhUaASGTUE";
+            URL url10 = new URL("https://dev.virtualearth.net/REST/v1/Routes/DistanceMatrix?origins=" +
+                    "{" +
+                        "lat0,long0;" +
+                        "lat1,lon1;" +
+                        "latM,lonM" +
+                    "}" +
+                    "&destinations=" +
+                    "{" +
+                        "lat0,lon0;" +
+                        "lat1,lon1;" +
+                        "latN,longN" +
+                    "}" +
+                    "&travelMode={travelMode}" +
+                    "&startTime={startTime}" +
+                    "&timeUnit={timeUnit}" +
+                    "&key={BingMapsKey}");
+
+            String urlPrefix = "http://dev.virtualearth.net/REST/v1/Locations?q=";
+            String urlSuffix = "&key=" + key;
+            String address = "Hadaat 6, beer sheva, israel";
+            address = address.replace(" ", "%20");
+            String url = urlPrefix + address + urlSuffix;
+            URL url2 = new URL(url);
+
+            HttpURLConnection conn = (HttpURLConnection) url2.openConnection();
+            conn.setRequestMethod("GET");
+            conn.connect();
+
+            //Check if connect is made
+            int responseCode = conn.getResponseCode();
+
+            // 200 OK
+            if (responseCode != 200) {
+                throw new RuntimeException("HttpResponseCode: " + responseCode);
+            } else {
+
+                StringBuilder informationString = new StringBuilder();
+                Scanner scanner = new Scanner(url2.openStream());
+
+                while (scanner.hasNext()) {
+                    informationString.append(scanner.nextLine());
+                }
+                //Close the scanner
+                scanner.close();
+
+                LocationByQueryResponse jsonObj = JsonUtils.deserialize(informationString.toString(), LocationByQueryResponse.class);
+                System.out.println();
+
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

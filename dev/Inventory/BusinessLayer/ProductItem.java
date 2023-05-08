@@ -5,7 +5,7 @@ public class ProductItem {
     private String serial_number;
     private productPair<Boolean, LocalDateTime> isDefective;
     private Boolean isSold;
-    private int supplierID;
+    private String supplierID;
     private double supplierPrice;
     //default value -1
     private double supplierDiscount;
@@ -28,21 +28,17 @@ public class ProductItem {
             return second;
         }
     }
-    public ProductItem(String serial_number, int supplierID, double supplierPrice, String location, Double supplierDiscount, LocalDateTime expirationDate) {
+    public ProductItem(String serial_number,String supplierID, String location, LocalDateTime expirationDate) {
         this.serial_number = serial_number;
         this.supplierID = supplierID;
-        this.supplierPrice = supplierPrice;
         this.location = location;
         this.isSold = false;
         this.soldPrice = -1;
         this.isDefective = null;
         this.expirationDate = expirationDate;
-        if(supplierDiscount == null) {
-            this.supplierDiscount = supplierDiscount.doubleValue();
-        } else
-        {
-            this.supplierDiscount = 0;
-        }
+        // TODO: calc supplierDiscount and price
+        // this.supplierPrice this.supplierDiscount
+
     }
     public boolean isDefective(){
         if (isDefective == null)

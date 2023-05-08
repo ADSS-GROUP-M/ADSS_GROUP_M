@@ -32,6 +32,7 @@ public class Product {
         // Map<productID, product>
         this.productItems = new HashMap<String, ProductItem>();
         this.branch = branch;
+        // TODO : calc amount store and warehouse
     }
 
     public ProductItem getProduct(String serial_number){
@@ -66,8 +67,8 @@ public class Product {
         category.addProductToCategory(this);
     }
 
-    public void addProductItem(String serialNumber, int supplierID, double supplierPrice, String location, Double supplierDiscount, LocalDateTime expirationDate){
-        productItems.put(serialNumber,new ProductItem(serialNumber,supplierID,supplierPrice,location,supplierDiscount, expirationDate));
+    public void addProductItem(String serialNumber, String supplierID, String location, LocalDateTime expirationDate){
+        productItems.put(serialNumber,new ProductItem(serialNumber,supplierID,location, expirationDate));
     }
 
     public List<ProductItem> getDefectiveProductItems(){

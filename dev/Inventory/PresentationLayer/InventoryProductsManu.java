@@ -1,5 +1,8 @@
 package dev.Inventory.PresentationLayer;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 public class InventoryProductsManu extends MainMenu {
 
     private String branch;
@@ -47,17 +50,19 @@ public class InventoryProductsManu extends MainMenu {
         //supplier should be ID
         System.out.println("Enter the following product details:");
         System.out.println("Catalog Number: (int)");
-        String catalog_num = in.nextInt();
+        String catalog_num = in.nextLine();
         System.out.println("Serial Number: (int)");
-        int serial_num = in.nextInt();
+        String serial_num = in.nextLine();
         System.out.println("Supplier: (int)");
-        int supplier = in.nextInt();
-        System.out.println("Supplier Price: (int)");
-        int supplier_price = in.nextInt();
+        String supplier = in.nextLine();
         in.nextLine();
         System.out.println("location: (string)");
         String location = in.nextLine();
-        System.out.println(stockService.addProductItem(serial_num, catalog_num, supplier, supplier_price, branch, location).getReturnValue());
+        System.out.println("expiration date: (string format: yyyy-MM-dd)");
+        String date = in.nextLine();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDateTime expirationDate = LocalDateTime.parse(date, formatter);
+        System.out.println(stockService.addProductItem(serial_num, catalog_num, supplier,  branch, location, expirationDate).getReturnValue());
     }
 
     private void updateProduct() {

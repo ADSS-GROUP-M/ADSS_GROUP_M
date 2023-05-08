@@ -44,9 +44,9 @@ public class ProductController {
         }
     }
     // Add new product
-    public void createProductItem(String serial_number, String catalog_number, String branch, int supplierID, double supplierPrice, String location, Double supplierDiscount, LocalDateTime expirationDate) {
+    public void createProductItem(String serial_number, String catalog_number, String branch, String supplierID, String location, LocalDateTime expirationDate) {
         if(checkIfProductExist(branch,catalog_number))
-            products.get(branch).get(catalog_number).addProductItem(serial_number,supplierID,supplierPrice,location, supplierDiscount, expirationDate);
+            products.get(branch).get(catalog_number).addProductItem(serial_number,supplierID,location, expirationDate);
         else{
             throw new RuntimeException(String.format("Product type does not exist with the ID : %s",catalog_number));
         }

@@ -26,9 +26,9 @@ public class StockService {
         }
     }
 
-    public Response addProductItem(int serial_number, String catalog_number, int supplier, int supplier_price, String branch, String location, Double supplierDiscount, LocalDateTime expirationDate) {
+    public Response addProductItem(String serial_number, String catalog_number, String supplier, String branch, String location, LocalDateTime expirationDate) {
         try {
-            productController.createProductItem(serial_number, catalog_number, branch, supplier, supplier_price, location, supplierDiscount, expirationDate);
+            productController.createProductItem(serial_number, catalog_number, branch, supplier, location, expirationDate);
             return new Response<>("Product added successfully");
         } catch (Exception e) {
             return Response.createErrorResponse("Error updating product type: " + e.getMessage());

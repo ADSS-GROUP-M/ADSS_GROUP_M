@@ -35,28 +35,16 @@ public class StockService {
         }
     }
 
-    public Response updateProductType(String name, int catalog_number, String manufacturer, double supplier_price, double store_price, String category, String sub_category, int min_amount, String branch) {
+    public Response updateProduct(String name, String catalog_number, String manufacturer, double store_price, String branch) {
         try {
             if (name != null) {
-                productController.updateProduct(branch, name, catalog_number, null, -1, -1, null, null, -1);
+                productController.updateProduct(branch, name, catalog_number, null, -1);
                 return new Response<>("Product type updated successfully");
             } else if (manufacturer != null) {
-                productController.updateProduct(branch, null, catalog_number, manufacturer, -1, -1, null, null, -1);
-                return new Response<>("Product type updated successfully");
-            } else if (supplier_price != -1) {
-                productController.updateProduct(branch, null, catalog_number, null, supplier_price, -1, null, null, -1);
+                productController.updateProduct(branch, null, catalog_number, manufacturer, -1);
                 return new Response<>("Product type updated successfully");
             } else if (store_price != -1) {
-                productController.updateProduct(branch, null, catalog_number, null, -1, store_price, null, null, -1);
-                return new Response<>("Product type updated successfully");
-            } else if (category != null) {
-                productController.updateProduct(branch, null, catalog_number, null, -1, -1, category, null, -1);
-                return new Response<>("Product type updated successfully");
-            } else if (sub_category != null) {
-                productController.updateProduct(branch, null, catalog_number, null, -1, -1, null, sub_category, -1);
-                return new Response<>("Product type updated successfully");
-            } else if (min_amount != -1) {
-                productController.updateProduct(branch, null, catalog_number, null, -1, -1, null, null, min_amount);
+                productController.updateProduct(branch, null, catalog_number, null, store_price);
                 return new Response<>("Product type updated successfully");
             } else {
                 return Response.createErrorResponse("Invalid input parameters");
@@ -66,7 +54,7 @@ public class StockService {
         }
     }
 
-    public Response updateProduct(int is_defective, int catalog_number, int serial_num, int is_sold, int supplier, int supplier_price, int sold_price, String location, String branch) {
+    public Response updateProductItem(int is_defective, int catalog_number, int serial_num, int is_sold, int supplier, int supplier_price, int sold_price, String location, String branch) {
         try {
             if (is_defective != -1) {
                 productController.updateProductItem(branch, is_defective, catalog_number, serial_num, -1, -1, -1, -1, null);

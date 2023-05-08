@@ -76,32 +76,17 @@ public class ProductController {
         else
             throw new RuntimeException(String.format("Product type does not exist with the ID : %s",catalog_number));
     }
-    public void updateProduct(String branch, String newName, String catalog_number, String newManufacturer, double newSupplierPrice, double newStorePrice, String newCategory, String newSubCategory, int newMinAmount ){
-        CategoryController categoryController = CategoryController.CategoryController();
+
+    public void updateProduct(String branch, String newName, String catalog_number, String newManufacturer, double newStorePrice){
         if(checkIfProductExist(branch,catalog_number)){
             Product product = products.get(branch).get(catalog_number);
             //set name
             if(newName != null){product.setName(newName);}
             if (newManufacturer != null){product.setManufacturer(newManufacturer);}
-            if(newSupplierPrice != -1){product.setOriginalSupplierPrice(newSupplierPrice);}
             if(newStorePrice != -1){product.setOriginalStorePrice(newStorePrice);}
-            if(newMinAmount != -1){product.setNotificationMin(newMinAmount);}
-            if(newCategory != null){
-                if(categoryController.checkIfCategoryExist(branch,newCategory))
-                    product.setCategory(categoryController.getCategory(branch,newCategory));
-                else
-                    categoryController.createCategory(branch,newCategory,1);
-            }
-            if(newSubCategory != null){
-                if(categoryController.checkIfCategoryExist(branch,newCategory))
-                    product.setCategory(categoryController.getCategory(branch,newSubCategory));
-                else
-                    categoryController.createCategory(branch,newSubCategory,0);
-            }
         }
         else
             throw new RuntimeException(String.format("Product type does not exist with the ID : %s",catalog_number));
-
     }
 
     // update products to defective

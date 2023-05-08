@@ -305,11 +305,11 @@ public class TransportsManagement {
     }
 
     private void updateArrivalTimes(Transport oldtransport) {
-        System.out.println("Select new arrival times: ");
+        System.out.println("Select new arrival times (enter 'cancel!' to cancel): ");
         HashMap<String, LocalTime> arrivalTimes = new HashMap<>();
         for (String destination : oldtransport.destinations()) {
-            System.out.println("Arrival time for " + destination + "(enter 'cancel!' to cancel): ");
-            LocalTime arrivalTime = uiData.readTime(">>");
+            System.out.println("Arrival time for " + destination + ": ");
+            LocalTime arrivalTime = uiData.readTime("(format: hh:mm): ");
             if(arrivalTime == null) {
                 return;
             }

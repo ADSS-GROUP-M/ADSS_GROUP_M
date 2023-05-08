@@ -85,20 +85,6 @@ public class ProductController {
             if(newManufacturer != null){product.setManufacturer(newManufacturer);}
             if(newStorePrice != -1){product.setOriginalStorePrice(newStorePrice);}
             if(newMinAmount != -1){product.setNotificationMin(newMinAmount);}
-
-            // TODO : need to update
-//            if(newCategory != null){
-//                if(categoryController.checkIfCategoryExist(newCategory))
-//                    product.setCategory(categoryController.getCategory(newCategory));
-//                else
-//                    categoryController.createCategory(newCategory);
-//            }
-//            if(newSubCategory != null){
-//                if(categoryController.checkIfCategoryExist(newCategory))
-//                    product.setCategory(categoryController.getCategory(newSubCategory));
-//                else
-//                    categoryController.createCategory(branch,newSubCategory);
-//            }
         }
         else
             throw new RuntimeException(String.format("Product type does not exist with the ID : %s",catalog_number));

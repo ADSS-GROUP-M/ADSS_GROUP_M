@@ -67,31 +67,23 @@ public class InventoryProductsManu extends MainMenu {
 
     private void updateProduct() {
         System.out.println("what is the product's catalog num?: (int)");
-        int catalog_num = in.nextInt();
+        String catalog_num = in.nextLine();
         System.out.println("Choose details to update:");
         System.out.println("1. name (String)");
         System.out.println("2. manufacturer (String)");
-        System.out.println("3. supplier price (double)");
-        System.out.println("4. store price (double)");
-        System.out.println("5. category (string)");
-        System.out.println("6. sub category (string)");
-        System.out.println("7. minimum amount for notification about running out of products (int)");
-        System.out.println("8. Back to main manu");
-        System.out.println("9. Exit");
+        System.out.println("3. store price (double)");
+        System.out.println("4. Back to main manu");
+        System.out.println("5. Exit");
         int option = in.nextInt();
         in.nextLine();
         System.out.println("the new value is:");
         String new_val = in.nextLine();
         switch (option) {
-            case 1 -> stockService.updateProductType(new_val, catalog_num, null, -1, -1, null, null, -1, branch);
-            case 2 -> stockService.updateProductType(null, catalog_num, new_val, -1, -1, null, null, -1, branch);
-            case 3 -> stockService.updateProductType(null, catalog_num, null, Integer.parseInt(new_val), -1, null, null, -1, branch);
-            case 4 -> stockService.updateProductType(null, catalog_num, null, -1, Integer.parseInt(new_val), null, null, -1, branch);
-            case 5 -> stockService.updateProductType(null, catalog_num, null, -1, -1, new_val, null, -1, branch);
-            case 6 -> stockService.updateProductType(null, catalog_num, null, -1, -1, null, new_val, -1, branch);
-            case 7 -> stockService.updateProductType(null, catalog_num, null, -1, -1, null, null, Integer.parseInt(new_val), branch);
-            case 8 -> super.run();
-            case 9 -> System.exit(0);
+            case 1 -> stockService.updateProduct(new_val, catalog_num, null, -1, branch);
+            case 2 -> stockService.updateProduct(null, catalog_num, new_val, -1, branch);
+            case 3 -> stockService.updateProduct(null, catalog_num, null, Integer.parseInt(new_val),branch);
+            case 4 -> super.run();
+            case 5 -> System.exit(0);
             default -> System.out.println("\nInvalid command");
         }
     }

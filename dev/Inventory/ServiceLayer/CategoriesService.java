@@ -51,6 +51,15 @@ public class CategoriesService {
         }
     }
 
+    public Response getCategoryReport(String branch, List<String> categories){
+        try {
+            categoryController.getProductsPerCategory(categories,branch);
+            return new Response<>("Subcategories removed successfully");
+        } catch (Exception e) {
+            return Response.createErrorResponse("Error removing category: " + e.getMessage());
+        }
+    }
+
     public Response addSubCategory(String name, List<String> subcategories){
         try {
             categoryController.addSubcategory(name,subcategories);

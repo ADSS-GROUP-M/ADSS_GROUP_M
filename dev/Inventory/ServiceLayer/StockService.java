@@ -91,9 +91,17 @@ public class StockService {
         try {
             return new Response<>(productController.getDefectiveProducts(branch));
         } catch (Exception e) {
-            return Response.createErrorResponse("Error creating catagory: " + e.getMessage());
+            return Response.createErrorResponse("Error creating category: " + e.getMessage());
         }
     }
+    public Response getShortagesProducts(String branch) {
+        try {
+            return new Response<>(productController.getInventoryShortages(branch));
+        } catch (Exception e) {
+            return Response.createErrorResponse("Error creating category: " + e.getMessage());
+        }
+    }
+
 
 
     public Response updateDiscountPerCategory(String name, String branch, double discount, LocalDateTime startDate, LocalDateTime endDate) {

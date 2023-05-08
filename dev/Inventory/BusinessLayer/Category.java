@@ -53,6 +53,7 @@ public class Category {
         return subCategories.containsKey(subcategoryName);
     }
 
+    public Map<String, Category> getSubcategories(){return subCategories;}
     public void removeSubCategory(String subcategoryName){
         if(isSubcategory(subcategoryName))
             subCategories.remove(subcategoryName);

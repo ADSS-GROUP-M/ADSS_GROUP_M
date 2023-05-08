@@ -1,6 +1,7 @@
 package dev.Inventory.BusinessLayer;
 
 import java.time.LocalDateTime;
+import java.time.chrono.ChronoLocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,8 +11,6 @@ public class Product {
     private  String catalog_number;
     private  String name;
     private String manufacturer;
-    private int storeAmount;
-    private int warehouseAmount;
 //    private double originalSupplierPrice;
     private double originalStorePrice;
     private Category category;
@@ -54,22 +53,17 @@ public class Product {
         for(Integer soldProductID: serialNumber){
             productItems.get(soldProductID).reportAsSold(soldPrice);
         }
+        //TODO: notification min
     }
     public void setNotificationMin(int newVal){
         this.notificationMin = newVal;
     }
-    public void setCategory(Category category){
-        this.category = category;
-        category.addProductToCategory(this);
-    }
-    public void addSubCategory(Category category){
-        subCategory.add(category);
-        category.addProductToCategory(this);
-    }
 
     public void addProductItem(String serialNumber, String supplierID, String location, LocalDateTime expirationDate){
         productItems.put(serialNumber,new ProductItem(serialNumber,supplierID,location, expirationDate));
+        //TODO add min function
     }
+
 
     public List<ProductItem> getDefectiveProductItems(){
         List<ProductItem> defectiveList = new ArrayList<ProductItem>();
@@ -92,16 +86,45 @@ public class Product {
     public Map<String, ProductItem> getProductItems(){return this.productItems;}
 
     public Boolean isProductLack(){
-        if(storeAmount+warehouseAmount < notificationMin)
+        if(getStoreAmount()+getWarehouseAmount() < notificationMin)
             return true;
         return false;
     }
+    //TODO: get supplier info from orderController and calc minNotification val
+    private int productDemandAmount(){
+        int calc = 0;
+        LocalDateTime current = LocalDateTime.now();
+        LocalDateTime lastWeek = current.minusDays(7);
+        for(ProductItem productItem: productItems.values()){
+            if(productItem.isSold()){
+                if(productItem.getSoldDate().isAfter(lastWeek))
+                    calc++;
+            }
+        }
+        return calc;
+    }
+    public void updateMin(){}
+
     public String getCatalogNumber(){return catalog_number;}
 
     public void setName(String newName){this.name = newName;}
     public void setManufacturer(String newManufacturer){this.manufacturer =newManufacturer;}
-    public void setStoreAmount(int newStoreAmount){this.storeAmount = newStoreAmount;}
-    public void setWarehouseAmount(int newWarehouseAmount){this.warehouseAmount = newWarehouseAmount;}
+    public int getStoreAmount(){
+        int amount =0;
+        for(ProductItem productItem: productItems.values()){
+            if(productItem.getLocation() == "store")
+                amount++;
+        }
+        return amount;
+    }
+    public int getWarehouseAmount(){
+        int amount =0;
+        for(ProductItem productItem: productItems.values()){
+            if(productItem.getLocation() == "warehouse")
+                amount++;
+        }
+        return amount;
+    }
     public void setOriginalStorePrice(double newPrice ){this.originalStorePrice = newPrice;}
     public double getOriginalStorePrice(){return this.originalStorePrice;}
     public String getName(){return this.name;}

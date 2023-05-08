@@ -14,6 +14,9 @@ public class Record {
     private Category category;
     private List<Category> subCategories;
     private String location;
+    private int warehouse_amount;
+    private int store_amount;
+
 
 
     //catalog_number - ProductTypeID
@@ -32,6 +35,16 @@ public class Record {
         this.location = location;
     }
 
+    public Record(String catalog_number,  String name, String branch, String manufacturer, double store_price, int warehouse_amount, int store_amount) {
+        this.catalog_number = catalog_number;
+        this.name = name;
+        this.branch = branch;
+        this.manufacturer = manufacturer;
+        this.store_price = store_price;
+        this.warehouse_amount = warehouse_amount;
+        this.store_amount = store_amount;
+    }
+
     @Override
     public String toString() {
         return "Record{" +
@@ -46,6 +59,19 @@ public class Record {
                 ", category=" + category.toString() +
                 ", subCategories=" + subCategories.toString() +
                 ", location='" + location + '\'' +
+                '}';
+    }
+
+    public String toStringProduct() {
+        return "Record{" +
+                "catalog_number=" + catalog_number +
+                ", name='" + name + '\'' +
+                ", branch='" + branch + '\'' +
+                ", manufacturer=" + manufacturer +
+                ", store_price=" + store_price +
+                ", warehouse_amount='" + warehouse_amount +
+                ", store_amount='" + store_amount +
+                ", total_amount='" + (warehouse_amount+store_amount) + '\'' +
                 '}';
     }
 }

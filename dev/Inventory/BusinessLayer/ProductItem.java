@@ -5,6 +5,7 @@ public class ProductItem {
     private String serial_number;
     private productPair<Boolean, LocalDateTime> isDefective;
     private Boolean isSold;
+    private LocalDateTime soldDate;
     private String supplierID;
     private double supplierPrice;
     private double supplierDiscount;
@@ -33,6 +34,7 @@ public class ProductItem {
         this.supplierID = supplierID;
         this.location = location;
         this.isSold = false;
+        this.soldDate = null;
         this.soldPrice = -1;
         this.isDefective = null;
         this.expirationDate = expirationDate;
@@ -42,10 +44,15 @@ public class ProductItem {
 //        this.supplierDiscount = 0;
 
     }
-    public boolean isDefective(){
-        if (isDefective == null)
+    public boolean isDefective(){return isSold();}
+    public boolean isSold(){
+        if (this.isSold == null)
             return false;
         return true;
+    }
+
+    public LocalDateTime getSoldDate(){
+        return this.soldDate;
     }
 
     public void reportAsDefective() {

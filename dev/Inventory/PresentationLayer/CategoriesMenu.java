@@ -16,15 +16,17 @@ public class CategoriesMenu extends MainMenu {
         System.out.println("1. Add new category");
         System.out.println("2. Remove category");
         System.out.println("3. Add subcategory");
-        System.out.println("4. Back to main manu");
-        System.out.println("5. Exit");
+        System.out.println("4. Get products reports per category");
+        System.out.println("5. Back to main manu");
+        System.out.println("6. Exit");
         int option = in.nextInt();
         switch (option) {
             case 1 -> createCategory();
             case 2 -> removeCategory();
             case 3 -> addSubcategory();
-            case 4 -> new MainMenu().run();
-            case 5 -> System.exit(0);
+            case 4 -> getProductPerCategory();
+            case 5 -> new MainMenu().run();
+            case 6 -> System.exit(0);
             default -> System.out.println("\nInvalid command");
         }
     }
@@ -65,5 +67,18 @@ public class CategoriesMenu extends MainMenu {
                 subcategories.add(subcategory);
         }
         System.out.println(categoriesService.removeSubCategory(category_name, subcategories).getReturnValue());
+    }
+
+    private void getProductPerCategory() {
+        in.nextLine();
+        List<String> categories = new ArrayList<String>();
+        String category_name = "";
+        while (category_name != "null"){
+            System.out.println("Please enter category's name , if you done choose 'null'");
+            category_name = in.nextLine();
+            if(category_name != "null")
+                categories.add(category_name);
+        }
+        System.out.println(categoriesService.getCategoryReport(category_name,categories).getReturnValue());
     }
 }

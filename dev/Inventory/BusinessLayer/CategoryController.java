@@ -92,26 +92,30 @@ public class CategoryController {
         return categories.get(categoryName).getProductsRelated();
     }
 
+    private List<Record> getProductRecordPerCategory(String categoryName,String branch, List<Record> records){
+        for(Product product: categories.get(categoryName).getProductsRelated().values()){
+            String catalog_number = product.getCatalogNumber();
+            String name = product.getName();
+            String manufacture = product.getManufacturer();
+            DiscountController discountController = DiscountController.DiscountController();
+            double storePrice = discountController.calcSoldPrice(branch,catalog_number,product.getOriginalStorePrice());
+            int warehouseAmount = product.getWarehouseAmount();
+            int storeAmount = product.getStoreAmount();
+            Record record = new Record(catalog_number,name,branch,manufacture,storePrice,warehouseAmount,storeAmount);
+            records.add(record);
+        }
+        return records;
+    }
+
     // Report Category function - inorder to receive all category product details
-    public List<Record> getProductsPerCategory(List<Category> categories, String branch){
+    public List<Record> getProductsPerCategory(List<String> categoriesName, String branch){
         List<Record> productsCategoryRecords = new ArrayList<Record>();
-        for(Category category: categories){
-            for(Product product: category.getProductsRelated().values()){
-                for(ProductItem productItem: product.getProductItems().values()){
-                    String catalog_number = product.getCatalogNumber();
-                    String serial_number = productItem.getSerial_number();
-                    String name = product.getName();
-                    String manufacture = product.getManufacturer();
-                    double supplierPrice = productItem.getSupplierPrice();
-                    double supplierDiscount = productItem.getSupplierDiscount();
-                    DiscountController discountController = DiscountController.DiscountController();
-                    double storePrice = discountController.calcSoldPrice(branch,catalog_number,product.getOriginalStorePrice());
-                    List<Category> subCategory = product.getSubCategory();
-                    String location = productItem.getLocation();
-                    //create Record
-                    Record record = new Record(catalog_number,serial_number,name,branch,manufacture,supplierPrice,supplierDiscount,storePrice,category,subCategory,location);
-                    productsCategoryRecords.add(record);
-                }
+        for(String categoryName: categoriesName){
+            Category category = categories.get(categoryName);
+            productsCategoryRecords = getProductRecordPerCategory(category.getCategoryName(),branch,productsCategoryRecords);
+            for(Category subcategory: category.getSubcategories().values()){
+                if(!categoriesName.contains(subcategory.getCategoryName()))
+                    productsCategoryRecords = getProductRecordPerCategory(subcategory.getCategoryName(),branch,productsCategoryRecords);
             }
         }
         return productsCategoryRecords;

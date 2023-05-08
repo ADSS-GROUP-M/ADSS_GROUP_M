@@ -17,7 +17,7 @@ public class ReportsMenu extends MainMenu {
         int option = in.nextInt();
         switch (option) {
 //            case 1 -> inventoryReport();
-//            case 2 -> inventoryRunningOutReport();
+            case 2 -> inventoryRunningOutReport();
             case 3 -> inventoryDefectiveReport();
             case 4 -> new MainMenu().run();
             case 5 -> System.exit(0);
@@ -28,10 +28,14 @@ public class ReportsMenu extends MainMenu {
 //    private void inventoryReport() {
 //        throw new RuntimeException();
 //    }
-//
-//    private void inventoryRunningOutReport() {
-//        throw new RuntimeException();
-//    }
+
+    private void inventoryRunningOutReport() {
+        String output = "";
+        for (Record r: (List<Record>) stockService.getShortagesProducts(branch).getReturnValue()){
+            output += r.toString() + "\n";
+        }
+        System.out.println(output);
+    }
 
     private void inventoryDefectiveReport() {
         String output = "";

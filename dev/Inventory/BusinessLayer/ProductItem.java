@@ -2,7 +2,7 @@ package dev.Inventory.BusinessLayer;
 import java.time.LocalDateTime;
 
 public class ProductItem {
-    private int serial_number;
+    private String serial_number;
     private productPair<Boolean, LocalDateTime> isDefective;
     private Boolean isSold;
     private int supplierID;
@@ -28,7 +28,7 @@ public class ProductItem {
             return second;
         }
     }
-    public ProductItem(int serial_number, int supplierID, double supplierPrice, String location, Double supplierDiscount, LocalDateTime expirationDate) {
+    public ProductItem(String serial_number, int supplierID, double supplierPrice, String location, Double supplierDiscount, LocalDateTime expirationDate) {
         this.serial_number = serial_number;
         this.supplierID = supplierID;
         this.supplierPrice = supplierPrice;
@@ -69,6 +69,6 @@ public class ProductItem {
     public void setSupplierPrice(double newPrice){this.supplierPrice = newPrice;}
     public void setSupplierID(int newSupplierID){this.supplierID = newSupplierID;}
     public void setSoldPrice(double newSoldPrice){this.soldPrice = newSoldPrice;}
-    public int getSerial_number(){return this.serial_number;}
+    public String getSerial_number(){return this.serial_number;}
     public String getLocation(){return this.location;}
 }

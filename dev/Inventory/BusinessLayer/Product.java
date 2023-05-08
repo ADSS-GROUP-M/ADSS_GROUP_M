@@ -18,7 +18,7 @@ public class Product {
     private List<Category> subCategory;
     //default value -1
     private int notificationMin;
-    private Map<Integer, ProductItem> productItems;
+    private Map<String, ProductItem> productItems;
     private String branch;
 
     public Product(String catalog_number, String name, String manufacturer, int storeAmount, int warehouseAmount, double originalSupplierPrice, double originalStorePrice, String branch){
@@ -33,15 +33,15 @@ public class Product {
         this.subCategory = new ArrayList<Category>();
         this.notificationMin = -1;
         // Map<productID, product>
-        this.productItems = new HashMap<Integer, ProductItem>();
+        this.productItems = new HashMap<String, ProductItem>();
         this.branch = branch;
     }
 
-    public ProductItem getProduct(int productID){
-        if(productItems.containsKey(productID))
-            return productItems.get(productID);
+    public ProductItem getProduct(String serial_number){
+        if(productItems.containsKey(serial_number))
+            return productItems.get(serial_number);
         else
-            throw new RuntimeException(String.format("Product does not exist with the ID : %s",productID));
+            throw new RuntimeException(String.format("Product does not exist with the ID : %s",serial_number));
     }
     public void reportAsDefective(List<Integer> ItemsSerialNumber){
         for(Integer defectiveSerialNumber: ItemsSerialNumber){
@@ -62,14 +62,14 @@ public class Product {
     }
     public void setCategory(Category category){
         this.category = category;
-        category.addProduct(this);
+        category.addProductToCategory(this);
     }
     public void addSubCategory(Category category){
         subCategory.add(category);
-        category.addProduct(this);
+        category.addProductToCategory(this);
     }
 
-    public void addProductItem(int serialNumber, int supplierID, double supplierPrice, String location, Double supplierDiscount, LocalDateTime expirationDate){
+    public void addProductItem(String serialNumber, int supplierID, double supplierPrice, String location, Double supplierDiscount, LocalDateTime expirationDate){
         productItems.put(serialNumber,new ProductItem(serialNumber,supplierID,supplierPrice,location,supplierDiscount, expirationDate));
     }
 
@@ -91,7 +91,7 @@ public class Product {
         return allProducts;
     }
 
-    public Map<Integer, ProductItem> getProductItems(){return this.productItems;}
+    public Map<String, ProductItem> getProductItems(){return this.productItems;}
 
     public Boolean isProductLack(){
         if(storeAmount+warehouseAmount < notificationMin)

@@ -20,7 +20,7 @@ public class Category {
         this.productsRelated = new HashMap<String, Product>();
     }
 
-    public void addProduct(Product product){
+    public void addProductToCategory(Product product){
         productsRelated.put(product.getCatalogNumber(),product);
     }
 
@@ -28,18 +28,18 @@ public class Category {
 //        categoriesDiscount.add(new CategoryDiscount(startDate,endDate,discount,categoryName,branch));
 //    }
 
-    public Boolean isProductIDRelated(int productTypeID){
-        return this.productsRelated.containsKey(productTypeID);
+    public Boolean isProductIDRelated(int catalog_number){
+        return this.productsRelated.containsKey(catalog_number);
     }
 
     public String getCategoryName(){return this.categoryName;}
 
     public Boolean isRelatedProductEmpty(){return productsRelated.isEmpty();}
 
-    public Map<Integer, Product> getProductsRelated(){return this.productsRelated;}
+    public Map<String, Product> getProductsRelated(){return this.productsRelated;}
 
-    public void removeProduct(int productID){
-        productsRelated.remove(productID);
+    public void removeProduct(String catalog_number){
+        productsRelated.remove(catalog_number);
     }
 
     @Override

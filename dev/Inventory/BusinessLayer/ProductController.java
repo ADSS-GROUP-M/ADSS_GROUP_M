@@ -44,7 +44,7 @@ public class ProductController {
         }
     }
     // Add new product
-    public void createProductItem(int serial_number, String catalog_number, String branch, int supplierID, double supplierPrice, String location, Double supplierDiscount, LocalDateTime expirationDate) {
+    public void createProductItem(String serial_number, String catalog_number, String branch, int supplierID, double supplierPrice, String location, Double supplierDiscount, LocalDateTime expirationDate) {
         if(checkIfProductExist(branch,catalog_number))
             products.get(branch).get(catalog_number).addProductItem(serial_number,supplierID,supplierPrice,location, supplierDiscount, expirationDate);
         else{
@@ -59,7 +59,7 @@ public class ProductController {
         Product newProductType = new Product(catalog_number,name,manufacture,storeAmount,warehouseAmount,originalSupplierPrice,originalStorePrice, branch);
         products.get(branch).put(catalog_number,newProductType);
     }
-    public void updateProductItem(String branch, int isDefective, int serial_number, String catalog_number, int isSold, int newSupplier, double newSupplierPrice, double newSoldPrice, String newLocation) {
+    public void updateProductItem(String branch, int isDefective, String serial_number, String catalog_number, int isSold, int newSupplier, double newSupplierPrice, double newSoldPrice, String newLocation) {
         if(checkIfProductExist(branch,catalog_number)){
             ProductItem currentProduct = products.get(branch).get(catalog_number).getProduct(serial_number);
             if(isDefective != -1){currentProduct.reportAsDefective();}
@@ -135,7 +135,7 @@ public class ProductController {
         return allProductsList;
     }
 
-    public Record getProductDetails(String branch, String catalog_number, int serial_number){
+    public Record getProductDetails(String branch, String catalog_number, String serial_number){
         if(checkIfProductExist(branch,catalog_number)){
             Product productType = products.get(branch).get(catalog_number);
             ProductItem product = productType.getProductItems().get(serial_number);
@@ -163,7 +163,7 @@ public class ProductController {
                 if(product.isProductLack()){
                     for(ProductItem productItem: product.getProductItems().values()){
                         String productCatalogNumber = product.getCatalogNumber();
-                        int productID = productItem.getSerial_number();
+                        String serial_number = productItem.getSerial_number();
                         String name = product.getName();
                         String manufacture = product.getManufacturer();
                         double supplierPrice = product.getOriginalSupplierPrice();
@@ -172,7 +172,7 @@ public class ProductController {
                         List<Category> subCategory = product.getSubCategory();
                         String location = productItem.getLocation();
                         //create Record
-                        Record record = new Record(productCatalogNumber,productID,name,branch,manufacture,supplierPrice,storePrice,category,subCategory,location);
+                        Record record = new Record(productCatalogNumber,serial_number,name,branch,manufacture,supplierPrice,storePrice,category,subCategory,location);
                         shortagesProductsRecord.add(record);
                     }
                 }
@@ -190,7 +190,7 @@ public class ProductController {
             for (Product product: branchCatalogNumber.values())
                 for(ProductItem productItem : product.getDefectiveProductItems()){
                     String productCatalogNumber = product.getCatalogNumber();
-                    int productID = productItem.getSerial_number();
+                    String serial_number = productItem.getSerial_number();
                     String name = product.getName();
                     String manufacture = product.getManufacturer();
                     double supplierPrice = product.getOriginalSupplierPrice();
@@ -199,7 +199,7 @@ public class ProductController {
                     List<Category> subCategory = product.getSubCategory();
                     String location = productItem.getLocation();
                     //create Record
-                    Record record = new Record(productCatalogNumber,productID,name,branch,manufacture,supplierPrice,storePrice,category,subCategory,location);
+                    Record record = new Record(productCatalogNumber,serial_number,name,branch,manufacture,supplierPrice,storePrice,category,subCategory,location);
                     defectiveRecords.add(record);
                 }
         }

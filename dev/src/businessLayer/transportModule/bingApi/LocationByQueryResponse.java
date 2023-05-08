@@ -42,7 +42,7 @@ public record LocationByQueryResponse(
             String calculationMethod,
             String[] usageTypes
     ){}
-    
+
     public record Point (
             String type,
             double[] coordinates

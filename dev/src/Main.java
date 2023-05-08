@@ -1,6 +1,5 @@
 import businessLayer.transportModule.bingApi.BingAPI;
 import businessLayer.transportModule.bingApi.LocationByQueryResponse;
-import businessLayer.transportModule.bingApi.LocationByQueryResponsettttttt;
 import dataAccessLayer.DalFactory;
 import org.junit.jupiter.api.Test;
 import presentationLayer.employeeModule.View.MenuManager;

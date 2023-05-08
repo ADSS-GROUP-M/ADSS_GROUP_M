@@ -6,17 +6,17 @@ import java.util.Map;
 
 public class Category {
     private String categoryName;
-    // map<productTypeID, Product obj>
+    // map<catalog_number, Product obj>
     private Map<String, Product> productsRelated;
-    //0 - subCategory , 1 - main Category
 
-    private List<Category> subCategories;
-    private int categoryType;
-//    public List<CategoryDiscount> categoriesDiscount;
 
-    public Category(String nameCategory, int categoryType){
+    //map<category_name, Category obj>
+    private Map<String, Category> subCategories;
+
+
+    public Category(String nameCategory){
         this.categoryName = nameCategory;
-        this.categoryType = categoryType;
+        this.subCategories = new HashMap<String, Category>();
         this.productsRelated = new HashMap<String, Product>();
     }
 

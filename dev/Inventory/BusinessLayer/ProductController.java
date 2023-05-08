@@ -84,17 +84,19 @@ public class ProductController {
             if(newSupplierPrice != -1){product.setOriginalSupplierPrice(newSupplierPrice);}
             if(newStorePrice != -1){product.setOriginalStorePrice(newStorePrice);}
             if(newMinAmount != -1){product.setNotificationMin(newMinAmount);}
+
+            // TODO : need to update
             if(newCategory != null){
-                if(categoryController.checkIfCategoryExist(branch,newCategory))
+                if(categoryController.checkIfCategoryExist(newCategory))
                     product.setCategory(categoryController.getCategory(branch,newCategory));
                 else
-                    categoryController.createCategory(branch,newCategory,1);
+                    categoryController.createCategory(branch,newCategory);
             }
             if(newSubCategory != null){
-                if(categoryController.checkIfCategoryExist(branch,newCategory))
+                if(categoryController.checkIfCategoryExist(newCategory))
                     product.setCategory(categoryController.getCategory(branch,newSubCategory));
                 else
-                    categoryController.createCategory(branch,newSubCategory,0);
+                    categoryController.createCategory(branch,newSubCategory);
             }
         }
         else

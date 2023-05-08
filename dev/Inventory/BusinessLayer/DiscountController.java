@@ -59,8 +59,8 @@ public class DiscountController {
 
     public void createCategoryDiscount(String categoryName, String branch,double discount, LocalDateTime startDate, LocalDateTime endDate){
         CategoryController categoryController = CategoryController.CategoryController();
-        if(categoryController.checkIfCategoryExist(branch,categoryName)){
-            Map<Integer, Product> relatedProducts = categoryController.getCategoryProducts(branch,categoryName);
+        if(categoryController.checkIfCategoryExist(categoryName)){
+            Map<String, Product> relatedProducts = categoryController.getCategoryProducts(categoryName);
             for(Product product: relatedProducts.values()){
                createStoreDiscount(product.getCatalogNumber(),branch,discount,startDate,endDate);
             }
@@ -148,7 +148,7 @@ public class DiscountController {
                 for(Product productType: category.getProductsRelated().values()){
                     for(ProductItem product: productType.getProductItems().values()){
                         String catalog_number = productType.getCatalogNumber();
-                        int productID = product.getSerial_number();
+                        String serial_number = product.getSerial_number();
                         String name = productType.getName();
                         String manufacture = productType.getManufacturer();
                         double supplierPrice = productType.getOriginalSupplierPrice();
@@ -156,7 +156,7 @@ public class DiscountController {
                         List<Category> subCategory = productType.getSubCategory();
                         String location = product.getLocation();
                         //create Record
-                        Record record = new Record(catalog_number,productID,name,branch,manufacture,supplierPrice,storePrice,category,subCategory,location);
+                        Record record = new Record(catalog_number,serial_number,name,branch,manufacture,supplierPrice,storePrice,category,subCategory,location);
                         productsCategoryRecords.add(record);
                     }
                 }

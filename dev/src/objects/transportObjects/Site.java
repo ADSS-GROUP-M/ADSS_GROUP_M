@@ -7,7 +7,7 @@ import java.lang.reflect.Type;
 import java.util.LinkedList;
 import java.util.Objects;
 
-public record Site (String transportZone, String address, String phoneNumber, String contactName, SiteType siteType) {
+public record Site (String transportZone, String address, String phoneNumber, String contactName, SiteType siteType, double latitude, double longitude) {
 
     public enum SiteType{
         BRANCH,
@@ -15,8 +15,12 @@ public record Site (String transportZone, String address, String phoneNumber, St
         SUPPLIER
     }
 
+    public Site(String transportZone, String address, String phoneNumber, String contactName, SiteType siteType) {
+        this(transportZone, address, phoneNumber, contactName, siteType, 0.0,0.0);
+    }
+
     public static Site getLookupObject(String address){
-        return new Site(null, address, null, null, null);
+        return new Site(null, address, null, null, null,0.0,0.0);
     }
 
     public String toJson(){

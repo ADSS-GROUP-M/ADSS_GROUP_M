@@ -12,7 +12,7 @@ import java.util.List;
 
 public class SitesDAO extends DAO<Site> {
 
-    private static final String[] types = new String[]{"TEXT", "TEXT", "TEXT", "TEXT", "TEXT"};
+    private static final String[] types = new String[]{"TEXT", "TEXT", "TEXT", "TEXT", "TEXT", "REAL", "REAL"};
     private static final String[] primary_keys = {"address"};
     public static final String tableName = "sites";
 
@@ -25,7 +25,9 @@ public class SitesDAO extends DAO<Site> {
                 "transport_zone",
                 "contact_name",
                 "contact_phone",
-                "site_type");
+                "site_type",
+                "latitude",
+                "longitude");
         initTable();
     }
 
@@ -83,13 +85,15 @@ public class SitesDAO extends DAO<Site> {
      */
     @Override
     public void insert(Site object) throws DalException {
-        String query = String.format("INSERT INTO %s VALUES ('%s', '%s', '%s', '%s', '%s');",
+        String query = String.format("INSERT INTO %s VALUES ('%s', '%s', '%s', '%s', '%s', %f, %f);",
                 TABLE_NAME,
                 object.address(),
                 object.transportZone(),
                 object.contactName(),
                 object.phoneNumber(),
-                object.siteType().toString());
+                object.siteType().toString(),
+                object.latitude(),
+                object.longitude());
         try {
             if(cursor.executeWrite(query) == 1){
                 cache.put(object);
@@ -107,12 +111,14 @@ public class SitesDAO extends DAO<Site> {
      */
     @Override
     public void update(Site object) throws DalException {
-        String query = String.format("UPDATE %s SET transport_zone = '%s', contact_name = '%s', contact_phone = '%s', site_type = '%s' WHERE address = '%s';",
+        String query = String.format("UPDATE %s SET transport_zone = '%s', contact_name = '%s', contact_phone = '%s', site_type = '%s', latitude = %f, longitude = %f WHERE address = '%s';",
                 TABLE_NAME,
                 object.transportZone(),
                 object.contactName(),
                 object.phoneNumber(),
                 object.siteType(),
+                object.latitude(),
+                object.longitude(),
                 object.address());
         try {
             if(cursor.executeWrite(query) == 1){
@@ -172,6 +178,8 @@ public class SitesDAO extends DAO<Site> {
                 resultSet.getString("address"),
                 resultSet.getString("contact_phone"),
                 resultSet.getString("contact_name"),
-                Site.SiteType.valueOf(resultSet.getString("site_type")));
+                Site.SiteType.valueOf(resultSet.getString("site_type")),
+                resultSet.getDouble("latitude"),
+                resultSet.getDouble("longitude"));
     }
 }

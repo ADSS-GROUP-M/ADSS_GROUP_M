@@ -30,7 +30,7 @@ public class InventoryProductsManu extends MainMenu {
     private void createNewProduct() {
         System.out.println("Enter the following product details:");
         System.out.println("Catalog Number: (number)");
-        String catalog_num = in.nextInt();
+        String catalog_num = in.nextLine();
         System.out.println("Name: (string)");
         String name = in.nextLine();
         in.nextLine();
@@ -40,11 +40,7 @@ public class InventoryProductsManu extends MainMenu {
         double supplier_price = in.nextDouble();
         System.out.println("Store Price: (double)");
         double store_price = in.nextDouble();
-        System.out.println("Amount in store: (int)");
-        int amount_store = in.nextInt();
-        System.out.println("Amount in warehouse: (int)");
-        int amount_warehouse = in.nextInt();
-        System.out.println(inventoryService.addProduct(catalog_num, name, manufacturer, supplier_price, store_price, branch, amount_store, amount_warehouse).getReturnValue());
+        System.out.println(stockService.addProduct(catalog_num, name, manufacturer, store_price, branch).getReturnValue());
     }
 
     private void createNewItem() {
@@ -61,7 +57,7 @@ public class InventoryProductsManu extends MainMenu {
         in.nextLine();
         System.out.println("location: (string)");
         String location = in.nextLine();
-        System.out.println(inventoryService.addProductItem(serial_num, catalog_num, supplier, supplier_price, branch, location).getReturnValue());
+        System.out.println(stockService.addProductItem(serial_num, catalog_num, supplier, supplier_price, branch, location).getReturnValue());
     }
 
     private void updateProduct() {
@@ -82,13 +78,13 @@ public class InventoryProductsManu extends MainMenu {
         System.out.println("the new value is:");
         String new_val = in.nextLine();
         switch (option) {
-            case 1 -> inventoryService.updateProductType(new_val, catalog_num, null, -1, -1, null, null, -1, branch);
-            case 2 -> inventoryService.updateProductType(null, catalog_num, new_val, -1, -1, null, null, -1, branch);
-            case 3 -> inventoryService.updateProductType(null, catalog_num, null, Integer.parseInt(new_val), -1, null, null, -1, branch);
-            case 4 -> inventoryService.updateProductType(null, catalog_num, null, -1, Integer.parseInt(new_val), null, null, -1, branch);
-            case 5 -> inventoryService.updateProductType(null, catalog_num, null, -1, -1, new_val, null, -1, branch);
-            case 6 -> inventoryService.updateProductType(null, catalog_num, null, -1, -1, null, new_val, -1, branch);
-            case 7 -> inventoryService.updateProductType(null, catalog_num, null, -1, -1, null, null, Integer.parseInt(new_val), branch);
+            case 1 -> stockService.updateProductType(new_val, catalog_num, null, -1, -1, null, null, -1, branch);
+            case 2 -> stockService.updateProductType(null, catalog_num, new_val, -1, -1, null, null, -1, branch);
+            case 3 -> stockService.updateProductType(null, catalog_num, null, Integer.parseInt(new_val), -1, null, null, -1, branch);
+            case 4 -> stockService.updateProductType(null, catalog_num, null, -1, Integer.parseInt(new_val), null, null, -1, branch);
+            case 5 -> stockService.updateProductType(null, catalog_num, null, -1, -1, new_val, null, -1, branch);
+            case 6 -> stockService.updateProductType(null, catalog_num, null, -1, -1, null, new_val, -1, branch);
+            case 7 -> stockService.updateProductType(null, catalog_num, null, -1, -1, null, null, Integer.parseInt(new_val), branch);
             case 8 -> super.run();
             case 9 -> System.exit(0);
             default -> System.out.println("\nInvalid command");
@@ -114,12 +110,12 @@ public class InventoryProductsManu extends MainMenu {
         System.out.println("the new value is: ");
         String new_val = in.nextLine();
         switch (option) {
-            case 1 -> inventoryService.updateProduct(Integer.parseInt(new_val), catalog_num, serial_number, -1, -1, -1, -1, null, branch);
-            case 2 -> inventoryService.updateProduct(-1, catalog_num, serial_number, Integer.parseInt(new_val), -1, -1, -1, null, branch);
-            case 3 -> inventoryService.updateProduct(-1, catalog_num, serial_number, -1 , Integer.parseInt(new_val), -1, -1, null, branch);
-            case 4 -> inventoryService.updateProduct(-1, catalog_num, serial_number, -1, -1, Integer.parseInt(new_val), -1, null, branch);
-            case 5 -> inventoryService.updateProduct(-1, catalog_num, serial_number, -1, -1, -1, Integer.parseInt(new_val), null, branch);
-            case 6 -> inventoryService.updateProduct(-1, catalog_num, serial_number, -1, -1, -1, -1, new_val, branch);
+            case 1 -> stockService.updateProduct(Integer.parseInt(new_val), catalog_num, serial_number, -1, -1, -1, -1, null, branch);
+            case 2 -> stockService.updateProduct(-1, catalog_num, serial_number, Integer.parseInt(new_val), -1, -1, -1, null, branch);
+            case 3 -> stockService.updateProduct(-1, catalog_num, serial_number, -1 , Integer.parseInt(new_val), -1, -1, null, branch);
+            case 4 -> stockService.updateProduct(-1, catalog_num, serial_number, -1, -1, Integer.parseInt(new_val), -1, null, branch);
+            case 5 -> stockService.updateProduct(-1, catalog_num, serial_number, -1, -1, -1, Integer.parseInt(new_val), null, branch);
+            case 6 -> stockService.updateProduct(-1, catalog_num, serial_number, -1, -1, -1, -1, new_val, branch);
             case 7 -> super.run();
             case 8 -> System.exit(0);
             default -> System.out.println("\nInvalid command");
@@ -131,6 +127,6 @@ public class InventoryProductsManu extends MainMenu {
         String catalog_num = in.nextInt();
         System.out.println("what is the product's serial num? (int)");
         int serial_num = in.nextInt();
-        System.out.println(inventoryService.getProductDetails(catalog_num, serial_num, branch).getReturnValue().toString());
+        System.out.println(stockService.getProductDetails(catalog_num, serial_num, branch).getReturnValue().toString());
     }
 }

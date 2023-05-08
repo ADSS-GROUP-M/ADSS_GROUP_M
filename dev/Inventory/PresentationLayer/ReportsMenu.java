@@ -35,7 +35,7 @@ public class ReportsMenu extends MainMenu {
 
     private void inventoryDefectiveReport() {
         String output = "";
-        for (Record r: (List<Record>) inventoryService.getDefectiveProducts(branch).getReturnValue()){
+        for (Record r: (List<Record>) stockService.getDefectiveProducts(branch).getReturnValue()){
             output += r.toString() + "\n";
         }
         System.out.println(output);

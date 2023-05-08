@@ -6,11 +6,11 @@ import java.util.*;
 
 public class MainMenu {
     protected Scanner in;
-    protected StockService inventoryService;
+    protected StockService stockService;
 
     public MainMenu(){
         in = new Scanner(System.in);
-        inventoryService = new StockService();
+        stockService = new StockService();
     }
 
     public void run() {

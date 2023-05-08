@@ -36,7 +36,7 @@ public class DiscountsManu extends MainMenu {
         String start_date = in.nextLine();
         System.out.println("end date:(\"2016-03-04 11:30\" - example)");
         String end_date = in.nextLine();
-        System.out.println(inventoryService.updateDiscountPerProduct(catalog_num, branch, discount, LocalDateTime.parse(start_date, formatter), LocalDateTime.parse(end_date, formatter)).getReturnValue());
+        System.out.println(stockService.updateDiscountPerProduct(catalog_num, branch, discount, LocalDateTime.parse(start_date, formatter), LocalDateTime.parse(end_date, formatter)).getReturnValue());
     }
 
     private void categoryDiscount() {
@@ -51,6 +51,6 @@ public class DiscountsManu extends MainMenu {
         String start_date = in.nextLine();
         System.out.println("end date:(\"2016-03-04 11:30\" - example)");
         String end_date = in.nextLine();
-        System.out.println(inventoryService.updateDiscountPerCategory(name, branch, discount, LocalDateTime.parse(start_date, formatter), LocalDateTime.parse(end_date, formatter)).getReturnValue());
+        System.out.println(stockService.updateDiscountPerCategory(name, branch, discount, LocalDateTime.parse(start_date, formatter), LocalDateTime.parse(end_date, formatter)).getReturnValue());
     }
 }

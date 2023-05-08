@@ -51,14 +51,16 @@ public class ProductController {
             throw new RuntimeException(String.format("Product type does not exist with the ID : %s",catalog_number));
         }
     }
+
     // Add new product type
-    public void createProduct(String catalog_number, String branch, String name, String manufacture, int storeAmount, int warehouseAmount, double originalSupplierPrice, double originalStorePrice){
+    public void createProduct(String catalog_number, String branch, String name, String manufacture, double originalStorePrice){
         if(!products.containsKey(branch)){
             products.put(branch, new HashMap<String, Product>());
         }
-        Product newProductType = new Product(catalog_number,name,manufacture,storeAmount,warehouseAmount,originalSupplierPrice,originalStorePrice, branch);
+        Product newProductType = new Product(catalog_number,name,manufacture,originalStorePrice, branch);
         products.get(branch).put(catalog_number,newProductType);
     }
+
     public void updateProductItem(String branch, int isDefective, String serial_number, String catalog_number, int isSold, int newSupplier, double newSupplierPrice, double newSoldPrice, String newLocation) {
         if(checkIfProductExist(branch,catalog_number)){
             ProductItem currentProduct = products.get(branch).get(catalog_number).getProduct(serial_number);

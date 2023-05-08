@@ -21,13 +21,10 @@ public class Product {
     private Map<String, ProductItem> productItems;
     private String branch;
 
-    public Product(String catalog_number, String name, String manufacturer, int storeAmount, int warehouseAmount, double originalSupplierPrice, double originalStorePrice, String branch){
+    public Product(String catalog_number, String name, String manufacturer, double originalStorePrice, String branch){
         this.catalog_number = catalog_number;
         this.name = name;
         this.manufacturer = manufacturer;
-        this.storeAmount = storeAmount;
-        this.warehouseAmount = warehouseAmount;
-        this.originalSupplierPrice = originalSupplierPrice;
         this.originalStorePrice = originalStorePrice;
         this.category = null;
         this.subCategory = new ArrayList<Category>();

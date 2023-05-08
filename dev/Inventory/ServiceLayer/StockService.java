@@ -17,10 +17,9 @@ public class StockService {
         discountController = DiscountController.DiscountController();
     }
 
-
-    public Response addProduct(String catalog_number, String name, String manufacturer, double supplier_price, double store_price, String branch, int storeAmount, int warehouseAmount) {
+    public Response addProduct(String catalog_number, String name, String manufacturer, double store_price, String branch) {
         try {
-            productController.createProduct(catalog_number, branch, name, manufacturer, storeAmount, warehouseAmount, supplier_price, store_price);
+            productController.createProduct(catalog_number, branch, name, manufacturer, store_price);
             return new Response<>("Product added successfully");
         } catch (Exception e) {
             return Response.createErrorResponse("Error updating product type: " + e.getMessage());

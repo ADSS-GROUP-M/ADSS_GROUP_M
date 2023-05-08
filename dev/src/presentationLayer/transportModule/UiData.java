@@ -7,7 +7,10 @@ import serviceLayer.transportModule.ResourceManagementService;
 import serviceLayer.transportModule.TransportsService;
 import utils.Response;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeParseException;
 import java.util.*;
 
 public class UiData {
@@ -61,7 +64,7 @@ public class UiData {
             System.out.println("Data already generated!");
             return;
         }
-        generateAndAddData();
+//        generateAndAddData();
         dataGenerated = true;
         fetchDrivers();
         fetchTrucks();
@@ -430,5 +433,39 @@ public class UiData {
             return null;
         }
         return truckArray[option];
+    }
+
+    public LocalTime readTime(String prefix) {
+        LocalTime arrivalTime;
+        while(true) {
+            try{
+                String line = readLine(prefix);
+                if(line.equals("cancel!")) {
+                    return null;
+                }
+                arrivalTime = LocalTime.parse(line);
+                break;
+            }catch(DateTimeParseException e) {
+                System.out.println("Invalid time format, please try again");
+            }
+        }
+        return arrivalTime;
+    }
+
+    public LocalDate readDate(String prefix) {
+        LocalDate arrivalTime;
+        while(true) {
+            try{
+                String line = readLine(prefix);
+                if(line.equals("cancel!")) {
+                    return null;
+                }
+                arrivalTime = LocalDate.parse(line);
+                break;
+            }catch(DateTimeParseException e) {
+                System.out.println("Invalid time format, please try again");
+            }
+        }
+        return arrivalTime;
     }
 }

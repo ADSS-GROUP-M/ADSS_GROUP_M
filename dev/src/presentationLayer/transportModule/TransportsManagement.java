@@ -63,8 +63,8 @@ public class TransportsManagement {
         System.out.println("Enter transport details:");
 
         // date/time
-        LocalDate departureDate = LocalDate.parse(uiData.readLine("Departure date (format: yyyy-mm-dd): "));
-        LocalTime departureTime = LocalTime.parse(uiData.readLine("Departure time (format: hh:mm): "));
+        LocalDate departureDate = uiData.readDate("Departure date (format: yyyy-mm-dd): ");
+        LocalTime departureTime = uiData.readTime("Departure time (format: hh:mm): ");
         LocalDateTime departureDateTime = LocalDateTime.of(departureDate, departureTime);
 
         // driver
@@ -309,7 +309,7 @@ public class TransportsManagement {
         HashMap<String, LocalTime> arrivalTimes = new HashMap<>();
         for (String destination : oldtransport.destinations()) {
             System.out.println("Arrival time for " + destination + "(enter 'cancel!' to cancel): ");
-            LocalTime arrivalTime = readTime();
+            LocalTime arrivalTime = uiData.readTime(">>");
             if(arrivalTime == null) {
                 return;
             }
@@ -318,22 +318,6 @@ public class TransportsManagement {
         oldtransport.deliveryRoute().initializeArrivalTimes(arrivalTimes);
     }
 
-    private LocalTime readTime() {
-        LocalTime arrivalTime;
-        while(true) {
-            try{
-                String line = uiData.readLine();
-                if(line.equals("cancel!")) {
-                    return null;
-                }
-                arrivalTime = LocalTime.parse(line);
-                break;
-            }catch(DateTimeParseException e) {
-                System.out.println("Invalid time format, please try again");
-            }
-        }
-        return arrivalTime;
-    }
 
     private void removeTransport() {
         while(true) {
@@ -476,7 +460,7 @@ public class TransportsManagement {
             }
             //validate the site if it is a branch
              if(site.siteType() == Site.SiteType.BRANCH) {
-                String stokeKeeperMassageJson =  es.checkStoreKeeperAvailability(site.address(), JsonUtils.serialize(departureDateTime));
+                String stokeKeeperMassageJson =  es.checkStoreKeeperAvailability(JsonUtils.serialize(departureDateTime),site.address());
                 Response response = JsonUtils.deserialize(stokeKeeperMassageJson, Response.class);
                 if(response.success() == false){
                  System.out.println("\n"+response.message());

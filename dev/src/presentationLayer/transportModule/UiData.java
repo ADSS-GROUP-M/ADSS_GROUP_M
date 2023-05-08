@@ -1,6 +1,7 @@
 package presentationLayer.transportModule;
 
 import objects.transportObjects.*;
+import serviceLayer.ServiceFactory;
 import serviceLayer.transportModule.ItemListsService;
 import serviceLayer.transportModule.ResourceManagementService;
 import serviceLayer.transportModule.TransportsService;
@@ -114,7 +115,14 @@ public class UiData {
         }
     }
 
-    private void generateAndAddData() {
+    public static void generateAndAddData() {
+
+        ServiceFactory serviceFactory = new ServiceFactory();
+        ResourceManagementService rms = serviceFactory.resourceManagementService();
+        ItemListsService ils = serviceFactory.itemListsService();
+        TransportsService ts = serviceFactory.transportsService();
+
+
 
         //!!!!!!!!!!!!! CHAT GPT IS KING !!!!!!!!!!!
 
@@ -227,11 +235,11 @@ public class UiData {
 
         // Randomly generated transports
         Transport transport1 = new Transport(
-                site1.address(),
-                new LinkedList<>(Arrays.asList(site2.address(), site3.address())),
+                site2.address(),
+                new LinkedList<>(Arrays.asList(site1.address(), site4.address())),
                 new HashMap<>() {{
-                    put(site2.address(), 1);
-                    put(site3.address(), 2);
+                    put(site1.address(), 1);
+                    put(site4.address(), 4);
                 }},
                 driver1.id(),
                 truck1.id(),

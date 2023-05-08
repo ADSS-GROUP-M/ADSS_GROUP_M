@@ -11,7 +11,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import serviceLayer.ServiceFactory;
-import serviceLayer.transportModule.ResourceManagementService;
 import utils.Response;
 
 import java.time.LocalDate;
@@ -29,7 +28,7 @@ class ResourceManagementServiceIT {
 
     @BeforeEach
     void setUp() {
-        rms = new ServiceFactory(TESTING_DB_NAME).getResourceManagementService();
+        rms = new ServiceFactory(TESTING_DB_NAME).resourceManagementService();
         //add drivers
         DalFactory dalFactory;
         try {

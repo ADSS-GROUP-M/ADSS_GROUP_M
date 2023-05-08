@@ -140,8 +140,12 @@ public class DalFactory {
     }
 
     public static void clearTestDB(){
+        clearDB(TESTING_DB_NAME);
+    }
+
+    public static void clearDB(String dbName){
         try {
-            DalFactory factory = new DalFactory(TESTING_DB_NAME);
+            DalFactory factory = new DalFactory(dbName);
             factory.shiftDAO().clearTable();
             factory.userDAO().clearTable();
 

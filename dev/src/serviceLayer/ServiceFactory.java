@@ -49,15 +49,15 @@ public class ServiceFactory {
         //========================================================= |
     }
 
-    public TransportsService getTransportsService() {
+    public TransportsService transportsService() {
         return transportsService;
     }
 
-    public ResourceManagementService getResourceManagementService() {
+    public ResourceManagementService resourceManagementService() {
         return resourceManagementService;
     }
 
-    public ItemListsService getItemListsService() {
+    public ItemListsService itemListsService() {
         return itemListsService;
     }
 

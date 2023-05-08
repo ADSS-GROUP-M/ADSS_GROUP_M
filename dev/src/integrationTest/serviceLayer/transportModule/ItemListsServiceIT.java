@@ -6,7 +6,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import serviceLayer.ServiceFactory;
-import serviceLayer.transportModule.ItemListsService;
 import utils.Response;
 
 import java.util.HashMap;
@@ -21,7 +20,7 @@ class ItemListsServiceIT {
 
     @BeforeEach
     void setUp() {
-        ils = new ServiceFactory(TESTING_DB_NAME).getItemListsService();
+        ils = new ServiceFactory(TESTING_DB_NAME).itemListsService();
 
         HashMap<String, Integer> load1 = new HashMap<>();
         load1.put("Shirts", 20);

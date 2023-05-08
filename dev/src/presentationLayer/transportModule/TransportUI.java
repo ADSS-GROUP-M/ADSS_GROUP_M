@@ -20,16 +20,16 @@ public class TransportUI implements Menu {
     public TransportUI(ServiceFactory factory){
         this.factory = factory;
         UIData = new UiData(
-                factory.getResourceManagementService(),
-                factory.getItemListsService(),
-                factory.getTransportsService()
+                factory.resourceManagementService(),
+                factory.itemListsService(),
+                factory.transportsService()
         );
         EmployeesService employeesService = factory.employeesService();
-        itemListsManagement = new ItemListsManagement(UIData,factory.getItemListsService());
-        sitesManagement = new SitesManagement(UIData,factory.getResourceManagementService());
-        trucksManagement = new TrucksManagement(UIData,factory.getResourceManagementService());
-        driversManagement = new DriversManagement(UIData,factory.getResourceManagementService());
-        transportsManagement = new TransportsManagement(UIData,factory.getTransportsService(), employeesService);
+        itemListsManagement = new ItemListsManagement(UIData,factory.itemListsService());
+        sitesManagement = new SitesManagement(UIData,factory.resourceManagementService());
+        trucksManagement = new TrucksManagement(UIData,factory.resourceManagementService());
+        driversManagement = new DriversManagement(UIData,factory.resourceManagementService());
+        transportsManagement = new TransportsManagement(UIData,factory.transportsService(), employeesService);
     }
 
     @Override

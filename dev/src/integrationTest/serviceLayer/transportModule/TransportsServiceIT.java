@@ -9,9 +9,6 @@ import serviceLayer.ServiceFactory;
 import serviceLayer.employeeModule.Objects.SShiftType;
 import serviceLayer.employeeModule.Services.EmployeesService;
 import serviceLayer.employeeModule.Services.UserService;
-import serviceLayer.transportModule.ItemListsService;
-import serviceLayer.transportModule.ResourceManagementService;
-import serviceLayer.transportModule.TransportsService;
 import utils.JsonUtils;
 import utils.Response;
 
@@ -45,9 +42,9 @@ class TransportsServiceIT {
     void setUp() {
         DalFactory.clearTestDB();
         ServiceFactory factory = new ServiceFactory(TESTING_DB_NAME);
-        ts = factory.getTransportsService();
-        ils = factory.getItemListsService();
-        rms = factory.getResourceManagementService();
+        ts = factory.transportsService();
+        ils = factory.itemListsService();
+        rms = factory.resourceManagementService();
         es = factory.employeesService();
         us = factory.userService();
 

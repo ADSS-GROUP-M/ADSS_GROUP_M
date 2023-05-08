@@ -32,7 +32,7 @@ public class EmployeesService {
     private ShiftsController shiftsController;
 
     public EmployeesService(ServiceFactory serviceFactory, EmployeesController employeesController, ShiftsController shiftsController) {
-        rms = serviceFactory.getResourceManagementService();
+        rms = serviceFactory.resourceManagementService();
         userService = serviceFactory.userService();
         this.employeesController = employeesController;
         this.shiftsController = shiftsController;

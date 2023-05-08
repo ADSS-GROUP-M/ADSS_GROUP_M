@@ -5,11 +5,12 @@ import dataAccessLayer.transportModule.DistanceBetweenSites;
 import dataAccessLayer.transportModule.SitesDAO;
 import dataAccessLayer.transportModule.SitesDistancesDAO;
 import javafx.util.Pair;
-import objects.transportObjects.DeliveryRoute;
 import objects.transportObjects.Site;
-import objects.transportObjects.Transport;
 import serviceLayer.employeeModule.Services.EmployeesService;
 import utils.transportUtils.TransportException;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
 
 import java.util.*;
 
@@ -63,15 +64,37 @@ public class SitesController {
         for(Site s : sites){
             if(s.address().equals(site.address())) continue;
             try {
-                int distance = rand.nextInt(1,10); //TODO: temporary random distance
+                int distance = rand.nextInt(1,50); //TODO: temporary random distance
                 DistanceBetweenSites to = new DistanceBetweenSites(s.address(),site.address(),distance);
                 DistanceBetweenSites from = new DistanceBetweenSites(site.address(),s.address(),distance);
+                DistanceBetweenSites stay = new DistanceBetweenSites(site.address(),site.address(),0);
                 distancesDAO.insert(to);
                 distancesDAO.insert(from);
+                distancesDAO.insert(stay);
             } catch (DalException e) {
                 throw new TransportException(e.getMessage(),e);
             }
         }
+    }
+
+    private void fetchDistances(Site site){
+        // Create a ScriptEngineManager object
+        ScriptEngineManager manager = new ScriptEngineManager();
+
+        // Get the JavaScript engine
+        ScriptEngine engine = manager.getEngineByName("javascript");
+
+        try {
+            // Execute JavaScript code
+            String script = "var a = 1 + 2; a;";
+            Object result = engine.eval(script);
+
+            // Print the result
+            System.out.println(result);
+        } catch (ScriptException e) {
+            e.printStackTrace();
+        }
+
     }
 
     /**

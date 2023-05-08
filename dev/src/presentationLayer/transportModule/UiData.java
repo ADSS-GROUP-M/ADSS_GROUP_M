@@ -16,7 +16,6 @@ import java.util.*;
 public class UiData {
 
     private Scanner scanner;
-    private boolean dataGenerated;
     private final HashMap<String, Driver> drivers;
     private final HashMap<String, Truck> trucks;
     private final HashMap<String, Site> sites;
@@ -28,7 +27,6 @@ public class UiData {
 
     public UiData(ResourceManagementService rms, ItemListsService ils, TransportsService ts){
         scanner = new Scanner(System.in);
-        dataGenerated = false;
         this.rms = rms;
         this.ils = ils;
         this.ts = ts;
@@ -60,18 +58,11 @@ public class UiData {
     }
 
     public void loadData(){
-        if(dataGenerated){
-            System.out.println("Data already generated!");
-            return;
-        }
-//        generateAndAddData();
-        dataGenerated = true;
         fetchDrivers();
         fetchTrucks();
         fetchSites();
         fetchItemLists();
         fetchTransports();
-        System.out.println("\nData generated successfully!");
     }
 
     private void fetchTrucks() {

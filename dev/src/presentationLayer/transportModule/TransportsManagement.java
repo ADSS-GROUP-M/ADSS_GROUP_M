@@ -12,7 +12,6 @@ import utils.Response;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.format.DateTimeParseException;
 import java.util.*;
 
 public class TransportsManagement {
@@ -69,8 +68,8 @@ public class TransportsManagement {
 
         // driver
         System.out.println("Driver: ");
-        String driverID = pickFromAvailableDrivers(departureDateTime);
-        if(driverID == null){
+        Driver driver = pickFromAvailableDrivers(departureDateTime);
+        if(driver == null){
             return;
         }
 
@@ -97,7 +96,7 @@ public class TransportsManagement {
                         destinations,
                         itemsList
                 ),
-                driverID,
+                driver.id(),
                 truckId,
                 departureDateTime,
                 truckWeight
@@ -110,7 +109,7 @@ public class TransportsManagement {
         }
     }
 
-    private String pickFromAvailableDrivers(LocalDateTime departureDateTime) {
+    private Driver pickFromAvailableDrivers(LocalDateTime departureDateTime) {
         String json = es.getAvailableDrivers(JsonUtils.serialize(departureDateTime));
         Response response = Response.fromJson(json);
         if(response.success() == false){
@@ -122,7 +121,7 @@ public class TransportsManagement {
                 .map(driver -> uiData.drivers().get(driver))
                 .filter(Objects::nonNull)
                 .toArray(Driver[]::new);
-        return uiData.pickDriver(false,availableDrivers).id();
+        return uiData.pickDriver(false,availableDrivers);
     }
 
     private void pickAnOptionIfFail(Transport newTransport) {
@@ -138,13 +137,13 @@ public class TransportsManagement {
                     System.out.println("Truck: ");
                     String truckId = uiData.pickTruck(false).id();
                     System.out.println("Driver: ");
-                    String driverID = uiData.pickDriver(false).id();
+                    Driver driver = pickFromAvailableDrivers(newTransport.departureTime());
                     newTransport = new Transport(
                             new DeliveryRoute(
                                     newTransport.source(),
                                     newTransport.destinations(),
                                     newTransport.itemLists()),
-                            driverID,
+                            driver.id(),
                             truckId,
                             newTransport.departureTime(),
                             newTransport.weight()
@@ -200,15 +199,15 @@ public class TransportsManagement {
             System.out.println("3. Update source");
             System.out.println("4. Update destinations");
             System.out.println("5. Update weight");
-            System.out.println("6. Update arrival times");
+            System.out.println("6. Set manual arrival times");
             System.out.println("7. Return to previous menu");
             int option = uiData.readInt();
             switch (option) {
 
                 case 1 -> {
                     System.out.println("Select driver: ");
-                    String driverID = pickFromAvailableDrivers(oldtransport.departureTime());
-                    if(driverID == null) {
+                    Driver driver = pickFromAvailableDrivers(oldtransport.departureTime());
+                    if(driver == null) {
                         continue;
                     }
 
@@ -218,7 +217,7 @@ public class TransportsManagement {
                             oldtransport.destinations(),
                             oldtransport.itemLists(),
                             oldtransport.truckId(),
-                            driverID,
+                            driver.id(),
                             oldtransport.departureTime(),
                             oldtransport.weight()
                     );
@@ -282,7 +281,7 @@ public class TransportsManagement {
                     );
                 }
                 case 6 -> {
-                    updateArrivalTimes(oldtransport);
+                    overrideArrivalTimes(oldtransport);
                     updateTransportHelperMethod(
                             oldtransport.id(),
                             oldtransport.deliveryRoute(),
@@ -304,7 +303,7 @@ public class TransportsManagement {
         }
     }
 
-    private void updateArrivalTimes(Transport oldtransport) {
+    private void overrideArrivalTimes(Transport oldtransport) {
         System.out.println("Select new arrival times (enter 'cancel!' to cancel): ");
         HashMap<String, LocalTime> arrivalTimes = new HashMap<>();
         for (String destination : oldtransport.destinations()) {
@@ -315,7 +314,9 @@ public class TransportsManagement {
             }
             arrivalTimes.put(destination, arrivalTime);
         }
-        oldtransport.deliveryRoute().initializeArrivalTimes(arrivalTimes);
+        for(var pair : arrivalTimes.entrySet()) {
+            oldtransport.deliveryRoute().overrideArrivalTime(pair.getKey(), pair.getValue());
+        }
     }
 
 
@@ -453,6 +454,7 @@ public class TransportsManagement {
         int destinationId = 1;
         System.out.println("Pick destinations and items lists:");
         while(true){
+            System.out.println("=========================================");
             System.out.println("Destination number "+destinationId+": ");
             Site site = uiData.pickSite(true);
             if(site == null) {

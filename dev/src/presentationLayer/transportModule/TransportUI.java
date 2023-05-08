@@ -34,17 +34,23 @@ public class TransportUI implements Menu {
 
     @Override
     public Menu run() {
+        Thread loader = new Thread(UIData::loadData);
+        loader.start();
         printCommands();
+        try {
+            loader.join();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         int option = UIData.readInt();
         switch (option) {
             case 1 -> transportsManagement.manageTransports();
             case 2 -> itemListsManagement.manageItemLists();
             case 3 -> manageResources();
-            case 4 -> UIData.loadData();
-            case 5 -> {
+            case 4 -> {
                 return new LoginMenu(factory);
             }
-            case 6 -> {
+            case 5 -> {
                 MenuManager.terminate();
                 return null;
             }
@@ -61,9 +67,8 @@ public class TransportUI implements Menu {
         System.out.println("1. Manage transports");
         System.out.println("2. Manage item lists");
         System.out.println("3. Manage transport module resources");
-        System.out.println("4. Generate data");
-        System.out.println("5. Return to login menu");
-        System.out.println("6. Exit");
+        System.out.println("4. Return to login menu");
+        System.out.println("5. Exit");
     }
 
     private void manageResources() {

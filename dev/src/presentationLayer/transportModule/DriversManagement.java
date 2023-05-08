@@ -21,20 +21,16 @@ public class DriversManagement {
             System.out.println("=========================================");
             System.out.println("Drivers management");
             System.out.println("Please select an option:");
-            System.out.println("1. Create new driver");
-            System.out.println("2. Update driver");
-            System.out.println("3. Remove driver");
-            System.out.println("4. View full driver information");
-            System.out.println("5. View all drivers");
-            System.out.println("6. Return to previous menu");
+            System.out.println("1. Update driver's license");
+            System.out.println("2. View full driver information");
+            System.out.println("3. View all drivers");
+            System.out.println("4. Return to previous menu");
             int option = uiData.readInt();
             switch (option) {
-                case 1 -> createDriver();
-                case 2 -> updateDriver();
-                case 3 -> removeDriver();
-                case 4 -> viewDriver();
-                case 5 -> viewAllDrivers();
-                case 6 -> {
+                case 1 -> updateLicense();
+                case 2 -> viewDriver();
+                case 3 -> viewAllDrivers();
+                case 4 -> {
                     return;
                 }
                 default -> System.out.println("\nInvalid option!");
@@ -42,6 +38,25 @@ public class DriversManagement {
         }
     }
 
+    private void updateLicense() {
+        System.out.println("=========================================");
+        System.out.println("Select driver to update:");
+        Driver driver = uiData.pickDriver(true);
+        if (driver == null) {
+            return;
+        }
+        System.out.println("Select new license type:");
+        Driver.LicenseType licenseType = pickLicenseType();
+        if (licenseType == null) {
+            return;
+        }
+        updateDriverHelperMethod(driver.id(), driver.name(), licenseType);
+    }
+
+    /**
+     * @deprecated no longer used
+     */
+    @Deprecated
     private void createDriver() {
         System.out.println("=========================================");
         System.out.println("Enter driver details:");
@@ -62,6 +77,10 @@ public class DriversManagement {
         System.out.println("\n"+response.message());
     }
 
+    /**
+     * @deprecated no longer used
+     */
+    @Deprecated
     private void updateDriver() {
         while (true) {
             System.out.println("=========================================");
@@ -113,6 +132,10 @@ public class DriversManagement {
         System.out.println("\n"+response.message());
     }
 
+    /**
+     * @deprecated no longer used
+     */
+    @Deprecated
     private void removeDriver() {
         while(true) {
             System.out.println("=========================================");
@@ -178,14 +201,21 @@ public class DriversManagement {
     }
 
     private Driver.LicenseType pickLicenseType() {
-        for (int i = 0; i < Driver.LicenseType.values().length; i++) {
-            System.out.println((i+1) + ". " + Driver.LicenseType.values()[i]);
+        while(true){
+            int i = 0;
+            for (; i < Driver.LicenseType.values().length; i++) {
+                System.out.println((i+1) + ". " + Driver.LicenseType.values()[i]);
+            }
+            System.out.println((i+1) + ". Cancel");
+            int option = uiData.readInt()-1;
+            if(option == Driver.LicenseType.values().length) {
+                return null;
+            }
+            if (option < 0 || option > Driver.LicenseType.values().length) {
+                System.out.println("Invalid option!");
+                continue;
+            }
+            return Driver.LicenseType.values()[option];
         }
-        int option = uiData.readInt()-1;
-        if (option < 0 || option >= Driver.LicenseType.values().length) {
-            System.out.println("Invalid license type!");
-            return null;
-        }
-        return Driver.LicenseType.values()[option];
     }
 }

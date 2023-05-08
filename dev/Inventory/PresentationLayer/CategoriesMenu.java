@@ -1,55 +1,69 @@
 package dev.Inventory.PresentationLayer;
 
 
+import dev.Inventory.ServiceLayer.CategoriesService;
+
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
+
 public class CategoriesMenu extends MainMenu {
 
     private String branch;
     public void run(String branch) {
         this.branch = branch;
         System.out.println("Please select an option:");
-        System.out.println("1. Add new main category");
-        System.out.println("2. Add new sub category");
-        System.out.println("3. Remove main category");
-        System.out.println("4. Remove sub category");
-        System.out.println("5. Back to main manu");
-        System.out.println("6. Exit");
+        System.out.println("1. Add new category");
+        System.out.println("2. Remove category");
+        System.out.println("3. Add subcategory");
+        System.out.println("4. Back to main manu");
+        System.out.println("5. Exit");
         int option = in.nextInt();
         switch (option) {
-            case 1 -> mainCategory();
-            case 2 -> subCategory();
-            case 3 -> removeMainCategory();
-            case 4 -> removeSubCategory();
-            case 5 -> new MainMenu().run();
-            case 6 -> System.exit(0);
+            case 1 -> createCategory();
+            case 2 -> removeCategory();
+            case 3 -> addSubcategory();
+            case 4 -> new MainMenu().run();
+            case 5 -> System.exit(0);
             default -> System.out.println("\nInvalid command");
         }
     }
 
-    private void mainCategory() {
+    private void createCategory() {
         in.nextLine();
         System.out.println("Please enter new category's name");
         String category_name = in.nextLine();
-        System.out.println(stockService.createMainCategory(category_name, branch).getReturnValue());
+        String subcategory = "";
+        List<String> subcategories = new ArrayList<String>();
+        while (subcategory != "null"){
+            System.out.println("enter subcategory, if you done choose 'null' ");
+            subcategory = in.nextLine();
+            if(subcategory != "null")
+                subcategories.add(subcategory);
+        }
+        System.out.println(categoriesService.createCategory(category_name,subcategories).getReturnValue());
     }
 
-    private void subCategory() {
-        in.nextLine();
-        System.out.println("Please enter new category's name");
-        String category_name = in.nextLine();
-        System.out.println(stockService.createSubCategory(category_name, branch).getReturnValue());
-    }
 
-    private void removeMainCategory() {
-        in.nextLine();
-        System.out.println("category name:");
-        String category_name = in.nextLine();
-        System.out.println(stockService.removeMainCategory(category_name, branch).getReturnValue());
-    }
-
-    private void removeSubCategory() {
+    private void removeCategory() {
         in.nextLine();
         System.out.println("category name:");
         String category_name = in.nextLine();
-        System.out.println(stockService.removeSubCategory(category_name, branch).getReturnValue());
+        System.out.println(categoriesService.removeCategory(category_name).getReturnValue());
+    }
+
+    private void addSubcategory() {
+        in.nextLine();
+        System.out.println("category name:");
+        String category_name = in.nextLine();
+        String subcategory = "";
+        List<String> subcategories = new ArrayList<String>();
+        while (subcategory != "null"){
+            System.out.println("enter subcategory, if you done choose 'null' ");
+            subcategory = in.nextLine();
+            if(subcategory != "null")
+                subcategories.add(subcategory);
+        }
+        System.out.println(categoriesService.removeSubCategory(category_name, subcategories).getReturnValue());
     }
 }

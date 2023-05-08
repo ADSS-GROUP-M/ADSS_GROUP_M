@@ -57,6 +57,7 @@ public class DiscountController {
         storeDiscounts.get(branch).get(catalog_number).add(new ProductStoreDiscount(catalog_number,branch,startDate,endDate,discount));
     }
 
+    //TODO: need to edit
     public void createCategoryDiscount(String categoryName, String branch,double discount, LocalDateTime startDate, LocalDateTime endDate){
         CategoryController categoryController = CategoryController.CategoryController();
         if(categoryController.checkIfCategoryExist(categoryName)){
@@ -68,9 +69,10 @@ public class DiscountController {
         else
             throw new RuntimeException("Category does not exist, please create category in order to continue");
     }
-    public double getTodayBiggestStoreDiscountI(String catalog_number, String branch){
+    //TODO : need to edit and verify
+    public double getTodayBiggestStoreDiscount(String catalog_number, String branch){
         if(checkIfBranchExistStoreDiscount(branch)){
-            double maxDiscount = -1;
+            double maxDiscount = 0;
             for(ProductStoreDiscount PDS: storeDiscounts.get(branch).get(catalog_number)){
                double currentDiscount = PDS.getDiscount(LocalDateTime.now());
                if(currentDiscount > maxDiscount)
@@ -81,6 +83,7 @@ public class DiscountController {
         else
             throw new RuntimeException("Branch does not exist, please create discount in order to continue");
     }
+    //TODO: remove?
     public double getTodaySupplierDiscountI(String catalog_number, String branch, int supplierID){
         if(checkIfSupplierExist(branch,supplierID)){
             List<ProductDiscountSupplier> supplierDiscountList = supplierDiscount.get(branch).get(supplierID);
@@ -102,8 +105,8 @@ public class DiscountController {
     // need to edit
     // check if there is a discount today on the current product and calculate to final price
     public double calcSoldPrice(String branch, String catalog_number, double originalStorePrice){
-        double currentDiscount = getTodayBiggestStoreDiscountI(catalog_number,branch);
-        if(currentDiscount != -1)
+        double currentDiscount = getTodayBiggestStoreDiscount(catalog_number,branch);
+        if(currentDiscount > 0)
             return (100-currentDiscount)*originalStorePrice;
         return originalStorePrice;
     }
@@ -145,18 +148,19 @@ public class DiscountController {
         if(checkIfBranchExistStoreDiscount(branch)){
             List<Record> productsCategoryRecords = new ArrayList<Record>();
             for(Category category: categories){
-                for(Product productType: category.getProductsRelated().values()){
-                    for(ProductItem product: productType.getProductItems().values()){
-                        String catalog_number = productType.getCatalogNumber();
-                        String serial_number = product.getSerial_number();
-                        String name = productType.getName();
-                        String manufacture = productType.getManufacturer();
-                        double supplierPrice = productType.getOriginalSupplierPrice();
-                        double storePrice = calcSoldPrice(branch,catalog_number,productType.getOriginalStorePrice());
-                        List<Category> subCategory = productType.getSubCategory();
-                        String location = product.getLocation();
+                for(Product product: category.getProductsRelated().values()){
+                    for(ProductItem productItem: product.getProductItems().values()){
+                        String catalog_number = product.getCatalogNumber();
+                        String serial_number = productItem.getSerial_number();
+                        String name = product.getName();
+                        String manufacture = product.getManufacturer();
+                        double supplierPrice = productItem.getSupplierPrice();
+                        double supplierDiscount = productItem.getSupplierDiscount();
+                        double storePrice = calcSoldPrice(branch,catalog_number,product.getOriginalStorePrice());
+                        List<Category> subCategory = product.getSubCategory();
+                        String location = productItem.getLocation();
                         //create Record
-                        Record record = new Record(catalog_number,serial_number,name,branch,manufacture,supplierPrice,storePrice,category,subCategory,location);
+                        Record record = new Record(catalog_number,serial_number,name,branch,manufacture,supplierPrice,supplierDiscount,storePrice,category,subCategory,location);
                         productsCategoryRecords.add(record);
                     }
                 }

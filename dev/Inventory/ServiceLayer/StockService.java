@@ -123,7 +123,7 @@ public class StockService {
         }
     }
 
-    public Response getProductDetails(String catalog_num, int serial_num, String branch) {
+    public Response getProductDetails(String catalog_num, String serial_num, String branch) {
         try {
             return new Response<>(productController.getProductDetails(branch, catalog_num, serial_num));
         } catch (Exception e) {

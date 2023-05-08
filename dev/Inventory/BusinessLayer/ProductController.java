@@ -66,7 +66,7 @@ public class ProductController {
             ProductItem currentProduct = products.get(branch).get(catalog_number).getProduct(serial_number);
             if(isDefective != -1){currentProduct.reportAsDefective();}
             if(isSold != -1){
-                currentProduct.reportAsSold(DCController.getTodayBiggestStoreDiscountI(catalog_number,branch));
+                currentProduct.reportAsSold(DCController.getTodayBiggestStoreDiscount(catalog_number,branch));
             }
             if(newSupplier != null){currentProduct.setSupplierID(newSupplier);}
             if(newSoldPrice != -1){currentProduct.setSoldPrice(newSoldPrice);}
@@ -75,30 +75,30 @@ public class ProductController {
         else
             throw new RuntimeException(String.format("Product type does not exist with the ID : %s",catalog_number));
     }
-    public void updateProduct(String branch, String newName, String catalog_number, String newManufacturer, double newSupplierPrice, double newStorePrice, String newCategory, String newSubCategory, int newMinAmount ){
+    //TODO: need to update
+    public void updateProduct(String branch, String newName, String catalog_number, String newManufacturer, double newStorePrice, String newCategory, String newSubCategory, int newMinAmount ){
         CategoryController categoryController = CategoryController.CategoryController();
         if(checkIfProductExist(branch,catalog_number)){
             Product product = products.get(branch).get(catalog_number);
             //set name
             if(newName != null){product.setName(newName);}
-            if (newManufacturer != null){product.setManufacturer(newManufacturer);}
-            if(newSupplierPrice != -1){product.setOriginalSupplierPrice(newSupplierPrice);}
+            if(newManufacturer != null){product.setManufacturer(newManufacturer);}
             if(newStorePrice != -1){product.setOriginalStorePrice(newStorePrice);}
             if(newMinAmount != -1){product.setNotificationMin(newMinAmount);}
 
             // TODO : need to update
-            if(newCategory != null){
-                if(categoryController.checkIfCategoryExist(newCategory))
-                    product.setCategory(categoryController.getCategory(branch,newCategory));
-                else
-                    categoryController.createCategory(branch,newCategory);
-            }
-            if(newSubCategory != null){
-                if(categoryController.checkIfCategoryExist(newCategory))
-                    product.setCategory(categoryController.getCategory(branch,newSubCategory));
-                else
-                    categoryController.createCategory(branch,newSubCategory);
-            }
+//            if(newCategory != null){
+//                if(categoryController.checkIfCategoryExist(newCategory))
+//                    product.setCategory(categoryController.getCategory(newCategory));
+//                else
+//                    categoryController.createCategory(newCategory);
+//            }
+//            if(newSubCategory != null){
+//                if(categoryController.checkIfCategoryExist(newCategory))
+//                    product.setCategory(categoryController.getCategory(newSubCategory));
+//                else
+//                    categoryController.createCategory(branch,newSubCategory);
+//            }
         }
         else
             throw new RuntimeException(String.format("Product type does not exist with the ID : %s",catalog_number));
@@ -140,18 +140,19 @@ public class ProductController {
 
     public Record getProductDetails(String branch, String catalog_number, String serial_number){
         if(checkIfProductExist(branch,catalog_number)){
-            Product productType = products.get(branch).get(catalog_number);
-            ProductItem product = productType.getProductItems().get(serial_number);
-            String name = productType.getName();
-            String manufacture = productType.getManufacturer();
-            double supplierPrice = productType.getOriginalSupplierPrice();
-//            double storePrice = DCController.calcSoldPrice(branch,productTypeID,productType.getOriginalStorePrice());
-            double storePrice = productType.getOriginalStorePrice();
-            Category category = productType.getCategory();
-            List<Category> subCategory = productType.getSubCategory();
-            String location = product.getLocation();
+            Product product = products.get(branch).get(catalog_number);
+            ProductItem productItem = product.getProductItems().get(serial_number);
+            String name = product.getName();
+            String manufacture = product.getManufacturer();
+            double supplierPrice = productItem.getSupplierPrice();
+            double supplierDiscount = productItem.getSupplierDiscount();
+            // TODO : verify that working
+            double storePrice = DCController.calcSoldPrice(branch,catalog_number,product.getOriginalStorePrice());
+            Category category = product.getCategory();
+            List<Category> subCategory = product.getSubCategory();
+            String location = productItem.getLocation();
             //create Record
-            Record record = new Record(catalog_number,serial_number,name,branch,manufacture,supplierPrice,storePrice,category,subCategory,location);
+            Record record = new Record(catalog_number,serial_number,name,branch,manufacture,supplierPrice,supplierDiscount,storePrice,category,subCategory,location);
             return record;
         }
         return null;
@@ -169,13 +170,14 @@ public class ProductController {
                         String serial_number = productItem.getSerial_number();
                         String name = product.getName();
                         String manufacture = product.getManufacturer();
-                        double supplierPrice = product.getOriginalSupplierPrice();
+                        double supplierPrice = productItem.getSupplierPrice();
+                        double supplierDiscount = productItem.getSupplierDiscount();
                         double storePrice = DCController.calcSoldPrice(branch,productCatalogNumber,product.getOriginalStorePrice());
                         Category category = product.getCategory();
                         List<Category> subCategory = product.getSubCategory();
                         String location = productItem.getLocation();
                         //create Record
-                        Record record = new Record(productCatalogNumber,serial_number,name,branch,manufacture,supplierPrice,storePrice,category,subCategory,location);
+                        Record record = new Record(productCatalogNumber,serial_number,name,branch,manufacture,supplierPrice,supplierDiscount,storePrice,category,subCategory,location);
                         shortagesProductsRecord.add(record);
                     }
                 }
@@ -196,13 +198,14 @@ public class ProductController {
                     String serial_number = productItem.getSerial_number();
                     String name = product.getName();
                     String manufacture = product.getManufacturer();
-                    double supplierPrice = product.getOriginalSupplierPrice();
+                    double supplierPrice = productItem.getSupplierPrice();
+                    double supplierDiscount = productItem.getSupplierDiscount();
                     double storePrice = product.getOriginalStorePrice();
                     Category category = product.getCategory();
                     List<Category> subCategory = product.getSubCategory();
                     String location = productItem.getLocation();
                     //create Record
-                    Record record = new Record(productCatalogNumber,serial_number,name,branch,manufacture,supplierPrice,storePrice,category,subCategory,location);
+                    Record record = new Record(productCatalogNumber,serial_number,name,branch,manufacture,supplierPrice,storePrice,supplierDiscount,category,subCategory,location);
                     defectiveRecords.add(record);
                 }
         }

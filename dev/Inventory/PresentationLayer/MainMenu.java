@@ -1,5 +1,6 @@
 package dev.Inventory.PresentationLayer;
 
+import dev.Inventory.ServiceLayer.CategoriesService;
 import dev.Inventory.ServiceLayer.StockService;
 
 import java.util.*;
@@ -8,9 +9,12 @@ public class MainMenu {
     protected Scanner in;
     protected StockService stockService;
 
+    protected CategoriesService categoriesService;
+
     public MainMenu(){
         in = new Scanner(System.in);
         stockService = new StockService();
+        categoriesService = new CategoriesService();
     }
 
     public void run() {

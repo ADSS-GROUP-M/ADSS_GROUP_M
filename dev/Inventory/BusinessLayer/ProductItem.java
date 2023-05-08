@@ -7,8 +7,8 @@ public class ProductItem {
     private Boolean isSold;
     private String supplierID;
     private double supplierPrice;
-    //default value -1
     private double supplierDiscount;
+    //default value -1
     private double soldPrice;
     private String location;
     private LocalDateTime expirationDate;
@@ -36,8 +36,10 @@ public class ProductItem {
         this.soldPrice = -1;
         this.isDefective = null;
         this.expirationDate = expirationDate;
-        // TODO: calc supplierDiscount and price
+        // TODO: connect to supplier controller and update supplier price and discount
         // this.supplierPrice this.supplierDiscount
+//        this.supplierPrice = 0;
+//        this.supplierDiscount = 0;
 
     }
     public boolean isDefective(){
@@ -65,6 +67,8 @@ public class ProductItem {
     public void setSupplierPrice(double newPrice){this.supplierPrice = newPrice;}
     public void setSupplierID(String newSupplierID){this.supplierID = newSupplierID;}
     public void setSoldPrice(double newSoldPrice){this.soldPrice = newSoldPrice;}
+    public double getSupplierPrice(){return this.supplierPrice;}
+    public double getSupplierDiscount(){return this.supplierDiscount;}
     public String getSerial_number(){return this.serial_number;}
     public String getLocation(){return this.location;}
 }

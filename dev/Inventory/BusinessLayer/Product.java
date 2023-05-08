@@ -12,7 +12,7 @@ public class Product {
     private String manufacturer;
     private int storeAmount;
     private int warehouseAmount;
-    private double originalSupplierPrice;
+//    private double originalSupplierPrice;
     private double originalStorePrice;
     private Category category;
     private List<Category> subCategory;
@@ -103,11 +103,9 @@ public class Product {
     public void setStoreAmount(int newStoreAmount){this.storeAmount = newStoreAmount;}
     public void setWarehouseAmount(int newWarehouseAmount){this.warehouseAmount = newWarehouseAmount;}
     public void setOriginalStorePrice(double newPrice ){this.originalStorePrice = newPrice;}
-    public void setOriginalSupplierPrice(double newPrice){this.originalSupplierPrice = newPrice;}
     public double getOriginalStorePrice(){return this.originalStorePrice;}
     public String getName(){return this.name;}
     public String getManufacturer(){return this.manufacturer;}
-    public double getOriginalSupplierPrice(){return this.originalSupplierPrice;}
     public Category getCategory(){return this.category;}
     public List<Category> getSubCategory(){return this.subCategory;}
 }

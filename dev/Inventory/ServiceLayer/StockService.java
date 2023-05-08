@@ -35,16 +35,19 @@ public class StockService {
         }
     }
 
-    public Response updateProduct(String name, String catalog_number, String manufacturer, double store_price, String branch) {
+    public Response updateProduct(String name, String catalog_number, String manufacturer, double store_price, int newMinAmount, String branch) {
         try {
             if (name != null) {
-                productController.updateProduct(branch, name, catalog_number, null, -1);
+                productController.updateProduct(branch, name, catalog_number, null, -1,   -1);
                 return new Response<>("Product type updated successfully");
             } else if (manufacturer != null) {
-                productController.updateProduct(branch, null, catalog_number, manufacturer, -1);
+                productController.updateProduct(branch, null, catalog_number, manufacturer, -1,  -1);
                 return new Response<>("Product type updated successfully");
             } else if (store_price != -1) {
-                productController.updateProduct(branch, null, catalog_number, null, store_price);
+                productController.updateProduct(branch, null, catalog_number, null, store_price, -1);
+                return new Response<>("Product type updated successfully");
+            }else if (newMinAmount != -1) {
+                productController.updateProduct(branch, null, catalog_number, null, -1, newMinAmount);
                 return new Response<>("Product type updated successfully");
             } else {
                 return Response.createErrorResponse("Invalid input parameters");

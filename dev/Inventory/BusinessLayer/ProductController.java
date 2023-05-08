@@ -76,7 +76,7 @@ public class ProductController {
             throw new RuntimeException(String.format("Product type does not exist with the ID : %s",catalog_number));
     }
     //TODO: need to update
-    public void updateProduct(String branch, String newName, String catalog_number, String newManufacturer, double newStorePrice, String newCategory, String newSubCategory, int newMinAmount ){
+    public void updateProduct(String branch, String newName, String catalog_number, String newManufacturer, double newStorePrice, int newMinAmount ){
         CategoryController categoryController = CategoryController.CategoryController();
         if(checkIfProductExist(branch,catalog_number)){
             Product product = products.get(branch).get(catalog_number);

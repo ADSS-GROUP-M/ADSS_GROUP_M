@@ -7,7 +7,6 @@ import dataAccessLayer.DalFactory;
 import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.dalUtils.OfflineResultSet;
 import dataAccessLayer.dalUtils.SQLExecutor;
-import dataAccessLayer.dalUtils.SQLExecutorProductionImpl;
 import dataAccessLayer.employeeModule.EmployeeDAO;
 import objects.transportObjects.*;
 import org.junit.jupiter.api.AfterEach;
@@ -81,7 +80,7 @@ class TransportDestinationsDAOTest {
                     15000
             );
 
-            DistanceBetweenSites distance = new DistanceBetweenSites(site1.address(), site2.address(), 40);
+            DistanceBetweenSites distance = new DistanceBetweenSites(site1.address(), site2.address(), 40,40);
 
             factory = new DalFactory(TESTING_DB_NAME);
             dao = factory.transportDestinationsDAO();
@@ -95,7 +94,8 @@ class TransportDestinationsDAOTest {
             TrucksController trucksController = mock(TrucksController.class);
             ItemListsController itemListsController = mock(ItemListsController.class);
             DriversController driversController = mock(DriversController.class);
-            SitesController sitesController =  new SitesController(sitesDAO, sitesDistancesDAO);
+            SitesDistancesController distancesController = new SitesDistancesController();
+            SitesController sitesController =  new SitesController(sitesDAO, sitesDistancesDAO, distancesController);
             transportsController = new TransportsController(
                     trucksController,
                     driversController,

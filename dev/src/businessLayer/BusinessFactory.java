@@ -21,6 +21,8 @@ public class BusinessFactory {
     private UserController userController;
     private final DalFactory dalFactory;
 
+    private SitesDistancesController distancesController;
+
     public BusinessFactory() throws DalException{
         dalFactory = new DalFactory();
         buildInstances();
@@ -37,8 +39,9 @@ public class BusinessFactory {
 
         try {
             // ======================== Dependencies ===================== |
+            /*(1)*/ distancesController = new SitesDistancesController();
             /*(1)*/ trucksController = new TrucksController(dalFactory.trucksDAO());
-            /*(1)*/ sitesController = new SitesController(dalFactory.sitesDAO(), dalFactory.sitesDistancesDAO());
+            /*(1)*/ sitesController = new SitesController(dalFactory.sitesDAO(), dalFactory.sitesDistancesDAO(), distancesController);
             /*(1)*/ driversController = new DriversController(dalFactory.driversDAO());
             /*(1)*/ itemListsController = new ItemListsController(dalFactory.itemListsDAO());
             /*(2)*/ transportsController = new TransportsController(trucksController,
@@ -98,6 +101,10 @@ public class BusinessFactory {
 
     public UserController userController() {
         return userController;
+    }
+
+    public SitesDistancesController getDistancesController() {
+        return distancesController;
     }
 
     public DalFactory dalFactory() {

@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.Key;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -25,12 +26,12 @@ public class BingAPI {
         return JsonUtils.deserialize(json, LocationByQueryResponse.class);
     }
 
-    public static DistanceMatrixResponse distanceMatrix(Map<Point,Point> map) throws IOException{
+    public static DistanceMatrixResponse distanceMatrix(List<Pair<Point,Point>> list) throws IOException{
         String urlPrefix = "http://dev.virtualearth.net/REST/v1/Routes/DistanceMatrix?";
         String urlSuffix = "&travelMode=driving&key=" + key;
         StringBuilder originsString = new StringBuilder("origins=");
         StringBuilder destinationsString = new StringBuilder("&destinations=");
-        for(var pair : map.entrySet()){
+        for(var pair : list){
             originsString.append(pair.getKey().latitude()).append(",").append(pair.getKey().longitude()).append(";");
             destinationsString.append(pair.getValue().latitude()).append(",").append(pair.getValue().longitude()).append(";");
         }

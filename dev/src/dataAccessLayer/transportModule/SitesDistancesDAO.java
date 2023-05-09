@@ -11,7 +11,7 @@ import java.util.List;
 
 public class SitesDistancesDAO extends ManyToManyDAO<DistanceBetweenSites> {
 
-    private static final String[] types = {"TEXT", "TEXT" , "INTEGER"};
+    private static final String[] types = {"TEXT", "TEXT" , "REAL","REAL"};
     private static final String[] parent_tables = {"sites", "sites"};
     private static final String[] primary_keys = {"source", "destination"};
     private static final String[][] foreign_keys = {{"source"}, {"destination"}};
@@ -28,7 +28,8 @@ public class SitesDistancesDAO extends ManyToManyDAO<DistanceBetweenSites> {
                 references,
                 "source",
                 "destination",
-                "distance"
+                "distance",
+                "duration"
         );
         initTable();
     }
@@ -89,11 +90,12 @@ public class SitesDistancesDAO extends ManyToManyDAO<DistanceBetweenSites> {
      */
     @Override
     public void insert(DistanceBetweenSites object) throws DalException {
-        String query = String.format("INSERT INTO %s VALUES ('%s','%s', %f);",
+        String query = String.format("INSERT INTO %s VALUES ('%s','%s',%f,%f);",
                 TABLE_NAME,
                 object.source(),
                 object.destination(),
-                object.distance()
+                object.distance(),
+                object.duration()
         );
         try {
             if(cursor.executeWrite(query) != 1){
@@ -109,11 +111,12 @@ public class SitesDistancesDAO extends ManyToManyDAO<DistanceBetweenSites> {
     public void insertAll(List<DistanceBetweenSites> objects) throws DalException {
         StringBuilder query = new StringBuilder();
         for(DistanceBetweenSites object : objects) {
-            query.append(String.format("INSERT INTO %s VALUES ('%s','%s', %f);",
+            query.append(String.format("INSERT INTO %s VALUES ('%s','%s', %f,%f);",
                     TABLE_NAME,
                     object.source(),
                     object.destination(),
-                    object.distance()
+                    object.distance(),
+                    object.duration()
             ));
         }
         try {
@@ -133,9 +136,10 @@ public class SitesDistancesDAO extends ManyToManyDAO<DistanceBetweenSites> {
      */
     @Override
     public void update(DistanceBetweenSites object) throws DalException {
-        String query = String.format("UPDATE %s SET distance = %f WHERE source = '%s' AND destination = '%s';",
+        String query = String.format("UPDATE %s SET distance = %f, duration = %f WHERE source = '%s' AND destination = '%s';",
                 TABLE_NAME,
                 object.distance(),
+                object.duration(),
                 object.source(),
                 object.destination()
 
@@ -192,7 +196,8 @@ public class SitesDistancesDAO extends ManyToManyDAO<DistanceBetweenSites> {
         return new DistanceBetweenSites(
                 resultSet.getString("source"),
                 resultSet.getString("destination"),
-                resultSet.getInt("distance")
+                resultSet.getInt("distance"),
+                resultSet.getDouble("duration")
         );
     }
 }

@@ -1,14 +1,12 @@
 package businessLayer.transportModule;
 
 import dataAccessLayer.dalUtils.DalException;
-import dataAccessLayer.dalUtils.SQLExecutorTestingImpl;
 import dataAccessLayer.transportModule.SitesDAO;
 import dataAccessLayer.transportModule.SitesDistancesDAO;
 import objects.transportObjects.Site;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import serviceLayer.employeeModule.Services.EmployeesService;
-import utils.Response;
 import utils.transportUtils.TransportException;
 
 import java.util.List;
@@ -28,7 +26,8 @@ class SitesControllerTest {
         dao = mock(SitesDAO.class);
         EmployeesService employeesService = mock(EmployeesService.class);
         distancesDAO = mock(SitesDistancesDAO.class);
-        controller = new SitesController(dao, distancesDAO);
+        SitesDistancesController distancesController = mock(SitesDistancesController.class);
+        controller = new SitesController(dao, distancesDAO, distancesController);
         controller.injectDependencies(employeesService);
 
         site = new Site("zone1", "address1", "phone1", "contact1", Site.SiteType.BRANCH);

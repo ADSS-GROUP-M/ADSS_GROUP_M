@@ -4,21 +4,16 @@ import businessLayer.employeeModule.Employee;
 import businessLayer.employeeModule.Role;
 import businessLayer.transportModule.*;
 import dataAccessLayer.DalFactory;
-import dataAccessLayer.dalUtils.Cache;
 import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.employeeModule.EmployeeDAO;
 import objects.transportObjects.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.platform.commons.util.CollectionUtils;
 import utils.transportUtils.TransportException;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -85,7 +80,7 @@ class TransportsDAOTest {
         DistanceBetweenSites distance = new DistanceBetweenSites(
                 source.address(),
                 site.address(),
-                100
+                100,100
         );
 
         try {
@@ -100,7 +95,8 @@ class TransportsDAOTest {
             TrucksController trucksController = mock(TrucksController.class);
             ItemListsController itemListsController = mock(ItemListsController.class);
             DriversController driversController = mock(DriversController.class);
-            SitesController sitesController =  new SitesController(sitesDAO, distancesDAO);
+            SitesDistancesController distancesController = mock(SitesDistancesController.class);
+            SitesController sitesController =  new SitesController(sitesDAO, distancesDAO, distancesController);
             transportsController = new TransportsController(
                     trucksController,
                     driversController,
@@ -153,7 +149,7 @@ class TransportsDAOTest {
         DistanceBetweenSites distance = new DistanceBetweenSites(
                 site.address(),
                 site.address(),
-                100
+                100,100
         );
         try {
             distancesDAO.insert(distance);

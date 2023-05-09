@@ -9,6 +9,7 @@ import javafx.util.Pair;
 import objects.transportObjects.Site;
 import serviceLayer.employeeModule.Services.EmployeesService;
 import utils.transportUtils.TransportException;
+import java.util.concurrent.ConcurrentLinkedDeque;
 
 import java.util.*;
 
@@ -22,11 +23,33 @@ public class SitesController {
     private final SitesDAO dao;
     private final SitesDistancesDAO distancesDAO;
     private EmployeesService employeesService;
-    private SitesDistancesController distancesController;
-    
-    public SitesController(SitesDAO dao, SitesDistancesDAO distancesDAO){
+    private final SitesDistancesController distancesController;
+    private final ConcurrentLinkedDeque<Runnable> tasks;
+    private final Thread worker;
+
+    public SitesController(SitesDAO dao, SitesDistancesDAO distancesDAO, SitesDistancesController distancesController){
         this.dao = dao;
         this.distancesDAO = distancesDAO;
+        this.distancesController = distancesController;
+        tasks = new ConcurrentLinkedDeque<>();
+        worker = new Thread(()->{
+            while(true){
+                if(tasks.isEmpty()){
+                    try {
+                        synchronized (tasks){
+                            tasks.wait();
+                        }
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                else{
+                    Runnable task = tasks.poll();
+                    if(task != null) task.run();
+                }
+            }
+        });
+        worker.start();
     }
 
     public void injectDependencies(EmployeesService employeesService) {
@@ -40,6 +63,7 @@ public class SitesController {
      * @throws TransportException If the site already exists.
      */
     public void addSite(Site site) throws TransportException {
+
         if (siteExists(site.address()) != false) {
             throw new TransportException("Site already exists");
         }
@@ -51,7 +75,20 @@ public class SitesController {
                     coordinates.coordinates()[1]);
 
             dao.insert(site);
-            distancesDAO.insertAll(distancesController.createDistanceObjects(site, getAllSites()));
+            List<Site> sites = getAllSites();
+            Site finalSite = site;
+//             tasks.add(() -> {
+//                try {
+//                    distancesDAO.insertAll(distancesController.createDistanceObjects(finalSite,sites ));
+//                } catch (DalException | TransportException e) {
+//                    throw new RuntimeException(e);
+//                }
+//            });
+//            synchronized(tasks){
+//                tasks.notify();
+//            }
+
+            distancesDAO.insertAll(distancesController.createDistanceObjects(finalSite,sites ));
             if(site.siteType() == Site.SiteType.BRANCH){
                 employeesService.createBranch(TRANSPORT_MANAGER_USERNAME,site.address());
             }

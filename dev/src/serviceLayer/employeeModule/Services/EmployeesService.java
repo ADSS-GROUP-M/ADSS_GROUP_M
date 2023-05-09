@@ -82,10 +82,10 @@ public class EmployeesService {
             // Initializing Branches - TODO: Should be moved to Transport module
             String headquartersId = "1";
             rms.addSite(new Site("Headquarters",headquartersId,"123456789","Headquarters", Site.SiteType.BRANCH).toJson());
-            for(int i = 2; i <= 9; i++) {
-                String branchId = Integer.toString(i);
-                rms.addSite(new Site("Zone" + i,branchId, "phone" + i,"contact"+i, Site.SiteType.BRANCH).toJson());
-            }
+//            for(int i = 2; i <= 9; i++) {
+//                String branchId = Integer.toString(i);
+//                rms.addSite(new Site("Zone" + i,branchId, "phone" + i,"contact"+i, Site.SiteType.BRANCH).toJson());
+//            }
             // Transport Module Sites
             Site site1 = new Site("zone a", "123 main st", "(555) 123-4567", "john smith", Site.SiteType.BRANCH);
             Site site4 = new Site("zone d", "246 maple st", "(555) 456-7890", "mary jones", Site.SiteType.BRANCH);

@@ -24,7 +24,7 @@ public class InventoryProductsManu extends MainMenu {
             case 3 -> updateProduct();
             case 4 -> updateItem();
             case 5 -> getProductDetails();
-            case 6 -> new MainMenu().run();
+            case 6 -> new MainMenu().Menu();
             case 7 -> System.exit(0);
             default -> System.out.println("\nInvalid command");
         }
@@ -83,7 +83,7 @@ public class InventoryProductsManu extends MainMenu {
             case 2 -> stockService.updateProduct(null, catalog_num, new_val, -1,-1, branch);
             case 3 -> stockService.updateProduct(null, catalog_num, null, Integer.parseInt(new_val),-1,branch);
             //TODO add min option to edit
-            case 4 -> super.run();
+            case 4 -> super.Menu();
             case 5 -> System.exit(0);
             default -> System.out.println("\nInvalid command");
         }
@@ -112,7 +112,7 @@ public class InventoryProductsManu extends MainMenu {
             case 3 -> stockService.updateProduct(-1, catalog_num, serial_number, -1 , new_val, -1,  null, branch);
             case 4 -> stockService.updateProduct(-1, catalog_num, serial_number, -1, null,  Integer.parseInt(new_val), null, branch);
             case 5 -> stockService.updateProduct(-1, catalog_num, serial_number, -1, null, -1,  new_val, branch);
-            case 6 -> super.run();
+            case 6 -> super.Menu();
             case 7 -> System.exit(0);
             default -> System.out.println("\nInvalid command");
         }

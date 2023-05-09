@@ -1,9 +1,6 @@
 package dev.Inventory.PresentationLayer;
 
 
-import dev.Inventory.ServiceLayer.CategoriesService;
-
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +22,7 @@ public class CategoriesMenu extends MainMenu {
             case 2 -> removeCategory();
             case 3 -> addSubcategory();
             case 4 -> getProductPerCategory();
-            case 5 -> new MainMenu().run();
+            case 5 -> new MainMenu().Menu();
             case 6 -> System.exit(0);
             default -> System.out.println("\nInvalid command");
         }

@@ -18,7 +18,7 @@ public class DiscountsManu extends MainMenu {
         switch (option) {
             case 1 -> productDiscount();
             case 2 -> categoryDiscount();
-            case 4 -> new MainMenu().run();
+            case 4 -> new MainMenu().Menu();
             case 5 -> System.exit(0);
             default -> System.out.println("\nInvalid command");
         }

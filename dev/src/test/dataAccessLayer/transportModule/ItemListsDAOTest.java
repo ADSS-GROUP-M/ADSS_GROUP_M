@@ -47,6 +47,7 @@ class ItemListsDAOTest {
         } catch (DalException e) {
             fail(e);
         }
+        dao.clearCache();
     }
 
     @AfterEach

@@ -37,6 +37,7 @@ class TrucksDAOTest {
         } catch (DalException e) {
             fail(e);
         }
+        dao.clearCache();
     }
 
     @AfterEach

@@ -60,20 +60,19 @@ public class SitesController {
         //TODO: replace with real distances
 
         Random rand = new Random();
+        List<DistanceBetweenSites> distances = new LinkedList<>();
+        distances.add(new DistanceBetweenSites(site.address(),site.address(),0));
         List<Site> sites = getAllSites();
-        for(Site s : sites){
-            if(s.address().equals(site.address())) continue;
-            try {
-                int distance = rand.nextInt(1,50); //TODO: temporary random distance
-                DistanceBetweenSites to = new DistanceBetweenSites(s.address(),site.address(),distance);
-                DistanceBetweenSites from = new DistanceBetweenSites(site.address(),s.address(),distance);
-                DistanceBetweenSites stay = new DistanceBetweenSites(site.address(),site.address(),0);
-                distancesDAO.insert(to);
-                distancesDAO.insert(from);
-                distancesDAO.insert(stay);
-            } catch (DalException e) {
-                throw new TransportException(e.getMessage(),e);
-            }
+        for(Site other : sites){
+            if(other.address().equals(site.address())) continue;
+            int distance = rand.nextInt(1,50); //TODO: temporary random distance
+            distances.add(new DistanceBetweenSites(other.address(),site.address(),distance));
+            distances.add(new DistanceBetweenSites(site.address(),other.address(),distance));
+        }
+        try {
+            distancesDAO.insertAll(distances);
+        } catch (DalException e) {
+            throw new TransportException(e.getMessage(),e);
         }
     }
 

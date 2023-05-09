@@ -38,6 +38,7 @@ class SitesControllerTest {
     void addSite() {
         try{
             when(dao.exists(Site.getLookupObject(site.address()))).thenReturn(false);
+            when(dao.selectAll()).thenReturn(List.of());
         } catch (DalException e) {
             fail(e);
         }

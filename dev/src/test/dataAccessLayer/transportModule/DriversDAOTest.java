@@ -50,6 +50,7 @@ class DriversDAOTest {
         } catch (DalException e) {
             fail(e);
         }
+        dao.clearCache();
     }
 
     @AfterEach

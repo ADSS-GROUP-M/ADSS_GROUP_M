@@ -36,6 +36,7 @@ class SitesDAOTest {
         } catch (DalException e) {
             throw new RuntimeException(e);
         }
+        dao.clearCache();
     }
 
     @AfterEach

@@ -128,6 +128,7 @@ class TransportsDAOTest {
         } catch (DalException | TransportException e) {
             fail(e);
         }
+        transportsDAO.clearCache();
     }
 
     @AfterEach
@@ -138,7 +139,6 @@ class TransportsDAOTest {
     @Test
     void select() {
         try {
-            transportsDAO.clearCache();
             Transport selected = transportsDAO.select(transport);
             assertDeepEquals(transport, selected);
         } catch (DalException e) {

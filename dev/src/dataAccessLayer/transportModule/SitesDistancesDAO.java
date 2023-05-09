@@ -52,7 +52,9 @@ public class SitesDistancesDAO extends ManyToManyDAO<DistanceBetweenSites> {
             throw new DalException("Failed to select distance between sites", e);
         }
         if(resultSet.next()) {
-            return getObjectFromResultSet(resultSet);
+            DistanceBetweenSites fetched = getObjectFromResultSet(resultSet);
+            cache.put(fetched);
+            return fetched;
         } else {
             throw new DalException("No distance between sites  with source " + object.source()+ " and destination " + object.destination()+ " was found");
         }
@@ -72,11 +74,12 @@ public class SitesDistancesDAO extends ManyToManyDAO<DistanceBetweenSites> {
         } catch (SQLException e) {
             throw new DalException("Failed to select all distance between sites", e);
         }
-        List<DistanceBetweenSites> distanceBetweenSites = new LinkedList<>();
+        List<DistanceBetweenSites> distances = new LinkedList<>();
         while(resultSet.next()) {
-            distanceBetweenSites.add(getObjectFromResultSet(resultSet));
+            distances.add(getObjectFromResultSet(resultSet));
         }
-        return distanceBetweenSites;
+        cache.putAll(distances);
+        return distances;
     }
 
 
@@ -95,9 +98,32 @@ public class SitesDistancesDAO extends ManyToManyDAO<DistanceBetweenSites> {
         try {
             if(cursor.executeWrite(query) != 1){
                 throw new RuntimeException("Unexpected error while trying to insert distance between sites");
+            } else {
+                cache.put(object);
             }
         } catch (SQLException e) {
             throw new DalException("Failed to insert distance between sites", e);
+        }
+    }
+
+    public void insertAll(List<DistanceBetweenSites> objects) throws DalException {
+        StringBuilder query = new StringBuilder();
+        for(DistanceBetweenSites object : objects) {
+            query.append(String.format("INSERT INTO %s VALUES ('%s','%s', %f);",
+                    TABLE_NAME,
+                    object.source(),
+                    object.destination(),
+                    object.distance()
+            ));
+        }
+        try {
+            if(cursor.executeWrite(query.toString()) != objects.size()){
+                throw new RuntimeException("Unexpected error while trying to insert distance between sites");
+            } else {
+                cache.putAll(objects);
+            }
+        } catch (SQLException e) {
+            throw new DalException("Failed to insertAll distance between sites", e);
         }
     }
 
@@ -107,7 +133,7 @@ public class SitesDistancesDAO extends ManyToManyDAO<DistanceBetweenSites> {
      */
     @Override
     public void update(DistanceBetweenSites object) throws DalException {
-        String query = String.format("UPDATE %s SET distance = %d WHERE source = '%s' AND destination = '%s';",
+        String query = String.format("UPDATE %s SET distance = %f WHERE source = '%s' AND destination = '%s';",
                 TABLE_NAME,
                 object.distance(),
                 object.source(),
@@ -117,6 +143,8 @@ public class SitesDistancesDAO extends ManyToManyDAO<DistanceBetweenSites> {
         try {
             if(cursor.executeWrite(query) != 1) {
                 throw new DalException("Failed to update distance between sites with source " + object.source()+ " and destination " + object.destination());
+            } else {
+                cache.put(object);
             }
         } catch (SQLException e) {
             throw new DalException("Failed to update distance between sites", e);
@@ -137,6 +165,8 @@ public class SitesDistancesDAO extends ManyToManyDAO<DistanceBetweenSites> {
         try {
             if(cursor.executeWrite(query) != 1){
                 throw new DalException("Failed to delete distance between sites with source " + object.source()+ " and destination " + object.destination());
+            } else {
+                cache.remove(object);
             }
         } catch (SQLException e) {
             throw new DalException("Failed to delete distance between sites", e);

@@ -1,6 +1,7 @@
 package businessLayer.transportModule;
 
 import dataAccessLayer.dalUtils.DalException;
+import dataAccessLayer.dalUtils.SQLExecutorTestingImpl;
 import dataAccessLayer.transportModule.SitesDAO;
 import dataAccessLayer.transportModule.SitesDistancesDAO;
 import objects.transportObjects.Site;
@@ -13,8 +14,7 @@ import utils.transportUtils.TransportException;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 class SitesControllerTest {
 
@@ -38,7 +38,6 @@ class SitesControllerTest {
     void addSite() {
         try{
             when(dao.exists(Site.getLookupObject(site.address()))).thenReturn(false);
-            when(dao.selectAll()).thenReturn(List.of());
         } catch (DalException e) {
             fail(e);
         }

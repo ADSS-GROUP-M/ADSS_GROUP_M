@@ -46,7 +46,7 @@ public class SitesController {
         }
         try {
             dao.insert(site);
-            addDistances(site);
+            distancesDAO.insertAll(createDistanceObjects(site));
             if(site.siteType() == Site.SiteType.BRANCH){
                 employeesService.createBranch(TRANSPORT_MANAGER_USERNAME,site.address());
             }
@@ -55,7 +55,9 @@ public class SitesController {
         }
     }
 
-    private void addDistances(Site site) throws TransportException {
+    private List<DistanceBetweenSites> createDistanceObjects(Site site) throws TransportException {
+
+        //TODO: Figure out how to test this
 
         //TODO: replace with real distances
 
@@ -69,11 +71,7 @@ public class SitesController {
             distances.add(new DistanceBetweenSites(other.address(),site.address(),distance));
             distances.add(new DistanceBetweenSites(site.address(),other.address(),distance));
         }
-        try {
-            distancesDAO.insertAll(distances);
-        } catch (DalException e) {
-            throw new TransportException(e.getMessage(),e);
-        }
+        return distances;
     }
 
     private void fetchDistances(Site site){

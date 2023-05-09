@@ -1,7 +1,7 @@
 package businessLayer.transportModule.bingApi;
 
-public record ResourceSet(
+public record DistanceResourceSet(
         long estimatedTotal,
-        Resource[] resources
+        DistanceResource[] resources
 ) {
 }

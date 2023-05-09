@@ -39,7 +39,7 @@ public class SitesDistancesController {
         return getPoint(site);
     }
 
-    private Map<Pair<String,String>, Double> getDistanceMatrix(Site site, List<Site> otherSites) throws TransportException {
+    public Map<Pair<String,String>, Double> getDistanceMatrix(Site site, List<Site> otherSites) throws TransportException {
 
         Map<Point,Point> points = new HashMap<>();
         Point newSitePoint = new Point(site.address(), new double[]{site.latitude(),site.longitude()});
@@ -56,6 +56,7 @@ public class SitesDistancesController {
 
         Map<Pair<String,String>, Double> distances = new HashMap<>();
         distances.put(new Pair<>(site.address(),site.address()),0.0);
+        return null;
     }
 
     private Point getPoint(Site site) throws TransportException {
@@ -65,10 +66,10 @@ public class SitesDistancesController {
         } catch (IOException e) {
             throw new TransportException(e.getMessage(), e);
         }
-        Resource[] resources = queryResponse.resourceSets()[0].resources();
-        if (resources.length != 1) {
+        LocationResource[] locationResources = queryResponse.resourceSets()[0].locationResources();
+        if (locationResources.length != 1) {
             throw new TransportException("Could not find site or found multiple sites");
         }
-        return resources[0].point();
+        return locationResources[0].point();
     }
 }

@@ -1,6 +1,6 @@
 package businessLayer.transportModule.bingApi;
 
-public record Resource(
+public record LocationResource(
         String __type,
         double[] bbox,
         String name,

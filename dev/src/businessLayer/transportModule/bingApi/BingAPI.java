@@ -34,6 +34,8 @@ public class BingAPI {
             originsString.append(pair.getKey().latitude()).append(",").append(pair.getKey().longitude()).append(";");
             destinationsString.append(pair.getValue().latitude()).append(",").append(pair.getValue().longitude()).append(";");
         }
+        originsString.deleteCharAt(originsString.length()-1);
+        destinationsString.deleteCharAt(destinationsString.length()-1);
 
         String url = urlPrefix + originsString + destinationsString + urlSuffix;
         String json = sendRequest(url);

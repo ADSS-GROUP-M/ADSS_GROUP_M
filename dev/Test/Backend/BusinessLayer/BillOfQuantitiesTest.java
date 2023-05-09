@@ -1,8 +1,10 @@
 package Backend.BusinessLayer;
 
-import Backend.BusinessLayer.Discounts.CashDiscount;
-import Backend.BusinessLayer.Discounts.Discount;
-import Backend.BusinessLayer.Discounts.PercentageDiscount;
+
+import Backend.BusinessLayer.SuppliersModule.BillOfQuantities;
+import Backend.BusinessLayer.SuppliersModule.Discounts.CashDiscount;
+import Backend.BusinessLayer.SuppliersModule.Discounts.Discount;
+import Backend.BusinessLayer.SuppliersModule.Discounts.PercentageDiscount;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

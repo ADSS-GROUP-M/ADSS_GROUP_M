@@ -92,7 +92,7 @@ public class ProductController {
     }
 
     // update products to defective
-    public void reportProductAsDefective(String catalog_number, List<Integer> serialNumbers, String branch){
+    public void reportProductAsDefective(String catalog_number, List<String> serialNumbers, String branch){
         if(checkIfProductExist(branch,catalog_number)){
             Product productType = products.get(branch).get(catalog_number);
             productType.reportAsDefective(serialNumbers);
@@ -105,8 +105,8 @@ public class ProductController {
     // update products status to sold
     public void reportProductAsSold(String catalog_number, List<Integer> serialNumbers, String branch){
         if(checkIfProductExist(branch,catalog_number)){
-            Product productType = products.get(branch).get(catalog_number);
-            productType.reportAsSold(serialNumbers, DCController.calcSoldPrice(branch,catalog_number,productType.getOriginalStorePrice()));
+            Product product = products.get(branch).get(catalog_number);
+            product.reportAsSold(serialNumbers, DCController.calcSoldPrice(branch,catalog_number,product.getOriginalStorePrice()));
         }
         else
             throw new RuntimeException(String.format("Unable to update sold products,\n product type does not exist with the ID : %s",catalog_number));

@@ -1,8 +1,8 @@
 package Backend.ServiceLayer.InventoryModule;
 
-import dev.Inventory.BusinessLayer.InventoryModule.CategoryController;
-import dev.Inventory.BusinessLayer.InventoryModule.DiscountController;
-import dev.Inventory.BusinessLayer.InventoryModule.ProductController;
+import Backend.BusinessLayer.InventoryModule.CategoryController;
+import Backend.BusinessLayer.InventoryModule.DiscountController;
+import Backend.BusinessLayer.InventoryModule.ProductController;
 
 import java.util.List;
 
@@ -16,10 +16,6 @@ public class CategoriesService {
         categoryController = CategoryController.CategoryController();
         discountController = DiscountController.DiscountController();
     }
-
-//    public Response getStockProductsByCategory(){
-//        categoryController.getProductsPerCategory()
-//    }
 
     public Response createCategory(String name, List<String> subcategories) {
         try {
@@ -41,16 +37,6 @@ public class CategoriesService {
         }
     }
 
-//    public Response removeSubCategory(String name, List<String> subcategories){
-//        try {
-//            //TODO
-//            categoryController.removeSubcategory(name,subcategories);
-//            return new Response<>("Subcategories removed successfully");
-//        } catch (Exception e) {
-//            return Response.createErrorResponse("Error removing category: " + e.getMessage());
-//        }
-//    }
-
     public Response getCategoryReport(String branch, List<String> categories){
         try {
             categoryController.getProductsPerCategory(categories,branch);
@@ -60,13 +46,5 @@ public class CategoriesService {
         }
     }
 
-//    public Response addSubCategory(String name, List<String> subcategories){
-//        try {
-//            categoryController.addSubcategory(name,subcategories);
-//            return new Response<>("Subcategory added successfully");
-//        } catch (Exception e) {
-//            return Response.createErrorResponse("Error removing category: " + e.getMessage());
-//        }
-//    }
 
 }

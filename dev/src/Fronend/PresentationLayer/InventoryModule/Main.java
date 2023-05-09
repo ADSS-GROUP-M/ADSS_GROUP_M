@@ -1,5 +1,5 @@
 package Fronend.PresentationLayer.InventoryModule;
-import dev.Inventory.PresentationLayer.InventoryModule.MainMenu;
+import Fronend.PresentationLayer.InventoryModule.MainMenu;
 
 import java.util.*;
 

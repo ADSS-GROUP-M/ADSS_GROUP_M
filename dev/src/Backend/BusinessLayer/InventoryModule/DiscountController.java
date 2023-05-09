@@ -83,26 +83,7 @@ public class DiscountController {
         else
             throw new RuntimeException("Branch does not exist, please create discount in order to continue");
     }
-    //TODO: remove?
-    public double getTodaySupplierDiscountI(String catalog_number, String branch, int supplierID){
-        if(checkIfSupplierExist(branch,supplierID)){
-            List<ProductDiscountSupplier> supplierDiscountList = supplierDiscount.get(branch).get(supplierID);
-            double maxDisxount =-1;
-            for(ProductDiscountSupplier PDS: supplierDiscountList){
-                double currentDiscount = PDS.getDiscountPerDate(LocalDateTime.now(),catalog_number);
-                if(currentDiscount > maxDisxount)
-                    maxDisxount = currentDiscount;
-            }
-            if(maxDisxount != -1)
-                return maxDisxount;
-            else
-                throw new RuntimeException(String.format("Today there is not Discount form this supplierID: %s",supplierID));
-        }
-        else
-            throw new RuntimeException("Supplier or branch does not exist, please create discount in order to continue");
-    }
 
-    // need to edit
     // check if there is a discount today on the current product and calculate to final price
     public double calcSoldPrice(String branch, String catalog_number, double originalStorePrice){
         double currentDiscount = getTodayBiggestStoreDiscount(catalog_number,branch);
@@ -110,21 +91,22 @@ public class DiscountController {
             return (100-currentDiscount)*originalStorePrice;
         return originalStorePrice;
     }
-    public List<ProductStoreDiscount> getStoreDiscountPerDate(int productID, String branch, LocalDateTime startDate, LocalDateTime endDate){
+    public List<ProductStoreDiscount> getStoreDiscountPerDate(String catalog_number, String branch, LocalDateTime startDate, LocalDateTime endDate){
         if(checkIfBranchExistStoreDiscount(branch)){
             List<ProductStoreDiscount> discountList = new ArrayList<ProductStoreDiscount>();
-            for(ProductStoreDiscount PSD: storeDiscounts.get(branch).get(productID)){
-                discountList = PSD.addDiscountSupplier(discountList,startDate,endDate);
+            for(ProductStoreDiscount PSD: storeDiscounts.get(branch).get(catalog_number)){
+                discountList = PSD.addDiscountStore(discountList,startDate,endDate);
             }
             if(!discountList.isEmpty())
                 return discountList;
             else
-                throw new RuntimeException(String.format("There is no discount for this product type ID: %s", productID));
+                throw new RuntimeException(String.format("There is no discount for this product type catalog number: %s", catalog_number));
         }
         else
             throw new RuntimeException("Branch does not exist, please create discount in order to continue");
     }
 
+    //TODO : remove?
     public List<ProductDiscountSupplier> getSupplierDiscountPerDate(String catalog_number, String branch, int supplierID, LocalDateTime startDate, LocalDateTime endDate){
         if(checkIfSupplierExist(branch,supplierID)){
             List<ProductDiscountSupplier> supplierDiscountList = supplierDiscount.get(branch).get(supplierID);

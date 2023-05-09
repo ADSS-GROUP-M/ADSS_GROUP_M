@@ -39,18 +39,18 @@ public class Product {
         else
             throw new RuntimeException(String.format("Product does not exist with the ID : %s",serial_number));
     }
-    public void reportAsDefective(List<Integer> ItemsSerialNumber){
-        for(Integer defectiveSerialNumber: ItemsSerialNumber){
+    public void reportAsDefective(List<String> ItemsSerialNumber){
+        for(String defectiveSerialNumber: ItemsSerialNumber){
             productItems.get(defectiveSerialNumber).reportAsDefective();
         }
     }
-    public void reportAsDefective(int serialNumber){
+    public void reportAsDefective(String serialNumber){
         productItems.get(serialNumber).reportAsDefective();
     }
-    // TODO: should add soldPrice and check with the discount table
+
     public void reportAsSold(List<Integer> serialNumber, double soldPrice){
-        for(Integer soldProductID: serialNumber){
-            productItems.get(soldProductID).reportAsSold(soldPrice);
+        for(Integer soldSerialNumber: serialNumber){
+            productItems.get(soldSerialNumber).reportAsSold(soldPrice);
         }
         //TODO: notification min
     }

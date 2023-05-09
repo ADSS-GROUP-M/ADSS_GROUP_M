@@ -1,8 +1,8 @@
 package Backend.ServiceLayer.InventoryModule;
 
-import dev.Inventory.BusinessLayer.InventoryModule.CategoryController;
-import dev.Inventory.BusinessLayer.InventoryModule.DiscountController;
-import dev.Inventory.BusinessLayer.InventoryModule.ProductController;
+import Backend.BusinessLayer.InventoryModule.ProductController;
+import Backend.BusinessLayer.InventoryModule.DiscountController;
+import Backend.BusinessLayer.InventoryModule.CategoryController;
 
 import java.time.LocalDateTime;
 

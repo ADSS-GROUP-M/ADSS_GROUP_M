@@ -5,12 +5,13 @@ import utils.JsonUtils;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.security.Key;
 import java.util.Scanner;
 
 public class BingAPI {
     
     private static final String key = "Ap_rzOWHxjXVKTzD5kXxfWSj_9LN2Vpr7LSFWv53tgAbvU9iBWl4SqqhUaASGTUE";
-    private static final String COUNTRY_SUFFIX = ", Israel";
+    private static final String COUNTRY_SUFFIX = ", United States";
 
     public static LocationByQueryResponse locationByQuery(String address) throws IOException{
 
@@ -19,7 +20,6 @@ public class BingAPI {
         address = address.concat(COUNTRY_SUFFIX).replace(" ", "%20");
 
         String json = sendRequest(urlPrefix + address + urlSuffix);
-
         return JsonUtils.deserialize(json, LocationByQueryResponse.class);
     }
 

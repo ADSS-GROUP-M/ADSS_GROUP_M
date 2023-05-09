@@ -8,9 +8,6 @@ import javafx.util.Pair;
 import objects.transportObjects.Site;
 import serviceLayer.employeeModule.Services.EmployeesService;
 import utils.transportUtils.TransportException;
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
 
 import java.util.*;
 
@@ -24,6 +21,7 @@ public class SitesController {
     private final SitesDAO dao;
     private final SitesDistancesDAO distancesDAO;
     private EmployeesService employeesService;
+    private SitesDistancesController distancesController;
     
     public SitesController(SitesDAO dao, SitesDistancesDAO distancesDAO){
         this.dao = dao;
@@ -46,52 +44,13 @@ public class SitesController {
         }
         try {
             dao.insert(site);
-            distancesDAO.insertAll(createDistanceObjects(site));
+            distancesDAO.insertAll(distancesController.createDistanceObjects(site, getAllSites()));
             if(site.siteType() == Site.SiteType.BRANCH){
                 employeesService.createBranch(TRANSPORT_MANAGER_USERNAME,site.address());
             }
         } catch (DalException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    private List<DistanceBetweenSites> createDistanceObjects(Site site) throws TransportException {
-
-        //TODO: Figure out how to test this
-
-        //TODO: replace with real distances
-
-        Random rand = new Random();
-        List<DistanceBetweenSites> distances = new LinkedList<>();
-        distances.add(new DistanceBetweenSites(site.address(),site.address(),0));
-        List<Site> sites = getAllSites();
-        for(Site other : sites){
-            if(other.address().equals(site.address())) continue;
-            int distance = rand.nextInt(1,50); //TODO: temporary random distance
-            distances.add(new DistanceBetweenSites(other.address(),site.address(),distance));
-            distances.add(new DistanceBetweenSites(site.address(),other.address(),distance));
-        }
-        return distances;
-    }
-
-    private void fetchDistances(Site site){
-        // Create a ScriptEngineManager object
-        ScriptEngineManager manager = new ScriptEngineManager();
-
-        // Get the JavaScript engine
-        ScriptEngine engine = manager.getEngineByName("javascript");
-
-        try {
-            // Execute JavaScript code
-            String script = "var a = 1 + 2; a;";
-            Object result = engine.eval(script);
-
-            // Print the result
-            System.out.println(result);
-        } catch (ScriptException e) {
-            e.printStackTrace();
-        }
-
     }
 
     /**
@@ -193,4 +152,6 @@ public class SitesController {
         }
         return distances;
     }
+
+
 }

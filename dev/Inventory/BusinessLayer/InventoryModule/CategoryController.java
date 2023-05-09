@@ -1,4 +1,4 @@
-package dev.Inventory.BusinessLayer;
+package dev.Inventory.BusinessLayer.InventoryModule;
 
 import java.util.ArrayList;
 import java.util.HashMap;

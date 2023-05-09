@@ -1,4 +1,4 @@
-package dev.Inventory.BusinessLayer;
+package dev.Inventory.BusinessLayer.InventoryModule;
 import java.time.LocalDateTime;
 
 public class ProductItem {

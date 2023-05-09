@@ -1,8 +1,8 @@
-package dev.Inventory.ServiceLayer;
+package dev.Inventory.ServiceLayer.InventoryModule;
 
-import dev.Inventory.BusinessLayer.CategoryController;
-import dev.Inventory.BusinessLayer.DiscountController;
-import dev.Inventory.BusinessLayer.ProductController;
+import dev.Inventory.BusinessLayer.InventoryModule.CategoryController;
+import dev.Inventory.BusinessLayer.InventoryModule.DiscountController;
+import dev.Inventory.BusinessLayer.InventoryModule.ProductController;
 
 import java.time.LocalDateTime;
 
@@ -83,9 +83,6 @@ public class StockService {
     }
 
 
-//    public Response getInventoryShortages(){
-//
-//    }
 
     public Response getDefectiveProducts(String branch) {
         try {
@@ -101,7 +98,6 @@ public class StockService {
             return Response.createErrorResponse("Error creating category: " + e.getMessage());
         }
     }
-
 
 
     public Response updateDiscountPerCategory(String name, String branch, double discount, LocalDateTime startDate, LocalDateTime endDate) {

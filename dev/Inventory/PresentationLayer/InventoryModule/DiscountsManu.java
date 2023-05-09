@@ -1,4 +1,4 @@
-package dev.Inventory.PresentationLayer;
+package dev.Inventory.PresentationLayer.InventoryModule;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

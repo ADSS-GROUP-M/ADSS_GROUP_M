@@ -1,4 +1,4 @@
-package dev.Inventory.ServiceLayer;
+package dev.Inventory.ServiceLayer.InventoryModule;
 
 public class Response<T> {
     private T returnValue;

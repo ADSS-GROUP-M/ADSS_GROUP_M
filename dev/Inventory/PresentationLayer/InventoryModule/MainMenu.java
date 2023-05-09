@@ -1,7 +1,7 @@
-package dev.Inventory.PresentationLayer;
+package dev.Inventory.PresentationLayer.InventoryModule;
 
-import dev.Inventory.ServiceLayer.CategoriesService;
-import dev.Inventory.ServiceLayer.StockService;
+import dev.Inventory.ServiceLayer.InventoryModule.CategoriesService;
+import dev.Inventory.ServiceLayer.InventoryModule.StockService;
 
 import java.util.*;
 

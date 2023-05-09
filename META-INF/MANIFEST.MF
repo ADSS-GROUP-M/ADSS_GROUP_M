@@ -1,3 +1,3 @@
 Manifest-Version: 1.0
-Main-Class: dev.Inventory.PresentationLayer.Main
+Main-Class: dev.Inventory.PresentationLayer.InventoryModule.Main
 

@@ -1,8 +1,8 @@
-package dev.Inventory.ServiceLayer;
+package dev.Inventory.ServiceLayer.InventoryModule;
 
-import dev.Inventory.BusinessLayer.CategoryController;
-import dev.Inventory.BusinessLayer.DiscountController;
-import dev.Inventory.BusinessLayer.ProductController;
+import dev.Inventory.BusinessLayer.InventoryModule.CategoryController;
+import dev.Inventory.BusinessLayer.InventoryModule.DiscountController;
+import dev.Inventory.BusinessLayer.InventoryModule.ProductController;
 
 import java.util.List;
 
@@ -41,33 +41,32 @@ public class CategoriesService {
         }
     }
 
-    public Response removeSubCategory(String name, List<String> subcategories){
-        try {
-            //TODO
-            categoryController.removeSubcategory(name,subcategories);
-            return new Response<>("Subcategories removed successfully");
-        } catch (Exception e) {
-            return Response.createErrorResponse("Error removing category: " + e.getMessage());
-        }
-    }
+//    public Response removeSubCategory(String name, List<String> subcategories){
+//        try {
+//            //TODO
+//            categoryController.removeSubcategory(name,subcategories);
+//            return new Response<>("Subcategories removed successfully");
+//        } catch (Exception e) {
+//            return Response.createErrorResponse("Error removing category: " + e.getMessage());
+//        }
+//    }
 
     public Response getCategoryReport(String branch, List<String> categories){
         try {
             categoryController.getProductsPerCategory(categories,branch);
-            return new Response<>("Subcategories removed successfully");
+            return new Response<>("Succeed");
         } catch (Exception e) {
-            return Response.createErrorResponse("Error removing category: " + e.getMessage());
+            return Response.createErrorResponse("Error " + e.getMessage());
         }
     }
 
-    public Response addSubCategory(String name, List<String> subcategories){
-        try {
-            categoryController.addSubcategory(name,subcategories);
-            return new Response<>("Subcategory added successfully");
-        } catch (Exception e) {
-            return Response.createErrorResponse("Error removing category: " + e.getMessage());
-        }
-    }
-
+//    public Response addSubCategory(String name, List<String> subcategories){
+//        try {
+//            categoryController.addSubcategory(name,subcategories);
+//            return new Response<>("Subcategory added successfully");
+//        } catch (Exception e) {
+//            return Response.createErrorResponse("Error removing category: " + e.getMessage());
+//        }
+//    }
 
 }

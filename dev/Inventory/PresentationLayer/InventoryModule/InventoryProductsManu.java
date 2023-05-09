@@ -1,4 +1,4 @@
-package dev.Inventory.PresentationLayer;
+package dev.Inventory.PresentationLayer.InventoryModule;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -34,6 +34,7 @@ public class InventoryProductsManu extends MainMenu {
         System.out.println("Enter the following product details:");
         System.out.println("Catalog Number: (number)");
         String catalog_num = in.nextLine();
+        in.nextLine();
         System.out.println("Name: (string)");
         String name = in.nextLine();
         in.nextLine();

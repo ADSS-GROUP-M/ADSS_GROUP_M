@@ -16,7 +16,7 @@ public class OrderController {
     /***
      *
      * @param order maps between productId to the amount to be ordered
-     * @return map between supplier to the products he supplies from the orer
+     * @return map between supplier to the products he supplies from the order
      */
     public Map<String, Pair<Map<Integer, Integer>, Double>> order(Map<Integer, Integer> order){
         List<Supplier> suppliers = supplierController.getCopyOfSuppliers();

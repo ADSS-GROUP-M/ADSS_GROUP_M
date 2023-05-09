@@ -6,37 +6,57 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e454f93c-4ee8-4f4b-9a14-eaaf36aa303c" name="Changes" comment="commit before dal">
-      <change afterPath="$PROJECT_DIR$/sqlite-jdbc-3.41.2.1.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/AbstractDataMapper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/ContactsInfoDataMapper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/DeliveryAgreementDataMapper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/DiscountOnAmountDataMapper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/DiscountOnTotalDataMapper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/OrderHistoryDataMapper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/ProductsDataMapper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/ProductsDiscountsDataMapper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SupplierDataMapper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SupplierProductDataMapper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/fieldsDataMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/code.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/code.iml" afterDir="false" />
+    <list default="true" id="e454f93c-4ee8-4f4b-9a14-eaaf36aa303c" name="Changes" comment="commit dal structure">
       <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/43a9be89-dce4-4781-b868-333e4edc0661.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/645d1f5d-5ee3-4598-9834-536c946f6b51.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/645d1f5d-5ee3-4598-9834-536c946f6b51.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database.sqlite" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/OrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/BusinessLayer/OrderController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/META-INF/MANIFEST.MF" beforeDir="false" afterPath="$PROJECT_DIR$/src/META-INF/MANIFEST.MF" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/PresentationLayer/DeliveryAgreements/DeliveryAgreement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/DeliveryAgreements/DeliveryAgreement.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/PresentationLayer/DeliveryAgreements/DeliveryByInvitation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/DeliveryAgreements/DeliveryByInvitation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/PresentationLayer/DeliveryAgreements/DeliveryFixedDays.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/DeliveryAgreements/DeliveryFixedDays.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/PresentationLayer/Discounts/CashDiscount.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/Discounts/CashDiscount.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/PresentationLayer/Discounts/Discount.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/Discounts/Discount.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/PresentationLayer/Discounts/PercentageDiscount.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/Discounts/PercentageDiscount.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/PresentationLayer/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/PresentationLayer/Order.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/Order.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/PresentationLayer/Response.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/Response.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/PresentationLayer/UI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/UI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Super_lee.db" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/Agreement.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/BankAccount.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/BillOfQuantities.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/DeliveryAgreements/DeliveryAgreement.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/DeliveryAgreements/DeliveryByInvitation.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/DeliveryAgreements/DeliveryFixedDays.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/Discounts/CashDiscount.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/Discounts/Discount.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/Discounts/PercentageDiscount.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/Order.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/OrderController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/Pair.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/Product.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/Supplier.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/SupplierController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/AbstractDataMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/ContactsInfoDataMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/DeliveryAgreementDataMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/DiscountOnAmountDataMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/DiscountOnTotalDataMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/OrderHistoryDataMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/ProductsDataMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/ProductsDiscountsDataMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SupplierDataMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SupplierProductDataMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/fieldsDataMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/ServiceLayer/OrderService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/ServiceLayer/Response.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/ServiceLayer/SupplierService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/DeliveryAgreements/DeliveryAgreement.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/DeliveryAgreements/DeliveryByInvitation.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/DeliveryAgreements/DeliveryFixedDays.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/Discounts/CashDiscount.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/Discounts/Discount.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/Discounts/PercentageDiscount.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/Main.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/Order.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/Response.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/UI.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/super_lee.sqlite" beforeDir="false" afterPath="$PROJECT_DIR$/super_lee.sqlite" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docs/ID-List.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docs/Open Quesions.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docs/Requirements.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docs/class diagram.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docs/object diagram 1.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docs/object diagram2.pdf" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,7 +76,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$/.." value="master" />
+        <entry key="$PROJECT_DIR$/.." value="String_product_id" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
@@ -70,33 +90,33 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Downloaded.Files.Path.Enabled": "false",
-    "Repository.Attach.Annotations": "false",
-    "Repository.Attach.JavaDocs": "false",
-    "Repository.Attach.Sources": "false",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit4",
-    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit4": "",
-    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5": "",
-    "jdk.selected.JAVA_MODULE": "19",
-    "last_opened_file_path": "C:/Users/yossi/OneDrive/שולחן העבודה/ניתוצ/Assignment2/Assignment2/dev/sqlite-jdbc-3.41.2.1.jar",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "reference.projectsettings.compiler.javacompiler"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Downloaded.Files.Path.Enabled&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.Annotations&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.JavaDocs&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.Sources&quot;: &quot;false&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary&quot;: &quot;JUnit4&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit4&quot;: &quot;&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5&quot;: &quot;&quot;,
+    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;19&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/yossi/OneDrive/שולחן העבודה/ניתוצ/Assignment2/Assignment2/dev/sqlite-jdbc-3.41.2.1.jar&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.projectsettings.compiler.javacompiler&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "sqlite"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;sqlite&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\yossi\OneDrive\שולחן העבודה\ניתוצ\Assignment1\Assignment1\dev\PresentationLayer" />
@@ -191,11 +211,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.OrderHistoryDataMapper" />
-        <item itemvalue="JUnit.BillOfQuantitiesTest" />
-        <item itemvalue="Application.Main" />
         <item itemvalue="JUnit.BillOfQuantitiesTest.setOrderOfDiscounts" />
         <item itemvalue="JUnit.BillOfQuantitiesTest.removeDiscountOnAmountOfProducts" />
+        <item itemvalue="JUnit.BillOfQuantitiesTest" />
+        <item itemvalue="Application.OrderHistoryDataMapper" />
+        <item itemvalue="Application.Main" />
       </list>
     </recent_temporary>
   </component>
@@ -216,6 +236,7 @@
       <workItem from="1681150568098" duration="2870000" />
       <workItem from="1682020177721" duration="51433000" />
       <workItem from="1683488131151" duration="9878000" />
+      <workItem from="1683644904745" duration="310000" />
     </task>
     <task id="LOCAL-00001" summary="done with order functionality - moving to the ability to print the order etc">
       <created>1680693870968</created>

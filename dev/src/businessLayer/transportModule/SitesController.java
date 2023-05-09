@@ -1,5 +1,6 @@
 package businessLayer.transportModule;
 
+import businessLayer.transportModule.bingApi.Point;
 import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.transportModule.DistanceBetweenSites;
 import dataAccessLayer.transportModule.SitesDAO;
@@ -43,6 +44,12 @@ public class SitesController {
             throw new TransportException("Site already exists");
         }
         try {
+            // get latitude and longitude
+            Point coordinates = distancesController.getCoordinates(site);
+            site = new Site(site,
+                    coordinates.coordinates()[0],
+                    coordinates.coordinates()[1]);
+
             dao.insert(site);
             distancesDAO.insertAll(distancesController.createDistanceObjects(site, getAllSites()));
             if(site.siteType() == Site.SiteType.BRANCH){

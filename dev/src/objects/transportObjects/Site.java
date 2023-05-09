@@ -36,6 +36,10 @@ public record Site (String transportZone, String address, String phoneNumber, St
         this(transportZone, address, phoneNumber, contactName, siteType, 0.0,0.0);
     }
 
+    public Site(Site old, double latitude, double longitude){
+        this(old.transportZone(), old.address(), old.phoneNumber(), old.contactName(), old.siteType(), latitude, longitude);
+    }
+
     public static Site getLookupObject(String address){
         return new Site(null, address, null, null, null,0.0,0.0);
     }

@@ -19,8 +19,8 @@ public class SitesDistancesController {
         //TODO: Figure out how to test this
 
         //TODO: replace with real distances
-
         
+        Map<Pair<String,String>, Double> distanceMatrix = getDistanceMatrix(site,sites);
 
         Random rand = new Random();
         List<DistanceBetweenSites> distances = new LinkedList<>();
@@ -35,6 +35,10 @@ public class SitesDistancesController {
 
 
         return distances;
+    }
+
+    public Point getCoordinates(Site site) throws TransportException {
+        return getPoint(site);
     }
 
     private Map<Pair<String,String>, Double> getDistanceMatrix(Site site, List<Site> otherSites){

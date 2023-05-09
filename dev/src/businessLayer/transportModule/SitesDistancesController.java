@@ -19,7 +19,7 @@ public class SitesDistancesController {
         //TODO: Figure out how to test this
 
         //TODO: replace with real distances
-        
+
         Map<Pair<String,String>, Double> distanceMatrix = getDistanceMatrix(site,sites);
 
         Random rand = new Random();
@@ -32,8 +32,6 @@ public class SitesDistancesController {
             distances.add(new DistanceBetweenSites(other.address(),site.address(),distance));
             distances.add(new DistanceBetweenSites(site.address(),other.address(),distance));
         }
-
-
         return distances;
     }
 
@@ -41,8 +39,23 @@ public class SitesDistancesController {
         return getPoint(site);
     }
 
-    private Map<Pair<String,String>, Double> getDistanceMatrix(Site site, List<Site> otherSites){
-        return  null;
+    private Map<Pair<String,String>, Double> getDistanceMatrix(Site site, List<Site> otherSites) throws TransportException {
+
+        Map<Point,Point> points = new HashMap<>();
+        Point newSitePoint = new Point(site.address(), new double[]{site.latitude(),site.longitude()});
+        for(Site other : otherSites){
+            Point otherSitePoint = new Point(other.address(), new double[]{other.latitude(),other.longitude()});
+            points.put(newSitePoint,otherSitePoint);
+            points.put(otherSitePoint,newSitePoint);
+        }
+        try {
+            DistanceMatrixResponse response = BingAPI.distanceMatrix(points);
+        } catch (IOException e) {
+            throw new TransportException(e.getMessage(), e);
+        }
+
+        Map<Pair<String,String>, Double> distances = new HashMap<>();
+        distances.put(new Pair<>(site.address(),site.address()),0.0);
     }
 
     private Point getPoint(Site site) throws TransportException {

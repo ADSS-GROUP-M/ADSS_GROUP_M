@@ -1,11 +1,13 @@
 package businessLayer.transportModule.bingApi;
 
+import javafx.util.Pair;
 import utils.JsonUtils;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.Key;
+import java.util.Map;
 import java.util.Scanner;
 
 public class BingAPI {
@@ -21,6 +23,21 @@ public class BingAPI {
 
         String json = sendRequest(urlPrefix + address + urlSuffix);
         return JsonUtils.deserialize(json, LocationByQueryResponse.class);
+    }
+
+    public static DistanceMatrixResponse distanceMatrix(Map<Point,Point> map) throws IOException{
+        String urlPrefix = "http://dev.virtualearth.net/REST/v1/Routes/DistanceMatrix?";
+        String urlSuffix = "&travelMode=driving&key=" + key;
+        StringBuilder originsString = new StringBuilder("origins=");
+        StringBuilder destinationsString = new StringBuilder("&destinations=");
+        for(var pair : map.entrySet()){
+            originsString.append(pair.getKey().latitude()).append(",").append(pair.getKey().longitude()).append(";");
+            destinationsString.append(pair.getValue().latitude()).append(",").append(pair.getValue().longitude()).append(";");
+        }
+
+        String url = urlPrefix + originsString + destinationsString + urlSuffix;
+        String json = sendRequest(url);
+        return JsonUtils.deserialize(json, DistanceMatrixResponse.class);
     }
 
     private static String sendRequest(String _url) throws IOException {

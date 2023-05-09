@@ -114,7 +114,7 @@ public class DiscountController {
         if(checkIfBranchExistStoreDiscount(branch)){
             List<ProductStoreDiscount> discountList = new ArrayList<ProductStoreDiscount>();
             for(ProductStoreDiscount PSD: storeDiscounts.get(branch).get(productID)){
-                discountList = PSD.addDiscountSupplier(discountList,startDate,endDate);
+                discountList = PSD.addDiscountStore(discountList,startDate,endDate);
             }
             if(!discountList.isEmpty())
                 return discountList;

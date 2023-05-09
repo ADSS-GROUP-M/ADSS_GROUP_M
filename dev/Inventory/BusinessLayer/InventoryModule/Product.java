@@ -26,6 +26,7 @@ public class Product {
         this.originalStorePrice = originalStorePrice;
         this.category = null;
         this.subCategory = new ArrayList<Category>();
+        // TODO: notification min
         this.notificationMin = -1;
         // Map<productID, product>
         this.productItems = new HashMap<String, ProductItem>();
@@ -44,7 +45,7 @@ public class Product {
             productItems.get(defectiveSerialNumber).reportAsDefective();
         }
     }
-    public void reportAsDefective(int serialNumber){
+    public void reportAsDefective(String serialNumber){
         productItems.get(serialNumber).reportAsDefective();
     }
     // TODO: should add soldPrice and check with the discount table

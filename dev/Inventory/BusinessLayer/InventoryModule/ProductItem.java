@@ -46,9 +46,7 @@ public class ProductItem {
     }
     public boolean isDefective(){return isSold();}
     public boolean isSold(){
-        if (this.isSold == null)
-            return false;
-        return true;
+        return isSold;
     }
 
     public LocalDateTime getSoldDate(){
@@ -73,7 +71,10 @@ public class ProductItem {
     public void setLocation(String newLocation){this.location = newLocation;}
     public void setSupplierPrice(double newPrice){this.supplierPrice = newPrice;}
     public void setSupplierID(String newSupplierID){this.supplierID = newSupplierID;}
-    public void setSoldPrice(double newSoldPrice){this.soldPrice = newSoldPrice;}
+    public void setSoldPrice(double newSoldPrice){
+        this.soldPrice = newSoldPrice;
+        this.soldDate = LocalDateTime.now();
+    }
     public double getSupplierPrice(){return this.supplierPrice;}
     public double getSupplierDiscount(){return this.supplierDiscount;}
     public String getSerial_number(){return this.serial_number;}

@@ -34,7 +34,7 @@ public class Category {
 //        categoriesDiscount.add(new CategoryDiscount(startDate,endDate,discount,categoryName,branch));
 //    }
 
-    public Boolean isProductIDRelated(int catalog_number){
+    public Boolean isProductIDRelated(String catalog_number){
         return this.productsRelated.containsKey(catalog_number);
     }
 

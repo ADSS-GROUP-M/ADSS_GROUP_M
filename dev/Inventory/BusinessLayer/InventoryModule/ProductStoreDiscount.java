@@ -38,10 +38,10 @@ public class ProductStoreDiscount {
             return -1;
     }
 
-    public List<ProductStoreDiscount> addDiscountSupplier(List<ProductStoreDiscount> discountSuppliersList, LocalDateTime startDate, LocalDateTime endDate){
+    public List<ProductStoreDiscount> addDiscountStore(List<ProductStoreDiscount> discountStoreList, LocalDateTime startDate, LocalDateTime endDate){
         if(isDateInRange(startDate,endDate))
-            discountSuppliersList.add(this);
-        return discountSuppliersList;
+            discountStoreList.add(this);
+        return discountStoreList;
     }
 
 }

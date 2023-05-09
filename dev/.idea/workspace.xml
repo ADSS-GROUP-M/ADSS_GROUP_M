@@ -6,57 +6,8 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e454f93c-4ee8-4f4b-9a14-eaaf36aa303c" name="Changes" comment="commit dal structure">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/645d1f5d-5ee3-4598-9834-536c946f6b51.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/645d1f5d-5ee3-4598-9834-536c946f6b51.xml" afterDir="false" />
+    <list default="true" id="e454f93c-4ee8-4f4b-9a14-eaaf36aa303c" name="Changes" comment="commit">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Super_lee.db" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/Agreement.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/BankAccount.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/BillOfQuantities.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/DeliveryAgreements/DeliveryAgreement.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/DeliveryAgreements/DeliveryByInvitation.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/DeliveryAgreements/DeliveryFixedDays.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/Discounts/CashDiscount.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/Discounts/Discount.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/Discounts/PercentageDiscount.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/Order.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/OrderController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/Pair.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/Product.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/Supplier.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/SupplierController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/AbstractDataMapper.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/ContactsInfoDataMapper.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/DeliveryAgreementDataMapper.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/DiscountOnAmountDataMapper.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/DiscountOnTotalDataMapper.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/OrderHistoryDataMapper.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/ProductsDataMapper.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/ProductsDiscountsDataMapper.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SupplierDataMapper.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SupplierProductDataMapper.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/fieldsDataMapper.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/ServiceLayer/OrderService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/ServiceLayer/Response.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/ServiceLayer/SupplierService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/DeliveryAgreements/DeliveryAgreement.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/DeliveryAgreements/DeliveryByInvitation.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/DeliveryAgreements/DeliveryFixedDays.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/Discounts/CashDiscount.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/Discounts/Discount.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/Discounts/PercentageDiscount.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/Main.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/Order.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/Response.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/UI.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/super_lee.sqlite" beforeDir="false" afterPath="$PROJECT_DIR$/super_lee.sqlite" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../docs/ID-List.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../docs/Open Quesions.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../docs/Requirements.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../docs/class diagram.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../docs/object diagram 1.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../docs/object diagram2.pdf" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -236,7 +187,7 @@
       <workItem from="1681150568098" duration="2870000" />
       <workItem from="1682020177721" duration="51433000" />
       <workItem from="1683488131151" duration="9878000" />
-      <workItem from="1683644904745" duration="310000" />
+      <workItem from="1683644904745" duration="1332000" />
     </task>
     <task id="LOCAL-00001" summary="done with order functionality - moving to the ability to print the order etc">
       <created>1680693870968</created>
@@ -301,7 +252,21 @@
       <option name="project" value="LOCAL" />
       <updated>1683124351701</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="commit">
+      <created>1683646018146</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1683646018146</updated>
+    </task>
+    <task id="LOCAL-00011" summary="commit">
+      <created>1683646037405</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1683646037405</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -344,7 +309,8 @@
     <MESSAGE value="order packages" />
     <MESSAGE value="jdk 17" />
     <MESSAGE value="commit before dal" />
-    <option name="LAST_COMMIT_MESSAGE" value="commit before dal" />
+    <MESSAGE value="commit" />
+    <option name="LAST_COMMIT_MESSAGE" value="commit" />
   </component>
   <component name="XDebuggerManager">
     <pin-to-top-manager>

@@ -128,8 +128,8 @@ public class UiData {
         Site site5 = new Site("zone2", "19340 hawthorne blvd, torrance, ca 90503", "555-555-5555", "Mike Brown", Site.SiteType.BRANCH, 0, 0);
         Site site6 = new Site("zone2", "4651 firestone blvd, south gate, ca 90280", "666-666-6666", "Emily Wilson", Site.SiteType.BRANCH, 0, 0);
         Site site7 = new Site("zone3", "1301 n victory pl, burbank, ca 91502", "777-777-7777", "Tom Kim", Site.SiteType.BRANCH, 0, 0);
-        Site site8 = new Site("zone3", "6433 fallbrook ave, west hills, ca 91307", "888-888-8888", "Amanda Garcia", Site.SiteType.BRANCH, 0, 0);
-        Site site9 = new Site("zone4", "8333 van nuys blvd, panorama city, ca 91402", "123-456-7890", "David Kim", Site.SiteType.BRANCH, 0, 0);
+//        Site site8 = new Site("zone3", "6433 fallbrook ave, west hills, ca 91307", "888-888-8888", "Amanda Garcia", Site.SiteType.BRANCH, 0, 0);
+//        Site site9 = new Site("zone4", "8333 van nuys blvd, panorama city, ca 91402", "123-456-7890", "David Kim", Site.SiteType.BRANCH, 0, 0);
         Site site10 = new Site("zone4", "8500 washington blvd, pico rivera, ca 90660", "456-789-0123", "William Davis", Site.SiteType.SUPPLIER, 0, 0);
         Site site11 = new Site("zone3", "20226 avalon blvd, carson, ca 90746", "999-999-9999", "Steve Chen", Site.SiteType.SUPPLIER, 0, 0);
         Site site12 = new Site("zone4", "9001 apollo way, downey, ca 90242", "345-678-9012", "Andrew Chen", Site.SiteType.SUPPLIER, 0, 0);
@@ -172,8 +172,8 @@ public class UiData {
         rms.addSite(site5.toJson());
         rms.addSite(site6.toJson());
         rms.addSite(site7.toJson());
-        rms.addSite(site8.toJson());
-        rms.addSite(site9.toJson());
+//        rms.addSite(site8.toJson());
+//        rms.addSite(site9.toJson());
         rms.addSite(site10.toJson());
         rms.addSite(site11.toJson());
         rms.addSite(site12.toJson());

@@ -82,16 +82,16 @@ public class EmployeesService {
             // Initializing Branches - TODO: Should be moved to Transport module
             String headquartersId = "1";
             rms.addSite(new Site("Headquarters",headquartersId,"123456789","Headquarters", Site.SiteType.BRANCH).toJson());
-//            for(int i = 2; i <= 9; i++) {
-//                String branchId = Integer.toString(i);
-//                rms.addSite(new Site("Zone" + i,branchId, "phone" + i,"contact"+i, Site.SiteType.BRANCH).toJson());
-//            }
+            for(int i = 2; i <= 9; i++) {
+                String branchId = Integer.toString(i);
+                rms.addSite(new Site("Zone" + i,branchId, "phone" + i,"contact"+i, Site.SiteType.BRANCH).toJson());
+            }
             // Transport Module Sites
-            Site site1 = new Site("zone a", "123 main st", "(555) 123-4567", "john smith", Site.SiteType.BRANCH);
-            Site site4 = new Site("zone d", "246 maple st", "(555) 456-7890", "mary jones", Site.SiteType.BRANCH);
+            Site site8 = new Site("zone3", "6433 fallbrook ave, west hills, ca 91307", "888-888-8888", "Amanda Garcia", Site.SiteType.BRANCH, 0, 0);
+            Site site9 = new Site("zone4", "8333 van nuys blvd, panorama city, ca 91402", "123-456-7890", "David Kim", Site.SiteType.BRANCH, 0, 0);
             // These sites were already inserted in the transport module before, I removed their creation there.
-            rms.addSite(site1.toJson());
-            rms.addSite(site4.toJson());
+            rms.addSite(site8.toJson());
+            rms.addSite(site9.toJson());
 
             // TODO: Add initial employees data, after the Transport Sites have already been added
             employeesController.recruitEmployee(headquartersId,"Moshe Biton", "111","Hapoalim 12 230", 50, LocalDate.of(2023,2,2),"Employment Conditions Test", "More details about Moshe");
@@ -124,8 +124,8 @@ public class EmployeesService {
             // Transport Module Storekeeper Data
             String storekeeperId1 = "1";
             String storekeeperId2 = "2";
-            employeesController.recruitEmployee(site1.address(),"Someone", storekeeperId1,"Hapoalim 12 250", 30, LocalDate.of(2023,2,2),"Employment Conditions Test", "More details about Someone");
-            employeesController.recruitEmployee(site4.address(),"Someone2", storekeeperId2,"Hapoalim 12 250", 30, LocalDate.of(2023,2,2),"Employment Conditions Test", "More details about Someone2");
+            employeesController.recruitEmployee(site8.address(),"Someone", storekeeperId1,"Hapoalim 12 250", 30, LocalDate.of(2023,2,2),"Employment Conditions Test", "More details about Someone");
+            employeesController.recruitEmployee(site9.address(),"Someone2", storekeeperId2,"Hapoalim 12 250", 30, LocalDate.of(2023,2,2),"Employment Conditions Test", "More details about Someone2");
             employeesController.certifyEmployee(storekeeperId1, Role.Storekeeper);
             employeesController.certifyEmployee(storekeeperId2, Role.Storekeeper);
             userService.createUser(UserService.HR_MANAGER_USERNAME,storekeeperId1,"123");
@@ -134,23 +134,23 @@ public class EmployeesService {
             // Shift Creation
             LocalDate shiftDate = LocalDate.of(2023, 4, 5);
             createWeekShifts(UserService.HR_MANAGER_USERNAME,headquartersId,shiftDate);
-            createWeekShifts(UserService.HR_MANAGER_USERNAME,site1.address(),shiftDate);
-            createWeekShifts(UserService.HR_MANAGER_USERNAME,site4.address(),shiftDate);
+            createWeekShifts(UserService.HR_MANAGER_USERNAME,site8.address(),shiftDate);
+            createWeekShifts(UserService.HR_MANAGER_USERNAME,site9.address(),shiftDate);
 
             // Shift Workers Initialization
             setShiftNeededAmount(UserService.HR_MANAGER_USERNAME,headquartersId,shiftDate,SShiftType.Morning,"Driver",2);
             requestShift(driver1.id(),headquartersId,shiftDate,SShiftType.Morning,"Driver");
             requestShift(driver2.id(),headquartersId,shiftDate,SShiftType.Morning,"Driver");
-            requestShift(storekeeperId1,site1.address(),shiftDate,SShiftType.Morning,"Storekeeper");
-            requestShift(storekeeperId2,site4.address(),shiftDate,SShiftType.Morning,"Storekeeper");
+            requestShift(storekeeperId1,site8.address(),shiftDate,SShiftType.Morning,"Storekeeper");
+            requestShift(storekeeperId2,site9.address(),shiftDate,SShiftType.Morning,"Storekeeper");
 
             setShiftEmployees(UserService.HR_MANAGER_USERNAME,headquartersId,shiftDate,SShiftType.Morning,"Driver",List.of(driver1.id(), driver2.id()));
-            setShiftEmployees(UserService.HR_MANAGER_USERNAME,site1.address(),shiftDate,SShiftType.Morning,"Storekeeper",List.of(storekeeperId1));
-            setShiftEmployees(UserService.HR_MANAGER_USERNAME,site4.address(),shiftDate,SShiftType.Morning,"Storekeeper",List.of(storekeeperId2));
+            setShiftEmployees(UserService.HR_MANAGER_USERNAME,site8.address(),shiftDate,SShiftType.Morning,"Storekeeper",List.of(storekeeperId1));
+            setShiftEmployees(UserService.HR_MANAGER_USERNAME,site9.address(),shiftDate,SShiftType.Morning,"Storekeeper",List.of(storekeeperId2));
 
             approveShift(UserService.HR_MANAGER_USERNAME,headquartersId, shiftDate, SShiftType.Morning);
-            approveShift(UserService.HR_MANAGER_USERNAME,site1.address(), shiftDate, SShiftType.Morning);
-            approveShift(UserService.HR_MANAGER_USERNAME,site4.address(), shiftDate, SShiftType.Morning);
+            approveShift(UserService.HR_MANAGER_USERNAME,site8.address(), shiftDate, SShiftType.Morning);
+            approveShift(UserService.HR_MANAGER_USERNAME,site9.address(), shiftDate, SShiftType.Morning);
             // Site 1 and Site 4 should now be ready for receiving a transport on the specified date
         } catch (Exception ignore) {
             Exception x = ignore;

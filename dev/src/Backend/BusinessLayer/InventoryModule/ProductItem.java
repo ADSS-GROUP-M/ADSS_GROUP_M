@@ -64,10 +64,10 @@ public class ProductItem {
         return isDefective.getDefectiveDate();
     }
 
-    //TODO: update soldPrice
     public void reportAsSold(double soldPrice) {
         this.isSold = true;
         this.soldPrice = soldPrice;
+        this.soldDate = LocalDateTime.now();
     }
 
     public void setLocation(String newLocation){this.location = newLocation;}

@@ -63,14 +63,15 @@ public class ProductController {
 
     public void updateProductItem(String branch, int isDefective, String serial_number, String catalog_number, int isSold, String newSupplier, double newSoldPrice, String newLocation) {
         if(checkIfProductExist(branch,catalog_number)){
-            ProductItem currentProduct = products.get(branch).get(catalog_number).getProduct(serial_number);
-            if(isDefective != -1){currentProduct.reportAsDefective();}
+            ProductItem productItem = products.get(branch).get(catalog_number).getProduct(serial_number);
+            Product product = products.get(branch).get(catalog_number);
+            if(isDefective != -1){productItem.reportAsDefective();}
             if(isSold != -1){
-                currentProduct.reportAsSold(DCController.getTodayBiggestStoreDiscount(catalog_number,branch));
+                productItem.reportAsSold(DCController.getTodayBiggestStoreDiscount(catalog_number,branch));
             }
-            if(newSupplier != null){currentProduct.setSupplierID(newSupplier);}
-            if(newSoldPrice != -1){currentProduct.setSoldPrice(newSoldPrice);}
-            if(newLocation != null){currentProduct.setLocation(newLocation);}
+            if(newSupplier != null){productItem.setSupplierID(newSupplier);}
+            if(newSoldPrice != -1){productItem.setSoldPrice(newSoldPrice);}
+            if(newLocation != null){productItem.setLocation(newLocation);}
         }
         else
             throw new RuntimeException(String.format("Product type does not exist with the ID : %s",catalog_number));

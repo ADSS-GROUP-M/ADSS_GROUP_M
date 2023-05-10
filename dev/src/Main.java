@@ -1,20 +1,25 @@
-import businessLayer.transportModule.SitesDistancesController;
-import businessLayer.transportModule.bingApi.BingAPI;
-import businessLayer.transportModule.bingApi.LocationByQueryResponse;
+import businessLayer.employeeModule.Authorization;
+import businessLayer.employeeModule.Branch;
+import businessLayer.employeeModule.Role;
+import businessLayer.employeeModule.Shift;
 import dataAccessLayer.DalFactory;
+import objects.transportObjects.Driver;
 import objects.transportObjects.Site;
 import org.junit.jupiter.api.Test;
 import presentationLayer.employeeModule.View.MenuManager;
 import presentationLayer.transportModule.UiData;
 import serviceLayer.ServiceFactory;
+import serviceLayer.employeeModule.Objects.SShiftType;
 import serviceLayer.employeeModule.Services.EmployeesService;
 import serviceLayer.employeeModule.Services.UserService;
 import serviceLayer.transportModule.ResourceManagementService;
-import utils.transportUtils.TransportException;
 
-import java.io.IOException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @SuppressWarnings("NewClassNamingConvention")
 public class Main {
@@ -27,14 +32,35 @@ public class Main {
     public void generate(){
         generateData();
     }
+    private static UserService us;
+    private static EmployeesService es;
+    private static final LocalDate EMPLOYMENT_DATE = LocalDate.of(2020,2,2);
+    private static final LocalDate SHIFT_DATE = LocalDate.of(2023,2,2);
 
     public static void generateData(){
         deleteData();
         ServiceFactory factory = new ServiceFactory();
-        UserService userService = factory.userService();
-        EmployeesService employeesService = factory.employeesService();
-        userService.createData();
-        employeesService.createData();
+        us = factory.userService();
+        es = factory.employeesService();
+        ResourceManagementService rms = factory.resourceManagementService();
+        generateSites(rms);
+        initializeUserData();
+
+        // Driver Data
+        Driver driver1 = new Driver("1234", "megan smith", Driver.LicenseType.A1);
+        Driver driver2 = new Driver("5678", "john doe", Driver.LicenseType.B2);
+        Driver driver3 = new Driver("9012", "emily chen", Driver.LicenseType.C2);
+        Driver driver4 = new Driver("3456", "david lee", Driver.LicenseType.C3);
+        Driver driver5 = new Driver("7890", "sarah kim", Driver.LicenseType.C3);
+        List<Driver> morningDrivers = List.of(driver1,driver2);
+        List<Driver> eveningDrivers = List.of(driver3,driver4,driver5);
+        List<Driver> drivers = new ArrayList<>();
+        drivers.addAll(morningDrivers);
+        drivers.addAll(eveningDrivers);
+
+        initializeBranches(drivers);
+        initializeShiftDay(morningDrivers, eveningDrivers,SHIFT_DATE);
+        assignStorekeepers(SHIFT_DATE);
         UiData.generateAndAddData();
     }
 
@@ -76,7 +102,89 @@ public class Main {
         rms.addSite(site15.toJson());
     }
 
-    public static void initializeBranch(Site site, LocalDate date){
-        // initialize everything so that there will be an available storekeeper and driver and everything
+    public static void initializeUserData() {
+        us.createUser(UserService.HR_MANAGER_USERNAME, UserService.TRANSPORT_MANAGER_USERNAME, "123");
+        us.authorizeUser(UserService.HR_MANAGER_USERNAME, UserService.TRANSPORT_MANAGER_USERNAME, Authorization.TransportManager.name());
+    }
+
+    public static void initializeBranches(List<Driver> drivers) {
+        initializeHeadquarters(drivers);
+        for(int i=2; i<=9; i++) {
+            String branchId = "branch"+i;
+            List<String> morningStorekeeperIds = List.of(branchId + "Morning");
+            List<String> eveningStorekeeperIds = List.of(branchId + "Evening");
+            List<String> storekeeperIds = new ArrayList<>();
+            storekeeperIds.addAll(morningStorekeeperIds);
+            storekeeperIds.addAll(eveningStorekeeperIds);
+            initializeStorekeepers(branchId, storekeeperIds);
+        }
+    }
+
+    public static void initializeHeadquarters(List<Driver> drivers) {
+        es.recruitEmployee(UserService.HR_MANAGER_USERNAME, Branch.HEADQUARTERS_ID, "Moshe Biton", "111","Hapoalim 12 230", 50, LocalDate.of(2023,2,2),"Employment Conditions Test", "More details about Moshe");
+        es.certifyEmployee(UserService.HR_MANAGER_USERNAME,"111", Role.ShiftManager.name());
+        es.certifyEmployee(UserService.HR_MANAGER_USERNAME,"111",Role.Storekeeper.name());
+        us.createUser(UserService.HR_MANAGER_USERNAME,"111","1234");
+
+        initializeDrivers(drivers);
+    }
+
+
+    public static void initializeDrivers(List<Driver> drivers) {
+        for (Driver driver : drivers) {
+            es.recruitEmployee(UserService.HR_MANAGER_USERNAME, Branch.HEADQUARTERS_ID, driver.name(), driver.id(), "Hapoalim 12 230", 40, EMPLOYMENT_DATE, "Employment Conditions Test", "More details about Driver");
+            es.certifyDriver(UserService.HR_MANAGER_USERNAME, driver.id(), driver.licenseType().toString());
+            us.createUser(UserService.HR_MANAGER_USERNAME, driver.id(), "123");
+        }
+    }
+
+    public static void initializeStorekeepers(String branchId,List<String> storekeeperIds){
+        for (String storekeeperId : storekeeperIds) {
+            es.recruitEmployee(UserService.HR_MANAGER_USERNAME, branchId, "Name " + storekeeperId, storekeeperId, "Hapoalim 12 250", 30, LocalDate.of(2020, 2, 2), "Employment Conditions Test", "More details about Storekeeper");
+            es.certifyEmployee(UserService.HR_MANAGER_USERNAME, storekeeperId, Role.Storekeeper.name());
+            us.createUser(UserService.HR_MANAGER_USERNAME, storekeeperId, "123");
+        }
+    }
+
+    public static void initializeShiftDay(List<Driver> morningDrivers, List<Driver> eveningDrivers,LocalDate date) {
+        // Shift Creation
+        es.createShiftDay(UserService.HR_MANAGER_USERNAME,Branch.HEADQUARTERS_ID,date);
+
+        // Drivers Assignment
+        assignDrivers(morningDrivers,date,SShiftType.Morning);
+        assignDrivers(eveningDrivers,date,SShiftType.Evening);
+    }
+
+    public static void assignStorekeepers(LocalDate date) {
+        List<String> morningStorekeeperIds = List.of(Branch.HEADQUARTERS_ID + "Morning");
+        List<String> eveningStorekeeperIds = List.of(Branch.HEADQUARTERS_ID + "Evening");
+        assignShiftStorekeepers(Branch.HEADQUARTERS_ID, morningStorekeeperIds, date, SShiftType.Morning);
+        assignShiftStorekeepers(Branch.HEADQUARTERS_ID, eveningStorekeeperIds, date, SShiftType.Evening);
+
+        for(int i=2; i<=9; i++) {
+            String branchId = "branch" + i;
+            morningStorekeeperIds = List.of(branchId + "Morning");
+            eveningStorekeeperIds = List.of(branchId + "Evening");
+            assignShiftStorekeepers(branchId, morningStorekeeperIds, date, SShiftType.Morning);
+            assignShiftStorekeepers(branchId, eveningStorekeeperIds, date, SShiftType.Evening);
+        }
+    }
+
+    public static void assignDrivers(List<Driver> drivers, LocalDate date, SShiftType shiftType) {
+        // Assign Drivers
+        es.setShiftNeededAmount(UserService.HR_MANAGER_USERNAME,Branch.HEADQUARTERS_ID,date, shiftType,"Driver",drivers.size());
+        for(Driver driver : drivers) {
+            es.requestShift(driver.id(), Branch.HEADQUARTERS_ID, date, shiftType, "Driver");
+        }
+        es.setShiftEmployees(UserService.HR_MANAGER_USERNAME,Branch.HEADQUARTERS_ID,date, shiftType,"Driver", drivers.stream().map(d->d.id()).toList());
+    }
+
+    public static void assignShiftStorekeepers(String branchId, List<String> storekeeperIds, LocalDate date, SShiftType shiftType) {
+        // Assign Storekeepers
+        es.setShiftNeededAmount(UserService.HR_MANAGER_USERNAME,branchId,date, shiftType,"Storekeeper",storekeeperIds.size());
+        for(String storekeeperId : storekeeperIds) {
+            es.requestShift(storekeeperId, branchId, date, shiftType, "Storekeeper");
+        }
+        es.setShiftEmployees(UserService.HR_MANAGER_USERNAME,branchId,date, shiftType,"Storekeeper", storekeeperIds);
     }
 }

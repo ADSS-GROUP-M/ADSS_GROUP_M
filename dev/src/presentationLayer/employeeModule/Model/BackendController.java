@@ -1,7 +1,6 @@
 package presentationLayer.employeeModule.Model;
 
 import com.google.gson.reflect.TypeToken;
-import dataAccessLayer.DalFactory;
 import serviceLayer.ServiceFactory;
 import serviceLayer.employeeModule.Objects.SEmployee;
 import serviceLayer.employeeModule.Objects.SShift;
@@ -91,8 +90,8 @@ public class BackendController {
             return "Logout failed.";
     }
 
-    public String recruitEmployee(String fullName, String branchId, String id, String bankDetails, double hourlyRate, LocalDate employmentDate, String employmentConditions, String details) {
-        Response response = Response.fromJson(employeesService.recruitEmployee(loggedUsername, fullName, branchId, id, bankDetails, hourlyRate, employmentDate, employmentConditions, details));
+    public String recruitEmployee(String branchId, String fullName, String id, String bankDetails, double hourlyRate, LocalDate employmentDate, String employmentConditions, String details) {
+        Response response = Response.fromJson(employeesService.recruitEmployee(loggedUsername, branchId, fullName, id, bankDetails, hourlyRate, employmentDate, employmentConditions, details));
         if (response.success() == false)
             return response.message();
         else

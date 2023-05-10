@@ -1,5 +1,6 @@
 package serviceLayer.employeeModule;
 
+import businessLayer.employeeModule.Branch;
 import businessLayer.employeeModule.User;
 import dataAccessLayer.DalFactory;
 import org.junit.jupiter.api.AfterEach;
@@ -38,7 +39,7 @@ public class RecruitAndUserCreationTests {
         if(Response.fromJson(userService.getUser(username2)).success() == false)
             userService.createUser(admin.getUsername(), username2, password2);
         if(Response.fromJson(empService.getEmployee(username2)).success() == false)
-            empService.recruitEmployee(admin.getUsername(),"Moshe Biton", "1", username2,"Hapoalim 12 230", 50, LocalDate.of(2023,2,2),"Employment Conditions Test", "More details about Moshe");
+            empService.recruitEmployee(admin.getUsername(), Branch.HEADQUARTERS_ID,"Moshe Biton", username2,"Hapoalim 12 230", 50, LocalDate.of(2023,2,2),"Employment Conditions Test", "More details about Moshe");
         user = Response.fromJson(userService.getUser(username2)).data(User.class);
     }
 
@@ -50,11 +51,11 @@ public class RecruitAndUserCreationTests {
     @Test
     public void recruit_newEmployee() {
         try {
-            Response ans = Response.fromJson(empService.recruitEmployee(admin.getUsername(),"Max T","2", "555","Hapoalim 12 231", 50, LocalDate.of(2023,2,2),"Employment Conditions Test", "about me"));
+            Response ans = Response.fromJson(empService.recruitEmployee(admin.getUsername(),"2", "Max T", "555","Hapoalim 12 231", 50, LocalDate.of(2023,2,2),"Employment Conditions Test", "about me"));
             assertTrue(ans.success(), ans.message());
-            ans = Response.fromJson(empService.recruitEmployee(admin.getUsername(),"ab T","2", "555","Hapoalim 12 211", 50, LocalDate.of(2023,2,2),"Employment Conditions Test", "about me"));
+            ans = Response.fromJson(empService.recruitEmployee(admin.getUsername(), "2", "ab T", "555","Hapoalim 12 211", 50, LocalDate.of(2023,2,2),"Employment Conditions Test", "about me"));
             assertFalse(ans.success(),ans.message()); // existing employee with same ID
-            ans = Response.fromJson(empService.recruitEmployee(username2,"ab T","2", "575","Hapoalim 12 211", 50, LocalDate.of(2023,2,2),"Employment Conditions Test", "about me"));
+            ans = Response.fromJson(empService.recruitEmployee(username2, "2", "ab T", "575","Hapoalim 12 211", 50, LocalDate.of(2023,2,2),"Employment Conditions Test", "about me"));
             assertFalse(ans.success(),ans.message()); //unauthorized personnel
         } catch (Exception ignore) { ignore.printStackTrace(); fail("failed");}
     }
@@ -80,7 +81,7 @@ public class RecruitAndUserCreationTests {
             String employeeId = "989";
             Response ans = Response.fromJson(userService.createUser(adminUsername, employeeId, password));
             assertTrue(ans.success());
-            ans = Response.fromJson(empService.recruitEmployee(admin.getUsername(),employeeName,"2", employeeId,"Hapoalim 12 221", 50, LocalDate.of(2023,2,2),"Employment Conditions Test", "about me"));
+            ans = Response.fromJson(empService.recruitEmployee(admin.getUsername(), "2", employeeName, employeeId,"Hapoalim 12 221", 50, LocalDate.of(2023,2,2),"Employment Conditions Test", "about me"));
             assertTrue(ans.success());
             try{
             User us = Response.fromJson(userService.getUser(employeeId)).data(User.class);

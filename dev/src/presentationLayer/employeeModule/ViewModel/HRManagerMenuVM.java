@@ -14,8 +14,8 @@ public class HRManagerMenuVM {
         backendController = BackendController.getInstance();
     }
 
-    public String recruitEmployee(String fullName, String branchId, String id, String bankDetails, double hourlyRate, LocalDate employmentDate, String employmentConditions, String details) {
-        return backendController.recruitEmployee(fullName, branchId, id, bankDetails, hourlyRate, employmentDate, employmentConditions, details);
+    public String recruitEmployee(String branchId, String fullName, String id, String bankDetails, double hourlyRate, LocalDate employmentDate, String employmentConditions, String details) {
+        return backendController.recruitEmployee(branchId, fullName, id, bankDetails, hourlyRate, employmentDate, employmentConditions, details);
     }
 
     public String createUser(String username, String password) {

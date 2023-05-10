@@ -72,7 +72,7 @@ public class HRManagerMenu implements Menu {
                 String employmentConditions = scanner.nextLine();
                 System.out.println("Please enter other employee details (optional):");
                 String details = scanner.nextLine();
-                output = hrManagerMenuVM.recruitEmployee(firstName + " " + lastName, branchId, employeeId, bankNumber + " " + branchNumber, hourlyRate, employmentDate, employmentConditions, details);
+                output = hrManagerMenuVM.recruitEmployee(branchId, firstName + " " + lastName, employeeId, bankNumber + " " + branchNumber, hourlyRate, employmentDate, employmentConditions, details);
                 if (output == null) {
                     System.out.println("Recruited employee successfully.");
                     System.out.println("Would you like to create a user for the new employee?");

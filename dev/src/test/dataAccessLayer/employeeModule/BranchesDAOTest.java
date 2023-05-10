@@ -64,7 +64,7 @@ class BranchesDAOTest {
     @Test
     void select() {
         try {
-            assertDeepEquals(branch1, branchesDAO.select(branch1.address()));
+            assertDeepEquals(branch1, branchesDAO.select(branch1.name()));
         } catch (DalException e) {
             fail(e);
         }
@@ -108,10 +108,10 @@ class BranchesDAOTest {
     void update() {
         LocalTime updatedMorningStart = LocalTime.of(10,0);
         LocalTime updatedEveningEnd = LocalTime.of(23,0);
-        Branch updatedBranch1 = new Branch(branch1.address(),updatedMorningStart,branch1.getMorningEnd(),branch1.getEveningStart(),updatedEveningEnd);
+        Branch updatedBranch1 = new Branch(branch1.name(),updatedMorningStart,branch1.getMorningEnd(),branch1.getEveningStart(),updatedEveningEnd);
         try {
             branchesDAO.update(updatedBranch1);
-            assertDeepEquals(updatedBranch1, branchesDAO.select(updatedBranch1.address()));
+            assertDeepEquals(updatedBranch1, branchesDAO.select(updatedBranch1.name()));
         } catch (DalException e) {
             fail(e);
         }
@@ -135,14 +135,14 @@ class BranchesDAOTest {
         } catch (DalException e) {
             fail(e);
         }
-        assertThrows(DalException.class, () -> branchesDAO.select(branch2.address()));
+        assertThrows(DalException.class, () -> branchesDAO.select(branch2.name()));
     }
 
     @Test
     void getObjectFromResultSet() {
         SQLExecutor cursor = factory.cursor();
         try {
-            OfflineResultSet resultSet = cursor.executeRead("SELECT * FROM Branches WHERE address = '" + branch1.address() + "'");
+            OfflineResultSet resultSet = cursor.executeRead("SELECT * FROM Branches WHERE address = '" + branch1.name() + "'");
             resultSet.next();
             assertDeepEquals(branch1, branchesDAO.getObjectFromResultSet(resultSet));
         } catch (SQLException e) {
@@ -151,7 +151,7 @@ class BranchesDAOTest {
     }
 
     private void assertDeepEquals(Branch branch1, Branch branch2) {
-        assertEquals(branch1.address(), branch2.address());
+        assertEquals(branch1.name(), branch2.name());
         assertEquals(branch1.getMorningStart(), branch2.getMorningStart());
         assertEquals(branch1.getMorningEnd(), branch2.getMorningEnd());
         assertEquals(branch1.getEveningStart(), branch2.getEveningStart());

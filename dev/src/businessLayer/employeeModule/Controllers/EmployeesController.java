@@ -119,7 +119,7 @@ public class EmployeesController {
         for (Branch branch : branchesDAO.selectAll()) {
             try {
                 ShiftType shiftType = branch.getShiftType(dateTime.toLocalTime()); // Could throw an exception if the given time is not in any shift
-                Map<Role, List<Employee>> shiftWorkers = shiftsController.getShift(branch.address(), dateTime.toLocalDate(), shiftType).getShiftWorkers();
+                Map<Role, List<Employee>> shiftWorkers = shiftsController.getShift(branch.name(), dateTime.toLocalDate(), shiftType).getShiftWorkers();
                 if (shiftWorkers.containsKey(Role.Driver))
                     availableDrivers.addAll(shiftWorkers.get(Role.Driver));
             } catch (Exception ignore) {}
@@ -131,8 +131,8 @@ public class EmployeesController {
 
     public void checkStoreKeeperAvailability(LocalDate date, String branchAddress) throws Exception {
         Branch branch = getBranch(branchAddress); // finds a branch by its address / branchId.
-        Shift morningShift = shiftsController.getShift(branch.address(), date, ShiftType.Morning);
-        Shift eveningShift = shiftsController.getShift(branch.address(), date, ShiftType.Morning);
+        Shift morningShift = shiftsController.getShift(branch.name(), date, ShiftType.Morning);
+        Shift eveningShift = shiftsController.getShift(branch.name(), date, ShiftType.Morning);
         if (!morningShift.isStorekeeperWorking() || !eveningShift.isStorekeeperWorking()) {
             throw new Exception("There is no available storekeeper at the given date in this branch.");
         }

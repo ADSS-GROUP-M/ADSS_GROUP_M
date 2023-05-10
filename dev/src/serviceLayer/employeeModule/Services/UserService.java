@@ -25,11 +25,8 @@ public class UserService {
      * This method loads the initial user data into the system, during the initial load of the system.
      */
     public void createData() {
-        resetData();
         try {
             userController.createManagerUser(HR_MANAGER_USERNAME, "123");
-            userController.createUser(TRANSPORT_MANAGER_USERNAME, "123");
-            userController.authorizeUser(TRANSPORT_MANAGER_USERNAME, Authorization.TransportManager);
         }
         catch (Exception ignore) {}
     }

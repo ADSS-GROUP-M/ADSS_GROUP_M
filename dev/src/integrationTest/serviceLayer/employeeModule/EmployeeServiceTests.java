@@ -77,7 +77,7 @@ public class EmployeeServiceTests {
             if (Response.fromJson(userService.getUser(usernames[i])).success() == false)
                 userService.createUser(admin.getUsername(), usernames[i], passwords[i]);
             if (Response.fromJson(empService.getEmployee(usernames[i])).success() == false)
-                empService.recruitEmployee(admin.getUsername(), fullnames[i], branches[i], usernames[i], bankDetails[i], hourlyRates[i], employmentDates[i], employmentConditions[i], details[i]);
+                empService.recruitEmployee(admin.getUsername(), branches[i], fullnames[i], usernames[i], bankDetails[i], hourlyRates[i], employmentDates[i], employmentConditions[i], details[i]);
             users[i] = Response.fromJson(userService.getUser(usernames[i])).data(User.class);
             users[i].login(passwords[i]);
 
@@ -221,9 +221,9 @@ public class EmployeeServiceTests {
         Response ans;
         String newUsername = "777";
         ans = Response.fromJson(userService.createUser(admin.getUsername(), newUsername, "123"));
-        ans = Response.fromJson(empService.recruitEmployee(admin.getUsername(),"abc", "2", newUsername,"Nothin 123 11", 30, week[0],"Nothing", "about"));
+        ans = Response.fromJson(empService.recruitEmployee(admin.getUsername(), "2", "abc", newUsername,"Nothin 123 11", 30, week[0],"Nothing", "about"));
         assertFalse(ans.success() == false, ans.message());
-        ans = Response.fromJson(empService.recruitEmployee(admin.getUsername(),"abc", "1", newUsername,"Nothin 123 11", 30, week[0],"Nothing", "about"));
+        ans = Response.fromJson(empService.recruitEmployee(admin.getUsername(), "1", "abc", newUsername,"Nothin 123 11", 30, week[0],"Nothing", "about"));
         assertTrue(ans.success() == false, ans.message()); //recruiting same employee to different branch
         ans = Response.fromJson(empService.addEmployeeToBranch(adminUsername, newUsername, "1"));
         ans = Response.fromJson(userService.login(newUsername, "123"));

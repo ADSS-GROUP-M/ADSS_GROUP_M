@@ -64,7 +64,7 @@ public class BranchesDAO extends ManyToManyDAO<Branch> {
 
         String query = String.format("SELECT * FROM %s WHERE address = '%s';",
                 TABLE_NAME,
-                object.address());
+                object.name());
         OfflineResultSet resultSet;
         try {
             resultSet = cursor.executeRead(query);
@@ -76,7 +76,7 @@ public class BranchesDAO extends ManyToManyDAO<Branch> {
             cache.put(selected);
             return selected;
         } else {
-            throw new DalException("No branch with address " + object.address() + " was found");
+            throw new DalException("No branch with address " + object.name() + " was found");
         }
     }
 
@@ -109,7 +109,7 @@ public class BranchesDAO extends ManyToManyDAO<Branch> {
     public void insert(Branch object) throws DalException {
         String query = String.format("INSERT INTO %s VALUES ('%s', '%s', '%s', '%s', '%s');",
                 TABLE_NAME,
-                object.address(),
+                object.name(),
                 object.getMorningStart(),
                 object.getMorningEnd(),
                 object.getEveningStart(),
@@ -137,12 +137,12 @@ public class BranchesDAO extends ManyToManyDAO<Branch> {
                 object.getMorningEnd(),
                 object.getEveningStart(),
                 object.getEveningEnd(),
-                object.address());
+                object.name());
         try {
             if (cursor.executeWrite(query) == 1) {
                 cache.put(object);
             } else {
-                throw new DalException("No branch with id " + object.address() + " was found");
+                throw new DalException("No branch with id " + object.name() + " was found");
             }
         } catch (SQLException e) {
             throw new DalException("Failed to update branch", e);
@@ -156,12 +156,12 @@ public class BranchesDAO extends ManyToManyDAO<Branch> {
     public void delete(Branch object) throws DalException {
         String query = String.format("DELETE FROM %s WHERE address = '%s';",
                 TABLE_NAME,
-                object.address());
+                object.name());
         try {
             if (cursor.executeWrite(query) == 1) {
                 cache.remove(object);
             } else {
-                throw new DalException("No branch with id " + object.address() + " was found");
+                throw new DalException("No branch with id " + object.name() + " was found");
             }
 
         } catch (SQLException e) {

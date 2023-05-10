@@ -37,7 +37,6 @@ public class InventoryProductsManu extends MainMenu {
         in.nextLine();
         System.out.println("Name: (string)");
         String name = in.nextLine();
-        in.nextLine();
         System.out.println("Manufacturer: (string)");
         String manufacturer = in.nextLine();
         System.out.println("Supplier Price: (double)");

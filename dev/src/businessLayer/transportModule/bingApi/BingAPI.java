@@ -8,16 +8,17 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.Key;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
 public class BingAPI {
-
-    public static long counter = 0;
     
     private static final String key = "ApCimQpMhBbPbxxutJUbXvOeQZ7zrJh-ryeMWVyI7a0iyZ_aDIJdxqSUlED1D7l-";
     private static final String COUNTRY_SUFFIX = ", United States";
+    public static int counter = 0;
 
     public BingAPI() {
     }
@@ -32,21 +33,37 @@ public class BingAPI {
         return JsonUtils.deserialize(json, LocationByQueryResponse.class);
     }
 
-    public void calculateRoute(List<Point> route){
+    public void calculateRoute(List<Point> route, LocalDateTime departureTime) throws IOException {
+        String urlPrefix = "http://dev.virtualearth.net/REST/v1/Routes?";
+        String urlSuffix = "&ra=excludeItinerary&key="+key;
 
+        String date = departureTime.format(DateTimeFormatter.ofPattern("MM/dd/yyyy"));
+        String hour = departureTime.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+        String time = "&dt="+date+"%20"+hour+"&tt=Departure";
 
+        StringBuilder wayPoints = new StringBuilder();
+        int index = 1;
+        for(Point point : route){
+            wayPoints.append("&wp.").append(index++).append("=")
+                    .append(point.latitude()).append(",").append(point.longitude());
+        }
+
+        String json = sendRequest(urlPrefix + wayPoints + time + urlSuffix);
     }
 
-    @Deprecated
     public DistanceMatrixResponse distanceMatrix(List<Pair<Point,Point>> list) throws IOException{
         String urlPrefix = "http://dev.virtualearth.net/REST/v1/Routes/DistanceMatrix?";
         String urlSuffix = "&travelMode=driving&key=" + key;
         StringBuilder originsString = new StringBuilder("origins=");
         StringBuilder destinationsString = new StringBuilder("&destinations=");
+
+        // formatted as: origins=lat1,long1;lat2,long2;...&destinations=lat1,long1;lat2,long2;...
         for(var pair : list){
             originsString.append(pair.getKey().latitude()).append(",").append(pair.getKey().longitude()).append(";");
             destinationsString.append(pair.getValue().latitude()).append(",").append(pair.getValue().longitude()).append(";");
         }
+
+        // remove last ';' from each string
         originsString.deleteCharAt(originsString.length()-1);
         destinationsString.deleteCharAt(destinationsString.length()-1);
 
@@ -81,7 +98,5 @@ public class BingAPI {
         counter++;
 
         return informationString.toString();
-
-//        return "";
     }
 }

@@ -31,8 +31,6 @@ public class SitesDistancesController {
         return locationResources[0].point();
     }
 
-
-    @Deprecated
     public List<DistanceBetweenSites> createDistanceObjects(Site site ,List<Site> sites) throws TransportException {
 
         Map<Pair<String,String>,Pair<Double,Double>> travelMatrix = getTravelMatrix(site,sites);
@@ -50,32 +48,31 @@ public class SitesDistancesController {
         return distances;
     }
 
-    @Deprecated
     public Map<Pair<String,String>, Pair<Double,Double>> getTravelMatrix(Site site, List<Site> otherSites) throws TransportException {
 
-        List<Pair<Point,Point>> points = new LinkedList<>();
+        Map<Pair<String,String>, Pair<Double,Double>> distances = new HashMap<>();
+
         Point newSitePoint = new Point(site.address(), new double[]{site.latitude(),site.longitude()});
+
         for(Site other : otherSites){
             Point otherSitePoint = new Point(other.address(), new double[]{other.latitude(),other.longitude()});
-            points.add(new Pair<>(newSitePoint,otherSitePoint));
-            points.add(new Pair<>(otherSitePoint,newSitePoint));
-        }
-        DistanceMatrixResponse response;
-        try {
-            response = bingAPI.distanceMatrix(points);
-        } catch (IOException e) {
-            throw new TransportException(e.getMessage(), e);
-        }
-        Result[] results = Arrays.stream(response.resourceSets()[0].resources()[0].results())
-                .filter(result -> result.originIndex() == result.destinationIndex())
-                .toArray(Result[]::new);
+            Pair<Point,Point> pair1 = new Pair<>(newSitePoint,otherSitePoint);
+            Pair<Point,Point> pair2 = new Pair<>(otherSitePoint,newSitePoint);
 
-        Map<Pair<String,String>, Pair<Double,Double>> distances = new HashMap<>();
-        ListIterator<Pair<Point,Point>> pointsIterator = points.listIterator();
-        while(pointsIterator.hasNext()){
-            Pair<Point,Point> pair = pointsIterator.next();
-            distances.put(new Pair<>(pair.getKey().address(),pair.getValue().address()),
-                    new Pair<>(results[pointsIterator.previousIndex()].travelDuration(),results[pointsIterator.previousIndex()].travelDistance()));
+            DistanceMatrixResponse response;
+            try {
+                response = bingAPI.distanceMatrix(List.of(pair1,pair2));
+            } catch (IOException e) {
+                throw new TransportException(e.getMessage(), e);
+            }
+            Result[] results = Arrays.stream(response.resourceSets()[0].resources()[0].results())
+                    .filter(result -> result.originIndex() == result.destinationIndex())
+                    .toArray(Result[]::new);
+
+            distances.put(new Pair<>(site.address(),other.address()),
+                    new Pair<>(results[0].travelDistance(),results[0].travelDuration()));
+            distances.put(new Pair<>(other.address(),site.address()),
+                    new Pair<>(results[1].travelDistance(),results[1].travelDuration()));
         }
 
         distances.put(new Pair<>(site.address(),site.address()),new Pair<>(0.0,0.0));

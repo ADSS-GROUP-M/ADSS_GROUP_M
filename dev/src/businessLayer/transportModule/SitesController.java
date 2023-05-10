@@ -47,6 +47,8 @@ public class SitesController {
             throw new TransportException("Site already exists");
         }
         try {
+            List<Site> otherSites = getAllSites();
+
             // get latitude and longitude
             Point coordinates = distancesController.getCoordinates(site);
             site = new Site(site,
@@ -54,15 +56,13 @@ public class SitesController {
                     coordinates.coordinates()[1]);
             dao.insert(site);
 
-
-            //TODO: check if this is the right way to do this
-//            List<Site> sites = getAllSites();
-//            if(sites.size() > 1) {
-//                distancesDAO.insertAll(distancesController.createDistanceObjects(site,sites ));
-//            }
+            if(otherSites.isEmpty() == false) {
+                distancesDAO.insertAll(distancesController.createDistanceObjects(site,otherSites));
+            }
             if(site.siteType() == Site.SiteType.BRANCH){
                 employeesService.createBranch(TRANSPORT_MANAGER_USERNAME,site.address());
             }
+
         } catch (DalException e) {
             throw new RuntimeException(e);
         }

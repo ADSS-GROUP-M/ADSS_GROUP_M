@@ -49,6 +49,9 @@ public class SitesController {
         if (siteExists(site.name()) != false) {
             throw new TransportException("Site already exists");
         }
+
+        validateSite(site);
+
         try {
             List<Site> otherSites = getAllSites();
 
@@ -67,7 +70,17 @@ public class SitesController {
             }
 
         } catch (DalException e) {
-            throw new RuntimeException(e);
+            throw new TransportException(e.getMessage(),e);
+        }
+    }
+
+    private void validateSite(Site site) throws TransportException {
+        try {
+            if(dao.isAddressUnique(site.address()) == false){
+                throw new TransportException("Site address already exists");
+            }
+        } catch (DalException e) {
+            throw new TransportException(e.getMessage(),e);
         }
     }
 

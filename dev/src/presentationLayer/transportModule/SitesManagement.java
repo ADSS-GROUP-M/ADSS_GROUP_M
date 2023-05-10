@@ -51,7 +51,6 @@ public class SitesManagement {
         // =============================================================================================== |
         // =============================================================================================== |
 
-
         System.out.println("=========================================");
         System.out.println("Enter site details:");
         String name = transportAppData.readLine("Name: ");
@@ -76,8 +75,19 @@ public class SitesManagement {
         }
         Site newSite = new Site(name, address, transportZone, contactPhone, contactName, type);
         String json = newSite.toJson();
-        String responseJson = rms.addSite(json);
-        Response response = JsonUtils.deserialize(responseJson, Response.class);
+        final String[] responseJson = {null};
+        Thread worker = new Thread(()-> {
+            String _response = rms.addSite(json);
+            responseJson[0] = _response;
+        });
+        worker.start();
+        System.out.println("Creating site, sit tight!....");
+        try {
+            worker.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        Response response = JsonUtils.deserialize(responseJson[0], Response.class);
         if(response.success()) {
             transportAppData.sites().put(newSite.name(), newSite);
         }

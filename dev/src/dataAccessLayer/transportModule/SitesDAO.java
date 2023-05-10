@@ -208,4 +208,15 @@ public class SitesDAO extends DAO<Site> {
                 resultSet.getDouble("latitude"),
                 resultSet.getDouble("longitude"));
     }
+
+    public boolean isAddressUnique(String address) throws DalException{
+        String query = String.format("SELECT * FROM %s WHERE address = '%s';", TABLE_NAME, address);
+        OfflineResultSet resultSet;
+        try {
+            resultSet = cursor.executeRead(query);
+            return resultSet.next() == false;
+        } catch (SQLException e) {
+            throw new DalException("Failed to check if Site exists", e);
+        }
+    }
 }

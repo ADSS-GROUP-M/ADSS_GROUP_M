@@ -1,0 +1,149 @@
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project version=\"4\">\n  <component name=\"ArtifactsWorkspaceSettings\">\n    <artifacts-to-build>\n      <artifact name=\"code:jar\" />\n    </artifacts-to-build>\n  </component>\n  <component name=\"ChangeListManager\">\n    <list default=\"true\" id=\"e454f93c-4ee8-4f4b-9a14-eaaf36aa303c\" name=\"Changes\" comment=\"commit\">\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/src/Backend/BusinessLayer/InventoryModule/ProductItem.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/Backend/BusinessLayer/InventoryModule/ProductItem.java\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/CategoryDataMapper.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/CategoryDataMapper.java\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/ProductItemDataMapper.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/ProductItemDataMapper.java\" afterDir=\"false\" />\n    </list>\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\n  </component>\n  <component name=\"FileTemplateManagerImpl\">\n    <option name=\"RECENT_TEMPLATES\">\n      <list>\n        <option value=\"TypeScript File\" />\n        <option value=\"JUnit5 Test Class\" />\n        <option value=\"JUnit4 Test Class\" />\n        <option value=\"Class\" />\n      </list>\n    </option>\n  </component>\n  <component name=\"Git.Settings\">\n    <option name=\"RECENT_BRANCH_BY_REPOSITORY\">\n      <map>\n        <entry key=\"$PROJECT_DIR$/..\" value=\"Suppliers_Inventory_208671990_207161605_324988880_325294429\" />\n      </map>\n    </option>\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$/..\" />\n  </component>\n  <component name=\"HighlightingSettingsPerFile\">\n    <setting file=\"file://$PROJECT_DIR$/src/Backend/ServiceLayer/InventoryModule/CategoriesService.java\" root0=\"FORCE_HIGHLIGHTING\" />\n  </component>\n  <component name=\"MarkdownSettingsMigration\">\n    <option name=\"stateVersion\" value=\"1\" />\n  </component>\n  <component name=\"ProjectId\" id=\"2Ns1AY5qJ2vweTUuXVxQYWQnhZR\" />\n  <component name=\"ProjectLevelVcsManager\" settingsEditedManually=\"true\" />\n  <component name=\"ProjectViewState\">\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\n    <option name=\"showLibraryContents\" value=\"true\" />\n  </component>\n  <component name=\"PropertiesComponent\">\n    <property name=\"RunOnceActivity.OpenProjectViewOnStart\" value=\"true\" />\n    <property name=\"RunOnceActivity.ShowReadmeOnStart\" value=\"true\" />\n    <property name=\"last_opened_file_path\" value=\"$PROJECT_DIR$\" />\n  </component>\n  <component name=\"RecentsManager\">\n    <key name=\"CopyFile.RECENT_KEYS\">\n      <recent name=\"C:\\Users\\yossi\\OneDrive\\שולחן העבודה\\ניתוצ\\Assignment1\\Assignment1\\dev\\PresentationLayer\" />\n    </key>\n    <key name=\"CreateTestDialog.Recents.Supers\">\n      <recent name=\"\" />\n    </key>\n    <key name=\"MoveFile.RECENT_KEYS\">\n      <recent name=\"C:\\Users\\yossi\\OneDrive\\שולחן העבודה\\ניתוצ\\Assignment2\\Assignment2\\dev\" />\n      <recent name=\"C:\\Users\\yossi\\OneDrive\\שולחן העבודה\\ניתוצ\\Assignment1\\Assignment1\\dev\\src\" />\n    </key>\n    <key name=\"MoveClassesOrPackagesDialog.RECENTS_KEY\">\n      <recent name=\"Backend.DataAccessLayer.dalUtils\" />\n    </key>\n    <key name=\"CreateTestDialog.RecentsKey\">\n      <recent name=\"Backend.BusinessLayer\" />\n    </key>\n    <key name=\"CopyClassDialog.RECENTS_KEY\">\n      <recent name=\"PresentationLayer\" />\n    </key>\n  </component>\n  <component name=\"RunManager\" selected=\"Application.OrderHistoryDataMapper\">\n    <configuration name=\"Main\" type=\"Application\" factoryName=\"Application\" temporary=\"true\" nameIsGenerated=\"true\">\n      <option name=\"MAIN_CLASS_NAME\" value=\"PresentationLayer.Main\" />\n      <module name=\"code\" />\n      <extension name=\"coverage\">\n        <pattern>\n          <option name=\"PATTERN\" value=\"PresentationLayer.*\" />\n          <option name=\"ENABLED\" value=\"true\" />\n        </pattern>\n      </extension>\n      <method v=\"2\">\n        <option name=\"Make\" enabled=\"true\" />\n      </method>\n    </configuration>\n    <configuration name=\"OrderHistoryDataMapper\" type=\"Application\" factoryName=\"Application\" temporary=\"true\" nameIsGenerated=\"true\">\n      <option name=\"MAIN_CLASS_NAME\" value=\"Backend.DataAccessLayer.OrderHistoryDataMapper\" />\n      <module name=\"code\" />\n      <extension name=\"coverage\">\n        <pattern>\n          <option name=\"PATTERN\" value=\"Backend.DataAccessLayer.*\" />\n          <option name=\"ENABLED\" value=\"true\" />\n        </pattern>\n      </extension>\n      <method v=\"2\">\n        <option name=\"Make\" enabled=\"true\" />\n      </method>\n    </configuration>\n    <configuration name=\"BillOfQuantitiesTest\" type=\"JUnit\" factoryName=\"JUnit\" temporary=\"true\" nameIsGenerated=\"true\">\n      <module name=\"code\" />\n      <extension name=\"coverage\">\n        <pattern>\n          <option name=\"PATTERN\" value=\"Backend.BusinessLayer.*\" />\n          <option name=\"ENABLED\" value=\"true\" />\n        </pattern>\n      </extension>\n      <option name=\"PACKAGE_NAME\" value=\"Backend.BusinessLayer\" />\n      <option name=\"MAIN_CLASS_NAME\" value=\"Backend.BusinessLayer.BillOfQuantitiesTest\" />\n      <option name=\"TEST_OBJECT\" value=\"class\" />\n      <method v=\"2\">\n        <option name=\"Make\" enabled=\"true\" />\n      </method>\n    </configuration>\n    <configuration name=\"BillOfQuantitiesTest.removeDiscountOnAmountOfProducts\" type=\"JUnit\" factoryName=\"JUnit\" temporary=\"true\" nameIsGenerated=\"true\">\n      <module name=\"code\" />\n      <extension name=\"coverage\">\n        <pattern>\n          <option name=\"PATTERN\" value=\"Backend.BusinessLayer.*\" />\n          <option name=\"ENABLED\" value=\"true\" />\n        </pattern>\n      </extension>\n      <option name=\"PACKAGE_NAME\" value=\"Backend.BusinessLayer\" />\n      <option name=\"MAIN_CLASS_NAME\" value=\"Backend.BusinessLayer.BillOfQuantitiesTest\" />\n      <option name=\"METHOD_NAME\" value=\"removeDiscountOnAmountOfProducts\" />\n      <option name=\"TEST_OBJECT\" value=\"method\" />\n      <method v=\"2\">\n        <option name=\"Make\" enabled=\"true\" />\n      </method>\n    </configuration>\n    <configuration name=\"BillOfQuantitiesTest.setOrderOfDiscounts\" type=\"JUnit\" factoryName=\"JUnit\" temporary=\"true\" nameIsGenerated=\"true\">\n      <module name=\"code\" />\n      <extension name=\"coverage\">\n        <pattern>\n          <option name=\"PATTERN\" value=\"Backend.BusinessLayer.*\" />\n          <option name=\"ENABLED\" value=\"true\" />\n        </pattern>\n      </extension>\n      <option name=\"PACKAGE_NAME\" value=\"Backend.BusinessLayer\" />\n      <option name=\"MAIN_CLASS_NAME\" value=\"Backend.BusinessLayer.BillOfQuantitiesTest\" />\n      <option name=\"METHOD_NAME\" value=\"setOrderOfDiscounts\" />\n      <option name=\"TEST_OBJECT\" value=\"method\" />\n      <method v=\"2\">\n        <option name=\"Make\" enabled=\"true\" />\n      </method>\n    </configuration>\n    <recent_temporary>\n      <list>\n        <item itemvalue=\"JUnit.BillOfQuantitiesTest.setOrderOfDiscounts\" />\n        <item itemvalue=\"JUnit.BillOfQuantitiesTest.removeDiscountOnAmountOfProducts\" />\n        <item itemvalue=\"JUnit.BillOfQuantitiesTest\" />\n        <item itemvalue=\"Application.OrderHistoryDataMapper\" />\n        <item itemvalue=\"Application.Main\" />\n      </list>\n    </recent_temporary>\n  </component>\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\n  <component name=\"TaskManager\">\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\n      <changelist id=\"e454f93c-4ee8-4f4b-9a14-eaaf36aa303c\" name=\"Changes\" comment=\"\" />\n      <created>1680437835640</created>\n      <option name=\"number\" value=\"Default\" />\n      <option name=\"presentableId\" value=\"Default\" />\n      <updated>1680437835640</updated>\n      <workItem from=\"1680437836657\" duration=\"39000\" />\n      <workItem from=\"1680438006576\" duration=\"12448000\" />\n      <workItem from=\"1680468003859\" duration=\"62000\" />\n      <workItem from=\"1680511359414\" duration=\"167000\" />\n      <workItem from=\"1680511529805\" duration=\"12696000\" />\n      <workItem from=\"1681150003845\" duration=\"544000\" />\n      <workItem from=\"1681150568098\" duration=\"2870000\" />\n      <workItem from=\"1682020177721\" duration=\"51433000\" />\n      <workItem from=\"1683488131151\" duration=\"9878000\" />\n      <workItem from=\"1683644904745\" duration=\"1332000\" />\n    </task>\n    <task id=\"LOCAL-00001\" summary=\"done with order functionality - moving to the ability to print the order etc\">\n      <created>1680693870968</created>\n      <option name=\"number\" value=\"00001\" />\n      <option name=\"presentableId\" value=\"LOCAL-00001\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1680693870968</updated>\n    </task>\n    <task id=\"LOCAL-00002\" summary=\"commit to move to another functionality\">\n      <created>1680811222544</created>\n      <option name=\"number\" value=\"00002\" />\n      <option name=\"presentableId\" value=\"LOCAL-00002\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1680811222544</updated>\n    </task>\n    <task id=\"LOCAL-00003\" summary=\"added products that can be ordered only by dividing to several suppliers functionality and started ui\">\n      <created>1680880637709</created>\n      <option name=\"number\" value=\"00003\" />\n      <option name=\"presentableId\" value=\"LOCAL-00003\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1680880637709</updated>\n    </task>\n    <task id=\"LOCAL-00004\" summary=\"finish ui and tests\">\n      <created>1681121958493</created>\n      <option name=\"number\" value=\"00004\" />\n      <option name=\"presentableId\" value=\"LOCAL-00004\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1681121958493</updated>\n    </task>\n    <task id=\"LOCAL-00005\" summary=\"order packages\">\n      <created>1681128879409</created>\n      <option name=\"number\" value=\"00005\" />\n      <option name=\"presentableId\" value=\"LOCAL-00005\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1681128879409</updated>\n    </task>\n    <task id=\"LOCAL-00006\" summary=\"order packages\">\n      <created>1681128893853</created>\n      <option name=\"number\" value=\"00006\" />\n      <option name=\"presentableId\" value=\"LOCAL-00006\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1681128893853</updated>\n    </task>\n    <task id=\"LOCAL-00007\" summary=\"order packages\">\n      <created>1681129952179</created>\n      <option name=\"number\" value=\"00007\" />\n      <option name=\"presentableId\" value=\"LOCAL-00007\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1681129952179</updated>\n    </task>\n    <task id=\"LOCAL-00008\" summary=\"jdk 17\">\n      <created>1681151928695</created>\n      <option name=\"number\" value=\"00008\" />\n      <option name=\"presentableId\" value=\"LOCAL-00008\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1681151928695</updated>\n    </task>\n    <task id=\"LOCAL-00009\" summary=\"commit before dal\">\n      <created>1683124351701</created>\n      <option name=\"number\" value=\"00009\" />\n      <option name=\"presentableId\" value=\"LOCAL-00009\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1683124351701</updated>\n    </task>\n    <task id=\"LOCAL-00010\" summary=\"commit\">\n      <created>1683646018146</created>\n      <option name=\"number\" value=\"00010\" />\n      <option name=\"presentableId\" value=\"LOCAL-00010\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1683646018146</updated>\n    </task>\n    <task id=\"LOCAL-00011\" summary=\"commit\">\n      <created>1683646037405</created>\n      <option name=\"number\" value=\"00011\" />\n      <option name=\"presentableId\" value=\"LOCAL-00011\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1683646037405</updated>\n    </task>\n    <option name=\"localTasksCounter\" value=\"12\" />\n    <servers />\n  </component>\n  <component name=\"TypeScriptGeneratedFilesManager\">\n    <option name=\"version\" value=\"3\" />\n  </component>\n  <component name=\"Vcs.Log.Tabs.Properties\">\n    <option name=\"TAB_STATES\">\n      <map>\n        <entry key=\"MAIN\">\n          <value>\n            <State />\n          </value>\n        </entry>\n      </map>\n    </option>\n    <option name=\"RECENT_FILTERS\">\n      <map>\n        <entry key=\"User\">\n          <value>\n            <list>\n              <RecentGroup>\n                <option name=\"FILTER_VALUES\">\n                  <option value=\"*\" />\n                </option>\n              </RecentGroup>\n            </list>\n          </value>\n        </entry>\n      </map>\n    </option>\n  </component>\n  <component name=\"VcsManagerConfiguration\">\n    <ignored-roots>\n      <path value=\"$PROJECT_DIR$\" />\n    </ignored-roots>\n    <MESSAGE value=\"done with order functionality - moving to the ability to print the order etc\" />\n    <MESSAGE value=\"commit to move to another functionality\" />\n    <MESSAGE value=\"added products that can be ordered only by dividing to several suppliers functionality and started ui\" />\n    <MESSAGE value=\"finish ui and tests\" />\n    <MESSAGE value=\"order packages\" />\n    <MESSAGE value=\"jdk 17\" />\n    <MESSAGE value=\"commit before dal\" />\n    <MESSAGE value=\"commit\" />\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"commit\" />\n  </component>\n  <component name=\"XDebuggerManager\">\n    <pin-to-top-manager>\n      <pinned-members>\n        <PinnedItemInfo parentTag=\"Backend.BusinessLayer.SupplierController\" memberName=\"suppliers\" />\n      </pinned-members>\n    </pin-to-top-manager>\n  </component>\n  <component name=\"XSLT-Support.FileAssociations.UIState\">\n    <expand />\n    <select />\n  </component>\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision 663bda41b45ddcb2c4fa8c29df71228e60c0d683)
++++ b/.idea/workspace.xml	(date 1683747415809)
+@@ -7,10 +7,12 @@
+   </component>
+   <component name="ChangeListManager">
+     <list default="true" id="e454f93c-4ee8-4f4b-9a14-eaaf36aa303c" name="Changes" comment="commit">
++      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/InventoryModule/ProductItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/BusinessLayer/InventoryModule/ProductItem.java" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/CategoryDataMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/CategoryDataMapper.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/ProductItemDataMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/ProductItemDataMapper.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/CategoryHierarchyDataMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/CategoryHierarchyDataMapper.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/ProductPairBranchDataMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/ProductPairBranchDataMapper.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/StoreProductDiscountDataMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/StoreProductDiscountDataMapper.java" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+Index: .idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project version=\"4\">\n  <component name=\"ProjectRootManager\" version=\"2\" languageLevel=\"JDK_19\" default=\"true\" project-jdk-name=\"19\" project-jdk-type=\"JavaSDK\">\n    <output url=\"file://$PROJECT_DIR$/out\" />\n  </component>\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/misc.xml b/.idea/misc.xml
+--- a/.idea/misc.xml	(revision 663bda41b45ddcb2c4fa8c29df71228e60c0d683)
++++ b/.idea/misc.xml	(date 1683747416423)
+@@ -1,6 +1,6 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
+-  <component name="ProjectRootManager" version="2" languageLevel="JDK_19" default="true" project-jdk-name="19" project-jdk-type="JavaSDK">
++  <component name="ProjectRootManager" version="2" languageLevel="JDK_X" default="true" project-jdk-name="18 (2)" project-jdk-type="JavaSDK">
+     <output url="file://$PROJECT_DIR$/out" />
+   </component>
+ </project>
+\ No newline at end of file
+Index: src/Backend/DataAccessLayer/InventoryModule/ProductPairBranchDataMapper.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package Backend.DataAccessLayer.InventoryModule;\n\nimport Backend.DataAccessLayer.dalUtils.AbstractDataMapper;\n\npublic class ProductPairBranchDataMapper extends AbstractDataMapper {\n    public ProductPairBranchDataMapper() {\n        super(\"product_pair_branch\", new String[]{\"branch_name\", \"product_catalog_number\", \"original_store_price\", \"notification_min\"});\n    }\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/Backend/DataAccessLayer/InventoryModule/ProductPairBranchDataMapper.java b/src/Backend/DataAccessLayer/InventoryModule/ProductPairBranchDataMapper.java
+--- a/src/Backend/DataAccessLayer/InventoryModule/ProductPairBranchDataMapper.java	(revision 663bda41b45ddcb2c4fa8c29df71228e60c0d683)
++++ b/src/Backend/DataAccessLayer/InventoryModule/ProductPairBranchDataMapper.java	(date 1683747416458)
+@@ -2,8 +2,17 @@
+ 
+ import Backend.DataAccessLayer.dalUtils.AbstractDataMapper;
+ 
++import java.sql.SQLException;
++
+ public class ProductPairBranchDataMapper extends AbstractDataMapper {
+     public ProductPairBranchDataMapper() {
+         super("product_pair_branch", new String[]{"branch_name", "product_catalog_number", "original_store_price", "notification_min"});
+     }
++
++    public void insert(String branch_name, String product_catalog_number, double original_store_price, int notification_min) throws SQLException {
++        String columnsString = String.join(", ", columns);
++        sqlExecutor.executeWrite(String.format("INSERT INTO %s (%s) VALUES('%s', %s, '%f', '%d')",
++                tableName, columnsString, branch_name, product_catalog_number, original_store_price, notification_min));
++    }
++
+ }
+Index: src/Backend/DataAccessLayer/InventoryModule/CategoryDataMapper.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package Backend.DataAccessLayer.InventoryModule;\nimport Backend.DataAccessLayer.dalUtils.AbstractDataMapper;\n\nimport java.sql.SQLException;\n\npublic class CategoryDataMapper extends AbstractDataMapper {\n    public CategoryDataMapper() {\n        super(\"category\", new String[]{\"category_name\"});\n    }\n\n\n    public void insert(String category_name) throws SQLException {\n        String columnsString = String.join(\", \", columns);\n        sqlExecutor.executeWrite(String.format(\"INSERT INTO %s (%s) VALUES('%s')\",\n                tableName, columnsString, category_name));\n    }\n\n    public void delete(String category_name) throws SQLException {\n        sqlExecutor.executeWrite(String.format(\"DROP FROM %s WHERE category_name = %s\", tableName, category_name));\n    }\n}\n\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/Backend/DataAccessLayer/InventoryModule/CategoryDataMapper.java b/src/Backend/DataAccessLayer/InventoryModule/CategoryDataMapper.java
+--- a/src/Backend/DataAccessLayer/InventoryModule/CategoryDataMapper.java	(revision 663bda41b45ddcb2c4fa8c29df71228e60c0d683)
++++ b/src/Backend/DataAccessLayer/InventoryModule/CategoryDataMapper.java	(date 1683747416461)
+@@ -18,5 +18,6 @@
+     public void delete(String category_name) throws SQLException {
+         sqlExecutor.executeWrite(String.format("DROP FROM %s WHERE category_name = %s", tableName, category_name));
+     }
++
+ }
+ 
+Index: src/Backend/DataAccessLayer/InventoryModule/CategoryHierarchyDataMapper.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package Backend.DataAccessLayer.InventoryModule;\nimport Backend.DataAccessLayer.dalUtils.AbstractDataMapper;\n\npublic class CategoryHierarchyDataMapper extends AbstractDataMapper {\n    public CategoryHierarchyDataMapper() {\n        super(\"category_hierarchy\", new String[]{\"category\", \"sub_category\"});\n    }\n\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/Backend/DataAccessLayer/InventoryModule/CategoryHierarchyDataMapper.java b/src/Backend/DataAccessLayer/InventoryModule/CategoryHierarchyDataMapper.java
+--- a/src/Backend/DataAccessLayer/InventoryModule/CategoryHierarchyDataMapper.java	(revision 663bda41b45ddcb2c4fa8c29df71228e60c0d683)
++++ b/src/Backend/DataAccessLayer/InventoryModule/CategoryHierarchyDataMapper.java	(date 1683747416463)
+@@ -1,9 +1,21 @@
+ package Backend.DataAccessLayer.InventoryModule;
+ import Backend.DataAccessLayer.dalUtils.AbstractDataMapper;
+ 
++import java.sql.SQLException;
++
+ public class CategoryHierarchyDataMapper extends AbstractDataMapper {
+     public CategoryHierarchyDataMapper() {
+         super("category_hierarchy", new String[]{"category", "sub_category"});
+     }
+ 
++    public void insert(String category_name, String sub_category) throws SQLException {
++        String columnsString = String.join(", ", columns);
++        sqlExecutor.executeWrite(String.format("INSERT INTO %s (%s) VALUES('%s', '%s')",
++                tableName, columnsString, category_name, sub_category));
++    }
++
++    public void delete(String category_name, String sub_category) throws SQLException {
++        sqlExecutor.executeWrite(String.format("DROP FROM %s WHERE category = %s and sub_category = %s", tableName, category_name, sub_category));
++    }
++
+ }
+Index: src/Backend/DataAccessLayer/InventoryModule/StoreProductDiscountDataMapper.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package Backend.DataAccessLayer.InventoryModule;\n\nimport Backend.DataAccessLayer.dalUtils.AbstractDataMapper;\n\npublic class StoreProductDiscountDataMapper extends AbstractDataMapper {\n    public StoreProductDiscountDataMapper() {\n        super(\"store_product_discount\", new String[]{\"catalog_number\", \"start_date\", \"end_date\", \"discount\"});\n    }\n\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/Backend/DataAccessLayer/InventoryModule/StoreProductDiscountDataMapper.java b/src/Backend/DataAccessLayer/InventoryModule/StoreProductDiscountDataMapper.java
+--- a/src/Backend/DataAccessLayer/InventoryModule/StoreProductDiscountDataMapper.java	(revision 663bda41b45ddcb2c4fa8c29df71228e60c0d683)
++++ b/src/Backend/DataAccessLayer/InventoryModule/StoreProductDiscountDataMapper.java	(date 1683747416465)
+@@ -2,9 +2,17 @@
+ 
+ import Backend.DataAccessLayer.dalUtils.AbstractDataMapper;
+ 
++import java.sql.SQLException;
++
+ public class StoreProductDiscountDataMapper extends AbstractDataMapper {
+     public StoreProductDiscountDataMapper() {
+         super("store_product_discount", new String[]{"catalog_number", "start_date", "end_date", "discount"});
+     }
+ 
++    public void insert(String category_name, String start_date, String end_date, double discount) throws SQLException {
++        String columnsString = String.join(", ", columns);
++        sqlExecutor.executeWrite(String.format("INSERT INTO %s (%s) VALUES('%s', '%s', '%s', '%s')",
++                tableName, columnsString, category_name, start_date, end_date, discount));
++    }
++
+ }

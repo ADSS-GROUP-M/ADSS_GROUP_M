@@ -18,5 +18,6 @@ public class CategoryDataMapper extends AbstractDataMapper {
     public void delete(String category_name) throws SQLException {
         sqlExecutor.executeWrite(String.format("DROP FROM %s WHERE category_name = %s", tableName, category_name));
     }
+
 }
 

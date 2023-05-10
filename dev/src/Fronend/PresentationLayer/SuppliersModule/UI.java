@@ -1,6 +1,6 @@
 package Fronend.PresentationLayer.SuppliersModule;
 
-import Backend.BusinessLayer.*;
+//import Backend.BusinessLayer.*;
 
 import Backend.BusinessLayer.SuppliersModule.BankAccount;
 import Backend.BusinessLayer.SuppliersModule.DeliveryAgreements.DeliveryAgreement;

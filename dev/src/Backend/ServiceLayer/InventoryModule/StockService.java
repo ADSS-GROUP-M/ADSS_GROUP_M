@@ -55,9 +55,6 @@ public class StockService {
                 productController.updateProduct(branch, null, catalog_number, null, -1, newMinAmount);
                 if(productController.isProductLack(branch,catalog_number)){
                     isMin = String.format("\n !!! Notice product %s is less than the minimum",catalog_number);
-                    // TODO: order automatic
-                    //inventory_amount = productController.getMinNotification(branch,catalog_number);
-                    // orderController.createOrder()
                 }
                 return new Response<>("Product type updated successfully" + isMin);
             } else {
@@ -75,21 +72,12 @@ public class StockService {
                 productController.updateProductItem(branch, is_defective, serial_num,  catalog_number,-1, null, -1, null);
                 if(productController.isProductLack(branch,catalog_number)){
                     isMin = String.format("\n !!! Notice product %s is less than the minimum !!!",catalog_number);
-                    //TODO: order automatic
-                    //inventory_amount = productController.getMinNotification(branch,catalog_number);
-                    // orderController.createOrder()
                 }
                 return new Response<>("Product type updated successfully" + isMin);
             } else if (is_sold != -1) {
                 productController.updateProductItem(branch, -1, serial_num,  catalog_number, is_sold, null, -1,  null);
-                // TODO: need to add supplier function with the days
-                OrderController orderController = new OrderController();
-                productController.updateMinAmount(branch,catalog_number,5);
                 if(productController.isProductLack(branch,catalog_number)) {
                     isMin = String.format("\n !!! Notice product %s is less than the minimum !!!", catalog_number);
-                    // TODO: order automatic
-                    //inventory_amount = productController.getMinNotification(branch,catalog_number);
-                    // orderController.createOrder()
                 }
                 return new Response<>("Product type updated successfully" + isMin);
             } else if (supplier != null) {

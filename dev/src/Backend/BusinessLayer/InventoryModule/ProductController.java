@@ -1,5 +1,7 @@
 package Backend.BusinessLayer.InventoryModule;
 
+import Backend.BusinessLayer.SuppliersModule.OrderController;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -46,7 +48,13 @@ public class ProductController {
 
     //check if the amount of product in more than the minimum
     public boolean isProductLack(String branch,String catalog_number){
-        return products.get(branch).get(catalog_number).isProductLack();
+        boolean isProductLack = products.get(branch).get(catalog_number).isProductLack();
+        if(isProductLack) {
+            //TODO: order automatic
+            //inventory_amount = productController.getMinNotification(branch,catalog_number);
+            // orderController.createOrder()
+        }
+        return isProductLack;
     }
 
 
@@ -87,7 +95,9 @@ public class ProductController {
             if(isDefective != -1){productItem.reportAsDefective();}
             if(isSold != -1){
                 productItem.reportAsSold(DCController.getTodayBiggestStoreDiscount(catalog_number,branch));
-                //TODO
+                // TODO: need to add supplier function with the days
+                OrderController orderController = new OrderController();
+                updateMinAmount(branch,catalog_number,5);
             }
             if(newSupplier != null){productItem.setSupplierID(newSupplier);}
             if(newSoldPrice != -1){productItem.setSoldPrice(newSoldPrice);}

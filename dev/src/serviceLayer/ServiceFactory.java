@@ -16,6 +16,7 @@ public class ServiceFactory {
     private ItemListsService itemListsService;
     private EmployeesService employeesService;
     private UserService userService;
+
     private final BusinessFactory businessFactory;
 
     public ServiceFactory(){
@@ -67,5 +68,9 @@ public class ServiceFactory {
 
     public UserService userService() {
         return userService;
+    }
+
+    public BusinessFactory businessFactory() {
+        return businessFactory;
     }
 }

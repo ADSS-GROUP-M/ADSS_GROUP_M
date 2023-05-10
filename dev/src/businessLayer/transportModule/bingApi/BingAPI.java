@@ -48,16 +48,37 @@ public class BingAPI {
         String json = sendRequest(urlPrefix + wayPoints + time + urlSuffix);
     }
 
-    public DistanceMatrixResponse distanceMatrix(List<Pair<Point,Point>> list) throws IOException{
+//    public DistanceMatrixResponse distanceMatrix(List<Pair<Point,Point>> list) throws IOException{
+//        String urlPrefix = "http://dev.virtualearth.net/REST/v1/Routes/DistanceMatrix?";
+//        String urlSuffix = "&travelMode=driving&key=" + key;
+//        StringBuilder originsString = new StringBuilder("origins=");
+//        StringBuilder destinationsString = new StringBuilder("&destinations=");
+//
+//        // formatted as: origins=lat1,long1;lat2,long2;...&destinations=lat1,long1;lat2,long2;...
+//        for(var pair : list){
+//            originsString.append(pair.getKey().latitude()).append(",").append(pair.getKey().longitude()).append(";");
+//            destinationsString.append(pair.getValue().latitude()).append(",").append(pair.getValue().longitude()).append(";");
+//        }
+//
+//        // remove last ';' from each string
+//        originsString.deleteCharAt(originsString.length()-1);
+//        destinationsString.deleteCharAt(destinationsString.length()-1);
+//
+//        String url = urlPrefix + originsString + destinationsString + urlSuffix;
+//        String json = sendRequest(url);
+//        return JsonUtils.deserialize(json, DistanceMatrixResponse.class);
+//    }
+
+    public DistanceMatrixResponse distanceMatrix(List<Point> list) throws IOException {
         String urlPrefix = "http://dev.virtualearth.net/REST/v1/Routes/DistanceMatrix?";
         String urlSuffix = "&travelMode=driving&key=" + key;
         StringBuilder originsString = new StringBuilder("origins=");
         StringBuilder destinationsString = new StringBuilder("&destinations=");
 
         // formatted as: origins=lat1,long1;lat2,long2;...&destinations=lat1,long1;lat2,long2;...
-        for(var pair : list){
-            originsString.append(pair.getKey().latitude()).append(",").append(pair.getKey().longitude()).append(";");
-            destinationsString.append(pair.getValue().latitude()).append(",").append(pair.getValue().longitude()).append(";");
+        for(var point : list){
+            originsString.append(point.latitude()).append(",").append(point.longitude()).append(";");
+            destinationsString.append(point.latitude()).append(",").append(point.longitude()).append(";");
         }
 
         // remove last ';' from each string

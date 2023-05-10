@@ -1,6 +1,7 @@
 import businessLayer.employeeModule.Authorization;
 import businessLayer.employeeModule.Branch;
 import businessLayer.employeeModule.Role;
+import businessLayer.transportModule.SitesController;
 import businessLayer.transportModule.SitesDistancesController;
 import businessLayer.transportModule.bingApi.BingAPI;
 import businessLayer.transportModule.bingApi.Point;
@@ -9,6 +10,7 @@ import javafx.util.Pair;
 import objects.transportObjects.Driver;
 import objects.transportObjects.ItemList;
 import objects.transportObjects.Site;
+import objects.transportObjects.Truck;
 import org.junit.jupiter.api.Test;
 import presentationLayer.employeeModule.View.MenuManager;
 import presentationLayer.transportModule.UiData;
@@ -18,7 +20,9 @@ import serviceLayer.employeeModule.Services.EmployeesService;
 import serviceLayer.employeeModule.Services.UserService;
 import serviceLayer.transportModule.ItemListsService;
 import serviceLayer.transportModule.ResourceManagementService;
+import utils.transportUtils.TransportException;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -46,7 +50,7 @@ public class Main {
             site2 = new Site(site2,point2.latitude(),point2.longitude());
             site3 = new Site(site3,point3.latitude(),point3.longitude());
 
-            Map<Pair<String, String>, Pair<Double, Double>> response = controller.getTravelMatrix(site1, Arrays.asList(site2,site3));
+            Map<Pair<String, String>, Pair<Double, Double>> response = controller.getTravelData(site1, Arrays.asList(site2,site3));
             System.out.println();
 
 
@@ -70,11 +74,11 @@ public class Main {
         ServiceFactory factory = new ServiceFactory();
         us = factory.userService();
         es = factory.employeesService();
-        ResourceManagementService rms = factory.resourceManagementService();
         ItemListsService ils = factory.itemListsService();
         initializeUserData();
-        generateSites(rms);
+        generateSites(factory.businessFactory().sitesController());
         generateItemLists(ils);
+        generateTrucks(factory.resourceManagementService());
 
         // Driver Data
         Driver driver1 = new Driver("1234", "megan smith", Driver.LicenseType.A1);
@@ -91,14 +95,27 @@ public class Main {
         initializeBranches(drivers);
         initializeShiftDay(morningDrivers, eveningDrivers,SHIFT_DATE);
         assignStorekeepers(SHIFT_DATE);
-        UiData.generateAndAddData();
+    }
+
+    private static void generateTrucks(ResourceManagementService rms) {
+        Truck truck1 = new Truck("abc123", "ford", 1500, 10000, Truck.CoolingCapacity.NONE);
+        Truck truck2 = new Truck("def456", "chevy", 2000, 15000, Truck.CoolingCapacity.COLD);
+        Truck truck3 = new Truck("ghi789", "toyota", 2500, 20000, Truck.CoolingCapacity.COLD);
+        Truck truck4 = new Truck("jkl012", "honda", 3000, 25000, Truck.CoolingCapacity.FROZEN);
+        Truck truck5 = new Truck("mno345", "nissan", 3500, 30000, Truck.CoolingCapacity.FROZEN);
+
+        rms.addTruck(truck1.toJson());
+        rms.addTruck(truck2.toJson());
+        rms.addTruck(truck3.toJson());
+        rms.addTruck(truck4.toJson());
+        rms.addTruck(truck5.toJson());
     }
 
     public static void deleteData(){
         DalFactory.clearDB("SuperLiDB.db");
     }
 
-    public static void generateSites(ResourceManagementService rms){
+    public static void generateSites(SitesController controller){
         Site site1 = new Site("branch1", "14441 s inglewood ave, hawthorne, ca 90250", "zone1", "111-111-1111", "John Smith", Site.SiteType.BRANCH, 0, 0);
         Site site2 = new Site("branch2", "19503 s normandie ave, torrance, ca 90501", "zone1", "222-222-2222", "Jane Doe", Site.SiteType.BRANCH, 0, 0);
         Site site3 = new Site("branch3", "22015 hawthorne blvd, torrance, ca 90503", "zone1", "333-333-3333", "Bob Johnson", Site.SiteType.BRANCH, 0, 0);
@@ -107,7 +124,7 @@ public class Main {
         Site site6 = new Site("branch6", "4651 firestone blvd, south gate, ca 90280", "zone2", "666-666-6666", "Emily Wilson", Site.SiteType.BRANCH, 0, 0);
         Site site7 = new Site("branch7", "1301 n victory pl, burbank, ca 91502", "zone3", "777-777-7777", "Tom Kim", Site.SiteType.BRANCH, 0, 0);
         Site site8 = new Site("branch8", "6433 fallbrook ave, west hills, ca 91307","zone3", "888-888-8888", "Amanda Garcia", Site.SiteType.BRANCH, 0, 0);
-        Site site9 = new Site("branch9", "8333 van nuys blvd, panorama city, ca 91402", "123-456-7890","zone4" ,"David Kim", Site.SiteType.BRANCH, 0, 0);
+        Site site9 = new Site("branch9", "8333 van nuys blvd, panorama city, ca 91402","zone4", "123-456-7890" ,"David Kim", Site.SiteType.BRANCH, 0, 0);
         Site site10 = new Site("supplier1", "8500 washington blvd, pico rivera, ca 90660", "zone4", "456-789-0123", "William Davis", Site.SiteType.SUPPLIER, 0, 0);
         Site site11 = new Site("supplier2", "20226 avalon blvd, carson, ca 90746", "zone3", "999-999-9999", "Steve Chen", Site.SiteType.SUPPLIER, 0, 0);
         Site site12 = new Site("supplier3", "9001 apollo way, downey, ca 90242", "zone4", "345-678-9012", "Andrew Chen", Site.SiteType.SUPPLIER, 0, 0);
@@ -115,21 +132,30 @@ public class Main {
         Site site14 = new Site("supplier5", "14501 lakewood blvd, paramount, ca 90723", "zone4", "234-567-8901", "Jessica Park", Site.SiteType.SUPPLIER, 0, 0);
         Site site15 = new Site("logistical1", "3705 e south st, long beach, ca 90805", "zone5", "123-456-7890", "Jessica Park", Site.SiteType.LOGISTICAL_CENTER, 0,0);
 
-        rms.addSite(site1.toJson());
-        rms.addSite(site2.toJson());
-        rms.addSite(site3.toJson());
-        rms.addSite(site4.toJson());
-        rms.addSite(site5.toJson());
-        rms.addSite(site6.toJson());
-        rms.addSite(site7.toJson());
-        rms.addSite(site8.toJson());
-        rms.addSite(site9.toJson());
-        rms.addSite(site10.toJson());
-        rms.addSite(site11.toJson());
-        rms.addSite(site12.toJson());
-        rms.addSite(site13.toJson());
-        rms.addSite(site14.toJson());
-        rms.addSite(site15.toJson());
+        List<Site> sites = new LinkedList<>(){{
+            add(site1);
+            add(site2);
+            add(site3);
+            add(site4);
+            add(site5);
+            add(site6);
+            add(site7);
+            add(site8);
+            add(site9);
+            add(site10);
+            add(site11);
+            add(site12);
+            add(site13);
+            add(site14);
+            add(site15);
+        }};
+
+        try {
+            controller.addAllSitesFirstTimeSystemLoad(sites);
+        } catch (TransportException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     public static void initializeUserData() {

@@ -327,7 +327,7 @@ class TransportDestinationsDAOTest {
     private void assertDeepEquals(TransportDestination transportDestination1, TransportDestination transportDestination2) {
         assertEquals(transportDestination1.transportId(), transportDestination2.transportId());
         assertEquals(transportDestination1.destination_index(), transportDestination2.destination_index());
-        assertEquals(transportDestination1.address(), transportDestination2.address());
+        assertEquals(transportDestination1.name(), transportDestination2.name());
         assertEquals(transportDestination1.itemListId(), transportDestination2.itemListId());
         assertEquals(transportDestination1.expectedArrivalTime(), transportDestination2.expectedArrivalTime());
     }

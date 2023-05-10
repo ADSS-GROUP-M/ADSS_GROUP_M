@@ -73,7 +73,7 @@ public class SitesController {
     /**
      * Removes a site from the `SitesController`.
      *
-     * @param address The address of the site to be removed.
+     * @param address The name of the site to be removed.
      * @throws TransportException If the site is not found.
      */
     public void removeSite(String address) throws TransportException {
@@ -91,7 +91,7 @@ public class SitesController {
     /**
      * Retrieves a site from the `SitesController`.
      *
-     * @param address The address of the site to be retrieved.
+     * @param address The name of the site to be retrieved.
      * @return The retrieved site.
      * @throws TransportException If the site is not found.
      */
@@ -110,7 +110,7 @@ public class SitesController {
     /**
      * Updates a site in the `SitesController`.
      *
-     * @param address The address of the site to be updated.
+     * @param address The name of the site to be updated.
      * @param newSite The updated site.
      * @throws TransportException If the site is not found.
      */
@@ -139,8 +139,8 @@ public class SitesController {
         }
     }
 
-    public boolean siteExists(String address) throws TransportException{
-        Site lookupObject = Site.getLookupObject(address);
+    public boolean siteExists(String name) throws TransportException{
+        Site lookupObject = Site.getLookupObject(name);
         try {
             return dao.exists(lookupObject);
         } catch (DalException e) {

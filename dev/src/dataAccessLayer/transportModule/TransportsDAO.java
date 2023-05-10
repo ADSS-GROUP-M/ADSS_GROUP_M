@@ -19,8 +19,8 @@ public class TransportsDAO extends ManyToManyDAO<Transport> implements CounterDA
     private static final String[] types = {"INTEGER", "TEXT", "TEXT", "TEXT", "TEXT", "INTEGER"};
     private static final String[] parent_tables = {"truck_drivers", "trucks", "sites"};
     private static final String[] primary_keys = {"id"};
-    private static final String[][] foreign_keys = {{"driver_id"}, {"truck_id"},{"source_address"}};
-    private static final String[][] references = {{"id"}, {"id"}, {"address"}};
+    private static final String[][] foreign_keys = {{"driver_id"}, {"truck_id"},{"source_name"}};
+    private static final String[][] references = {{"id"}, {"id"}, {"name"}};
     public static final String tableName = "transports";
 
     private final TransportDestinationsDAO destinationsDAO;
@@ -35,7 +35,7 @@ public class TransportsDAO extends ManyToManyDAO<Transport> implements CounterDA
                 foreign_keys,
                 references,
                 "id",
-                "source_address",
+                "source_name",
                 "driver_id",
                 "truck_id",
                 "departure_time",
@@ -136,7 +136,7 @@ public class TransportsDAO extends ManyToManyDAO<Transport> implements CounterDA
      */
     @Override
     public void update(Transport object) throws DalException {
-        String query = String.format("UPDATE %s SET source_address = '%s', driver_id = '%s', truck_id = '%s', departure_time = '%s', weight = %d WHERE id = %d;",
+        String query = String.format("UPDATE %s SET source_name = '%s', driver_id = '%s', truck_id = '%s', departure_time = '%s', weight = %d WHERE id = %d;",
                 TABLE_NAME,
                 object.source(),
                 object.driverId(),
@@ -203,12 +203,12 @@ public class TransportsDAO extends ManyToManyDAO<Transport> implements CounterDA
         HashMap<String,Integer> itemLists = new HashMap<>();
         HashMap<String, LocalTime> estimatedTimesOfArrival = new HashMap<>();
         for(TransportDestination transportDestination : transportDestinations){
-            destinations.add(transportDestination.address());
-            itemLists.put(transportDestination.address(), transportDestination.itemListId());
-            estimatedTimesOfArrival.put(transportDestination.address(), transportDestination.expectedArrivalTime());
+            destinations.add(transportDestination.name());
+            itemLists.put(transportDestination.name(), transportDestination.itemListId());
+            estimatedTimesOfArrival.put(transportDestination.name(), transportDestination.expectedArrivalTime());
         }
 
-        String sourceAddress = resultSet.getString("source_address");
+        String sourceAddress = resultSet.getString("source_name");
         return new Transport(
                 resultSet.getInt("id"),
                 new DeliveryRoute(sourceAddress, destinations,itemLists, estimatedTimesOfArrival),

@@ -71,8 +71,10 @@ public class Main {
         us = factory.userService();
         es = factory.employeesService();
         ResourceManagementService rms = factory.resourceManagementService();
+        ItemListsService ils = factory.itemListsService();
         generateSites(rms);
         initializeUserData();
+        generateItemLists(ils);
 
         // Driver Data
         Driver driver1 = new Driver("1234", "megan smith", Driver.LicenseType.A1);

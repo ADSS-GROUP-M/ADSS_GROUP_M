@@ -38,7 +38,7 @@ class BranchesDAOTest {
         branch1 = new Branch("address1");
         branch2 = new Branch("address2");
         branch3 = new Branch("address3", LocalTime.of(9,0),LocalTime.of(13,0),LocalTime.of(13,0),LocalTime.of(20,0));
-        branch4 = new Branch("address2"); // Same address as branch2
+        branch4 = new Branch("address2"); // Same name as branch2
 
         try {
             factory = new DalFactory(TESTING_DB_NAME);
@@ -100,7 +100,7 @@ class BranchesDAOTest {
     void insert_fail() {
         try {
             branchesDAO.insert(branch4);
-            fail("Expected an error after attempting to insert a branch with the same address.");
+            fail("Expected an error after attempting to insert a branch with the same name.");
         } catch (DalException ignore) { }
     }
 
@@ -142,7 +142,7 @@ class BranchesDAOTest {
     void getObjectFromResultSet() {
         SQLExecutor cursor = factory.cursor();
         try {
-            OfflineResultSet resultSet = cursor.executeRead("SELECT * FROM Branches WHERE address = '" + branch1.name() + "'");
+            OfflineResultSet resultSet = cursor.executeRead("SELECT * FROM Branches WHERE name = '" + branch1.name() + "'");
             resultSet.next();
             assertDeepEquals(branch1, branchesDAO.getObjectFromResultSet(resultSet));
         } catch (SQLException e) {

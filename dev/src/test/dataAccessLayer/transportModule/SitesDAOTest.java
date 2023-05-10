@@ -128,7 +128,7 @@ class SitesDAOTest {
     void getObjectFromResultSet() {
         SQLExecutor cursor = factory.cursor();
         try{
-            OfflineResultSet resultSet = cursor.executeRead(String.format("SELECT * FROM Sites WHERE address = '%s';",site.address()));
+            OfflineResultSet resultSet = cursor.executeRead(String.format("SELECT * FROM Sites WHERE name = '%s';",site.address()));
             resultSet.next();
             Site siteFromDB = dao.getObjectFromResultSet(resultSet);
             assertDeepEquals(site,siteFromDB);

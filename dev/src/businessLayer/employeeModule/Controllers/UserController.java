@@ -2,6 +2,7 @@ package businessLayer.employeeModule.Controllers;
 
 import businessLayer.employeeModule.Authorization;
 import businessLayer.employeeModule.User;
+import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.employeeModule.UserDAO;
 
 import java.util.List;
@@ -27,44 +28,44 @@ public class UserController {
             throw new Exception("Invalid password.");
     }
 
-    public void logout(String username) throws Exception {
+    public void logout(String username) throws DalException {
         getUser(username).logout(); // Throws an exception if the user is not found
     }
 
-    public User getUser(String username) throws Exception {
+    public User getUser(String username) throws DalException {
         User user = userDAO.get(username);
         if (user == null)
-            throw new Exception("The given username doesn't exist.");
+            throw new DalException("The given username doesn't exist.");
         return user;
     }
 
-    public void createUser(String username, String password) throws Exception {
+    public void createUser(String username, String password) throws DalException {
         User user = new User(username, password);
         userDAO.create(user);
     }
 
-    public void createManagerUser(String username, String password) throws Exception {
+    public void createManagerUser(String username, String password) throws DalException {
         User user = new User(username, password, Authorization.HRManager);
         userDAO.create(user);
     }
 
-    public boolean isAuthorized(String username, Authorization auth) throws Exception {
+    public boolean isAuthorized(String username, Authorization auth) throws DalException {
         User user = getUser(username);
         return user.isAuthorized(auth);
     }
 
-    public List<Authorization> getUserAuthorizations(String username) throws Exception {
+    public List<Authorization> getUserAuthorizations(String username) throws DalException {
         User user = getUser(username);
         return user.getAuthorizations();
     }
 
-    public void authorizeUser(String username, Authorization auth) throws Exception {
+    public void authorizeUser(String username, Authorization auth) throws DalException {
         User user = getUser(username);
         user.authorize(auth);
         userDAO.update(user);
     }
 
-    public boolean isLoggedIn(String username) throws Exception {
+    public boolean isLoggedIn(String username) throws DalException {
         return getUser(username).isLoggedIn();
     }
 }

@@ -14,9 +14,9 @@ import java.util.List;
 public class BranchEmployeesDAO extends ManyToManyDAO<Pair<String,String>> {
     private static final String[] types = new String[]{"TEXT", "TEXT"};
     private static final String[] parent_table_names = {"branches","employees"};
-    private static final String[] primary_keys = {"address","employee_id"};
-    private static final String[][] foreign_keys = {{"address"},{"employee_id"}};
-    private static final String[][] references = {{"address"},{"id"}};
+    private static final String[] primary_keys = {"name","employee_id"};
+    private static final String[][] foreign_keys = {{"name"},{"employee_id"}};
+    private static final String[][] references = {{"name"},{"id"}};
     public static final String tableName = "branch_employees";
 
     public BranchEmployeesDAO(SQLExecutor cursor) throws DalException {
@@ -27,13 +27,13 @@ public class BranchEmployeesDAO extends ManyToManyDAO<Pair<String,String>> {
                 primary_keys,
                 foreign_keys,
                 references,
-                "address",
+                "name",
                 "employee_id");
         initTable();
     }
 
     /**
-     * @param branchAddress the branch address
+     * @param branchAddress the branch name
      * @param employeeId the employee's id
      * @return the pair with the given identifier
      * @throws DalException if an error occurred while trying to select the pair
@@ -43,7 +43,7 @@ public class BranchEmployeesDAO extends ManyToManyDAO<Pair<String,String>> {
     }
 
     /**
-     * @param branchAddress the branch address
+     * @param branchAddress the branch name
      * @param employeeIds the list of employee ids
      * @return the list of pairs with the given identifiers
      * @throws DalException if an error occurred while trying to select the pair
@@ -67,7 +67,7 @@ public class BranchEmployeesDAO extends ManyToManyDAO<Pair<String,String>> {
             return cache.get(object);
         }
 
-        String query = String.format("SELECT * FROM %s WHERE address = '%s' AND employee_id = '%s';",
+        String query = String.format("SELECT * FROM %s WHERE name = '%s' AND employee_id = '%s';",
                 TABLE_NAME,
                 object.getKey(),
                 object.getValue());
@@ -134,7 +134,7 @@ public class BranchEmployeesDAO extends ManyToManyDAO<Pair<String,String>> {
      */
     @Override
     public void update(Pair<String, String> object) throws DalException { // TODO: probably shouldn't allow updates - keys are the only columns
-        String query = String.format("UPDATE %s SET address = '%s', employee_id = '%s';",
+        String query = String.format("UPDATE %s SET name = '%s', employee_id = '%s';",
                 TABLE_NAME,
                 object.getKey(),
                 object.getValue());
@@ -154,7 +154,7 @@ public class BranchEmployeesDAO extends ManyToManyDAO<Pair<String,String>> {
      */
     @Override
     public void delete(Pair<String,String> object) throws DalException {
-        String query = String.format("DELETE FROM %s WHERE address = '%s' AND employee_id = '%s';",
+        String query = String.format("DELETE FROM %s WHERE name = '%s' AND employee_id = '%s';",
                 TABLE_NAME,
                 object.getKey(),
                 object.getValue());
@@ -189,7 +189,7 @@ public class BranchEmployeesDAO extends ManyToManyDAO<Pair<String,String>> {
     @Override
     public Pair<String,String> getObjectFromResultSet(OfflineResultSet resultSet) {
         return new Pair<>(
-                resultSet.getString("address"),
+                resultSet.getString("name"),
                 resultSet.getString("employee_id"));
     }
 }

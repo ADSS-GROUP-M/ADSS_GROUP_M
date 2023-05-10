@@ -18,16 +18,11 @@ public class UserService {
 
     public UserService(UserController userController) {
         this.userController = userController;
-    }
-
-    /**
-     * This method loads the initial user data into the system, during the initial load of the system.
-     */
-    public void createData() {
         try {
             userController.createManagerUser(HR_MANAGER_USERNAME, "123");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
-        catch (Exception ignore) {}
     }
 
     /**

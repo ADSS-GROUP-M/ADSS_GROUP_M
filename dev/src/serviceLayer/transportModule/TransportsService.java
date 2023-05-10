@@ -23,7 +23,7 @@ public class TransportsService {
      * <ul>
      * <li>The Truck's maximum weight has been exceeded</li>
      * <li>The assigned Driver does not have the required license for the Truck</li>
-     * <li>The source address of the Transport does not exist in the System</li>
+     * <li>The source name of the Transport does not exist in the System</li>
      * <li>Any of the destination addresses of the Transport do not exist in the System</li>
      * <li>Any of the assigned ItemLists for the destinations do not exist in the System</li>
      * </ul>
@@ -34,8 +34,8 @@ public class TransportsService {
      * Example: <br/><br/> the message field will contain the following:<br/><br/>
      * The truck's maximum weight has been exceeded<br/>
      * A driver with license type A1 is not permitted to drive this truck<br/>
-     * Site with address 123 Main St does not exist<br/>
-     * Site with address 456 Oak St does not exist<br>
+     * Site with name 123 Main St does not exist<br/>
+     * Site with name 456 Oak St does not exist<br>
      * Item list with id 1234 does not exist<br/><br/>
      * the data field will contain the following:<br/><br/>
      * weight,license,source,destination:0,itemList:1

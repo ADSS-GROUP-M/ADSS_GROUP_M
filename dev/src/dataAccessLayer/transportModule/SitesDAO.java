@@ -32,6 +32,28 @@ public class SitesDAO extends DAO<Site> {
         initTable();
     }
 
+    @Override
+    protected void initTable() throws DalException {
+        String query = """
+                CREATE TABLE IF NOT EXISTS "sites" (
+                	"name"	TEXT NOT NULL,
+                	"address"	TEXT NOT NULL UNIQUE,
+                	"transport_zone"	TEXT NOT NULL,
+                	"contact_name"	TEXT NOT NULL,
+                	"contact_phone"	TEXT NOT NULL,
+                	"site_type"	TEXT NOT NULL,
+                	"latitude"	REAL NOT NULL,
+                	"longitude"	REAL NOT NULL,
+                	PRIMARY KEY("name")
+                )
+                """;
+        try {
+            cursor.executeWrite(query);
+        } catch (SQLException e) {
+            throw new DalException("Failed to create sites table", e);
+        }
+    }
+
     /**
      * @param object@return the object with the given identifier
      * @throws DalException if an error occurred while trying to select the object
@@ -43,7 +65,7 @@ public class SitesDAO extends DAO<Site> {
             return cache.get(object);
         }
 
-        String query = String.format("SELECT * FROM %s WHERE address = '%s';", TABLE_NAME, object.name());
+        String query = String.format("SELECT * FROM %s WHERE name = '%s';", TABLE_NAME, object.name());
         OfflineResultSet resultSet;
         try {
             resultSet = cursor.executeRead(query);
@@ -113,7 +135,7 @@ public class SitesDAO extends DAO<Site> {
      */
     @Override
     public void update(Site object) throws DalException {
-        String query = String.format("UPDATE %s SET address = '%s', transport_zone = '%s', contact_name = '%s', contact_phone = '%s', site_type = '%s', latitude = %f, longitude = %f WHERE address = '%s';",
+        String query = String.format("UPDATE %s SET address = '%s', transport_zone = '%s', contact_name = '%s', contact_phone = '%s', site_type = '%s', latitude = %f, longitude = %f WHERE name = '%s';",
                 TABLE_NAME,
                 object.address(),
                 object.transportZone(),

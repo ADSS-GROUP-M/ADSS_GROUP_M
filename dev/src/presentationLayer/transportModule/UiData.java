@@ -252,11 +252,11 @@ public class UiData {
 
         // Randomly generated transports
 //        Transport transport1 = new Transport(
-//                site2.address(),
-//                new LinkedList<>(Arrays.asList(site1.address(), site4.address())),
+//                site2.name(),
+//                new LinkedList<>(Arrays.asList(site1.name(), site4.name())),
 //                new HashMap<>() {{
-//                    put(site1.address(), 1);
-//                    put(site4.address(), 4);
+//                    put(site1.name(), 1);
+//                    put(site4.name(), 4);
 //                }},
 //                driver1.id(),
 //                truck1.id(),
@@ -265,11 +265,11 @@ public class UiData {
 //        );
 //
 //        Transport transport2 = new Transport(
-//                site2.address(),
-//                new LinkedList<>(Arrays.asList(site1.address(), site4.address())),
+//                site2.name(),
+//                new LinkedList<>(Arrays.asList(site1.name(), site4.name())),
 //                new HashMap<>() {{
-//                    put(site1.address(), 3);
-//                    put(site4.address(), 4);
+//                    put(site1.name(), 3);
+//                    put(site4.name(), 4);
 //                }},
 //                driver2.id(),
 //                truck2.id(),
@@ -278,11 +278,11 @@ public class UiData {
 //        );
 //
 //        Transport transport3 = new Transport(
-//                site3.address(),
-//                new LinkedList<>(Arrays.asList(site1.address(), site5.address())),
+//                site3.name(),
+//                new LinkedList<>(Arrays.asList(site1.name(), site5.name())),
 //                new HashMap<>() {{
-//                    put(site1.address(), 2);
-//                    put(site5.address(), 5);
+//                    put(site1.name(), 2);
+//                    put(site5.name(), 5);
 //                }},
 //                driver3.id(),
 //                truck3.id(),
@@ -291,12 +291,12 @@ public class UiData {
 //        );
 //
 //        Transport transport4 = new Transport(
-//                site4.address(),
-//                new LinkedList<>(Arrays.asList(site2.address(), site3.address(), site5.address())),
+//                site4.name(),
+//                new LinkedList<>(Arrays.asList(site2.name(), site3.name(), site5.name())),
 //                new HashMap<>() {{
-//                    put(site2.address(), 4);
-//                    put(site3.address(), 1);
-//                    put(site5.address(), 3);
+//                    put(site2.name(), 4);
+//                    put(site3.name(), 1);
+//                    put(site5.name(), 3);
 //                }},
 //                driver4.id(),
 //                truck4.id(),
@@ -305,10 +305,10 @@ public class UiData {
 //        );
 //
 //        Transport transport5 = new Transport(
-//                site5.address(),
-//                new LinkedList<>(List.of(site4.address())),
+//                site5.name(),
+//                new LinkedList<>(List.of(site4.name())),
 //                new HashMap<>() {{
-//                    put(site4.address(), 2);
+//                    put(site4.name(), 2);
 //                }},
 //                driver5.id(),
 //                truck5.id(),
@@ -375,7 +375,7 @@ public class UiData {
         for(Site site : sites.values()){
             System.out.print(i+".");
             System.out.println(" Transport zone: "+site.transportZone());
-            System.out.println("   address:        "+site.address());
+            System.out.println("   name:        "+site.address());
             siteArray[i-1] = site;
             i++;
         }

@@ -331,13 +331,13 @@ class TransportsServiceIT {
     @Test
     void createTransportEverythingDoesNotExist(){
         Transport newTransport = new Transport(
-                "some address",
+                "some name",
                 new LinkedList<>(){{
-                    add("some other address");
+                    add("some other name");
                     add("some other address2");
                 }},
                 new HashMap<>(){{
-                    put("some other address", 10);
+                    put("some other name", 10);
                     put("some other address2", 20);
                 }},
                 "some driver",
@@ -359,7 +359,6 @@ class TransportsServiceIT {
     private void initEmployeesModuleTestData() {
         // Used for testing Employees module integration:
         // Creating the test branch and shifts, recruiting and certifying the employees
-        us.createData();
         es.createData();
         es.updateBranchWorkingHours("admin123",HQAddress, LocalTime.of(0,0),LocalTime.of(14,0),LocalTime.of(14,0),LocalTime.of(23,0));
         es.createWeekShifts("admin123",HQAddress,shiftDate);

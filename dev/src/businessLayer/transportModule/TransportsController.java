@@ -205,7 +205,7 @@ public class TransportsController {
 
         // source validation
         if(sc.siteExists(transport.source()) == false){
-            ec.addError("Site with address " + transport.source() + " does not exist", "source");
+            ec.addError("Site with name " + transport.source() + " does not exist", "source");
         }
 
         // destinations + itemLists validation
@@ -214,14 +214,14 @@ public class TransportsController {
 
             //destination validation
             if(sc.siteExists(address) == false){
-                ec.addError("Site with address " + address + " does not exist", "destination:"+destIndex);
+                ec.addError("Site with name " + address + " does not exist", "destination:"+destIndex);
             }
             //store keeper validation
             else if(sc.getSite(address).siteType() == Site.SiteType.BRANCH){
                 String destinationJson = es.checkStoreKeeperAvailability(JsonUtils.serialize(transport.departureTime()),address);
                 Response response = Response.fromJson(destinationJson);
                 if(response.success()==false){
-                    ec.addError("Store keeper is not available on site with address " + address, "storeKeeper");
+                    ec.addError("Store keeper is not available on site with name " + address, "storeKeeper");
                 }
             }
 

@@ -17,9 +17,9 @@ public class BranchesDAO extends ManyToManyDAO<Branch> {
 
     private static final String[] types = new String[]{"TEXT", "TEXT", "TEXT", "TEXT", "TEXT"};
     private static final String[] parent_table_names = {"sites"};
-    private static final String[] primary_keys = {"address"};
-    private static final String[][] foreign_keys = {{"address"}};
-    private static final String[][] references = {{"address"}};
+    private static final String[] primary_keys = {"name"};
+    private static final String[][] foreign_keys = {{"name"}};
+    private static final String[][] references = {{"name"}};
     public static final String tableName = "branches";
 
     private final BranchEmployeesDAO branchEmployeesDAO;
@@ -32,7 +32,7 @@ public class BranchesDAO extends ManyToManyDAO<Branch> {
                 primary_keys,
                 foreign_keys,
                 references,
-                "address",
+                "name",
                 "morning_shift_start",
                 "morning_shift_end",
                 "evening_shift_start",
@@ -62,7 +62,7 @@ public class BranchesDAO extends ManyToManyDAO<Branch> {
             return cache.get(object);
         }
 
-        String query = String.format("SELECT * FROM %s WHERE address = '%s';",
+        String query = String.format("SELECT * FROM %s WHERE name = '%s';",
                 TABLE_NAME,
                 object.name());
         OfflineResultSet resultSet;
@@ -76,7 +76,7 @@ public class BranchesDAO extends ManyToManyDAO<Branch> {
             cache.put(selected);
             return selected;
         } else {
-            throw new DalException("No branch with address " + object.name() + " was found");
+            throw new DalException("No branch with name " + object.name() + " was found");
         }
     }
 
@@ -131,7 +131,7 @@ public class BranchesDAO extends ManyToManyDAO<Branch> {
      */
     @Override
     public void update(Branch object) throws DalException {
-        String query = String.format("UPDATE %s SET morning_shift_start = '%s', morning_shift_end = '%s', evening_shift_start = '%s', evening_shift_end = '%s' WHERE address = '%s';",
+        String query = String.format("UPDATE %s SET morning_shift_start = '%s', morning_shift_end = '%s', evening_shift_start = '%s', evening_shift_end = '%s' WHERE name = '%s';",
                 TABLE_NAME,
                 object.getMorningStart(),
                 object.getMorningEnd(),
@@ -154,7 +154,7 @@ public class BranchesDAO extends ManyToManyDAO<Branch> {
      */
     @Override
     public void delete(Branch object) throws DalException {
-        String query = String.format("DELETE FROM %s WHERE address = '%s';",
+        String query = String.format("DELETE FROM %s WHERE name = '%s';",
                 TABLE_NAME,
                 object.name());
         try {
@@ -188,7 +188,7 @@ public class BranchesDAO extends ManyToManyDAO<Branch> {
     @Override
     public Branch getObjectFromResultSet(OfflineResultSet resultSet) {
         return new Branch(
-                resultSet.getString("address"),
+                resultSet.getString("name"),
                 resultSet.getLocalTime("morning_shift_start"),
                 resultSet.getLocalTime("morning_shift_end"),
                 resultSet.getLocalTime("evening_shift_start"),

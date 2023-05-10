@@ -1,5 +1,7 @@
 package businessLayer.employeeModule;
 
+import utils.employeeUtils.EmployeeException;
+
 import java.time.LocalTime;
 import java.util.Objects;
 
@@ -57,12 +59,12 @@ public class Branch {
         this.eveningEnd = eUntil;
     }
 
-    public Shift.ShiftType getShiftType(LocalTime localTime) throws Exception {
+    public Shift.ShiftType getShiftType(LocalTime localTime) throws EmployeeException {
         if (localTime.equals(morningStart) || (localTime.isAfter(morningStart) && localTime.isBefore(morningEnd)) || localTime.equals(morningEnd))
             return Shift.ShiftType.Morning;
         else if (localTime.equals(eveningStart) || (localTime.isAfter(eveningStart) && localTime.isBefore(eveningEnd)) || localTime.equals(eveningEnd))
             return Shift.ShiftType.Evening;
-        throw new Exception("The given LocalTime isn't included in any shift of the day.");
+        throw new EmployeeException("The given LocalTime isn't included in any shift of the day.");
     }
 
     public String name() {

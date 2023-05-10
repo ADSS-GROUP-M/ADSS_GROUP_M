@@ -15,8 +15,8 @@ public class TransportDestinationsDAO extends ManyToManyDAO<TransportDestination
     private static final String[] types = {"INTEGER", "INTEGER" , "TEXT", "INTEGER", "TEXT"};
     private static final String[] parent_tables = {"transports", "sites", "item_lists"};
     private static final String[] primary_keys = {"transport_id", "destination_index"};
-    private static final String[][] foreign_keys = {{"transport_id"}, {"destination_address"}, {"item_list_id"}};
-    private static final String[][] references = {{"id"}, {"address"}, {"id"}};
+    private static final String[][] foreign_keys = {{"transport_id"}, {"destination_name"}, {"item_list_id"}};
+    private static final String[][] references = {{"id"}, {"name"}, {"id"}};
     public static final String tableName = "transport_destinations";
 
     public TransportDestinationsDAO(SQLExecutor cursor) throws DalException{
@@ -29,7 +29,7 @@ public class TransportDestinationsDAO extends ManyToManyDAO<TransportDestination
                 references,
                 "transport_id",
                 "destination_index",
-                "destination_address",
+                "destination_name",
                 "item_list_id",
                 "expected_arrival_time"
         );
@@ -110,7 +110,7 @@ public class TransportDestinationsDAO extends ManyToManyDAO<TransportDestination
                 TABLE_NAME,
                 object.transportId(),
                 object.destination_index(),
-                object.address(),
+                object.name(),
                 object.itemListId(),
                 object.expectedArrivalTime()
         );
@@ -134,7 +134,7 @@ public class TransportDestinationsDAO extends ManyToManyDAO<TransportDestination
                     TABLE_NAME,
                     object.transportId(),
                     object.destination_index(),
-                    object.address(),
+                    object.name(),
                     object.itemListId(),
                     object.expectedArrivalTime()));
         }
@@ -155,7 +155,7 @@ public class TransportDestinationsDAO extends ManyToManyDAO<TransportDestination
     public void update(TransportDestination object) throws DalException {
         String query = String.format("UPDATE %s SET destination_address = '%s', item_list_id = %d, expected_arrival_time = '%s' WHERE transport_id = %d AND destination_index = %d;",
                 TABLE_NAME,
-                object.address(),
+                object.name(),
                 object.itemListId(),
                 object.expectedArrivalTime(),
                 object.transportId(),

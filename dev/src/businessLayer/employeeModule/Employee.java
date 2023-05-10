@@ -1,5 +1,7 @@
 package businessLayer.employeeModule;
 
+import utils.employeeUtils.EmployeeException;
+
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Objects;
@@ -80,9 +82,9 @@ public class Employee {
     }
 
 
-    public void removeRole(Role role) throws Exception {
+    public void removeRole(Role role) throws EmployeeException {
         if (!roles.contains(role))
-            throw new Exception("The given role: `" + role + "` is not one of the employee roles.");
+            throw new EmployeeException("The given role: `" + role + "` is not one of the employee roles.");
         roles.remove(role);
     }
 

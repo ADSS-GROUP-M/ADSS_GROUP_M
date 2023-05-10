@@ -56,7 +56,7 @@ public class EmployeesService {
     /**
      * This method checks if there is a storekeeper at the specified date and branch. (DateTime?)
      * @param dateToCheck The needed date
-     * @param branchAddress The needed branch address
+     * @param branchAddress The needed branch name
      * @return A success response if there is an available storekeeper.
      * Otherwise, returns a matching error response.
      */
@@ -122,8 +122,8 @@ public class EmployeesService {
         //    // Transport Module Storekeeper Data
         //    String storekeeperId1 = "1";
         //    String storekeeperId2 = "2";
-        //    employeesController.recruitEmployee(site8.address(),"Someone", storekeeperId1,"Hapoalim 12 250", 30, LocalDate.of(2023,2,2),"Employment Conditions Test", "More details about Someone");
-        //    employeesController.recruitEmployee(site9.address(),"Someone2", storekeeperId2,"Hapoalim 12 250", 30, LocalDate.of(2023,2,2),"Employment Conditions Test", "More details about Someone2");
+        //    employeesController.recruitEmployee(site8.name(),"Someone", storekeeperId1,"Hapoalim 12 250", 30, LocalDate.of(2023,2,2),"Employment Conditions Test", "More details about Someone");
+        //    employeesController.recruitEmployee(site9.name(),"Someone2", storekeeperId2,"Hapoalim 12 250", 30, LocalDate.of(2023,2,2),"Employment Conditions Test", "More details about Someone2");
         //    employeesController.certifyEmployee(storekeeperId1, Role.Storekeeper);
         //    employeesController.certifyEmployee(storekeeperId2, Role.Storekeeper);
         //    userService.createUser(UserService.HR_MANAGER_USERNAME,storekeeperId1,"123");
@@ -132,23 +132,23 @@ public class EmployeesService {
         //    // Shift Creation
         //    LocalDate shiftDate = LocalDate.of(2023, 4, 5);
         //    createWeekShifts(UserService.HR_MANAGER_USERNAME,headquartersId,shiftDate);
-        //    createWeekShifts(UserService.HR_MANAGER_USERNAME,site8.address(),shiftDate);
-        //    createWeekShifts(UserService.HR_MANAGER_USERNAME,site9.address(),shiftDate);
+        //    createWeekShifts(UserService.HR_MANAGER_USERNAME,site8.name(),shiftDate);
+        //    createWeekShifts(UserService.HR_MANAGER_USERNAME,site9.name(),shiftDate);
 //
         //    // Shift Workers Initialization
         //    setShiftNeededAmount(UserService.HR_MANAGER_USERNAME,headquartersId,shiftDate,SShiftType.Morning,"Driver",2);
         //    requestShift(driver1.id(),headquartersId,shiftDate,SShiftType.Morning,"Driver");
         //    requestShift(driver2.id(),headquartersId,shiftDate,SShiftType.Morning,"Driver");
-        //    requestShift(storekeeperId1,site8.address(),shiftDate,SShiftType.Morning,"Storekeeper");
-        //    requestShift(storekeeperId2,site9.address(),shiftDate,SShiftType.Morning,"Storekeeper");
+        //    requestShift(storekeeperId1,site8.name(),shiftDate,SShiftType.Morning,"Storekeeper");
+        //    requestShift(storekeeperId2,site9.name(),shiftDate,SShiftType.Morning,"Storekeeper");
 //
         //    setShiftEmployees(UserService.HR_MANAGER_USERNAME,headquartersId,shiftDate,SShiftType.Morning,"Driver",List.of(driver1.id(), driver2.id()));
-        //    setShiftEmployees(UserService.HR_MANAGER_USERNAME,site8.address(),shiftDate,SShiftType.Morning,"Storekeeper",List.of(storekeeperId1));
-        //    setShiftEmployees(UserService.HR_MANAGER_USERNAME,site9.address(),shiftDate,SShiftType.Morning,"Storekeeper",List.of(storekeeperId2));
+        //    setShiftEmployees(UserService.HR_MANAGER_USERNAME,site8.name(),shiftDate,SShiftType.Morning,"Storekeeper",List.of(storekeeperId1));
+        //    setShiftEmployees(UserService.HR_MANAGER_USERNAME,site9.name(),shiftDate,SShiftType.Morning,"Storekeeper",List.of(storekeeperId2));
 //
         //    approveShift(UserService.HR_MANAGER_USERNAME,headquartersId, shiftDate, SShiftType.Morning);
-        //    approveShift(UserService.HR_MANAGER_USERNAME,site8.address(), shiftDate, SShiftType.Morning);
-        //    approveShift(UserService.HR_MANAGER_USERNAME,site9.address(), shiftDate, SShiftType.Morning);
+        //    approveShift(UserService.HR_MANAGER_USERNAME,site8.name(), shiftDate, SShiftType.Morning);
+        //    approveShift(UserService.HR_MANAGER_USERNAME,site9.name(), shiftDate, SShiftType.Morning);
         //    // Site 1 and Site 4 should now be ready for receiving a transport on the specified date
         //} catch (Exception ignore) {
         //    Exception x = ignore;

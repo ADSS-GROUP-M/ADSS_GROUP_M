@@ -1,6 +1,7 @@
 package Backend.DataAccessLayer.SuppliersModule;
 
-import Backend.BusinessLayer.Supplier;
+import Backend.BusinessLayer.SuppliersModule.Supplier;
+import Backend.DataAccessLayer.dalUtils.AbstractDataMapper;
 
 import java.util.List;
 

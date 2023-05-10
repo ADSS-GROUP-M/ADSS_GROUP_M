@@ -1,6 +1,7 @@
 package Backend.DataAccessLayer.SuppliersModule;
 
-import Backend.BusinessLayer.Order;
+import Backend.BusinessLayer.SuppliersModule.Order;
+import Backend.DataAccessLayer.dalUtils.AbstractDataMapper;
 import Backend.DataAccessLayer.dalUtils.OfflineResultSet;
 
 import java.sql.SQLException;
@@ -9,7 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class OrderHistoryDataMapper extends AbstractDataMapper{
+public class OrderHistoryDataMapper extends AbstractDataMapper {
     public OrderHistoryDataMapper() {
         super("Orders_history", new String[]{"bn_number", "order_id", "catalog_number", "quantity"});
     }

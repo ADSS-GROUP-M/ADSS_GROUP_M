@@ -420,32 +420,33 @@ class TransportsControllerTest {
     @Test
     void initializeEstimatedArrivalTimes() {
 
-        //set up
-        List<String> route = new LinkedList<>();
-        route.add(transport.source());
-        route.addAll(transport.destinations());
-        HashMap<Pair<String,String>, Double> siteDistances = new HashMap<>(){{
-            put(new Pair<>(source.address(), destination1.address()), 100.0);
-            put(new Pair<>(destination1.address(), destination2.address()), 100.0);
-        }};
-        try {
-            when(sitesController.buildSitesTravelTimes(route)).thenReturn(siteDistances);
-
-            //test
-            transportController.initializeEstimatedArrivalTimes(transport);
-            assertEquals(
-                    transport.deliveryRoute().getEstimatedTimeOfArrival(destination1.address()),
-                    DEPARTURE_TIME.plusMinutes(Math.max(TransportsController.MINIMUM_DRIVING_TIME,
-                            (long)((100.0/TransportsController.AVERAGE_SPEED)*60))).toLocalTime());
-            assertEquals(
-                    transport.deliveryRoute().getEstimatedTimeOfArrival(destination2.address()),
-                    DEPARTURE_TIME.plusMinutes((long)(
-                            Math.max(TransportsController.MINIMUM_DRIVING_TIME,
-                                    (200.0/TransportsController.AVERAGE_SPEED)*60 +
-                                            TransportsController.AVERAGE_TIME_PER_VISIT))).toLocalTime());
-        } catch (TransportException e) {
-            throw new RuntimeException(e);
-        }
+        fail("FIX THIS TEST");
+//        //set up
+//        List<String> route = new LinkedList<>();
+//        route.add(transport.source());
+//        route.addAll(transport.destinations());
+//        HashMap<Pair<String,String>, Double> siteDistances = new HashMap<>(){{
+//            put(new Pair<>(source.address(), destination1.address()), 100.0);
+//            put(new Pair<>(destination1.address(), destination2.address()), 100.0);
+//        }};
+//        try {
+//            when(sitesController.buildSitesTravelTimes(route)).thenReturn(siteDistances);
+//
+//            //test
+//            transportController.initializeEstimatedArrivalTimes(transport);
+//            assertEquals(
+//                    transport.deliveryRoute().getEstimatedTimeOfArrival(destination1.address()),
+//                    DEPARTURE_TIME.plusMinutes(Math.max(TransportsController.MINIMUM_DRIVING_TIME,
+//                            (long)((100.0/TransportsController.AVERAGE_SPEED)*60))).toLocalTime());
+//            assertEquals(
+//                    transport.deliveryRoute().getEstimatedTimeOfArrival(destination2.address()),
+//                    DEPARTURE_TIME.plusMinutes((long)(
+//                            Math.max(TransportsController.MINIMUM_DRIVING_TIME,
+//                                    (200.0/TransportsController.AVERAGE_SPEED)*60 +
+//                                            TransportsController.AVERAGE_TIME_PER_VISIT))).toLocalTime());
+//        } catch (TransportException e) {
+//            throw new RuntimeException(e);
+//        }
 
 
     }

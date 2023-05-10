@@ -3,19 +3,20 @@ package Backend.BusinessLayer;
 import Backend.BusinessLayer.InventoryModule.ProductStoreDiscount;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 
 import java.time.LocalDateTime;
 
 public class ProductStoreDiscountTest {
-    public static String catalog_number = "0444";
-    public static String branch = "beer sheva";
-    public static LocalDateTime startDate = LocalDateTime.now();
-    public static LocalDateTime endDate = LocalDateTime.now().plusDays(3);
-    public static double discount = 15;
+    private static String catalog_number = "0444";
+    private static String branch = "beer sheva";
+    private static LocalDateTime startDate = LocalDateTime.now();
+    private static LocalDateTime endDate = LocalDateTime.now().plusDays(3);
+    private static double discount = 15;
 
     private ProductStoreDiscount productStoreDiscount;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         //create new product store discount
         productStoreDiscount = new ProductStoreDiscount(catalog_number,branch,startDate,endDate,discount);

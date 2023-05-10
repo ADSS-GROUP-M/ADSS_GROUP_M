@@ -61,6 +61,7 @@ public class ProductController {
     }
 
     public int getMinNotification(String branch, String catalog_number){return products.get(branch).get(catalog_number).getNotificationMin();}
+
     public void updateMinAmount(String branch, String catalog_number, int supplierDays){
         if(checkIfProductExist(branch,catalog_number))
             products.get(branch).get(catalog_number).updateMin(supplierDays);
@@ -86,6 +87,7 @@ public class ProductController {
             if(isDefective != -1){productItem.reportAsDefective();}
             if(isSold != -1){
                 productItem.reportAsSold(DCController.getTodayBiggestStoreDiscount(catalog_number,branch));
+                //TODO
             }
             if(newSupplier != null){productItem.setSupplierID(newSupplier);}
             if(newSoldPrice != -1){productItem.setSoldPrice(newSoldPrice);}

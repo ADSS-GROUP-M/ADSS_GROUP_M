@@ -4,25 +4,26 @@ import Backend.BusinessLayer.InventoryModule.Category;
 import Backend.BusinessLayer.InventoryModule.Product;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class CategoryTest {
-    public static String categoryName = "test_category";
-    public static List<Category> sub = new ArrayList<>();
+    private static String categoryName = "test_category";
+    private static List<Category> sub = new ArrayList<>();
 
-    public static String catalog_number = "0x123";
-    public static String catalog_name = "productTest";
-    public static String manufacturer = "tnuva";
-    public static double storePrice = 5.0;
-    public static String branch = "beer sheva";
+    private static String catalog_number = "0x123";
+    private static String catalog_name = "productTest";
+    private static String manufacturer = "tnuva";
+    private static double storePrice = 5.0;
+    private static String branch = "beer sheva";
     private Category category;
     private Product product;
 
     private Category c;
-    @Before
+    @BeforeEach
     public void setUp() {
         //create new category
         category = new Category(categoryName, sub);

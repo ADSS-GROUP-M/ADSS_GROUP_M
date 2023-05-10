@@ -39,7 +39,7 @@ public class StockService {
         }
     }
 
-    public Response updateProductItem(String name, String catalog_number, String manufacturer, double store_price, int newMinAmount, String branch) {
+    public Response updateProduct(String name, String catalog_number, String manufacturer, double store_price, int newMinAmount, String branch) {
         try {
             String isMin = "";
             if (name != null) {
@@ -53,8 +53,12 @@ public class StockService {
                 return new Response<>("Product type updated successfully");
             }else if (newMinAmount != -1) {
                 productController.updateProduct(branch, null, catalog_number, null, -1, newMinAmount);
-                if(productController.isProductLack(branch,catalog_number))
+                if(productController.isProductLack(branch,catalog_number)){
                     isMin = String.format("\n !!! Notice product %s is less than the minimum",catalog_number);
+                    // TODO: order automatic
+                    //inventory_amount = productController.getMinNotification(branch,catalog_number);
+                    // orderController.createOrder()
+                }
                 return new Response<>("Product type updated successfully" + isMin);
             } else {
                 return Response.createErrorResponse("Invalid input parameters");
@@ -64,24 +68,29 @@ public class StockService {
         }
     }
 
-    public Response updateProductItem(int is_defective, String catalog_number, String serial_num, int is_sold, String supplier, int sold_price, String location, String branch) {
+    public Response updateProduct(int is_defective, String catalog_number, String serial_num, int is_sold, String supplier, int sold_price, String location, String branch) {
         try {
             String isMin = "";
             if (is_defective != -1) {
                 productController.updateProductItem(branch, is_defective, serial_num,  catalog_number,-1, null, -1, null);
                 if(productController.isProductLack(branch,catalog_number)){
                     isMin = String.format("\n !!! Notice product %s is less than the minimum !!!",catalog_number);
+                    //TODO: order automatic
                     //inventory_amount = productController.getMinNotification(branch,catalog_number);
                     // orderController.createOrder()
                 }
                 return new Response<>("Product type updated successfully" + isMin);
             } else if (is_sold != -1) {
                 productController.updateProductItem(branch, -1, serial_num,  catalog_number, is_sold, null, -1,  null);
-                //TODO: need to add supplier function with the days
+                // TODO: need to add supplier function with the days
                 OrderController orderController = new OrderController();
                 productController.updateMinAmount(branch,catalog_number,5);
-                if(productController.isProductLack(branch,catalog_number))
-                    isMin = String.format("\n !!! Notice product %s is less than the minimum !!!",catalog_number);
+                if(productController.isProductLack(branch,catalog_number)) {
+                    isMin = String.format("\n !!! Notice product %s is less than the minimum !!!", catalog_number);
+                    // TODO: order automatic
+                    //inventory_amount = productController.getMinNotification(branch,catalog_number);
+                    // orderController.createOrder()
+                }
                 return new Response<>("Product type updated successfully" + isMin);
             } else if (supplier != null) {
                 productController.updateProductItem(branch, -1, serial_num,  catalog_number,-1, supplier, -1, null);

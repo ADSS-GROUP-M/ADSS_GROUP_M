@@ -3,18 +3,19 @@ package Backend.BusinessLayer;
 import Backend.BusinessLayer.InventoryModule.ProductItem;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 
 import java.time.LocalDateTime;
 
 public class ProductItemTest {
-    public static String serial_number = "0444";
-    public static String supplierId = "123";
-    public static String location = "store";
-    public static LocalDateTime expireDate = LocalDateTime.now().plusDays(7);
+    private static String serial_number = "0444";
+    private static String supplierId = "123";
+    private static String location = "store";
+    private static LocalDateTime expireDate = LocalDateTime.now().plusDays(7);
 
     private ProductItem item;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         //create new product item
         item = new ProductItem(serial_number,supplierId,location,expireDate);

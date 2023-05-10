@@ -459,15 +459,15 @@ class TransportsControllerTest {
         when(trucksController.truckExists(truck.id())).thenReturn(true);
         when(trucksController.getTruck(TRUCK_ID)).thenReturn(truck);
 
-        when(sitesController.siteExists(source.address())).thenReturn(true);
-        when(sitesController.siteExists(destination1.address())).thenReturn(true);
-        when(sitesController.siteExists(destination2.address())).thenReturn(true);
-        when(sitesController.getSite(source.address())).thenReturn(source);
-        when(sitesController.getSite(destination1.address())).thenReturn(destination1);
-        when(sitesController.getSite(destination2.address())).thenReturn(destination2);
-        when(employeesService.checkStoreKeeperAvailability(JsonUtils.serialize(DEPARTURE_TIME), source.address())).thenReturn(new Response(true).toJson());
-        when(employeesService.checkStoreKeeperAvailability(JsonUtils.serialize(DEPARTURE_TIME), destination1.address())).thenReturn(new Response(true).toJson());
-        when(employeesService.checkStoreKeeperAvailability(JsonUtils.serialize(DEPARTURE_TIME), destination2.address())).thenReturn(new Response(true).toJson());
+        when(sitesController.siteExists(source.name())).thenReturn(true);
+        when(sitesController.siteExists(destination1.name())).thenReturn(true);
+        when(sitesController.siteExists(destination2.name())).thenReturn(true);
+        when(sitesController.getSite(source.name())).thenReturn(source);
+        when(sitesController.getSite(destination1.name())).thenReturn(destination1);
+        when(sitesController.getSite(destination2.name())).thenReturn(destination2);
+        when(employeesService.checkStoreKeeperAvailability(JsonUtils.serialize(DEPARTURE_TIME), source.name())).thenReturn(new Response(true).toJson());
+        when(employeesService.checkStoreKeeperAvailability(JsonUtils.serialize(DEPARTURE_TIME), destination1.name())).thenReturn(new Response(true).toJson());
+        when(employeesService.checkStoreKeeperAvailability(JsonUtils.serialize(DEPARTURE_TIME), destination2.name())).thenReturn(new Response(true).toJson());
 
         when(itemListsController.listExists(itemList1.id())).thenReturn(true);
         when(itemListsController.listExists(itemList2.id())).thenReturn(true);
@@ -476,8 +476,8 @@ class TransportsControllerTest {
         route.add(transport.source());
         route.addAll(transport.destinations());
         HashMap<Pair<String,String>, Double> siteDistances = new HashMap<>(){{
-            put(new Pair<>(source.address(), destination1.address()), 100.0);
-            put(new Pair<>(destination1.address(), destination2.address()), 100.0);
+            put(new Pair<>(source.name(), destination1.name()), 100.0);
+            put(new Pair<>(destination1.name(), destination2.name()), 100.0);
         }};
         when(sitesController.buildSitesDistances(route)).thenReturn(siteDistances);
     }

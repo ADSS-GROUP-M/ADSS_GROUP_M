@@ -88,13 +88,11 @@ public class UserAuthorizationsDAO extends DAO {
         //Set<Authorization> ans = new HashSet<>();
         Authorization ans = null;
         try {
-            if (reader.next()){
-                String authString = reader.getString(Columns.Authorization.name());
-                if(authString == null)
-                    return null;
-                ans = Authorization.valueOf(authString);
-                //ans.add(Authorization.valueOf(reader.getString(Columns.Authorization.name())));
-            };
+            String authString = reader.getString(Columns.Authorization.name());
+            if(authString == null)
+                return null;
+            ans = Authorization.valueOf(authString);
+            //ans.add(Authorization.valueOf(reader.getString(Columns.Authorization.name())));
         }catch (Exception e){ }
         return ans;
     }

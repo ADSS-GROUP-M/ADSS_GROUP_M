@@ -18,8 +18,8 @@ public class EmployeeMenuVM {
         return backendController.requestShift(branchId, shiftType, shiftDate, role);
     }
 
-    public String cancelShiftRequest(String branchId, String shiftType, LocalDate shiftDate, String role) {
-        return backendController.cancelShiftRequest(branchId, shiftType, shiftDate, role);
+    public String cancelShiftRequest(String branchId, LocalDate shiftDate, String shiftType, String role) {
+        return backendController.cancelShiftRequest(branchId, shiftDate, shiftType, role);
     }
 
     public String reportShiftActivity(String branchId, LocalDate shiftDate, String shiftType, String activity) {

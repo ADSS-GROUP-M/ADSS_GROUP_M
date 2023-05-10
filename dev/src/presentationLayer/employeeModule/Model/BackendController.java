@@ -19,7 +19,7 @@ import static java.time.temporal.TemporalAdjusters.next;
 
 public class BackendController {
 
-    public static final Type STRING_lIST_TYPE = new TypeToken<List<String>>(){}.getType();
+    public static final Type STRING_LIST_TYPE = new TypeToken<List<String>>(){}.getType();
     private static final Type LIST_SSHIFT_ARRAY_TYPE = new TypeToken<List<SShift[]>>(){}.getType();
 
     private static BackendController instance;
@@ -133,7 +133,7 @@ public class BackendController {
         if (response.success() == false)
             return null;
         else{
-            return response.data(STRING_lIST_TYPE);
+            return response.data(STRING_LIST_TYPE);
         }
     }
 
@@ -338,7 +338,7 @@ public class BackendController {
             return "Authorized the user successfully.";
     }
 
-    public String cancelShiftRequest(String branchId, String shiftType, LocalDate shiftDate, String role) {
+    public String cancelShiftRequest(String branchId, LocalDate shiftDate, String shiftType, String role) {
         try {
             Response response = Response.fromJson(employeesService.cancelShiftRequest(loggedUsername, branchId, shiftDate, SShiftType.valueOf(shiftType), role));
             if (response.success() == false)

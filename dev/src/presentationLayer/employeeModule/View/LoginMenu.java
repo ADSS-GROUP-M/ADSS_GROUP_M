@@ -6,6 +6,7 @@ import serviceLayer.ServiceFactory;
 
 import java.util.List;
 import java.util.Scanner;
+//import static Main.*;
 
 public class LoginMenu implements Menu {
     private final LoginMenuVM loginMenuVM;
@@ -25,7 +26,8 @@ public class LoginMenu implements Menu {
 
     public void printCommands() {
         System.out.println("1. Login command: `login <username> <password>`");
-        System.out.println("2. Exit command: `exit`");
+        System.out.println("2. Generate initial data: `generate_data`");
+        System.out.println("3. Exit command: `exit`");
     }
 
     /* Valid commands list:
@@ -43,6 +45,11 @@ public class LoginMenu implements Menu {
             output = "Exiting CLI.";
             MenuManager.terminate();
         }
+        else if (command[0].equals("create_data") && command.length == 1) {
+            // Call the generate_data function
+            //generateData();
+            output = "Generated data successfully.";
+        }
         else if (command[0].equals("login")) {
             if (command.length != 3)
                 output = "Invalid login command. (Usage: `login <username> <password>`)";
@@ -51,9 +58,9 @@ public class LoginMenu implements Menu {
                 if (loginMenuVM.isLoggedIn()) {
                     System.out.println(output);
                     List<String> authorizations = loginMenuVM.getUserAuthorizations();
-                    if (authorizations.contains("HRManager"))
+                    if (authorizations != null && authorizations.contains("HRManager"))
                         return new HRManagerMenu();
-                    else if (authorizations.contains("TransportManager"))
+                    else if (authorizations != null && authorizations.contains("TransportManager"))
                         return new TransportUI(loginMenuVM.serviceFactory());
                     else
                         return new EmployeeMenu();

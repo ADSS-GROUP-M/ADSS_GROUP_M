@@ -43,13 +43,31 @@ public class ProductController {
             throw new RuntimeException("brunch does not exist, please create ProductType in order to continue");
         }
     }
+
+    //check if the amount of product in more than the minimum
+    public boolean isProductLack(String branch,String catalog_number){
+        return products.get(branch).get(catalog_number).isProductLack();
+    }
+
+
+
     // Add new product
     public void createProductItem(String serial_number, String catalog_number, String branch, String supplierID, String location, LocalDateTime expirationDate) {
         if(checkIfProductExist(branch,catalog_number))
             products.get(branch).get(catalog_number).addProductItem(serial_number,supplierID,location, expirationDate);
         else{
-            throw new RuntimeException(String.format("Product type does not exist with the ID : %s",catalog_number));
+            throw new RuntimeException(String.format("Product type does not exist with the catalog number : %s",catalog_number));
         }
+    }
+
+    public int getMinNotification(String branch, String catalog_number){return products.get(branch).get(catalog_number).getNotificationMin();}
+    public void updateMinAmount(String branch, String catalog_number, int supplierDays){
+        if(checkIfProductExist(branch,catalog_number))
+            products.get(branch).get(catalog_number).updateMin(supplierDays);
+        else{
+            throw new RuntimeException(String.format("Product type does not exist with the catalog number : %s",catalog_number));
+        }
+
     }
 
     // Add new product type
@@ -76,12 +94,11 @@ public class ProductController {
         else
             throw new RuntimeException(String.format("Product type does not exist with the ID : %s",catalog_number));
     }
-    //TODO: need to update
+
     public void updateProduct(String branch, String newName, String catalog_number, String newManufacturer, double newStorePrice, int newMinAmount ){
         CategoryController categoryController = CategoryController.CategoryController();
         if(checkIfProductExist(branch,catalog_number)){
             Product product = products.get(branch).get(catalog_number);
-            //set name
             if(newName != null){product.setName(newName);}
             if(newManufacturer != null){product.setManufacturer(newManufacturer);}
             if(newStorePrice != -1){product.setOriginalStorePrice(newStorePrice);}
@@ -91,28 +108,6 @@ public class ProductController {
             throw new RuntimeException(String.format("Product type does not exist with the ID : %s",catalog_number));
 
     }
-
-    // update products to defective
-    public void reportProductAsDefective(String catalog_number, List<String> serialNumbers, String branch){
-        if(checkIfProductExist(branch,catalog_number)){
-            Product productType = products.get(branch).get(catalog_number);
-            productType.reportAsDefective(serialNumbers);
-        }
-        else
-            throw new RuntimeException(String.format("Unable to update defective products,\nproduct type does not exist with the ID : %s",catalog_number));
-    }
-
-
-    // update products status to sold
-    public void reportProductAsSold(String catalog_number, List<Integer> serialNumbers, String branch){
-        if(checkIfProductExist(branch,catalog_number)){
-            Product product = products.get(branch).get(catalog_number);
-            product.reportAsSold(serialNumbers, DCController.calcSoldPrice(branch,catalog_number,product.getOriginalStorePrice()));
-        }
-        else
-            throw new RuntimeException(String.format("Unable to update sold products,\n product type does not exist with the ID : %s",catalog_number));
-    }
-
 
     //in chosen branch, for each ProductType return all related products to the return Map
     public Map<String,List<ProductItem>> getStockProductsDetails(String branch){

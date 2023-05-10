@@ -1,4 +1,6 @@
 package Backend.BusinessLayer.InventoryModule;
+import Backend.BusinessLayer.SuppliersModule.OrderController;
+
 import java.time.LocalDateTime;
 
 public class ProductItem {
@@ -40,11 +42,16 @@ public class ProductItem {
         this.expirationDate = expirationDate;
         // TODO: connect to supplier controller and update supplier price and discount
         // this.supplierPrice this.supplierDiscount
-//        this.supplierPrice = 0;
-//        this.supplierDiscount = 0;
+        OrderController orderController = new OrderController();
+        this.supplierPrice = 0;
+        this.supplierDiscount = 0;
 
     }
-    public boolean isDefective(){return isSold();}
+    public boolean isDefective(){
+        if(isDefective == null)
+            return false;
+        else return isDefective.getIsDefective();
+    }
     public boolean isSold(){
         if (this.isSold == null)
             return false;

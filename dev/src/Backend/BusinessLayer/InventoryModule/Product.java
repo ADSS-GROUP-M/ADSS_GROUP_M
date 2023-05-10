@@ -48,19 +48,12 @@ public class Product {
         productItems.get(serialNumber).reportAsDefective();
     }
 
-    public void reportAsSold(List<Integer> serialNumber, double soldPrice){
-        for(Integer soldSerialNumber: serialNumber){
-            productItems.get(soldSerialNumber).reportAsSold(soldPrice);
-        }
-        //TODO: notification min
-    }
     public void setNotificationMin(int newVal){
         this.notificationMin = newVal;
     }
 
     public void addProductItem(String serialNumber, String supplierID, String location, LocalDateTime expirationDate){
         productItems.put(serialNumber,new ProductItem(serialNumber,supplierID,location, expirationDate));
-        //TODO add min function
     }
 
 
@@ -89,11 +82,12 @@ public class Product {
             return true;
         return false;
     }
+
     //TODO: get supplier info from orderController and calc minNotification val
     private int productDemandAmount(){
         int calc = 0;
         LocalDateTime current = LocalDateTime.now();
-        LocalDateTime lastWeek = current.minusDays(7);
+        LocalDateTime lastWeek = current.minusDays(1);
         for(ProductItem productItem: productItems.values()){
             if(productItem.isSold()){
                 if(productItem.getSoldDate().isAfter(lastWeek))
@@ -102,7 +96,9 @@ public class Product {
         }
         return calc;
     }
-    public void updateMin(){}
+    public void updateMin(int supplierDays){
+        setNotificationMin((productDemandAmount()*supplierDays)+1);
+    }
 
     public String getCatalogNumber(){return catalog_number;}
 
@@ -130,4 +126,6 @@ public class Product {
     public String getManufacturer(){return this.manufacturer;}
     public Category getCategory(){return this.category;}
     public List<Category> getSubCategory(){return this.subCategory;}
+
+    public int getNotificationMin(){return this.notificationMin;}
 }

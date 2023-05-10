@@ -2,9 +2,9 @@ package businessLayer.transportModule;
 
 import businessLayer.transportModule.bingApi.Point;
 import dataAccessLayer.dalUtils.DalException;
-import dataAccessLayer.transportModule.DistanceBetweenSites;
+import dataAccessLayer.transportModule.siteRoute;
 import dataAccessLayer.transportModule.SitesDAO;
-import dataAccessLayer.transportModule.SitesDistancesDAO;
+import dataAccessLayer.transportModule.SitesRoutesDAO;
 import javafx.util.Pair;
 import objects.transportObjects.Site;
 import serviceLayer.employeeModule.Services.EmployeesService;
@@ -24,13 +24,13 @@ import static serviceLayer.employeeModule.Services.UserService.TRANSPORT_MANAGER
  */
 public class SitesController {
     private final SitesDAO dao;
-    private final SitesDistancesDAO distancesDAO;
+    private final SitesRoutesDAO sitesRoutesDAO;
     private EmployeesService employeesService;
     private final SitesDistancesController distancesController;
 
-    public SitesController(SitesDAO dao, SitesDistancesDAO distancesDAO, SitesDistancesController distancesController){
+    public SitesController(SitesDAO dao, SitesRoutesDAO sitesRoutesDAO, SitesDistancesController distancesController){
         this.dao = dao;
-        this.distancesDAO = distancesDAO;
+        this.sitesRoutesDAO = sitesRoutesDAO;
         this.distancesController = distancesController;
     }
 
@@ -60,7 +60,7 @@ public class SitesController {
             dao.insert(site);
 
             if(otherSites.isEmpty() == false) {
-                distancesDAO.insertAll(distancesController.createDistanceObjects(site,otherSites));
+                sitesRoutesDAO.insertAll(distancesController.createDistanceObjects(site,otherSites));
             }
             if(site.siteType() == Site.SiteType.BRANCH){
                 employeesService.createBranch(TRANSPORT_MANAGER_USERNAME,site.name());
@@ -158,10 +158,10 @@ public class SitesController {
         // map distances between following sites
         while (destinationsIterator.hasNext()) {
             next = destinationsIterator.next();
-            DistanceBetweenSites lookUpObject = DistanceBetweenSites.getLookupObject(curr,next);
+            siteRoute lookUpObject = siteRoute.getLookupObject(curr,next);
             double distance;
             try {
-                distance = distancesDAO.select(lookUpObject).distance();
+                distance = sitesRoutesDAO.select(lookUpObject).distance();
             } catch (DalException e) {
                 throw new TransportException(e.getMessage(),e);
             }
@@ -195,8 +195,8 @@ public class SitesController {
                     throw new RuntimeException(e);
                 }
             });
-            List<DistanceBetweenSites> distanceObjects = distancesController.createAllDistanceObjectsFirstTimeLoad(sites);
-            distancesDAO.insertAll(distanceObjects);
+            List<siteRoute> distanceObjects = distancesController.createAllDistanceObjectsFirstTimeLoad(sites);
+            sitesRoutesDAO.insertAll(distanceObjects);
 
             for(Site site : sites){
                 if(site.siteType() == Site.SiteType.BRANCH){

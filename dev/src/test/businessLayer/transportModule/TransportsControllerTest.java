@@ -1,7 +1,7 @@
 package businessLayer.transportModule;
 
 import dataAccessLayer.dalUtils.DalException;
-import dataAccessLayer.transportModule.SitesDistancesDAO;
+import dataAccessLayer.transportModule.SitesRoutesDAO;
 import dataAccessLayer.transportModule.TransportsDAO;
 import javafx.util.Pair;
 import objects.transportObjects.*;
@@ -41,7 +41,7 @@ class TransportsControllerTest {
     EmployeesService employeesService;
     DriversController driversController;
     TransportsDAO transportsDAO;
-    SitesDistancesDAO sitesDistancesDAO;
+    SitesRoutesDAO sitesRoutesDAO;
     Transport transport;
     Site source;
     Driver driver;
@@ -59,7 +59,7 @@ class TransportsControllerTest {
         sitesController = mock(SitesController.class);
         driversController = mock(DriversController.class);
         transportsDAO = mock(TransportsDAO.class);
-        sitesDistancesDAO = mock(SitesDistancesDAO.class);
+        sitesRoutesDAO = mock(SitesRoutesDAO.class);
 
         try {
             when(transportsDAO.selectCounter()).thenReturn(1);

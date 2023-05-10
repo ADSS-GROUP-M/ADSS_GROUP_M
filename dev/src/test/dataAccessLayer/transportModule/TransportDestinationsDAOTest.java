@@ -80,7 +80,7 @@ class TransportDestinationsDAOTest {
                     15000
             );
 
-            DistanceBetweenSites distance = new DistanceBetweenSites(site1.address(), site2.address(), 40,40);
+            siteRoute distance = new siteRoute(site1.address(), site2.address(), 40,40);
 
             factory = new DalFactory(TESTING_DB_NAME);
             dao = factory.transportDestinationsDAO();
@@ -90,12 +90,12 @@ class TransportDestinationsDAOTest {
             DriversDAO driversDAO = factory.driversDAO();
             ItemListsDAO itemListsDAO = factory.itemListsDAO();
             TransportsDAO transportsDAO = factory.transportsDAO();
-            SitesDistancesDAO sitesDistancesDAO = factory.sitesDistancesDAO();
+            SitesRoutesDAO sitesRoutesDAO = factory.sitesDistancesDAO();
             TrucksController trucksController = mock(TrucksController.class);
             ItemListsController itemListsController = mock(ItemListsController.class);
             DriversController driversController = mock(DriversController.class);
             SitesDistancesController distancesController = mock(SitesDistancesController.class);
-            SitesController sitesController =  new SitesController(sitesDAO, sitesDistancesDAO, distancesController);
+            SitesController sitesController =  new SitesController(sitesDAO, sitesRoutesDAO, distancesController);
             transportsController = new TransportsController(
                     trucksController,
                     driversController,
@@ -117,7 +117,7 @@ class TransportDestinationsDAOTest {
             employeeDAO.insert(employee);
             driversDAO.insert(driver);
             itemListsDAO.insert(itemList);
-            sitesDistancesDAO.insert(distance);
+            sitesRoutesDAO.insert(distance);
             transportsController.initializeEstimatedArrivalTimes(transport);
             transportsDAO.insert(transport);
 

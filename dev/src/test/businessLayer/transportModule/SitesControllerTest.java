@@ -37,7 +37,7 @@ class SitesControllerTest {
     @Test
     void addSite() {
         try{
-            when(dao.exists(Site.getLookupObject(site.address()))).thenReturn(false);
+            when(dao.exists(Site.getLookupObject(site.name()))).thenReturn(false);
         } catch (DalException e) {
             fail(e);
         }
@@ -47,7 +47,7 @@ class SitesControllerTest {
     @Test
     void addSiteAlreadyExists(){
         try{
-            when(dao.exists(Site.getLookupObject(site.address()))).thenReturn(true);
+            when(dao.exists(Site.getLookupObject(site.name()))).thenReturn(true);
         } catch (DalException e) {
             fail(e);
         }
@@ -57,68 +57,68 @@ class SitesControllerTest {
     @Test
     void removeSite() {
         try{
-            when(dao.exists(Site.getLookupObject(site.address()))).thenReturn(true);
+            when(dao.exists(Site.getLookupObject(site.name()))).thenReturn(true);
         } catch (DalException e) {
             fail(e);
         }
-        assertDoesNotThrow(() -> controller.removeSite(site.address()));
+        assertDoesNotThrow(() -> controller.removeSite(site.name()));
     }
 
     @Test
     void removeSiteDoesNotExist(){
         try{
-            when(dao.exists(Site.getLookupObject(site.address()))).thenReturn(false);
+            when(dao.exists(Site.getLookupObject(site.name()))).thenReturn(false);
         } catch (DalException e) {
             fail(e);
         }
-        assertThrows(TransportException.class, () -> controller.removeSite(site.address()));
+        assertThrows(TransportException.class, () -> controller.removeSite(site.name()));
     }
 
     @Test
     void updateSite() {
         Site updatedSite = new Site("TODO: INSERT NAME HERE", site.address(), "zone1", "phone1Updated", "contact1", Site.SiteType.BRANCH);
         try{
-            Site lookupObject = Site.getLookupObject(site.address());
+            Site lookupObject = Site.getLookupObject(site.name());
             when(dao.exists(lookupObject)).thenReturn(true);
             when(dao.select(lookupObject)).thenReturn(site);
         } catch (DalException e) {
             fail(e);
         }
-        assertDoesNotThrow(()->controller.updateSite(updatedSite.address(), updatedSite));
+        assertDoesNotThrow(()->controller.updateSite(updatedSite.name(), updatedSite));
     }
 
     @Test
     void updateSiteDoesNotExist(){
         Site updatedSite = new Site("TODO: INSERT NAME HERE", site.address(), "zone1", "phone1Updated", "contact1", Site.SiteType.BRANCH);
         try{
-            when(dao.exists(Site.getLookupObject(site.address()))).thenReturn(false);
+            when(dao.exists(Site.getLookupObject(site.name()))).thenReturn(false);
         } catch (DalException e) {
             fail(e);
         }
-        assertThrows(TransportException.class, ()->controller.updateSite(updatedSite.address(), updatedSite));
+        assertThrows(TransportException.class, ()->controller.updateSite(updatedSite.name(), updatedSite));
     }
 
     @Test
     void getSite() {
         try{
-            Site lookupObject = Site.getLookupObject(site.address());
+            Site lookupObject = Site.getLookupObject(site.name());
             when(dao.exists(lookupObject)).thenReturn(true);
             when(dao.select(lookupObject)).thenReturn(site);
         } catch (DalException e) {
             fail(e);
         }
-        Site result = assertDoesNotThrow(()->controller.getSite(site.address()));
+        Site result = assertDoesNotThrow(()->controller.getSite(site.name()));
         assertDeepEquals(site, result);
     }
 
     @Test
     void getSiteDoesNotExist(){
         try{
-            when(dao.exists(Site.getLookupObject(site.address()))).thenReturn(false);
+            when(dao.exists(Site.getLookupObject(site.name()))).thenReturn(false);
         } catch (DalException e) {
             fail(e);
         }
-        assertThrows(TransportException.class, ()->controller.getSite(site.address()));
+        assertThrows(TransportException.class, ()->controller.getSite(site.name()));
     }
 
     @Test

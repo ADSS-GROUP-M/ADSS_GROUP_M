@@ -74,16 +74,16 @@ public class SitesController {
     /**
      * Removes a site from the `SitesController`.
      *
-     * @param address The name of the site to be removed.
+     * @param name The name of the site to be removed.
      * @throws TransportException If the site is not found.
      */
-    public void removeSite(String address) throws TransportException {
-        if (siteExists(address) == false) {
+    public void removeSite(String name) throws TransportException {
+        if (siteExists(name) == false) {
             throw new TransportException("Site not found");
         }
 
         try {
-            dao.delete(Site.getLookupObject(address));
+            dao.delete(Site.getLookupObject(name));
         } catch (DalException e) {
             throw new TransportException(e.getMessage(),e);
         }
@@ -92,17 +92,17 @@ public class SitesController {
     /**
      * Retrieves a site from the `SitesController`.
      *
-     * @param address The name of the site to be retrieved.
+     * @param name The name of the site to be retrieved.
      * @return The retrieved site.
      * @throws TransportException If the site is not found.
      */
-    public Site getSite(String address) throws TransportException {
-        if (siteExists(address) == false) {
+    public Site getSite(String name) throws TransportException {
+        if (siteExists(name) == false) {
             throw new TransportException("Site not found");
         }
 
         try {
-            return dao.select(Site.getLookupObject(address));
+            return dao.select(Site.getLookupObject(name));
         } catch (DalException e) {
             throw new TransportException(e.getMessage(),e);
         }

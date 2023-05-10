@@ -208,23 +208,23 @@ public class TransportsController {
 
         // destinations + itemLists validation
         int destIndex = 0;
-        for(String address : transport.destinations()){
+        for(String name : transport.destinations()){
 
             //destination validation
-            if(sc.siteExists(address) == false){
-                ec.addError("Site with name " + address + " does not exist", "destination:"+destIndex);
+            if(sc.siteExists(name) == false){
+                ec.addError("Site with name " + name + " does not exist", "destination:"+destIndex);
             }
             //store keeper validation
-            else if(sc.getSite(address).siteType() == Site.SiteType.BRANCH){
-                String destinationJson = es.checkStoreKeeperAvailability(JsonUtils.serialize(transport.departureTime()),address);
+            else if(sc.getSite(name).siteType() == Site.SiteType.BRANCH){
+                String destinationJson = es.checkStoreKeeperAvailability(JsonUtils.serialize(transport.departureTime()),name);
                 Response response = Response.fromJson(destinationJson);
                 if(response.success()==false){
-                    ec.addError("Store keeper is not available on site with name " + address, "storeKeeper");
+                    ec.addError("Store keeper is not available on site with name " + name, "storeKeeper");
                 }
             }
 
             //itemList validation
-            Integer itemListId = transport.itemLists().get(address);
+            Integer itemListId = transport.itemLists().get(name);
             if(ilc.listExists(itemListId) == false) {
                 ec.addError("Item list with id " + itemListId + " does not exist", "itemList:"+destIndex);
             }

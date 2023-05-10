@@ -7,12 +7,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e454f93c-4ee8-4f4b-9a14-eaaf36aa303c" name="Changes" comment="commit">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/code.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/code.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/CategoryDataMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/CategoryDataMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/CategoryHierarchyDataMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/CategoryHierarchyDataMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/CategoryManagerMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/CategoryManagerMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/ProductManagerMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/ProductManagerMapper.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/ProductPairBranchDataMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/ProductPairBranchDataMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/StoreProductDiscountDataMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/StoreProductDiscountDataMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/ProductsDataMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/ProductsDataMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/InventoryModule/MainMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/InventoryModule/MainMenu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/UI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/UI.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,10 +34,18 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$/.." value="Suppliers_Inventory_208671990_207161605_324988880_325294429" />
+        <entry key="$PROJECT_DIR$/.." value="amit_new" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
   </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/src/Backend/ServiceLayer/InventoryModule/CategoriesService.java" root0="FORCE_HIGHLIGHTING" />
@@ -50,6 +60,10 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="Downloaded.Files.Path.Enabled" value="false" />
+    <property name="Repository.Attach.Annotations" value="false" />
+    <property name="Repository.Attach.JavaDocs" value="false" />
+    <property name="Repository.Attach.Sources" value="false" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
@@ -75,13 +89,13 @@
       <recent name="PresentationLayer" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.OrderHistoryDataMapper">
-    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="PresentationLayer.Main" />
+  <component name="RunManager" selected="Application.Main (1)">
+    <configuration name="Main (1)" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Fronend.PresentationLayer.InventoryModule.Main" />
       <module name="code" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="PresentationLayer.*" />
+          <option name="PATTERN" value="Fronend.PresentationLayer.InventoryModule.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -151,11 +165,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.Main (1)" />
         <item itemvalue="JUnit.BillOfQuantitiesTest.setOrderOfDiscounts" />
         <item itemvalue="JUnit.BillOfQuantitiesTest.removeDiscountOnAmountOfProducts" />
         <item itemvalue="JUnit.BillOfQuantitiesTest" />
         <item itemvalue="Application.OrderHistoryDataMapper" />
-        <item itemvalue="Application.Main" />
       </list>
     </recent_temporary>
   </component>

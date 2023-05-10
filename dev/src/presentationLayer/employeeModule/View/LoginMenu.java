@@ -7,7 +7,6 @@ import serviceLayer.ServiceFactory;
 
 import java.util.List;
 import java.util.Scanner;
-//import static Main.*;
 
 public class LoginMenu implements Menu {
     private final LoginMenuVM loginMenuVM;

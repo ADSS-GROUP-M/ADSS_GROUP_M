@@ -117,7 +117,7 @@ public class ShiftToWorkersDAO extends DAO {
         HashMap<Role,List<Employee>> ans = new HashMap<>();
         try {
 
-            while (reader.next()) {
+            do {
                 Role r = Role.valueOf(reader.getString(Columns.Role.name()));
                 Employee e = employeeDAO.select(reader.getString(Columns.EmployeeId.name()));
                 if(r == null || e == null)
@@ -129,7 +129,7 @@ public class ShiftToWorkersDAO extends DAO {
                     li.add(e);
                     ans.put(r, li);
                 }
-            }
+            } while ((reader.next()));
         }catch (Exception e){}
         return ans;
     }

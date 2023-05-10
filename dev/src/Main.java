@@ -206,6 +206,11 @@ public class Main {
         // Shift Creation
         es.createShiftDay(UserService.HR_MANAGER_USERNAME,Branch.HEADQUARTERS_ID,date);
 
+        for (int i = 2; i <= 9; i++) {
+            String branchId = "branch"+i;
+            es.createShiftDay(UserService.HR_MANAGER_USERNAME,branchId,date);
+        }
+
         // Drivers Assignment
         assignDrivers(morningDrivers,date,SShiftType.Morning);
         assignDrivers(eveningDrivers,date,SShiftType.Evening);

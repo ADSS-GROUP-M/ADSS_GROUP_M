@@ -30,7 +30,6 @@ public class Main {
         userService.createData();
         employeesService.createData();
         UiData.generateAndAddData();
-        System.out.println();
     }
 
     @Test

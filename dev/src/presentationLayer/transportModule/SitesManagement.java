@@ -15,6 +15,8 @@ public class SitesManagement {
         this.rms = rms;
     }
 
+
+
     void manageSites() {
         while(true){
             System.out.println("=========================================");
@@ -22,18 +24,16 @@ public class SitesManagement {
             System.out.println("Please select an option:");
             System.out.println("1. Create new site");
             System.out.println("2. Update site");
-            System.out.println("3. Remove site");
-            System.out.println("4. View full site information");
-            System.out.println("5. View all sites");
-            System.out.println("6. Return to previous menu");
+            System.out.println("3. View full site information");
+            System.out.println("4. View all sites");
+            System.out.println("5. Return to previous menu");
             int option = transportAppData.readInt();
             switch (option) {
                 case 1 -> createSite();
                 case 2 -> updateSite();
-                case 3 -> removeSite();
-                case 4 -> viewSite();
-                case 5 -> viewAllSites();
-                case 6 -> {
+                case 3 -> viewSite();
+                case 4 -> viewAllSites();
+                case 5 -> {
                     return;
                 }
                 default -> System.out.println("\nInvalid option!");
@@ -42,10 +42,21 @@ public class SitesManagement {
     }
 
     private void createSite() {
+
+
+        //TODO:
+        // =============================================================================================== |
+        // ==================================== | READ ME |=============================================== |
+        //  need to update the code here to retrieve the new latitude and longitude fields in Site object  |
+        // =============================================================================================== |
+        // =============================================================================================== |
+
+
         System.out.println("=========================================");
         System.out.println("Enter site details:");
-        String transportZone = transportAppData.readLine("Transport zone: ");
+        String name = transportAppData.readLine("Name: ");
         String address = transportAppData.readLine("Address: ");
+        String transportZone = transportAppData.readLine("Transport zone: ");
         String contactPhone = transportAppData.readLine("Contact phone: ");
         String contactName = transportAppData.readLine("Contact name: ");
         System.out.println("Site type: ");
@@ -63,12 +74,12 @@ public class SitesManagement {
                 return;
             }
         }
-        Site newSite = new Site("TODO: INSERT NAME HERE", address, transportZone, contactPhone, contactName, type);
+        Site newSite = new Site(name, address, transportZone, contactPhone, contactName, type);
         String json = newSite.toJson();
         String responseJson = rms.addSite(json);
         Response response = JsonUtils.deserialize(responseJson, Response.class);
         if(response.success()) {
-            transportAppData.sites().put(newSite.address(), newSite);
+            transportAppData.sites().put(newSite.name(), newSite);
         }
         System.out.println("\n"+response.message());
     }
@@ -94,8 +105,10 @@ public class SitesManagement {
                 switch (option) {
                     case 1 -> {
                         String contactName = transportAppData.readLine("Contact name: ");
-                        updateSiteHelperMethod(site.transportZone(),
+                        updateSiteHelperMethod(
+                                site.name(),
                                 site.address(),
+                                site.transportZone(),
                                 site.phoneNumber(),
                                 contactName,
                                 site.siteType()
@@ -104,8 +117,9 @@ public class SitesManagement {
                     case 2 -> {
                         String contactPhone = transportAppData.readLine("Contact phone: ");
                         updateSiteHelperMethod(
-                                site.transportZone(),
+                                site.name(),
                                 site.address(),
+                                site.transportZone(),
                                 contactPhone,
                                 site.contactName(),
                                 site.siteType()
@@ -124,8 +138,8 @@ public class SitesManagement {
         }
     }
 
-    private void updateSiteHelperMethod(String transportZone, String address, String phoneNumber, String contactName, Site.SiteType siteType) {
-        Site newSite = new Site("TODO: INSERT NAME HERE", address, transportZone, phoneNumber, contactName, siteType);
+    private void updateSiteHelperMethod(String name, String address, String transportZone, String phoneNumber, String contactName, Site.SiteType siteType) {
+        Site newSite = new Site(name, address, transportZone, phoneNumber, contactName, siteType);
         String json = newSite.toJson();
         String responseJson = rms.updateSite(json);
         Response response = JsonUtils.deserialize(responseJson, Response.class);
@@ -135,6 +149,10 @@ public class SitesManagement {
         System.out.println("\n"+response.message());
     }
 
+    /**
+     * @deprecated currently not fully supported and could cause unexpected behavior
+     */
+    @Deprecated
     private void removeSite() {
         while(true) {
             System.out.println("=========================================");
@@ -168,15 +186,15 @@ public class SitesManagement {
     private void viewSite() {
         while(true) {
             System.out.println("=========================================");
-            String siteId = transportAppData.readLine("Enter address of site to view (enter 'done!' to return to previous menu): ");
-            if(siteId.equals("done!")) {
+            String siteName = transportAppData.readLine("Enter name of site to view (enter 'done!' to return to previous menu): ");
+            if(siteName.equals("done!")) {
                 return;
             }
-            if(transportAppData.sites().containsKey(siteId) == false) {
+            if(transportAppData.sites().containsKey(siteName) == false) {
                 System.out.println("Site not found!");
                 continue;
             }
-            Site site = transportAppData.sites().get(siteId);
+            Site site = transportAppData.sites().get(siteName);
             System.out.println("=========================================");
             System.out.println("Site details:");
             printSiteDetails(site);
@@ -198,8 +216,9 @@ public class SitesManagement {
     }
 
     void printSiteDetails(Site site) {
-        System.out.println("Transport zone: " + site.transportZone());
+        System.out.println("Name:           " + site.name());
         System.out.println("Address:        " + site.address());
+        System.out.println("Transport zone: " + site.transportZone());
         System.out.println("Phone number:   " + site.phoneNumber());
         System.out.println("Contact name:   " + site.contactName());
         System.out.println("Site type:      " + site.siteType());

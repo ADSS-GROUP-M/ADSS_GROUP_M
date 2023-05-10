@@ -351,7 +351,7 @@ class ResourceManagementServiceIT {
         Response response1 = Response.fromJson(json1);
         assertTrue(response1.success(),response1.message());
 
-        String json2 = rms.getSite(Site.getLookupObject(site.address()).toJson());
+        String json2 = rms.getSite(Site.getLookupObject(site.name()).toJson());
         Response response2 = Response.fromJson(json2);
         assertFalse(response2.success());
     }
@@ -372,7 +372,7 @@ class ResourceManagementServiceIT {
         Response response1 = Response.fromJson(json1);
         assertTrue(response1.success(),response1.message());
 
-        String json2 = rms.getSite(Site.getLookupObject(site.address()).toJson());
+        String json2 = rms.getSite(Site.getLookupObject(site.name()).toJson());
         Response response2 = Response.fromJson(json2);
         assertTrue(response2.success(),response2.message());
         Site siteToCheck = response2.data(Site.class);
@@ -393,7 +393,7 @@ class ResourceManagementServiceIT {
 
     @Test
     void getSite() {
-        String responseJson = rms.getSite(Site.getLookupObject(site.address()).toJson());
+        String responseJson = rms.getSite(Site.getLookupObject(site.name()).toJson());
         Response response = Response.fromJson(responseJson);
         assertTrue(response.success(),response.message());
         Site siteToCheck = response.data(Site.class);

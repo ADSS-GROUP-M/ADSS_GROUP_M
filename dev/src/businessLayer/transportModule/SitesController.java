@@ -43,7 +43,7 @@ public class SitesController {
      */
     public void addSite(Site site) throws TransportException {
 
-        if (siteExists(site.address()) != false) {
+        if (siteExists(site.name()) != false) {
             throw new TransportException("Site already exists");
         }
         try {

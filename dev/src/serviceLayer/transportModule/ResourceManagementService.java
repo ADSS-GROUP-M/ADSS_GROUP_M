@@ -12,9 +12,9 @@ import utils.transportUtils.TransportException;
 
 public class ResourceManagementService {
 
-    private SitesController sitesController;
-    private DriversController driversController;
-    private TrucksController trucksController;
+    private final SitesController sitesController;
+    private final DriversController driversController;
+    private final TrucksController trucksController;
 
     public ResourceManagementService(SitesController sitesController,
                                      DriversController driversController,
@@ -149,7 +149,7 @@ public class ResourceManagementService {
     public String removeSite(String json){
         Site site = JsonUtils.deserialize(json, Site.class);
         try{
-            sitesController.removeSite(site.address());
+            sitesController.removeSite(site.name());
         }catch(TransportException e){
             return Response.getErrorResponse(e).toJson();
         }
@@ -159,7 +159,7 @@ public class ResourceManagementService {
     public String updateSite(String json){
         Site site = JsonUtils.deserialize(json, Site.class);
         try{
-            sitesController.updateSite(site.address(), site);
+            sitesController.updateSite(site.name(), site);
         }catch(TransportException e){
             return Response.getErrorResponse(e).toJson();
         }
@@ -172,7 +172,7 @@ public class ResourceManagementService {
     public String getSite(String json){
         Site site = JsonUtils.deserialize(json, Site.class);
         try{
-            site = sitesController.getSite(site.address());
+            site = sitesController.getSite(site.name());
         }catch(Exception e){
             return Response.getErrorResponse(e).toJson();
         }

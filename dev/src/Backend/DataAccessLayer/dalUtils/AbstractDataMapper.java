@@ -1,4 +1,4 @@
-package Backend.DataAccessLayer.SuppliersModule;
+package Backend.DataAccessLayer.dalUtils;
 
 import Backend.DataAccessLayer.dalUtils.SQLExecutorProductionImpl;
 

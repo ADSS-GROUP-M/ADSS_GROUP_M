@@ -33,7 +33,7 @@ public class SitesDistancesController {
 
     public List<DistanceBetweenSites> createDistanceObjects(Site site ,List<Site> sites) throws TransportException {
 
-        Map<Pair<String,String>,Pair<Double,Double>> travelMatrix = getTravelMatrix(site,sites);
+        Map<Pair<String,String>,Pair<Double,Double>> travelMatrix = getTravelData(site,sites);
 
         List<DistanceBetweenSites> distances = new LinkedList<>();
 
@@ -48,7 +48,12 @@ public class SitesDistancesController {
         return distances;
     }
 
-    public Map<Pair<String,String>, Pair<Double,Double>> getTravelMatrix(Site site, List<Site> otherSites) throws TransportException {
+    /**
+     * Returns a map of all the distances between the given site and the other sites.
+     * @implNote this implementation calculates efficiently but requires a lot of different API calls.
+     * this is the method that should be used when adding a single new site.
+     */
+    public Map<Pair<String,String>, Pair<Double,Double>> getTravelData(Site site, List<Site> otherSites) throws TransportException {
 
         Map<Pair<String,String>, Pair<Double,Double>> distances = new HashMap<>();
 
@@ -56,12 +61,10 @@ public class SitesDistancesController {
 
         for(Site other : otherSites){
             Point otherSitePoint = new Point(other.address(), new double[]{other.latitude(),other.longitude()});
-            Pair<Point,Point> pair1 = new Pair<>(newSitePoint,otherSitePoint);
-            Pair<Point,Point> pair2 = new Pair<>(otherSitePoint,newSitePoint);
 
             DistanceMatrixResponse response;
             try {
-                response = bingAPI.distanceMatrix(List.of(pair1,pair2));
+                response = bingAPI.distanceMatrix(List.of(newSitePoint,otherSitePoint));
             } catch (IOException e) {
                 throw new TransportException(e.getMessage(), e);
             }
@@ -76,6 +79,35 @@ public class SitesDistancesController {
         }
 
         distances.put(new Pair<>(site.address(),site.address()),new Pair<>(0.0,0.0));
+        return distances;
+    }
+
+    public List<DistanceBetweenSites> createAllDistanceObjectsFirstTimeLoad(List<Site> sites) throws IOException {
+        Map<Pair<String,String>, Pair<Double,Double>> data = new HashMap<>();
+
+        Point[] points = sites.stream()
+                .map(site -> new Point(site.address(), new double[]{site.latitude(),site.longitude()}))
+                .toArray(Point[]::new);
+
+        DistanceMatrixResponse response = bingAPI.distanceMatrix(Arrays.stream(points).toList());
+        Result[] results = response.resourceSets()[0].resources()[0].results();
+        Arrays.stream(results).forEach(result -> {
+            int originIndex = result.originIndex();
+            int destinationIndex = result.destinationIndex();
+            data.put(new Pair<>(points[originIndex].address(),points[destinationIndex].address()),
+                    new Pair<>(result.travelDistance(),result.travelDuration()));
+        });
+
+        List<DistanceBetweenSites> distances = new LinkedList<>();
+
+        for(var entry : data.entrySet()){
+            distances.add(new DistanceBetweenSites(
+                    entry.getKey().getKey(), //source
+                    entry.getKey().getValue(), //destination
+                    entry.getValue().getKey(), //distance
+                    entry.getValue().getValue()) //duration
+            );
+        }
         return distances;
     }
 }

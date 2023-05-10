@@ -147,11 +147,11 @@ public class UiData {
         Driver driver5 = new Driver("7890", "sarah kim", Driver.LicenseType.C3);
 
         // generate trucks with random data:
-        Truck truck1 = new Truck("abc123", "ford", 1500, 10000, Truck.CoolingCapacity.NONE);
-        Truck truck2 = new Truck("def456", "chevy", 2000, 15000, Truck.CoolingCapacity.COLD);
-        Truck truck3 = new Truck("ghi789", "toyota", 2500, 20000, Truck.CoolingCapacity.COLD);
-        Truck truck4 = new Truck("jkl012", "honda", 3000, 25000, Truck.CoolingCapacity.FROZEN);
-        Truck truck5 = new Truck("mno345", "nissan", 3500, 30000, Truck.CoolingCapacity.FROZEN);
+//        Truck truck1 = new Truck("abc123", "ford", 1500, 10000, Truck.CoolingCapacity.NONE);
+//        Truck truck2 = new Truck("def456", "chevy", 2000, 15000, Truck.CoolingCapacity.COLD);
+//        Truck truck3 = new Truck("ghi789", "toyota", 2500, 20000, Truck.CoolingCapacity.COLD);
+//        Truck truck4 = new Truck("jkl012", "honda", 3000, 25000, Truck.CoolingCapacity.FROZEN);
+//        Truck truck5 = new Truck("mno345", "nissan", 3500, 30000, Truck.CoolingCapacity.FROZEN);
 
 
 
@@ -160,11 +160,11 @@ public class UiData {
 //        rms.addDriver(driver3.toJson());
 //        rms.addDriver(driver4.toJson());
 //        rms.addDriver(driver5.toJson());
-        rms.addTruck(truck1.toJson());
-        rms.addTruck(truck2.toJson());
-        rms.addTruck(truck3.toJson());
-        rms.addTruck(truck4.toJson());
-        rms.addTruck(truck5.toJson());
+//        rms.addTruck(truck1.toJson());
+//        rms.addTruck(truck2.toJson());
+//        rms.addTruck(truck3.toJson());
+//        rms.addTruck(truck4.toJson());
+//        rms.addTruck(truck5.toJson());
 
 //        rms.addSite(site1.toJson());
 //        rms.addSite(site2.toJson());

@@ -1,9 +1,9 @@
 package businessLayer.transportModule.bingApi;
 
 public record Result(
-        long destinationIndex,
-        long originIndex,
-        long totalWalkDuration,
+        int destinationIndex,
+        int originIndex,
+        int totalWalkDuration,
         double travelDistance,
         double travelDuration
 ) {

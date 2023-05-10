@@ -10,6 +10,7 @@ import objects.transportObjects.Site;
 import serviceLayer.employeeModule.Services.EmployeesService;
 import utils.transportUtils.TransportException;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
@@ -168,5 +169,43 @@ public class SitesController {
             curr = next;
         }
         return distances;
+    }
+
+    /**
+     * this method is used only for the first time the system is loaded.
+     * this method assumes that there are no sites in the system.
+     */
+    public void addAllSitesFirstTimeSystemLoad(List<Site> sites) throws TransportException {
+
+        try {
+            // get latitude and longitude
+            sites = sites.stream().map(site -> {
+                try {
+                    Point p = distancesController.getCoordinates(site);
+                    return new Site(site, p.latitude(), p.longitude());
+                } catch (TransportException e) {
+                    throw new RuntimeException(e);
+                }
+            }).toList();
+
+            sites.forEach(site -> {
+                try {
+                    dao.insert(site);
+                } catch (DalException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+            List<DistanceBetweenSites> distanceObjects = distancesController.createAllDistanceObjectsFirstTimeLoad(sites);
+            distancesDAO.insertAll(distanceObjects);
+
+            for(Site site : sites){
+                if(site.siteType() == Site.SiteType.BRANCH){
+                    employeesService.createBranch(TRANSPORT_MANAGER_USERNAME,site.address());
+                }
+            }
+        } catch (DalException | IOException e) {
+            throw new TransportException(e.getMessage(),e);
+        }
+
     }
 }

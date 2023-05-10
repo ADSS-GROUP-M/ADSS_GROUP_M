@@ -159,7 +159,11 @@ public class SitesController {
         // map distances between following sites
         while (destinationsIterator.hasNext()) {
             next = destinationsIterator.next();
-            siteRoute lookUpObject = siteRoute.getLookupObject(curr,next);
+
+            String currAddress = getSite(curr).address();
+            String nextAddress = getSite(next).address();
+
+            siteRoute lookUpObject = siteRoute.getLookupObject(currAddress,nextAddress);
             double distance;
             try {
                 distance = sitesRoutesDAO.select(lookUpObject).duration();

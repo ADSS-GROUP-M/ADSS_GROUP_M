@@ -92,7 +92,7 @@ public class TransportsManagement {
 
         Transport newTransport = new Transport(
                 new DeliveryRoute(
-                        source.address(),
+                        source.name(),
                         destinations,
                         itemsList
                 ),
@@ -241,7 +241,7 @@ public class TransportsManagement {
                     Site source = uiData.pickSite(false);
                     updateTransportHelperMethod(
                             oldtransport.id(),
-                            source.address(),
+                            source.name(),
                             oldtransport.destinations(),
                             oldtransport.itemLists(),
                             oldtransport.truckId(),
@@ -462,7 +462,7 @@ public class TransportsManagement {
             }
             //validate the site if it is a branch
              if(site.siteType() == Site.SiteType.BRANCH) {
-                String stokeKeeperMassageJson =  es.checkStoreKeeperAvailability(JsonUtils.serialize(departureDateTime),site.address());
+                String stokeKeeperMassageJson =  es.checkStoreKeeperAvailability(JsonUtils.serialize(departureDateTime),site.name());
                 Response response = JsonUtils.deserialize(stokeKeeperMassageJson, Response.class);
                 if(response.success() == false){
                  System.out.println("\n"+response.message());
@@ -476,8 +476,8 @@ public class TransportsManagement {
                 System.out.println();
                 continue;
             }
-            itemsList.put(site.address(), listId);
-            destinations.add(site.address());
+            itemsList.put(site.name(), listId);
+            destinations.add(site.name());
             destinationId++;
         }
     }

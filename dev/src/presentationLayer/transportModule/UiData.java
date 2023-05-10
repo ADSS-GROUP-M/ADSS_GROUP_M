@@ -88,7 +88,7 @@ public class UiData {
         Response response = Response.fromJson(json);
 
         for(Site site : Site.listFromJson(response.data())){
-            sites.put(site.address(), site);
+            sites.put(site.name(), site);
         }
     }
 
@@ -161,8 +161,9 @@ public class UiData {
         Site[] siteArray = new Site[sites.size()];
         for(Site site : sites.values()){
             System.out.print(i+".");
-            System.out.println(" Transport zone: "+site.transportZone());
-            System.out.println("   name:        "+site.address());
+            System.out.println("  Transport zone: "+site.transportZone());
+            System.out.println("    name:         "+site.name());
+            System.out.println("    site type:    "+site.siteType());
             siteArray[i-1] = site;
             i++;
         }

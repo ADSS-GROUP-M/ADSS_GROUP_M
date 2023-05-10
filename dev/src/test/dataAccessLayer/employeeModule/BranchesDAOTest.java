@@ -5,7 +5,6 @@ import dataAccessLayer.DalFactory;
 import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.dalUtils.OfflineResultSet;
 import dataAccessLayer.dalUtils.SQLExecutor;
-import dataAccessLayer.dalUtils.SQLExecutorProductionImpl;
 import dataAccessLayer.transportModule.SitesDAO;
 import objects.transportObjects.Site;
 import org.junit.jupiter.api.AfterEach;
@@ -32,9 +31,9 @@ class BranchesDAOTest {
     @BeforeEach
     void setUp() {
         DalFactory.clearTestDB();
-        Site site1 = new Site("zone1","address1","name1","phone1", Site.SiteType.BRANCH);
-        Site site2 = new Site("zone2","address2","name2","phone2", Site.SiteType.BRANCH);
-        Site site3 = new Site("zone3","address3","name3","phone3", Site.SiteType.BRANCH);
+        Site site1 = new Site("TODO: INSERT NAME HERE", "address1", "zone1", "name1","phone1", Site.SiteType.BRANCH);
+        Site site2 = new Site("TODO: INSERT NAME HERE", "address2", "zone2", "name2","phone2", Site.SiteType.BRANCH);
+        Site site3 = new Site("TODO: INSERT NAME HERE", "address3", "zone3", "name3","phone3", Site.SiteType.BRANCH);
 
         branch1 = new Branch("address1");
         branch2 = new Branch("address2");

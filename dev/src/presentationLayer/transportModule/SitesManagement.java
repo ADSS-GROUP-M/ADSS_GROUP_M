@@ -63,7 +63,7 @@ public class SitesManagement {
                 return;
             }
         }
-        Site newSite = new Site(transportZone, address, contactPhone, contactName, type);
+        Site newSite = new Site("TODO: INSERT NAME HERE", address, transportZone, contactPhone, contactName, type);
         String json = newSite.toJson();
         String responseJson = rms.addSite(json);
         Response response = JsonUtils.deserialize(responseJson, Response.class);
@@ -125,7 +125,7 @@ public class SitesManagement {
     }
 
     private void updateSiteHelperMethod(String transportZone, String address, String phoneNumber, String contactName, Site.SiteType siteType) {
-        Site newSite = new Site(transportZone, address, phoneNumber, contactName, siteType);
+        Site newSite = new Site("TODO: INSERT NAME HERE", address, transportZone, phoneNumber, contactName, siteType);
         String json = newSite.toJson();
         String responseJson = rms.updateSite(json);
         Response response = JsonUtils.deserialize(responseJson, Response.class);

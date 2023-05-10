@@ -24,32 +24,11 @@ public class SitesController {
     private final SitesDistancesDAO distancesDAO;
     private EmployeesService employeesService;
     private final SitesDistancesController distancesController;
-    private final ConcurrentLinkedDeque<Runnable> tasks;
-    private final Thread worker;
 
     public SitesController(SitesDAO dao, SitesDistancesDAO distancesDAO, SitesDistancesController distancesController){
         this.dao = dao;
         this.distancesDAO = distancesDAO;
         this.distancesController = distancesController;
-        tasks = new ConcurrentLinkedDeque<>();
-        worker = new Thread(()->{
-            while(true){
-                if(tasks.isEmpty()){
-                    try {
-                        synchronized (tasks){
-                            tasks.wait();
-                        }
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-                else{
-                    Runnable task = tasks.poll();
-                    if(task != null) task.run();
-                }
-            }
-        });
-        worker.start();
     }
 
     public void injectDependencies(EmployeesService employeesService) {
@@ -73,22 +52,14 @@ public class SitesController {
             site = new Site(site,
                     coordinates.coordinates()[0],
                     coordinates.coordinates()[1]);
-
             dao.insert(site);
-            List<Site> sites = getAllSites();
-            Site finalSite = site;
-//             tasks.add(() -> {
-//                try {
-//                    distancesDAO.insertAll(distancesController.createDistanceObjects(finalSite,sites ));
-//                } catch (DalException | TransportException e) {
-//                    throw new RuntimeException(e);
-//                }
-//            });
-//            synchronized(tasks){
-//                tasks.notify();
-//            }
 
-            distancesDAO.insertAll(distancesController.createDistanceObjects(finalSite,sites ));
+
+            //TODO: check if this is the right way to do this
+//            List<Site> sites = getAllSites();
+//            if(sites.size() > 1) {
+//                distancesDAO.insertAll(distancesController.createDistanceObjects(site,sites ));
+//            }
             if(site.siteType() == Site.SiteType.BRANCH){
                 employeesService.createBranch(TRANSPORT_MANAGER_USERNAME,site.address());
             }
@@ -196,6 +167,4 @@ public class SitesController {
         }
         return distances;
     }
-
-
 }

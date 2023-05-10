@@ -10,15 +10,30 @@ import java.io.IOException;
 import java.util.*;
 
 public class SitesDistancesController {
-    public SitesDistancesController(){
 
+    private final BingAPI bingAPI;
+
+    public SitesDistancesController(BingAPI bingAPI) {
+        this.bingAPI = bingAPI;
     }
 
+    public Point getCoordinates(Site site) throws TransportException {
+        LocationByQueryResponse queryResponse;
+        try {
+            queryResponse = bingAPI.locationByQuery(site.address());
+        } catch (IOException e) {
+            throw new TransportException(e.getMessage(), e);
+        }
+        LocationResource[] locationResources = queryResponse.resourceSets()[0].resources();
+        if (locationResources.length != 1) {
+            throw new TransportException("Could not find site or found multiple sites");
+        }
+        return locationResources[0].point();
+    }
+
+
+    @Deprecated
     public List<DistanceBetweenSites> createDistanceObjects(Site site ,List<Site> sites) throws TransportException {
-
-        //TODO: Figure out how to test this
-
-        //TODO: replace with real distances
 
         Map<Pair<String,String>,Pair<Double,Double>> travelMatrix = getTravelMatrix(site,sites);
 
@@ -35,10 +50,7 @@ public class SitesDistancesController {
         return distances;
     }
 
-    public Point getCoordinates(Site site) throws TransportException {
-        return getPoint(site);
-    }
-
+    @Deprecated
     public Map<Pair<String,String>, Pair<Double,Double>> getTravelMatrix(Site site, List<Site> otherSites) throws TransportException {
 
         List<Pair<Point,Point>> points = new LinkedList<>();
@@ -50,7 +62,7 @@ public class SitesDistancesController {
         }
         DistanceMatrixResponse response;
         try {
-            response = BingAPI.distanceMatrix(points);
+            response = bingAPI.distanceMatrix(points);
         } catch (IOException e) {
             throw new TransportException(e.getMessage(), e);
         }
@@ -68,19 +80,5 @@ public class SitesDistancesController {
 
         distances.put(new Pair<>(site.address(),site.address()),new Pair<>(0.0,0.0));
         return distances;
-    }
-
-    private Point getPoint(Site site) throws TransportException {
-        LocationByQueryResponse queryResponse;
-        try {
-            queryResponse = BingAPI.locationByQuery(site.address());
-        } catch (IOException e) {
-            throw new TransportException(e.getMessage(), e);
-        }
-        LocationResource[] locationResources = queryResponse.resourceSets()[0].resources();
-        if (locationResources.length != 1) {
-            throw new TransportException("Could not find site or found multiple sites");
-        }
-        return locationResources[0].point();
     }
 }

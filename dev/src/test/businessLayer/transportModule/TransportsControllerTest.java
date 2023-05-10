@@ -1,7 +1,6 @@
 package businessLayer.transportModule;
 
 import dataAccessLayer.dalUtils.DalException;
-import dataAccessLayer.transportModule.DistanceBetweenSites;
 import dataAccessLayer.transportModule.SitesDistancesDAO;
 import dataAccessLayer.transportModule.TransportsDAO;
 import javafx.util.Pair;
@@ -82,9 +81,9 @@ class TransportsControllerTest {
         employeesService = mock(EmployeesService.class);
         transportController.injectDependencies(employeesService);
 
-        source = new Site("zone1", SOURCE_ADDRESS, "0545555550", "contactNameSource", Site.SiteType.LOGISTICAL_CENTER);
-        destination1 = new Site("zone1", DESTINATION_ADDRESS_1, "0545555551", "contactNameDest1", Site.SiteType.BRANCH);
-        destination2 = new Site("zone1", DESTINATION_ADDRESS_2, "0545555552", "contactNameDest2", Site.SiteType.BRANCH);
+        source = new Site("TODO: INSERT NAME HERE", SOURCE_ADDRESS, "zone1", "0545555550", "contactNameSource", Site.SiteType.LOGISTICAL_CENTER);
+        destination1 = new Site("TODO: INSERT NAME HERE", DESTINATION_ADDRESS_1, "zone1", "0545555551", "contactNameDest1", Site.SiteType.BRANCH);
+        destination2 = new Site("TODO: INSERT NAME HERE", DESTINATION_ADDRESS_2, "zone1", "0545555552", "contactNameDest2", Site.SiteType.BRANCH);
         driver = new Driver(DRIVER_ID, "driverName", Driver.LicenseType.C3);
         truck = new Truck(TRUCK_ID, "model", 2000, 25000, Truck.CoolingCapacity.FROZEN);
         itemList1 = new ItemList(ITEM_LIST_ID_1,

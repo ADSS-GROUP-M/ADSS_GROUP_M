@@ -29,11 +29,12 @@ public class RecruitAndUserCreationTests {
 
     @BeforeEach
     public void setUp() throws Exception {
-        ServiceFactory serviceFactory = new ServiceFactory(TESTING_DB_NAME);
-        userService = serviceFactory.userService();
-        empService = serviceFactory.employeesService();
-        userService.createData(); // Loads the HR Manager user: "admin123" "123", clears the data in each test
-        empService.createData();
+//        ServiceFactory serviceFactory = new ServiceFactory(TESTING_DB_NAME);
+//        userService = serviceFactory.userService();
+//        empService = serviceFactory.employeesService();
+//        userService.createData(); // Loads the HR Manager user: "admin123" "123", clears the data in each test
+//        empService.createData();
+        fail("MOCK THESE TESTS");
         admin = Response.fromJson(userService.getUser(adminUsername)).data(User.class);
         if(Response.fromJson(userService.getUser(username2)).success() == false)
             userService.createUser(admin.getUsername(), username2, password2);

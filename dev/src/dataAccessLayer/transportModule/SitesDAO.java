@@ -12,8 +12,8 @@ import java.util.List;
 
 public class SitesDAO extends DAO<Site> {
 
-    private static final String[] types = new String[]{"TEXT", "TEXT", "TEXT", "TEXT", "TEXT", "REAL", "REAL"};
-    private static final String[] primary_keys = {"address"};
+    private static final String[] types = new String[]{"TEXT","TEXT", "TEXT", "TEXT", "TEXT", "TEXT", "REAL", "REAL"};
+    private static final String[] primary_keys = {"name"};
     public static final String tableName = "sites";
 
     public SitesDAO(SQLExecutor cursor) throws DalException {
@@ -21,6 +21,7 @@ public class SitesDAO extends DAO<Site> {
 				tableName,
                 types,
                 primary_keys,
+                "name",
                 "address",
                 "transport_zone",
                 "contact_name",
@@ -42,7 +43,7 @@ public class SitesDAO extends DAO<Site> {
             return cache.get(object);
         }
 
-        String query = String.format("SELECT * FROM %s WHERE address = '%s';", TABLE_NAME, object.address());
+        String query = String.format("SELECT * FROM %s WHERE address = '%s';", TABLE_NAME, object.name());
         OfflineResultSet resultSet;
         try {
             resultSet = cursor.executeRead(query);
@@ -54,7 +55,7 @@ public class SitesDAO extends DAO<Site> {
             cache.put(selected);
             return selected;
         } else {
-            throw new DalException("No site with address " + object.address() + " was found");
+            throw new DalException("No site with name " + object.name() + " was found");
         }
     }
 
@@ -85,8 +86,9 @@ public class SitesDAO extends DAO<Site> {
      */
     @Override
     public void insert(Site object) throws DalException {
-        String query = String.format("INSERT INTO %s VALUES ('%s', '%s', '%s', '%s', '%s', %f, %f);",
+        String query = String.format("INSERT INTO %s VALUES ('%s','%s', '%s', '%s', '%s', '%s', %f, %f);",
                 TABLE_NAME,
+                object.name(),
                 object.address(),
                 object.transportZone(),
                 object.contactName(),
@@ -111,20 +113,21 @@ public class SitesDAO extends DAO<Site> {
      */
     @Override
     public void update(Site object) throws DalException {
-        String query = String.format("UPDATE %s SET transport_zone = '%s', contact_name = '%s', contact_phone = '%s', site_type = '%s', latitude = %f, longitude = %f WHERE address = '%s';",
+        String query = String.format("UPDATE %s SET address = '%s', transport_zone = '%s', contact_name = '%s', contact_phone = '%s', site_type = '%s', latitude = %f, longitude = %f WHERE address = '%s';",
                 TABLE_NAME,
+                object.address(),
                 object.transportZone(),
                 object.contactName(),
                 object.phoneNumber(),
                 object.siteType(),
                 object.latitude(),
                 object.longitude(),
-                object.address());
+                object.name());
         try {
             if(cursor.executeWrite(query) == 1){
                 cache.put(object);
             } else {
-                throw new DalException("No site with address " + object.address() + " was found");
+                throw new DalException("No site with name " + object.name() + " was found");
             }
         } catch (SQLException e) {
             throw new DalException("Failed to update site", e);
@@ -136,12 +139,12 @@ public class SitesDAO extends DAO<Site> {
      */
     @Override
     public void delete(Site object) throws DalException {
-        String query = String.format("DELETE FROM %s WHERE address = '%s';", TABLE_NAME, object.address());
+        String query = String.format("DELETE FROM %s WHERE name = '%s';", TABLE_NAME, object.name());
         try {
             if(cursor.executeWrite(query) == 1){
                 cache.remove(object);
             } else {
-                throw new DalException("No site with address " + object.address() + " was found");
+                throw new DalException("No site with name " + object.name() + " was found");
             }
         } catch (SQLException e) {
             throw new DalException("Failed to delete site", e);
@@ -155,7 +158,7 @@ public class SitesDAO extends DAO<Site> {
             return true;
         }
 
-        String query = String.format("SELECT * FROM %s WHERE address = '%s';", TABLE_NAME, object.address());
+        String query = String.format("SELECT * FROM %s WHERE name = '%s';", TABLE_NAME, object.name());
         OfflineResultSet resultSet;
         try {
             resultSet = cursor.executeRead(query);
@@ -174,8 +177,9 @@ public class SitesDAO extends DAO<Site> {
     @Override
     protected Site getObjectFromResultSet(OfflineResultSet resultSet) {
         return new Site(
-                resultSet.getString("transport_zone"),
+                resultSet.getString("name"),
                 resultSet.getString("address"),
+                resultSet.getString("transport_zone"),
                 resultSet.getString("contact_phone"),
                 resultSet.getString("contact_name"),
                 Site.SiteType.valueOf(resultSet.getString("site_type")),

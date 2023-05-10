@@ -7,7 +7,7 @@ import java.lang.reflect.Type;
 import java.util.LinkedList;
 import java.util.Objects;
 
-public record Site (String transportZone, String address, String phoneNumber, String contactName, SiteType siteType, double latitude, double longitude) {
+public record Site (String name, String address, String transportZone, String phoneNumber, String contactName, SiteType siteType, double latitude, double longitude) {
 
     // 1) "14441 S Inglewood Ave, Hawthorne, CA 90250"
     // 2) "19503 S Normandie Ave, Torrance, CA 90501"
@@ -25,23 +25,21 @@ public record Site (String transportZone, String address, String phoneNumber, St
     // 14) "3705 E South St, Long Beach, CA 90805"
     // 15) "2770 E Carson St, Lakewood, CA 90712"
 
-
     public enum SiteType{
         BRANCH,
         LOGISTICAL_CENTER,
-        SUPPLIER
+        SUPPLIER;
     }
-
-    public Site(String transportZone, String address, String phoneNumber, String contactName, SiteType siteType) {
-        this(transportZone, address, phoneNumber, contactName, siteType, 0.0,0.0);
+    public Site(String name, String address, String transportZone, String phoneNumber, String contactName, SiteType siteType) {
+        this(name, address, transportZone, phoneNumber, contactName, siteType, 0.0,0.0);
     }
 
     public Site(Site old, double latitude, double longitude){
-        this(old.transportZone(), old.address(), old.phoneNumber(), old.contactName(), old.siteType(), latitude, longitude);
+        this(old.name(), old.address(), old.transportZone(), old.phoneNumber(), old.contactName(), old.siteType(), latitude, longitude);
     }
 
-    public static Site getLookupObject(String address){
-        return new Site(null, address, null, null, null,0.0,0.0);
+    public static Site getLookupObject(String name){
+        return new Site(name, null, null, null, null, null,0.0,0.0);
     }
 
     public String toJson(){
@@ -59,27 +57,24 @@ public record Site (String transportZone, String address, String phoneNumber, St
 
     @Override
     public String toString(){
-        return "Trn. zone: " + transportZone +
+        return "Name: " + name +
                 " | Address: " + address +
+                " | Trn. zone: " + transportZone +
                 " | Phone: " + phoneNumber +
                 " | Contact: " + contactName +
                 " | Type: " + siteType;
     }
-    
+
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
         Site site = (Site) o;
-        return address.equals(site.address);
+        return Objects.equals(name, site.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(address);
+        return Objects.hash(name);
     }
 }

@@ -4,7 +4,6 @@ import dataAccessLayer.DalFactory;
 import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.dalUtils.OfflineResultSet;
 import dataAccessLayer.dalUtils.SQLExecutor;
-import dataAccessLayer.dalUtils.SQLExecutorProductionImpl;
 import objects.transportObjects.Site;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,7 +25,7 @@ class SitesDAOTest {
 
     @BeforeEach
     void setUp() {
-        site = new Site("zone1","address1","12345","kobi", Site.SiteType.SUPPLIER);
+        site = new Site("TODO: INSERT NAME HERE", "address1", "zone1", "12345","kobi", Site.SiteType.SUPPLIER);
         try {
             factory = new DalFactory(TESTING_DB_NAME);
             dao = factory.sitesDAO();
@@ -73,7 +72,7 @@ class SitesDAOTest {
         sites.add(site);
         List.of("address2","address3","address4","address5","address6").forEach(address -> {
             try {
-                Site site = new Site("zone1",address,"12345","kobi", Site.SiteType.SUPPLIER);
+                Site site = new Site("TODO: INSERT NAME HERE", address, "zone1", "12345","kobi", Site.SiteType.SUPPLIER);
                 dao.insert(site);
                 sites.add(site);
             } catch (DalException e) {
@@ -96,7 +95,7 @@ class SitesDAOTest {
     @Test
     void insert() {
         try {
-            Site site2 = new Site("zone1","address2","12345","kobi", Site.SiteType.SUPPLIER);
+            Site site2 = new Site("TODO: INSERT NAME HERE", "address2", "zone1", "12345","kobi", Site.SiteType.SUPPLIER);
             dao.insert(site2);
             assertDeepEquals(site2,dao.select(Site.getLookupObject(site2.address())));
         } catch (DalException e) {
@@ -107,7 +106,7 @@ class SitesDAOTest {
     @Test
     void update() {
         try {
-            Site site2 = new Site("zone2",site.address(),"51235","lo kobi", Site.SiteType.LOGISTICAL_CENTER);
+            Site site2 = new Site("TODO: INSERT NAME HERE", site.address(), "zone2", "51235","lo kobi", Site.SiteType.LOGISTICAL_CENTER);
             dao.update(site2);
             assertDeepEquals(site2,dao.select(Site.getLookupObject(site2.address())));
         } catch (DalException e) {

@@ -44,7 +44,7 @@ class ResourceManagementServiceIT {
 
         //add sites
 
-        site = new Site("zone a", "123 main st", "(555) 123-4567", "john smith", Site.SiteType.BRANCH);
+        site = new Site("TODO: INSERT NAME HERE", "123 main st", "zone a", "(555) 123-4567", "john smith", Site.SiteType.BRANCH);
         rms.addSite(site.toJson());
 
         //add trucks
@@ -322,7 +322,7 @@ class ResourceManagementServiceIT {
 
     @Test
     void addSite() {
-        Site site3 = new Site("zone a", "address a", "123456","bob", Site.SiteType.BRANCH);
+        Site site3 = new Site("TODO: INSERT NAME HERE", "address a", "zone a", "123456","bob", Site.SiteType.BRANCH);
 
         String json1 = rms.addSite(site3.toJson());
         Response response1 = Response.fromJson(json1);
@@ -358,7 +358,7 @@ class ResourceManagementServiceIT {
 
     @Test
     void removeSiteDoesNotExist(){
-        Site site3 = new Site("zone a", "address a", "123456","bob", Site.SiteType.BRANCH);
+        Site site3 = new Site("TODO: INSERT NAME HERE", "address a", "zone a", "123456","bob", Site.SiteType.BRANCH);
         String json1 = rms.removeSite(site3.toJson());
         Response response1 = Response.fromJson(json1);
         assertFalse(response1.success());
@@ -366,7 +366,7 @@ class ResourceManagementServiceIT {
 
     @Test
     void updateSite() {
-        Site siteUpdate = new Site(site.transportZone(), site.address(), "123456981251","new bob", Site.SiteType.BRANCH);
+        Site siteUpdate = new Site("TODO: INSERT NAME HERE", site.address(), site.transportZone(), "123456981251","new bob", Site.SiteType.BRANCH);
 
         String json1 = rms.updateSite(siteUpdate.toJson());
         Response response1 = Response.fromJson(json1);
@@ -385,7 +385,7 @@ class ResourceManagementServiceIT {
 
     @Test
     void updateSiteDoesNotExist(){
-        Site site3 = new Site("zone a", "address a", "123456","bob", Site.SiteType.BRANCH);
+        Site site3 = new Site("TODO: INSERT NAME HERE", "address a", "zone a", "123456","bob", Site.SiteType.BRANCH);
         String json1 = rms.updateSite(site3.toJson());
         Response response1 = Response.fromJson(json1);
         assertFalse(response1.success());
@@ -416,7 +416,7 @@ class ResourceManagementServiceIT {
     void getAllSites() {
         //generate more sites
         for (int i = 0; i < 20; i++) {
-            Site site = new Site("abc" + i, "address" + i, "123456","bob", Site.SiteType.BRANCH);
+            Site site = new Site("TODO: INSERT NAME HERE", "address" + i, "abc" + i, "123456","bob", Site.SiteType.BRANCH);
             rms.addSite(site.toJson());
         }
 

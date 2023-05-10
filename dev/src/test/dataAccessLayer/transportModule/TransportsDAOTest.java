@@ -43,8 +43,8 @@ class TransportsDAOTest {
 
     @BeforeEach
     void setUp() {
-        site = new Site("zone1","site address","12345","kobi", Site.SiteType.SUPPLIER);
-        source = new Site("zone1","source address","12345","kobi", Site.SiteType.BRANCH);
+        site = new Site("TODO: INSERT NAME HERE", "site address", "zone1", "12345","kobi", Site.SiteType.SUPPLIER);
+        source = new Site("TODO: INSERT NAME HERE", "source address", "zone1", "12345","kobi", Site.SiteType.BRANCH);
         truck = new Truck("1", "model1", 1000, 20000, Truck.CoolingCapacity.FROZEN);
         employee = new Employee("name1","12345","Poalim",50, LocalDate.of(1999,10,10),"conditions","details");
         employee.addRole(Role.Driver);

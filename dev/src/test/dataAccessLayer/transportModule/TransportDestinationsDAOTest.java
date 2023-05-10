@@ -44,8 +44,8 @@ class TransportDestinationsDAOTest {
     @BeforeEach
     void setUp() {
         try {
-            Site site1 = new Site("zone1", SITE_ADDRESS1, "12345", "kobi", Site.SiteType.SUPPLIER);
-            Site site2 = new Site("zone1", SITE_ADDRESS2, "12345", "kobi", Site.SiteType.SUPPLIER);
+            Site site1 = new Site("TODO: INSERT NAME HERE", SITE_ADDRESS1, "zone1", "12345", "kobi", Site.SiteType.SUPPLIER);
+            Site site2 = new Site("TODO: INSERT NAME HERE", SITE_ADDRESS2, "zone1", "12345", "kobi", Site.SiteType.SUPPLIER);
             Truck truck = new Truck("1", "model1", 1000, 20000, Truck.CoolingCapacity.FROZEN);
             Employee employee = new Employee("name1", "12345", "Poalim", 50, LocalDate.of(1999, 10, 10), "conditions", "details");
             employee.addRole(Role.Driver);
@@ -94,7 +94,7 @@ class TransportDestinationsDAOTest {
             TrucksController trucksController = mock(TrucksController.class);
             ItemListsController itemListsController = mock(ItemListsController.class);
             DriversController driversController = mock(DriversController.class);
-            SitesDistancesController distancesController = new SitesDistancesController();
+            SitesDistancesController distancesController = mock(SitesDistancesController.class);
             SitesController sitesController =  new SitesController(sitesDAO, sitesDistancesDAO, distancesController);
             transportsController = new TransportsController(
                     trucksController,

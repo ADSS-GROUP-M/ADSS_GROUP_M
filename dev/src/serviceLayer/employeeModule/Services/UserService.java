@@ -17,8 +17,7 @@ public class UserService {
 
     private final UserController userController;
 
-    public UserService(ServiceFactory serviceFactory, UserController userController) {
-        // Can get any needed service through the serviceFactory
+    public UserService(UserController userController) {
         this.userController = userController;
     }
 

@@ -30,7 +30,7 @@ class SitesControllerTest {
         controller = new SitesController(dao, distancesDAO, distancesController);
         controller.injectDependencies(employeesService);
 
-        site = new Site("zone1", "address1", "phone1", "contact1", Site.SiteType.BRANCH);
+        site = new Site("TODO: INSERT NAME HERE", "address1", "zone1", "phone1", "contact1", Site.SiteType.BRANCH);
     }
 
     @Test
@@ -75,7 +75,7 @@ class SitesControllerTest {
 
     @Test
     void updateSite() {
-        Site updatedSite = new Site("zone1", site.address(), "phone1Updated", "contact1", Site.SiteType.BRANCH);
+        Site updatedSite = new Site("TODO: INSERT NAME HERE", site.address(), "zone1", "phone1Updated", "contact1", Site.SiteType.BRANCH);
         try{
             Site lookupObject = Site.getLookupObject(site.address());
             when(dao.exists(lookupObject)).thenReturn(true);
@@ -88,7 +88,7 @@ class SitesControllerTest {
 
     @Test
     void updateSiteDoesNotExist(){
-        Site updatedSite = new Site("zone1", site.address(), "phone1Updated", "contact1", Site.SiteType.BRANCH);
+        Site updatedSite = new Site("TODO: INSERT NAME HERE", site.address(), "zone1", "phone1Updated", "contact1", Site.SiteType.BRANCH);
         try{
             when(dao.exists(Site.getLookupObject(site.address()))).thenReturn(false);
         } catch (DalException e) {
@@ -122,7 +122,7 @@ class SitesControllerTest {
 
     @Test
     void getAllSites() {
-        Site site2 = new Site("zone2", "address2", "phone2", "contact2", Site.SiteType.BRANCH);
+        Site site2 = new Site("TODO: INSERT NAME HERE", "address2", "zone2", "phone2", "contact2", Site.SiteType.BRANCH);
         try{
             when(dao.selectAll()).thenReturn(List.of(site, site2));
         } catch (DalException e) {

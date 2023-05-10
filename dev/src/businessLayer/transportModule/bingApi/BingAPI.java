@@ -1,5 +1,6 @@
 package businessLayer.transportModule.bingApi;
 
+import businessLayer.transportModule.SitesController;
 import javafx.util.Pair;
 import utils.JsonUtils;
 
@@ -12,11 +13,16 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class BingAPI {
+
+    public static long counter = 0;
     
-    private static final String key = "Ap_rzOWHxjXVKTzD5kXxfWSj_9LN2Vpr7LSFWv53tgAbvU9iBWl4SqqhUaASGTUE";
+    private static final String key = "ApCimQpMhBbPbxxutJUbXvOeQZ7zrJh-ryeMWVyI7a0iyZ_aDIJdxqSUlED1D7l-";
     private static final String COUNTRY_SUFFIX = ", United States";
 
-    public static LocationByQueryResponse locationByQuery(String address) throws IOException{
+    public BingAPI() {
+    }
+
+    public LocationByQueryResponse locationByQuery(String address) throws IOException{
 
         String urlPrefix = "http://dev.virtualearth.net/REST/v1/Locations?q=";
         String urlSuffix = "&key=" + key;
@@ -26,7 +32,13 @@ public class BingAPI {
         return JsonUtils.deserialize(json, LocationByQueryResponse.class);
     }
 
-    public static DistanceMatrixResponse distanceMatrix(List<Pair<Point,Point>> list) throws IOException{
+    public void calculateRoute(List<Point> route){
+
+
+    }
+
+    @Deprecated
+    public DistanceMatrixResponse distanceMatrix(List<Pair<Point,Point>> list) throws IOException{
         String urlPrefix = "http://dev.virtualearth.net/REST/v1/Routes/DistanceMatrix?";
         String urlSuffix = "&travelMode=driving&key=" + key;
         StringBuilder originsString = new StringBuilder("origins=");
@@ -43,7 +55,7 @@ public class BingAPI {
         return JsonUtils.deserialize(json, DistanceMatrixResponse.class);
     }
 
-    private static String sendRequest(String _url) throws IOException {
+    private String sendRequest(String _url) throws IOException {
         URL url = new URL(_url);
 
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -66,6 +78,10 @@ public class BingAPI {
         //Close the scanner
         scanner.close();
 
+        counter++;
+
         return informationString.toString();
+
+//        return "";
     }
 }

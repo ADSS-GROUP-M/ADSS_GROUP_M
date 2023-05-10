@@ -10,7 +10,6 @@ import businessLayer.employeeModule.Shift;
 import businessLayer.employeeModule.Shift.ShiftType;
 import objects.transportObjects.Driver;
 import objects.transportObjects.Site;
-import serviceLayer.ServiceFactory;
 import serviceLayer.employeeModule.Objects.SEmployee;
 import serviceLayer.employeeModule.Objects.SShift;
 import serviceLayer.employeeModule.Objects.SShiftType;
@@ -26,14 +25,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class EmployeesService {
-    private static UserService userService;
-    private ResourceManagementService rms;
-    private EmployeesController employeesController;
-    private ShiftsController shiftsController;
+    private final UserService userService;
+    private final ResourceManagementService rms;
+    private final EmployeesController employeesController;
+    private final ShiftsController shiftsController;
 
-    public EmployeesService(ServiceFactory serviceFactory, EmployeesController employeesController, ShiftsController shiftsController) {
-        rms = serviceFactory.resourceManagementService();
-        userService = serviceFactory.userService();
+    public EmployeesService(ResourceManagementService rms, UserService userService, EmployeesController employeesController, ShiftsController shiftsController) {
+        this.rms = rms;
+        this.userService = userService;
         this.employeesController = employeesController;
         this.shiftsController = shiftsController;
     }
@@ -81,14 +80,14 @@ public class EmployeesService {
         try {
             // Initializing Branches - TODO: Should be moved to Transport module
             String headquartersId = "1";
-            rms.addSite(new Site("Headquarters",headquartersId,"123456789","Headquarters", Site.SiteType.BRANCH).toJson());
+            rms.addSite(new Site("TODO: INSERT NAME HERE", headquartersId, "Headquarters", "123456789","Headquarters", Site.SiteType.BRANCH).toJson());
             for(int i = 2; i <= 9; i++) {
                 String branchId = Integer.toString(i);
-                rms.addSite(new Site("Zone" + i,branchId, "phone" + i,"contact"+i, Site.SiteType.BRANCH).toJson());
+                rms.addSite(new Site("TODO: INSERT NAME HERE", branchId, "Zone" + i, "phone" + i,"contact"+i, Site.SiteType.BRANCH).toJson());
             }
             // Transport Module Sites
-            Site site8 = new Site("zone3", "6433 fallbrook ave, west hills, ca 91307", "888-888-8888", "Amanda Garcia", Site.SiteType.BRANCH, 0, 0);
-            Site site9 = new Site("zone4", "8333 van nuys blvd, panorama city, ca 91402", "123-456-7890", "David Kim", Site.SiteType.BRANCH, 0, 0);
+            Site site8 = new Site("TODO: INSERT NAME HERE", "6433 fallbrook ave, west hills, ca 91307", "zone3", "888-888-8888", "Amanda Garcia", Site.SiteType.BRANCH, 0, 0);
+            Site site9 = new Site("TODO: INSERT NAME HERE", "8333 van nuys blvd, panorama city, ca 91402", "zone4", "123-456-7890", "David Kim", Site.SiteType.BRANCH, 0, 0);
             // These sites were already inserted in the transport module before, I removed their creation there.
             rms.addSite(site8.toJson());
             rms.addSite(site9.toJson());

@@ -4,6 +4,7 @@ import businessLayer.employeeModule.Controllers.EmployeesController;
 import businessLayer.employeeModule.Controllers.ShiftsController;
 import businessLayer.employeeModule.Controllers.UserController;
 import businessLayer.transportModule.*;
+import businessLayer.transportModule.bingApi.BingAPI;
 import dataAccessLayer.DalFactory;
 import dataAccessLayer.dalUtils.DalException;
 import serviceLayer.employeeModule.Services.EmployeesService;
@@ -28,9 +29,17 @@ public class BusinessFactory {
         buildInstances();
     }
 
+    /**
+     * used for testing
+     * @param dbName the name of the database to connect to
+     */
+    public BusinessFactory(String dbName) throws DalException{
+        dalFactory = new DalFactory(dbName);
+        buildInstances();
+    }
+
     private void buildInstances() {
         userController = new UserController(dalFactory.userDAO());
-
 
         //==================== Dependencies ======================= |
         /*(1)*/ shiftsController = new ShiftsController(dalFactory.shiftDAO());
@@ -39,31 +48,21 @@ public class BusinessFactory {
 
         try {
             // ======================== Dependencies ===================== |
-            /*(1)*/ distancesController = new SitesDistancesController();
+            /*(1)*/ distancesController = new SitesDistancesController(new BingAPI());
             /*(1)*/ trucksController = new TrucksController(dalFactory.trucksDAO());
             /*(1)*/ sitesController = new SitesController(dalFactory.sitesDAO(), dalFactory.sitesDistancesDAO(), distancesController);
             /*(1)*/ driversController = new DriversController(dalFactory.driversDAO());
             /*(1)*/ itemListsController = new ItemListsController(dalFactory.itemListsDAO());
             /*(2)*/ transportsController = new TransportsController(trucksController,
-                                                                        driversController,
-                                                                        sitesController,
-                                                                        itemListsController,
-                                                                        dalFactory.transportsDAO()
+                    driversController,
+                    sitesController,
+                    itemListsController,
+                    dalFactory.transportsDAO()
             );
             //========================================================= |
         } catch (TransportException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    /**
-     * used for testing
-     * @param dbName the name of the database to connect to
-     */
-    public BusinessFactory(String dbName) throws DalException{
-
-        dalFactory = new DalFactory(dbName);
-        buildInstances();
     }
 
     public TransportsController transportsController() {

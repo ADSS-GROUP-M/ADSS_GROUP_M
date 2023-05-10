@@ -48,8 +48,8 @@ class TransportsServiceIT {
         es = factory.employeesService();
         us = factory.userService();
 
-        site1 = new Site("zone a", "123 main st", "(555) 123-4567", "john smith", Site.SiteType.BRANCH);
-        site2 = new Site("zone b", "456 oak ave", "(555) 234-5678", "jane doe", Site.SiteType.LOGISTICAL_CENTER);
+        site1 = new Site("TODO: INSERT NAME HERE", "123 main st", "zone a", "(555) 123-4567", "john smith", Site.SiteType.BRANCH);
+        site2 = new Site("TODO: INSERT NAME HERE", "456 oak ave", "zone b", "(555) 234-5678", "jane doe", Site.SiteType.LOGISTICAL_CENTER);
         Driver driver1 = new Driver("123", "megan smith", Driver.LicenseType.C3);
         Truck truck1 = new Truck("abc123", "ford", 1500, 10000, Truck.CoolingCapacity.FROZEN);
         HashMap<String, Integer> load1 = new HashMap<>();
@@ -174,8 +174,8 @@ class TransportsServiceIT {
 
         HashMap<String,Integer> hm = new HashMap<>();
 
-        Site source = new Site("zone b", "456 oak ave UPDATED", "(555) 234-5678", "jane doe", Site.SiteType.LOGISTICAL_CENTER);
-        Site destination = new Site("zone a", "123 main st UPDATED", "(555) 123-4567", "john smith", Site.SiteType.BRANCH);
+        Site source = new Site("TODO: INSERT NAME HERE", "456 oak ave UPDATED", "zone b", "(555) 234-5678", "jane doe", Site.SiteType.LOGISTICAL_CENTER);
+        Site destination = new Site("TODO: INSERT NAME HERE", "123 main st UPDATED", "zone a", "(555) 123-4567", "john smith", Site.SiteType.BRANCH);
 
         rms.addSite(source.toJson());
         rms.addSite(destination.toJson());

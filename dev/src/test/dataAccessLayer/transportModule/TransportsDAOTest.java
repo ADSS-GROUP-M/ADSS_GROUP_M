@@ -38,7 +38,7 @@ class TransportsDAOTest {
     private Site site;
     private Site source;
     private Employee employee;
-    private SitesDistancesDAO distancesDAO;
+    private SitesRoutesDAO distancesDAO;
     private TransportsController transportsController;
 
     @BeforeEach
@@ -77,7 +77,7 @@ class TransportsDAOTest {
                 15000
         );
 
-        DistanceBetweenSites distance = new DistanceBetweenSites(
+        siteRoute distance = new siteRoute(
                 source.address(),
                 site.address(),
                 100,100
@@ -146,7 +146,7 @@ class TransportsDAOTest {
     void selectAll() {
         
         //set up
-        DistanceBetweenSites distance = new DistanceBetweenSites(
+        siteRoute distance = new siteRoute(
                 site.address(),
                 site.address(),
                 100,100

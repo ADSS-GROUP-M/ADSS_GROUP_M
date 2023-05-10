@@ -2,7 +2,7 @@ package businessLayer.transportModule;
 
 import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.transportModule.SitesDAO;
-import dataAccessLayer.transportModule.SitesDistancesDAO;
+import dataAccessLayer.transportModule.SitesRoutesDAO;
 import objects.transportObjects.Site;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,14 +19,14 @@ class SitesControllerTest {
 
     private SitesController controller;
     private SitesDAO dao;
-    private SitesDistancesDAO distancesDAO;
+    private SitesRoutesDAO distancesDAO;
     private Site site;
 
     @BeforeEach
     void setUp() {
         dao = mock(SitesDAO.class);
         EmployeesService employeesService = mock(EmployeesService.class);
-        distancesDAO = mock(SitesDistancesDAO.class);
+        distancesDAO = mock(SitesRoutesDAO.class);
         SitesDistancesController distancesController = mock(SitesDistancesController.class);
         controller = new SitesController(dao, distancesDAO, distancesController);
         controller.injectDependencies(employeesService);

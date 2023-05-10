@@ -1,7 +1,7 @@
 package businessLayer.transportModule;
 
 import businessLayer.transportModule.bingApi.*;
-import dataAccessLayer.transportModule.DistanceBetweenSites;
+import dataAccessLayer.transportModule.siteRoute;
 import javafx.util.Pair;
 import objects.transportObjects.Site;
 import utils.transportUtils.TransportException;
@@ -31,14 +31,14 @@ public class SitesDistancesController {
         return locationResources[0].point();
     }
 
-    public List<DistanceBetweenSites> createDistanceObjects(Site site ,List<Site> sites) throws TransportException {
+    public List<siteRoute> createDistanceObjects(Site site , List<Site> sites) throws TransportException {
 
         Map<Pair<String,String>,Pair<Double,Double>> travelMatrix = getTravelData(site,sites);
 
-        List<DistanceBetweenSites> distances = new LinkedList<>();
+        List<siteRoute> distances = new LinkedList<>();
 
         for(var entry : travelMatrix.entrySet()){
-            distances.add(new DistanceBetweenSites(
+            distances.add(new siteRoute(
                     entry.getKey().getKey(), //source
                     entry.getKey().getValue(), //destination
                     entry.getValue().getKey(), //distance
@@ -82,7 +82,7 @@ public class SitesDistancesController {
         return distances;
     }
 
-    public List<DistanceBetweenSites> createAllDistanceObjectsFirstTimeLoad(List<Site> sites) throws IOException {
+    public List<siteRoute> createAllDistanceObjectsFirstTimeLoad(List<Site> sites) throws IOException {
         Map<Pair<String,String>, Pair<Double,Double>> data = new HashMap<>();
 
         Point[] points = sites.stream()
@@ -98,10 +98,10 @@ public class SitesDistancesController {
                     new Pair<>(result.travelDistance(),result.travelDuration()));
         });
 
-        List<DistanceBetweenSites> distances = new LinkedList<>();
+        List<siteRoute> distances = new LinkedList<>();
 
         for(var entry : data.entrySet()){
-            distances.add(new DistanceBetweenSites(
+            distances.add(new siteRoute(
                     entry.getKey().getKey(), //source
                     entry.getKey().getValue(), //destination
                     entry.getValue().getKey(), //distance

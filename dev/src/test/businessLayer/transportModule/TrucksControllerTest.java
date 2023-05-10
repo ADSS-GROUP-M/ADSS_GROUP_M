@@ -5,7 +5,6 @@ import dataAccessLayer.transportModule.TrucksDAO;
 import objects.transportObjects.Truck;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import utils.Response;
 import utils.transportUtils.TransportException;
 
 import java.util.List;

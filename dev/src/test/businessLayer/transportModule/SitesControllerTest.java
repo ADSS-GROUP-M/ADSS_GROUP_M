@@ -12,7 +12,8 @@ import utils.transportUtils.TransportException;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class SitesControllerTest {
 

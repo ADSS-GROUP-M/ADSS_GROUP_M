@@ -3,7 +3,6 @@ package dataAccessLayer.transportModule.abstracts;
 import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.dalUtils.OfflineResultSet;
 import dataAccessLayer.dalUtils.SQLExecutor;
-import dataAccessLayer.dalUtils.SQLExecutorProductionImpl;
 
 import java.sql.SQLException;
 

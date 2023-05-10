@@ -9,9 +9,11 @@ import javafx.util.Pair;
 import objects.transportObjects.Site;
 import serviceLayer.employeeModule.Services.EmployeesService;
 import utils.transportUtils.TransportException;
-import java.util.concurrent.ConcurrentLinkedDeque;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Map;
 
 import static serviceLayer.employeeModule.Services.UserService.TRANSPORT_MANAGER_USERNAME;
 
@@ -47,6 +49,8 @@ public class SitesController {
             throw new TransportException("Site already exists");
         }
         try {
+            List<Site> otherSites = getAllSites();
+
             // get latitude and longitude
             Point coordinates = distancesController.getCoordinates(site);
             site = new Site(site,
@@ -54,15 +58,13 @@ public class SitesController {
                     coordinates.coordinates()[1]);
             dao.insert(site);
 
-
-            //TODO: check if this is the right way to do this
-//            List<Site> sites = getAllSites();
-//            if(sites.size() > 1) {
-//                distancesDAO.insertAll(distancesController.createDistanceObjects(site,sites ));
-//            }
+            if(otherSites.isEmpty() == false) {
+                distancesDAO.insertAll(distancesController.createDistanceObjects(site,otherSites));
+            }
             if(site.siteType() == Site.SiteType.BRANCH){
                 employeesService.createBranch(TRANSPORT_MANAGER_USERNAME,site.address());
             }
+
         } catch (DalException e) {
             throw new RuntimeException(e);
         }

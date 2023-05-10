@@ -8,10 +8,11 @@ import serviceLayer.transportModule.TransportsService;
 import utils.Response;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.InputMismatchException;
+import java.util.Scanner;
 
 public class UiData {
 
@@ -183,143 +184,143 @@ public class UiData {
 
 
         // generate item lists with random data:
-        HashMap<String, Integer> load1 = new HashMap<>();
-        load1.put("shirts", 20);
-        load1.put("pants", 15);
-        load1.put("socks", 30);
-
-        HashMap<String, Integer> unload1 = new HashMap<>();
-        unload1.put("jackets", 10);
-        unload1.put("hats", 5);
-        unload1.put("gloves", 20);
-
-        ItemList itemList1 = new ItemList(load1, unload1);
-
-        HashMap<String, Integer> load2 = new HashMap<>();
-        load2.put("pencils", 50);
-        load2.put("notebooks", 20);
-        load2.put("erasers", 30);
-
-        HashMap<String, Integer> unload2 = new HashMap<>();
-        unload2.put("pens", 40);
-        unload2.put("markers", 15);
-        unload2.put("highlighters", 25);
-
-        ItemList itemList2 = new ItemList(load2, unload2);
-
-        HashMap<String, Integer> load3 = new HashMap<>();
-        load3.put("laptops", 5);
-        load3.put("tablets", 10);
-        load3.put("smartphones", 20);
-
-        HashMap<String, Integer> unload3 = new HashMap<>();
-        unload3.put("desktops", 8);
-        unload3.put("monitors", 12);
-        unload3.put("printers", 6);
-
-        ItemList itemList3 = new ItemList(load3, unload3);
-
-        HashMap<String, Integer> load4 = new HashMap<>();
-        load4.put("carrots", 15);
-        load4.put("broccoli", 10);
-        load4.put("celery", 20);
-
-        HashMap<String, Integer> unload4 = new HashMap<>();
-        unload4.put("tomatoes", 12);
-        unload4.put("peppers", 8);
-        unload4.put("cucumbers", 18);
-
-        ItemList itemList4 = new ItemList(load4, unload4);
-
-        HashMap<String, Integer> load5 = new HashMap<>();
-        load5.put("screws", 500);
-        load5.put("nails", 1000);
-        load5.put("bolts", 750);
-
-        HashMap<String, Integer> unload5 = new HashMap<>();
-        unload5.put("washers", 800);
-        unload5.put("anchors", 600);
-        unload5.put("clamps", 900);
-
-        ItemList itemList5 = new ItemList(load5, unload5);
-
-        ils.addItemList(itemList1.toJson());
-        ils.addItemList(itemList2.toJson());
-        ils.addItemList(itemList3.toJson());
-        ils.addItemList(itemList4.toJson());
-        ils.addItemList(itemList5.toJson());
+//        HashMap<String, Integer> load1 = new HashMap<>();
+//        load1.put("shirts", 20);
+//        load1.put("pants", 15);
+//        load1.put("socks", 30);
+//
+//        HashMap<String, Integer> unload1 = new HashMap<>();
+//        unload1.put("jackets", 10);
+//        unload1.put("hats", 5);
+//        unload1.put("gloves", 20);
+//
+//        ItemList itemList1 = new ItemList(load1, unload1);
+//
+//        HashMap<String, Integer> load2 = new HashMap<>();
+//        load2.put("pencils", 50);
+//        load2.put("notebooks", 20);
+//        load2.put("erasers", 30);
+//
+//        HashMap<String, Integer> unload2 = new HashMap<>();
+//        unload2.put("pens", 40);
+//        unload2.put("markers", 15);
+//        unload2.put("highlighters", 25);
+//
+//        ItemList itemList2 = new ItemList(load2, unload2);
+//
+//        HashMap<String, Integer> load3 = new HashMap<>();
+//        load3.put("laptops", 5);
+//        load3.put("tablets", 10);
+//        load3.put("smartphones", 20);
+//
+//        HashMap<String, Integer> unload3 = new HashMap<>();
+//        unload3.put("desktops", 8);
+//        unload3.put("monitors", 12);
+//        unload3.put("printers", 6);
+//
+//        ItemList itemList3 = new ItemList(load3, unload3);
+//
+//        HashMap<String, Integer> load4 = new HashMap<>();
+//        load4.put("carrots", 15);
+//        load4.put("broccoli", 10);
+//        load4.put("celery", 20);
+//
+//        HashMap<String, Integer> unload4 = new HashMap<>();
+//        unload4.put("tomatoes", 12);
+//        unload4.put("peppers", 8);
+//        unload4.put("cucumbers", 18);
+//
+//        ItemList itemList4 = new ItemList(load4, unload4);
+//
+//        HashMap<String, Integer> load5 = new HashMap<>();
+//        load5.put("screws", 500);
+//        load5.put("nails", 1000);
+//        load5.put("bolts", 750);
+//
+//        HashMap<String, Integer> unload5 = new HashMap<>();
+//        unload5.put("washers", 800);
+//        unload5.put("anchors", 600);
+//        unload5.put("clamps", 900);
+//
+//        ItemList itemList5 = new ItemList(load5, unload5);
+//
+//        ils.addItemList(itemList1.toJson());
+//        ils.addItemList(itemList2.toJson());
+//        ils.addItemList(itemList3.toJson());
+//        ils.addItemList(itemList4.toJson());
+//        ils.addItemList(itemList5.toJson());
 
         // Randomly generated transports
-        Transport transport1 = new Transport(
-                site2.address(),
-                new LinkedList<>(Arrays.asList(site1.address(), site4.address())),
-                new HashMap<>() {{
-                    put(site1.address(), 1);
-                    put(site4.address(), 4);
-                }},
-                driver1.id(),
-                truck1.id(),
-                LocalDateTime.of(2023, 4, 5, 8, 30),
-                truck1.maxWeight()
-        );
+//        Transport transport1 = new Transport(
+//                site2.address(),
+//                new LinkedList<>(Arrays.asList(site1.address(), site4.address())),
+//                new HashMap<>() {{
+//                    put(site1.address(), 1);
+//                    put(site4.address(), 4);
+//                }},
+//                driver1.id(),
+//                truck1.id(),
+//                LocalDateTime.of(2023, 4, 5, 8, 30),
+//                truck1.maxWeight()
+//        );
+//
+//        Transport transport2 = new Transport(
+//                site2.address(),
+//                new LinkedList<>(Arrays.asList(site1.address(), site4.address())),
+//                new HashMap<>() {{
+//                    put(site1.address(), 3);
+//                    put(site4.address(), 4);
+//                }},
+//                driver2.id(),
+//                truck2.id(),
+//                LocalDateTime.of(2023, 4, 7, 12, 0),
+//                truck2.maxWeight()
+//        );
+//
+//        Transport transport3 = new Transport(
+//                site3.address(),
+//                new LinkedList<>(Arrays.asList(site1.address(), site5.address())),
+//                new HashMap<>() {{
+//                    put(site1.address(), 2);
+//                    put(site5.address(), 5);
+//                }},
+//                driver3.id(),
+//                truck3.id(),
+//                LocalDateTime.of(2023, 4, 10, 9, 30),
+//                truck3.maxWeight()
+//        );
+//
+//        Transport transport4 = new Transport(
+//                site4.address(),
+//                new LinkedList<>(Arrays.asList(site2.address(), site3.address(), site5.address())),
+//                new HashMap<>() {{
+//                    put(site2.address(), 4);
+//                    put(site3.address(), 1);
+//                    put(site5.address(), 3);
+//                }},
+//                driver4.id(),
+//                truck4.id(),
+//                LocalDateTime.of(2023, 4, 12, 14, 0),
+//                truck4.maxWeight()
+//        );
+//
+//        Transport transport5 = new Transport(
+//                site5.address(),
+//                new LinkedList<>(List.of(site4.address())),
+//                new HashMap<>() {{
+//                    put(site4.address(), 2);
+//                }},
+//                driver5.id(),
+//                truck5.id(),
+//                LocalDateTime.of(2023, 4, 15, 10, 0),
+//                truck5.maxWeight()
+//        );
 
-        Transport transport2 = new Transport(
-                site2.address(),
-                new LinkedList<>(Arrays.asList(site1.address(), site4.address())),
-                new HashMap<>() {{
-                    put(site1.address(), 3);
-                    put(site4.address(), 4);
-                }},
-                driver2.id(),
-                truck2.id(),
-                LocalDateTime.of(2023, 4, 7, 12, 0),
-                truck2.maxWeight()
-        );
-
-        Transport transport3 = new Transport(
-                site3.address(),
-                new LinkedList<>(Arrays.asList(site1.address(), site5.address())),
-                new HashMap<>() {{
-                    put(site1.address(), 2);
-                    put(site5.address(), 5);
-                }},
-                driver3.id(),
-                truck3.id(),
-                LocalDateTime.of(2023, 4, 10, 9, 30),
-                truck3.maxWeight()
-        );
-
-        Transport transport4 = new Transport(
-                site4.address(),
-                new LinkedList<>(Arrays.asList(site2.address(), site3.address(), site5.address())),
-                new HashMap<>() {{
-                    put(site2.address(), 4);
-                    put(site3.address(), 1);
-                    put(site5.address(), 3);
-                }},
-                driver4.id(),
-                truck4.id(),
-                LocalDateTime.of(2023, 4, 12, 14, 0),
-                truck4.maxWeight()
-        );
-
-        Transport transport5 = new Transport(
-                site5.address(),
-                new LinkedList<>(List.of(site4.address())),
-                new HashMap<>() {{
-                    put(site4.address(), 2);
-                }},
-                driver5.id(),
-                truck5.id(),
-                LocalDateTime.of(2023, 4, 15, 10, 0),
-                truck5.maxWeight()
-        );
-
-        ts.addTransport(transport1.toJson());
-        ts.addTransport(transport2.toJson());
-        ts.addTransport(transport3.toJson());
-        ts.addTransport(transport4.toJson());
-        ts.addTransport(transport5.toJson());
+//        ts.addTransport(transport1.toJson());
+//        ts.addTransport(transport2.toJson());
+//        ts.addTransport(transport3.toJson());
+//        ts.addTransport(transport4.toJson());
+//        ts.addTransport(transport5.toJson());
     }
     
     //==========================================================================|

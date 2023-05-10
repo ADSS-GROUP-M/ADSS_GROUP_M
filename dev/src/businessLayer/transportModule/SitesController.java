@@ -149,7 +149,8 @@ public class SitesController {
         }
     }
 
-    public Map<Pair<String,String>,Double> buildSitesDistances(List<String> route) throws TransportException {
+    public Map<Pair<String,String>,Double> buildSitesTravelTimes(List<String> route) throws TransportException {
+
         HashMap<Pair<String,String>,Double> distances = new HashMap<>();
         ListIterator<String> destinationsIterator = route.listIterator();
         String curr = destinationsIterator.next();
@@ -161,7 +162,7 @@ public class SitesController {
             siteRoute lookUpObject = siteRoute.getLookupObject(curr,next);
             double distance;
             try {
-                distance = sitesRoutesDAO.select(lookUpObject).distance();
+                distance = sitesRoutesDAO.select(lookUpObject).duration();
             } catch (DalException e) {
                 throw new TransportException(e.getMessage(),e);
             }

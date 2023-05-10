@@ -181,7 +181,7 @@ class TransportsControllerTest {
             HashMap<Pair<String,String>, Double> siteDistances = new HashMap<>(){{
                 put(new Pair<>(destination1.address(), destination2.address()), 100.0);
             }};
-            when(sitesController.buildSitesDistances(route)).thenReturn(siteDistances);
+            when(sitesController.buildSitesTravelTimes(route)).thenReturn(siteDistances);
             when(transportsDAO.exists(updatedTransport)).thenReturn(true);
 
 
@@ -429,7 +429,7 @@ class TransportsControllerTest {
             put(new Pair<>(destination1.address(), destination2.address()), 100.0);
         }};
         try {
-            when(sitesController.buildSitesDistances(route)).thenReturn(siteDistances);
+            when(sitesController.buildSitesTravelTimes(route)).thenReturn(siteDistances);
 
             //test
             transportController.initializeEstimatedArrivalTimes(transport);
@@ -479,7 +479,7 @@ class TransportsControllerTest {
             put(new Pair<>(source.address(), destination1.address()), 100.0);
             put(new Pair<>(destination1.address(), destination2.address()), 100.0);
         }};
-        when(sitesController.buildSitesDistances(route)).thenReturn(siteDistances);
+        when(sitesController.buildSitesTravelTimes(route)).thenReturn(siteDistances);
     }
 
     private void assertDeepEquals(Transport transport1, Transport transport2) {

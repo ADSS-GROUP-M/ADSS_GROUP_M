@@ -26,9 +26,7 @@ import java.util.*;
  */
 public class TransportsController {
 
-    public static final int MINIMUM_DRIVING_TIME = 5;
-    public static final double AVERAGE_SPEED = 80;
-    public static final long AVERAGE_TIME_PER_VISIT = 30;
+    public static final long AVERAGE_TIME_PER_VISIT = 15;
     private final TrucksController tc;
     private final DriversController dc;
     private final SitesController sc;
@@ -260,7 +258,7 @@ public class TransportsController {
         List<String> route = new LinkedList<>();
         route.add(transport.source());
         route.addAll(transport.destinations());
-        Map<Pair<String,String>,Double> distances = sc.buildSitesDistances(route);
+        Map<Pair<String,String>,Double> durations = sc.buildSitesTravelTimes(route);
 
         ListIterator<String> destinationsIterator = transport.destinations().listIterator();
         LocalTime time = transport.departureTime().toLocalTime();
@@ -269,7 +267,7 @@ public class TransportsController {
 
         if(destinationsIterator.hasNext()){
             next = destinationsIterator.next();
-            time = addTravelTime(time, curr, next, distances);
+            time = addTravelTime(time, curr, next, durations);
             estimatedArrivalTimes.put(next, time);
             curr = next;
         }
@@ -277,7 +275,7 @@ public class TransportsController {
         while(destinationsIterator.hasNext()){
             time = time.plusMinutes(AVERAGE_TIME_PER_VISIT);
             next = destinationsIterator.next();
-            time = addTravelTime(time, curr, next,distances);
+            time = addTravelTime(time, curr, next,durations);
             estimatedArrivalTimes.put(next, time);
             curr = next;
         }
@@ -285,7 +283,7 @@ public class TransportsController {
     }
 
     private static LocalTime addTravelTime(LocalTime time, String curr, String next, Map<Pair<String,String>,Double> distances){
-        long minutesToAdd = Math.max(MINIMUM_DRIVING_TIME,(long)((distances.get(new Pair<>(curr, next)) / AVERAGE_SPEED)*60));
+        long minutesToAdd = distances.get(new Pair<>(curr,next)).longValue();
         time = time.plusMinutes(minutesToAdd);
         return time;
     }

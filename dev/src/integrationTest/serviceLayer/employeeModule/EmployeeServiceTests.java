@@ -50,7 +50,7 @@ public class EmployeeServiceTests {
         userService = serviceFactory.userService();
         empService = serviceFactory.employeesService();
         //userService.createData(); // Loads the HR Manager user: "admin123" "123", clears the data in each test
-        empService.createData();
+//        empService.createData();
         admin = Response.fromJson(userService.getUser(adminUsername)).data(User.class);
         users = new User[30];
         String usernamer = "0";

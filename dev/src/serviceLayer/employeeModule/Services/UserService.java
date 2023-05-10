@@ -18,18 +18,6 @@ public class UserService {
 
     public UserService(UserController userController) {
         this.userController = userController;
-        try {
-            userController.createManagerUser(HR_MANAGER_USERNAME, "123");
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    /**
-     * This method resets the user data from the system.
-     */
-    public void resetData() {
-        userController.resetData();
     }
 
     public String login(String username, String password) {

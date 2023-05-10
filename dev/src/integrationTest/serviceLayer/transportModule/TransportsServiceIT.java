@@ -359,7 +359,7 @@ class TransportsServiceIT {
     private void initEmployeesModuleTestData() {
         // Used for testing Employees module integration:
         // Creating the test branch and shifts, recruiting and certifying the employees
-        es.createData();
+//        es.createData();
         es.updateBranchWorkingHours("admin123",HQAddress, LocalTime.of(0,0),LocalTime.of(14,0),LocalTime.of(14,0),LocalTime.of(23,0));
         es.createWeekShifts("admin123",HQAddress,shiftDate);
         es.setShiftNeededAmount("admin123",HQAddress,shiftDate,SShiftType.Morning,"Driver",1);

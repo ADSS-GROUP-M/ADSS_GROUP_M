@@ -9,7 +9,7 @@ import serviceLayer.employeeModule.Services.EmployeesService;
 
 public class TransportUI implements Menu {
 
-    private final UiData UIData;
+    private final UiData uiData;
     private final TransportsManagement transportsManagement;
     private final ItemListsManagement itemListsManagement;
     private final SitesManagement sitesManagement;
@@ -19,22 +19,22 @@ public class TransportUI implements Menu {
 
     public TransportUI(ServiceFactory factory){
         this.factory = factory;
-        UIData = new UiData(
+        uiData = new UiData(
                 factory.resourceManagementService(),
                 factory.itemListsService(),
                 factory.transportsService()
         );
         EmployeesService employeesService = factory.employeesService();
-        itemListsManagement = new ItemListsManagement(UIData,factory.itemListsService());
-        sitesManagement = new SitesManagement(UIData,factory.resourceManagementService());
-        trucksManagement = new TrucksManagement(UIData,factory.resourceManagementService());
-        driversManagement = new DriversManagement(UIData,factory.resourceManagementService());
-        transportsManagement = new TransportsManagement(UIData,factory.transportsService(), employeesService);
+        itemListsManagement = new ItemListsManagement(uiData,factory.itemListsService());
+        sitesManagement = new SitesManagement(uiData,factory.resourceManagementService());
+        trucksManagement = new TrucksManagement(uiData,factory.resourceManagementService());
+        driversManagement = new DriversManagement(uiData,factory.resourceManagementService());
+        transportsManagement = new TransportsManagement(uiData,factory.transportsService(), employeesService);
     }
 
     @Override
     public Menu run() {
-        Thread loader = new Thread(UIData::loadData);
+        Thread loader = new Thread(uiData::loadData);
         loader.start();
         printCommands();
         try {
@@ -42,7 +42,7 @@ public class TransportUI implements Menu {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        int option = UIData.readInt();
+        int option = uiData.readInt();
         switch (option) {
             case 1 -> transportsManagement.manageTransports();
             case 2 -> itemListsManagement.manageItemLists();
@@ -80,7 +80,7 @@ public class TransportUI implements Menu {
             System.out.println("2. Manage drivers");
             System.out.println("3. Manage trucks");
             System.out.println("4. Return to main menu");
-            int option = UIData.readInt();
+            int option = uiData.readInt();
             switch (option) {
                 case 1 -> sitesManagement.manageSites();
                 case 2 -> driversManagement.manageDrivers();

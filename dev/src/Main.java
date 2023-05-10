@@ -1,11 +1,13 @@
 import businessLayer.employeeModule.Authorization;
 import businessLayer.employeeModule.Branch;
+import businessLayer.employeeModule.Controllers.UserController;
 import businessLayer.employeeModule.Role;
 import businessLayer.transportModule.SitesController;
 import businessLayer.transportModule.SitesDistancesController;
 import businessLayer.transportModule.bingApi.BingAPI;
 import businessLayer.transportModule.bingApi.Point;
 import dataAccessLayer.DalFactory;
+import dataAccessLayer.dalUtils.DalException;
 import javafx.util.Pair;
 import objects.transportObjects.Driver;
 import objects.transportObjects.ItemList;
@@ -13,7 +15,6 @@ import objects.transportObjects.Site;
 import objects.transportObjects.Truck;
 import org.junit.jupiter.api.Test;
 import presentationLayer.employeeModule.View.MenuManager;
-import presentationLayer.transportModule.UiData;
 import serviceLayer.ServiceFactory;
 import serviceLayer.employeeModule.Objects.SShiftType;
 import serviceLayer.employeeModule.Services.EmployeesService;
@@ -22,9 +23,10 @@ import serviceLayer.transportModule.ItemListsService;
 import serviceLayer.transportModule.ResourceManagementService;
 import utils.transportUtils.TransportException;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
+
+import static serviceLayer.employeeModule.Services.UserService.HR_MANAGER_USERNAME;
 
 @SuppressWarnings("NewClassNamingConvention")
 public class Main {
@@ -33,32 +35,6 @@ public class Main {
         System.out.println("Welcome to the Transport-Employees CLI");
         new MenuManager().run();
     }
-
-    @Test
-    public void routeTest(){
-        try {
-            BingAPI api = new BingAPI();
-            SitesDistancesController controller = new SitesDistancesController(api);
-
-            Site site1 = new Site("branch1", "14441 s inglewood ave, hawthorne, ca 90250", "zone1", "111-111-1111", "John Smith", Site.SiteType.BRANCH, 0, 0);
-            Site site2 = new Site("branch2", "19503 s normandie ave, torrance, ca 90501", "zone1", "222-222-2222", "Jane Doe", Site.SiteType.BRANCH, 0, 0);
-            Site site3 = new Site("branch3", "22015 hawthorne blvd, torrance, ca 90503", "zone1", "333-333-3333", "Bob Johnson", Site.SiteType.BRANCH, 0, 0);
-            Point point1 =  controller.getCoordinates(site1);
-            Point point2 =  controller.getCoordinates(site2);
-            Point point3 =  controller.getCoordinates(site3);
-            site1 = new Site(site1,point1.latitude(),point1.longitude());
-            site2 = new Site(site2,point2.latitude(),point2.longitude());
-            site3 = new Site(site3,point3.latitude(),point3.longitude());
-
-            Map<Pair<String, String>, Pair<Double, Double>> response = controller.getTravelData(site1, Arrays.asList(site2,site3));
-            System.out.println();
-
-
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
 
     @Test
     public void generate(){
@@ -72,10 +48,11 @@ public class Main {
     public static void generateData(){
         deleteData();
         ServiceFactory factory = new ServiceFactory();
+        UserController uc = factory.businessFactory().userController();
         us = factory.userService();
         es = factory.employeesService();
         ItemListsService ils = factory.itemListsService();
-        initializeUserData();
+        initializeUserData(uc);
         generateSites(factory.businessFactory().sitesController());
         generateItemLists(ils);
         generateTrucks(factory.resourceManagementService());
@@ -158,9 +135,14 @@ public class Main {
 
     }
 
-    public static void initializeUserData() {
-        us.createUser(UserService.HR_MANAGER_USERNAME, UserService.TRANSPORT_MANAGER_USERNAME, "123");
-        us.authorizeUser(UserService.HR_MANAGER_USERNAME, UserService.TRANSPORT_MANAGER_USERNAME, Authorization.TransportManager.name());
+    public static void initializeUserData(UserController uc) {
+        try {
+            uc.createManagerUser(HR_MANAGER_USERNAME, "123");
+        } catch (DalException e) {
+            throw new RuntimeException(e);
+        }
+        us.createUser(HR_MANAGER_USERNAME, UserService.TRANSPORT_MANAGER_USERNAME, "123");
+        us.authorizeUser(HR_MANAGER_USERNAME, UserService.TRANSPORT_MANAGER_USERNAME, Authorization.TransportManager.name());
     }
 
     public static void initializeBranches(List<Driver> drivers) {
@@ -177,10 +159,10 @@ public class Main {
     }
 
     public static void initializeHeadquarters(List<Driver> drivers) {
-        es.recruitEmployee(UserService.HR_MANAGER_USERNAME, Branch.HEADQUARTERS_ID, "Moshe Biton", "111","Hapoalim 12 230", 50, LocalDate.of(2023,2,2),"Employment Conditions Test", "More details about Moshe");
-        es.certifyEmployee(UserService.HR_MANAGER_USERNAME,"111", Role.ShiftManager.name());
-        es.certifyEmployee(UserService.HR_MANAGER_USERNAME,"111",Role.Storekeeper.name());
-        us.createUser(UserService.HR_MANAGER_USERNAME,"111","1234");
+        es.recruitEmployee(HR_MANAGER_USERNAME, Branch.HEADQUARTERS_ID, "Moshe Biton", "111","Hapoalim 12 230", 50, LocalDate.of(2023,2,2),"Employment Conditions Test", "More details about Moshe");
+        es.certifyEmployee(HR_MANAGER_USERNAME,"111", Role.ShiftManager.name());
+        es.certifyEmployee(HR_MANAGER_USERNAME,"111",Role.Storekeeper.name());
+        us.createUser(HR_MANAGER_USERNAME,"111","1234");
 
         initializeDrivers(drivers);
     }
@@ -188,27 +170,27 @@ public class Main {
 
     public static void initializeDrivers(List<Driver> drivers) {
         for (Driver driver : drivers) {
-            es.recruitEmployee(UserService.HR_MANAGER_USERNAME, Branch.HEADQUARTERS_ID, driver.name(), driver.id(), "Hapoalim 12 230", 40, EMPLOYMENT_DATE, "Employment Conditions Test", "More details about Driver");
-            es.certifyDriver(UserService.HR_MANAGER_USERNAME, driver.id(), driver.licenseType().toString());
-            us.createUser(UserService.HR_MANAGER_USERNAME, driver.id(), "123");
+            es.recruitEmployee(HR_MANAGER_USERNAME, Branch.HEADQUARTERS_ID, driver.name(), driver.id(), "Hapoalim 12 230", 40, EMPLOYMENT_DATE, "Employment Conditions Test", "More details about Driver");
+            es.certifyDriver(HR_MANAGER_USERNAME, driver.id(), driver.licenseType().toString());
+            us.createUser(HR_MANAGER_USERNAME, driver.id(), "123");
         }
     }
 
     public static void initializeStorekeepers(String branchId,List<String> storekeeperIds){
         for (String storekeeperId : storekeeperIds) {
-            es.recruitEmployee(UserService.HR_MANAGER_USERNAME, branchId, "Name " + storekeeperId, storekeeperId, "Hapoalim 12 250", 30, LocalDate.of(2020, 2, 2), "Employment Conditions Test", "More details about Storekeeper");
-            es.certifyEmployee(UserService.HR_MANAGER_USERNAME, storekeeperId, Role.Storekeeper.name());
-            us.createUser(UserService.HR_MANAGER_USERNAME, storekeeperId, "123");
+            es.recruitEmployee(HR_MANAGER_USERNAME, branchId, "Name " + storekeeperId, storekeeperId, "Hapoalim 12 250", 30, LocalDate.of(2020, 2, 2), "Employment Conditions Test", "More details about Storekeeper");
+            es.certifyEmployee(HR_MANAGER_USERNAME, storekeeperId, Role.Storekeeper.name());
+            us.createUser(HR_MANAGER_USERNAME, storekeeperId, "123");
         }
     }
 
     public static void initializeShiftDay(List<Driver> morningDrivers, List<Driver> eveningDrivers,LocalDate date) {
         // Shift Creation
-        es.createShiftDay(UserService.HR_MANAGER_USERNAME,Branch.HEADQUARTERS_ID,date);
+        es.createShiftDay(HR_MANAGER_USERNAME,Branch.HEADQUARTERS_ID,date);
 
         for (int i = 2; i <= 9; i++) {
             String branchId = "branch"+i;
-            es.createShiftDay(UserService.HR_MANAGER_USERNAME,branchId,date);
+            es.createShiftDay(HR_MANAGER_USERNAME,branchId,date);
         }
 
         // Drivers Assignment
@@ -233,20 +215,20 @@ public class Main {
 
     public static void assignDrivers(List<Driver> drivers, LocalDate date, SShiftType shiftType) {
         // Assign Drivers
-        es.setShiftNeededAmount(UserService.HR_MANAGER_USERNAME,Branch.HEADQUARTERS_ID,date, shiftType,"Driver",drivers.size());
+        es.setShiftNeededAmount(HR_MANAGER_USERNAME,Branch.HEADQUARTERS_ID,date, shiftType,"Driver",drivers.size());
         for(Driver driver : drivers) {
             es.requestShift(driver.id(), Branch.HEADQUARTERS_ID, date, shiftType, "Driver");
         }
-        es.setShiftEmployees(UserService.HR_MANAGER_USERNAME,Branch.HEADQUARTERS_ID,date, shiftType,"Driver", drivers.stream().map(d->d.id()).toList());
+        es.setShiftEmployees(HR_MANAGER_USERNAME,Branch.HEADQUARTERS_ID,date, shiftType,"Driver", drivers.stream().map(d->d.id()).toList());
     }
 
     public static void assignShiftStorekeepers(String branchId, List<String> storekeeperIds, LocalDate date, SShiftType shiftType) {
         // Assign Storekeepers
-        es.setShiftNeededAmount(UserService.HR_MANAGER_USERNAME, branchId, date, shiftType, "Storekeeper", storekeeperIds.size());
+        es.setShiftNeededAmount(HR_MANAGER_USERNAME, branchId, date, shiftType, "Storekeeper", storekeeperIds.size());
         for (String storekeeperId : storekeeperIds) {
             es.requestShift(storekeeperId, branchId, date, shiftType, "Storekeeper");
         }
-        es.setShiftEmployees(UserService.HR_MANAGER_USERNAME, branchId, date, shiftType, "Storekeeper", storekeeperIds);
+        es.setShiftEmployees(HR_MANAGER_USERNAME, branchId, date, shiftType, "Storekeeper", storekeeperIds);
     }
 
     public static void generateItemLists(ItemListsService ils) {

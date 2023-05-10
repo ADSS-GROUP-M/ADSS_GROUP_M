@@ -28,12 +28,12 @@ public class Branch {
     }
 
 
-    public Branch(String address, LocalTime morningShiftStart,LocalTime morningShiftFinish, LocalTime eveningShiftStart, LocalTime eveningShiftFinish){
+    public Branch(String name, LocalTime morningShiftStart,LocalTime morningShiftFinish, LocalTime eveningShiftStart, LocalTime eveningShiftFinish){
         this.morningStart = morningShiftStart;
         this.morningEnd = morningShiftFinish;
         this.eveningStart = eveningShiftStart;
         this.eveningEnd = eveningShiftFinish;
-        this.name = address;
+        this.name = name;
     }
 
     public LocalTime getMorningStart() {

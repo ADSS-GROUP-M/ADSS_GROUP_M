@@ -35,10 +35,10 @@ class BranchesDAOTest {
         Site site2 = new Site("testbranch2", "address2", "zone2", "name2","phone2", Site.SiteType.BRANCH);
         Site site3 = new Site("testbranch3", "address3", "zone3", "name3","phone3", Site.SiteType.BRANCH);
 
-        branch1 = new Branch("address1");
-        branch2 = new Branch("address2");
-        branch3 = new Branch("address3", LocalTime.of(9,0),LocalTime.of(13,0),LocalTime.of(13,0),LocalTime.of(20,0));
-        branch4 = new Branch("address2"); // Same name as branch2
+        branch1 = new Branch("testbranch1");
+        branch2 = new Branch("testbranch2");
+        branch3 = new Branch("testbranch3", LocalTime.of(9,0),LocalTime.of(13,0),LocalTime.of(13,0),LocalTime.of(20,0));
+        branch4 = new Branch("testbranch2"); // Same name as branch2
 
         try {
             factory = new DalFactory(TESTING_DB_NAME);

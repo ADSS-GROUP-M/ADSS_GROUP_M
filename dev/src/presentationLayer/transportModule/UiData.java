@@ -121,21 +121,21 @@ public class UiData {
         //!!!!!!!!!!!!! CHAT GPT IS KING !!!!!!!!!!!
 
         // generate sites with random data:
-        Site site1 = new Site("TODO: INSERT NAME HERE", "14441 s inglewood ave, hawthorne, ca 90250", "zone1", "111-111-1111", "John Smith", Site.SiteType.BRANCH, 0, 0);
-        Site site2 = new Site("TODO: INSERT NAME HERE", "19503 s normandie ave, torrance, ca 90501", "zone1", "222-222-2222", "Jane Doe", Site.SiteType.BRANCH, 0, 0);
-        Site site3 = new Site("TODO: INSERT NAME HERE", "22015 hawthorne blvd, torrance, ca 90503", "zone1", "333-333-3333", "Bob Johnson", Site.SiteType.BRANCH, 0, 0);
-        Site site4 = new Site("TODO: INSERT NAME HERE", "2100 n long beach blvd, compton, ca 90221", "zone2", "444-444-4444", "Samantha Lee", Site.SiteType.BRANCH, 0, 0);
-        Site site5 = new Site("TODO: INSERT NAME HERE", "19340 hawthorne blvd, torrance, ca 90503", "zone2", "555-555-5555", "Mike Brown", Site.SiteType.BRANCH, 0, 0);
-        Site site6 = new Site("TODO: INSERT NAME HERE", "4651 firestone blvd, south gate, ca 90280", "zone2", "666-666-6666", "Emily Wilson", Site.SiteType.BRANCH, 0, 0);
-        Site site7 = new Site("TODO: INSERT NAME HERE", "1301 n victory pl, burbank, ca 91502", "zone3", "777-777-7777", "Tom Kim", Site.SiteType.BRANCH, 0, 0);
-//        Site site8 = new Site("zone3", "6433 fallbrook ave, west hills, ca 91307", "888-888-8888", "Amanda Garcia", Site.SiteType.BRANCH, 0, 0);
-//        Site site9 = new Site("zone4", "8333 van nuys blvd, panorama city, ca 91402", "123-456-7890", "David Kim", Site.SiteType.BRANCH, 0, 0);
-        Site site10 = new Site("TODO: INSERT NAME HERE", "8500 washington blvd, pico rivera, ca 90660", "zone4", "456-789-0123", "William Davis", Site.SiteType.SUPPLIER, 0, 0);
-        Site site11 = new Site("TODO: INSERT NAME HERE", "20226 avalon blvd, carson, ca 90746", "zone3", "999-999-9999", "Steve Chen", Site.SiteType.SUPPLIER, 0, 0);
-        Site site12 = new Site("TODO: INSERT NAME HERE", "9001 apollo way, downey, ca 90242", "zone4", "345-678-9012", "Andrew Chen", Site.SiteType.SUPPLIER, 0, 0);
-        Site site13 = new Site("TODO: INSERT NAME HERE", "2770 e carson st, lakewood, ca 90712", "zone5", "123-456-7890", "Andrew Chen", Site.SiteType.SUPPLIER, 0,0);
-        Site site14 = new Site("TODO: INSERT NAME HERE", "14501 lakewood blvd, paramount, ca 90723", "zone4", "234-567-8901", "Jessica Park", Site.SiteType.SUPPLIER, 0, 0);
-        Site site15 = new Site("TODO: INSERT NAME HERE", "3705 e south st, long beach, ca 90805", "zone5", "123-456-7890", "Jessica Park", Site.SiteType.LOGISTICAL_CENTER, 0,0);
+//        Site site1 = new Site("TODO: INSERT NAME HERE", "14441 s inglewood ave, hawthorne, ca 90250", "zone1", "111-111-1111", "John Smith", Site.SiteType.BRANCH, 0, 0);
+//        Site site2 = new Site("TODO: INSERT NAME HERE", "19503 s normandie ave, torrance, ca 90501", "zone1", "222-222-2222", "Jane Doe", Site.SiteType.BRANCH, 0, 0);
+//        Site site3 = new Site("TODO: INSERT NAME HERE", "22015 hawthorne blvd, torrance, ca 90503", "zone1", "333-333-3333", "Bob Johnson", Site.SiteType.BRANCH, 0, 0);
+//        Site site4 = new Site("TODO: INSERT NAME HERE", "2100 n long beach blvd, compton, ca 90221", "zone2", "444-444-4444", "Samantha Lee", Site.SiteType.BRANCH, 0, 0);
+//        Site site5 = new Site("TODO: INSERT NAME HERE", "19340 hawthorne blvd, torrance, ca 90503", "zone2", "555-555-5555", "Mike Brown", Site.SiteType.BRANCH, 0, 0);
+//        Site site6 = new Site("TODO: INSERT NAME HERE", "4651 firestone blvd, south gate, ca 90280", "zone2", "666-666-6666", "Emily Wilson", Site.SiteType.BRANCH, 0, 0);
+//        Site site7 = new Site("TODO: INSERT NAME HERE", "1301 n victory pl, burbank, ca 91502", "zone3", "777-777-7777", "Tom Kim", Site.SiteType.BRANCH, 0, 0);
+////        Site site8 = new Site("zone3", "6433 fallbrook ave, west hills, ca 91307", "888-888-8888", "Amanda Garcia", Site.SiteType.BRANCH, 0, 0);
+////        Site site9 = new Site("zone4", "8333 van nuys blvd, panorama city, ca 91402", "123-456-7890", "David Kim", Site.SiteType.BRANCH, 0, 0);
+//        Site site10 = new Site("TODO: INSERT NAME HERE", "8500 washington blvd, pico rivera, ca 90660", "zone4", "456-789-0123", "William Davis", Site.SiteType.SUPPLIER, 0, 0);
+//        Site site11 = new Site("TODO: INSERT NAME HERE", "20226 avalon blvd, carson, ca 90746", "zone3", "999-999-9999", "Steve Chen", Site.SiteType.SUPPLIER, 0, 0);
+//        Site site12 = new Site("TODO: INSERT NAME HERE", "9001 apollo way, downey, ca 90242", "zone4", "345-678-9012", "Andrew Chen", Site.SiteType.SUPPLIER, 0, 0);
+//        Site site13 = new Site("TODO: INSERT NAME HERE", "2770 e carson st, lakewood, ca 90712", "zone5", "123-456-7890", "Andrew Chen", Site.SiteType.SUPPLIER, 0,0);
+//        Site site14 = new Site("TODO: INSERT NAME HERE", "14501 lakewood blvd, paramount, ca 90723", "zone4", "234-567-8901", "Jessica Park", Site.SiteType.SUPPLIER, 0, 0);
+//        Site site15 = new Site("TODO: INSERT NAME HERE", "3705 e south st, long beach, ca 90805", "zone5", "123-456-7890", "Jessica Park", Site.SiteType.LOGISTICAL_CENTER, 0,0);
 
 
                 // generate drivers with random data:
@@ -165,21 +165,21 @@ public class UiData {
         rms.addTruck(truck4.toJson());
         rms.addTruck(truck5.toJson());
 
-        rms.addSite(site1.toJson());
-        rms.addSite(site2.toJson());
-        rms.addSite(site3.toJson());
-        rms.addSite(site4.toJson());
-        rms.addSite(site5.toJson());
-        rms.addSite(site6.toJson());
-        rms.addSite(site7.toJson());
+//        rms.addSite(site1.toJson());
+//        rms.addSite(site2.toJson());
+//        rms.addSite(site3.toJson());
+//        rms.addSite(site4.toJson());
+//        rms.addSite(site5.toJson());
+//        rms.addSite(site6.toJson());
+//        rms.addSite(site7.toJson());
 //        rms.addSite(site8.toJson());
 //        rms.addSite(site9.toJson());
-        rms.addSite(site10.toJson());
-        rms.addSite(site11.toJson());
-        rms.addSite(site12.toJson());
-        rms.addSite(site13.toJson());
-        rms.addSite(site14.toJson());
-        rms.addSite(site15.toJson());
+//        rms.addSite(site10.toJson());
+//        rms.addSite(site11.toJson());
+//        rms.addSite(site12.toJson());
+//        rms.addSite(site13.toJson());
+//        rms.addSite(site14.toJson());
+//        rms.addSite(site15.toJson());
 
 
         // generate item lists with random data:

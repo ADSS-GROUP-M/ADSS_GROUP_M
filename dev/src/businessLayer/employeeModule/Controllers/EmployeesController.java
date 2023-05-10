@@ -173,22 +173,14 @@ public class EmployeesController {
     }
 
     public List<Employee> getAvailableDrivers(LocalDateTime dateTime) throws EmployeeException {
-        List<Employee> availableDrivers = new ArrayList<>();
-        List<Branch> branches;
-        try {
-            branches = branchesDAO.selectAll();
-        } catch (DalException e) {
-            throw new EmployeeException(e.getMessage(),e);
-        }
 
-        for (Branch branch : branches) {
-            try{
-                ShiftType shiftType = branch.getShiftType(dateTime.toLocalTime()); // Could throw an exception if the given time is not in any shift
-                Map<Role, List<Employee>> shiftWorkers = shiftsController.getShift(branch.name(), dateTime.toLocalDate(), shiftType).getShiftWorkers();
-                if (shiftWorkers.containsKey(Role.Driver)) {
-                    availableDrivers.addAll(shiftWorkers.get(Role.Driver));
-                }
-            }catch (EmployeeException ignored){}
+        List<Employee> availableDrivers = new ArrayList<>();
+
+        Branch branch = getBranch(Branch.HEADQUARTERS_ID);
+        ShiftType shiftType = branch.getShiftType(dateTime.toLocalTime()); // Could throw an exception if the given time is not in any shift
+        Map<Role, List<Employee>> shiftWorkers = shiftsController.getShift(Branch.HEADQUARTERS_ID, dateTime.toLocalDate(), shiftType).getShiftWorkers();
+        if (shiftWorkers.containsKey(Role.Driver)) {
+            availableDrivers.addAll(shiftWorkers.get(Role.Driver));
         }
 
         if (availableDrivers.isEmpty()) {

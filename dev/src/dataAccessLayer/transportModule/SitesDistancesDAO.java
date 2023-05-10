@@ -196,7 +196,7 @@ public class SitesDistancesDAO extends ManyToManyDAO<DistanceBetweenSites> {
         return new DistanceBetweenSites(
                 resultSet.getString("source"),
                 resultSet.getString("destination"),
-                resultSet.getInt("distance"),
+                resultSet.getDouble("distance"),
                 resultSet.getDouble("duration")
         );
     }

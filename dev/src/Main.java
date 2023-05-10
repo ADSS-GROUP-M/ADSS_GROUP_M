@@ -72,8 +72,8 @@ public class Main {
         es = factory.employeesService();
         ResourceManagementService rms = factory.resourceManagementService();
         ItemListsService ils = factory.itemListsService();
-        generateSites(rms);
         initializeUserData();
+        generateSites(rms);
         generateItemLists(ils);
 
         // Driver Data

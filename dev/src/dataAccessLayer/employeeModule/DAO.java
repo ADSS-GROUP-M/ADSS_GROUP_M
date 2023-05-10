@@ -9,6 +9,7 @@ import dataAccessLayer.dalUtils.SQLExecutor;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -101,10 +102,28 @@ public abstract class DAO {
         }
         return ans;
     }
+
+    protected List<Object> selectBy(Object[] columns, Object[] values) throws DalException {
+        List<Object> ans = new ArrayList<>();
+        try {
+            String queryString = String.format("SELECT * FROM %s WHERE",TABLE_NAME);
+            for(int i = 0; i < columns.length; i++) {
+                queryString += String.format(" %s = '%s'",columns[i],values[i]);
+            }
+            OfflineResultSet resultSet = cursor.executeRead(queryString);
+            while(resultSet.next()){
+                ans.add(convertReaderToObject(resultSet));
+            }
+        } catch (SQLException e) {
+            throw new DalException(e);
+        }
+        return ans;
+    }
+
     protected List<Object> selectAll() throws DalException {
         String queryString = String.format("SELECT * FROM %s",TABLE_NAME);
         OfflineResultSet resultSet;
-        List<Object> ans = new LinkedList<>();
+        List<Object> ans = new ArrayList<>();
         try {
             resultSet = cursor.executeRead(queryString);
         } catch (SQLException e) {
@@ -129,6 +148,18 @@ public abstract class DAO {
         try {
             String queryString = String.format("DELETE FROM %s WHERE", this.TABLE_NAME);
             queryString = queryString.concat(createConditionForPrimaryKey(idValues));
+            cursor.executeWrite(queryString);
+        } catch (SQLException e) {
+            throw new DalException(e);
+        }
+    }
+
+    protected void deleteBy(Object[] columns, Object[] values) throws DalException {
+        try {
+            String queryString = String.format("DELETE FROM %s WHERE", this.TABLE_NAME);
+            for(int i = 0; i < columns.length; i++) {
+                queryString += String.format(" %s = '%s'",columns[i],values[i]);
+            }
             cursor.executeWrite(queryString);
         } catch (SQLException e) {
             throw new DalException(e);

@@ -62,7 +62,7 @@ public class SitesController {
                 distancesDAO.insertAll(distancesController.createDistanceObjects(site,otherSites));
             }
             if(site.siteType() == Site.SiteType.BRANCH){
-                employeesService.createBranch(TRANSPORT_MANAGER_USERNAME,site.address());
+                employeesService.createBranch(TRANSPORT_MANAGER_USERNAME,site.name());
             }
 
         } catch (DalException e) {

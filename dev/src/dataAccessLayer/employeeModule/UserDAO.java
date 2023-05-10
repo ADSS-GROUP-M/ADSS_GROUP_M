@@ -80,16 +80,16 @@ public class UserDAO extends DAO {
     }
 
     public void update(User user) throws DalException {
-        if(!this.cache.containsValue(user))
-            throw new DalException("Object doesn't exist in the database! Create it first.");
-        if(!this.cache.containsKey(getHashCode(user.getUsername())) || this.cache.get(getHashCode(user.getUsername()))!= user)
+        //if(!this.cache.containsValue(user))
+        //    throw new DalException("Object doesn't exist in the database! Create it first.");
+        if(!this.cache.containsKey(getHashCode(user.getUsername()))) //|| this.cache.get(getHashCode(user.getUsername()))!= user)
             throw new DalException("Cannot change primary key of an object. You must delete it and then create a new one.");
         Exception ex = null;
         try {
             Object[] key = {user.getUsername()};
             this.userAuthorizationsDAO.update(user);
-            String queryString = String.format("UPDATE "+TABLE_NAME+" SET %s = ? , %s = ? WHERE",
-                    Columns.Username.name(), Columns.Password.name());
+            String queryString = String.format("UPDATE "+TABLE_NAME+" SET %s = '%s' , %s = '%s' WHERE",
+                    Columns.Username.name(), user.getUsername(), Columns.Password.name(), user.getPassword());
             queryString = queryString.concat(createConditionForPrimaryKey(key));
             if (cursor.executeWrite(queryString) != 1)
                 throw new DalException("No user with username " + user.getUsername() + " was found");
@@ -110,6 +110,7 @@ public class UserDAO extends DAO {
             userAuthorizationsDAO.clearTable();
         } catch (Exception ignore) {}
         super.clearTable();
+        this.cache.clear();
     }
 
     User select(String id) throws DalException {

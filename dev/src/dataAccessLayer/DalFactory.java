@@ -6,6 +6,7 @@ import dataAccessLayer.dalUtils.SQLExecutorProductionImpl;
 import dataAccessLayer.dalUtils.SQLExecutorTestingImpl;
 import dataAccessLayer.employeeModule.*;
 import dataAccessLayer.transportModule.*;
+import serviceLayer.employeeModule.Services.UserService;
 
 public class DalFactory {
 
@@ -13,6 +14,7 @@ public class DalFactory {
 
     private EmployeeDAO employeeDAO;
     private UserDAO userDAO;
+    private UserAuthorizationsDAO userAuthorizationsDAO;
     private ShiftDAO shiftDAO;
     private TrucksDAO trucksDAO;
     private ItemListsDAO itemListsDAO;
@@ -50,7 +52,7 @@ public class DalFactory {
         driversDAO = new DriversDAO(cursor);
 
         //============== dependencies ============== |
-        /*(1)*/ UserAuthorizationsDAO userAuthorizationsDAO = new UserAuthorizationsDAO(cursor);
+        /*(1)*/ userAuthorizationsDAO = new UserAuthorizationsDAO(cursor);
         /*(2)*/ userDAO = new UserDAO(cursor,userAuthorizationsDAO);
         //========================================== |
 
@@ -92,9 +94,14 @@ public class DalFactory {
         return userDAO;
     }
 
+    public UserAuthorizationsDAO userAuthorizationsDAO() {
+        return userAuthorizationsDAO;
+    }
+
     public ShiftDAO shiftDAO() {
         return shiftDAO;
     }
+
     public TrucksDAO trucksDAO() {
         return trucksDAO;
     }

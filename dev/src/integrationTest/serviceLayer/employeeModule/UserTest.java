@@ -26,7 +26,7 @@ public class UserTest {
     public void setUp() throws Exception {
         ServiceFactory serviceFactory = new ServiceFactory(TESTING_DB_NAME);
         userService = serviceFactory.userService();
-        userService.createData(); // Loads the HR Manager user: "admin123" "123", clears the data in each test
+        //userService.createData(); // Loads the HR Manager user: "admin123" "123", clears the data in each test
         user = Response.fromJson(userService.getUser(username)).data(User.class);
     }
 

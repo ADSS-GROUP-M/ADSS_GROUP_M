@@ -2,10 +2,10 @@ package dataAccessLayer.employeeModule;
 
 import businessLayer.employeeModule.Branch;
 import dataAccessLayer.DalFactory;
-import dataAccessLayer.dalUtils.DalException;
+import dataAccessLayer.dalAbstracts.SQLExecutor;
 import dataAccessLayer.dalUtils.OfflineResultSet;
-import dataAccessLayer.dalUtils.SQLExecutor;
 import dataAccessLayer.transportModule.SitesDAO;
+import exceptions.DalException;
 import objects.transportObjects.Site;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

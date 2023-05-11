@@ -2,7 +2,7 @@ package serviceLayer;
 
 
 import businessLayer.BusinessFactory;
-import dataAccessLayer.dalUtils.DalException;
+import exceptions.DalException;
 import serviceLayer.employeeModule.Services.EmployeesService;
 import serviceLayer.employeeModule.Services.UserService;
 import serviceLayer.transportModule.ItemListsService;

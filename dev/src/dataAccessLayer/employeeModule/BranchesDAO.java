@@ -1,10 +1,10 @@
 package dataAccessLayer.employeeModule;
 
 import businessLayer.employeeModule.Branch;
-import dataAccessLayer.dalUtils.DalException;
+import dataAccessLayer.dalAbstracts.ManyToManyDAO;
+import dataAccessLayer.dalAbstracts.SQLExecutor;
 import dataAccessLayer.dalUtils.OfflineResultSet;
-import dataAccessLayer.dalUtils.SQLExecutor;
-import dataAccessLayer.transportModule.abstracts.ManyToManyDAO;
+import exceptions.DalException;
 import javafx.util.Pair;
 
 import java.sql.SQLException;
@@ -150,7 +150,8 @@ public class BranchesDAO extends ManyToManyDAO<Branch> {
     }
 
     /**
-     * @param object@throws DalException if an error occurred while trying to delete the object
+     * @param object
+     * @throws DalException if an error occurred while trying to delete the object
      */
     @Override
     public void delete(Branch object) throws DalException {
@@ -180,9 +181,13 @@ public class BranchesDAO extends ManyToManyDAO<Branch> {
     }
 
     @Override
-    public boolean exists(Branch object) throws DalException {
-        //TODO: implement
-        throw new UnsupportedOperationException("Not implemented");
+    public boolean exists(Branch object) {
+        try {
+            select(object);
+            return true;
+        } catch (DalException e) {
+            return false;
+        }
     }
 
     @Override

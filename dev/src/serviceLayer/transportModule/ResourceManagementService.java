@@ -3,12 +3,12 @@ package serviceLayer.transportModule;
 import businessLayer.transportModule.DriversController;
 import businessLayer.transportModule.SitesController;
 import businessLayer.transportModule.TrucksController;
+import exceptions.TransportException;
 import objects.transportObjects.Driver;
 import objects.transportObjects.Site;
 import objects.transportObjects.Truck;
 import utils.JsonUtils;
 import utils.Response;
-import utils.transportUtils.TransportException;
 
 public class ResourceManagementService {
 

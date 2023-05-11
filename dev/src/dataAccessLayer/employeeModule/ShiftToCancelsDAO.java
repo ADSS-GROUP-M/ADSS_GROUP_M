@@ -1,107 +1,288 @@
 package dataAccessLayer.employeeModule;
 
 import businessLayer.employeeModule.Shift;
-import dataAccessLayer.dalUtils.DalException;
+import dataAccessLayer.dalAbstracts.ManyToManyDAO;
+import dataAccessLayer.dalAbstracts.SQLExecutor;
+import dataAccessLayer.dalAssociationClasses.employeeModule.ShiftCancel;
 import dataAccessLayer.dalUtils.OfflineResultSet;
-import dataAccessLayer.dalUtils.SQLExecutor;
+import exceptions.DalException;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-public class ShiftToCancelsDAO extends DAO{
-    private static final String[] primaryKeys = {
-            Columns.ShiftDate.name(), Columns.ShiftType.name(), Columns.Branch.name(), Columns.CancelAction.name()
-    };
-    private static final String tableName = "SHIFT_CANCELS";
-    private static ShiftToCancelsDAO instance;
-    private HashMap<Integer, List<String>> cache;
+public class ShiftToCancelsDAO extends ManyToManyDAO<ShiftCancel> {
+
+    private static final String[] types = {"TEXT", "TEXT" , "TEXT", "TEXT"};
+    private static final String[] parent_tables = {"SHIFTS"};
+    private static final String[] primary_keys = {Columns.BranchId.name(), Columns.ShiftDate.name(), Columns.ShiftType.name(), Columns.CancelAction.name()};
+    private static final String[][] foreign_keys = {{Columns.BranchId.name(), Columns.ShiftDate.name(), Columns.ShiftType.name()}};
+    private static final String[][] references = {{"Branch", "ShiftDate", "ShiftType"}};
+    public static final String tableName = "SHIFT_CANCELS";
+
     private enum Columns {
+        BranchId,
         ShiftDate,
         ShiftType,
-        Branch,
-        CancelAction;
+        CancelAction
     }
-    public ShiftToCancelsDAO(SQLExecutor cursor)throws DalException {
+
+    public ShiftToCancelsDAO(SQLExecutor cursor) throws DalException{
         super(cursor,
-				tableName,
-                primaryKeys,
-                new String[]{"TEXT", "TEXT", "TEXT", "TEXT"},
-                "ShiftDate",
-                "ShiftType",
-                "Branch",
-                "CancelAction"
+                tableName,
+                parent_tables,
+                types,
+                primary_keys,
+                foreign_keys,
+                references,
+                Columns.BranchId.name(),
+                Columns.ShiftDate.name(),
+                Columns.ShiftType.name(),
+                Columns.CancelAction.name()
         );
-        this.cache = new HashMap<>();
+        initTable();
     }
 
-    private int getHashCode(LocalDate dt, Shift.ShiftType st, String branch){
-        return (formatLocalDate(dt) + st.name() + branch).hashCode();
-    }
-
-    List<String> getAll(LocalDate dt, Shift.ShiftType st, String branch) throws DalException {
-        if (this.cache.get(getHashCode(dt,st,branch))!=null)
-            return this.cache.get(getHashCode(dt,st,branch));
-        List<String> ans = this.select(dt,st.name(),branch);
-        this.cache.put(getHashCode(dt,st,branch),ans);
-        return ans;
-    }
-
-    void create(Shift shift) throws DalException {
+    /**
+     * @param object getLookUpObject(identifier) of the object to select
+     * @return the object with the given identifier
+     * @throws DalException if an error occurred while trying to select the object
+     */
+    @Override
+    public ShiftCancel select(ShiftCancel object) throws DalException {
+        String query = String.format("SELECT * FROM %s WHERE %s = '%s' AND %s = '%s' AND %s = '%s' AND %s = '%s';",
+                TABLE_NAME,
+                Columns.BranchId.name(),
+                object.branchId(),
+                Columns.ShiftDate.name(),
+                object.shiftDate().toString(),
+                Columns.ShiftType.name(),
+                object.shiftType().name(),
+                Columns.CancelAction.name(),
+                object.cancelAction()
+        );
+        OfflineResultSet resultSet;
         try {
-            if(this.cache.containsKey(getHashCode(shift.getShiftDate(), shift.getShiftType(), shift.getBranch())))
-                throw new DalException("Key already exists!");
-            List<String> entries = new LinkedList<>();
-            for(String str: shift.getShiftCancels()) {
-                String queryString = String.format("INSERT INTO " + TABLE_NAME + "(%s, %s, %s, %s) VALUES('%s','%s','%s','%s')",
-                        ShiftToCancelsDAO.Columns.ShiftDate.name(), ShiftToCancelsDAO.Columns.ShiftType.name(), ShiftToCancelsDAO.Columns.Branch.name(), Columns.CancelAction.name(),
-                        formatLocalDate(shift.getShiftDate()), shift.getShiftType().name(), shift.getBranch(), str);
-                cursor.executeWrite(queryString);
-                entries.add(str);
-            }
-            this.cache.put(getHashCode(shift.getShiftDate(), shift.getShiftType(), shift.getBranch()),entries );
+            resultSet = cursor.executeRead(query);
         } catch (SQLException e) {
-            throw new DalException(e);
+            throw new DalException("Failed to select shift cancel action", e);
+        }
+        if(resultSet.next()) {
+            ShiftCancel fetched = getObjectFromResultSet(resultSet);
+            cache.put(fetched);
+            return fetched;
+        } else {
+            throw new DalException("The cancel action was not found in shift " + object.shiftDate() + " " + object.shiftType() + " in branch " + object.branchId());
+        }
+
+    }
+
+    /**
+     * @return All the objects in the table corresponding to the given shift identifiers, as a list of strings
+     * @throws DalException if an error occurred while trying to select the objects
+     */
+    public List<String> selectAllByShiftIds(String branchId, LocalDate shiftDate, Shift.ShiftType shiftType) throws DalException {
+        String query = String.format("SELECT * FROM %s WHERE %s = '%s' AND %s = '%s' AND %s = '%s';",
+                TABLE_NAME,
+                Columns.BranchId.name(),
+                branchId,
+                Columns.ShiftDate.name(),
+                shiftDate.toString(),
+                Columns.ShiftType.name(),
+                shiftType.name()
+        );
+        OfflineResultSet resultSet;
+        try {
+            resultSet = cursor.executeRead(query);
+        } catch (SQLException e) {
+            throw new DalException("Failed to select all shifts cancel actions", e);
+        }
+        List<String> result = new ArrayList<>();
+        while(resultSet.next()) {
+            ShiftCancel selected = getObjectFromResultSet(resultSet);
+            cache.put(selected);
+            result.add(selected.cancelAction());
+        }
+        return result;
+    }
+
+    /**
+     * @return All the objects in the table
+     * @throws DalException if an error occurred while trying to select the objects
+     */
+    @Override
+    public List<ShiftCancel> selectAll() throws DalException {
+        String query = String.format("SELECT * FROM %s;", TABLE_NAME);
+        OfflineResultSet resultSet;
+        try {
+            resultSet = cursor.executeRead(query);
+        } catch (SQLException e) {
+            throw new DalException("Failed to select all shifts cancel actions", e);
+        }
+        List<ShiftCancel> result = new LinkedList<>();
+        while(resultSet.next()) {
+            result.add(getObjectFromResultSet(resultSet));
+        }
+        cache.putAll(result);
+        return result;
+    }
+
+    /**
+     * @param shift - the shift to insert its cancel actions
+     * @throws DalException if an error occurred while trying to insert the object
+     */
+    public void insert(Shift shift) throws DalException {
+        for (String cancelAction : shift.getShiftCancels()) {
+            insert(new ShiftCancel(shift.getBranch(), shift.getShiftDate(), shift.getShiftType(), cancelAction));
         }
     }
 
-    void update(Shift s) throws DalException {
-        if(!this.cache.containsKey(getHashCode(s.getShiftDate(), s.getShiftType(), s.getBranch())))
-            throw new DalException("Key doesnt exist! Create it first.");
-        this.delete(s);
-        this.create(s);
-    }
-
-    void delete(Shift s) throws DalException {
-        Object[] keys = {s.getShiftDate(),s.getShiftType().name(),s.getBranch()};
-        super.delete(keys);
-        this.cache.remove(getHashCode(s.getShiftDate(),s.getShiftType(),s.getBranch()));
-    }
-
-    List<String> select(LocalDate date, String shiftType, String branch) throws DalException {
-        Object[] keys = {date,shiftType, branch};
-        return ((List<String>) super.select(keys));
-    }
-
-    protected List<String> convertReaderToObject(OfflineResultSet reader) {
-        List<String> ans = new LinkedList<>();
+    /**
+     * @param object - the object to insert
+     * @throws DalException if an error occurred while trying to insert the object
+     */
+    @Override
+    public void insert(ShiftCancel object) throws DalException {
+        String query = String.format("INSERT INTO %s VALUES ('%s','%s','%s','%s');",
+                TABLE_NAME,
+                object.branchId(),
+                object.shiftDate().toString(),
+                object.shiftType().name(),
+                object.cancelAction()
+        );
         try {
-
-            while (reader.next()) {
-                String str = reader.getString(Columns.CancelAction.name());
-                if(str == null)
-                    continue;
-                ans.add(str);
-
+            if(cursor.executeWrite(query) != 1){
+                throw new RuntimeException("Unexpected error while trying to insert shift cancel action");
+            } else {
+                cache.put(object);
             }
-        }catch (Exception e){ }
-        return ans;
+        } catch (SQLException e) {
+            throw new DalException("Failed to insert shift cancel action", e);
+        }
     }
 
-    public void clearTable() throws DalException{
-        super.clearTable();
-        cache.clear();
+    /**
+     * @param shift - the object to update its needed roles
+     * @throws DalException if an error occurred while trying to update the object
+     */
+    public void update(Shift shift) throws DalException {
+        delete(shift);
+        insert(shift);
+    }
+
+    /** Updates a shift cancel object in the database, but do not use this method, it is deprecated,
+     * use delete and insert instead.
+     * @param object - the object to update
+     * @throws DalException if an error occurred while trying to update the object
+     */
+    @Override
+    @Deprecated
+    public void update(ShiftCancel object) throws DalException {
+        String query = String.format("UPDATE %s SET %s = '%s' WHERE %s = '%s' AND %s = '%s' AND %s = '%s' AND %s = '%s';",
+                TABLE_NAME,
+                Columns.CancelAction.name(),
+                object.cancelAction(),
+                Columns.BranchId.name(),
+                object.branchId(),
+                Columns.ShiftDate.name(),
+                object.shiftDate().toString(),
+                Columns.ShiftType.name(),
+                object.shiftType().name(),
+                Columns.CancelAction.name(),
+                object.cancelAction()
+        );
+        try {
+            if(cursor.executeWrite(query) != 1) {
+                throw new DalException("Failed to update cancel action in shift " + object.shiftDate() + " " + object.shiftType() + " in branch " + object.branchId());
+            } else {
+                cache.put(object);
+            }
+        } catch (SQLException e) {
+            throw new DalException("Failed to update cancel action", e);
+        }
+    }
+
+    /**
+     * @param shift the shift to delete its cancel actions
+     * @throws DalException if an error occurred while trying to delete the objects
+     */
+    public void delete(Shift shift) throws DalException {
+        String query = String.format("DELETE FROM %s WHERE %s = '%s' AND %s = '%s' AND %s = '%s';",
+                TABLE_NAME,
+                Columns.BranchId.name(),
+                shift.getBranch(),
+                Columns.ShiftDate.name(),
+                shift.getShiftDate().toString(),
+                Columns.ShiftType.name(),
+                shift.getShiftType().name());
+        try {
+            if(cursor.executeWrite(query) != 0) {
+                for (String cancelAction : shift.getShiftCancels()) {
+                    cache.remove(new ShiftCancel(shift.getBranch(), shift.getShiftDate(), shift.getShiftType(), cancelAction));
+                }
+            }
+        } catch (SQLException e) {
+            throw new DalException("Failed to delete shift's cancel actions", e);
+        }
+    }
+
+    /**
+     * @param object getLookUpObject(identifier) of the object to delete
+     * @throws DalException if an error occurred while trying to delete the object
+     */
+    @Override
+    public void delete(ShiftCancel object) throws DalException {
+        String query = String.format("DELETE FROM %s WHERE %s = '%s' AND %s = '%s' AND %s = '%s' AND %s = '%s';",
+                TABLE_NAME,
+                Columns.BranchId.name(),
+                object.branchId(),
+                Columns.ShiftDate.name(),
+                object.shiftType(),
+                Columns.ShiftType.name(),
+                object.shiftType().name(),
+                Columns.CancelAction.name(),
+                object.cancelAction()
+        );
+        try {
+            if(cursor.executeWrite(query) != 1){
+                throw new DalException("Failed to delete cancel action in shift " + object.shiftDate() + " " + object.shiftType() + " in branch " + object.branchId());
+            } else {
+                cache.remove(object);
+            }
+        } catch (SQLException e) {
+            throw new DalException("Failed to delete cancel action", e);
+        }
+    }
+
+    @Override
+    public boolean exists(ShiftCancel object) throws DalException {
+        String query = String.format("SELECT * FROM %s WHERE %s = '%s' AND %s = '%s' AND %s = '%s' AND %s = '%s';",
+                TABLE_NAME,
+                Columns.BranchId.name(),
+                object.branchId(),
+                Columns.ShiftDate.name(),
+                object.shiftDate().toString(),
+                Columns.ShiftType.name(),
+                object.shiftType().name(),
+                Columns.CancelAction.name(),
+                object.cancelAction()
+        );
+        try {
+            return cursor.executeRead(query).isEmpty() == false;
+        } catch (SQLException e) {
+            throw new DalException("Failed to check if the shift's cancel action exists", e);
+        }
+    }
+
+    @Override
+    protected ShiftCancel getObjectFromResultSet(OfflineResultSet resultSet) {
+        return new ShiftCancel(
+                resultSet.getString(Columns.BranchId.name()),
+                resultSet.getLocalDate(Columns.ShiftDate.name()),
+                Shift.ShiftType.valueOf(resultSet.getString(Columns.ShiftType.name())),
+                resultSet.getString(Columns.CancelAction.name())
+        );
     }
 }

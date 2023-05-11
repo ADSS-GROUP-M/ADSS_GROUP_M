@@ -2,10 +2,10 @@ package dataAccessLayer.employeeModule;
 
 import businessLayer.employeeModule.Employee;
 import businessLayer.employeeModule.Role;
-import dataAccessLayer.dalUtils.DalException;
+import dataAccessLayer.dalAbstracts.DAO;
+import dataAccessLayer.dalAbstracts.SQLExecutor;
 import dataAccessLayer.dalUtils.OfflineResultSet;
-import dataAccessLayer.dalUtils.SQLExecutor;
-import dataAccessLayer.transportModule.abstracts.DAO;
+import exceptions.DalException;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -16,8 +16,8 @@ import java.util.Set;
 public class EmployeeDAO extends DAO<Employee> {
 
     private static final String[] types = new String[]{"TEXT", "TEXT", "TEXT", "REAL", "REAL", "REAL", "TEXT", "TEXT", "TEXT"};
-    private static final String[] primary_keys = {"Id"};
-    private static final String tableName = "EMPLOYEES";
+    private static final String[] primary_keys = {"id"};
+    private static final String tableName = "employees";
     private final EmployeeRolesDAO employeeRolesDAO;
 
     public EmployeeDAO(SQLExecutor cursor, EmployeeRolesDAO employeeRolesDAO) throws DalException{
@@ -25,15 +25,15 @@ public class EmployeeDAO extends DAO<Employee> {
                 tableName,
                 types,
                 primary_keys,
-                "Id",
-                "Name",
-                "BankDetails",
-                "HourlySalaryRate",
-                "MonthlyHours",
-                "SalaryBonus",
-                "EmploymentDate",
-                "EmploymentConditions",
-                "Details"
+                "id",
+                "name",
+                "bank_details",
+                "hourly_salary_rate",
+                "monthly_hours",
+                "salary_bonus",
+                "employment_date",
+                "employment_conditions",
+                "details"
         );
         initTable();
         this.employeeRolesDAO = employeeRolesDAO;
@@ -65,7 +65,7 @@ public class EmployeeDAO extends DAO<Employee> {
         if (resultSet.next()) {
             ans = getObjectFromResultSet(resultSet);
         } else {
-            throw new DalException("No truck with id " + object.getId() + " was found");//TODO: Is this a mistake?
+            throw new DalException("No employee with id " + object.getId() + " was found");
         }
         cache.put(ans);
         return ans;
@@ -109,7 +109,7 @@ public class EmployeeDAO extends DAO<Employee> {
                     object.getEmploymentConditions(), object.getDetails());
             cursor.executeWrite(queryString);
             cache.put(object);
-            this.employeeRolesDAO.create(object); // Should insert the dependent values only after creating the employee in the database
+            this.employeeRolesDAO.insert(object); // Should insert the dependent values only after creating the employee in the database
         } catch (SQLException e) {
             throw new DalException(e);
         }
@@ -142,7 +142,8 @@ public class EmployeeDAO extends DAO<Employee> {
     }
 
     /**
-     * @param emp@throws DalException if an error occurred while trying to delete the employee
+     * @param emp
+     * @throws DalException if an error occurred while trying to delete the employee
      */
     @Override
     public void delete(Employee emp) throws DalException{
@@ -150,7 +151,7 @@ public class EmployeeDAO extends DAO<Employee> {
         Object[] keys = {emp.getId()};
         this.employeeRolesDAO.delete(emp);
 
-        String query = String.format("DELETE FROM %s WHERE id = '%s';", TABLE_NAME, emp.getId());
+        String query = String.format("DELETE FROM %s WHERE %s = '%s';", TABLE_NAME, PRIMARY_KEYS[0], emp.getId());
         try {
             if (cursor.executeWrite(query) == 0)
                 throw new DalException("No employee with id " + emp.getId() + " was found");
@@ -161,8 +162,12 @@ public class EmployeeDAO extends DAO<Employee> {
 
     @Override
     public boolean exists(Employee object) throws DalException {
-        // TODO: implement
-        throw new UnsupportedOperationException("not implemented");
+        try {
+            select(object);
+            return true;
+        } catch (DalException e) {
+            return false;
+        }
     }
 
     @Override
@@ -183,7 +188,7 @@ public class EmployeeDAO extends DAO<Employee> {
 
         Set<Role> roles = null;
         try {
-            roles = this.employeeRolesDAO.getAll(ans.getId());
+            roles = this.employeeRolesDAO.selectAll(ans);
         } catch (DalException e) {
             throw new RuntimeException(e);
         }
@@ -193,11 +198,7 @@ public class EmployeeDAO extends DAO<Employee> {
 
     @Override
     public void clearTable() {
-        try {
-            employeeRolesDAO.clearTable();
-        } catch (DalException e) {
-            throw new RuntimeException(e);
-        }
+        employeeRolesDAO.clearTable();
         super.clearTable();
     }
 }

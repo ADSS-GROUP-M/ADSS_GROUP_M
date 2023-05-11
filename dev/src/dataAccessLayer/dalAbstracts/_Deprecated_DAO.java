@@ -1,10 +1,9 @@
-package dataAccessLayer.employeeModule;
+package dataAccessLayer.dalAbstracts;
 
 //import org.sqlite.SQLiteConnection;
 
-import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.dalUtils.OfflineResultSet;
-import dataAccessLayer.dalUtils.SQLExecutor;
+import exceptions.DalException;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -12,7 +11,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class DAO {
+@Deprecated
+public abstract class _Deprecated_DAO {
     protected SQLExecutor cursor;
 
     protected final String TABLE_NAME;
@@ -20,7 +20,7 @@ public abstract class DAO {
     protected final String[] TYPES;
     protected final String[] ALL_COLUMNS;
 
-    public DAO(SQLExecutor cursor, String tableName, String[] keyFields, String[] types, String ... allColumns) throws DalException {
+    public _Deprecated_DAO(SQLExecutor cursor, String tableName, String[] keyFields, String[] types, String ... allColumns) throws DalException {
         this.cursor = cursor;
         this.TABLE_NAME = tableName;
         this.PRIMARY_KEYS = keyFields;

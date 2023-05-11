@@ -1,8 +1,8 @@
 package dataAccessLayer.transportModule;
 
-import dataAccessLayer.dalUtils.DalException;
-import dataAccessLayer.dalUtils.SQLExecutor;
-import dataAccessLayer.transportModule.abstracts.CounterDAOBase;
+import dataAccessLayer.dalAbstracts.CounterDAOBase;
+import dataAccessLayer.dalAbstracts.SQLExecutor;
+import exceptions.DalException;
 
 public class TransportIdCounterDAO extends CounterDAOBase {
 

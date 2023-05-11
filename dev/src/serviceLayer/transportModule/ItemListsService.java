@@ -1,9 +1,9 @@
 package serviceLayer.transportModule;
 
 import businessLayer.transportModule.ItemListsController;
+import exceptions.TransportException;
 import objects.transportObjects.ItemList;
 import utils.Response;
-import utils.transportUtils.TransportException;
 
 public class ItemListsService {
     private final ItemListsController ilc;

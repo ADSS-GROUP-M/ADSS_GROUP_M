@@ -1,10 +1,10 @@
 package businessLayer.transportModule;
 
-import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.transportModule.TrucksDAO;
+import exceptions.DalException;
+import exceptions.TransportException;
 import objects.transportObjects.Truck;
-import utils.transportUtils.ErrorCollection;
-import utils.transportUtils.TransportException;
+import utils.ErrorCollection;
 
 import java.util.List;
 

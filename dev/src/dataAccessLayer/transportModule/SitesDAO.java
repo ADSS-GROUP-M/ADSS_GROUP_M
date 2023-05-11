@@ -1,9 +1,9 @@
 package dataAccessLayer.transportModule;
 
-import dataAccessLayer.dalUtils.DalException;
+import dataAccessLayer.dalAbstracts.DAO;
+import dataAccessLayer.dalAbstracts.SQLExecutor;
 import dataAccessLayer.dalUtils.OfflineResultSet;
-import dataAccessLayer.dalUtils.SQLExecutor;
-import dataAccessLayer.transportModule.abstracts.DAO;
+import exceptions.DalException;
 import objects.transportObjects.Site;
 
 import java.sql.SQLException;

@@ -2,8 +2,8 @@ package serviceLayer.transportModule;
 
 import businessLayer.employeeModule.Employee;
 import dataAccessLayer.DalFactory;
-import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.employeeModule.EmployeeDAO;
+import exceptions.DalException;
 import objects.transportObjects.Driver;
 import objects.transportObjects.Site;
 import objects.transportObjects.Truck;

@@ -1,18 +1,18 @@
 package businessLayer.transportModule;
 
 import com.google.gson.reflect.TypeToken;
-import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.transportModule.TransportsDAO;
+import exceptions.DalException;
+import exceptions.TransportException;
 import javafx.util.Pair;
 import objects.transportObjects.Driver;
 import objects.transportObjects.Site;
 import objects.transportObjects.Transport;
 import objects.transportObjects.Truck;
 import serviceLayer.employeeModule.Services.EmployeesService;
+import utils.ErrorCollection;
 import utils.JsonUtils;
 import utils.Response;
-import utils.transportUtils.ErrorCollection;
-import utils.transportUtils.TransportException;
 
 import java.lang.reflect.Type;
 import java.time.LocalDateTime;

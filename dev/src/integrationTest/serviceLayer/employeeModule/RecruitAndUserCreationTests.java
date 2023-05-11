@@ -5,6 +5,7 @@ import businessLayer.employeeModule.Controllers.UserController;
 import businessLayer.employeeModule.User;
 import businessLayer.transportModule.SitesController;
 import dataAccessLayer.DalFactory;
+import exceptions.TransportException;
 import objects.transportObjects.Site;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,7 +16,6 @@ import serviceLayer.employeeModule.Objects.SEmployee;
 import serviceLayer.employeeModule.Services.EmployeesService;
 import serviceLayer.employeeModule.Services.UserService;
 import utils.Response;
-import utils.transportUtils.TransportException;
 
 import java.time.LocalDate;
 import java.util.LinkedList;

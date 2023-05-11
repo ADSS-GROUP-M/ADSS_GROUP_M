@@ -1,8 +1,9 @@
 package businessLayer.transportModule;
 
-import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.transportModule.SitesRoutesDAO;
 import dataAccessLayer.transportModule.TransportsDAO;
+import exceptions.DalException;
+import exceptions.TransportException;
 import javafx.util.Pair;
 import objects.transportObjects.*;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,7 +12,6 @@ import org.mockito.Mockito;
 import serviceLayer.employeeModule.Services.EmployeesService;
 import utils.JsonUtils;
 import utils.Response;
-import utils.transportUtils.TransportException;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

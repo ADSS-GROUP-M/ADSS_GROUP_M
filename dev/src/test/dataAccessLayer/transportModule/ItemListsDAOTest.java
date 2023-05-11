@@ -1,9 +1,9 @@
 package dataAccessLayer.transportModule;
 
 import dataAccessLayer.DalFactory;
-import dataAccessLayer.dalUtils.DalException;
+import dataAccessLayer.dalAbstracts.SQLExecutor;
 import dataAccessLayer.dalUtils.OfflineResultSet;
-import dataAccessLayer.dalUtils.SQLExecutor;
+import exceptions.DalException;
 import objects.transportObjects.ItemList;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

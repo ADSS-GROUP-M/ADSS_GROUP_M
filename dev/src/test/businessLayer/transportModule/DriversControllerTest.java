@@ -1,11 +1,11 @@
 package businessLayer.transportModule;
 
-import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.transportModule.DriversDAO;
+import exceptions.DalException;
+import exceptions.TransportException;
 import objects.transportObjects.Driver;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import utils.transportUtils.TransportException;
 
 import java.util.List;
 

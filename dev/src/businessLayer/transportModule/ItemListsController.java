@@ -1,9 +1,9 @@
 package businessLayer.transportModule;
 
-import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.transportModule.ItemListsDAO;
+import exceptions.DalException;
+import exceptions.TransportException;
 import objects.transportObjects.ItemList;
-import utils.transportUtils.TransportException;
 
 import java.util.List;
 

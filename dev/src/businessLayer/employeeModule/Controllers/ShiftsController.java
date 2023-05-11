@@ -4,10 +4,10 @@ import businessLayer.employeeModule.Employee;
 import businessLayer.employeeModule.Role;
 import businessLayer.employeeModule.Shift;
 import businessLayer.employeeModule.Shift.ShiftType;
-import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.employeeModule.ShiftDAO;
-import utils.employeeUtils.DateUtils;
-import utils.employeeUtils.EmployeeException;
+import exceptions.DalException;
+import exceptions.EmployeeException;
+import utils.DateUtils;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -19,7 +19,6 @@ import static java.time.temporal.TemporalAdjusters.next;
 
 public class ShiftsController {
     private ShiftDAO shiftDAO;
-    //private Map<String, Map<LocalDate, Map<ShiftType,Shift>>> shifts; // branchID to <Date to <ShiftTime to Shift>>
 
     public ShiftsController(ShiftDAO shiftDAO) {
         this.shiftDAO = shiftDAO;
@@ -34,7 +33,7 @@ public class ShiftsController {
     public Shift getShift(String branchId, LocalDate shiftDate, ShiftType shiftType) throws EmployeeException {
         Shift shift;
         try {
-            shift = shiftDAO.get(branchId, shiftDate,shiftType);
+            shift = shiftDAO.select(branchId, shiftDate,shiftType);
         } catch (DalException e) {
             throw new RuntimeException(e);
         }
@@ -55,7 +54,7 @@ public class ShiftsController {
 
     public Shift createShift(String branchId, LocalDate shiftDate, ShiftType shiftType) throws Exception {
         Shift shift = new Shift(branchId, shiftDate, shiftType);
-        shiftDAO.create(shift);
+        shiftDAO.insert(shift);
         return shift;
     }
 

@@ -1,11 +1,11 @@
 package dataAccessLayer;
 
-import dataAccessLayer.dalUtils.DalException;
-import dataAccessLayer.dalUtils.SQLExecutor;
+import dataAccessLayer.dalAbstracts.SQLExecutor;
 import dataAccessLayer.dalUtils.SQLExecutorProductionImpl;
 import dataAccessLayer.dalUtils.SQLExecutorTestingImpl;
 import dataAccessLayer.employeeModule.*;
 import dataAccessLayer.transportModule.*;
+import exceptions.DalException;
 
 public class DalFactory {
 

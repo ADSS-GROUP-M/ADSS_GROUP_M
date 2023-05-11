@@ -1,5 +1,7 @@
 package dataAccessLayer.dalUtils;
 
+import dataAccessLayer.dalAbstracts.SQLExecutor;
+
 import java.sql.*;
 
 public class SQLExecutorTestingImpl implements SQLExecutor {

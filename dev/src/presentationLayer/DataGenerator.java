@@ -181,21 +181,21 @@ public class DataGenerator {
     }
 
     public static void generateSites(SitesController controller){
-        branch1 = new Site("branch1", "14441 s inglewood ave, hawthorne, ca 90250", "zone1", "111-111-1111", "John Smith", Site.SiteType.BRANCH, 0, 0);
-        branch2 = new Site("branch2", "19503 s normandie ave, torrance, ca 90501", "zone1", "222-222-2222", "Jane Doe", Site.SiteType.BRANCH, 0, 0);
-        branch3 = new Site("branch3", "22015 hawthorne blvd, torrance, ca 90503", "zone1", "333-333-3333", "Bob Johnson", Site.SiteType.BRANCH, 0, 0);
-        branch4 = new Site("branch4", "2100 n long beach blvd, compton, ca 90221", "zone2", "444-444-4444", "Samantha Lee", Site.SiteType.BRANCH, 0, 0);
-        branch5 = new Site("branch5", "19340 hawthorne blvd, torrance, ca 90503", "zone2", "555-555-5555", "Mike Brown", Site.SiteType.BRANCH, 0, 0);
-        branch6 = new Site("branch6", "4651 firestone blvd, south gate, ca 90280", "zone2", "666-666-6666", "Emily Wilson", Site.SiteType.BRANCH, 0, 0);
-        branch7 = new Site("branch7", "1301 n victory pl, burbank, ca 91502", "zone3", "777-777-7777", "Tom Kim", Site.SiteType.BRANCH, 0, 0);
-        branch8 = new Site("branch8", "6433 fallbrook ave, west hills, ca 91307","zone3", "888-888-8888", "Amanda Garcia", Site.SiteType.BRANCH, 0, 0);
-        branch9 = new Site("branch9", "8333 van nuys blvd, panorama city, ca 91402","zone4", "123-456-7890" ,"David Kim", Site.SiteType.BRANCH, 0, 0);
-        supplier1 = new Site("supplier1", "8500 washington blvd, pico rivera, ca 90660", "zone4", "456-789-0123", "William Davis", Site.SiteType.SUPPLIER, 0, 0);
-        supplier2 = new Site("supplier2", "20226 avalon blvd, carson, ca 90746", "zone3", "999-999-9999", "Steve Chen", Site.SiteType.SUPPLIER, 0, 0);
-        supplier3 = new Site("supplier3", "9001 apollo way, downey, ca 90242", "zone4", "345-678-9012", "Andrew Chen", Site.SiteType.SUPPLIER, 0, 0);
-        supplier4 = new Site("supplier4", "2770 e carson st, lakewood, ca 90712", "zone5", "123-456-7890", "Andrew Chen", Site.SiteType.SUPPLIER, 0,0);
-        supplier5 = new Site("supplier5", "14501 lakewood blvd, paramount, ca 90723", "zone4", "234-567-8901", "Jessica Park", Site.SiteType.SUPPLIER, 0, 0);
-        logistical1 = new Site("logistical1", "3705 e south st, long beach, ca 90805", "zone5", "123-456-7890", "Jessica Park", Site.SiteType.LOGISTICAL_CENTER, 0,0);
+        branch1 = new Site("branch1", "14441 s inglewood ave, hawthorne, ca 90250, united states", "zone1", "111-111-1111", "John Smith", Site.SiteType.BRANCH, 0, 0);
+        branch2 = new Site("branch2", "19503 s normandie ave, torrance, ca 90501, united states", "zone1", "222-222-2222", "Jane Doe", Site.SiteType.BRANCH, 0, 0);
+        branch3 = new Site("branch3", "22015 hawthorne blvd, torrance, ca 90503, united states", "zone1", "333-333-3333", "Bob Johnson", Site.SiteType.BRANCH, 0, 0);
+        branch4 = new Site("branch4", "2100 n long beach blvd, compton, ca 90221, united states", "zone2", "444-444-4444", "Samantha Lee", Site.SiteType.BRANCH, 0, 0);
+        branch5 = new Site("branch5", "19340 hawthorne blvd, torrance, ca 90503, united states", "zone2", "555-555-5555", "Mike Brown", Site.SiteType.BRANCH, 0, 0);
+        branch6 = new Site("branch6", "4651 firestone blvd, south gate, ca 90280, united states", "zone2", "666-666-6666", "Emily Wilson", Site.SiteType.BRANCH, 0, 0);
+        branch7 = new Site("branch7", "1301 n victory pl, burbank, ca 91502, united states", "zone3", "777-777-7777", "Tom Kim", Site.SiteType.BRANCH, 0, 0);
+        branch8 = new Site("branch8", "6433 fallbrook ave, west hills, ca 91307, united states","zone3", "888-888-8888", "Amanda Garcia", Site.SiteType.BRANCH, 0, 0);
+        branch9 = new Site("branch9", "8333 van nuys blvd, panorama city, ca 91402, united states","zone4", "123-456-7890" ,"David Kim", Site.SiteType.BRANCH, 0, 0);
+        supplier1 = new Site("supplier1", "8500 washington blvd, pico rivera, ca 90660, united states", "zone4", "456-789-0123", "William Davis", Site.SiteType.SUPPLIER, 0, 0);
+        supplier2 = new Site("supplier2", "20226 avalon blvd, carson, ca 90746, united states", "zone3", "999-999-9999", "Steve Chen", Site.SiteType.SUPPLIER, 0, 0);
+        supplier3 = new Site("supplier3", "9001 apollo way, downey, ca 90242, united states", "zone4", "345-678-9012", "Andrew Chen", Site.SiteType.SUPPLIER, 0, 0);
+        supplier4 = new Site("supplier4", "2770 e carson st, lakewood, ca 90712, united states", "zone5", "123-456-7890", "Andrew Chen", Site.SiteType.SUPPLIER, 0,0);
+        supplier5 = new Site("supplier5", "14501 lakewood blvd, paramount, ca 90723, united states", "zone4", "234-567-8901", "Jessica Park", Site.SiteType.SUPPLIER, 0, 0);
+        logistical1 = new Site("logistical1", "3705 e south st, long beach, ca 90805, united states", "zone5", "123-456-7890", "Jessica Park", Site.SiteType.LOGISTICAL_CENTER, 0,0);
 
         List<Site> sites = new LinkedList<>(){{
             add(branch1);

@@ -11,8 +11,6 @@ import java.util.Scanner;
 public class BingAPI {
     
     private static final String key = "ApCimQpMhBbPbxxutJUbXvOeQZ7zrJh-ryeMWVyI7a0iyZ_aDIJdxqSUlED1D7l-";
-    private static final String COUNTRY_SUFFIX = ", United States";
-    public static int counter = 0;
 
     public BingAPI() {
     }
@@ -21,7 +19,7 @@ public class BingAPI {
 
         String urlPrefix = "http://dev.virtualearth.net/REST/v1/Locations?q=";
         String urlSuffix = "&key=" + key;
-        address = address.concat(COUNTRY_SUFFIX).replace(" ", "%20");
+        address = address.replace(" ", "%20");
 
         String json = sendRequest(urlPrefix + address + urlSuffix);
         return JsonUtils.deserialize(json, LocationByQueryResponse.class);
@@ -70,8 +68,6 @@ public class BingAPI {
         }
         //Close the scanner
         scanner.close();
-
-        counter++;
 
         return informationString.toString();
     }

@@ -95,7 +95,7 @@ class TransportsDAOTest {
             TrucksController trucksController = mock(TrucksController.class);
             ItemListsController itemListsController = mock(ItemListsController.class);
             DriversController driversController = mock(DriversController.class);
-            SitesDistancesController distancesController = mock(SitesDistancesController.class);
+            SitesRoutesController distancesController = mock(SitesRoutesController.class);
             SitesController sitesController =  new SitesController(sitesDAO, distancesDAO, distancesController);
             transportsController = new TransportsController(
                     trucksController,

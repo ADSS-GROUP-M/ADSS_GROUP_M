@@ -9,11 +9,11 @@ import utils.transportUtils.TransportException;
 import java.io.IOException;
 import java.util.*;
 
-public class SitesDistancesController {
+public class SitesRoutesController {
 
     private final BingAPI bingAPI;
 
-    public SitesDistancesController(BingAPI bingAPI) {
+    public SitesRoutesController(BingAPI bingAPI) {
         this.bingAPI = bingAPI;
     }
 

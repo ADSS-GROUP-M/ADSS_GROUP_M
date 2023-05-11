@@ -22,14 +22,14 @@ class SitesControllerTest {
     private SitesDAO dao;
     private SitesRoutesDAO sitesRoutesDAO;
     private Site site;
-    private SitesDistancesController sitesRoutesController;
+    private SitesRoutesController sitesRoutesController;
 
     @BeforeEach
     void setUp() {
         dao = mock(SitesDAO.class);
         EmployeesService employeesService = mock(EmployeesService.class);
         sitesRoutesDAO = mock(SitesRoutesDAO.class);
-        sitesRoutesController = mock(SitesDistancesController.class);
+        sitesRoutesController = mock(SitesRoutesController.class);
         controller = new SitesController(dao, sitesRoutesDAO, sitesRoutesController);
         controller.injectDependencies(employeesService);
 

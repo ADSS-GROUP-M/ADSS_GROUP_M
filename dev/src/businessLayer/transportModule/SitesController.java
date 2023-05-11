@@ -26,9 +26,9 @@ public class SitesController {
     private final SitesDAO dao;
     private final SitesRoutesDAO sitesRoutesDAO;
     private EmployeesService employeesService;
-    private final SitesDistancesController distancesController;
+    private final SitesRoutesController distancesController;
 
-    public SitesController(SitesDAO dao, SitesRoutesDAO sitesRoutesDAO, SitesDistancesController distancesController){
+    public SitesController(SitesDAO dao, SitesRoutesDAO sitesRoutesDAO, SitesRoutesController distancesController){
         this.dao = dao;
         this.sitesRoutesDAO = sitesRoutesDAO;
         this.distancesController = distancesController;

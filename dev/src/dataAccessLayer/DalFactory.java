@@ -9,7 +9,7 @@ import dataAccessLayer.transportModule.*;
 
 public class DalFactory {
 
-    public static String TESTING_DB_NAME = "TestingDB.db";
+    public static String TESTING_DB_NAME = ":memory:";
 
     private EmployeeDAO employeeDAO;
     private UserDAO userDAO;

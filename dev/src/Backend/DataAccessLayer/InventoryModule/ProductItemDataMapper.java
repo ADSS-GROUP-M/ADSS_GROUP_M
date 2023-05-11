@@ -10,11 +10,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProductItemDataMapper extends AbstractDataMapper {
+    private List<ProductItem> cachedItems;
+
     public ProductItemDataMapper() {
         super("product_items", new String[]{"serial_number", "is_defective", "defection_date", "supplier_id", "supplier_price", "supplier_discount", "sold_price", "expiration_date", "location", "catalog_number", "branch"});
     }
 
     public void insert(String serial_number, int is_defective, String defection_date, String supplier_id, double supplier_price, double supplier_discount, double sold_price, String expiration_date, String location, String catalog_number, String branch) throws SQLException {
+
         String columnsString = String.join(", ", columns);
         sqlExecutor.executeWrite(String.format("INSERT INTO %s (%s) VALUES('%s', %d, '%s', '%s', %f, %f, %f, '%s', '%s', '%s', '%s')",
                 tableName, columnsString, serial_number, is_defective, defection_date, supplier_id, supplier_price, supplier_discount,
@@ -77,5 +80,14 @@ public class ProductItemDataMapper extends AbstractDataMapper {
         }
         return itemsList;
     }
+
+//    public boolean isExists(String catalogNumber, String serial_number, String branch) {
+//        for (ProductItem product : cachedItems) {
+//            if (product.getCatalog_number().equals(catalogNumber)) {
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
 
 }

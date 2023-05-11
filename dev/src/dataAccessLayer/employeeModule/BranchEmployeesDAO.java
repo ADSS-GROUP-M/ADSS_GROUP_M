@@ -182,8 +182,12 @@ public class BranchEmployeesDAO extends ManyToManyDAO<Pair<String,String>> {
 
     @Override
     public boolean exists(Pair<String,String> object) throws DalException {
-        //TODO: implement
-        throw new UnsupportedOperationException("Not implemented");
+        try {
+            select(object); // Throws a DAL exception if the given object doesn't exist in the system.
+            return true;
+        } catch (DalException e) {
+            return false;
+        }
     }
 
     @Override

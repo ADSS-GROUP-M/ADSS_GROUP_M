@@ -1,5 +1,6 @@
 package dataAccessLayer.employeeModule;
 
+import businessLayer.employeeModule.Authorization;
 import businessLayer.employeeModule.User;
 import dataAccessLayer.DalFactory;
 import dataAccessLayer.dalUtils.DalException;
@@ -30,16 +31,16 @@ class UserDAOTest {
         user2 = new User("username2","password2");
         user3 = new User("username3","password3");
         user4 = new User("username1","password4");
-        //user1.authorize(Authorization.Cashier);
-        //user1.authorize(Authorization.Storekeeper);
-        //user3.authorize(Authorization.ShiftManager);
+        user1.authorize(Authorization.Cashier);
+        user1.authorize(Authorization.Storekeeper);
+        user3.authorize(Authorization.ShiftManager);
 
         try {
             factory = new DalFactory(TESTING_DB_NAME);
             userDAO = factory.userDAO();
             // Inserting only user1, user3 at setUp
-            userDAO.create(user1);
-            userDAO.create(user3);
+            userDAO.insert(user1);
+            userDAO.insert(user3);
             userAuthorizationsDAO = factory.userAuthorizationsDAO();
         } catch (DalException e) {
             throw new RuntimeException(e);
@@ -52,18 +53,18 @@ class UserDAOTest {
     }
 
     @Test
-    void create() {
+    void insert() {
         try {
-            userDAO.create(user2);
+            userDAO.insert(user2);
         } catch (DalException e) {
             fail(e);
         }
     }
 
     @Test
-    void create_fail() {
+    void insert_fail() {
         try {
-            userDAO.create(user4);
+            userDAO.insert(user4);
             fail("Expected an error after attempting to insert a user with the same username.");
         } catch (DalException ignore) { }
     }
@@ -94,14 +95,14 @@ class UserDAOTest {
     @Test
     void delete() {
         try {
-            userDAO.delete(user2);
+            userDAO.delete(user1);
         } catch (DalException e) {
             fail(e);
         }
-        //assertThrows(DalException.class, () -> userDAO.select(user2.getUsername()));
-        try {
-            assertEquals(null, userDAO.select(user2.getUsername())); // Should probably be updated if we switch to the other DAO implementation
-        } catch (DalException e) {}
+        assertThrows(DalException.class, () -> userDAO.select(user1.getUsername()));
+        //try {
+        //    assertEquals(null, userDAO.select(user2.getUsername())); // Should probably be updated if we switch to the other DAO implementation
+        //} catch (DalException e) {}
     }
 
     @Test
@@ -120,13 +121,10 @@ class UserDAOTest {
         expectedUsers.add(user3);
 
         try {
-            List<Object> selectedUsers = userDAO.selectAll();
+            List<User> selectedUsers = userDAO.selectAll();
             assertEquals(expectedUsers.size(), selectedUsers.size());
             for (int i = 0; i < expectedUsers.size(); i++) {
-                if(!(selectedUsers.get(i) instanceof User)) {
-                    fail("Expected the returned objects to be of type User");
-                }
-                assertDeepEquals(expectedUsers.get(i), (User)selectedUsers.get(i));
+                assertDeepEquals(expectedUsers.get(i), selectedUsers.get(i));
             }
         } catch (DalException e) {
             fail(e);
@@ -139,7 +137,7 @@ class UserDAOTest {
         try {
             OfflineResultSet resultSet = cursor.executeRead("SELECT * FROM Users WHERE username = '" + user1.getUsername() + "'");
             resultSet.next();
-            assertDeepEquals(user1, userDAO.convertReaderToObject(resultSet));
+            assertDeepEquals(user1, userDAO.getObjectFromResultSet(resultSet));
         } catch (SQLException e) {
             fail(e);
         }

@@ -33,7 +33,7 @@ public class UserController {
     }
 
     public User getUser(String username) throws DalException {
-        User user = userDAO.get(username);
+        User user = userDAO.select(username);
         if (user == null)
             throw new DalException("The given username doesn't exist.");
         return user;
@@ -41,12 +41,12 @@ public class UserController {
 
     public void createUser(String username, String password) throws DalException {
         User user = new User(username, password);
-        userDAO.create(user);
+        userDAO.insert(user);
     }
 
     public void createManagerUser(String username, String password) throws DalException {
         User user = new User(username, password, Authorization.HRManager);
-        userDAO.create(user);
+        userDAO.insert(user);
     }
 
     public boolean isAuthorized(String username, Authorization auth) throws DalException {

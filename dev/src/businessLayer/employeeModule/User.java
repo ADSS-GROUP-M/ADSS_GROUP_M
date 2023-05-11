@@ -1,9 +1,6 @@
 package businessLayer.employeeModule;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class User {// This class represents a user in the system and manages its authorization
 
@@ -68,6 +65,27 @@ public class User {// This class represents a user in the system and manages its
 
     public void setAuthorizations(Set<Authorization> auth) {
         this.authorizations = auth;
+    }
+
+    public static User getLookupObject(String username) {
+        return new User(username,null);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        User user = (User) o;
+        return username == user.username;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(username);
     }
 }
 	

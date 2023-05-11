@@ -65,7 +65,7 @@ public class EmployeeDAO extends DAO<Employee> {
         if (resultSet.next()) {
             ans = getObjectFromResultSet(resultSet);
         } else {
-            throw new DalException("No truck with id " + object.getId() + " was found");
+            throw new DalException("No employee with id " + object.getId() + " was found");
         }
         cache.put(ans);
         return ans;
@@ -161,8 +161,12 @@ public class EmployeeDAO extends DAO<Employee> {
 
     @Override
     public boolean exists(Employee object) throws DalException {
-        // TODO: implement
-        throw new UnsupportedOperationException("not implemented");
+        try {
+            select(object);
+            return true;
+        } catch (DalException e) {
+            return false;
+        }
     }
 
     @Override

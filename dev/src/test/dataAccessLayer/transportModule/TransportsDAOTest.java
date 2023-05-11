@@ -19,6 +19,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static dataAccessLayer.DalFactory.TESTING_DB_NAME;
+import static javafx.beans.binding.Bindings.when;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
@@ -212,9 +213,11 @@ class TransportsDAOTest {
             Transport transport2 = new Transport(2,
                     source.name(),
                     new LinkedList<>() {{
+                        add(source.name());
                         add(site.name());
                     }},
                     new HashMap<>() {{
+                        put(source.name(), 1);
                         put(site.name(), 1);
                     }},
                     driver.id(),
@@ -273,34 +276,6 @@ class TransportsDAOTest {
         } catch (DalException e) {
             fail(e);
         }
-    }
-
-    @Test
-    void generateTransportDestinations() {
-            Transport transport2 = new Transport(1,
-                    source.name(),
-                    new LinkedList<>() {{
-                        add(source.name());
-                        add(site.name());
-                    }},
-                    new HashMap<>() {{
-                        put(source.name(), 1);
-                        put(site.name(), 1);
-                    }},
-                    driver.id(),
-                    truck.id(),
-                    LocalDateTime.of(2020, 1, 1, 1, 1),
-                    15000
-            );
-        try {
-            transportsController.initializeEstimatedArrivalTimes(transport2);
-        } catch (TransportException e) {
-            fail(e);
-        }
-        transportsDAO.generateTransportDestinations(transport);
-            assertEquals(2,transport.destinations().size());
-            assertEquals(source.name(), transport.destinations().get(0));
-            assertEquals(site.name(), transport.destinations().get(1));
     }
 
     private void assertDeepEquals(Transport transport1, Transport transport2) {

@@ -119,8 +119,7 @@ public class TransportsDAO extends ManyToManyDAO<Transport> implements CounterDA
         );
         try {
             if(cursor.executeWrite(query) == 1){
-                LinkedList<TransportDestination> transportDestinations = generateTransportDestinations(object);
-                destinationsDAO.insertAll(transportDestinations);
+                destinationsDAO.insertFromTransport(object);
                 cache.put(object);
             } else {
                 throw new RuntimeException("Unexpected error while inserting transport");
@@ -148,8 +147,7 @@ public class TransportsDAO extends ManyToManyDAO<Transport> implements CounterDA
         try {
             destinationsDAO.deleteAllRelated(object);
             if(cursor.executeWrite(query) == 1){
-                LinkedList<TransportDestination> transportDestinations = generateTransportDestinations(object);
-                destinationsDAO.insertAll(transportDestinations);
+                destinationsDAO.insertFromTransport(object);
                 cache.put(object);
             } else {
                 throw new DalException("No transport with id " + object.id() + " was found");
@@ -219,21 +217,6 @@ public class TransportsDAO extends ManyToManyDAO<Transport> implements CounterDA
         );
     }
 
-    protected LinkedList<TransportDestination> generateTransportDestinations(Transport object) {
-        LinkedList<TransportDestination> transportDestinations = new LinkedList<>();
-        DeliveryRoute deliveryRoute = object.deliveryRoute();
-        int i = 1;
-        for(String destination : object.destinations()){
-            transportDestinations.add(new TransportDestination(
-                    object.id(),
-                    i++,
-                    destination,
-                    object.itemLists().get(destination),
-                    deliveryRoute.getEstimatedTimeOfArrival(destination)
-            ));
-        }
-        return transportDestinations;
-    }
     @Override
     public void clearTable() {
         destinationsDAO.clearTable();

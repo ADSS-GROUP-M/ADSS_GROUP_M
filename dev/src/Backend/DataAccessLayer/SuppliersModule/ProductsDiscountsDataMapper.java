@@ -18,7 +18,12 @@ public class ProductsDiscountsDataMapper extends AbstractDataMapper {
         super("products_discounts", new String[]{"bn_number","catalog_number", "amount", "percentage", "cash"});
     }
 
-    public void insert(String bnNumber, String catalogNumber, int amount, double percentage, double cash) throws SQLException {
+    public void insert(String bnNumber, String catalogNumber, int amount, Discount discount) throws SQLException {
+        double percentage = -1,cash = -1;
+        if(discount instanceof PercentageDiscount)
+            percentage = ((PercentageDiscount) discount).getPercentage();
+        else
+            cash = ((CashDiscount)discount).getAmountOfDiscount();
         String columnsString = String.join(", ", columns);
         sqlExecutor.executeWrite(String.format("INSERT INTO %s (%s) VALUES(%s, %s, %d, %f, %f)",tableName, columnsString, bnNumber,
                 catalogNumber, amount, percentage, cash));

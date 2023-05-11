@@ -43,7 +43,7 @@ public class OrderHistoryDataMapper extends AbstractDataMapper {
         for (int i = 0; i < maxOrderId; i++)
             orderList.add(new Order());
         while (resultSet.next()){
-            //orderList.get(resultSet.getInt("order_id")).addProduct(resultSet.getString("catalog_number"), resultSet.getInt("quantity"));
+            orderList.get(resultSet.getInt("order_id")).addProduct(resultSet.getString("catalog_number"), resultSet.getInt("quantity"));
         }
         return null;
     }

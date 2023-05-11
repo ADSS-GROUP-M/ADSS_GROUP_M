@@ -14,14 +14,14 @@ public class Agreement {
     /***
      * products on the agreement - maps between product's id to the product and its amount
      */
-    private Map<Integer, Product> products;
+    private Map<String, Product> products;
     private BillOfQuantities billOfQuantities;
     private DeliveryAgreement deliveryAgreement;
 
     public Agreement(List<Product> productsList, DeliveryAgreement deliveryAgreement){
         products = new HashMap<>();
         for (Product p : productsList)
-            products.put(p.getId(), p);
+            products.put(p.getCatalogNumber(), p);
         this.deliveryAgreement = deliveryAgreement;
     }
 
@@ -30,7 +30,7 @@ public class Agreement {
         this.billOfQuantities = billOfQuantities;
     }
 
-    public Map<Integer, Product> getProducts() {
+    public Map<String, Product> getProducts() {
         return products;
     }
 
@@ -50,7 +50,7 @@ public class Agreement {
     }
 
     public void addProduct(Product product){
-        products.put(product.getId(), product);
+        products.put(product.getCatalogNumber(), product);
     }
 
     public void removeProduct(Integer productId){

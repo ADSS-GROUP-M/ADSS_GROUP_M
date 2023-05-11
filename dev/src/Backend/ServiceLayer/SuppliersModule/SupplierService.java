@@ -144,7 +144,7 @@ public class SupplierService {
         try {
             if(!supplierController.getSupplier(bnNumber).productExist(productId))
                 throw new RuntimeException("the supplier does not supply product - " + productId);
-            supplierController.getSupplier(bnNumber).getAgreement().getProduct(productId).setCatalogNumber(newCatalogNumber);
+            supplierController.getSupplier(bnNumber).getAgreement().getProduct(productId).setSuppliersCatalogNumber(newCatalogNumber);
             return gson.toJson(new Response<String>("product catalog number is edited!", false));
         }
         catch (Exception e){
@@ -321,7 +321,7 @@ public class SupplierService {
 
     public String getCatalogNumber(String bnNumber, int productId){
         try {
-            return gson.toJson(new Response<String>(supplierController.getSupplier(bnNumber).getAgreement().getProduct(productId).getCatalogNumber()));
+            return gson.toJson(new Response<String>(supplierController.getSupplier(bnNumber).getAgreement().getProduct(productId).getSuppliersCatalogNumber()));
         }
         catch (Exception e){
             return gson.toJson(new Response<>(e.getMessage(), true));

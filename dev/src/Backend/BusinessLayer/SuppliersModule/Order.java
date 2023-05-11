@@ -7,9 +7,9 @@ public class Order {
     /***
      * maps between productId and amount ordered
      */
-    private Map<Integer, Integer> products;
+    private Map<String, Integer> products;
 
-    public Order(Map<Integer, Integer> products){
+    public Order(Map<String, Integer> products){
         this.products = products;
     }
 
@@ -17,11 +17,11 @@ public class Order {
         products = new HashMap<>();
     }
 
-    public void addProduct(Integer productId, int amount){
-        products.put(productId, amount);
+    public void addProduct(String catalogNumber, int amount){
+        products.put(catalogNumber, amount);
     }
 
-    public Map<Integer, Integer> getProducts() {
+    public Map<String, Integer> getProducts() {
         return products;
     }
 }

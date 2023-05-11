@@ -115,12 +115,11 @@ public class EmployeeRolesDAO extends ManyToManyDAO<Pair<String,Role>> {
         } catch (SQLException e) {
             throw new DalException("Failed to select employee roles", e);
         }
-        List<Pair<String,Role>> authorizations = new ArrayList<>();
+        List<Pair<String,Role>> authorizations = new LinkedList<>();
         while (resultSet.next()) {
-            Pair<String,Role> selected = getObjectFromResultSet(resultSet);
-            authorizations.add(selected);
-            cache.put(selected);
+            authorizations.add(getObjectFromResultSet(resultSet));
         }
+        cache.putAll(authorizations);
         return authorizations;
     }
 

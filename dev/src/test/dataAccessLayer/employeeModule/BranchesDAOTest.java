@@ -26,26 +26,28 @@ class BranchesDAOTest {
     private SitesDAO sitesDAO;
 
     private Branch branch1, branch2, branch3, branch4;
+    private DalFactory factory;
 
     @BeforeEach
     void setUp() {
         DalFactory.clearTestDB();
-        Site site1 = new Site("zone1","address1","name1","phone1", Site.SiteType.BRANCH);
-        Site site2 = new Site("zone2","address2","name2","phone2", Site.SiteType.BRANCH);
-        Site site3 = new Site("zone3","address3","name3","phone3", Site.SiteType.BRANCH);
+        Site site1 = new Site("testbranch1", "address1", "zone1", "name1","phone1", Site.SiteType.BRANCH);
+        Site site2 = new Site("testbranch2", "address2", "zone2", "name2","phone2", Site.SiteType.BRANCH);
+        Site site3 = new Site("testbranch3", "address3", "zone3", "name3","phone3", Site.SiteType.BRANCH);
 
-        branch1 = new Branch("address1");
-        branch2 = new Branch("address2");
-        branch3 = new Branch("address3", LocalTime.of(9,0),LocalTime.of(13,0),LocalTime.of(13,0),LocalTime.of(20,0));
-        branch4 = new Branch("address2"); // Same address as branch2
+        branch1 = new Branch("testbranch1");
+        branch2 = new Branch("testbranch2");
+        branch3 = new Branch("testbranch3", LocalTime.of(9,0),LocalTime.of(13,0),LocalTime.of(13,0),LocalTime.of(20,0));
+        branch4 = new Branch("testbranch2"); // Same name as branch2
 
         try {
-            sitesDAO = new SitesDAO(TESTING_DB_NAME);
+            factory = new DalFactory(TESTING_DB_NAME);
+            sitesDAO = factory.sitesDAO();
             sitesDAO.insert(site1);
             sitesDAO.insert(site2);
             sitesDAO.insert(site3);
-            branchEmployeesDAO = new BranchEmployeesDAO(TESTING_DB_NAME);
-            branchesDAO = new BranchesDAO(TESTING_DB_NAME, branchEmployeesDAO);
+            branchEmployeesDAO = factory.branchEmployeesDAO();
+            branchesDAO = factory.branchesDAO();
             // Inserting only branch1 and branch2 at setUp
             branchesDAO.insert(branch1);
             branchesDAO.insert(branch2);
@@ -62,7 +64,7 @@ class BranchesDAOTest {
     @Test
     void select() {
         try {
-            assertDeepEquals(branch1, branchesDAO.select(branch1.address()));
+            assertDeepEquals(branch1, branchesDAO.select(branch1.name()));
         } catch (DalException e) {
             fail(e);
         }
@@ -98,7 +100,7 @@ class BranchesDAOTest {
     void insert_fail() {
         try {
             branchesDAO.insert(branch4);
-            fail("Expected an error after attempting to insert a branch with the same address.");
+            fail("Expected an error after attempting to insert a branch with the same name.");
         } catch (DalException ignore) { }
     }
 
@@ -106,10 +108,10 @@ class BranchesDAOTest {
     void update() {
         LocalTime updatedMorningStart = LocalTime.of(10,0);
         LocalTime updatedEveningEnd = LocalTime.of(23,0);
-        Branch updatedBranch1 = new Branch(branch1.address(),updatedMorningStart,branch1.getMorningEnd(),branch1.getEveningStart(),updatedEveningEnd);
+        Branch updatedBranch1 = new Branch(branch1.name(),updatedMorningStart,branch1.getMorningEnd(),branch1.getEveningStart(),updatedEveningEnd);
         try {
             branchesDAO.update(updatedBranch1);
-            assertDeepEquals(updatedBranch1, branchesDAO.select(updatedBranch1.address()));
+            assertDeepEquals(updatedBranch1, branchesDAO.select(updatedBranch1.name()));
         } catch (DalException e) {
             fail(e);
         }
@@ -133,14 +135,14 @@ class BranchesDAOTest {
         } catch (DalException e) {
             fail(e);
         }
-        assertThrows(DalException.class, () -> branchesDAO.select(branch2.address()));
+        assertThrows(DalException.class, () -> branchesDAO.select(branch2.name()));
     }
 
     @Test
     void getObjectFromResultSet() {
-        SQLExecutor cursor = new SQLExecutor(TESTING_DB_NAME);
+        SQLExecutor cursor = factory.cursor();
         try {
-            OfflineResultSet resultSet = cursor.executeRead("SELECT * FROM Branches WHERE address = '" + branch1.address() + "'");
+            OfflineResultSet resultSet = cursor.executeRead("SELECT * FROM Branches WHERE name = '" + branch1.name() + "'");
             resultSet.next();
             assertDeepEquals(branch1, branchesDAO.getObjectFromResultSet(resultSet));
         } catch (SQLException e) {
@@ -149,7 +151,7 @@ class BranchesDAOTest {
     }
 
     private void assertDeepEquals(Branch branch1, Branch branch2) {
-        assertEquals(branch1.address(), branch2.address());
+        assertEquals(branch1.name(), branch2.name());
         assertEquals(branch1.getMorningStart(), branch2.getMorningStart());
         assertEquals(branch1.getMorningEnd(), branch2.getMorningEnd());
         assertEquals(branch1.getEveningStart(), branch2.getEveningStart());

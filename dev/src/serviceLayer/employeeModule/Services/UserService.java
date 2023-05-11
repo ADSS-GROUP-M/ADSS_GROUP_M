@@ -3,7 +3,6 @@ package serviceLayer.employeeModule.Services;
 import businessLayer.employeeModule.Authorization;
 import businessLayer.employeeModule.Controllers.UserController;
 import businessLayer.employeeModule.User;
-import serviceLayer.ServiceFactory;
 import utils.Response;
 
 import java.util.List;
@@ -17,29 +16,8 @@ public class UserService {
 
     private final UserController userController;
 
-    public UserService(ServiceFactory serviceFactory, UserController userController) {
-        // Can get any needed service through the serviceFactory
+    public UserService(UserController userController) {
         this.userController = userController;
-    }
-
-    /**
-     * This method loads the initial user data into the system, during the initial load of the system.
-     */
-    public void createData() {
-        resetData();
-        try {
-            userController.createManagerUser(HR_MANAGER_USERNAME, "123");
-            userController.createUser(TRANSPORT_MANAGER_USERNAME, "123");
-            userController.authorizeUser(TRANSPORT_MANAGER_USERNAME, Authorization.TransportManager);
-        }
-        catch (Exception ignore) {}
-    }
-
-    /**
-     * This method resets the user data from the system.
-     */
-    public void resetData() {
-        userController.resetData();
     }
 
     public String login(String username, String password) {

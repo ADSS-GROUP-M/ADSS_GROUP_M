@@ -1,21 +1,28 @@
-package employeeModule.BusinessLayer.Employees;
+package serviceLayer.employeeModule;
 
 import businessLayer.employeeModule.Authorization;
+import businessLayer.employeeModule.Controllers.UserController;
 import businessLayer.employeeModule.Role;
 import businessLayer.employeeModule.User;
+import businessLayer.transportModule.SitesController;
 import com.google.gson.reflect.TypeToken;
 import dataAccessLayer.DalFactory;
+import dataAccessLayer.dalUtils.DalException;
+import objects.transportObjects.Site;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import presentationLayer.DataGenerator;
 import serviceLayer.ServiceFactory;
 import serviceLayer.employeeModule.Objects.SEmployee;
 import serviceLayer.employeeModule.Objects.SShift;
 import serviceLayer.employeeModule.Objects.SShiftType;
 import serviceLayer.employeeModule.Services.EmployeesService;
 import serviceLayer.employeeModule.Services.UserService;
+import serviceLayer.transportModule.ResourceManagementService;
 import utils.Response;
 import utils.employeeUtils.DateUtils;
+import utils.transportUtils.TransportException;
 
 import java.lang.reflect.Type;
 import java.time.LocalDate;
@@ -24,10 +31,10 @@ import java.util.List;
 
 import static dataAccessLayer.DalFactory.TESTING_DB_NAME;
 import static org.junit.jupiter.api.Assertions.*;
+import static serviceLayer.employeeModule.Services.UserService.HR_MANAGER_USERNAME;
 
 public class EmployeeServiceTests {
-    public static final Type LIST_SSHIFT_ARRAY_TYPE = new TypeToken<List<SShift[]>>() {
-    }.getType();
+    public static final Type LIST_SSHIFT_ARRAY_TYPE = new TypeToken<List<SShift[]>>() {}.getType();
     private UserService userService;
     private EmployeesService empService;
     private User admin;
@@ -46,11 +53,16 @@ public class EmployeeServiceTests {
 
     @BeforeEach
     public void setUp() throws Exception {
+        DalFactory.clearTestDB();
         ServiceFactory serviceFactory = new ServiceFactory(TESTING_DB_NAME);
         userService = serviceFactory.userService();
         empService = serviceFactory.employeesService();
-        userService.createData(); // Loads the HR Manager user: "admin123" "123", clears the data in each test
-        empService.createData();
+
+        // Loads the HR Manager user: "admin123" "123", clears the data in each test
+        initUserData(userService, serviceFactory.businessFactory().userController());
+        // Loads the branches data
+        initBranchData(serviceFactory.businessFactory().sitesController());
+
         admin = Response.fromJson(userService.getUser(adminUsername)).data(User.class);
         users = new User[30];
         String usernamer = "0";
@@ -77,7 +89,7 @@ public class EmployeeServiceTests {
             if (Response.fromJson(userService.getUser(usernames[i])).success() == false)
                 userService.createUser(admin.getUsername(), usernames[i], passwords[i]);
             if (Response.fromJson(empService.getEmployee(usernames[i])).success() == false)
-                empService.recruitEmployee(admin.getUsername(), fullnames[i], branches[i], usernames[i], bankDetails[i], hourlyRates[i], employmentDates[i], employmentConditions[i], details[i]);
+                empService.recruitEmployee(admin.getUsername(), branches[i], fullnames[i], usernames[i], bankDetails[i], hourlyRates[i], employmentDates[i], employmentConditions[i], details[i]);
             users[i] = Response.fromJson(userService.getUser(usernames[i])).data(User.class);
             users[i].login(passwords[i]);
 
@@ -101,6 +113,40 @@ public class EmployeeServiceTests {
                 empService.certifyEmployee(adminUsername, usernames[i], Role.Storekeeper.name());
             }
 
+        }
+    }
+
+    private void initUserData(UserService us, UserController uc) {
+        DataGenerator.initializeUserData(us,uc);
+    }
+
+    private void initBranchData(SitesController sc) {
+        Site site1 = new Site("1", "14441 s inglewood ave, hawthorne, ca 90250", "zone1", "111-111-1111", "John Smith", Site.SiteType.BRANCH, 0, 0);
+        Site site2 = new Site("2", "19503 s normandie ave, torrance, ca 90501", "zone1", "222-222-2222", "Jane Doe", Site.SiteType.BRANCH, 0, 0);
+        Site site3 = new Site("3", "22015 hawthorne blvd, torrance, ca 90503", "zone1", "333-333-3333", "Bob Johnson", Site.SiteType.BRANCH, 0, 0);
+        Site site4 = new Site("4", "2100 n long beach blvd, compton, ca 90221", "zone2", "444-444-4444", "Samantha Lee", Site.SiteType.BRANCH, 0, 0);
+        Site site5 = new Site("5", "19340 hawthorne blvd, torrance, ca 90503", "zone2", "555-555-5555", "Mike Brown", Site.SiteType.BRANCH, 0, 0);
+        Site site6 = new Site("6", "4651 firestone blvd, south gate, ca 90280", "zone2", "666-666-6666", "Emily Wilson", Site.SiteType.BRANCH, 0, 0);
+        Site site7 = new Site("7", "1301 n victory pl, burbank, ca 91502", "zone3", "777-777-7777", "Tom Kim", Site.SiteType.BRANCH, 0, 0);
+        Site site8 = new Site("8", "6433 fallbrook ave, west hills, ca 91307","zone3", "888-888-8888", "Amanda Garcia", Site.SiteType.BRANCH, 0, 0);
+        Site site9 = new Site("9", "8333 van nuys blvd, panorama city, ca 91402","zone4", "123-456-7890" ,"David Kim", Site.SiteType.BRANCH, 0, 0);
+
+        List<Site> sites = new LinkedList<>(){{
+            add(site1);
+            add(site2);
+            add(site3);
+            add(site4);
+            add(site5);
+            add(site6);
+            add(site7);
+            add(site8);
+            add(site9);
+        }};
+
+        try {
+            sc.addAllSitesFirstTimeSystemLoad(sites);
+        } catch (TransportException e) {
+            fail(e);
         }
     }
 
@@ -221,9 +267,9 @@ public class EmployeeServiceTests {
         Response ans;
         String newUsername = "777";
         ans = Response.fromJson(userService.createUser(admin.getUsername(), newUsername, "123"));
-        ans = Response.fromJson(empService.recruitEmployee(admin.getUsername(),"abc", "2", newUsername,"Nothin 123 11", 30, week[0],"Nothing", "about"));
+        ans = Response.fromJson(empService.recruitEmployee(admin.getUsername(), "2", "abc", newUsername,"Nothin 123 11", 30, week[0],"Nothing", "about"));
         assertFalse(ans.success() == false, ans.message());
-        ans = Response.fromJson(empService.recruitEmployee(admin.getUsername(),"abc", "1", newUsername,"Nothin 123 11", 30, week[0],"Nothing", "about"));
+        ans = Response.fromJson(empService.recruitEmployee(admin.getUsername(), "1", "abc", newUsername,"Nothin 123 11", 30, week[0],"Nothing", "about"));
         assertTrue(ans.success() == false, ans.message()); //recruiting same employee to different branch
         ans = Response.fromJson(empService.addEmployeeToBranch(adminUsername, newUsername, "1"));
         ans = Response.fromJson(userService.login(newUsername, "123"));

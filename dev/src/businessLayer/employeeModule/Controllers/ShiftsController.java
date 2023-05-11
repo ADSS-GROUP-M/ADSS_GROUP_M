@@ -4,8 +4,10 @@ import businessLayer.employeeModule.Employee;
 import businessLayer.employeeModule.Role;
 import businessLayer.employeeModule.Shift;
 import businessLayer.employeeModule.Shift.ShiftType;
+import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.employeeModule.ShiftDAO;
 import utils.employeeUtils.DateUtils;
+import utils.employeeUtils.EmployeeException;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -29,10 +31,16 @@ public class ShiftsController {
         } catch (Exception ignore) {}
     }
 
-    public Shift getShift(String branchId, LocalDate shiftDate, ShiftType shiftType) throws Exception {
-        Shift shift = shiftDAO.get(branchId, shiftDate,shiftType);
-        if (shift == null)
-            throw new Exception("The shift " + shiftDate + shiftType + " does not exist in the branch " + branchId + ".");
+    public Shift getShift(String branchId, LocalDate shiftDate, ShiftType shiftType) throws EmployeeException {
+        Shift shift;
+        try {
+            shift = shiftDAO.get(branchId, shiftDate,shiftType);
+        } catch (DalException e) {
+            throw new RuntimeException(e);
+        }
+        if (shift == null) {
+            throw new EmployeeException("The shift " + shiftDate + shiftType + " does not exist in the branch " + branchId + ".");
+        }
         return shift;
     }
 
@@ -56,8 +64,9 @@ public class ShiftsController {
         List<LocalDate> dates = weekStart.datesUntil(weekStart.with(next(DayOfWeek.SUNDAY))).toList();
         // Check if any shift in the week already exists
         for (LocalDate date : dates) {
-            if (shiftExists(branchId, date, ShiftType.Morning) || shiftExists(branchId, date, ShiftType.Evening))
+            if (shiftExists(branchId, date, ShiftType.Morning) || shiftExists(branchId, date, ShiftType.Evening)) {
                 throw new Exception("Invalid week start date, there are already existing shifts during this week, please edit them or delete them to start over.");
+            }
         }
         // Create the week shifts
         for (LocalDate date : dates) {
@@ -99,24 +108,30 @@ public class ShiftsController {
 
     public void requestShift(Employee employee, String branchId, LocalDate shiftDate, ShiftType shiftType, Role role) throws Exception {
         Shift shift = getShift(branchId, shiftDate, shiftType);
-        if (!employee.getRoles().contains(role))
+        if (!employee.getRoles().contains(role)) {
             throw new Exception("Invalid shift request, the employee is not certified for this role: " + role + ".");
-        if (shift.isEmployeeWorking(employee))
+        }
+        if (shift.isEmployeeWorking(employee)) {
             throw new Exception("Invalid shift request, the employee is already working in this shift.");
-        if (shift.isEmployeeRequesting(employee))
+        }
+        if (shift.isEmployeeRequesting(employee)) {
             throw new Exception("Invalid shift request, the employee has already requested to work in this shift.");
-        if (employeeRequestedInDate(employee, shiftDate))
+        }
+        if (employeeRequestedInDate(employee, shiftDate)) {
             throw new Exception("Invalid shift request, the employee has already requested to work in this day.");
-        if (numEmployeeShiftRequestsInWeek(employee, shift.getShiftDate()) >= 6 && !employeeRequestedInDate(employee,shift.getShiftDate()))
+        }
+        if (numEmployeeShiftRequestsInWeek(employee, shift.getShiftDate()) >= 6 && !employeeRequestedInDate(employee,shift.getShiftDate())) {
             throw new Exception("Invalid shift request, the employee has already requested to work in 6 days of this week.");
+        }
         shift.addShiftRequest(role, employee);
         shiftDAO.update(shift);
     }
 
     public void cancelShiftRequest(Employee employee, String branchId, LocalDate shiftDate, ShiftType shiftType, Role role) throws Exception {
         Shift shift = getShift(branchId, shiftDate, shiftType);
-        if (!shift.isEmployeeRequestingForRole(employee, role))
+        if (!shift.isEmployeeRequestingForRole(employee, role)) {
             throw new Exception("Invalid shift request, the employee hasn't requested to work in this shift and this role.");
+        }
         shift.removeShiftRequest(role, employee);
         shiftDAO.update(shift);
     }
@@ -138,11 +153,14 @@ public class ShiftsController {
 
     public void setShiftEmployees(String branchId, LocalDate shiftDate, ShiftType shiftType, Role role, List<Employee> employees) throws Exception {
         Shift shift = getShift(branchId, shiftDate, shiftType);
-        for (Employee employee : employees)
-            if (!employee.getRoles().contains(role))
+        for (Employee employee : employees) {
+            if (!employee.getRoles().contains(role)) {
                 throw new Exception("Invalid shift request, the employee " + employee.getId() + " is not certified for this role: " + role + ".");
-        for (Employee employee : employees)
+            }
+        }
+        for (Employee employee : employees) {
             shift.addShiftWorker(role, employee);
+        }
         shiftDAO.update(shift);
     }
 
@@ -174,10 +192,11 @@ public class ShiftsController {
             }
             if (!foundDate) {
                 Shift[] shiftDay = new Shift[2];
-                if(shift.getShiftType().equals(ShiftType.Morning))
+                if(shift.getShiftType().equals(ShiftType.Morning)) {
                     shiftDay[0] = shift;
-                else if(shift.getShiftType().equals(ShiftType.Evening))
+                } else if(shift.getShiftType().equals(ShiftType.Evening)) {
                     shiftDay[1] = shift;
+                }
                 result.add(shiftDay);
             }
         }
@@ -206,10 +225,11 @@ public class ShiftsController {
             }
             if (!foundDate) {
                 Shift[] shiftDay = new Shift[2];
-                if(shift.getShiftType().equals(ShiftType.Morning))
+                if(shift.getShiftType().equals(ShiftType.Morning)) {
                     shiftDay[0] = shift;
-                else if(shift.getShiftType().equals(ShiftType.Evening))
+                } else if(shift.getShiftType().equals(ShiftType.Evening)) {
                     shiftDay[1] = shift;
+                }
                 result.add(shiftDay);
             }
         }

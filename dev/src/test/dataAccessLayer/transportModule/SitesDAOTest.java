@@ -1,5 +1,6 @@
 package dataAccessLayer.transportModule;
 
+import dataAccessLayer.DalFactory;
 import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.dalUtils.OfflineResultSet;
 import dataAccessLayer.dalUtils.SQLExecutor;
@@ -20,18 +21,21 @@ class SitesDAOTest {
     private SitesDAO dao;
 
     private Site site;
+    private DalFactory factory;
 
     @BeforeEach
     void setUp() {
-        site = new Site("zone1","address1","12345","kobi", Site.SiteType.SUPPLIER);
+        site = new Site("name1", "address1", "zone1", "12345","kobi", Site.SiteType.SUPPLIER);
         try {
-            dao = new SitesDAO(TESTING_DB_NAME);
+            factory = new DalFactory(TESTING_DB_NAME);
+            dao = factory.sitesDAO();
             dao.clearTable();
 
             dao.insert(site);
         } catch (DalException e) {
             throw new RuntimeException(e);
         }
+        dao.clearCache();
     }
 
     @AfterEach
@@ -54,7 +58,7 @@ class SitesDAOTest {
     @Test
     void select() {
         try {
-            assertDeepEquals(site,dao.select(Site.getLookupObject(site.address())));
+            assertDeepEquals(site,dao.select(Site.getLookupObject(site.name())));
         } catch (DalException e) {
             fail(e);
         }
@@ -66,9 +70,9 @@ class SitesDAOTest {
         // set up
         LinkedList<Site> sites = new LinkedList<>();
         sites.add(site);
-        List.of("address2","address3","address4","address5","address6").forEach(address -> {
+        List.of(2,3,4,5,6).forEach(i -> {
             try {
-                Site site = new Site("zone1",address,"12345","kobi", Site.SiteType.SUPPLIER);
+                Site site = new Site("name"+i, "address" + i, "zone1", "12345","kobi", Site.SiteType.SUPPLIER);
                 dao.insert(site);
                 sites.add(site);
             } catch (DalException e) {
@@ -91,9 +95,9 @@ class SitesDAOTest {
     @Test
     void insert() {
         try {
-            Site site2 = new Site("zone1","address2","12345","kobi", Site.SiteType.SUPPLIER);
+            Site site2 = new Site("name2", "address2", "zone1", "12345","kobi", Site.SiteType.SUPPLIER);
             dao.insert(site2);
-            assertDeepEquals(site2,dao.select(Site.getLookupObject(site2.address())));
+            assertDeepEquals(site2,dao.select(Site.getLookupObject(site2.name())));
         } catch (DalException e) {
             fail(e);
         }
@@ -102,9 +106,9 @@ class SitesDAOTest {
     @Test
     void update() {
         try {
-            Site site2 = new Site("zone2",site.address(),"51235","lo kobi", Site.SiteType.LOGISTICAL_CENTER);
+            Site site2 = new Site(site.name(), site.address(), "zone2", "51235","lo kobi", Site.SiteType.LOGISTICAL_CENTER);
             dao.update(site2);
-            assertDeepEquals(site2,dao.select(Site.getLookupObject(site2.address())));
+            assertDeepEquals(site2,dao.select(Site.getLookupObject(site2.name())));
         } catch (DalException e) {
             fail(e);
         }
@@ -114,7 +118,7 @@ class SitesDAOTest {
     void delete() {
         try {
             dao.delete(site);
-            assertThrows(DalException.class,() -> dao.select(Site.getLookupObject(site.address())));
+            assertThrows(DalException.class,() -> dao.select(Site.getLookupObject(site.name())));
         } catch (DalException e) {
             fail(e);
         }
@@ -122,9 +126,9 @@ class SitesDAOTest {
 
     @Test
     void getObjectFromResultSet() {
-        SQLExecutor cursor = new SQLExecutor(TESTING_DB_NAME);
+        SQLExecutor cursor = factory.cursor();
         try{
-            OfflineResultSet resultSet = cursor.executeRead(String.format("SELECT * FROM Sites WHERE address = '%s';",site.address()));
+            OfflineResultSet resultSet = cursor.executeRead(String.format("SELECT * FROM Sites WHERE name = '%s';",site.name()));
             resultSet.next();
             Site siteFromDB = dao.getObjectFromResultSet(resultSet);
             assertDeepEquals(site,siteFromDB);
@@ -134,7 +138,7 @@ class SitesDAOTest {
     }
 
     private void assertDeepEquals(Site site1, Site site2) {
-        assertEquals(site1.address(),site2.address());
+        assertEquals(site1.name(),site2.name());
         assertEquals(site1.address(),site2.address());
         assertEquals(site1.contactName(),site2.contactName());
         assertEquals(site1.phoneNumber(),site2.phoneNumber());

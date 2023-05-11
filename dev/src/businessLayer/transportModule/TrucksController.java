@@ -117,15 +117,15 @@ public class TrucksController {
         ErrorCollection ec = new ErrorCollection();
 
         if(newTruck.baseWeight() <= 0) {
-             ec.addError("Truck base weight must be positive","baseWeight");
+             ec.addError("Truck base weight must be positive","negativeBaseWeight");
         }
 
         if(newTruck.maxWeight() <= 0) {
-            ec.addError("Truck max weight must be positive","maxWeight");
+            ec.addError("Truck max weight must be positive","negativeMaxWeight");
         }
 
         if(newTruck.baseWeight() > newTruck.maxWeight()){
-            ec.addError("Truck base weight must be smaller than max weight","baseWeightMaxWeight");
+            ec.addError("Truck base weight must be smaller than max weight","baseWeightGreaterThanMaxWeight");
         }
 
         if(ec.hasErrors()){

@@ -1,18 +1,22 @@
 package businessLayer.employeeModule;
 
+import utils.employeeUtils.EmployeeException;
+
 import java.time.LocalTime;
 import java.util.Objects;
 
 public class Branch {
-    private String address;
+    private String name;
     private LocalTime morningStart;
     private LocalTime morningEnd;
     private LocalTime eveningStart;
     private LocalTime eveningEnd;
 
-    public Branch(String address) {
+    public static final String HEADQUARTERS_ID = "branch1";
+
+    public Branch(String name) {
         this();
-        this.address = address;
+        this.name = name;
     }
 
     public Branch() {
@@ -24,12 +28,12 @@ public class Branch {
     }
 
 
-    public Branch(String address, LocalTime morningShiftStart,LocalTime morningShiftFinish, LocalTime eveningShiftStart, LocalTime eveningShiftFinish){
+    public Branch(String name, LocalTime morningShiftStart,LocalTime morningShiftFinish, LocalTime eveningShiftStart, LocalTime eveningShiftFinish){
         this.morningStart = morningShiftStart;
         this.morningEnd = morningShiftFinish;
         this.eveningStart = eveningShiftStart;
         this.eveningEnd = eveningShiftFinish;
-        this.address = address;
+        this.name = name;
     }
 
     public LocalTime getMorningStart() {
@@ -55,16 +59,16 @@ public class Branch {
         this.eveningEnd = eUntil;
     }
 
-    public Shift.ShiftType getShiftType(LocalTime localTime) throws Exception {
+    public Shift.ShiftType getShiftType(LocalTime localTime) throws EmployeeException {
         if (localTime.equals(morningStart) || (localTime.isAfter(morningStart) && localTime.isBefore(morningEnd)) || localTime.equals(morningEnd))
             return Shift.ShiftType.Morning;
         else if (localTime.equals(eveningStart) || (localTime.isAfter(eveningStart) && localTime.isBefore(eveningEnd)) || localTime.equals(eveningEnd))
             return Shift.ShiftType.Evening;
-        throw new Exception("The given LocalTime isn't included in any shift of the day.");
+        throw new EmployeeException("The given LocalTime isn't included in any shift of the day.");
     }
 
-    public String address() {
-        return address;
+    public String name() {
+        return name;
     }
 
     public static Branch getLookupObject(String address) {
@@ -80,11 +84,11 @@ public class Branch {
             return false;
         }
         Branch branch = (Branch) o;
-        return address == branch.address;
+        return name == branch.name;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(address);
+        return Objects.hash(name);
     }
 }

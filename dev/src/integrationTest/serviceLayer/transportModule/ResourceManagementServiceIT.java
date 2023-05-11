@@ -1,4 +1,4 @@
-package transportModule.backend.serviceLayer;
+package serviceLayer.transportModule;
 
 import businessLayer.employeeModule.Employee;
 import dataAccessLayer.DalFactory;
@@ -11,7 +11,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import serviceLayer.ServiceFactory;
-import serviceLayer.transportModule.ResourceManagementService;
 import utils.Response;
 
 import java.time.LocalDate;
@@ -19,7 +18,7 @@ import java.time.LocalDate;
 import static dataAccessLayer.DalFactory.TESTING_DB_NAME;
 import static org.junit.jupiter.api.Assertions.*;
 
-class ResourceManagementServiceTest {
+class ResourceManagementServiceIT {
 
     private ResourceManagementService rms;
     private Driver driver;
@@ -29,7 +28,7 @@ class ResourceManagementServiceTest {
 
     @BeforeEach
     void setUp() {
-        rms = new ServiceFactory(TESTING_DB_NAME).getResourceManagementService();
+        rms = new ServiceFactory(TESTING_DB_NAME).resourceManagementService();
         //add drivers
         DalFactory dalFactory;
         try {
@@ -45,7 +44,7 @@ class ResourceManagementServiceTest {
 
         //add sites
 
-        site = new Site("zone a", "123 main st", "(555) 123-4567", "john smith", Site.SiteType.BRANCH);
+        site = new Site("TODO: INSERT NAME HERE", "123 main st", "zone a", "(555) 123-4567", "john smith", Site.SiteType.BRANCH);
         rms.addSite(site.toJson());
 
         //add trucks
@@ -323,7 +322,7 @@ class ResourceManagementServiceTest {
 
     @Test
     void addSite() {
-        Site site3 = new Site("zone a", "address a", "123456","bob", Site.SiteType.BRANCH);
+        Site site3 = new Site("TODO: INSERT NAME HERE", "name a", "zone a", "123456","bob", Site.SiteType.BRANCH);
 
         String json1 = rms.addSite(site3.toJson());
         Response response1 = Response.fromJson(json1);
@@ -352,14 +351,14 @@ class ResourceManagementServiceTest {
         Response response1 = Response.fromJson(json1);
         assertTrue(response1.success(),response1.message());
 
-        String json2 = rms.getSite(Site.getLookupObject(site.address()).toJson());
+        String json2 = rms.getSite(Site.getLookupObject(site.name()).toJson());
         Response response2 = Response.fromJson(json2);
         assertFalse(response2.success());
     }
 
     @Test
     void removeSiteDoesNotExist(){
-        Site site3 = new Site("zone a", "address a", "123456","bob", Site.SiteType.BRANCH);
+        Site site3 = new Site("TODO: INSERT NAME HERE", "name a", "zone a", "123456","bob", Site.SiteType.BRANCH);
         String json1 = rms.removeSite(site3.toJson());
         Response response1 = Response.fromJson(json1);
         assertFalse(response1.success());
@@ -367,13 +366,13 @@ class ResourceManagementServiceTest {
 
     @Test
     void updateSite() {
-        Site siteUpdate = new Site(site.transportZone(), site.address(), "123456981251","new bob", Site.SiteType.BRANCH);
+        Site siteUpdate = new Site("TODO: INSERT NAME HERE", site.address(), site.transportZone(), "123456981251","new bob", Site.SiteType.BRANCH);
 
         String json1 = rms.updateSite(siteUpdate.toJson());
         Response response1 = Response.fromJson(json1);
         assertTrue(response1.success(),response1.message());
 
-        String json2 = rms.getSite(Site.getLookupObject(site.address()).toJson());
+        String json2 = rms.getSite(Site.getLookupObject(site.name()).toJson());
         Response response2 = Response.fromJson(json2);
         assertTrue(response2.success(),response2.message());
         Site siteToCheck = response2.data(Site.class);
@@ -386,7 +385,7 @@ class ResourceManagementServiceTest {
 
     @Test
     void updateSiteDoesNotExist(){
-        Site site3 = new Site("zone a", "address a", "123456","bob", Site.SiteType.BRANCH);
+        Site site3 = new Site("TODO: INSERT NAME HERE", "name a", "zone a", "123456","bob", Site.SiteType.BRANCH);
         String json1 = rms.updateSite(site3.toJson());
         Response response1 = Response.fromJson(json1);
         assertFalse(response1.success());
@@ -394,7 +393,7 @@ class ResourceManagementServiceTest {
 
     @Test
     void getSite() {
-        String responseJson = rms.getSite(Site.getLookupObject(site.address()).toJson());
+        String responseJson = rms.getSite(Site.getLookupObject(site.name()).toJson());
         Response response = Response.fromJson(responseJson);
         assertTrue(response.success(),response.message());
         Site siteToCheck = response.data(Site.class);
@@ -407,7 +406,7 @@ class ResourceManagementServiceTest {
 
     @Test
     void getSiteDoesNotExist(){
-        Site site3 = Site.getLookupObject("address a");
+        Site site3 = Site.getLookupObject("name a");
         String responseJson = rms.getSite(site3.toJson());
         Response response = Response.fromJson(responseJson);
         assertFalse(response.success());
@@ -417,7 +416,7 @@ class ResourceManagementServiceTest {
     void getAllSites() {
         //generate more sites
         for (int i = 0; i < 20; i++) {
-            Site site = new Site("abc" + i, "address" + i, "123456","bob", Site.SiteType.BRANCH);
+            Site site = new Site("TODO: INSERT NAME HERE", "name" + i, "abc" + i, "123456","bob", Site.SiteType.BRANCH);
             rms.addSite(site.toJson());
         }
 

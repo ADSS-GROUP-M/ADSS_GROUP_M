@@ -1,4 +1,4 @@
-package transportModule.backend.serviceLayer;
+package serviceLayer.transportModule;
 
 import dataAccessLayer.DalFactory;
 import objects.transportObjects.*;
@@ -9,9 +9,7 @@ import serviceLayer.ServiceFactory;
 import serviceLayer.employeeModule.Objects.SShiftType;
 import serviceLayer.employeeModule.Services.EmployeesService;
 import serviceLayer.employeeModule.Services.UserService;
-import serviceLayer.transportModule.ItemListsService;
-import serviceLayer.transportModule.ResourceManagementService;
-import serviceLayer.transportModule.TransportsService;
+import utils.JsonUtils;
 import utils.Response;
 
 import java.time.LocalDate;
@@ -24,7 +22,7 @@ import java.util.List;
 
 import static dataAccessLayer.DalFactory.TESTING_DB_NAME;
 import static org.junit.jupiter.api.Assertions.*;
-class TransportsServiceTest {
+class TransportsServiceIT {
 
     private Transport transport;
     private TransportsService ts;
@@ -33,19 +31,25 @@ class TransportsServiceTest {
     private ItemListsService ils;
     private ResourceManagementService rms;
     private Site site1;
+    private Site site2;
+
+    @AfterEach
+    void tearDown() {
+        DalFactory.clearTestDB();
+    }
 
     @BeforeEach
     void setUp() {
+        DalFactory.clearTestDB();
         ServiceFactory factory = new ServiceFactory(TESTING_DB_NAME);
-        ts = factory.getTransportsService();
-        ils = factory.getItemListsService();
-        rms = factory.getResourceManagementService();
+        ts = factory.transportsService();
+        ils = factory.itemListsService();
+        rms = factory.resourceManagementService();
         es = factory.employeesService();
         us = factory.userService();
-        DalFactory.clearTestDB();
 
-        Site site1 = new Site("zone a", "123 main st", "(555) 123-4567", "john smith", Site.SiteType.BRANCH);
-        Site site2 = new Site("zone b", "456 oak ave", "(555) 234-5678", "jane doe", Site.SiteType.LOGISTICAL_CENTER);
+        site1 = new Site("TODO: INSERT NAME HERE", "123 main st", "zone a", "(555) 123-4567", "john smith", Site.SiteType.BRANCH);
+        site2 = new Site("TODO: INSERT NAME HERE", "456 oak ave", "zone b", "(555) 234-5678", "jane doe", Site.SiteType.LOGISTICAL_CENTER);
         Driver driver1 = new Driver("123", "megan smith", Driver.LicenseType.C3);
         Truck truck1 = new Truck("abc123", "ford", 1500, 10000, Truck.CoolingCapacity.FROZEN);
         HashMap<String, Integer> load1 = new HashMap<>();
@@ -73,7 +77,7 @@ class TransportsServiceTest {
         HashMap<String,Integer> hm = new HashMap<>();
         hm.put(site2.address(), itemList1.id());
 
-        transport = new Transport(
+        Transport transportToAdd = new Transport(
                 site1.address(),
                 new LinkedList<>(List.of(site2.address())),
                 hm,
@@ -82,19 +86,14 @@ class TransportsServiceTest {
                 LocalDateTime.of(2020, 1, 1, 0, 0),
                 100
         );
-        String json2 = ts.addTransport(transport.toJson());
+        String json2 = ts.addTransport(transportToAdd.toJson());
         Response response = Response.fromJson(json2);
         if(response.success() == false){
             fail("Setup failed:\n" + response.message() + "\ncause: " + response.data());
         } else {
-            int id2 = Response.fromJson(json2).dataToInt();
-            transport = transport.newId(id2);
+            int _id = response.dataToInt();
+            transport = fetchAddedTransport(_id);
         }
-    }
-
-    @AfterEach
-    void tearDown() {
-        DalFactory.clearTestDB();
     }
 
     @Test
@@ -116,12 +115,10 @@ class TransportsServiceTest {
 
         HashMap<String,Integer> hm = new HashMap<>();
 
-        Site source = new Site("zone b", "456 oak ave", "(555) 234-5678", "jane doe", Site.SiteType.LOGISTICAL_CENTER);
-        Site destination = new Site("zone a", "123 main st", "(555) 123-4567", "john smith", Site.SiteType.BRANCH);
-        hm.put(destination.address(), itemList.id());
-        LinkedList<String> destinations = new LinkedList<>(List.of(destination.address()));
+        hm.put(site2.address(), itemList.id());
+        LinkedList<String> destinations = new LinkedList<>(List.of(site2.address()));
         Transport newTransport = new Transport(
-                source.address(),
+                site1.address(),
                 destinations,
                 hm,
                 "123",
@@ -129,10 +126,11 @@ class TransportsServiceTest {
                 LocalDateTime.of(2020, 1, 1, 0, 0),
                 2000
         );
+
         String json2 = ts.addTransport(newTransport.toJson());
         Response response = Response.fromJson(json2);
         assertTrue(response.success(),response.message());
-        newTransport = newTransport.newId(response.dataToInt());
+        newTransport = fetchAddedTransport(response.dataToInt());
         String updatedJson = ts.getTransport(Transport.getLookupObject(response.dataToInt()).toJson());
         Response updatedResponse = Response.fromJson(updatedJson);
         Transport updatedTransport = updatedResponse.data(Transport.class);
@@ -176,8 +174,8 @@ class TransportsServiceTest {
 
         HashMap<String,Integer> hm = new HashMap<>();
 
-        Site source = new Site("zone b", "456 oak ave UPDATED", "(555) 234-5678", "jane doe", Site.SiteType.LOGISTICAL_CENTER);
-        Site destination = new Site("zone a", "123 main st UPDATED", "(555) 123-4567", "john smith", Site.SiteType.BRANCH);
+        Site source = new Site("TODO: INSERT NAME HERE", "456 oak ave UPDATED", "zone b", "(555) 234-5678", "jane doe", Site.SiteType.LOGISTICAL_CENTER);
+        Site destination = new Site("TODO: INSERT NAME HERE", "123 main st UPDATED", "zone a", "(555) 123-4567", "john smith", Site.SiteType.BRANCH);
 
         rms.addSite(source.toJson());
         rms.addSite(destination.toJson());
@@ -195,6 +193,7 @@ class TransportsServiceTest {
                 LocalDateTime.of(2020, 1, 1, 0, 0),
                 2000
         );
+
         String json2 = ts.updateTransport(newTransport.toJson());
         Response response = Response.fromJson(json2);
         assertTrue(response.success(),response.message());
@@ -307,6 +306,7 @@ class TransportsServiceTest {
         assertFalse(response.success());
         assertEquals("license",response.data());
     }
+
     @Test
     void createTransportWithBadLicenseAndTooMuchWeight(){
         Driver driver = new Driver("12345","name", Driver.LicenseType.A1);
@@ -328,17 +328,16 @@ class TransportsServiceTest {
         assertFalse(response.success());
         assertEquals("license,weight",response.data());
     }
-
     @Test
     void createTransportEverythingDoesNotExist(){
         Transport newTransport = new Transport(
-                "some address",
+                "some name",
                 new LinkedList<>(){{
-                    add("some other address");
+                    add("some other name");
                     add("some other address2");
                 }},
                 new HashMap<>(){{
-                    put("some other address", 10);
+                    put("some other name", 10);
                     put("some other address2", 20);
                 }},
                 "some driver",
@@ -353,20 +352,19 @@ class TransportsServiceTest {
     }
 
     String driverId1 = "123", driverId2 = "12345";
+
     String storekeeperId1 = "126", storekeeperId2 = "127", storekeeperId3 = "128", storekeeperId4 = "129";
     String HQAddress = "1", updatedBranchDestination = "123 main st UPDATED", site1Address = "123 main st";
     LocalDate shiftDate = LocalDate.of(2020, 1, 1);
-
     private void initEmployeesModuleTestData() {
         // Used for testing Employees module integration:
         // Creating the test branch and shifts, recruiting and certifying the employees
-        us.createData();
-        es.createData();
+//        es.createData();
         es.updateBranchWorkingHours("admin123",HQAddress, LocalTime.of(0,0),LocalTime.of(14,0),LocalTime.of(14,0),LocalTime.of(23,0));
         es.createWeekShifts("admin123",HQAddress,shiftDate);
         es.setShiftNeededAmount("admin123",HQAddress,shiftDate,SShiftType.Morning,"Driver",1);
-        es.recruitEmployee("admin123","megan smith", HQAddress,driverId1,"Bank01",15, LocalDate.now(),"","");
-        es.recruitEmployee("admin123","name", HQAddress,driverId2,"Bank02",15, LocalDate.now(),"","");
+        es.recruitEmployee("admin123", HQAddress, "megan smith", driverId1,"Bank01",15, LocalDate.now(),"","");
+        es.recruitEmployee("admin123", HQAddress, "name", driverId2,"Bank02",15, LocalDate.now(),"","");
         es.certifyEmployee("admin123",driverId1,"Driver"); // This call should probably be responsible for calling the rms.addDriver method that adds the driver, when executed normally through the HR Manager Menu (Employees Module CLI).
         es.certifyEmployee("admin123",driverId2,"Driver"); // This call should probably be responsible for calling the rms.addDriver method that adds the driver, when executed normally through the HR Manager Menu (Employees Module CLI).
         es.requestShift(driverId1,HQAddress,shiftDate,SShiftType.Morning,"Driver");
@@ -379,8 +377,8 @@ class TransportsServiceTest {
     private void initBranchSite1() {
         es.updateBranchWorkingHours("admin123",site1Address, LocalTime.of(0,0),LocalTime.of(14,0),LocalTime.of(14,0),LocalTime.of(23,0));
         es.createWeekShifts("admin123",site1Address,shiftDate);
-        es.recruitEmployee("admin123","Test Storekeeper5", site1Address, storekeeperId3,"Bank5",25, LocalDate.now(),"","");
-        es.recruitEmployee("admin123","Test Storekeeper6", site1Address, storekeeperId4,"Bank6",25, LocalDate.now(),"","");
+        es.recruitEmployee("admin123", site1Address, "Test Storekeeper5", storekeeperId3,"Bank5",25, LocalDate.now(),"","");
+        es.recruitEmployee("admin123", site1Address, "Test Storekeeper6", storekeeperId4,"Bank6",25, LocalDate.now(),"","");
         es.certifyEmployee("admin123", storekeeperId3,"Storekeeper");
         es.certifyEmployee("admin123", storekeeperId4,"Storekeeper");
         es.requestShift(storekeeperId3,site1Address,shiftDate,SShiftType.Morning,"Storekeeper");
@@ -394,8 +392,8 @@ class TransportsServiceTest {
     private void initBranchSiteDestination() {
         es.updateBranchWorkingHours("admin123", updatedBranchDestination, LocalTime.of(0,0),LocalTime.of(14,0),LocalTime.of(14,0),LocalTime.of(23,0));
         es.createWeekShifts("admin123", updatedBranchDestination,shiftDate);
-        es.recruitEmployee("admin123","Test Storekeeper3", updatedBranchDestination, storekeeperId1,"Bank3",25, LocalDate.now(),"","");
-        es.recruitEmployee("admin123","Test Storekeeper4", updatedBranchDestination, storekeeperId2,"Bank4",25, LocalDate.now(),"","");
+        es.recruitEmployee("admin123", updatedBranchDestination, "Test Storekeeper3", storekeeperId1,"Bank3",25, LocalDate.now(),"","");
+        es.recruitEmployee("admin123", updatedBranchDestination, "Test Storekeeper4", storekeeperId2,"Bank4",25, LocalDate.now(),"","");
         es.certifyEmployee("admin123", storekeeperId1,"Storekeeper");
         es.certifyEmployee("admin123", storekeeperId2,"Storekeeper");
         es.requestShift(storekeeperId1, updatedBranchDestination,shiftDate,SShiftType.Morning,"Storekeeper");
@@ -404,5 +402,12 @@ class TransportsServiceTest {
         es.setShiftEmployees("admin123", updatedBranchDestination,shiftDate, SShiftType.Evening,"Storekeeper",new ArrayList<>(){{add(storekeeperId2);}});
         es.approveShift("admin123", updatedBranchDestination,shiftDate, SShiftType.Morning);
         es.approveShift("admin123", updatedBranchDestination,shiftDate, SShiftType.Evening);
+    }
+
+    private Transport fetchAddedTransport(int _id) {
+        String _json = Transport.getLookupObject(_id).toJson();
+        String _responseJson = ts.getTransport(_json);
+        Response _response = JsonUtils.deserialize(_responseJson, Response.class);
+        return Transport.fromJson(_response.data());
     }
 }

@@ -32,9 +32,9 @@ public class User {// This class represents a user in the system and manages its
         return loggedIn;
     }
 
-    public void logout() throws Exception {
+    public void logout() {
         if (!loggedIn)
-            throw new Exception("The user is already logged out.");
+            throw new RuntimeException("The user is already logged out.");
         loggedIn = false;
     }
 

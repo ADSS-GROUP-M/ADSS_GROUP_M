@@ -22,24 +22,21 @@ public class HRManagerMenu implements Menu {
     public void printCommands() {
         System.out.println();
         System.out.println("1. `logout` - Logout command");
-        System.out.println("2. `recruit_employee <first_name> <last_name> <branch_id> <employee_id> <bank_number> <bank branch> <hourly_rate> <employment_date: DD/MM/YYYY>` - Recruit employee command");
-        System.out.println("3. `create_week_shifts <branch_id>` - Create next week shifts");
-        System.out.println("4. `create_week_shifts <branch_id> <week_start: DD/MM/YYYY>` - Create week shifts.");
-        System.out.println("5. `update_shift_needed <branch_id> <shift_date: DD/MM/YYYY> <shift_type: Morning/Evening> <role> <amount>` - Update shift needed amount by role");
-        System.out.println("6. `update_shift_employees <branch_id>` - Update next week's shifts needed amount by role");
-        System.out.println("7. `update_shift_employees <branch_id> <week_start: DD/MM/YYYY>` - Update another week's shift needed amount by role");
-        System.out.println("8. `week_shifts <branch_id>` - Show next week shifts");
-        System.out.println("9. `week_shifts <branch_id> <week_start: DD/MM/YYYY>` - Show weekly shifts");
-        System.out.println("10. `certify <employee_id> <role>` - Certify employee to the given role");
-        System.out.println("11. `uncertify <employee_id> <role>` - Removes the employee's certification of the given role");
-        System.out.println("12. `approve_shift <branch_id> <shift_date: DD/MM/YYYY> <shift_type: Morning/Evening>` - Approve the specified shift");
-        System.out.println("13. `add_employee_to_branch <employee_id> <branch_id>` - Adds an existing employee to a branch");
-        System.out.println("14. `delete_shift <branch_id> <shift_date: DD/MM/YYYY> <shift_type: Morning/Evening>` Deletes the specified shift");
-        System.out.println("15. `create_branch <branch_id>` - Creates a new branch with the given branch id");
-        System.out.println("16. `update_branch_hours <branch_id> <morning_start> <morning_end> <evening_start> <evening_end>` - Updates the branch's working hours");
-        System.out.println("17. `update_employee <employee_id>` - Updates an existing employee's details");
-        System.out.println("18. `authorize <username> <authorization>` - Authorizes an existing user to the given authorization");
-        System.out.println("19. `exit` - Exit command");
+        System.out.println("2. `recruit_employee` - Recruit a new employee");
+        System.out.println("3. `create_week_shifts` - Create week shifts");
+        System.out.println("4. `update_shift_needed` - Update shift needed amount by role");
+        System.out.println("5. `update_shift_employees` - Update the week's shifts needed amount by role");
+        System.out.println("6. `week_shifts` - Show next week shifts");
+        System.out.println("7. `certify` - Certify employee to the given role");
+        System.out.println("8. `uncertify` - Removes the employee's certification of the given role");
+        System.out.println("9. `approve_shift` - Approve the specified shift");
+        System.out.println("10. `add_employee_to_branch` - Adds an existing employee to a branch");
+        System.out.println("11. `delete_shift` - Deletes the specified shift");
+        //System.out.println("12. `create_branch` - Creates a new branch with the given branch id"); // This operation has moved to Transport Module when creating a new site
+        System.out.println("12. `update_branch_hours` - Updates the branch's working hours");
+        System.out.println("13. `update_employee` - Updates an existing employee's details");
+        System.out.println("14. `authorize` - Authorizes an existing user to the given authorization");
+        System.out.println("15. `exit` - Exit command");
     }
 
     public Menu run() {
@@ -58,21 +55,30 @@ public class HRManagerMenu implements Menu {
             System.out.println(output);
             return new LoginMenu();
         }
-        else if (command[0].equals("recruit_employee") && command.length == 9) {
+        else if (command[0].equals("recruit_employee") && command.length == 1) {
+            // Parameters: <first_name> <last_name> <branch_id> <employee_id> <bank_number> <bank branch> <hourly_rate> <employment_date: DD/MM/YYYY>
             try {
-                String firstName = command[1];
-                String lastName = command[2];
-                String branchId = command[3];
-                String employeeId = command[4];
-                int bankNumber = Integer.parseInt(command[5]);
-                int branchNumber = Integer.parseInt(command[6]);
-                double hourlyRate = Double.parseDouble(command[7]);
-                LocalDate employmentDate = DateUtils.parse(command[8]);
+                System.out.println("Please enter the name of the employee:");
+                String employeeName = scanner.nextLine();
+                System.out.println("Please enter the branch id (branch address):");
+                String branchId = scanner.nextLine();
+                System.out.println("Please enter the employee id:");
+                String employeeId = scanner.nextLine();
+                System.out.println("Please enter the employee's bank number and bank branch number: <bank_number> <bank_branch>");
+                String[] bankDetails = scanner.nextLine().split(" ",-1);
+                int bankNumber = Integer.parseInt(bankDetails[0]);
+                int branchNumber = Integer.parseInt(bankDetails[1]);
+                System.out.println("Please enter the employee's hourly salary rate:");
+                String hourlyRateStr = scanner.nextLine();
+                double hourlyRate = Double.parseDouble(hourlyRateStr);
+                System.out.println("Please enter the employee's employment date <DD/MM/YYYY>:");
+                String employmentDateStr = scanner.nextLine();
+                LocalDate employmentDate = DateUtils.parse(employmentDateStr);
                 System.out.println("Please enter the employment conditions:");
                 String employmentConditions = scanner.nextLine();
                 System.out.println("Please enter other employee details (optional):");
                 String details = scanner.nextLine();
-                output = hrManagerMenuVM.recruitEmployee(firstName + " " + lastName, branchId, employeeId, bankNumber + " " + branchNumber, hourlyRate, employmentDate, employmentConditions, details);
+                output = hrManagerMenuVM.recruitEmployee(employeeName, branchId, employeeId, bankNumber + " " + branchNumber, hourlyRate, employmentDate, employmentConditions, details);
                 if (output == null) {
                     System.out.println("Recruited employee successfully.");
                     System.out.println("Would you like to create a user for the new employee?");
@@ -91,26 +97,39 @@ public class HRManagerMenu implements Menu {
                 output = "Invalid input, expected a date in the form " + DateUtils.DATE_PATTERN + ".";
             }
         }
-        else if (command[0].equals("create_week_shifts") && command.length == 2) {
-            String branchId = command[1];
-            output = hrManagerMenuVM.createNextWeekShifts(branchId);
-        }
-        else if (command[0].equals("create_week_shifts") && command.length == 3) {
-            try {
-                String branchId = command[1];
-                LocalDate weekStart = DateUtils.parse(command[2]);
-                output = hrManagerMenuVM.createWeekShifts(branchId, weekStart);
-            } catch (DateTimeParseException e) {
-                output = "Invalid input, expected a date in the form " + DateUtils.DATE_PATTERN + ".";
+        else if (command[0].equals("create_week_shifts") && command.length == 1) {
+            // Parameters: <branch_id>  |  <branch_id> <week_start: DD/MM/YYYY>
+            System.out.println("Please enter the branch id (branch address):");
+            String branchId = scanner.nextLine();
+            System.out.println("Please enter the starting date <DD/MM/YYYY> of the shifts week (or leave empty to create for next week):");
+            String weekStartStr = scanner.nextLine();
+            if(weekStartStr.isEmpty()) {
+                output = hrManagerMenuVM.createNextWeekShifts(branchId);
+            }
+            else {
+                try {
+                    LocalDate weekStart = DateUtils.parse(weekStartStr);
+                    output = hrManagerMenuVM.createWeekShifts(branchId, weekStart);
+                } catch (DateTimeParseException e) {
+                    output = "Invalid input, expected a date in the form " + DateUtils.DATE_PATTERN + ".";
+                }
             }
         }
-        else if (command[0].equals("update_shift_needed") && command.length == 6) {
+        else if (command[0].equals("update_shift_needed") && command.length == 1) {
+            // Parameters: <branch_id> <shift_date: DD/MM/YYYY> <shift_type: Morning/Evening> <role> <amount>
             try {
-                String branchId = command[1];
-                LocalDate shiftDate = DateUtils.parse(command[2]);
-                String shiftType = command[3];
-                String role = command[4];
-                int amount = Integer.parseInt(command[5]);
+                System.out.println("Please enter the branch id (branch address):");
+                String branchId = scanner.nextLine();
+                System.out.println("Please enter the shift date <DD/MM/YYYY>:");
+                String shiftDateStr = scanner.nextLine();
+                LocalDate shiftDate = DateUtils.parse(shiftDateStr);
+                System.out.println("Please enter the shift type (Morning/Evening):");
+                String shiftType = scanner.nextLine();
+                System.out.println("Please enter the shift role:");
+                String role = scanner.nextLine();
+                System.out.println("Please enter the needed amount of employees for this role:");
+                String amountStr = scanner.nextLine();
+                int amount = Integer.parseInt(amountStr);
                 output = hrManagerMenuVM.setShiftNeededAmount(branchId, shiftDate, shiftType, role, amount);
             } catch (DateTimeParseException e) {
                 output = "Invalid input, expected a date in the form " + DateUtils.DATE_PATTERN + ".";
@@ -118,10 +137,14 @@ public class HRManagerMenu implements Menu {
                 output = "Invalid input, expected an integer amount of employees.";
             }
         }
-        else if (command[0].equals("update_shift_employees") && (command.length == 2 || command.length == 3)) {
-            String branchId = command[1];
-            if (command.length == 3) {
-                LocalDate weekStart = DateUtils.parse(command[2]);
+        else if (command[0].equals("update_shift_employees") && command.length == 1) {
+            // Parameters: <branch_id>  |  <branch_id> <week_start: DD/MM/YYYY>
+            System.out.println("Please enter the branch id (branch address):");
+            String branchId = scanner.nextLine();
+            System.out.println("Please enter the starting date <DD/MM/YYYY> of the shifts week (or leave empty for next week's shifts):");
+            String weekStartStr = scanner.nextLine();
+            if (!weekStartStr.isEmpty()) {
+                LocalDate weekStart = DateUtils.parse(weekStartStr);
                 // Prints the week's shift requests
                 System.out.println("The week's shift requests:");
                 System.out.println(hrManagerMenuVM.getWeekShiftRequests(branchId, weekStart));
@@ -151,22 +174,30 @@ public class HRManagerMenu implements Menu {
             String[] employeeIds = idsInput.split(" ", -1);
             output = hrManagerMenuVM.setShiftEmployees(branchId, shiftDate, shiftType, role, Arrays.stream(employeeIds).toList());
         }
-        else if (command[0].equals("week_shifts") && command.length == 2) {
-            String branchId = command[1];
-            output = hrManagerMenuVM.getNextWeekShifts(branchId);
-        }
-        else if (command[0].equals("week_shifts") && command.length == 3) {
-            try {
-                String branchId = command[1];
-                LocalDate weekStart = DateUtils.parse(command[2]);
-                output = hrManagerMenuVM.getWeekShifts(branchId, weekStart);
-            } catch (DateTimeParseException e) {
-                output = "Invalid input, expected a date in the form " + DateUtils.DATE_PATTERN + ".";
+        else if (command[0].equals("week_shifts") && command.length == 1) {
+            // Parameters: <branch_id>  |  <branch_id> <week_start: DD/MM/YYYY>
+            System.out.println("Please enter the branch id (branch address):");
+            String branchId = scanner.nextLine();
+            System.out.println("Please enter the starting date <DD/MM/YYYY> of the shifts week (or leave empty for next week's shifts):");
+            String weekStartStr = scanner.nextLine();
+            if (weekStartStr.isEmpty()) {
+                output = hrManagerMenuVM.getNextWeekShifts(branchId);
+            }
+            else {
+                try {
+                    LocalDate weekStart = DateUtils.parse(weekStartStr);
+                    output = hrManagerMenuVM.getWeekShifts(branchId, weekStart);
+                } catch (DateTimeParseException e) {
+                    output = "Invalid input, expected a date in the form " + DateUtils.DATE_PATTERN + ".";
+                }
             }
         }
-        else if (command[0].equals("certify") && command.length == 3) {
-            String employeeId = command[1];
-            String role = command[2];
+        else if (command[0].equals("certify") && command.length == 1) {
+            // Parameters: <employee_id> <role>
+            System.out.println("Please enter the employee id:");
+            String employeeId = scanner.nextLine();
+            System.out.println("Please enter the role to certify:");
+            String role = scanner.nextLine();
             if (role.equals("Driver")) {
                 System.out.println("Please enter the driver's license: (A1,A2,B1,B2,B3,C1,C2,C3)");
                 String driverLicense = scanner.nextLine();
@@ -175,54 +206,73 @@ public class HRManagerMenu implements Menu {
             else
                 output = hrManagerMenuVM.certifyEmployee(employeeId, role);
         }
-        else if (command[0].equals("uncertify") && command.length == 3) {
-            String employeeId = command[1];
-            String role = command[2];
+        else if (command[0].equals("uncertify") && command.length == 1) {
+            // Parameters: <employee_id> <role>
+            System.out.println("Please enter the employee id:");
+            String employeeId = scanner.nextLine();
+            System.out.println("Please enter the role to uncertify:");
+            String role = scanner.nextLine();
             output = hrManagerMenuVM.uncertifyEmployee(employeeId, role);
         }
-        else if (command[0].equals("approve_shift") && command.length == 4) {
+        else if (command[0].equals("approve_shift") && command.length == 1) {
+            // Parameters: <branch_id> <shift_date: DD/MM/YYYY> <shift_type: Morning/Evening>
             try {
-                String branchId = command[1];
-                LocalDate shiftDate = DateUtils.parse(command[2]);
-                String shiftType = command[3];
+                System.out.println("Please enter the branch id (branch address):");
+                String branchId = scanner.nextLine();
+                System.out.println("Please enter the starting date <DD/MM/YYYY> of the shifts week (or leave empty for next week's shifts):");
+                String shiftDateStr = scanner.nextLine();
+                LocalDate shiftDate = DateUtils.parse(shiftDateStr);
+                System.out.println("Please enter the shift type (Morning/Evening):");
+                String shiftType = scanner.nextLine();
                 output = hrManagerMenuVM.approveShift(branchId, shiftDate, shiftType);
             } catch (DateTimeParseException e) {
                 output = "Invalid input, expected a date in the form " + DateUtils.DATE_PATTERN + ".";
             }
         }
-        else if (command[0].equals("add_employee_to_branch") && command.length == 3) {
-            String employeeId = command[1];
-            String branchId = command[2];
+        else if (command[0].equals("add_employee_to_branch") && command.length == 1) {
+            // Parameters: <employee_id> <branch_id>
+            System.out.println("Please enter the employee id:");
+            String employeeId = scanner.nextLine();
+            System.out.println("Please enter the branch id (branch address):");
+            String branchId = scanner.nextLine();
             output = hrManagerMenuVM.addEmployeeToBranch(employeeId, branchId);
         }
-        else if (command[0].equals("delete_shift") && command.length == 4) {
+        else if (command[0].equals("delete_shift") && command.length == 1) {
+            // Parameters: <branch_id> <shift_date: DD/MM/YYYY> <shift_type: Morning/Evening>
             try {
-                String branchId = command[1];
-                LocalDate shiftDate = DateUtils.parse(command[2]);
-                String shiftType = command[3];
+                System.out.println("Please enter the branch id (branch address):");
+                String branchId = scanner.nextLine();
+                System.out.println("Please enter the starting date <DD/MM/YYYY> of the shifts week (or leave empty for next week's shifts):");
+                String shiftDateStr = scanner.nextLine();
+                LocalDate shiftDate = DateUtils.parse(shiftDateStr);
+                String shiftType = scanner.nextLine();
                 output = hrManagerMenuVM.deleteShift(branchId, shiftDate, shiftType);
             } catch (DateTimeParseException e) {
                 output = "Invalid input, expected a date in the form " + DateUtils.DATE_PATTERN + ".";
             }
         }
-        else if (command[0].equals("create_branch") && command.length == 2) {
-            String branchId = command[1];
-            output = hrManagerMenuVM.createBranch(branchId);
-        }
-        else if (command[0].equals("update_branch_hours") && command.length == 6) {
+        else if (command[0].equals("update_branch_hours") && command.length == 1) {
+            // Parameters: <branch_id> <morning_start> <morning_end> <evening_start> <evening_end>
             try {
-                String branchId = command[1];
-                LocalTime morningStart = LocalTime.parse(command[2]);
-                LocalTime morningEnd = LocalTime.parse(command[3]);
-                LocalTime eveningStart = LocalTime.parse(command[4]);
-                LocalTime eveningEnd = LocalTime.parse(command[5]);
+                System.out.println("Please enter the branch id (branch address):");
+                String branchId = scanner.nextLine();
+                System.out.println("Please enter the morning start time (HH:MM):");
+                LocalTime morningStart = LocalTime.parse(scanner.nextLine());
+                System.out.println("Please enter the morning end time (HH:MM):");
+                LocalTime morningEnd = LocalTime.parse(scanner.nextLine());
+                System.out.println("Please enter the evening start time (HH:MM):");
+                LocalTime eveningStart = LocalTime.parse(scanner.nextLine());
+                System.out.println("Please enter the evening end time (HH:MM):");
+                LocalTime eveningEnd = LocalTime.parse(scanner.nextLine());
                 output = hrManagerMenuVM.updateBranchWorkingHours(branchId, morningStart, morningEnd, eveningStart, eveningEnd);
             } catch (DateTimeParseException e) {
                 output = "Invalid input, expected a time in the form HH:MM.";
             }
         }
-        else if (command[0].equals("update_employee") && command.length == 2) {
-            String employeeId = command[1];
+        else if (command[0].equals("update_employee") && command.length == 1) {
+            // Parameters: <employee_id>
+            System.out.println("Please enter the employee id:");
+            String employeeId = scanner.nextLine();
             System.out.println("Please choose which detail to update:");
             System.out.println("1. Salary");
             System.out.println("2. Bank Details");
@@ -263,9 +313,12 @@ public class HRManagerMenu implements Menu {
                     output = "Invalid input, expected a number between 1 and 4, try again.";
             }
         }
-        else if (command[0].equals("authorize") && command.length == 3) {
-            String username = command[1];
-            String authorization = command[2];
+        else if (command[0].equals("authorize") && command.length == 1) {
+            // Parameters: <username> <authorization>
+            System.out.println("Please enter the username to authorize:");
+            String username = scanner.nextLine();
+            System.out.println("Please enter the authorization to authorize:");
+            String authorization = scanner.nextLine();
             output = hrManagerMenuVM.authorizeUser(username, authorization);
         }
         else

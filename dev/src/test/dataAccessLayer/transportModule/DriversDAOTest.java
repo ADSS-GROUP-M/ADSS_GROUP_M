@@ -27,6 +27,7 @@ class DriversDAOTest {
 
     private Employee employee;
     private Driver driver;
+    private DalFactory factory;
 
     @BeforeEach
     void setUp() {
@@ -35,7 +36,7 @@ class DriversDAOTest {
         employee.addRole(Role.GeneralWorker);
         driver = new Driver(employee.getId(),employee.getName(), Driver.LicenseType.C3);
         try {
-            DalFactory factory = new DalFactory(TESTING_DB_NAME);
+            factory = new DalFactory(TESTING_DB_NAME);
 
             empDao = factory.employeeDAO();
             dao = factory.driversDAO();
@@ -48,6 +49,7 @@ class DriversDAOTest {
         } catch (DalException e) {
             fail(e);
         }
+        dao.clearCache();
     }
 
     @AfterEach
@@ -151,7 +153,7 @@ class DriversDAOTest {
                     WHERE %s.id = '%s';
                         """, TABLE_NAME, PARENT_TABLE_NAME[0] ,TABLE_NAME, PARENT_TABLE_NAME[0], TABLE_NAME, PARENT_TABLE_NAME[0], TABLE_NAME, driver.id());
 
-        SQLExecutor executor = new SQLExecutor(TESTING_DB_NAME);
+        SQLExecutor executor = factory.cursor();
         try {
             OfflineResultSet resultSet = executor.executeRead(query);
             resultSet.next();

@@ -12,9 +12,9 @@ import utils.transportUtils.TransportException;
 
 public class ResourceManagementService {
 
-    private SitesController sitesController;
-    private DriversController driversController;
-    private TrucksController trucksController;
+    private final SitesController sitesController;
+    private final DriversController driversController;
+    private final TrucksController trucksController;
 
     public ResourceManagementService(SitesController sitesController,
                                      DriversController driversController,
@@ -135,21 +135,24 @@ public class ResourceManagementService {
 
     public String addSite(String json){
         Site site = JsonUtils.deserialize(json, Site.class);
+        Site added;
         try{
-            sitesController.addSite(site);
+            added = sitesController.addSite(site);
         }catch(TransportException e){
             return Response.getErrorResponse(e).toJson();
         }
-        return new Response("Site added successfully", true).toJson();
+        return new Response("Site added successfully", true,added).toJson();
     }
 
     /**
      * @param json serialized {@link Site#getLookupObject(String)}
+     * @deprecated this operation is not fully supported and may result in inconsistent state
      */
+    @Deprecated
     public String removeSite(String json){
         Site site = JsonUtils.deserialize(json, Site.class);
         try{
-            sitesController.removeSite(site.address());
+            sitesController.removeSite(site.name());
         }catch(TransportException e){
             return Response.getErrorResponse(e).toJson();
         }
@@ -158,12 +161,13 @@ public class ResourceManagementService {
 
     public String updateSite(String json){
         Site site = JsonUtils.deserialize(json, Site.class);
+        Site updated;
         try{
-            sitesController.updateSite(site.address(), site);
+            updated = sitesController.updateSite(site.name(), site);
         }catch(TransportException e){
             return Response.getErrorResponse(e).toJson();
         }
-        return new Response("Site updated successfully", true).toJson();
+        return new Response("Site updated successfully", true, updated).toJson();
     }
 
     /**
@@ -172,7 +176,7 @@ public class ResourceManagementService {
     public String getSite(String json){
         Site site = JsonUtils.deserialize(json, Site.class);
         try{
-            site = sitesController.getSite(site.address());
+            site = sitesController.getSite(site.name());
         }catch(Exception e){
             return Response.getErrorResponse(e).toJson();
         }

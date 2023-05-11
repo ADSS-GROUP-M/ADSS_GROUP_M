@@ -19,7 +19,7 @@ import static java.time.temporal.TemporalAdjusters.next;
 
 public class BackendController {
 
-    public static final Type STRING_lIST_TYPE = new TypeToken<List<String>>(){}.getType();
+    public static final Type STRING_LIST_TYPE = new TypeToken<List<String>>(){}.getType();
     private static final Type LIST_SSHIFT_ARRAY_TYPE = new TypeToken<List<SShift[]>>(){}.getType();
 
     private static BackendController instance;
@@ -34,9 +34,9 @@ public class BackendController {
         employeesService = serviceFactory.employeesService();
         loggedUsername = null;
 
-        // Data Initialization
-        userService.createData();
-        employeesService.createData();
+        // Data Initialization - Use these lines after deleting the database, if you want to initialize the employees & transport module data
+        //userService.createData();
+        //employeesService.createData();
     }
 
     public BackendController(ServiceFactory factory) {
@@ -45,9 +45,9 @@ public class BackendController {
         employeesService = serviceFactory.employeesService();
         loggedUsername = null;
 
-        // Data Initialization
-        userService.createData();
-        employeesService.createData();
+        // Data Initialization - Use these lines after deleting the database, if you want to initalize the employees & transport module data
+        //userService.createData();
+        //employeesService.createData();
     }
 
     public static BackendController getInstance() {
@@ -90,8 +90,8 @@ public class BackendController {
             return "Logout failed.";
     }
 
-    public String recruitEmployee(String fullName, String branchId, String id, String bankDetails, double hourlyRate, LocalDate employmentDate, String employmentConditions, String details) {
-        Response response = Response.fromJson(employeesService.recruitEmployee(loggedUsername, fullName, branchId, id, bankDetails, hourlyRate, employmentDate, employmentConditions, details));
+    public String recruitEmployee(String branchId, String fullName, String id, String bankDetails, double hourlyRate, LocalDate employmentDate, String employmentConditions, String details) {
+        Response response = Response.fromJson(employeesService.recruitEmployee(loggedUsername, branchId, fullName, id, bankDetails, hourlyRate, employmentDate, employmentConditions, details));
         if (response.success() == false)
             return response.message();
         else
@@ -133,7 +133,7 @@ public class BackendController {
         if (response.success() == false)
             return null;
         else{
-            return response.data(STRING_lIST_TYPE);
+            return response.data(STRING_LIST_TYPE);
         }
     }
 
@@ -338,7 +338,7 @@ public class BackendController {
             return "Authorized the user successfully.";
     }
 
-    public String cancelShiftRequest(String branchId, String shiftType, LocalDate shiftDate, String role) {
+    public String cancelShiftRequest(String branchId, LocalDate shiftDate, String shiftType, String role) {
         try {
             Response response = Response.fromJson(employeesService.cancelShiftRequest(loggedUsername, branchId, shiftDate, SShiftType.valueOf(shiftType), role));
             if (response.success() == false)

@@ -18,21 +18,8 @@ public abstract class DAO<T> {
 
     protected final Cache<T> cache;
 
-    protected DAO(String tableName,String[] types, String[] primaryKeys, String ... allColumns) throws DalException {
-        this.cursor = new SQLExecutor();
-        this.TABLE_NAME = tableName;
-        this.PRIMARY_KEYS = primaryKeys;
-        this.ALL_COLUMNS = allColumns;
-        this.TYPES = types;
-        this.cache = new Cache<>();
-    }
-
-    /**
-     * used for testing
-     * @param dbName the name of the database to connect to
-     */
-    protected DAO(String dbName, String tableName,String[] types, String[] primaryKeys, String ... allColumns) throws DalException {
-        this.cursor = new SQLExecutor(dbName);
+    protected DAO(SQLExecutor cursor ,String tableName,String[] types, String[] primaryKeys, String ... allColumns) throws DalException {
+        this.cursor = cursor;
         this.TABLE_NAME = tableName;
         this.PRIMARY_KEYS = primaryKeys;
         this.ALL_COLUMNS = allColumns;
@@ -118,5 +105,9 @@ public abstract class DAO<T> {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public void clearCache() {
+    	cache.clear();
     }
 }

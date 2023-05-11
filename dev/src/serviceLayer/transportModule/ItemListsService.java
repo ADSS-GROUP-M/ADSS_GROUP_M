@@ -20,12 +20,13 @@ public class ItemListsService {
     public String addItemList(String json){
         ItemList itemList = ItemList.fromJson(json);
         Integer id = null;
+        ItemList added;
         try {
-            id = ilc.addItemList(itemList);
+              added = ilc.addItemList(itemList);
         } catch (TransportException e) {
             return Response.getErrorResponse(e).toJson();
         }
-        return new Response("Item list added successfully with id"+id, true, id).toJson();
+        return new Response("Item list added successfully with id"+id, true, added).toJson();
     }
 
     /**
@@ -43,12 +44,13 @@ public class ItemListsService {
 
     public String updateItemList(String json){
         ItemList itemList = ItemList.fromJson(json);
+        ItemList updated;
         try{
-            ilc.updateItemList(itemList.id(), itemList);
+           updated= ilc.updateItemList(itemList.id(), itemList);
         }catch(TransportException e){
             return Response.getErrorResponse(e).toJson();
         }
-        return new Response("Item list updated successfully", true).toJson();
+        return new Response("Item list updated successfully", true,updated).toJson();
     }
 
     /**

@@ -1,5 +1,6 @@
 package dataAccessLayer.transportModule;
 
+import dataAccessLayer.DalFactory;
 import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.dalUtils.OfflineResultSet;
 import dataAccessLayer.dalUtils.SQLExecutor;
@@ -19,13 +20,15 @@ class TrucksDAOTest {
 
     private TrucksDAO dao;
     private Truck truck;
+    private DalFactory factory;
 
     //TODO: Tests that are supposed to fail
 
     @BeforeEach
     void setUp() {
         try {
-            dao = new TrucksDAO(TESTING_DB_NAME);
+            factory = new DalFactory(TESTING_DB_NAME);
+            dao = factory.trucksDAO();
             truck = new Truck("1", "model1", 1000, 20000, Truck.CoolingCapacity.FROZEN);
             dao.clearTable();
 
@@ -33,6 +36,7 @@ class TrucksDAOTest {
         } catch (DalException e) {
             fail(e);
         }
+        dao.clearCache();
     }
 
     @AfterEach
@@ -121,7 +125,7 @@ class TrucksDAOTest {
 
     @Test
     void getObjectFromResultSet() {
-        SQLExecutor cursor = new SQLExecutor(TESTING_DB_NAME);
+        SQLExecutor cursor = factory.cursor();
         try {
             OfflineResultSet resultSet = cursor.executeRead("SELECT * FROM Trucks WHERE id = "+truck.id());
             resultSet.next();

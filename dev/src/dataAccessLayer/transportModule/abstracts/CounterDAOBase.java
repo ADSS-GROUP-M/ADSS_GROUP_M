@@ -12,21 +12,10 @@ public abstract class CounterDAOBase implements CounterDAO {
     private final String TABLE_NAME;
     private final String COLUMN_NAME;
 
-    protected CounterDAOBase(String tableName, String columnName) throws DalException{
+    protected CounterDAOBase(SQLExecutor cursor, String tableName, String columnName) throws DalException{
+        this.cursor = cursor;
         TABLE_NAME = tableName;
         COLUMN_NAME = columnName;
-        cursor = new SQLExecutor();
-        initTable();
-    }
-
-    /**
-     * used for testing
-     * @param dbName the name of the database to connect to
-     */
-    protected CounterDAOBase(String dbName, String tableName , String columnName) throws DalException{
-        TABLE_NAME = tableName;
-        COLUMN_NAME = columnName;
-        cursor = new SQLExecutor(dbName);
         initTable();
     }
 

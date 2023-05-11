@@ -3,6 +3,7 @@ package businessLayer.transportModule;
 import com.google.gson.reflect.TypeToken;
 import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.transportModule.TransportsDAO;
+import javafx.util.Pair;
 import objects.transportObjects.Driver;
 import objects.transportObjects.Site;
 import objects.transportObjects.Transport;
@@ -15,8 +16,8 @@ import utils.transportUtils.TransportException;
 
 import java.lang.reflect.Type;
 import java.time.LocalDateTime;
-import java.util.LinkedList;
-import java.util.List;
+import java.time.LocalTime;
+import java.util.*;
 
 /**
  * The TransportsController class is responsible for managing and controlling transport objects.
@@ -25,6 +26,7 @@ import java.util.List;
  */
 public class TransportsController {
 
+    public static final long AVERAGE_TIME_PER_VISIT = 15;
     private final TrucksController tc;
     private final DriversController dc;
     private final SitesController sc;
@@ -60,13 +62,13 @@ public class TransportsController {
      * @param transport The transport object to add.
      * @throws TransportException If the transport object is invalid or if a transport with the same ID already exists.
      */
-    public Integer addTransport(Transport transport)throws TransportException{
+    public Transport addTransport(Transport transport)throws TransportException{
 
         if(transport.id() != -1){
             throw new UnsupportedOperationException("Pre-defined IDs are not supported");
         }
-
         validateTransport(transport);
+        initializeEstimatedArrivalTimes(transport);
         Transport toAdd = new Transport(idCounter,transport);
         try {
             dao.insert(toAdd);
@@ -75,7 +77,7 @@ public class TransportsController {
         } catch (DalException e) {
             throw new TransportException(e.getMessage(),e);
         }
-        return toAdd.id();
+        return toAdd;
     }
 
     /**
@@ -122,18 +124,22 @@ public class TransportsController {
      * @param newTransport The updated transport object.
      * @throws TransportException If the newTransport object is invalid or if a transport with the given ID is not found.
      */
-    public void updateTransport(int id, Transport newTransport) throws TransportException{
+    public Transport updateTransport(int id, Transport newTransport) throws TransportException{
         if(transportExists(id) == false) {
             throw new TransportException("Transport not found");
         }
 
         validateTransport(newTransport);
-
+        if(newTransport.deliveryRoute().manuallyOverrideEstimatedArrivalTimes() == false){
+            initializeEstimatedArrivalTimes(newTransport);
+        }
+        Transport toUpdate = new Transport(id, newTransport);
         try {
-            dao.update(new Transport(id, newTransport));
+            dao.update(toUpdate);
         } catch (DalException e) {
             throw new TransportException(e.getMessage(),e);
         }
+        return toUpdate;
     }
 
     /**
@@ -198,28 +204,28 @@ public class TransportsController {
 
         // source validation
         if(sc.siteExists(transport.source()) == false){
-            ec.addError("Site with address " + transport.source() + " does not exist", "source");
+            ec.addError("Site with name " + transport.source() + " does not exist", "source");
         }
 
         // destinations + itemLists validation
         int destIndex = 0;
-        for(String address : transport.destinations()){
+        for(String name : transport.destinations()){
 
             //destination validation
-            if(sc.siteExists(address) == false){
-                ec.addError("Site with address " + address + " does not exist", "destination:"+destIndex);
+            if(sc.siteExists(name) == false){
+                ec.addError("Site with name " + name + " does not exist", "destination:"+destIndex);
             }
             //store keeper validation
-            else if(sc.getSite(address).siteType() == Site.SiteType.BRANCH){
-                String destinationJson = es.checkStoreKeeperAvailability(JsonUtils.serialize(transport.departureTime()),address);
+            else if(sc.getSite(name).siteType() == Site.SiteType.BRANCH){
+                String destinationJson = es.checkStoreKeeperAvailability(JsonUtils.serialize(transport.departureTime()),name);
                 Response response = Response.fromJson(destinationJson);
                 if(response.success()==false){
-                    ec.addError("Store keeper is not available on site with address " + address, "storeKeeper");
+                    ec.addError("Store keeper is not available on site with name " + name, "storeKeeper");
                 }
             }
 
             //itemList validation
-            Integer itemListId = transport.itemLists().get(address);
+            Integer itemListId = transport.itemLists().get(name);
             if(ilc.listExists(itemListId) == false) {
                 ec.addError("Item list with id " + itemListId + " does not exist", "itemList:"+destIndex);
             }
@@ -244,5 +250,42 @@ public class TransportsController {
         } catch (DalException e) {
             throw new TransportException(e.getMessage(),e);
         }
+    }
+
+    public void initializeEstimatedArrivalTimes(Transport transport) throws TransportException{
+
+        Map<String,LocalTime> estimatedArrivalTimes = new HashMap<>();
+
+        List<String> route = new LinkedList<>();
+        route.add(transport.source());
+        route.addAll(transport.destinations());
+        Map<Pair<String,String>,Double> durations = sc.buildSitesTravelTimes(route);
+
+        ListIterator<String> destinationsIterator = transport.destinations().listIterator();
+        LocalTime time = transport.departureTime().toLocalTime();
+        String curr = transport.source();
+        String next;
+
+        if(destinationsIterator.hasNext()){
+            next = destinationsIterator.next();
+            time = addTravelTime(time, curr, next, durations);
+            estimatedArrivalTimes.put(next, time);
+            curr = next;
+        }
+
+        while(destinationsIterator.hasNext()){
+            time = time.plusMinutes(AVERAGE_TIME_PER_VISIT);
+            next = destinationsIterator.next();
+            time = addTravelTime(time, curr, next,durations);
+            estimatedArrivalTimes.put(next, time);
+            curr = next;
+        }
+        transport.deliveryRoute().initializeArrivalTimes(estimatedArrivalTimes);
+    }
+
+    private static LocalTime addTravelTime(LocalTime time, String curr, String next, Map<Pair<String,String>,Double> durations){
+        long minutesToAdd = durations.get(new Pair<>(curr,next)).longValue();
+        time = time.plusMinutes(minutesToAdd);
+        return time;
     }
 }

@@ -1,5 +1,6 @@
 package presentationLayer.employeeModule.View;
 
+import presentationLayer.DataGenerator;
 import presentationLayer.employeeModule.ViewModel.LoginMenuVM;
 import presentationLayer.transportModule.TransportUI;
 import serviceLayer.ServiceFactory;
@@ -25,7 +26,8 @@ public class LoginMenu implements Menu {
 
     public void printCommands() {
         System.out.println("1. Login command: `login <username> <password>`");
-        System.out.println("2. Exit command: `exit`");
+        System.out.println("2. Generate initial data: `generate_data`");
+        System.out.println("3. Exit command: `exit`");
     }
 
     /* Valid commands list:
@@ -37,31 +39,39 @@ public class LoginMenu implements Menu {
         String input = scanner.nextLine();
         String[] command = input.split(" ", -1);
         String output;
-        if (command.length == 0)
+        if (command.length == 0) {
             output = "Invalid command, command cannot be empty.";
-        else if (command[0].equals("exit") && command.length == 1) {
+        } else if (command[0].equals("exit") && command.length == 1) {
             output = "Exiting CLI.";
             MenuManager.terminate();
         }
+        else if (command[0].equals("generate_data") && command.length == 1) {
+            // Call the generate_data function
+            System.out.println("Generating data... this may take a while....");
+            DataGenerator.generateData();
+            output = "Generated data successfully.";
+        }
         else if (command[0].equals("login")) {
-            if (command.length != 3)
+            if (command.length != 3) {
                 output = "Invalid login command. (Usage: `login <username> <password>`)";
-            else {
+            } else {
                 output = loginMenuVM.login(command[1], command[2]);
                 if (loginMenuVM.isLoggedIn()) {
                     System.out.println(output);
                     List<String> authorizations = loginMenuVM.getUserAuthorizations();
-                    if (authorizations.contains("HRManager"))
+                    if (authorizations != null && authorizations.contains("HRManager")) {
                         return new HRManagerMenu();
-                    else if (authorizations.contains("TransportManager"))
+                    } else if (authorizations != null && authorizations.contains("TransportManager")) {
                         return new TransportUI(loginMenuVM.serviceFactory());
-                    else
+                    } else {
                         return new EmployeeMenu();
+                    }
                 }
             }
         }
-        else
+        else {
             output = "You must log in to the system before using it. (Usage: `login <username> <password>`)";
+        }
         System.out.println(output);
         return this;
     }

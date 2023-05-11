@@ -9,8 +9,6 @@ import businessLayer.employeeModule.Role;
 import businessLayer.employeeModule.Shift;
 import businessLayer.employeeModule.Shift.ShiftType;
 import objects.transportObjects.Driver;
-import objects.transportObjects.Site;
-import serviceLayer.ServiceFactory;
 import serviceLayer.employeeModule.Objects.SEmployee;
 import serviceLayer.employeeModule.Objects.SShift;
 import serviceLayer.employeeModule.Objects.SShiftType;
@@ -26,14 +24,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class EmployeesService {
-    private static UserService userService;
-    private ResourceManagementService rms;
-    private EmployeesController employeesController;
-    private ShiftsController shiftsController;
+    private final UserService userService;
+    private final ResourceManagementService rms;
+    private final EmployeesController employeesController;
+    private final ShiftsController shiftsController;
 
-    public EmployeesService(ServiceFactory serviceFactory, EmployeesController employeesController, ShiftsController shiftsController) {
-        rms = serviceFactory.getResourceManagementService();
-        userService = serviceFactory.userService();
+    public EmployeesService(ResourceManagementService rms, UserService userService, EmployeesController employeesController, ShiftsController shiftsController) {
+        this.rms = rms;
+        this.userService = userService;
         this.employeesController = employeesController;
         this.shiftsController = shiftsController;
     }
@@ -58,7 +56,7 @@ public class EmployeesService {
     /**
      * This method checks if there is a storekeeper at the specified date and branch. (DateTime?)
      * @param dateToCheck The needed date
-     * @param branchAddress The needed branch address
+     * @param branchAddress The needed branch name
      * @return A success response if there is an available storekeeper.
      * Otherwise, returns a matching error response.
      */
@@ -74,28 +72,6 @@ public class EmployeesService {
     }
 
     /**
-     * This method loads the initial employee data from the system, during the initial load of the system.
-     */
-    public void createData() {
-        resetData();
-        try {
-            // Initializing Branches - TODO: Should be moved to Transport module
-            rms.addSite(new Site("Headquarters","1","123456789","Headquarters", Site.SiteType.BRANCH).toJson());
-            for(int i = 2; i <= 9; i++) {
-                String branchId = Integer.toString(i);
-                rms.addSite(new Site("Zone" + i,branchId, "phone" + i,"contact"+i, Site.SiteType.BRANCH).toJson());
-            }
-            // TODO: Add initial employees data, after the Transport Sites have already been added
-            employeesController.recruitEmployee("1","Moshe Biton", "111","Hapoalim 12 230", 50, LocalDate.of(2023,2,2),"Employment Conditions Test", "More details about Moshe");
-            employeesController.certifyEmployee("111", Role.ShiftManager);
-            employeesController.certifyEmployee("111",Role.Storekeeper);
-            userService.createUser("admin123","111","1234");
-        } catch (Exception ignore) {
-            Exception x = ignore;
-        }
-    }
-
-    /**
      * This method resets the employee data from the system.
      */
     public void resetData() {
@@ -103,7 +79,7 @@ public class EmployeesService {
         shiftsController.resetData();
     }
 
-    public String recruitEmployee(String actorUsername, String fullName, String branchId, String employeeId, String bankDetails, double hourlyRate, LocalDate employmentDate, String employmentConditions, String details) {
+    public String recruitEmployee(String actorUsername, String branchId, String fullName, String employeeId, String bankDetails, double hourlyRate, LocalDate employmentDate, String employmentConditions, String details) {
         Response authResponse = Response.fromJson(userService.isAuthorized(actorUsername, Authorization.HRManager));
         if (authResponse.success() == false)
             return new Response(authResponse.message(),false).toJson();
@@ -203,6 +179,21 @@ public class EmployeesService {
             return new Response("User isn't authorized to do this",false).toJson();
         try {
             shiftsController.createWeekShifts(branchId, weekStart);
+            return new Response(true).toJson();
+        } catch (Exception e) {
+            return Response.getErrorResponse(e).toJson();
+        }
+    }
+
+    public String createShiftDay(String actorUsername, String branchId, LocalDate shiftDate) {
+        Response authResponse = Response.fromJson(userService.isAuthorized(actorUsername, Authorization.HRManager));
+        if (authResponse.success() == false)
+            return new Response(authResponse.message(),false).toJson();
+        else if(authResponse.dataToBoolean() == false)
+            return new Response("User isn't authorized to do this",false).toJson();
+        try {
+            shiftsController.createShift(branchId, shiftDate,ShiftType.Morning);
+            shiftsController.createShift(branchId, shiftDate,ShiftType.Evening);
             return new Response(true).toJson();
         } catch (Exception e) {
             return Response.getErrorResponse(e).toJson();

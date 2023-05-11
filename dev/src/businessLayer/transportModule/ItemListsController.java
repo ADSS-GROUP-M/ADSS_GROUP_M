@@ -32,7 +32,7 @@ public class ItemListsController {
      * @return The ID of the added item list.
      * @throws TransportException If the item list already exists in the system.
      */
-    public Integer addItemList(ItemList itemList) throws TransportException {
+    public ItemList addItemList(ItemList itemList) throws TransportException {
 
         if(itemList.id() != -1){
             throw new UnsupportedOperationException("Pre-defined IDs are not supported");
@@ -45,7 +45,7 @@ public class ItemListsController {
         } catch (DalException e) {
             throw new TransportException(e.getMessage(),e);
         }
-        return toAdd.id();
+        return toAdd;
     }
 
     /**
@@ -92,16 +92,18 @@ public class ItemListsController {
      * @param newItemList The new item list to update with.
      * @throws TransportException If the item list with the specified ID is not found.
      */
-    public void updateItemList(int id, ItemList newItemList) throws TransportException{
+    public ItemList updateItemList(int id, ItemList newItemList) throws TransportException{
         if(listExists(id) == false) {
             throw new TransportException("Item list not found");
         }
+        ItemList toUpdate = new ItemList(id, newItemList);
 
         try {
             dao.update(newItemList);
         } catch (DalException e) {
             throw new TransportException(e.getMessage(),e);
         }
+        return toUpdate;
     }
 
     /**

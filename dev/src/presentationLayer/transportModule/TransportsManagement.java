@@ -1,5 +1,6 @@
 package presentationLayer.transportModule;
 
+import objects.transportObjects.DeliveryRoute;
 import objects.transportObjects.Driver;
 import objects.transportObjects.Site;
 import objects.transportObjects.Transport;
@@ -11,10 +12,7 @@ import utils.Response;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Objects;
+import java.util.*;
 
 public class TransportsManagement {
     
@@ -64,20 +62,27 @@ public class TransportsManagement {
         System.out.println("Enter transport details:");
 
         // date/time
-        LocalDate departureDate = LocalDate.parse(uiData.readLine("Departure date (format: yyyy-mm-dd): "));
-        LocalTime departureTime = LocalTime.parse(uiData.readLine("Departure time (format: hh:mm): "));
+        LocalDate departureDate = uiData.readDate("Departure date (format: yyyy-mm-dd): ");
+        if(departureDate == null){
+            return;
+        }
+        LocalTime departureTime = uiData.readTime("Departure time (format: hh:mm): ");
+        if(departureTime == null){
+            return;
+        }
         LocalDateTime departureDateTime = LocalDateTime.of(departureDate, departureTime);
+
+        // driver
+        System.out.println("Driver: ");
+        Driver driver = pickFromAvailableDrivers(departureDateTime);
+        if(driver == null){
+            return;
+        }
 
         // truck
         System.out.println("Truck: ");
         String truckId = uiData.pickTruck(false).id();
 
-        // driver
-        System.out.println("Driver: ");
-        String driverID = pickFromAvailableDrivers(departureDateTime);
-        if(driverID == null){
-            return;
-        }
 
         // source
         System.out.println("Source: ");
@@ -92,10 +97,12 @@ public class TransportsManagement {
         int truckWeight = uiData.readInt("Truck weight: ");
 
         Transport newTransport = new Transport(
-                source.address(),
-                destinations,
-                itemsList,
-                driverID,
+                new DeliveryRoute(
+                        source.name(),
+                        destinations,
+                        itemsList
+                ),
+                driver.id(),
                 truckId,
                 departureDateTime,
                 truckWeight
@@ -108,19 +115,19 @@ public class TransportsManagement {
         }
     }
 
-    private String pickFromAvailableDrivers(LocalDateTime departureDateTime) {
+    private Driver pickFromAvailableDrivers(LocalDateTime departureDateTime) {
         String json = es.getAvailableDrivers(JsonUtils.serialize(departureDateTime));
         Response response = Response.fromJson(json);
+        if(response.success() == false){
+            System.out.println("No available drivers for "+departureDateTime.toString()+", aborting...");
+            return null;
+        }
         Driver[] availableDrivers = Arrays.stream(
                 response.<String[]>data(String[].class))
                 .map(driver -> uiData.drivers().get(driver))
                 .filter(Objects::nonNull)
                 .toArray(Driver[]::new);
-        if(availableDrivers.length == 0){
-            System.out.println("No available drivers for "+departureDateTime.toString()+", aborting...");
-            return null;
-        }
-        return uiData.pickDriver(false,availableDrivers).id();
+        return uiData.pickDriver(false,availableDrivers);
     }
 
     private void pickAnOptionIfFail(Transport newTransport) {
@@ -136,12 +143,13 @@ public class TransportsManagement {
                     System.out.println("Truck: ");
                     String truckId = uiData.pickTruck(false).id();
                     System.out.println("Driver: ");
-                    String driverID = uiData.pickDriver(false).id();
+                    Driver driver = pickFromAvailableDrivers(newTransport.departureTime());
                     newTransport = new Transport(
-                            newTransport.source(),
-                            newTransport.destinations(),
-                            newTransport.itemLists(),
-                            driverID,
+                            new DeliveryRoute(
+                                    newTransport.source(),
+                                    newTransport.destinations(),
+                                    newTransport.itemLists()),
+                            driver.id(),
                             truckId,
                             newTransport.departureTime(),
                             newTransport.weight()
@@ -158,9 +166,10 @@ public class TransportsManagement {
                     System.out.println("New weight :");
                     int weight = uiData.readInt();
                     newTransport = new Transport(
-                            newTransport.source(),
-                            destinations,
-                            itemsList,
+                            new DeliveryRoute(
+                                    newTransport.source(),
+                                    destinations,
+                                    itemsList),
                             newTransport.driverId(),
                             newTransport.truckId(),
                             newTransport.departureTime(),
@@ -184,11 +193,11 @@ public class TransportsManagement {
         while(true) {
             System.out.println("=========================================");
             System.out.println("Select transport to update:");
-            Transport transport = getTransport();
-            if(transport == null) {
+            Transport oldtransport = getTransport();
+            if(oldtransport == null) {
                 return;
             }
-            printTransportDetails(transport);
+            printTransportDetails(oldtransport);
             System.out.println("=========================================");
             System.out.println("Please select an option:");
             System.out.println("1. Update driver");
@@ -196,87 +205,99 @@ public class TransportsManagement {
             System.out.println("3. Update source");
             System.out.println("4. Update destinations");
             System.out.println("5. Update weight");
-            System.out.println("6. Return to previous menu");
+            System.out.println("6. Set manual arrival times");
+            System.out.println("7. Return to previous menu");
             int option = uiData.readInt();
             switch (option) {
 
                 case 1 -> {
                     System.out.println("Select driver: ");
-                    String driverID = pickFromAvailableDrivers(transport.departureTime());
-                    if(driverID == null) {
+                    Driver driver = pickFromAvailableDrivers(oldtransport.departureTime());
+                    if(driver == null) {
                         continue;
                     }
 
                     updateTransportHelperMethod(
-                            transport.id(),
-                            transport.source(),
-                            transport.destinations(),
-                            transport.itemLists(),
-                            transport.truckId(),
-                            driverID,
-                            transport.departureTime(),
-                            transport.weight()
+                            oldtransport.id(),
+                            oldtransport.source(),
+                            oldtransport.destinations(),
+                            oldtransport.itemLists(),
+                            oldtransport.truckId(),
+                            driver.id(),
+                            oldtransport.departureTime(),
+                            oldtransport.weight()
                     );
                 }
                 case 2 -> {
                     System.out.println("Select truck: ");
                     String truckId = uiData.pickTruck(false).id();
                     updateTransportHelperMethod(
-                            transport.id(),
-                            transport.source(),
-                            transport.destinations(),
-                            transport.itemLists(),
+                            oldtransport.id(),
+                            oldtransport.source(),
+                            oldtransport.destinations(),
+                            oldtransport.itemLists(),
                             truckId,
-                            transport.driverId(),
-                            transport.departureTime(),
-                            transport.weight()
+                            oldtransport.driverId(),
+                            oldtransport.departureTime(),
+                            oldtransport.weight()
                     );
                 }
                 case 3 -> {
                     System.out.println("Select source: ");
                     Site source = uiData.pickSite(false);
                     updateTransportHelperMethod(
-                            transport.id(),
-                            source.address(),
-                            transport.destinations(),
-                            transport.itemLists(),
-                            transport.truckId(),
-                            transport.driverId(),
-                            transport.departureTime(),
-                            transport.weight()
+                            oldtransport.id(),
+                            source.name(),
+                            oldtransport.destinations(),
+                            oldtransport.itemLists(),
+                            oldtransport.truckId(),
+                            oldtransport.driverId(),
+                            oldtransport.departureTime(),
+                            oldtransport.weight()
                     );
                 }
                 case 4 ->{
                     System.out.println("Select new destinations and item lists: ");
                     HashMap<String, Integer> itemsList = new HashMap<>();
                     LinkedList<String> destinations = new LinkedList<>();
-                    destinationsMaker(destinations, itemsList, transport.departureTime());
+                    destinationsMaker(destinations, itemsList, oldtransport.departureTime());
 
                     updateTransportHelperMethod(
-                            transport.id(),
-                            transport.source(),
+                            oldtransport.id(),
+                            oldtransport.source(),
                             destinations,
                             itemsList,
-                            transport.truckId(),
-                            transport.driverId(),
-                            transport.departureTime(),
-                            transport.weight()
+                            oldtransport.truckId(),
+                            oldtransport.driverId(),
+                            oldtransport.departureTime(),
+                            oldtransport.weight()
                     );
                 }
                 case 5 -> {
                     int truckWeight = uiData.readInt("Truck weight: ");
                     updateTransportHelperMethod(
-                            transport.id(),
-                            transport.source(),
-                            transport.destinations(),
-                            transport.itemLists(),
-                            transport.truckId(),
-                            transport.driverId(),
-                            transport.departureTime(),
+                            oldtransport.id(),
+                            oldtransport.source(),
+                            oldtransport.destinations(),
+                            oldtransport.itemLists(),
+                            oldtransport.truckId(),
+                            oldtransport.driverId(),
+                            oldtransport.departureTime(),
                             truckWeight
                     );
                 }
                 case 6 -> {
+                    overrideArrivalTimes(oldtransport);
+                    updateTransportHelperMethod(
+                            oldtransport.id(),
+                            oldtransport.deliveryRoute(),
+                            oldtransport.truckId(),
+                            oldtransport.driverId(),
+                            oldtransport.departureTime(),
+                            oldtransport.weight()
+                    );
+                }
+                case 7 -> {
                     return;
                 }
                 default -> {
@@ -287,6 +308,23 @@ public class TransportsManagement {
             break;
         }
     }
+
+    private void overrideArrivalTimes(Transport oldtransport) {
+        System.out.println("Select new arrival times (enter 'cancel!' to cancel): ");
+        HashMap<String, LocalTime> arrivalTimes = new HashMap<>();
+        for (String destination : oldtransport.destinations()) {
+            System.out.println("Arrival time for " + destination + ": ");
+            LocalTime arrivalTime = uiData.readTime("(format: hh:mm): ");
+            if(arrivalTime == null) {
+                return;
+            }
+            arrivalTimes.put(destination, arrivalTime);
+        }
+        for(var pair : arrivalTimes.entrySet()) {
+            oldtransport.deliveryRoute().overrideArrivalTime(pair.getKey(), pair.getValue());
+        }
+    }
+
 
     private void removeTransport() {
         while(true) {
@@ -323,6 +361,7 @@ public class TransportsManagement {
         }
         printTransportDetails(transport);
         System.out.println("\nEnter 'done!' to return to previous menu");
+        uiData.readLine();
     }
 
     private void viewAllTransports() {
@@ -347,16 +386,21 @@ public class TransportsManagement {
         System.out.println("Destinations: ");
         for(String address : transport.destinations()){
             Site destination = uiData.sites().get(address);
-            System.out.println("   "+ destination + " (items list id: "+ transport.itemLists().get(address)+")");
+            LocalTime arrivalTime = transport.deliveryRoute().getEstimatedTimeOfArrival(address);
+            String time = String.format("[%02d:%02d] ", arrivalTime.getHour(), arrivalTime.getMinute());
+            System.out.println(time+destination + " (items list id: "+ transport.itemLists().get(address)+")");
         }
     }
 
-    private void updateTransportHelperMethod(int id, String source, LinkedList<String> destinations, HashMap<String, Integer> itemLists, String truckId, String driverId, LocalDateTime departureDateTime, int weight) {
+    private void updateTransportHelperMethod(int id,
+                                             DeliveryRoute deliveryRoute,
+                                             String truckId,
+                                             String driverId,
+                                             LocalDateTime departureDateTime,
+                                             int weight) {
         Transport newTransport = new Transport(
                 id,
-                source,
-                destinations,
-                itemLists,
+                deliveryRoute,
                 driverId,
                 truckId,
                 departureDateTime,
@@ -367,7 +411,35 @@ public class TransportsManagement {
         String responseJson = ts.updateTransport(json);
         Response response = JsonUtils.deserialize(responseJson, Response.class);
         if(response.success()){
-            uiData.transports().put(id, newTransport);
+            Transport _transport = Transport.fromJson(response.data());
+            uiData.transports().put(id, _transport);
+        }
+        System.out.println("\n"+response.message());
+    }
+
+    private void updateTransportHelperMethod(int id,
+                                             String source,
+                                             List<String> destinations,
+                                             Map<String, Integer> itemLists,
+                                             String truckId,
+                                             String driverId,
+                                             LocalDateTime departureDateTime,
+                                             int weight) {
+        Transport newTransport = new Transport(
+                id,
+                new DeliveryRoute(source, destinations, itemLists),
+                driverId,
+                truckId,
+                departureDateTime,
+                weight
+        );
+
+        String json = newTransport.toJson();
+        String responseJson = ts.updateTransport(json);
+        Response response = JsonUtils.deserialize(responseJson, Response.class);
+        if(response.success()){
+            Transport _transport = Transport.fromJson(response.data());
+            uiData.transports().put(id, _transport);
         }
         System.out.println("\n"+response.message());
     }
@@ -388,6 +460,7 @@ public class TransportsManagement {
         int destinationId = 1;
         System.out.println("Pick destinations and items lists:");
         while(true){
+            System.out.println("=========================================");
             System.out.println("Destination number "+destinationId+": ");
             Site site = uiData.pickSite(true);
             if(site == null) {
@@ -395,17 +468,13 @@ public class TransportsManagement {
             }
             //validate the site if it is a branch
              if(site.siteType() == Site.SiteType.BRANCH) {
-               String stokeKeeperMassageJson =  es.checkStoreKeeperAvailability(site.address(), JsonUtils.serialize(departureDateTime));
-                 Response response = JsonUtils.deserialize(stokeKeeperMassageJson, Response.class);
-                 if(response.success() == false){
-                     System.out.println("\n"+response.message());
-                     continue;
-                 }
-
+                String stokeKeeperMassageJson =  es.checkStoreKeeperAvailability(JsonUtils.serialize(departureDateTime),site.name());
+                Response response = JsonUtils.deserialize(stokeKeeperMassageJson, Response.class);
+                if(response.success() == false){
+                 System.out.println("\n"+response.message());
+                 continue;
+                }
             }
-
-
-
 
             int listId = uiData.readInt("Items list id: ");
             if (uiData.itemLists().containsKey(listId) == false) {
@@ -413,8 +482,8 @@ public class TransportsManagement {
                 System.out.println();
                 continue;
             }
-            itemsList.put(site.address(), listId);
-            destinations.add(site.address());
+            itemsList.put(site.name(), listId);
+            destinations.add(site.name());
             destinationId++;
         }
     }
@@ -428,9 +497,8 @@ public class TransportsManagement {
         System.out.println("\n"+response.message());
 
         if(response.success()){
-            int id = response.dataToInt();
-            newTransport = newTransport.newId(id);
-            uiData.transports().put(id, newTransport);
+            Transport _added = Transport.fromJson(response.data());
+            uiData.transports().put(_added.id(), _added);
         }
         return response;
     }
@@ -471,5 +539,13 @@ public class TransportsManagement {
             System.out.println(errorMessage);
         }
         return isMissingData;
+    }
+
+    @Deprecated
+    private Transport fetchAddedTransport(int _id) {
+        String _json = Transport.getLookupObject(_id).toJson();
+        String _responseJson = ts.getTransport(_json);
+        Response _response = JsonUtils.deserialize(_responseJson, Response.class);
+        return Transport.fromJson(_response.data());
     }
 }

@@ -20,14 +20,13 @@ public class EmployeeMenu implements Menu {
     public void printCommands() {
         System.out.println();
         System.out.println("1. `logout` - Logout command");
-        System.out.println("2. `request_shift <branch_id> <shift_type: Morning/Evening> <shift_date: DD/MM/YYYY> <role>` - Request shift command");
-        System.out.println("3. `week_shifts <branch_id>` - Show next week's shifts in the branch"); // Shows the approved weekly shifts, or only the weekly structure if they aren't approved yet
-        System.out.println("4. `week_shifts <branch_id> <week_start: DD/MM/YYYY>` - Show the week shifts in the branch");
+        System.out.println("2. `request_shift` - Request shift command");
+        System.out.println("3. `week_shifts` - Show the week shifts in the branch"); // Shows the approved weekly shifts, or only the weekly structure if they aren't approved yet
         System.out.println("5. `my_shifts` - Show my shifts");
         System.out.println("6. `show_details` - Show my employee details");
-        System.out.println("7. `cancel_shift <branch_id> <shift_type: Morning/Evening> <shift_date: DD/MM/YY> <role>` - Cancel a shift request");
-        System.out.println("8. `report_shift_activity <branch_id> <shift_date: DD/MM/YYYY> <shift_type: Morning/Evening> <activity>` - Reports a shift activity");
-        System.out.println("9. `apply_cancel_card <branch_id> <shift_date: DD/MM/YYYY> <shift_type: Morning/Evening> <product_id>` - Apply cancel card on a product during a shift (Only available for Shift Manager)");
+        System.out.println("7. `cancel_shift` - Cancel a shift request");
+        System.out.println("8. `report_shift_activity` - Reports a shift activity");
+        System.out.println("9. `apply_cancel_card` - Apply cancel card on a product during a shift (Only available for Shift Manager)");
         System.out.println("10. `exit` - Exit command");
     }
 
@@ -47,24 +46,34 @@ public class EmployeeMenu implements Menu {
             System.out.println(output);
             return new LoginMenu();
         }
-        else if (command[0].equals("request_shift") && command.length == 5) {
-            String branchId = command[1];
-            String shiftType = command[2];
-            LocalDate shiftDate = DateUtils.parse(command[3]);
-            String role = command[4];
+        else if (command[0].equals("request_shift") && command.length == 1) {
+            // Parameters: <branch_id> <shift_type: Morning/Evening> <shift_date: DD/MM/YYYY> <role>
+            System.out.println("Please enter the branch id (branch address):");
+            String branchId = scanner.nextLine();
+            System.out.println("Please enter the shift type (Morning/Evening):");
+            String shiftType = scanner.nextLine();
+            System.out.println("Please enter the shift date <DD/MM/YYYY>:");
+            LocalDate shiftDate = DateUtils.parse(scanner.nextLine());
+            System.out.println("Please enter the requested shift role:");
+            String role = scanner.nextLine();
             output = employeeMenuVM.requestShift(branchId, shiftType, shiftDate, role);
         }
-        else if (command[0].equals("week_shifts") && command.length == 2) {
-            String branchId = command[1];
-            output = employeeMenuVM.getNextWeekShifts(branchId);
-        }
-        else if (command[0].equals("week_shifts") && command.length == 3) {
-            try {
-                String branchId = command[1];
-                LocalDate weekStart = DateUtils.parse(command[2]);
-                output = employeeMenuVM.getWeekShifts(branchId, weekStart);
-            } catch (DateTimeParseException e) {
-                output = "Invalid input, expected a date in the form " + DateUtils.DATE_PATTERN + ".";
+        else if (command[0].equals("week_shifts") && command.length == 1) {
+            // Parameters: <branch_id> <week_start: DD/MM/YYYY>
+            System.out.println("Please enter the branch id (branch address):");
+            String branchId = scanner.nextLine();
+            System.out.println("Please enter the starting date <DD/MM/YYYY> of the shifts week (or leave empty for next week's shifts):");
+            String weekStartStr = scanner.nextLine();
+            if (weekStartStr.isEmpty()) {
+                output = employeeMenuVM.getNextWeekShifts(branchId);
+            }
+            else {
+                try {
+                    LocalDate weekStart = DateUtils.parse(command[2]);
+                    output = employeeMenuVM.getWeekShifts(branchId, weekStart);
+                } catch (DateTimeParseException e) {
+                    output = "Invalid input, expected a date in the form " + DateUtils.DATE_PATTERN + ".";
+                }
             }
         }
         else if (command[0].equals("my_shifts") && command.length == 1) {
@@ -73,34 +82,49 @@ public class EmployeeMenu implements Menu {
         else if (command[0].equals("show_details") && command.length == 1) {
             output = employeeMenuVM.getAllEmployeeDetails();
         }
-        else if (command[0].equals("cancel_shift") && command.length == 5) {
+        else if (command[0].equals("cancel_shift") && command.length == 1) {
+            // Parameters: <branch_id> <shift_date: DD/MM/YY> <role> <shift_type: Morning/Evening>
             try {
-                String branchId = command[1];
-                String shiftType = command[2];
-                LocalDate shiftDate = DateUtils.parse(command[3]);
-                String role = command[4];
-                output = employeeMenuVM.cancelShiftRequest(branchId, shiftType, shiftDate, role);
+                System.out.println("Please enter the branch id (branch address):");
+                String branchId = scanner.nextLine();
+                System.out.println("Please enter the shift date <DD/MM/YYYY>:");
+                LocalDate shiftDate = DateUtils.parse(scanner.nextLine());
+                System.out.println("Please enter the shift type (Morning/Evening):");
+                String shiftType = scanner.nextLine();
+                System.out.println("Please enter the shift role:");
+                String role = scanner.nextLine();
+                output = employeeMenuVM.cancelShiftRequest(branchId, shiftDate, shiftType, role);
             } catch (DateTimeParseException e) {
                 output = "Invalid input, expected a date in the form " + DateUtils.DATE_PATTERN + ".";
             }
         }
-        else if (command[0].equals("report_shift_activity") && command.length == 5) {
+        else if (command[0].equals("report_shift_activity") && command.length == 1) {
+            // Parameters: <branch_id> <shift_date: DD/MM/YYYY> <shift_type: Morning/Evening> <activity>
             try {
-                String branchId = command[1];
-                LocalDate shiftDate = DateUtils.parse(command[2]);
-                String shiftType = command[3];
-                String activity = command[4];
+                System.out.println("Please enter the branch id (branch address):");
+                String branchId = scanner.nextLine();
+                System.out.println("Please enter the shift date <DD/MM/YYYY>:");
+                LocalDate shiftDate = DateUtils.parse(scanner.nextLine());
+                System.out.println("Please enter the shift type (Morning/Evening):");
+                String shiftType = scanner.nextLine();
+                System.out.println("Please enter the shift activity:");
+                String activity = scanner.nextLine();
                 output = employeeMenuVM.reportShiftActivity(branchId, shiftDate, shiftType, activity);
             } catch (DateTimeParseException e) {
                 output = "Invalid input, expected a date in the form " + DateUtils.DATE_PATTERN + ".";
             }
         }
-        else if (command[0].equals("apply_cancel_card") && command.length == 5) {
+        else if (command[0].equals("apply_cancel_card") && command.length == 1) {
+            // Parameters: <branch_id> <shift_date: DD/MM/YYYY> <shift_type: Morning/Evening> <product_id>
             try {
-                String branchId = command[1];
-                LocalDate shiftDate = DateUtils.parse(command[2]);
-                String shiftType = command[3];
-                String productId = command[4];
+                System.out.println("Please enter the branch id (branch address):");
+                String branchId = scanner.nextLine();
+                System.out.println("Please enter the shift date <DD/MM/YYYY>:");
+                LocalDate shiftDate = DateUtils.parse(scanner.nextLine());
+                System.out.println("Please enter the shift type (Morning/Evening):");
+                String shiftType = scanner.nextLine();
+                System.out.println("Please enter the cancelled product id:");
+                String productId = scanner.nextLine();
                 output = employeeMenuVM.applyCancelCard(branchId, shiftDate, shiftType, productId);
             } catch (DateTimeParseException e) {
                 output = "Invalid input, expected a date in the form " + DateUtils.DATE_PATTERN + ".";

@@ -5,9 +5,11 @@ import businessLayer.employeeModule.Employee;
 import businessLayer.employeeModule.Role;
 import businessLayer.employeeModule.Shift;
 import businessLayer.employeeModule.Shift.ShiftType;
+import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.employeeModule.BranchesDAO;
 import dataAccessLayer.employeeModule.EmployeeDAO;
 import javafx.util.Pair;
+import utils.employeeUtils.EmployeeException;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -34,107 +36,165 @@ public class EmployeesController {
         this.employeeDAO.clearTable();
     }
 
-    public Branch getBranch(String branchId) throws Exception {
-        return this.branchesDAO.select(branchId);
-    }
-
-    public Employee getEmployee(String employeeId) throws Exception {
-        return this.employeeDAO.select(employeeId);
-    }
-
-    public Employee getBranchEmployee(String branchId, String employeeId) throws Exception {
-        return employeeDAO.select(branchesDAO.selectBranchEmployee(branchId, employeeId).getValue());
-    }
-
-    public List<Employee> getBranchEmployees(String branchId, List<String> employeeIds) throws Exception {
-        List<Pair<String,String>> branchEmployees = branchesDAO.selectBranchEmployees(branchId, employeeIds);
-        List<Employee> result = new ArrayList<>();
-        for (Pair<String,String> branchEmployee : branchEmployees) {
-            result.add(employeeDAO.select(branchEmployee.getValue()));
+    public Branch getBranch(String branchId) throws EmployeeException {
+        try {
+            return this.branchesDAO.select(branchId);
+        } catch (DalException e) {
+            throw new EmployeeException(e.getMessage(),e);
         }
-        return result;
     }
 
-    public void createBranch(String branchId) throws Exception {
+    public Employee getEmployee(String employeeId) throws EmployeeException {
+        try {
+            return this.employeeDAO.select(employeeId);
+        } catch (DalException e) {
+            throw new EmployeeException(e.getMessage(),e);
+        }
+    }
+
+    public Employee getBranchEmployee(String branchId, String employeeId) throws EmployeeException {
+        try {
+            return employeeDAO.select(branchesDAO.selectBranchEmployee(branchId, employeeId).getValue());
+        } catch (DalException e) {
+            throw new EmployeeException(e.getMessage(),e);
+        }
+    }
+
+    public List<Employee> getBranchEmployees(String branchId, List<String> employeeIds) throws EmployeeException {
+        try {
+            List<Pair<String, String>> branchEmployees = branchesDAO.selectBranchEmployees(branchId, employeeIds);
+            List<Employee> result = new ArrayList<>();
+            for (Pair<String,String> branchEmployee : branchEmployees) {
+                result.add(employeeDAO.select(branchEmployee.getValue()));
+            }
+            return result;
+        } catch (DalException e) {
+            throw new EmployeeException(e.getMessage(),e);
+        }
+    }
+
+    public void createBranch(String branchId) throws EmployeeException {
         Branch branch = new Branch(branchId);
-        branchesDAO.insert(branch);
+        try {
+            branchesDAO.insert(branch);
+        } catch (DalException e) {
+            throw new EmployeeException(e.getMessage(),e);
+        }
     }
 
-    public void recruitEmployee(String branchId, String fullName, String employeeId, String bankDetails, double hourlyRate, LocalDate employmentDate, String employmentConditions, String details) throws Exception {
-        Employee employee = new Employee(fullName, employeeId,bankDetails,hourlyRate, employmentDate, employmentConditions, details);
-        employeeDAO.insert(employee);
-        branchesDAO.insertEmployee(branchId, employeeId);
-        this.certifyEmployee(employee.getId(), Role.GeneralWorker);
+    public void recruitEmployee(String branchId, String fullName, String employeeId, String bankDetails, double hourlyRate, LocalDate employmentDate, String employmentConditions, String details) throws EmployeeException {
+        try{
+            Employee employee = new Employee(fullName, employeeId,bankDetails,hourlyRate, employmentDate, employmentConditions, details);
+            employeeDAO.insert(employee);
+            branchesDAO.insertEmployee(branchId, employeeId);
+            this.certifyEmployee(employee.getId(), Role.GeneralWorker);
+        } catch (DalException e) {
+            throw new EmployeeException(e.getMessage(),e);
+        }
     }
     
-    public void addEmployeeToBranch(String branchId, String employeeId) throws Exception {
-        this.branchesDAO.insertEmployee(branchId, employeeId);
+    public void addEmployeeToBranch(String branchId, String employeeId) throws EmployeeException {
+        try {
+            this.branchesDAO.insertEmployee(branchId, employeeId);
+        } catch (DalException e) {
+            throw new EmployeeException(e.getMessage(),e);
+        }
     }
 
-    public void updateEmployeeSalary(String employeeId, double hourlySalaryRate, double salaryBonus) throws Exception {
+    public void updateEmployeeSalary(String employeeId, double hourlySalaryRate, double salaryBonus) throws EmployeeException {
         Employee employee = getEmployee(employeeId);
         employee.setHourlySalaryRate(hourlySalaryRate);
         employee.setSalaryBonus(salaryBonus);
-        employeeDAO.update(employee);
+        try {
+            employeeDAO.update(employee);
+        } catch (DalException e) {
+            throw new EmployeeException(e.getMessage(),e);
+        }
     }
 
-    public void updateEmployeeBankDetails(String employeeId, String bankDetails) throws Exception {
+    public void updateEmployeeBankDetails(String employeeId, String bankDetails) throws EmployeeException {
         Employee employee = getEmployee(employeeId);
         employee.setBankDetails(bankDetails);
-        employeeDAO.update(employee);
+        try {
+            employeeDAO.update(employee);
+        } catch (DalException e) {
+            throw new EmployeeException(e.getMessage(),e);
+        }
     }
 
-    public void updateEmployeeEmploymentConditions(String employeeId, String employmentConditions) throws Exception {
+    public void updateEmployeeEmploymentConditions(String employeeId, String employmentConditions) throws EmployeeException {
         Employee employee = getEmployee(employeeId);
         employee.setEmploymentConditions(employmentConditions);
-        employeeDAO.update(employee);
+        try {
+            employeeDAO.update(employee);
+        } catch (DalException e) {
+            throw new EmployeeException(e.getMessage(),e);
+        }
     }
 
-    public void updateEmployeeDetails(String employeeId, String details) throws Exception {
+    public void updateEmployeeDetails(String employeeId, String details) throws EmployeeException {
         Employee employee = getEmployee(employeeId);
         employee.setDetails(details);
-        employeeDAO.update(employee);
+        try {
+            employeeDAO.update(employee);
+        } catch (DalException e) {
+            throw new EmployeeException(e.getMessage(),e);
+        }
     }
 
-    public void certifyEmployee(String employeeId, Role role) throws Exception {
+    public void certifyEmployee(String employeeId, Role role) throws EmployeeException {
         Employee employee = getEmployee(employeeId);
         employee.addRole(role);
-        employeeDAO.update(employee);
+        try {
+            employeeDAO.update(employee);
+        } catch (DalException e) {
+            throw new EmployeeException(e.getMessage(),e);
+        }
     }
 
-    public void uncertifyEmployee(String employeeId, Role role) throws Exception {
+    public void uncertifyEmployee(String employeeId, Role role) throws EmployeeException {
         Employee employee = getEmployee(employeeId);
         employee.removeRole(role);
-        employeeDAO.update(employee);
-    }
-
-    public void updateBranchWorkingHours(String branchId, LocalTime morningStart, LocalTime morningEnd, LocalTime eveningStart, LocalTime eveningEnd) throws Exception {
-        Branch branch = branchesDAO.select(branchId);
-        branch.setWorkingHours(morningStart, morningEnd, eveningStart, eveningEnd);
-        branchesDAO.update(branch);
-    }
-
-    public List<Employee> getAvailableDrivers(LocalDateTime dateTime) throws Exception {
-        List<Employee> availableDrivers = new ArrayList<>();
-        for (Branch branch : branchesDAO.selectAll()) {
-            try {
-                ShiftType shiftType = branch.getShiftType(dateTime.toLocalTime()); // Could throw an exception if the given time is not in any shift
-                Map<Role, List<Employee>> shiftWorkers = shiftsController.getShift(branch.address(), dateTime.toLocalDate(), shiftType).getShiftWorkers();
-                if (shiftWorkers.containsKey(Role.Driver))
-                    availableDrivers.addAll(shiftWorkers.get(Role.Driver));
-            } catch (Exception ignore) {}
+        try {
+            employeeDAO.update(employee);
+        } catch (DalException e) {
+            throw new EmployeeException(e.getMessage(),e);
         }
-        if (availableDrivers.isEmpty())
-            throw new Exception("Could not find any available driver at the specified dateTime.");
+    }
+
+    public void updateBranchWorkingHours(String branchId, LocalTime morningStart, LocalTime morningEnd, LocalTime eveningStart, LocalTime eveningEnd) throws EmployeeException {
+        try{
+            Branch branch = branchesDAO.select(branchId);
+            branch.setWorkingHours(morningStart, morningEnd, eveningStart, eveningEnd);
+            branchesDAO.update(branch);
+        } catch (DalException e) {
+            throw new EmployeeException(e.getMessage(),e);
+        }
+    }
+
+    public List<Employee> getAvailableDrivers(LocalDateTime dateTime) throws EmployeeException {
+
+        List<Employee> availableDrivers = new ArrayList<>();
+
+        Branch branch = getBranch(Branch.HEADQUARTERS_ID);
+        ShiftType shiftType = branch.getShiftType(dateTime.toLocalTime()); // Could throw an exception if the given time is not in any shift
+        Map<Role, List<Employee>> shiftWorkers = shiftsController.getShift(Branch.HEADQUARTERS_ID, dateTime.toLocalDate(), shiftType).getShiftWorkers();
+        if (shiftWorkers.containsKey(Role.Driver)) {
+            availableDrivers.addAll(shiftWorkers.get(Role.Driver));
+        }
+
+        if (availableDrivers.isEmpty()) {
+            throw new EmployeeException("Could not find any available driver at the specified dateTime.");
+        }
         return availableDrivers;
     }
 
-    public void checkStoreKeeperAvailability(LocalDate date, String branchAddress) throws Exception {
-        Branch branch = getBranch(branchAddress); // finds a branch by its address / branchId.
-        Shift morningShift = shiftsController.getShift(branch.address(), date, ShiftType.Morning);
-        Shift eveningShift = shiftsController.getShift(branch.address(), date, ShiftType.Morning);
+    public void checkStoreKeeperAvailability(LocalDate date, String branchAddress) throws EmployeeException {
+        Branch branch = getBranch(branchAddress); // finds a branch by its name / branchId.
+        Shift morningShift = shiftsController.getShift(branch.name(), date, ShiftType.Morning);
+        Shift eveningShift = shiftsController.getShift(branch.name(), date, ShiftType.Morning);
         if (!morningShift.isStorekeeperWorking() || !eveningShift.isStorekeeperWorking()) {
-            throw new Exception("There is no available storekeeper at the given date in this branch.");
+            throw new EmployeeException("There is no available storekeeper at the given date in this branch.");
         }
     }
 }

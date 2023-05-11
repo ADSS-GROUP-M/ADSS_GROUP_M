@@ -16,6 +16,7 @@ public class ServiceFactory {
     private ItemListsService itemListsService;
     private EmployeesService employeesService;
     private UserService userService;
+
     private final BusinessFactory businessFactory;
 
     public ServiceFactory(){
@@ -37,30 +38,27 @@ public class ServiceFactory {
     }
 
     private void buildInstances() {
-        userService = new UserService(this, businessFactory.userController());
+
+        userService = new UserService(businessFactory.userController());
         itemListsService = new ItemListsService(businessFactory.itemListsController());
         transportsService = new TransportsService(businessFactory.transportsController());
 
-
-        //======================== Dependents ===================== |
-        /*(1)*/ resourceManagementService = new ResourceManagementService(businessFactory.sitesController(),
-                    businessFactory.driversController(),
-                    businessFactory.trucksController());
-        /*(2)*/ employeesService = new EmployeesService(this, businessFactory.employeesController(), businessFactory.shiftsController());
+        //==================== Dependencies ======================= |
+        /*(1)*/ resourceManagementService = new ResourceManagementService(businessFactory.sitesController(), businessFactory.driversController(), businessFactory.trucksController());
+        /*(2)*/ employeesService = new EmployeesService(resourceManagementService,userService, businessFactory.employeesController(), businessFactory.shiftsController());
         /*(3)*/ businessFactory.injectDependencies(employeesService);
         //========================================================= |
-
     }
 
-    public TransportsService getTransportsService() {
+    public TransportsService transportsService() {
         return transportsService;
     }
 
-    public ResourceManagementService getResourceManagementService() {
+    public ResourceManagementService resourceManagementService() {
         return resourceManagementService;
     }
 
-    public ItemListsService getItemListsService() {
+    public ItemListsService itemListsService() {
         return itemListsService;
     }
 
@@ -70,5 +68,9 @@ public class ServiceFactory {
 
     public UserService userService() {
         return userService;
+    }
+
+    public BusinessFactory businessFactory() {
+        return businessFactory;
     }
 }

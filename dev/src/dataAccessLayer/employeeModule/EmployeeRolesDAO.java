@@ -4,6 +4,7 @@ import businessLayer.employeeModule.Employee;
 import businessLayer.employeeModule.Role;
 import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.dalUtils.OfflineResultSet;
+import dataAccessLayer.dalUtils.SQLExecutor;
 
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -25,19 +26,9 @@ public class EmployeeRolesDAO extends DAO {
        Role;
     }
 
-    public EmployeeRolesDAO()throws DalException {
-        super(tableName,
-                primaryKeys,
-                types,
-                "EmployeeId",
-                "Role"
-        );
-        this.cache = new HashMap<>();
-    }
-
-    public EmployeeRolesDAO(String dbName) throws DalException {
-        super(dbName,
-                tableName,
+    public EmployeeRolesDAO(SQLExecutor cursor)throws DalException {
+        super(cursor,
+	            tableName,
                 primaryKeys,
                 types,
                 "EmployeeId",

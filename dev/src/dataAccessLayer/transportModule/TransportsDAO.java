@@ -2,11 +2,14 @@ package dataAccessLayer.transportModule;
 
 import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.dalUtils.OfflineResultSet;
+import dataAccessLayer.dalUtils.SQLExecutor;
 import dataAccessLayer.transportModule.abstracts.CounterDAO;
 import dataAccessLayer.transportModule.abstracts.ManyToManyDAO;
+import objects.transportObjects.DeliveryRoute;
 import objects.transportObjects.Transport;
 
 import java.sql.SQLException;
+import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -16,53 +19,31 @@ public class TransportsDAO extends ManyToManyDAO<Transport> implements CounterDA
     private static final String[] types = {"INTEGER", "TEXT", "TEXT", "TEXT", "TEXT", "INTEGER"};
     private static final String[] parent_tables = {"truck_drivers", "trucks", "sites"};
     private static final String[] primary_keys = {"id"};
-    private static final String[][] foreign_keys = {{"driver_id"}, {"truck_id"},{"source_address"}};
-    private static final String[][] references = {{"id"}, {"id"}, {"address"}};
+    private static final String[][] foreign_keys = {{"driver_id"}, {"truck_id"},{"source_name"}};
+    private static final String[][] references = {{"id"}, {"id"}, {"name"}};
+    public static final String tableName = "transports";
 
     private final TransportDestinationsDAO destinationsDAO;
     private final TransportIdCounterDAO counterDAO;
 
-    public TransportsDAO() throws DalException{
-        super("transports",
+    public TransportsDAO(SQLExecutor cursor, TransportDestinationsDAO destinationsDAO, TransportIdCounterDAO counterDAO) throws DalException{
+        super(cursor,
+				tableName,
                 parent_tables,
                 types,
                 primary_keys,
                 foreign_keys,
                 references,
                 "id",
-                "source_address",
+                "source_name",
                 "driver_id",
                 "truck_id",
                 "departure_time",
                 "weight"
         );
+        this.destinationsDAO = destinationsDAO;
+        this.counterDAO = counterDAO;
         initTable();
-        destinationsDAO = new TransportDestinationsDAO();
-        counterDAO = new TransportIdCounterDAO();
-    }
-
-    /**
-     * used for testing
-     * @param dbName the name of the database to connect to
-     */
-    public TransportsDAO(String dbName) throws DalException{
-        super(dbName,
-                "transports",
-                parent_tables,
-                types,
-                primary_keys,
-                foreign_keys,
-                references,
-                "id",
-                "source_address",
-                "driver_id",
-                "truck_id",
-                "departure_time",
-                "weight"
-        );
-        initTable();
-        destinationsDAO = new TransportDestinationsDAO(dbName);
-        counterDAO = new TransportIdCounterDAO(dbName);
     }
 
     /**
@@ -138,8 +119,7 @@ public class TransportsDAO extends ManyToManyDAO<Transport> implements CounterDA
         );
         try {
             if(cursor.executeWrite(query) == 1){
-                LinkedList<TransportDestination> transportDestinations = generateTransportDestinations(object);
-                destinationsDAO.insertAll(transportDestinations);
+                destinationsDAO.insertFromTransport(object);
                 cache.put(object);
             } else {
                 throw new RuntimeException("Unexpected error while inserting transport");
@@ -155,7 +135,7 @@ public class TransportsDAO extends ManyToManyDAO<Transport> implements CounterDA
      */
     @Override
     public void update(Transport object) throws DalException {
-        String query = String.format("UPDATE %s SET source_address = '%s', driver_id = '%s', truck_id = '%s', departure_time = '%s', weight = %d WHERE id = %d;",
+        String query = String.format("UPDATE %s SET source_name = '%s', driver_id = '%s', truck_id = '%s', departure_time = '%s', weight = %d WHERE id = %d;",
                 TABLE_NAME,
                 object.source(),
                 object.driverId(),
@@ -167,8 +147,7 @@ public class TransportsDAO extends ManyToManyDAO<Transport> implements CounterDA
         try {
             destinationsDAO.deleteAllRelated(object);
             if(cursor.executeWrite(query) == 1){
-                LinkedList<TransportDestination> transportDestinations = generateTransportDestinations(object);
-                destinationsDAO.insertAll(transportDestinations);
+                destinationsDAO.insertFromTransport(object);
                 cache.put(object);
             } else {
                 throw new DalException("No transport with id " + object.id() + " was found");
@@ -220,16 +199,17 @@ public class TransportsDAO extends ManyToManyDAO<Transport> implements CounterDA
     protected Transport getObjectFromResultSet(OfflineResultSet resultSet, List<TransportDestination> transportDestinations){
         LinkedList<String> destinations = new LinkedList<>();
         HashMap<String,Integer> itemLists = new HashMap<>();
+        HashMap<String, LocalTime> estimatedTimesOfArrival = new HashMap<>();
         for(TransportDestination transportDestination : transportDestinations){
-            destinations.add(transportDestination.address());
-            itemLists.put(transportDestination.address(), transportDestination.itemListId());
+            destinations.add(transportDestination.name());
+            itemLists.put(transportDestination.name(), transportDestination.itemListId());
+            estimatedTimesOfArrival.put(transportDestination.name(), transportDestination.expectedArrivalTime());
         }
 
+        String sourceAddress = resultSet.getString("source_name");
         return new Transport(
                 resultSet.getInt("id"),
-                resultSet.getString("source_address"),
-                destinations,
-                itemLists,
+                new DeliveryRoute(sourceAddress, destinations,itemLists, estimatedTimesOfArrival),
                 resultSet.getString("driver_id"),
                 resultSet.getString("truck_id"),
                 resultSet.getLocalDateTime("departure_time"),
@@ -237,19 +217,6 @@ public class TransportsDAO extends ManyToManyDAO<Transport> implements CounterDA
         );
     }
 
-    private LinkedList<TransportDestination> generateTransportDestinations(Transport object) {
-        LinkedList<TransportDestination> transportDestinations = new LinkedList<>();
-        int i = 1;
-        for(String destination : object.destinations()){
-            transportDestinations.add(new TransportDestination(
-                    object.id(),
-                    i++,
-                    destination,
-                    object.itemLists().get(destination)
-            ));
-        }
-        return transportDestinations;
-    }
     @Override
     public void clearTable() {
         destinationsDAO.clearTable();

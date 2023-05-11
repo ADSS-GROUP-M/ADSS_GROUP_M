@@ -1,5 +1,7 @@
 package Backend.BusinessLayer.SuppliersModule;
 
+import Backend.BusinessLayer.BusinessLayerUsage.Branch;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -18,7 +20,7 @@ public class OrderController {
      * @param order maps between productId to the amount to be ordered
      * @return map between supplier to the products he supplies from the order
      */
-    public Map<String, Pair<Map<Integer, Integer>, Double>> order(Map<Integer, Integer> order){
+    public Map<String, Pair<Map<Integer, Integer>, Double>> order(Map<Integer, Integer> order, Branch branch){
         List<Supplier> suppliers = supplierController.getCopyOfSuppliers();
         Map<Integer, Map<Supplier, Integer>> cantBeOrderedByOneSupplier = findProductsWithoutSupplierToFullySupply(order, suppliers);
         Map<Integer, Integer> notOneSupplierOrder = new HashMap<>();

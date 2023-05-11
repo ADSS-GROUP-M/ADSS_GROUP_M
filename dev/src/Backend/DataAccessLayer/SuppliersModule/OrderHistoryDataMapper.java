@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class OrderHistoryDataMapper extends AbstractDataMapper {
     public OrderHistoryDataMapper() {
-        super("Orders_history", new String[]{"bn_number", "order_id", "catalog_number", "quantity"});
+        super("orders_history", new String[]{"bn_number", "order_id", "catalog_number", "quantity"});
     }
     public void insert(String bnNumber, int orderId, String catalog_number, int quantity) throws SQLException {
         String columnsString = String.join(", ", columns);
@@ -26,8 +26,8 @@ public class OrderHistoryDataMapper extends AbstractDataMapper {
 
     public Order find(String bnNumber, int orderId) throws SQLException {
         String columnsString = String.join(", ", columns);
-        OfflineResultSet resultSet = sqlExecutor.executeRead(String.format("SELECT %s WHERE bn_number = %s and order_id = %d", columnsString,
-                bnNumber, orderId));
+        OfflineResultSet resultSet = sqlExecutor.executeRead(String.format("SELECT %s FROM %s WHERE bn_number = %s and order_id = %d", columnsString,
+                tableName, bnNumber, orderId));
         Order order = new Order();
         while (resultSet.next()){
             order.addProduct(resultSet.getInt("catalog_number"), resultSet.getInt("quantity"));
@@ -37,8 +37,8 @@ public class OrderHistoryDataMapper extends AbstractDataMapper {
 
     public List<Order> findAll(String bnNumber, int maxOrderId) throws SQLException {
         String columnsString = String.join(", ", columns);
-        OfflineResultSet resultSet = sqlExecutor.executeRead(String.format("SELECT %s WHERE bn_number = %s and order_id = %d", columnsString,
-                bnNumber));
+        OfflineResultSet resultSet = sqlExecutor.executeRead(String.format("SELECT %s FROM %s WHERE bn_number = %s and order_id = %d", columnsString,
+                tableName, bnNumber));
         List<Order> orderList = new ArrayList<>();
         for (int i = 0; i < maxOrderId; i++)
             orderList.add(new Order());

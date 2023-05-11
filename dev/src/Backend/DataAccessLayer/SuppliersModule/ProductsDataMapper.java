@@ -15,7 +15,7 @@ public class ProductsDataMapper  extends AbstractDataMapper {
     private List<ProductDAO> cachedProducts;
 
     public ProductsDataMapper() {
-        super("Products", new String[]{"catalog_number", "name", "manufacture", "category"});
+        super("products", new String[]{"catalog_number", "name", "manufacture", "category"});
     }
 
     public void insert(String catalog_number, String name, String manufacture) throws SQLException {

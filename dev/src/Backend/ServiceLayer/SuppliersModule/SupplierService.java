@@ -100,9 +100,9 @@ public class SupplierService {
         }
     }
 
-    public String setContactsEmail(String bnNumber, String contactName, String email){
+    public String setContactsEmail(String bnNumber, String email, String newEmail){
         try {
-            supplierController.getSupplier(bnNumber).setContactsEmail(contactName, email);
+            supplierController.getSupplier(bnNumber).setContactsEmail(email, newEmail);
             return gson.toJson(new Response<String>("contact email is edited!", false));
         }
         catch (Exception e){
@@ -110,9 +110,9 @@ public class SupplierService {
         }
     }
 
-    public String setContactsPhoneNumber(String bnNumber, String contactName, String phoneNumber){
+    public String setContactsPhoneNumber(String bnNumber, String email, String phoneNumber){
         try {
-            supplierController.getSupplier(bnNumber).setContactsPhoneNumber(contactName, phoneNumber);
+            supplierController.getSupplier(bnNumber).setContactsPhoneNumber(email, phoneNumber);
             return gson.toJson(new Response<String>("contact phone number is edited!", false));
         }
         catch (Exception e){

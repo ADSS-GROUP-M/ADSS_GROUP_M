@@ -1,4 +1,4 @@
-package Backend.BusinessLayer.SuppliersModule;
+package Backend.BusinessLayer.BusinessLayerUsage;
 
 public enum Branch {
     branch1,

@@ -1,5 +1,6 @@
 package Backend.ServiceLayer.SuppliersModule;
 
+import Backend.BusinessLayer.BusinessLayerUsage.Branch;
 import Backend.BusinessLayer.SuppliersModule.OrderController;
 import Backend.BusinessLayer.SuppliersModule.Pair;
 import Backend.BusinessLayer.SuppliersModule.Supplier;
@@ -21,9 +22,9 @@ public class OrderService {
         gson = new Gson();
     }
 
-    public String order(Map<Integer, Integer> order){
+    public String order(Map<Integer, Integer> order, Branch branch){
         try {
-            Map<String, Pair<Map<Integer, Integer>, Double>> fullOrder = orderController.order(order);
+            Map<String, Pair<Map<Integer, Integer>, Double>> fullOrder = orderController.order(order, branch);
             Response<Map<String, Pair<Map<Integer, Integer>, Double>>> r = new Response<>(fullOrder);
             return gson.toJson(r);
         }

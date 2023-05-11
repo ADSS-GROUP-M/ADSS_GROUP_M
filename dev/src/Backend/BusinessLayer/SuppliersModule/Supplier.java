@@ -14,7 +14,7 @@ public class Supplier {
     private List<String> fields;
     private String paymentMethod;
     /***
-     * maps between the name of the contact person and his contact info - email, phone number
+     * maps between the email of the contact person and his contact info - name, phone number
      */
     private Map<String,Pair<String, String>> contactsInfo;
     /***
@@ -59,14 +59,16 @@ public class Supplier {
         contactsInfo.remove(contactsName);
     }
     public void addContactInfo(String contactName, String email, String phoneNumber){
-        this.contactsInfo.put(contactName, new Pair<>(email, phoneNumber));
+        this.contactsInfo.put(email, new Pair<>(name, phoneNumber));
     }
 
-    public void setContactsEmail(String contactName, String email){
-        contactsInfo.get(contactName).setFirst(email);
+    public void setContactsEmail(String email, String newEmail){
+        Pair<String, String> temp = contactsInfo.get(email);
+        contactsInfo.remove(email);
+        contactsInfo.put(newEmail, temp);
     }
-    public void setContactsPhoneNumber(String contactName, String phoneNumber){
-        contactsInfo.get(contactName).setSecond(phoneNumber);
+    public void setContactsPhoneNumber(String email, String phoneNumber){
+        contactsInfo.get(email).setSecond(phoneNumber);
     }
 
 
@@ -117,7 +119,7 @@ public class Supplier {
     public String toString(){
         String contactsInfo = "CONTACTS INFORMATION:";
         for(Map.Entry<String, Pair<String, String>> contact : this.contactsInfo.entrySet())
-            contactsInfo = contactsInfo + "\n\t\tName: " + contact.getKey() + " Email: " + contact.getValue().getFirst() + " Phone number: " + contact.getValue().getSecond();
+            contactsInfo = contactsInfo + "\n\t\tName: " + contact.getValue().getFirst() + " Email: " + contact.getKey() + " Phone number: " + contact.getValue().getSecond();
         String fields = "FIELDS:";
         for (String field : this.fields)
             fields = fields + "\n\t\t" + field;

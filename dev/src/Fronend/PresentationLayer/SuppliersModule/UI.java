@@ -368,11 +368,11 @@ public class UI {
         try {
             System.out.println("enter bn number of the supplier");
             String bnNumber = sc.nextLine();
-            System.out.println("enter contact name");
-            String name = sc.nextLine();
-            System.out.println("enter new email");
+            System.out.println("enter contact email");
             String email = sc.nextLine();
-            System.out.println(gson.fromJson(supplierService.setContactsEmail(bnNumber, name, email), Response.class).getMsg());
+            System.out.println("enter new email");
+            String newEmail = sc.nextLine();
+            System.out.println(gson.fromJson(supplierService.setContactsEmail(bnNumber, email, newEmail), Response.class).getMsg());
         }
         catch (Exception e){
             System.out.println("invalid input");
@@ -383,11 +383,11 @@ public class UI {
         try {
             System.out.println("enter bn number of the supplier");
             String bnNumber = sc.nextLine();
-            System.out.println("enter contact name");
-            String name = sc.nextLine();
+            System.out.println("enter contact email");
+            String email = sc.nextLine();
             System.out.println("enter new phone number");
             String phoneNumber = sc.nextLine();
-            System.out.println(gson.fromJson(supplierService.setContactsPhoneNumber(bnNumber, name, phoneNumber), Response.class).getMsg());
+            System.out.println(gson.fromJson(supplierService.setContactsPhoneNumber(bnNumber, email, phoneNumber), Response.class).getMsg());
         }
         catch (Exception e){
             System.out.println("invalid input");
@@ -786,6 +786,7 @@ public class UI {
     }
 
     public void order(){
+        /*
         try {
             Map<Integer, Integer> order = new HashMap<>();
             try {
@@ -832,8 +833,9 @@ public class UI {
         catch (Exception e){
             System.out.println(e.getMessage());
         }
-    }
 
+         */
+    }
     public void loadData(){
         System.out.println(gson.fromJson(supplierService.loadData(), Response.class).getMsg());
     }

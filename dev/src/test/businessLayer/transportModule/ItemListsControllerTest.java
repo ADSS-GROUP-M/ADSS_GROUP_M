@@ -53,8 +53,8 @@ class ItemListsControllerTest {
         } catch (DalException e) {
             fail(e);
         }
-        int id = assertDoesNotThrow(() -> controller.addItemList(itemList));
-        assertEquals(LIST_ID, id);
+        ItemList itemList1 = assertDoesNotThrow(() -> controller.addItemList(itemList));
+        assertEquals(LIST_ID, itemList1.id());
     }
 
     @Test

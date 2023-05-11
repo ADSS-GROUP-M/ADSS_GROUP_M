@@ -1,7 +1,6 @@
 package presentationLayer.transportModule;
 
 import objects.transportObjects.*;
-import serviceLayer.ServiceFactory;
 import serviceLayer.transportModule.ItemListsService;
 import serviceLayer.transportModule.ResourceManagementService;
 import serviceLayer.transportModule.TransportsService;
@@ -160,10 +159,11 @@ public class UiData {
         int i = 1;
         Site[] siteArray = new Site[sites.size()];
         for(Site site : sites.values()){
+            System.out.println();
             System.out.print(i+".");
-            System.out.println("  Transport zone: "+site.transportZone());
-            System.out.println("    name:         "+site.name());
-            System.out.println("    site type:    "+site.siteType());
+            System.out.println("  name:           "+site.name());
+            System.out.println("    Transport zone: "+site.transportZone());
+            System.out.println("    site type:      "+site.siteType());
             siteArray[i-1] = site;
             i++;
         }

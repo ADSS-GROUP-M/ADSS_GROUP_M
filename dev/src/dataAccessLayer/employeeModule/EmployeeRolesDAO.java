@@ -9,7 +9,10 @@ import dataAccessLayer.transportModule.abstracts.ManyToManyDAO;
 import javafx.util.Pair;
 
 import java.sql.SQLException;
-import java.util.*;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 
 public class EmployeeRolesDAO extends ManyToManyDAO<Pair<String,Role>> {
 
@@ -115,12 +118,11 @@ public class EmployeeRolesDAO extends ManyToManyDAO<Pair<String,Role>> {
         } catch (SQLException e) {
             throw new DalException("Failed to select employee roles", e);
         }
-        List<Pair<String,Role>> authorizations = new ArrayList<>();
+        List<Pair<String,Role>> authorizations = new LinkedList<>();
         while (resultSet.next()) {
-            Pair<String,Role> selected = getObjectFromResultSet(resultSet);
-            authorizations.add(selected);
-            cache.put(selected);
+            authorizations.add(getObjectFromResultSet(resultSet));
         }
+        cache.putAll(authorizations);
         return authorizations;
     }
 

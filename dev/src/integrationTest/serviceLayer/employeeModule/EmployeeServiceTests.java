@@ -7,7 +7,6 @@ import businessLayer.employeeModule.User;
 import businessLayer.transportModule.SitesController;
 import com.google.gson.reflect.TypeToken;
 import dataAccessLayer.DalFactory;
-import dataAccessLayer.dalUtils.DalException;
 import objects.transportObjects.Site;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,7 +18,6 @@ import serviceLayer.employeeModule.Objects.SShift;
 import serviceLayer.employeeModule.Objects.SShiftType;
 import serviceLayer.employeeModule.Services.EmployeesService;
 import serviceLayer.employeeModule.Services.UserService;
-import serviceLayer.transportModule.ResourceManagementService;
 import utils.Response;
 import utils.employeeUtils.DateUtils;
 import utils.transportUtils.TransportException;
@@ -31,7 +29,6 @@ import java.util.List;
 
 import static dataAccessLayer.DalFactory.TESTING_DB_NAME;
 import static org.junit.jupiter.api.Assertions.*;
-import static serviceLayer.employeeModule.Services.UserService.HR_MANAGER_USERNAME;
 
 public class EmployeeServiceTests {
     public static final Type LIST_SSHIFT_ARRAY_TYPE = new TypeToken<List<SShift[]>>() {}.getType();

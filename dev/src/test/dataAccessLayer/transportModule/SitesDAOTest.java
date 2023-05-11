@@ -58,7 +58,7 @@ class SitesDAOTest {
     @Test
     void select() {
         try {
-            assertDeepEquals(site,dao.select(Site.getLookupObject(site.address())));
+            assertDeepEquals(site,dao.select(Site.getLookupObject(site.name())));
         } catch (DalException e) {
             fail(e);
         }
@@ -108,7 +108,7 @@ class SitesDAOTest {
         try {
             Site site2 = new Site(site.name(), site.address(), "zone2", "51235","lo kobi", Site.SiteType.LOGISTICAL_CENTER);
             dao.update(site2);
-            assertDeepEquals(site2,dao.select(Site.getLookupObject(site2.address())));
+            assertDeepEquals(site2,dao.select(Site.getLookupObject(site2.name())));
         } catch (DalException e) {
             fail(e);
         }
@@ -118,7 +118,7 @@ class SitesDAOTest {
     void delete() {
         try {
             dao.delete(site);
-            assertThrows(DalException.class,() -> dao.select(Site.getLookupObject(site.address())));
+            assertThrows(DalException.class,() -> dao.select(Site.getLookupObject(site.name())));
         } catch (DalException e) {
             fail(e);
         }

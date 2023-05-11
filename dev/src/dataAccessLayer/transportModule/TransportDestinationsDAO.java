@@ -153,7 +153,7 @@ public class TransportDestinationsDAO extends ManyToManyDAO<TransportDestination
      */
     @Override
     public void update(TransportDestination object) throws DalException {
-        String query = String.format("UPDATE %s SET destination_address = '%s', item_list_id = %d, expected_arrival_time = '%s' WHERE transport_id = %d AND destination_index = %d;",
+        String query = String.format("UPDATE %s SET destination_name = '%s', item_list_id = %d, expected_arrival_time = '%s' WHERE transport_id = %d AND destination_index = %d;",
                 TABLE_NAME,
                 object.name(),
                 object.itemListId(),
@@ -222,7 +222,7 @@ public class TransportDestinationsDAO extends ManyToManyDAO<TransportDestination
         return new TransportDestination(
                 resultSet.getInt("transport_id"),
                 resultSet.getInt("destination_index"),
-                resultSet.getString("destination_address"),
+                resultSet.getString("destination_name"),
                 resultSet.getInt("item_list_id"),
                 resultSet.getLocalTime("expected_arrival_time")
                 );

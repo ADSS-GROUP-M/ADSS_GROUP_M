@@ -30,9 +30,9 @@ class TransportDestinationsDAOTest {
 
     public static final int TRANSPORT_ID = 1;
     public static final int LIST_ID = 1;
-    public static final String SITE_ADDRESS1 = "address1";
-    public static final String SITE_ADDRESS2 = "address2";
     public static final LocalTime ARRIVAL_TIME = LocalTime.of(20, 20);
+    public static final String SITE_NAME1 = "name1";
+    public static final String SITE_NAME2 = "name2";
     private TransportDestinationsDAO dao;
     private TransportDestination transportDestination1;
     private TransportDestination transportDestination2;
@@ -44,10 +44,10 @@ class TransportDestinationsDAOTest {
     @BeforeEach
     void setUp() {
         try {
-            Site site1 = new Site("TODO: INSERT NAME HERE", SITE_ADDRESS1, "zone1", "12345", "kobi", Site.SiteType.SUPPLIER);
-            Site site2 = new Site("TODO: INSERT NAME HERE", SITE_ADDRESS2, "zone1", "12345", "kobi", Site.SiteType.SUPPLIER);
+            Site site1 = new Site(SITE_NAME1, "address1", "zone1", "12345", "kobi", Site.SiteType.SUPPLIER);
+            Site site2 = new Site(SITE_NAME2, "address2", "zone1", "12345", "kobi", Site.SiteType.SUPPLIER);
             Truck truck = new Truck("1", "model1", 1000, 20000, Truck.CoolingCapacity.FROZEN);
-            Employee employee = new Employee("name1", "12345", "Poalim", 50, LocalDate.of(1999, 10, 10), "conditions", "details");
+            Employee employee = new Employee(SITE_NAME1, "12345", "Poalim", 50, LocalDate.of(1999, 10, 10), "conditions", "details");
             employee.addRole(Role.Driver);
             employee.addRole(Role.GeneralWorker);
             Driver driver = new Driver(employee.getId(), employee.getName(), Driver.LicenseType.C3);
@@ -64,15 +64,15 @@ class TransportDestinationsDAOTest {
             }};
             ItemList itemList = new ItemList(LIST_ID, load, unload);
 
-            transportDestination1 = new TransportDestination(TRANSPORT_ID, 1, SITE_ADDRESS2, LIST_ID, ARRIVAL_TIME);
+            transportDestination1 = new TransportDestination(TRANSPORT_ID, 1, SITE_NAME2, LIST_ID, ARRIVAL_TIME);
 
             Transport transport = new Transport(TRANSPORT_ID,
-                    site1.address(),
+                    site1.name(),
                     new LinkedList<>(){{
-                        add(site2.address());
+                        add(site2.name());
                     }},
                     new HashMap<>(){{
-                        put(site2.address(), LIST_ID);
+                        put(site2.name(), LIST_ID);
                     }},
                     driver.id(),
                     truck.id(),
@@ -80,7 +80,7 @@ class TransportDestinationsDAOTest {
                     15000
             );
 
-            SiteRoute distance = new SiteRoute(site1.address(), site2.address(), 40,40);
+            SiteRoute distance = new SiteRoute(site1.address(), site2.address(), 40,30);
 
             factory = new DalFactory(TESTING_DB_NAME);
             dao = factory.transportDestinationsDAO();
@@ -122,9 +122,9 @@ class TransportDestinationsDAOTest {
             transportsDAO.insert(transport);
 
 
-            transportDestination2 = new TransportDestination(TRANSPORT_ID, 2, SITE_ADDRESS1, LIST_ID, ARRIVAL_TIME);
-            transportDestination3 = new TransportDestination(TRANSPORT_ID, 3, SITE_ADDRESS1, LIST_ID, ARRIVAL_TIME);
-            transportDestination4 = new TransportDestination(TRANSPORT_ID, 4, SITE_ADDRESS1, LIST_ID, ARRIVAL_TIME);
+            transportDestination2 = new TransportDestination(TRANSPORT_ID, 2, SITE_NAME1, LIST_ID, ARRIVAL_TIME);
+            transportDestination3 = new TransportDestination(TRANSPORT_ID, 3, SITE_NAME1, LIST_ID, ARRIVAL_TIME);
+            transportDestination4 = new TransportDestination(TRANSPORT_ID, 4, SITE_NAME1, LIST_ID, ARRIVAL_TIME);
 
             dao.insert(transportDestination2);
             dao.insert(transportDestination3);
@@ -160,7 +160,7 @@ class TransportDestinationsDAOTest {
         expected.add(transportDestination4);
         List.of(5,6,7,8).forEach(i -> {
             try {
-                TransportDestination newDestination = new TransportDestination(TRANSPORT_ID, i, SITE_ADDRESS1, LIST_ID, ARRIVAL_TIME);
+                TransportDestination newDestination = new TransportDestination(TRANSPORT_ID, i, SITE_NAME1, LIST_ID, ARRIVAL_TIME);
                 expected.add(newDestination);
                 dao.insert(newDestination);
             } catch (DalException e) {
@@ -190,7 +190,7 @@ class TransportDestinationsDAOTest {
         expected.add(transportDestination4);
         List.of(5,6,7,8).forEach(i -> {
             try {
-                TransportDestination newDestination = new TransportDestination(TRANSPORT_ID, i, SITE_ADDRESS1, LIST_ID, ARRIVAL_TIME);
+                TransportDestination newDestination = new TransportDestination(TRANSPORT_ID, i, SITE_NAME1, LIST_ID, ARRIVAL_TIME);
                 dao.insert(newDestination);
                 expected.add(newDestination);
             } catch (DalException e) {
@@ -213,7 +213,7 @@ class TransportDestinationsDAOTest {
     @Test
     void insert() {
         try {
-            TransportDestination newDestination = new TransportDestination(TRANSPORT_ID, 5, SITE_ADDRESS1, LIST_ID, ARRIVAL_TIME);
+            TransportDestination newDestination = new TransportDestination(TRANSPORT_ID, 5, SITE_NAME1, LIST_ID, ARRIVAL_TIME);
             dao.insert(newDestination);
             TransportDestination selected = dao.select(TransportDestination.getLookupObject(
                     newDestination.transportId(),
@@ -229,7 +229,7 @@ class TransportDestinationsDAOTest {
         //set up
         LinkedList<TransportDestination> expected = new LinkedList<>();
         List.of(5,6,7,8).forEach(i -> {
-            TransportDestination newDestination = new TransportDestination(TRANSPORT_ID, i, SITE_ADDRESS1, LIST_ID, ARRIVAL_TIME);
+            TransportDestination newDestination = new TransportDestination(TRANSPORT_ID, i, SITE_NAME1, LIST_ID, ARRIVAL_TIME);
             expected.add(newDestination);
         });
         try {
@@ -261,7 +261,7 @@ class TransportDestinationsDAOTest {
             TransportDestination newDestination = new TransportDestination(
                     TRANSPORT_ID,
                     transportDestination2.destination_index(),
-                    SITE_ADDRESS2,
+                    SITE_NAME2,
                     LIST_ID, ARRIVAL_TIME);
             dao.update(newDestination);
             TransportDestination selected = dao.select(TransportDestination.getLookupObject(

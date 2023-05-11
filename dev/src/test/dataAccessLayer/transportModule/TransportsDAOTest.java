@@ -43,8 +43,8 @@ class TransportsDAOTest {
 
     @BeforeEach
     void setUp() {
-        site = new Site("TODO: INSERT NAME HERE", "site name", "zone1", "12345","kobi", Site.SiteType.SUPPLIER);
-        source = new Site("TODO: INSERT NAME HERE", "source name", "zone1", "12345","kobi", Site.SiteType.BRANCH);
+        site = new Site("dest1", "dest1 name", "zone1", "12345","kobi", Site.SiteType.SUPPLIER);
+        source = new Site("source1", "source1 name", "zone1", "12345","kobi", Site.SiteType.BRANCH);
         truck = new Truck("1", "model1", 1000, 20000, Truck.CoolingCapacity.FROZEN);
         employee = new Employee("name1","12345","Poalim",50, LocalDate.of(1999,10,10),"conditions","details");
         employee.addRole(Role.Driver);
@@ -64,12 +64,12 @@ class TransportsDAOTest {
         itemList = new ItemList(1, load, unload);
 
         transport = new Transport(1,
-                source.address(),
+                source.name(),
                 new LinkedList<>(){{
-                    add(site.address());
+                    add(site.name());
                 }} ,
                 new HashMap<>(){{
-                    put(site.address(), 1);
+                    put(site.name(), 1);
                 }},
                 driver.id(),
                 truck.id(),
@@ -163,12 +163,12 @@ class TransportsDAOTest {
             i -> {
                 try {
                     Transport toAdd = new Transport(i,
-                            site.address(),
+                            site.name(),
                             new LinkedList<>(){{
-                                add(site.address());
+                                add(site.name());
                             }} ,
                             new HashMap<>(){{
-                                put(site.address(), 1);
+                                put(site.name(), 1);
                             }},
                             driver.id(),
                             truck.id(),
@@ -203,12 +203,12 @@ class TransportsDAOTest {
     void insert() {
         try {
             Transport transport2 = new Transport(2,
-                    source.address(),
+                    source.name(),
                     new LinkedList<>() {{
-                        add(site.address());
+                        add(site.name());
                     }},
                     new HashMap<>() {{
-                        put(site.address(), 1);
+                        put(site.name(), 1);
                     }},
                     driver.id(),
                     truck.id(),
@@ -232,12 +232,12 @@ class TransportsDAOTest {
     void update() {
         try {
             Transport updatedTransport = new Transport(transport.id(),
-                    source.address(),
+                    source.name(),
                     new LinkedList<>() {{
-                        add(site.address());
+                        add(site.name());
                     }},
                     new HashMap<>() {{
-                        put(site.address(), 1);
+                        put(site.name(), 1);
                     }},
                     driver.id(),
                     truck.id(),

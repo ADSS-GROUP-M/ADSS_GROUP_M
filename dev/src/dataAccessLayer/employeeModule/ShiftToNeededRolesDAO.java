@@ -5,99 +5,288 @@ import businessLayer.employeeModule.Shift;
 import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.dalUtils.OfflineResultSet;
 import dataAccessLayer.dalUtils.SQLExecutor;
+import dataAccessLayer.employeeModule.records.ShiftNeededRole;
+import dataAccessLayer.transportModule.abstracts.ManyToManyDAO;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
-public class ShiftToNeededRolesDAO extends DAO{
-    private static final String[] primaryKeys = {Columns.ShiftDate.name(), Columns.ShiftType.name(), Columns.Branch.name(), Columns.Role.name()};
-    private static final String[] types = {"TEXT", "TEXT", "TEXT", "TEXT", "INTEGER"};
-    private static final String tableName = "SHIFT_ROLES";
-    private HashMap<Integer, HashMap<Role,Integer>> cache;
+public class ShiftToNeededRolesDAO extends ManyToManyDAO<ShiftNeededRole> {
+    private static final String[] types = {"TEXT", "TEXT" , "TEXT", "TEXT", "INTEGER"};
+    private static final String[] parent_tables = {"SHIFTS"};
+    private static final String[] primary_keys = {Columns.BranchId.name(), Columns.ShiftDate.name(), Columns.ShiftType.name(), Columns.Role.name()};
+    private static final String[][] foreign_keys = {{Columns.BranchId.name(), Columns.ShiftDate.name(), Columns.ShiftType.name()}};
+    private static final String[][] references = {{"Branch", "ShiftDate", "ShiftType"}};
+    public static final String tableName = "SHIFT_ROLES";
+
     private enum Columns {
+        BranchId,
         ShiftDate,
         ShiftType,
-        Branch,
         Role,
-        Amount;
+        Amount
     }
-    public ShiftToNeededRolesDAO(SQLExecutor cursor) throws DalException {
+
+    public ShiftToNeededRolesDAO(SQLExecutor cursor) throws DalException{
         super(cursor,
-				tableName,
-                primaryKeys,
+                tableName,
+                parent_tables,
                 types,
-                "ShiftDate",
-                "ShiftType",
-                "Branch",
-                "Role",
-                "Amount"
+                primary_keys,
+                foreign_keys,
+                references,
+                Columns.BranchId.name(),
+                Columns.ShiftDate.name(),
+                Columns.ShiftType.name(),
+                Columns.Role.name(),
+                Columns.Amount.name()
         );
-        this.cache = new HashMap<>();
+        initTable();
     }
 
-    private int getHashCode(LocalDate dt, Shift.ShiftType st, String branch){
-        return (formatLocalDate(dt) + st.name() + branch).hashCode();
-    }
-
-     HashMap<Role,Integer> getAll(LocalDate dt, Shift.ShiftType st, String branch) throws DalException {
-        if (this.cache.get(getHashCode(dt,st,branch))!=null)
-            return this.cache.get(getHashCode(dt,st,branch));
-        HashMap<Role,Integer> ans = this.select(dt,st.name(),branch);
-        this.cache.put(getHashCode(dt,st,branch),ans);
-        return ans;
-    }
-    void create(Shift shift) throws DalException {
+    /**
+     * @param object getLookUpObject(identifier) of the object to select
+     * @return the object with the given identifier
+     * @throws DalException if an error occurred while trying to select the object
+     */
+    @Override
+    public ShiftNeededRole select(ShiftNeededRole object) throws DalException {
+        String query = String.format("SELECT * FROM %s WHERE %s = '%s' AND %s = '%s' AND %s = '%s' AND %s = '%s';",
+                TABLE_NAME,
+                Columns.BranchId.name(),
+                object.branchId(),
+                Columns.ShiftDate.name(),
+                object.shiftDate().toString(),
+                Columns.ShiftType.name(),
+                object.shiftType().name(),
+                Columns.Role.name(),
+                object.role().name()
+        );
+        OfflineResultSet resultSet;
         try {
-            if(this.cache.containsKey(getHashCode(shift.getShiftDate(), shift.getShiftType(), shift.getBranch())))
-                throw new DalException("Key already exists!");
-            HashMap<Role,Integer> entries = new HashMap<>();
-            for(Role r: shift.getShiftNeededRoles().keySet()) {
-                    String queryString = String.format("INSERT INTO " + TABLE_NAME + "(%s, %s, %s, %s, %s) VALUES('%s','%s','%s','%s',%d)",
-                            Columns.ShiftDate.name(), Columns.ShiftType.name(), Columns.Branch.name(),Columns.Role.name(), Columns.Amount.name(),
-                            formatLocalDate(shift.getShiftDate()), shift.getShiftType().name(), shift.getBranch(), r.name(), shift.getShiftNeededRoles().get(r));
-                    cursor.executeWrite(queryString);
-                    entries.put(r,shift.getShiftNeededRoles().get(r));
-            }
-            this.cache.put(getHashCode(shift.getShiftDate(), shift.getShiftType(), shift.getBranch()),entries );
-        } catch(SQLException e) {
-            throw new DalException(e);
+            resultSet = cursor.executeRead(query);
+        } catch (SQLException e) {
+            throw new DalException("Failed to select shift needed role", e);
+        }
+        if(resultSet.next()) {
+            ShiftNeededRole fetched = getObjectFromResultSet(resultSet);
+            cache.put(fetched);
+            return fetched;
+        } else {
+            throw new DalException("The role " + object.role() + " was not found as a needed role in shift " + object.shiftDate() + " " + object.shiftType() + " in branch " + object.branchId());
+        }
+
+    }
+
+    /**
+     * @return All the objects in the table corresponding to the given shift identifiers, as a map from Role to role amounts
+     * @throws DalException if an error occurred while trying to select the objects
+     */
+    public Map<Role,Integer> selectAllByShiftIds(String branchId, LocalDate shiftDate, Shift.ShiftType shiftType) throws DalException {
+        String query = String.format("SELECT * FROM %s WHERE %s = '%s' AND %s = '%s' AND %s = '%s';",
+                TABLE_NAME,
+                Columns.BranchId.name(),
+                branchId,
+                Columns.ShiftDate.name(),
+                shiftDate.toString(),
+                Columns.ShiftType.name(),
+                shiftType.name()
+                );
+        OfflineResultSet resultSet;
+        try {
+            resultSet = cursor.executeRead(query);
+        } catch (SQLException e) {
+            throw new DalException("Failed to select all shifts needed roles ", e);
+        }
+        Map<Role,Integer> result = new HashMap<>();
+        while(resultSet.next()) {
+            ShiftNeededRole selected = getObjectFromResultSet(resultSet);
+            cache.put(selected);
+            result.put(selected.role(),selected.amount());
+        }
+        return result;
+    }
+
+    /**
+     * @return All the objects in the table
+     * @throws DalException if an error occurred while trying to select the objects
+     */
+    @Override
+    public List<ShiftNeededRole> selectAll() throws DalException {
+        String query = String.format("SELECT * FROM %s;", TABLE_NAME);
+        OfflineResultSet resultSet;
+        try {
+            resultSet = cursor.executeRead(query);
+        } catch (SQLException e) {
+            throw new DalException("Failed to select all shifts needed roles ", e);
+        }
+        List<ShiftNeededRole> result = new LinkedList<>();
+        while(resultSet.next()) {
+            result.add(getObjectFromResultSet(resultSet));
+        }
+        cache.putAll(result);
+        return result;
+    }
+
+    /**
+     * @param shift - the shift to insert its needed roles
+     * @throws DalException if an error occurred while trying to insert the object
+     */
+    public void insert(Shift shift) throws DalException {
+        for (Map.Entry<Role,Integer> entry : shift.getShiftNeededRoles().entrySet()) {
+            insert(new ShiftNeededRole(shift.getBranch(), shift.getShiftDate(), shift.getShiftType(), entry.getKey(), entry.getValue()));
         }
     }
 
-    void update(Shift s) throws DalException {
-        if(!this.cache.containsKey(getHashCode(s.getShiftDate(), s.getShiftType(), s.getBranch())))
-            throw new DalException("Key doesnt exist! Create it first.");
-        this.delete(s);
-        this.create(s);
-    }
-
-    void delete(Shift s) throws DalException {// first check if it is in cache, if it is, then delete that object! and remove from cache
-        Object[] keys = {s.getShiftDate(),s.getShiftType().name(),s.getBranch()};
-        super.delete(keys);
-        this.cache.remove(getHashCode(s.getShiftDate(),s.getShiftType(),s.getBranch()));
-    }
-    HashMap<Role,Integer> select(LocalDate date, String shiftType, String branch) throws DalException {
-        Object[] keys = {date,shiftType, branch};
-        return ((HashMap<Role,Integer>) super.select(keys));
-    }
-
-    protected HashMap<Role,Integer> convertReaderToObject(OfflineResultSet reader) {
-        HashMap<Role,Integer> ans = new HashMap<>();
+    /**
+     * @param object - the object to insert
+     * @throws DalException if an error occurred while trying to insert the object
+     */
+    @Override
+    public void insert(ShiftNeededRole object) throws DalException {
+        String query = String.format("INSERT INTO %s VALUES ('%s','%s','%s','%s',%d);",
+                TABLE_NAME,
+                object.branchId(),
+                object.shiftDate().toString(),
+                object.shiftType().name(),
+                object.role().name(),
+                object.amount()
+        );
         try {
-            while (reader.next()) {
-                    Role r = Role.valueOf(reader.getString(ShiftToNeededRolesDAO.Columns.Role.name()));
-                    Integer x = reader.getInt(ShiftToNeededRolesDAO.Columns.Amount.name());
-                    if(x == null || r == null)
-                         continue;
-                    ans.put(r,x);
+            if(cursor.executeWrite(query) != 1){
+                throw new RuntimeException("Unexpected error while trying to insert shift needed role");
+            } else {
+                cache.put(object);
             }
-        }catch (Exception e){ }
-        return ans;
+        } catch (SQLException e) {
+            throw new DalException("Failed to insert shift needed role", e);
+        }
     }
 
-    public void clearTable() throws DalException {
-        super.clearTable();
-        cache.clear();
+    /**
+     * @param shift - the object to update its needed roles
+     * @throws DalException if an error occurred while trying to update the object
+     */
+    public void update(Shift shift) throws DalException {
+        delete(shift);
+        insert(shift);
+    }
+
+    /**
+     * @param object - the object to update
+     * @throws DalException if an error occurred while trying to update the object
+     */
+    @Override
+    public void update(ShiftNeededRole object) throws DalException {
+        String query = String.format("UPDATE %s SET %s = %d WHERE %s = '%s' AND %s = '%s' AND %s = '%s' AND %s = '%s';",
+                TABLE_NAME,
+                Columns.Amount.name(),
+                object.amount(),
+                Columns.BranchId.name(),
+                object.branchId(),
+                Columns.ShiftDate.name(),
+                object.shiftDate().toString(),
+                Columns.ShiftType.name(),
+                object.shiftType().name(),
+                Columns.Role.name(),
+                object.role().name()
+
+        );
+        try {
+            if(cursor.executeWrite(query) != 1) {
+                throw new DalException("Failed to update shift needed amount of role " + object.role() + " in shift " + object.shiftDate() + " " + object.shiftType() + " in branch " + object.branchId());
+            } else {
+                cache.put(object);
+            }
+        } catch (SQLException e) {
+            throw new DalException("Failed to update shift needed amount", e);
+        }
+    }
+
+    /**
+     * @param shift the shift to delete its needed roles
+     * @throws DalException if an error occurred while trying to delete the object
+     */
+    public void delete(Shift shift) throws DalException {
+        String query = String.format("DELETE FROM %s WHERE %s = '%s' AND %s = '%s' AND %s = '%s';",
+                TABLE_NAME,
+                Columns.BranchId.name(),
+                shift.getBranch(),
+                Columns.ShiftDate.name(),
+                shift.getShiftDate().toString(),
+                Columns.ShiftType.name(),
+                shift.getShiftType().name());
+        try {
+            if(cursor.executeWrite(query) != 0) {
+                for(Role role : Role.values()) {
+                    cache.remove(ShiftNeededRole.getLookupObject(shift.getBranch(),shift.getShiftDate(),shift.getShiftType(), role));
+                }
+            }
+        } catch (SQLException e) {
+            throw new DalException("Failed to delete employee roles", e);
+        }
+    }
+
+    /**
+     * @param object getLookUpObject(identifier) of the object to delete
+     * @throws DalException if an error occurred while trying to delete the object
+     */
+    @Override
+    public void delete(ShiftNeededRole object) throws DalException {
+        String query = String.format("DELETE FROM %s WHERE %s = '%s' AND %s = '%s' AND %s = '%s' AND %s = '%s';",
+                TABLE_NAME,
+                Columns.BranchId.name(),
+                object.branchId(),
+                Columns.ShiftDate.name(),
+                object.shiftType(),
+                Columns.ShiftType.name(),
+                object.shiftType().name(),
+                Columns.Role.name(),
+                object.role().name()
+        );
+        try {
+            if(cursor.executeWrite(query) != 1){
+                throw new DalException("Failed to delete shift needed amount of role " + object.role() + " in shift " + object.shiftDate() + " " + object.shiftType() + " in branch " + object.branchId());
+            } else {
+                cache.remove(object);
+            }
+        } catch (SQLException e) {
+            throw new DalException("Failed to delete shift needed role", e);
+        }
+    }
+
+    @Override
+    public boolean exists(ShiftNeededRole object) throws DalException {
+        String query = String.format("SELECT * FROM %s WHERE %s = '%s' AND %s = '%s' AND %s = '%s' AND %s = '%s';",
+                TABLE_NAME,
+                Columns.BranchId.name(),
+                object.branchId(),
+                Columns.ShiftDate.name(),
+                object.shiftDate().toString(),
+                Columns.ShiftType.name(),
+                object.shiftType().name(),
+                Columns.Role.name(),
+                object.role().name()
+        );
+        try {
+            return cursor.executeRead(query).isEmpty() == false;
+        } catch (SQLException e) {
+            throw new DalException("Failed to check if shift needed role exists", e);
+        }
+    }
+
+    @Override
+    protected ShiftNeededRole getObjectFromResultSet(OfflineResultSet resultSet) {
+        return new ShiftNeededRole(
+                resultSet.getString(Columns.BranchId.name()),
+                resultSet.getLocalDate(Columns.ShiftDate.name()),
+                Shift.ShiftType.valueOf(resultSet.getString(Columns.ShiftType.name())),
+                Role.valueOf(resultSet.getString(Columns.Role.name())),
+                resultSet.getInt(Columns.Amount.name())
+        );
     }
 }

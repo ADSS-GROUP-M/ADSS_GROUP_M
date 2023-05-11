@@ -1,11 +1,14 @@
 package dataAccessLayer.employeeModule;
 
 
+import businessLayer.employeeModule.Branch;
 import businessLayer.employeeModule.Employee;
 import businessLayer.employeeModule.Role;
 import businessLayer.employeeModule.Shift;
 import dataAccessLayer.DalFactory;
 import dataAccessLayer.dalUtils.DalException;
+import dataAccessLayer.transportModule.SitesDAO;
+import objects.transportObjects.Site;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,6 +26,8 @@ public class ShiftDAOTest {
 
     ShiftDAO shiftDAO;
     EmployeeDAO empDao;
+    SitesDAO sitesDAO;
+    BranchesDAO branchesDAO;
     Shift shift1;
     Shift shift2;
     Map<Role,List<Employee>> workers;
@@ -34,17 +39,23 @@ public class ShiftDAOTest {
 
     @BeforeEach
     public void setUp(){ // cleans empDAO, creates 3 employees in DB, sets up 2 of them as workers shift
-
+        DalFactory.clearTestDB();
         try{
-
             factory = new DalFactory(TESTING_DB_NAME);
-
             workers = new HashMap<>();
             List<Employee> cashiers = new LinkedList<>();
             List<Employee> generalWorkers = new LinkedList<>();
 
             shiftDAO = factory.shiftDAO();
             empDao = factory.employeeDAO();
+            sitesDAO = factory.sitesDAO();
+            branchesDAO = factory.branchesDAO();
+
+            // Initialize branch data (to match shifts foreign keys)
+            sitesDAO.insert(new Site("branch1","address1","zone1","111-111-1111","contact1", Site.SiteType.BRANCH));
+            sitesDAO.insert(new Site("branch2","address2","zone2","222-222-2222","contact2", Site.SiteType.BRANCH));
+            branchesDAO.insert(new Branch("branch1"));
+            branchesDAO.insert(new Branch("branch2"));
 
             shift1 = new Shift("branch1",LocalDate.now(), Shift.ShiftType.Evening);
             shift2 = new Shift("branch2",LocalDate.of(1893,2,24), Shift.ShiftType.Morning);
@@ -73,8 +84,8 @@ public class ShiftDAOTest {
 
             shift1.setShiftWorkers(workers);
 
-            shiftDAO.create(shift1);
-            shiftDAO.create(shift2);
+            shiftDAO.insert(shift1);
+            shiftDAO.insert(shift2);
         } catch (Exception e) {
             fail(e);
         }
@@ -87,7 +98,7 @@ public class ShiftDAOTest {
 
     @Test
     public void testCreateData(){// creates 2 shifts in DB
-        assertThrows(DalException.class, () -> shiftDAO.create(shift1)); // cannot create same object with existing key
+        assertThrows(DalException.class, () -> shiftDAO.insert(shift1)); // cannot create same object with existing key
     }
 
     //To test data persistence, run after 'createData'
@@ -95,7 +106,8 @@ public class ShiftDAOTest {
     public void delete(){ // deletes shift from DB
         try{
             shiftDAO.delete(shift1);
-            assertNull(shiftDAO.get(shift1.getBranch(), shift1.getShiftDate(), shift1.getShiftType()));
+            //assertNull(shiftDAO.select(shift1.getBranch(), shift1.getShiftDate(), shift1.getShiftType()));
+            assertThrows(DalException.class, () -> shiftDAO.select(shift1.getBranch(), shift1.getShiftDate(), shift1.getShiftType()));
         } catch(Exception e) {
             fail(e);
         }
@@ -105,7 +117,7 @@ public class ShiftDAOTest {
     @Test
     public void get(){// gets the shift from DB and confirms its' state
         try{
-           Shift sh = shiftDAO.get(shift1.getBranch(), shift1.getShiftDate(), shift1.getShiftType());
+           Shift sh = shiftDAO.select(shift1.getBranch(), shift1.getShiftDate(), shift1.getShiftType());
             assertEquals(sh.getShiftDate().getDayOfYear(),shift1.getShiftDate().getDayOfYear());
             assertEquals(sh.getShiftWorkers().get(Role.GeneralWorker).get(0).getId(), shift1.getShiftWorkers().get(Role.GeneralWorker).get(0).getId());
         } catch(Exception e) {
@@ -117,7 +129,7 @@ public class ShiftDAOTest {
     @Test
     public void update(){
         try{
-            shift1 = shiftDAO.get("branch1", shift1.getShiftDate(), shift1.getShiftType());
+            shift1 = shiftDAO.select("branch1", shift1.getShiftDate(), shift1.getShiftType());
             HashMap<Role,List<Employee>> newWorkers = new HashMap<>();
             List<Employee> worker = new LinkedList<>();
             worker.add(employee1);
@@ -125,7 +137,7 @@ public class ShiftDAOTest {
             shift1.setShiftWorkers(newWorkers);
             shift1.setApproved(true);
             shiftDAO.update(shift1);
-            Shift s2 = shiftDAO.get("branch1", shift1.getShiftDate(), shift1.getShiftType());
+            Shift s2 = shiftDAO.select("branch1", shift1.getShiftDate(), shift1.getShiftType());
             assertEquals(s2.getShiftWorkers().get(Role.GeneralWorker).get(0).getId(), worker.get(0).getId());
         } catch(Exception e) {
             fail(e);
@@ -137,14 +149,14 @@ public class ShiftDAOTest {
     public void update2(){
 
         try{
-            shift1 = shiftDAO.get("branch1", shift1.getShiftDate(), shift1.getShiftType());
+            shift1 = shiftDAO.select("branch1", shift1.getShiftDate(), shift1.getShiftType());
             workers = shift1.getShiftWorkers();
             workers.get(Role.GeneralWorker).remove(workers.get(Role.GeneralWorker).get(0)); // removes twoEmployee
             List<Employee> security = new LinkedList<>();
             security.add(employee4);
             workers.put(Role.SecurityGuard, security);
             shiftDAO.update(shift1);
-            Shift s2 = shiftDAO.get("branch1", shift1.getShiftDate(), shift1.getShiftType());
+            Shift s2 = shiftDAO.select("branch1", shift1.getShiftDate(), shift1.getShiftType());
             assertEquals(s2.getShiftWorkers().get(Role.GeneralWorker).size(), 0);
             assertEquals(s2.getShiftWorkers().get(Role.SecurityGuard).get(0).getId(), employee4.getId());
             assertTrue(s2.getShiftWorkers().get(Role.SecurityGuard).get(0).getRoles().contains(Role.SecurityGuard));
@@ -156,7 +168,7 @@ public class ShiftDAOTest {
     @Test
     public void selectAllCacheTest(){
         try{
-            List<Shift> list = shiftDAO.getAll();
+            List<Shift> list = shiftDAO.selectAll();
             assertEquals(list.size(), 2);
         } catch(Exception e) {
             fail(e);
@@ -167,7 +179,7 @@ public class ShiftDAOTest {
     public void selectAllSQLTest(){ // tries to get all shifts from DB without relying on cache.
 
         try{
-            List<Shift> list = shiftDAO.getAll();
+            List<Shift> list = shiftDAO.selectAll();
             boolean sFlag = false, noiseFlag = false;
             for(Shift sh: list){
                 if(sh.getShiftDate().getDayOfYear() == shift1.getShiftDate().getDayOfYear() && sh.getShiftType() == shift1.getShiftType())
@@ -193,10 +205,10 @@ public class ShiftDAOTest {
         s2.setApproved(false);
         Shift s3 = new Shift("branch1",LocalDate.of(2022,3,1), Shift.ShiftType.Morning);
         try{
-            shiftDAO.create(s2);
-            shiftDAO.create(s3);
+            shiftDAO.insert(s2);
+            shiftDAO.insert(s3);
             s2.setApproved(true);
-            Shift testShift = shiftDAO.get(branch, dt,st);
+            Shift testShift = shiftDAO.select(branch, dt,st);
             assertTrue(testShift.getIsApproved());
         } catch(Exception e) {
             fail(e);

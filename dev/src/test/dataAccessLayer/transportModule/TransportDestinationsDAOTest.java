@@ -330,8 +330,10 @@ class TransportDestinationsDAOTest {
     @Test
     void deleteAllRelated() {
         try {
-            dao.deleteAllRelated(Transport.getLookupObject(TRANSPORT_ID));
             List<TransportDestination> selected = dao.selectAllRelated(Transport.getLookupObject(TRANSPORT_ID));
+            assertEquals(4, selected.size());
+            dao.deleteAllRelated(Transport.getLookupObject(TRANSPORT_ID));
+            selected = dao.selectAllRelated(Transport.getLookupObject(TRANSPORT_ID));
             assertEquals(0, selected.size());
         } catch (DalException e) {
             fail(e);

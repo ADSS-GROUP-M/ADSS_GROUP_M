@@ -1,4 +1,5 @@
 package Backend.BusinessLayer;
+import Backend.BusinessLayer.BusinessLayerUsage.Branch;
 import Backend.BusinessLayer.InventoryModule.CategoryController;
 import Backend.BusinessLayer.InventoryModule.ProductController;
 import Backend.BusinessLayer.InventoryModule.Record;
@@ -15,7 +16,7 @@ public class ReportTest {
     private static String catalog_name = "productTest";
     private static String manufacturer = "tnuva";
     private static double storePrice = 5.0;
-    private static String branch = "beer sheva";
+    private static Branch branch = Branch.branch1;
 
     //    private static String serial_number = "0444";
     private static String supplierId = "123";

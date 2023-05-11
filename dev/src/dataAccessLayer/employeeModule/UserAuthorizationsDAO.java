@@ -2,6 +2,7 @@ package dataAccessLayer.employeeModule;
 
 
 import businessLayer.employeeModule.Authorization;
+import businessLayer.employeeModule.Role;
 import businessLayer.employeeModule.User;
 import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.dalUtils.OfflineResultSet;
@@ -40,7 +41,8 @@ public class UserAuthorizationsDAO extends ManyToManyDAO<Pair<String,Authorizati
     }
 
     /**
-     * @param username@return the set of authorizations of the user with the given identifier
+     * @param username
+     * @return the set of authorizations of the user with the given identifier
      * @throws DalException if an error occurred while trying to select the objects
      */
     public Set<Authorization> selectAllByUsername(String username) throws DalException {
@@ -62,7 +64,8 @@ public class UserAuthorizationsDAO extends ManyToManyDAO<Pair<String,Authorizati
     }
 
     /**
-     * @param user@return the set of authorizations of the given user
+     * @param user
+     * @return the set of authorizations of the given user
      * @throws DalException if an error occurred while trying to select the objects
      */
     public Set<Authorization> selectAll(User user) throws DalException {
@@ -194,8 +197,18 @@ public class UserAuthorizationsDAO extends ManyToManyDAO<Pair<String,Authorizati
      * @throws DalException if an error occurred while trying to delete the object
      */
     public void delete(User user) throws DalException {
-        for(Authorization auth : user.getAuthorizations()) {
-            delete(new Pair<>(user.getUsername(),auth));
+        String query = String.format("DELETE FROM %s WHERE %s = '%s';",
+                TABLE_NAME,
+                Columns.username.name(),
+                user.getUsername());
+        try {
+            if(cursor.executeWrite(query) != 0) {
+                for(Authorization auth : Authorization.values()) {
+                    cache.remove(new Pair<>(user.getUsername(), auth));
+                }
+            }
+        } catch (SQLException e) {
+            throw new DalException("Failed to delete user authorizations", e);
         }
     }
 

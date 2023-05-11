@@ -5,12 +5,12 @@ import businessLayer.employeeModule.User;
 import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.dalUtils.OfflineResultSet;
 import dataAccessLayer.dalUtils.SQLExecutor;
+import dataAccessLayer.transportModule.abstracts.DAO;
 
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-import dataAccessLayer.transportModule.abstracts.DAO;
 
 public class UserDAO extends DAO<User> {
 

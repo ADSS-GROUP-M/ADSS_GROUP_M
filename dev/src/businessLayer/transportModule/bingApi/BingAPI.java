@@ -1,6 +1,5 @@
 package businessLayer.transportModule.bingApi;
 
-import javafx.util.Pair;
 import utils.JsonUtils;
 
 import java.io.IOException;

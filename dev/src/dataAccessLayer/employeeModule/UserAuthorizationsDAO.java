@@ -2,7 +2,6 @@ package dataAccessLayer.employeeModule;
 
 
 import businessLayer.employeeModule.Authorization;
-import businessLayer.employeeModule.Role;
 import businessLayer.employeeModule.User;
 import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.dalUtils.OfflineResultSet;
@@ -11,7 +10,10 @@ import dataAccessLayer.transportModule.abstracts.ManyToManyDAO;
 import javafx.util.Pair;
 
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class UserAuthorizationsDAO extends ManyToManyDAO<Pair<String,Authorization>> {
 

@@ -1,5 +1,6 @@
 package businessLayer.transportModule;
 
+import businessLayer.transportModule.bingApi.Point;
 import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.transportModule.SitesDAO;
 import dataAccessLayer.transportModule.SitesRoutesDAO;
@@ -19,26 +20,29 @@ class SitesControllerTest {
 
     private SitesController controller;
     private SitesDAO dao;
-    private SitesRoutesDAO distancesDAO;
+    private SitesRoutesDAO sitesRoutesDAO;
     private Site site;
+    private SitesDistancesController sitesRoutesController;
 
     @BeforeEach
     void setUp() {
         dao = mock(SitesDAO.class);
         EmployeesService employeesService = mock(EmployeesService.class);
-        distancesDAO = mock(SitesRoutesDAO.class);
-        SitesDistancesController distancesController = mock(SitesDistancesController.class);
-        controller = new SitesController(dao, distancesDAO, distancesController);
+        sitesRoutesDAO = mock(SitesRoutesDAO.class);
+        sitesRoutesController = mock(SitesDistancesController.class);
+        controller = new SitesController(dao, sitesRoutesDAO, sitesRoutesController);
         controller.injectDependencies(employeesService);
 
-        site = new Site("TODO: INSERT NAME HERE", "address1", "zone1", "phone1", "contact1", Site.SiteType.BRANCH);
+        site = new Site("site1", "address1", "zone1", "phone1", "contact1", Site.SiteType.BRANCH);
     }
 
     @Test
     void addSite() {
         try{
-            when(dao.exists(Site.getLookupObject(site.name()))).thenReturn(false);
-        } catch (DalException e) {
+            when(dao.exists(Site.getLookupObject(site.name()))).thenReturn(false); //checks name
+            when(dao.isAddressUnique(site.address())).thenReturn(true); //checks address
+            when(sitesRoutesController.getCoordinates(site)).thenReturn(new Point(site.address(), new double[] {1.0, 1.0}));
+        } catch (DalException | TransportException e) {
             fail(e);
         }
         assertDoesNotThrow(() -> controller.addSite(site));
@@ -47,7 +51,18 @@ class SitesControllerTest {
     @Test
     void addSiteAlreadyExists(){
         try{
-            when(dao.exists(Site.getLookupObject(site.name()))).thenReturn(true);
+            when(dao.exists(Site.getLookupObject(site.name()))).thenReturn(true); //checks name
+        } catch (DalException e) {
+            fail(e);
+        }
+        assertThrows(TransportException.class, () -> controller.addSite(site));
+    }
+
+    @Test
+    void addSiteAddressAlreadyExists(){
+        try{
+            when(dao.exists(Site.getLookupObject(site.name()))).thenReturn(false); //checks name
+            when(dao.isAddressUnique(site.address())).thenReturn(false); //checks address
         } catch (DalException e) {
             fail(e);
         }
@@ -76,7 +91,7 @@ class SitesControllerTest {
 
     @Test
     void updateSite() {
-        Site updatedSite = new Site("TODO: INSERT NAME HERE", site.address(), "zone1", "phone1Updated", "contact1", Site.SiteType.BRANCH);
+        Site updatedSite = new Site("site1", site.address(), "zone1", "phone1Updated", "contact1", Site.SiteType.BRANCH);
         try{
             Site lookupObject = Site.getLookupObject(site.name());
             when(dao.exists(lookupObject)).thenReturn(true);
@@ -89,7 +104,7 @@ class SitesControllerTest {
 
     @Test
     void updateSiteDoesNotExist(){
-        Site updatedSite = new Site("TODO: INSERT NAME HERE", site.address(), "zone1", "phone1Updated", "contact1", Site.SiteType.BRANCH);
+        Site updatedSite = new Site("site1", site.address(), "zone1", "phone1Updated", "contact1", Site.SiteType.BRANCH);
         try{
             when(dao.exists(Site.getLookupObject(site.name()))).thenReturn(false);
         } catch (DalException e) {
@@ -123,7 +138,7 @@ class SitesControllerTest {
 
     @Test
     void getAllSites() {
-        Site site2 = new Site("TODO: INSERT NAME HERE", "address2", "zone2", "phone2", "contact2", Site.SiteType.BRANCH);
+        Site site2 = new Site("site2", "address2", "zone2", "phone2", "contact2", Site.SiteType.BRANCH);
         try{
             when(dao.selectAll()).thenReturn(List.of(site, site2));
         } catch (DalException e) {

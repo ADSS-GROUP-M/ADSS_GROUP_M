@@ -6,6 +6,7 @@ import Backend.BusinessLayer.InventoryModule.CategoryController;
 import Backend.BusinessLayer.SuppliersModule.OrderController;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class StockService {
     ProductController productController;
@@ -27,10 +28,22 @@ public class StockService {
         }
     }
 
-    public Response addProductItem(String serial_number, String catalog_number, String supplier, String branch, String location, LocalDateTime expirationDate) {
+//    public Response addProductItem(String serial_number, String catalog_number, String supplier, String branch, String location, LocalDateTime expirationDate) {
+//        try {
+//            String isMin = "";
+//            productController.createProductItem(serial_number, catalog_number, branch, supplier, location, expirationDate);
+//            if(productController.isProductLack(branch,catalog_number))
+//                isMin = String.format("\n !!! Notice product %s is less than the minimum",catalog_number);
+//            return new Response<>("Product added successfully" + isMin);
+//        } catch (Exception e) {
+//            return Response.createErrorResponse("Error updating product type: " + e.getMessage());
+//        }
+//    }
+
+    public Response addProductItem(List<String> serialNumbers, String catalog_number, String supplier, double supplierPrice, double supplierDiscount,String branch, String location, LocalDateTime expirationDate, String periodicSupplier) {
         try {
             String isMin = "";
-            productController.createProductItem(serial_number, catalog_number, branch, supplier, location, expirationDate);
+            productController.createProductItem(serialNumbers, catalog_number, branch, supplier, supplierPrice, supplierDiscount, location, expirationDate,periodicSupplier);
             if(productController.isProductLack(branch,catalog_number))
                 isMin = String.format("\n !!! Notice product %s is less than the minimum",catalog_number);
             return new Response<>("Product added successfully" + isMin);
@@ -55,9 +68,6 @@ public class StockService {
                 productController.updateProduct(branch, null, catalog_number, null, -1, newMinAmount);
                 if(productController.isProductLack(branch,catalog_number)){
                     isMin = String.format("\n !!! Notice product %s is less than the minimum",catalog_number);
-                    // TODO: order automatic
-                    //inventory_amount = productController.getMinNotification(branch,catalog_number);
-                    // orderController.createOrder()
                 }
                 return new Response<>("Product type updated successfully" + isMin);
             } else {
@@ -75,21 +85,12 @@ public class StockService {
                 productController.updateProductItem(branch, is_defective, serial_num,  catalog_number,-1, null, -1, null);
                 if(productController.isProductLack(branch,catalog_number)){
                     isMin = String.format("\n !!! Notice product %s is less than the minimum !!!",catalog_number);
-                    //TODO: order automatic
-                    //inventory_amount = productController.getMinNotification(branch,catalog_number);
-                    // orderController.createOrder()
                 }
                 return new Response<>("Product type updated successfully" + isMin);
             } else if (is_sold != -1) {
                 productController.updateProductItem(branch, -1, serial_num,  catalog_number, is_sold, null, -1,  null);
-                // TODO: need to add supplier function with the days
-                OrderController orderController = new OrderController();
-                productController.updateMinAmount(branch,catalog_number,5);
                 if(productController.isProductLack(branch,catalog_number)) {
                     isMin = String.format("\n !!! Notice product %s is less than the minimum !!!", catalog_number);
-                    // TODO: order automatic
-                    //inventory_amount = productController.getMinNotification(branch,catalog_number);
-                    // orderController.createOrder()
                 }
                 return new Response<>("Product type updated successfully" + isMin);
             } else if (supplier != null) {

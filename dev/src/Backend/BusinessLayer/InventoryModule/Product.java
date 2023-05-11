@@ -52,8 +52,8 @@ public class Product {
         this.notificationMin = newVal;
     }
 
-    public void addProductItem(String serialNumber, String supplierID, String location, LocalDateTime expirationDate){
-        productItems.put(serialNumber,new ProductItem(serialNumber,supplierID,location, expirationDate));
+    public void addProductItem(String serialNumber, String supplierID, double supplierPrice, double supplierDiscount,String location, LocalDateTime expirationDate){
+        productItems.put(serialNumber,new ProductItem(serialNumber,supplierID, supplierPrice, supplierDiscount, location, expirationDate));
     }
 
 

@@ -6,10 +6,14 @@ import org.junit.Before;
 import org.junit.jupiter.api.BeforeEach;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ProductItemTest {
     private static String serial_number = "0444";
     private static String supplierId = "123";
+    private static double supplierPrice = 7.7;
+    private static double supplierDiscount = 6.7;
     private static String location = "store";
     private static LocalDateTime expireDate = LocalDateTime.now().plusDays(7);
 
@@ -18,7 +22,7 @@ public class ProductItemTest {
     @BeforeEach
     public void setUp() {
         //create new product item
-        item = new ProductItem(serial_number,supplierId,location,expireDate);
+        item = new ProductItem(serial_number,supplierId,supplierPrice,supplierDiscount,location,expireDate);
     }
 
     // Test 1

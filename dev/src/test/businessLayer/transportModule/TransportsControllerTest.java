@@ -1,6 +1,7 @@
 package businessLayer.transportModule;
 
 import dataAccessLayer.dalUtils.DalException;
+import dataAccessLayer.transportModule.SiteRoute;
 import dataAccessLayer.transportModule.SitesRoutesDAO;
 import dataAccessLayer.transportModule.TransportsDAO;
 import javafx.util.Pair;
@@ -82,9 +83,9 @@ class TransportsControllerTest {
         employeesService = mock(EmployeesService.class);
         transportController.injectDependencies(employeesService);
 
-        source = new Site("TODO: INSERT NAME HERE", SOURCE_ADDRESS, "zone1", "0545555550", "contactNameSource", Site.SiteType.LOGISTICAL_CENTER);
-        destination1 = new Site("TODO: INSERT NAME HERE", DESTINATION_ADDRESS_1, "zone1", "0545555551", "contactNameDest1", Site.SiteType.BRANCH);
-        destination2 = new Site("TODO: INSERT NAME HERE", DESTINATION_ADDRESS_2, "zone1", "0545555552", "contactNameDest2", Site.SiteType.BRANCH);
+        source = new Site("source1", SOURCE_ADDRESS, "zone1", "0545555550", "contactNameSource", Site.SiteType.LOGISTICAL_CENTER);
+        destination1 = new Site("dest1", DESTINATION_ADDRESS_1, "zone1", "0545555551", "contactNameDest1", Site.SiteType.BRANCH);
+        destination2 = new Site("dest2", DESTINATION_ADDRESS_2, "zone1", "0545555552", "contactNameDest2", Site.SiteType.BRANCH);
         driver = new Driver(DRIVER_ID, "driverName", Driver.LicenseType.C3);
         truck = new Truck(TRUCK_ID, "model", 2000, 25000, Truck.CoolingCapacity.FROZEN);
         itemList1 = new ItemList(ITEM_LIST_ID_1,
@@ -109,14 +110,14 @@ class TransportsControllerTest {
         );
 
         transport = new Transport(
-                source.address(),
+                source.name(),
                 new LinkedList<>() {{
-                    add(destination1.address());
-                    add(destination2.address());
+                    add(destination1.name());
+                    add(destination2.name());
                 }},
                 new HashMap<>() {{
-                    put(destination1.address(), itemList1.id());
-                    put(destination2.address(), itemList2.id());
+                    put(destination1.name(), itemList1.id());
+                    put(destination2.name(), itemList2.id());
                 }},
                 driver.id(),
                 truck.id(),
@@ -130,8 +131,8 @@ class TransportsControllerTest {
 
         try {
             initializeMocksToPassTransportValidation();
-            int id = assertDoesNotThrow(() -> transportController.addTransport(transport));
-            assertEquals(1, id);
+            Transport added = assertDoesNotThrow(() -> transportController.addTransport(transport));
+            assertEquals(1, added.id());
         } catch (TransportException | DalException e) {
             fail(e);
         }
@@ -141,14 +142,14 @@ class TransportsControllerTest {
     void addTransportPredefinedId(){
         Transport transport = new Transport(
                 500,
-                source.address(),
+                source.name(),
                 new LinkedList<>() {{
-                    add(destination1.address());
-                    add(destination2.address());
+                    add(destination1.name());
+                    add(destination2.name());
                 }},
                 new HashMap<>() {{
-                    put(destination1.address(), itemList1.id());
-                    put(destination2.address(), itemList2.id());
+                    put(destination1.name(), itemList1.id());
+                    put(destination2.name(), itemList2.id());
                 }},
                 driver.id(),
                 truck.id(),
@@ -164,12 +165,12 @@ class TransportsControllerTest {
             //set up
             Transport updatedTransport = new Transport(
                     1,
-                    destination1.address(),
+                    destination1.name(),
                     new LinkedList<>() {{
-                        add(destination2.address());
+                        add(destination2.name());
                     }},
                     new HashMap<>() {{
-                        put(destination2.address(), itemList1.id());
+                        put(destination2.name(), itemList1.id());
                     }},
                     driver.id(),
                     truck.id(),
@@ -177,9 +178,9 @@ class TransportsControllerTest {
                     25000
             );
             initializeMocksToPassTransportValidation();
-            List<String> route = List.of(destination1.address(), destination2.address());
+            List<String> route = List.of(destination1.name(), destination2.name());
             HashMap<Pair<String,String>, Double> siteDistances = new HashMap<>(){{
-                put(new Pair<>(destination1.address(), destination2.address()), 100.0);
+                put(new Pair<>(destination1.name(), destination2.name()), 100.0);
             }};
             when(sitesController.buildSitesTravelTimes(route)).thenReturn(siteDistances);
             when(transportsDAO.exists(updatedTransport)).thenReturn(true);
@@ -211,7 +212,7 @@ class TransportsControllerTest {
             initializeMocksToPassTransportValidation();
             when(transportsDAO.exists(Transport.getLookupObject(TRANSPORT_ID))).thenReturn(true);
             transportController.initializeEstimatedArrivalTimes(transport);
-            transport.deliveryRoute().overrideArrivalTime(destination2.address(), LocalTime.of(16,0));
+            transport.deliveryRoute().overrideArrivalTime(destination2.name(), LocalTime.of(16,0));
             Mockito.doThrow(new RuntimeException("Entered arrival time init when not supposed to")).when(transportController).initializeEstimatedArrivalTimes(transport);
         } catch (DalException | TransportException e) {
             fail(e);
@@ -275,14 +276,14 @@ class TransportsControllerTest {
             //set up
             Transport transport2 = new Transport(
                     2,
-                    source.address(),
+                    source.name(),
                     new LinkedList<>() {{
-                        add(destination1.address());
-                        add(destination2.address());
+                        add(destination1.name());
+                        add(destination2.name());
                     }},
                     new HashMap<>() {{
-                        put(destination1.address(), itemList1.id());
-                        put(destination2.address(), itemList2.id());
+                        put(destination1.name(), itemList1.id());
+                        put(destination2.name(), itemList2.id());
                     }},
                     driver.id(),
                     truck.id(),
@@ -310,14 +311,14 @@ class TransportsControllerTest {
 
         //set up
         Transport badTransport = new Transport(
-                source.address(),
+                source.name(),
                 new LinkedList<>() {{
-                    add(destination1.address());
-                    add(destination2.address());
+                    add(destination1.name());
+                    add(destination2.name());
                 }},
                 new HashMap<>() {{
-                    put(destination1.address(), itemList1.id());
-                    put(destination2.address(), itemList2.id());
+                    put(destination1.name(), itemList1.id());
+                    put(destination2.name(), itemList2.id());
                 }},
                 driver.id(),
                 truck.id(),
@@ -343,14 +344,14 @@ class TransportsControllerTest {
     void createTransportWithBadLicense(){
         Driver badDriver = new Driver(driver.id(), driver.name(), Driver.LicenseType.A1);
         Transport badTransport = new Transport(
-                source.address(),
+                source.name(),
                 new LinkedList<>() {{
-                    add(destination1.address());
-                    add(destination2.address());
+                    add(destination1.name());
+                    add(destination2.name());
                 }},
                 new HashMap<>() {{
-                    put(destination1.address(), itemList1.id());
-                    put(destination2.address(), itemList2.id());
+                    put(destination1.name(), itemList1.id());
+                    put(destination2.name(), itemList2.id());
                 }},
                 driver.id(),
                 truck.id(),
@@ -377,14 +378,14 @@ class TransportsControllerTest {
     void createTransportWithBadLicenseAndTooMuchWeight(){
         Driver badDriver = new Driver(driver.id(), driver.name(), Driver.LicenseType.A1);
         Transport badTransport = new Transport(
-                source.address(),
+                source.name(),
                 new LinkedList<>() {{
-                    add(destination1.address());
-                    add(destination2.address());
+                    add(destination1.name());
+                    add(destination2.name());
                 }},
                 new HashMap<>() {{
-                    put(destination1.address(), itemList1.id());
-                    put(destination2.address(), itemList2.id());
+                    put(destination1.name(), itemList1.id());
+                    put(destination2.name(), itemList2.id());
                 }},
                 driver.id(),
                 truck.id(),
@@ -420,33 +421,28 @@ class TransportsControllerTest {
     @Test
     void initializeEstimatedArrivalTimes() {
 
-        fail("FIX THIS TEST");
-//        //set up
-//        List<String> route = new LinkedList<>();
-//        route.add(transport.source());
-//        route.addAll(transport.destinations());
-//        HashMap<Pair<String,String>, Double> siteDistances = new HashMap<>(){{
-//            put(new Pair<>(source.address(), destination1.address()), 100.0);
-//            put(new Pair<>(destination1.address(), destination2.address()), 100.0);
-//        }};
-//        try {
-//            when(sitesController.buildSitesTravelTimes(route)).thenReturn(siteDistances);
-//
-//            //test
-//            transportController.initializeEstimatedArrivalTimes(transport);
-//            assertEquals(
-//                    transport.deliveryRoute().getEstimatedTimeOfArrival(destination1.address()),
-//                    DEPARTURE_TIME.plusMinutes(Math.max(TransportsController.MINIMUM_DRIVING_TIME,
-//                            (long)((100.0/TransportsController.AVERAGE_SPEED)*60))).toLocalTime());
-//            assertEquals(
-//                    transport.deliveryRoute().getEstimatedTimeOfArrival(destination2.address()),
-//                    DEPARTURE_TIME.plusMinutes((long)(
-//                            Math.max(TransportsController.MINIMUM_DRIVING_TIME,
-//                                    (200.0/TransportsController.AVERAGE_SPEED)*60 +
-//                                            TransportsController.AVERAGE_TIME_PER_VISIT))).toLocalTime());
-//        } catch (TransportException e) {
-//            throw new RuntimeException(e);
-//        }
+        //set up
+        List<String> route = new LinkedList<>();
+        route.add(transport.source());
+        route.addAll(transport.destinations());
+        HashMap<Pair<String, String>, Double> siteRoutes = new HashMap<>(){{
+            put(new Pair<>(source.name(), destination1.name()), 100.0);
+            put(new Pair<>(destination1.name(), destination2.name()), 100.0);
+        }};
+
+        try {
+            when(sitesController.buildSitesTravelTimes(eq(route))).thenReturn(siteRoutes);
+            //test
+            transportController.initializeEstimatedArrivalTimes(transport);
+            assertEquals(
+                    transport.deliveryRoute().getEstimatedTimeOfArrival(destination1.name()),
+                    DEPARTURE_TIME.plusMinutes(100).toLocalTime());
+            assertEquals(
+                    transport.deliveryRoute().getEstimatedTimeOfArrival(destination2.name()),
+                    DEPARTURE_TIME.plusMinutes(200+TransportsController.AVERAGE_TIME_PER_VISIT).toLocalTime());
+        } catch (TransportException e) {
+            throw new RuntimeException(e);
+        }
 
 
     }
@@ -476,11 +472,11 @@ class TransportsControllerTest {
         List<String> route = new LinkedList<>();
         route.add(transport.source());
         route.addAll(transport.destinations());
-        HashMap<Pair<String,String>, Double> siteDistances = new HashMap<>(){{
+        HashMap<Pair<String, String>, Double> siteRoutes = new HashMap<>(){{
             put(new Pair<>(source.name(), destination1.name()), 100.0);
             put(new Pair<>(destination1.name(), destination2.name()), 100.0);
         }};
-        when(sitesController.buildSitesTravelTimes(route)).thenReturn(siteDistances);
+        when(sitesController.buildSitesTravelTimes(route)).thenReturn(siteRoutes);
     }
 
     private void assertDeepEquals(Transport transport1, Transport transport2) {

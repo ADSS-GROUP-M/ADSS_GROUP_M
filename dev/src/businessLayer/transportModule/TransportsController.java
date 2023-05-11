@@ -62,7 +62,7 @@ public class TransportsController {
      * @param transport The transport object to add.
      * @throws TransportException If the transport object is invalid or if a transport with the same ID already exists.
      */
-    public Integer addTransport(Transport transport)throws TransportException{
+    public Transport addTransport(Transport transport)throws TransportException{
 
         if(transport.id() != -1){
             throw new UnsupportedOperationException("Pre-defined IDs are not supported");
@@ -77,7 +77,7 @@ public class TransportsController {
         } catch (DalException e) {
             throw new TransportException(e.getMessage(),e);
         }
-        return toAdd.id();
+        return toAdd;
     }
 
     /**
@@ -282,8 +282,8 @@ public class TransportsController {
         transport.deliveryRoute().initializeArrivalTimes(estimatedArrivalTimes);
     }
 
-    private static LocalTime addTravelTime(LocalTime time, String curr, String next, Map<Pair<String,String>,Double> distances){
-        long minutesToAdd = distances.get(new Pair<>(curr,next)).longValue();
+    private static LocalTime addTravelTime(LocalTime time, String curr, String next, Map<Pair<String,String>,Double> durations){
+        long minutesToAdd = durations.get(new Pair<>(curr,next)).longValue();
         time = time.plusMinutes(minutesToAdd);
         return time;
     }

@@ -2,7 +2,7 @@ package businessLayer.transportModule;
 
 import businessLayer.transportModule.bingApi.Point;
 import dataAccessLayer.dalUtils.DalException;
-import dataAccessLayer.transportModule.siteRoute;
+import dataAccessLayer.transportModule.SiteRoute;
 import dataAccessLayer.transportModule.SitesDAO;
 import dataAccessLayer.transportModule.SitesRoutesDAO;
 import javafx.util.Pair;
@@ -64,6 +64,8 @@ public class SitesController {
 
             if(otherSites.isEmpty() == false) {
                 sitesRoutesDAO.insertAll(distancesController.createDistanceObjects(site,otherSites));
+            } else {
+                sitesRoutesDAO.insert(new SiteRoute(site.name(),site.name(),0,0));
             }
             if(site.siteType() == Site.SiteType.BRANCH){
                 employeesService.createBranch(TRANSPORT_MANAGER_USERNAME,site.name());
@@ -176,7 +178,7 @@ public class SitesController {
             String currAddress = getSite(curr).address();
             String nextAddress = getSite(next).address();
 
-            siteRoute lookUpObject = siteRoute.getLookupObject(currAddress,nextAddress);
+            SiteRoute lookUpObject = SiteRoute.getLookupObject(currAddress,nextAddress);
             double distance;
             try {
                 distance = sitesRoutesDAO.select(lookUpObject).duration();
@@ -213,7 +215,7 @@ public class SitesController {
                     throw new RuntimeException(e);
                 }
             });
-            List<siteRoute> distanceObjects = distancesController.createAllDistanceObjectsFirstTimeLoad(sites);
+            List<SiteRoute> distanceObjects = distancesController.createAllDistanceObjectsFirstTimeLoad(sites);
             sitesRoutesDAO.insertAll(distanceObjects);
 
             for(Site site : sites){

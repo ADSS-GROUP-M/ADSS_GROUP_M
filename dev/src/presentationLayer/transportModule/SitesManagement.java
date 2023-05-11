@@ -81,12 +81,16 @@ public class SitesManagement {
             responseJson[0] = _response;
         });
         worker.start();
-        System.out.println("Creating site, sit tight!....");
-        try {
-            worker.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        System.out.print("Creating site, sit tight! ...");
+        while(worker.isAlive()){
+            System.out.print(".");
+            try {
+                worker.join(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
+        System.out.println();
         Response response = JsonUtils.deserialize(responseJson[0], Response.class);
         if(response.success()) {
             transportAppData.sites().put(newSite.name(), newSite);

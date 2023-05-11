@@ -1,7 +1,7 @@
 package businessLayer.transportModule;
 
 import businessLayer.transportModule.bingApi.*;
-import dataAccessLayer.transportModule.siteRoute;
+import dataAccessLayer.transportModule.SiteRoute;
 import javafx.util.Pair;
 import objects.transportObjects.Site;
 import utils.transportUtils.TransportException;
@@ -31,14 +31,14 @@ public class SitesDistancesController {
         return locationResources[0].point();
     }
 
-    public List<siteRoute> createDistanceObjects(Site site , List<Site> sites) throws TransportException {
+    public List<SiteRoute> createDistanceObjects(Site site , List<Site> sites) throws TransportException {
 
         Map<Pair<String,String>,Pair<Double,Double>> travelMatrix = getTravelData(site,sites);
 
-        List<siteRoute> distances = new LinkedList<>();
+        List<SiteRoute> distances = new LinkedList<>();
 
         for(var entry : travelMatrix.entrySet()){
-            distances.add(new siteRoute(
+            distances.add(new SiteRoute(
                     entry.getKey().getKey(), //source
                     entry.getKey().getValue(), //destination
                     entry.getValue().getKey(), //distance
@@ -69,7 +69,7 @@ public class SitesDistancesController {
                 throw new TransportException(e.getMessage(), e);
             }
             Result[] results = Arrays.stream(response.resourceSets()[0].resources()[0].results())
-                    .filter(result -> result.originIndex() == result.destinationIndex())
+                    .filter(result -> result.originIndex() != result.destinationIndex())
                     .toArray(Result[]::new);
 
             distances.put(new Pair<>(site.address(),other.address()),
@@ -82,7 +82,7 @@ public class SitesDistancesController {
         return distances;
     }
 
-    public List<siteRoute> createAllDistanceObjectsFirstTimeLoad(List<Site> sites) throws IOException {
+    public List<SiteRoute> createAllDistanceObjectsFirstTimeLoad(List<Site> sites) throws IOException {
         Map<Pair<String,String>, Pair<Double,Double>> data = new HashMap<>();
 
         Point[] points = sites.stream()
@@ -98,10 +98,10 @@ public class SitesDistancesController {
                     new Pair<>(result.travelDistance(),result.travelDuration()));
         });
 
-        List<siteRoute> distances = new LinkedList<>();
+        List<SiteRoute> distances = new LinkedList<>();
 
         for(var entry : data.entrySet()){
-            distances.add(new siteRoute(
+            distances.add(new SiteRoute(
                     entry.getKey().getKey(), //source
                     entry.getKey().getValue(), //destination
                     entry.getValue().getKey(), //distance

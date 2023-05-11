@@ -48,8 +48,8 @@ public class TransportsService {
         Transport transport = Transport.fromJson(json);
         try
         {
-            Integer id = tc.addTransport(transport);
-            return new Response("Transport added successfully with id "+id,true, id).toJson();
+            Transport added = tc.addTransport(transport);
+            return new Response("Transport added successfully with id "+added.id(),true, added).toJson();
         }
         catch(TransportException e){
             return Response.getErrorResponse(e).toJson();

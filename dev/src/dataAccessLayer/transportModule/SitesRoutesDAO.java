@@ -9,7 +9,7 @@ import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
-public class SitesRoutesDAO extends ManyToManyDAO<siteRoute> {
+public class SitesRoutesDAO extends ManyToManyDAO<SiteRoute> {
 
     private static final String[] types = {"TEXT", "TEXT" , "REAL", "REAL"};
     private static final String[] parent_tables = {"sites", "sites"};
@@ -40,7 +40,7 @@ public class SitesRoutesDAO extends ManyToManyDAO<siteRoute> {
      * @throws DalException if an error occurred while trying to select the object
      */
     @Override
-    public siteRoute select(siteRoute object) throws DalException {
+    public SiteRoute select(SiteRoute object) throws DalException {
         String query = String.format("SELECT * FROM %s WHERE source = '%s' AND destination = '%s';",
                 TABLE_NAME,
                 object.source(),
@@ -53,7 +53,7 @@ public class SitesRoutesDAO extends ManyToManyDAO<siteRoute> {
             throw new DalException("Failed to select route between sites", e);
         }
         if(resultSet.next()) {
-            siteRoute fetched = getObjectFromResultSet(resultSet);
+            SiteRoute fetched = getObjectFromResultSet(resultSet);
             cache.put(fetched);
             return fetched;
         } else {
@@ -67,7 +67,7 @@ public class SitesRoutesDAO extends ManyToManyDAO<siteRoute> {
      * @throws DalException if an error occurred while trying to select the objects
      */
     @Override
-    public List<siteRoute> selectAll() throws DalException {
+    public List<SiteRoute> selectAll() throws DalException {
         String query = String.format("SELECT * FROM %s;", TABLE_NAME);
         OfflineResultSet resultSet;
         try {
@@ -75,7 +75,7 @@ public class SitesRoutesDAO extends ManyToManyDAO<siteRoute> {
         } catch (SQLException e) {
             throw new DalException("Failed to select all site routes ", e);
         }
-        List<siteRoute> distances = new LinkedList<>();
+        List<SiteRoute> distances = new LinkedList<>();
         while(resultSet.next()) {
             distances.add(getObjectFromResultSet(resultSet));
         }
@@ -89,7 +89,7 @@ public class SitesRoutesDAO extends ManyToManyDAO<siteRoute> {
      * @throws DalException if an error occurred while trying to insert the object
      */
     @Override
-    public void insert(siteRoute object) throws DalException {
+    public void insert(SiteRoute object) throws DalException {
         String query = String.format("INSERT INTO %s VALUES ('%s','%s',%f,%f);",
                 TABLE_NAME,
                 object.source(),
@@ -108,9 +108,9 @@ public class SitesRoutesDAO extends ManyToManyDAO<siteRoute> {
         }
     }
 
-    public void insertAll(List<siteRoute> objects) throws DalException {
+    public void insertAll(List<SiteRoute> objects) throws DalException {
         StringBuilder query = new StringBuilder();
-        for(siteRoute object : objects) {
+        for(SiteRoute object : objects) {
             query.append(String.format("INSERT INTO %s VALUES ('%s','%s', %f,%f);",
                     TABLE_NAME,
                     object.source(),
@@ -135,7 +135,7 @@ public class SitesRoutesDAO extends ManyToManyDAO<siteRoute> {
      * @throws DalException if an error occurred while trying to update the object
      */
     @Override
-    public void update(siteRoute object) throws DalException {
+    public void update(SiteRoute object) throws DalException {
         String query = String.format("UPDATE %s SET distance = %f, duration = %f WHERE source = '%s' AND destination = '%s';",
                 TABLE_NAME,
                 object.distance(),
@@ -160,7 +160,7 @@ public class SitesRoutesDAO extends ManyToManyDAO<siteRoute> {
      * @throws DalException if an error occurred while trying to delete the object
      */
     @Override
-    public void delete(siteRoute object) throws DalException {
+    public void delete(SiteRoute object) throws DalException {
         String query = String.format("DELETE FROM %s WHERE source = '%s' AND destination = '%s';",
                 TABLE_NAME,
                 object.source(),
@@ -178,7 +178,7 @@ public class SitesRoutesDAO extends ManyToManyDAO<siteRoute> {
     }
 
     @Override
-    public boolean exists(siteRoute object) throws DalException {
+    public boolean exists(SiteRoute object) throws DalException {
         String query = String.format("SELECT * FROM %s WHERE source = '%s' AND destination = '%s';",
                 TABLE_NAME,
                 object.source(),
@@ -192,8 +192,8 @@ public class SitesRoutesDAO extends ManyToManyDAO<siteRoute> {
     }
 
     @Override
-    protected siteRoute getObjectFromResultSet(OfflineResultSet resultSet) {
-        return new siteRoute(
+    protected SiteRoute getObjectFromResultSet(OfflineResultSet resultSet) {
+        return new SiteRoute(
                 resultSet.getString("source"),
                 resultSet.getString("destination"),
                 resultSet.getDouble("distance"),

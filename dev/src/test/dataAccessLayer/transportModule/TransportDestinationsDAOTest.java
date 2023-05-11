@@ -80,7 +80,7 @@ class TransportDestinationsDAOTest {
                     15000
             );
 
-            siteRoute distance = new siteRoute(site1.address(), site2.address(), 40,40);
+            SiteRoute distance = new SiteRoute(site1.address(), site2.address(), 40,40);
 
             factory = new DalFactory(TESTING_DB_NAME);
             dao = factory.transportDestinationsDAO();

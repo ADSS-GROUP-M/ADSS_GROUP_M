@@ -77,7 +77,7 @@ class TransportsDAOTest {
                 15000
         );
 
-        siteRoute distance = new siteRoute(
+        SiteRoute distance = new SiteRoute(
                 source.address(),
                 site.address(),
                 100,100
@@ -146,7 +146,7 @@ class TransportsDAOTest {
     void selectAll() {
         
         //set up
-        siteRoute distance = new siteRoute(
+        SiteRoute distance = new SiteRoute(
                 site.address(),
                 site.address(),
                 100,100

@@ -55,10 +55,11 @@ public class ProductController {
         if(isProductLack) {
             // if there is no waiting order, create new supplier order.
             if(!orders.get(branch).contains(catalog_number)) {
-                //TODO: order automatic
                 int inventory_amount = productController.getMinNotification(branch,catalog_number);
                 OrderController orderController = new OrderController();
-//                orderController.order()
+                HashMap<String,Integer> order = new HashMap<>();
+                order.put(catalog_number,inventory_amount);
+                orderController.order(order, branch);
                 orders.get(branch).add(catalog_number);
             }
         }
@@ -109,9 +110,8 @@ public class ProductController {
             if(isDefective != -1){productItem.reportAsDefective();}
             if(isSold != -1){
                 productItem.reportAsSold(DCController.calcSoldPrice(branch,catalog_number,product.getOriginalStorePrice()));
-                // TODO: need to add supplier function with the days
                 OrderController orderController = new OrderController();
-                updateMinAmount(branch,catalog_number,5);
+                updateMinAmount(branch,catalog_number,orderController.getDaysForOrder(catalog_number,branch));
             }
             if(newSupplier != null){productItem.setSupplierID(newSupplier);}
             if(newSoldPrice != -1){productItem.setSoldPrice(newSoldPrice);}

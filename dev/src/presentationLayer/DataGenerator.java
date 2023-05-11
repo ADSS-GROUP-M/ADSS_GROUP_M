@@ -362,9 +362,9 @@ public class DataGenerator {
                     put(branch9.name(), 3);
                 }},
                 driver1.id(),
-                truck2.id(),
+                truck1.id(),
                 LocalDateTime.of(2023,2,2,12,0),
-                14800
+                9800
         );
 
         validateOperation(ts.addTransport(transport1.toJson()));

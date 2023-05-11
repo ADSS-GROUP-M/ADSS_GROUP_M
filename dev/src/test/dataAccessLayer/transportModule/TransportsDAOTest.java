@@ -38,7 +38,7 @@ class TransportsDAOTest {
     private Site site;
     private Site source;
     private Employee employee;
-    private SitesRoutesDAO distancesDAO;
+    private SitesRoutesDAO routesDAO;
     private TransportsController transportsController;
 
     @BeforeEach
@@ -77,9 +77,15 @@ class TransportsDAOTest {
                 15000
         );
 
-        SiteRoute distance = new SiteRoute(
+        SiteRoute siteRoute1 = new SiteRoute(
                 source.address(),
                 site.address(),
+                100,100
+        );
+
+        SiteRoute siteRoute2 = new SiteRoute(
+                source.address(),
+                source.address(),
                 100,100
         );
 
@@ -91,12 +97,12 @@ class TransportsDAOTest {
             driversDAO = factory.driversDAO();
             itemListsDAO = factory.itemListsDAO();
             transportsDAO = factory.transportsDAO();
-            distancesDAO = factory.sitesDistancesDAO();
+            routesDAO = factory.sitesDistancesDAO();
             TrucksController trucksController = mock(TrucksController.class);
             ItemListsController itemListsController = mock(ItemListsController.class);
             DriversController driversController = mock(DriversController.class);
             SitesRoutesController distancesController = mock(SitesRoutesController.class);
-            SitesController sitesController =  new SitesController(sitesDAO, distancesDAO, distancesController);
+            SitesController sitesController =  new SitesController(sitesDAO, routesDAO, distancesController);
             transportsController = new TransportsController(
                     trucksController,
                     driversController,
@@ -114,7 +120,8 @@ class TransportsDAOTest {
 
             sitesDAO.insert(site);
             sitesDAO.insert(source);
-            distancesDAO.insert(distance);
+            routesDAO.insert(siteRoute1);
+            routesDAO.insert(siteRoute2);
             trucksDAO.insert(truck);
             employeeDAO.insert(employee);
             driversDAO.insert(driver);
@@ -152,7 +159,7 @@ class TransportsDAOTest {
                 100,100
         );
         try {
-            distancesDAO.insert(distance);
+            routesDAO.insert(distance);
         } catch (DalException e) {
             fail(e);
         }
@@ -266,6 +273,34 @@ class TransportsDAOTest {
         } catch (DalException e) {
             fail(e);
         }
+    }
+
+    @Test
+    void generateTransportDestinations() {
+            Transport transport2 = new Transport(1,
+                    source.name(),
+                    new LinkedList<>() {{
+                        add(source.name());
+                        add(site.name());
+                    }},
+                    new HashMap<>() {{
+                        put(source.name(), 1);
+                        put(site.name(), 1);
+                    }},
+                    driver.id(),
+                    truck.id(),
+                    LocalDateTime.of(2020, 1, 1, 1, 1),
+                    15000
+            );
+        try {
+            transportsController.initializeEstimatedArrivalTimes(transport2);
+        } catch (TransportException e) {
+            fail(e);
+        }
+        transportsDAO.generateTransportDestinations(transport);
+            assertEquals(2,transport.destinations().size());
+            assertEquals(source.name(), transport.destinations().get(0));
+            assertEquals(site.name(), transport.destinations().get(1));
     }
 
     private void assertDeepEquals(Transport transport1, Transport transport2) {

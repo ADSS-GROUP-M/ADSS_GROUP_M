@@ -38,14 +38,21 @@ class SitesControllerTest {
 
     @Test
     void addSite() {
+        double[] coordinates = {1.0, 1.0};
         try{
             when(dao.exists(Site.getLookupObject(site.name()))).thenReturn(false); //checks name
             when(dao.isAddressUnique(site.address())).thenReturn(true); //checks address
-            when(sitesRoutesController.getCoordinates(site)).thenReturn(new Point(site.address(), new double[] {1.0, 1.0}));
+            when(sitesRoutesController.getCoordinates(site)).thenReturn(new Point(site.address(), coordinates));
         } catch (DalException | TransportException e) {
             fail(e);
         }
-        assertDoesNotThrow(() -> controller.addSite(site));
+        Site returned = assertDoesNotThrow(() -> controller.addSite(site));
+        assertEquals(coordinates[0], returned.latitude());
+        assertEquals(coordinates[1], returned.longitude());
+
+
+
+
     }
 
     @Test

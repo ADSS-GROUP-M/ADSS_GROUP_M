@@ -219,7 +219,7 @@ public class TransportsDAO extends ManyToManyDAO<Transport> implements CounterDA
         );
     }
 
-    private LinkedList<TransportDestination> generateTransportDestinations(Transport object) {
+    protected LinkedList<TransportDestination> generateTransportDestinations(Transport object) {
         LinkedList<TransportDestination> transportDestinations = new LinkedList<>();
         DeliveryRoute deliveryRoute = object.deliveryRoute();
         int i = 1;

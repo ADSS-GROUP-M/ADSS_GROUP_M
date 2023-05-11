@@ -94,8 +94,7 @@ public class SitesManagement {
         Response response = JsonUtils.deserialize(responseJson[0], Response.class);
         if(response.success()) {
             Site addedSite = Site.fromJson(response.data());
-            uiData.sites().put(addedSite.address(), addedSite);
-
+            uiData.sites().put(addedSite.name(), addedSite);
         }
         System.out.println("\n"+response.message());
     }
@@ -161,7 +160,7 @@ public class SitesManagement {
         Response response = JsonUtils.deserialize(responseJson, Response.class);
         if(response.success()) {
             Site updatedSite = Site.fromJson(response.data());
-            uiData.sites().put(updatedSite.address(), updatedSite);
+            uiData.sites().put(updatedSite.name(), updatedSite);
         }
         System.out.println("\n"+response.message());
     }
@@ -190,7 +189,7 @@ public class SitesManagement {
                     String responseJson = rms.removeSite(json);
                     Response response = JsonUtils.deserialize(responseJson, Response.class);
                     if(response.success()) {
-                        uiData.sites().remove(site.address());
+                        uiData.sites().remove(site.name());
                     }
                     System.out.println("\n"+response.message());
                 }

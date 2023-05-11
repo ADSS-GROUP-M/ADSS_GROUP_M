@@ -137,7 +137,7 @@ public class ResourceManagementService {
         Site site = JsonUtils.deserialize(json, Site.class);
         Site added;
         try{
-            added= sitesController.addSite(site);
+            added = sitesController.addSite(site);
         }catch(TransportException e){
             return Response.getErrorResponse(e).toJson();
         }
@@ -146,7 +146,9 @@ public class ResourceManagementService {
 
     /**
      * @param json serialized {@link Site#getLookupObject(String)}
+     * @deprecated this operation is not fully supported and may result in inconsistent state
      */
+    @Deprecated
     public String removeSite(String json){
         Site site = JsonUtils.deserialize(json, Site.class);
         try{
@@ -165,7 +167,7 @@ public class ResourceManagementService {
         }catch(TransportException e){
             return Response.getErrorResponse(e).toJson();
         }
-        return new Response("Site updated successfully", true).toJson();
+        return new Response("Site updated successfully", true, updated).toJson();
     }
 
     /**

@@ -1,5 +1,7 @@
 package Backend.BusinessLayer.InventoryModule;
 
+import Backend.BusinessLayer.BusinessLayerUsage.Branch;
+
 import java.util.*;
 
 public class CategoryController {
@@ -104,7 +106,7 @@ public class CategoryController {
         return categories.get(categoryName).getProductsRelated();
     }
 
-    private List<Record> getProductRecordPerCategory(String categoryName,String branch, List<Record> records){
+    private List<Record> getProductRecordPerCategory(String categoryName, Branch branch, List<Record> records){
         for(Product product: categories.get(categoryName).getProductsRelated().values()){
             String catalog_number = product.getCatalogNumber();
             String name = product.getName();
@@ -113,14 +115,14 @@ public class CategoryController {
             double storePrice = discountController.calcSoldPrice(branch,catalog_number,product.getOriginalStorePrice());
             int warehouseAmount = product.getWarehouseAmount();
             int storeAmount = product.getStoreAmount();
-            Record record = new Record(catalog_number,name,branch,manufacture,storePrice,warehouseAmount,storeAmount);
+            Record record = new Record(catalog_number,name,branch.name(),manufacture,storePrice,warehouseAmount,storeAmount);
             records.add(record);
         }
         return records;
     }
 
     // Report Category function - inorder to receive all category product details
-    public List<Record> getProductsPerCategory(List<String> categoriesName, String branch){
+    public List<Record> getProductsPerCategory(List<String> categoriesName, Branch branch){
         List<Record> productsCategoryRecords = new ArrayList<Record>();
         for(String categoryName: categoriesName){
             Category category = categories.get(categoryName);

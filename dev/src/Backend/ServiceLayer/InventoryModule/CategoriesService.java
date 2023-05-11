@@ -1,5 +1,6 @@
 package Backend.ServiceLayer.InventoryModule;
 
+import Backend.BusinessLayer.BusinessLayerUsage.Branch;
 import Backend.BusinessLayer.InventoryModule.CategoryController;
 import Backend.BusinessLayer.InventoryModule.DiscountController;
 import Backend.BusinessLayer.InventoryModule.ProductController;
@@ -57,7 +58,7 @@ public class CategoriesService {
 
     public Response getCategoryReport(String branch, List<String> categories){
         try {
-            categoryController.getProductsPerCategory(categories,branch);
+            categoryController.getProductsPerCategory(categories, Branch.valueOf(branch));
             return new Response<>("Succeed");
         } catch (Exception e) {
             return Response.createErrorResponse("Error " + e.getMessage());

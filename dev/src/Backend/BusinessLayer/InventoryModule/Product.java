@@ -1,5 +1,7 @@
 package Backend.BusinessLayer.InventoryModule;
 
+import Backend.BusinessLayer.BusinessLayerUsage.Branch;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,9 +19,9 @@ public class Product {
     //default value -1
     private int notificationMin;
     private Map<String, ProductItem> productItems;
-    private String branch;
+    private Branch branch;
 
-    public Product(String catalog_number, String name, String manufacturer, double originalStorePrice, String branch){
+    public Product(String catalog_number, String name, String manufacturer, double originalStorePrice, Branch branch){
         this.catalog_number = catalog_number;
         this.name = name;
         this.manufacturer = manufacturer;

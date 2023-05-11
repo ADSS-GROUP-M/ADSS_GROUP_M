@@ -1,6 +1,5 @@
 package Fronend.PresentationLayer.InventoryModule;
 
-import Backend.BusinessLayer.SuppliersModule.Branch;
 import Backend.ServiceLayer.InventoryModule.CategoriesService;
 import Backend.ServiceLayer.InventoryModule.StockService;
 
@@ -11,7 +10,6 @@ public class MainMenu {
     protected StockService stockService;
     protected CategoriesService categoriesService;
     protected String branch;
-    protected Branch b;
 
     public MainMenu(){
         in = new Scanner(System.in);

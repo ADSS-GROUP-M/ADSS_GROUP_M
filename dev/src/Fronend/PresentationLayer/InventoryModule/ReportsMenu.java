@@ -1,5 +1,7 @@
 package Fronend.PresentationLayer.InventoryModule;
 
+import Backend.BusinessLayer.BusinessLayerUsage.Branch;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +40,7 @@ public class ReportsMenu extends MainMenu {
 
     private void inventoryRunningOutReport() {
         String output = "";
-        for (Record r: (List<Record>) stockService.getShortagesProducts(branch).getReturnValue()){
+        for (Record r: (List<Record>) stockService.getShortagesProducts(Branch.valueOf(branch)).getReturnValue()){
             output += r.toString() + "\n";
         }
         System.out.println(output);
@@ -46,7 +48,7 @@ public class ReportsMenu extends MainMenu {
 
     private void inventoryDefectiveReport() {
         String output = "";
-        for (Record r: (List<Record>) stockService.getDefectiveProducts(branch).getReturnValue()){
+        for (Record r: (List<Record>) stockService.getDefectiveProducts(Branch.valueOf(branch)).getReturnValue()){
             output += r.toString() + "\n";
         }
         System.out.println(output);

@@ -1,5 +1,7 @@
 package Backend.BusinessLayer.InventoryModule;
 
+import Backend.BusinessLayer.BusinessLayerUsage.Branch;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,31 +11,32 @@ import java.util.Map;
 public class DiscountController {
 
     //Map<branch,Map<catalog_number, List<ProductStoreDiscount>>>
-    public Map<String, Map<String,List<ProductStoreDiscount>>> storeDiscounts;
+    public Map<Branch, Map<String,List<ProductStoreDiscount>>> storeDiscounts;
 
 
     //create the controller as Singleton
     private static DiscountController discountController = null;
     private DiscountController() {
-        this.storeDiscounts = new HashMap<String, Map<String,List<ProductStoreDiscount>>>();}
+        this.storeDiscounts = new HashMap<Branch, Map<String,List<ProductStoreDiscount>>>();}
+
     public static DiscountController DiscountController(){
         if(discountController == null)
             discountController = new DiscountController();
         return discountController;
     }
 
-    private Boolean checkIfBranchExist(String branch){
-        return storeDiscounts.containsKey(branch);
+    private Boolean checkIfBranchExist(Branch branch){
+        return storeDiscounts.containsKey(branch.name());
     }
 
 
-    private Boolean checkIfProductExist(String branch, String catalog_number){
+    private Boolean checkIfProductExist(Branch branch, String catalog_number){
         if(checkIfBranchExist(branch))
-            return storeDiscounts.get(branch).containsKey(catalog_number);
+            return storeDiscounts.get(branch.name()).containsKey(catalog_number);
         return false;
     }
 
-    public void createStoreDiscount(String catalog_number, String branch,double discount, LocalDateTime startDate, LocalDateTime endDate){
+    public void createStoreDiscount(String catalog_number, Branch branch, double discount, LocalDateTime startDate, LocalDateTime endDate){
         if(!checkIfBranchExist(branch))
             storeDiscounts.put(branch, new HashMap<String,List<ProductStoreDiscount>>());
         if(!checkIfProductExist(branch,catalog_number))
@@ -42,7 +45,7 @@ public class DiscountController {
     }
 
     //TODO: need to edit
-    public void createCategoryDiscount(String categoryName, String branch,double discount, LocalDateTime startDate, LocalDateTime endDate){
+    public void createCategoryDiscount(String categoryName, Branch branch, double discount, LocalDateTime startDate, LocalDateTime endDate){
         CategoryController categoryController = CategoryController.CategoryController();
         if(categoryController.checkIfCategoryExist(categoryName)){
             Map<String, Product> relatedProducts = categoryController.getCategoryProducts(categoryName);
@@ -54,7 +57,7 @@ public class DiscountController {
             throw new RuntimeException("Category does not exist, please create category in order to continue");
     }
     //TODO : need to edit and verify
-    public double getTodayBiggestStoreDiscount(String catalog_number, String branch){
+    public double getTodayBiggestStoreDiscount(String catalog_number, Branch branch){
         if(checkIfBranchExist(branch)){
             double maxDiscount = 0;
             for(ProductStoreDiscount PDS: storeDiscounts.get(branch).get(catalog_number)){
@@ -69,7 +72,7 @@ public class DiscountController {
     }
 
     // check if there is a discount today on the current product and calculate to final price
-    public double calcSoldPrice(String branch, String catalog_number, double originalStorePrice){
+    public double calcSoldPrice(Branch branch, String catalog_number, double originalStorePrice){
         if(checkIfBranchExist(branch)){
             double currentDiscount = getTodayBiggestStoreDiscount(catalog_number, branch);
             if (currentDiscount > 0)
@@ -77,7 +80,7 @@ public class DiscountController {
         }
         return originalStorePrice;
     }
-    public List<ProductStoreDiscount> getStoreDiscountPerDate(String catalog_number, String branch, LocalDateTime startDate, LocalDateTime endDate){
+    public List<ProductStoreDiscount> getStoreDiscountPerDate(String catalog_number, Branch branch, LocalDateTime startDate, LocalDateTime endDate){
         if(checkIfBranchExist(branch)){
             List<ProductStoreDiscount> discountList = new ArrayList<ProductStoreDiscount>();
             for(ProductStoreDiscount PSD: storeDiscounts.get(branch).get(catalog_number)){
@@ -95,7 +98,7 @@ public class DiscountController {
 
     //TODO : remove
 // Report Category function - inorder to receive all category product details
-    public List<Record> getProductsPerCategory(List<Category> categories, String branch){
+    public List<Record> getProductsPerCategory(List<Category> categories, Branch branch){
         if(checkIfBranchExist(branch)){
             List<Record> productsCategoryRecords = new ArrayList<Record>();
             for(Category category: categories){
@@ -111,7 +114,7 @@ public class DiscountController {
                         List<Category> subCategory = product.getSubCategory();
                         String location = productItem.getLocation();
                         //create Record
-                        Record record = new Record(catalog_number,serial_number,name,branch,manufacture,supplierPrice,supplierDiscount,storePrice, location);
+                        Record record = new Record(catalog_number,serial_number,name,branch.name(),manufacture,supplierPrice,supplierDiscount,storePrice, location);
                         productsCategoryRecords.add(record);
                     }
                 }

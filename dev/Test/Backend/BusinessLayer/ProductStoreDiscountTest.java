@@ -1,5 +1,6 @@
 package Backend.BusinessLayer;
 
+import Backend.BusinessLayer.BusinessLayerUsage.Branch;
 import Backend.BusinessLayer.InventoryModule.ProductStoreDiscount;
 import org.junit.Assert;
 import org.junit.Before;
@@ -8,7 +9,7 @@ import java.time.LocalDateTime;
 
 public class ProductStoreDiscountTest {
     private static String catalog_number = "0444";
-    private static String branch = "beer sheva";
+    private static Branch branch = Branch.branch1;
     private static LocalDateTime startDate = LocalDateTime.now();
     private static LocalDateTime endDate = LocalDateTime.now().plusDays(3);
     private static double discount = 15;

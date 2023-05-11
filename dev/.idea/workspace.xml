@@ -5,12 +5,28 @@
       <artifact name="code:jar" />
     </artifacts-to-build>
   </component>
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="e454f93c-4ee8-4f4b-9a14-eaaf36aa303c" name="Changes" comment="commit">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Test/Backend/BusinessLayer/ReportTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/Backend/BusinessLayer/CategoryTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/Backend/BusinessLayer/CategoryTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/Backend/BusinessLayer/IntegrationTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/Backend/BusinessLayer/IntegrationTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/Backend/BusinessLayer/ProductItemTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/Backend/BusinessLayer/ProductItemTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/Backend/BusinessLayer/ProductStoreDiscountTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/Backend/BusinessLayer/ProductStoreDiscountTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/Backend/BusinessLayer/ProductTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/Backend/BusinessLayer/ProductTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/InventoryModule/CategoryController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/BusinessLayer/InventoryModule/CategoryController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/InventoryModule/DiscountController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/BusinessLayer/InventoryModule/DiscountController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/InventoryModule/ProductController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/BusinessLayer/InventoryModule/ProductController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/InventoryModule/ProductItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/BusinessLayer/InventoryModule/ProductItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/InventoryModule/Record.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/BusinessLayer/InventoryModule/Record.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/ProductItemDataMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/ProductItemDataMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/ProductManagerMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/ProductManagerMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/ServiceLayer/InventoryModule/CategoriesService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/ServiceLayer/InventoryModule/CategoriesService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/InventoryModule/CategoriesMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/InventoryModule/CategoriesMenu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/InventoryModule/MainMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/InventoryModule/MainMenu.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,10 +43,13 @@
       </list>
     </option>
   </component>
+  <component name="Git.Merge.Settings">
+    <option name="BRANCH" value="origin/Suppliers_Inventory_Or" />
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$/.." value="amit_new" />
+        <entry key="$PROJECT_DIR$/.." value="Suppliers_Inventory_208671990_207161605_324988880_325294429" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
@@ -85,34 +104,8 @@
       <recent name="PresentationLayer" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.Main (1)">
-    <configuration name="Main (1)" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="Fronend.PresentationLayer.InventoryModule.Main" />
-      <module name="code" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="Fronend.PresentationLayer.InventoryModule.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="OrderHistoryDataMapper" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="Backend.DataAccessLayer.OrderHistoryDataMapper" />
-      <module name="code" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="Backend.DataAccessLayer.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="BillOfQuantitiesTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="JUnit.ReportTest.getDefectiveProductReport">
+    <configuration name="CategoryTest.addProductToCategory" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="code" />
       <extension name="coverage">
         <pattern>
@@ -121,29 +114,14 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="Backend.BusinessLayer" />
-      <option name="MAIN_CLASS_NAME" value="Backend.BusinessLayer.BillOfQuantitiesTest" />
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="BillOfQuantitiesTest.removeDiscountOnAmountOfProducts" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="code" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="Backend.BusinessLayer.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="Backend.BusinessLayer" />
-      <option name="MAIN_CLASS_NAME" value="Backend.BusinessLayer.BillOfQuantitiesTest" />
-      <option name="METHOD_NAME" value="removeDiscountOnAmountOfProducts" />
+      <option name="MAIN_CLASS_NAME" value="Backend.BusinessLayer.CategoryTest" />
+      <option name="METHOD_NAME" value="addProductToCategory" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="BillOfQuantitiesTest.setOrderOfDiscounts" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="CategoryTest.addSubcategoryToCategory" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="code" />
       <extension name="coverage">
         <pattern>
@@ -152,8 +130,56 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="Backend.BusinessLayer" />
-      <option name="MAIN_CLASS_NAME" value="Backend.BusinessLayer.BillOfQuantitiesTest" />
-      <option name="METHOD_NAME" value="setOrderOfDiscounts" />
+      <option name="MAIN_CLASS_NAME" value="Backend.BusinessLayer.CategoryTest" />
+      <option name="METHOD_NAME" value="addSubcategoryToCategory" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="CategoryTest.removeProductFromCategory" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="code" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="Backend.BusinessLayer.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="Backend.BusinessLayer" />
+      <option name="MAIN_CLASS_NAME" value="Backend.BusinessLayer.CategoryTest" />
+      <option name="METHOD_NAME" value="removeProductFromCategory" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ReportTest.getDefectiveProductReport" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="code" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="Backend.BusinessLayer.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="Backend.BusinessLayer" />
+      <option name="MAIN_CLASS_NAME" value="Backend.BusinessLayer.ReportTest" />
+      <option name="METHOD_NAME" value="getDefectiveProductReport" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ReportTest.getShortageReport" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="code" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="Backend.BusinessLayer.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="Backend.BusinessLayer" />
+      <option name="MAIN_CLASS_NAME" value="Backend.BusinessLayer.ReportTest" />
+      <option name="METHOD_NAME" value="getShortageReport" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -161,11 +187,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.Main (1)" />
-        <item itemvalue="JUnit.BillOfQuantitiesTest.setOrderOfDiscounts" />
-        <item itemvalue="JUnit.BillOfQuantitiesTest.removeDiscountOnAmountOfProducts" />
-        <item itemvalue="JUnit.BillOfQuantitiesTest" />
-        <item itemvalue="Application.OrderHistoryDataMapper" />
+        <item itemvalue="JUnit.ReportTest.getDefectiveProductReport" />
+        <item itemvalue="JUnit.ReportTest.getShortageReport" />
+        <item itemvalue="JUnit.CategoryTest.addSubcategoryToCategory" />
+        <item itemvalue="JUnit.CategoryTest.removeProductFromCategory" />
+        <item itemvalue="JUnit.CategoryTest.addProductToCategory" />
       </list>
     </recent_temporary>
   </component>
@@ -272,15 +298,6 @@
     <option name="version" value="3" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
-    <option name="TAB_STATES">
-      <map>
-        <entry key="MAIN">
-          <value>
-            <State />
-          </value>
-        </entry>
-      </map>
-    </option>
     <option name="RECENT_FILTERS">
       <map>
         <entry key="User">
@@ -292,6 +309,15 @@
                 </option>
               </RecentGroup>
             </list>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
           </value>
         </entry>
       </map>

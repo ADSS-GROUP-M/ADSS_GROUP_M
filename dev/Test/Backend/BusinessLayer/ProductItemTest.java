@@ -19,7 +19,7 @@ public class ProductItemTest {
 
     private ProductItem item;
 
-    @BeforeEach
+    @Before
     public void setUp() {
         //create new product item
         item = new ProductItem(serial_number,supplierId,supplierPrice,supplierDiscount,location,expireDate);

@@ -3,9 +3,10 @@ package Backend.BusinessLayer;
 import Backend.BusinessLayer.InventoryModule.Product;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.jupiter.api.BeforeEach;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ProductTest {
     private static String catalog_number = "0x123";
@@ -13,6 +14,8 @@ public class ProductTest {
     private static String manufacturer = "tnuva";
     private static double storePrice = 5.0;
     private static String branch = "beer sheva";
+
+    private static List<String> serialNumbers = new ArrayList<>();
 
     private static String serial_number = "0444";
     private static String supplierId = "123";
@@ -24,10 +27,11 @@ public class ProductTest {
     private Product product;
 
 
-    @BeforeEach
+    @Before
     public void setUp() {
         //create new product
         product = new Product(catalog_number, catalog_name, manufacturer, storePrice,branch );
+//        serialNumbers.add(serial_number);
     }
 
     // Test 1

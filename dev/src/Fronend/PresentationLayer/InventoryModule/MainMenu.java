@@ -1,5 +1,6 @@
 package Fronend.PresentationLayer.InventoryModule;
 
+import Backend.BusinessLayer.SuppliersModule.Branch;
 import Backend.ServiceLayer.InventoryModule.CategoriesService;
 import Backend.ServiceLayer.InventoryModule.StockService;
 
@@ -10,6 +11,7 @@ public class MainMenu {
     protected StockService stockService;
     protected CategoriesService categoriesService;
     protected String branch;
+    protected Branch b;
 
     public MainMenu(){
         in = new Scanner(System.in);
@@ -18,8 +20,9 @@ public class MainMenu {
     }
 
     public void run(){
-        System.out.println("Please select a branch:(number)");
+        System.out.println("Please select a branch number: [example - branch1]");
         branch = in.nextLine();
+
         Menu();
     }
 

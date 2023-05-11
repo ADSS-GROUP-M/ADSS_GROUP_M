@@ -30,7 +30,7 @@ public class IntegrationTest {
 //    private Product product;
     private ProductController productController;
 
-    @BeforeEach
+    @Before
     public void setUp() {
         productController = ProductController.ProductController();
         //create new product

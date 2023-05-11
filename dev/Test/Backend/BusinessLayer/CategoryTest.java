@@ -23,7 +23,7 @@ public class CategoryTest {
     private Product product;
 
     private Category c;
-    @BeforeEach
+    @Before
     public void setUp() {
         //create new category
         category = new Category(categoryName, sub);

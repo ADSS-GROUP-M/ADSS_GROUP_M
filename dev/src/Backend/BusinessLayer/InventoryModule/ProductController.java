@@ -107,7 +107,7 @@ public class ProductController {
             Product product = products.get(branch).get(catalog_number);
             if(isDefective != -1){productItem.reportAsDefective();}
             if(isSold != -1){
-                productItem.reportAsSold(DCController.getTodayBiggestStoreDiscount(catalog_number,branch));
+                productItem.reportAsSold(DCController.calcSoldPrice(branch,catalog_number,product.getOriginalStorePrice()));
                 // TODO: need to add supplier function with the days
                 OrderController orderController = new OrderController();
                 updateMinAmount(branch,catalog_number,5);
@@ -159,7 +159,7 @@ public class ProductController {
             List<Category> subCategory = product.getSubCategory();
             String location = productItem.getLocation();
             //create Record
-            Record record = new Record(catalog_number,serial_number,name,branch,manufacture,supplierPrice,supplierDiscount,storePrice,category,subCategory,location);
+            Record record = new Record(catalog_number,serial_number,name,branch,manufacture,supplierPrice,supplierDiscount,storePrice, location);
             return record;
         }
         return null;
@@ -172,27 +172,23 @@ public class ProductController {
             Map<String, Product> branchCatalogNumber = products.get(branch);
             for (Product product: branchCatalogNumber.values()){
                 if(product.isProductLack()){
-                    for(ProductItem productItem: product.getProductItems().values()){
-                        String productCatalogNumber = product.getCatalogNumber();
-                        String serial_number = productItem.getSerial_number();
-                        String name = product.getName();
-                        String manufacture = product.getManufacturer();
-                        double supplierPrice = productItem.getSupplierPrice();
-                        double supplierDiscount = productItem.getSupplierDiscount();
-                        double storePrice = DCController.calcSoldPrice(branch,productCatalogNumber,product.getOriginalStorePrice());
-                        Category category = product.getCategory();
-                        List<Category> subCategory = product.getSubCategory();
-                        String location = productItem.getLocation();
-                        //create Record
-                        Record record = new Record(productCatalogNumber,serial_number,name,branch,manufacture,supplierPrice,supplierDiscount,storePrice,category,subCategory,location);
-                        shortagesProductsRecord.add(record);
-                    }
+                    String catalog_number = product.getCatalogNumber();
+                    String name = product.getName();
+                    String manufacture = product.getManufacturer();
+                    double storePrice = DCController.calcSoldPrice(branch,catalog_number,product.getOriginalStorePrice());
+                    int warehouse_amount = product.getWarehouseAmount();
+                    int store_amount = product.getStoreAmount();
+                    Record record = new Record(catalog_number,name,branch,manufacture,storePrice,warehouse_amount,store_amount);
+                    shortagesProductsRecord.add(record);
+
                 }
 
             }
         }
         return shortagesProductsRecord;
     }
+
+
 
     // Report defective function - inorder to receive all defective product details
     public List<Record> getDefectiveProducts(String branch){
@@ -209,10 +205,9 @@ public class ProductController {
                     double supplierDiscount = productItem.getSupplierDiscount();
                     double storePrice = product.getOriginalStorePrice();
                     Category category = product.getCategory();
-                    List<Category> subCategory = product.getSubCategory();
                     String location = productItem.getLocation();
                     //create Record
-                    Record record = new Record(productCatalogNumber,serial_number,name,branch,manufacture,supplierPrice,storePrice,supplierDiscount,category,subCategory,location);
+                    Record record = new Record(productCatalogNumber,serial_number,name,branch,manufacture,supplierPrice,storePrice,supplierDiscount, location);
                     defectiveRecords.add(record);
                 }
         }

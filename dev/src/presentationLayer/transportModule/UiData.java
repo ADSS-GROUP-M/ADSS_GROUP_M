@@ -1,7 +1,6 @@
 package presentationLayer.transportModule;
 
 import objects.transportObjects.*;
-import serviceLayer.ServiceFactory;
 import serviceLayer.transportModule.ItemListsService;
 import serviceLayer.transportModule.ResourceManagementService;
 import serviceLayer.transportModule.TransportsService;

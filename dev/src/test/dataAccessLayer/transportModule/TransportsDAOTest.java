@@ -19,7 +19,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static dataAccessLayer.DalFactory.TESTING_DB_NAME;
-import static javafx.beans.binding.Bindings.when;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 

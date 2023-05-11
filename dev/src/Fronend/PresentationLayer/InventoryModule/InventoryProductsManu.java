@@ -1,7 +1,10 @@
 package Fronend.PresentationLayer.InventoryModule;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class InventoryProductsManu extends MainMenu {
 
@@ -39,8 +42,8 @@ public class InventoryProductsManu extends MainMenu {
         String name = in.nextLine();
         System.out.println("Manufacturer: (string)");
         String manufacturer = in.nextLine();
-        System.out.println("Supplier Price: (double)");
-        double supplier_price = in.nextDouble();
+//        System.out.println("Supplier Price: (double)");
+//        double supplier_price = in.nextDouble();
         System.out.println("Store Price: (double)");
         double store_price = in.nextDouble();
         System.out.println(stockService.addProduct(catalog_num, name, manufacturer, store_price, branch).getReturnValue());
@@ -49,20 +52,32 @@ public class InventoryProductsManu extends MainMenu {
     private void createNewItem() {
         //supplier should be ID
         System.out.println("Enter the following product details:");
-        System.out.println("Catalog Number: (int)");
+        System.out.println("Catalog Number: (string)");
         String catalog_num = in.nextLine();
-        System.out.println("Serial Number: (int)");
-        String serial_num = in.nextLine();
-        System.out.println("Supplier: (int)");
-        String supplier = in.nextLine();
         in.nextLine();
+        System.out.println("Serial Number: (string) >> add all the serials number, if you done write null");
+        List<String> serialNumbers = new ArrayList<String>();
+        String serial_num = in.nextLine();
+        while(serial_num != "null") {
+            serialNumbers.add(serial_num);
+            System.out.println("Serial Number: (string) >> add all the serials number, if you done write null");
+            serial_num = in.nextLine();
+        }
+        System.out.println("Supplier: (string)");
+        String supplier = in.nextLine();
+        System.out.println("Supplier price: (double)");
+        double supplier_price = in.nextDouble();
+        System.out.println("Supplier price after discount: (double)");
+        double supplier_discount_price = in.nextDouble();
         System.out.println("location: (string)");
         String location = in.nextLine();
         System.out.println("expiration date: (string format: yyyy-MM-dd)");
-        String date = in.nextLine();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDateTime expirationDate = LocalDateTime.parse(date, formatter);
-        System.out.println(stockService.addProductItem(serial_num, catalog_num, supplier,  branch, location, expirationDate).getReturnValue());
+        String dateString = in.nextLine();
+        LocalDate date = LocalDate.parse(dateString);
+        LocalDateTime expirationDate = date.atStartOfDay();
+        System.out.println("Is is periodic supplier? y/n");
+        String periodicSupplier = in.nextLine();
+        System.out.println(stockService.addProductItem(serialNumbers, catalog_num, supplier, supplier_price, supplier_discount_price, branch, location, expirationDate,periodicSupplier).getReturnValue());
     }
 
     private void updateProduct() {

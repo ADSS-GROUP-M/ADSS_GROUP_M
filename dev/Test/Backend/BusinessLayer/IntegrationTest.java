@@ -10,6 +10,8 @@ import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class IntegrationTest {
     private static String catalog_number = "0x123";
@@ -20,6 +22,8 @@ public class IntegrationTest {
 
 //    private static String serial_number = "0444";
     private static String supplierId = "123";
+    private static double supplierPrice = 7.7;
+    private static double supplierDiscount = 6.7;
     private static String location = "store";
     private static LocalDateTime expireDate = LocalDateTime.now().plusDays(7);
 
@@ -31,10 +35,12 @@ public class IntegrationTest {
         productController = ProductController.ProductController();
         //create new product
         productController.createProduct(catalog_number,branch,catalog_name,manufacturer,storePrice);
-        Integer ID = 0;
-        while(ID < 4){
-            productController.createProductItem(ID.toString(),catalog_number,branch,supplierId,location,expireDate);
-            ID++;}
+        List<String> serial_numbers = new ArrayList<>();
+        serial_numbers.add("0");
+        serial_numbers.add("1");
+        serial_numbers.add("2");
+        serial_numbers.add("3");
+        productController.createProductItem(serial_numbers,catalog_number,branch,supplierId,supplierPrice,supplierDiscount, location,expireDate, "y");
     }
 
     /**

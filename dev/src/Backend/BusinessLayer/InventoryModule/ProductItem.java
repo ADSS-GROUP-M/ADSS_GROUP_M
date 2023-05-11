@@ -31,7 +31,7 @@ public class ProductItem {
             return second;
         }
     }
-    public ProductItem(String serial_number,String supplierID, String location, LocalDateTime expirationDate) {
+    public ProductItem(String serial_number,String supplierID, double supplierPrice, double supplierDiscount, String location, LocalDateTime expirationDate) {
         this.serial_number = serial_number;
         this.supplierID = supplierID;
         this.location = location;
@@ -40,11 +40,8 @@ public class ProductItem {
         this.soldPrice = -1;
         this.isDefective = null;
         this.expirationDate = expirationDate;
-        // TODO: connect to supplier controller and update supplier price and discount
-        // this.supplierPrice this.supplierDiscount
-        OrderController orderController = new OrderController();
-        this.supplierPrice = 0;
-        this.supplierDiscount = 0;
+        this.supplierPrice = supplierPrice;
+        this.supplierDiscount = supplierDiscount;
 
     }
     public boolean isDefective(){

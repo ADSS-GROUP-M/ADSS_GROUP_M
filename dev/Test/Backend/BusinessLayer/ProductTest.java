@@ -16,6 +16,8 @@ public class ProductTest {
 
     private static String serial_number = "0444";
     private static String supplierId = "123";
+    private static double supplierPrice = 7.0;
+    private static double supplierDiscount = 6.3;
     private static String location = "store";
     private static LocalDateTime expireDate = LocalDateTime.now().plusDays(7);
 
@@ -31,7 +33,7 @@ public class ProductTest {
     // Test 1
     @org.junit.Test
     public void getProductItemFromList() {
-        product.addProductItem(serial_number,supplierId,location,expireDate);
+        product.addProductItem(serial_number,supplierId,supplierPrice,supplierDiscount,location,expireDate);
         Assert.assertEquals("get item from product list failed",product.getProduct(serial_number).getSerial_number(),serial_number);
     }
 
@@ -45,7 +47,7 @@ public class ProductTest {
     // Test 3
     @org.junit.Test
     public void productDefective() {
-        product.addProductItem(serial_number,supplierId,location,expireDate);
+        product.addProductItem(serial_number,supplierId,supplierPrice,supplierDiscount,location,expireDate);
         product.reportAsDefective(serial_number);
         Assert.assertFalse("get defective item failed",product.getDefectiveProductItems().isEmpty());
     }

@@ -10,7 +10,8 @@ import java.util.Map;
 
 public class ProductController {
 
-    Map<String, Map<String, Product>> products; // <branch, <productTYPEID, ProductType>
+    Map<String, Map<String, Product>> products; // <branch, <catalog_number, Product>
+    Map<String, List<String>> orders; // <branch, <catalog_number>
     DiscountController DCController;
 
     //create the controller as Singleton
@@ -18,6 +19,7 @@ public class ProductController {
     private ProductController() {
         //Map<branch, Map<catalog_number, Product>
         this.products = new HashMap<String, Map<String, Product>>();
+        this.orders = new HashMap<String, List<String>>();
         this.DCController = DiscountController.DiscountController();
     }
 
@@ -33,7 +35,7 @@ public class ProductController {
             if(branchProductsType.containsKey(catalog_number)){
                 return true;
             }
-            else {throw new RuntimeException("ProductType does not exist, please create the ProductType first");}
+            else {throw new RuntimeException("Product does not exist, please create the product first");}
         }
         return false;
     }
@@ -42,7 +44,7 @@ public class ProductController {
             return true;
         }
         else{
-            throw new RuntimeException("brunch does not exist, please create ProductType in order to continue");
+            throw new RuntimeException("brunch does not exist, please create product in order to continue");
         }
     }
 
@@ -50,21 +52,31 @@ public class ProductController {
     public boolean isProductLack(String branch,String catalog_number){
         boolean isProductLack = products.get(branch).get(catalog_number).isProductLack();
         if(isProductLack) {
-            //TODO: order automatic
-            //inventory_amount = productController.getMinNotification(branch,catalog_number);
-            // orderController.createOrder()
+            // if there is no waiting order, create new supplier order.
+            if(!orders.get(branch).contains(catalog_number)) {
+                //TODO: order automatic
+                int inventory_amount = productController.getMinNotification(branch,catalog_number);
+                OrderController orderController = new OrderController();
+//                orderController.order()
+                orders.get(branch).add(catalog_number);
+            }
         }
         return isProductLack;
     }
 
 
 
-    // Add new product
-    public void createProductItem(String serial_number, String catalog_number, String branch, String supplierID, String location, LocalDateTime expirationDate) {
-        if(checkIfProductExist(branch,catalog_number))
-            products.get(branch).get(catalog_number).addProductItem(serial_number,supplierID,location, expirationDate);
+    // Add new product item
+    public void createProductItem(List<String> serialNumbers, String catalog_number, String branch, String supplierID, double supplierPrice, double supplierDiscount,String location, LocalDateTime expirationDate, String periodicSupplier) {
+        if(checkIfProductExist(branch,catalog_number)) {
+            for (String serial_number : serialNumbers)
+                products.get(branch).get(catalog_number).addProductItem(serial_number, supplierID, supplierPrice, supplierDiscount, location, expirationDate);
+            //remove supplier order document from critical orders
+            if(periodicSupplier == "n" && orders.get(branch).contains(catalog_number))
+                orders.get(branch).remove(catalog_number);
+        }
         else{
-            throw new RuntimeException(String.format("Product type does not exist with the catalog number : %s",catalog_number));
+            throw new RuntimeException(String.format("Product does not exist with the catalog number : %s",catalog_number));
         }
     }
 
@@ -74,15 +86,16 @@ public class ProductController {
         if(checkIfProductExist(branch,catalog_number))
             products.get(branch).get(catalog_number).updateMin(supplierDays);
         else{
-            throw new RuntimeException(String.format("Product type does not exist with the catalog number : %s",catalog_number));
+            throw new RuntimeException(String.format("Product does not exist with the catalog number : %s",catalog_number));
         }
 
     }
 
-    // Add new product type
+    // Add new product
     public void createProduct(String catalog_number, String branch, String name, String manufacture, double originalStorePrice){
         if(!products.containsKey(branch)){
             products.put(branch, new HashMap<String, Product>());
+            orders.put(branch, new ArrayList<String>());
         }
         Product newProductType = new Product(catalog_number,name,manufacture,originalStorePrice, branch);
         products.get(branch).put(catalog_number,newProductType);
@@ -104,7 +117,7 @@ public class ProductController {
             if(newLocation != null){productItem.setLocation(newLocation);}
         }
         else
-            throw new RuntimeException(String.format("Product type does not exist with the ID : %s",catalog_number));
+            throw new RuntimeException(String.format("Product does not exist with the catalog_number : %s",catalog_number));
     }
 
     public void updateProduct(String branch, String newName, String catalog_number, String newManufacturer, double newStorePrice, int newMinAmount ){
@@ -117,7 +130,7 @@ public class ProductController {
             if(newMinAmount != -1){product.setNotificationMin(newMinAmount);}
         }
         else
-            throw new RuntimeException(String.format("Product type does not exist with the ID : %s",catalog_number));
+            throw new RuntimeException(String.format("Product does not exist with the catalog_number : %s",catalog_number));
 
     }
 

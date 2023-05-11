@@ -37,4 +37,20 @@ public class SupplierProductDataMapper extends AbstractDataMapper {
         }
         return products;
     }
+
+    public void updateBnNumber(String bnNumber,String newBnNumber) throws SQLException {
+        sqlExecutor.executeWrite(String.format("UPDATE %s SET bn_number = %s WHERE bn_number = %s", tableName, newBnNumber, bnNumber));
+    }
+
+    public void updateSuppliersCatalogNumber(String bnNumber, String catalogNumber, String suppliersCatalogNumber) throws SQLException {
+        sqlExecutor.executeWrite(String.format("UPDATE %s SET suppliers_catalog_number = %s WHERE bn_number = %s and catalog_number = %s", tableName, suppliersCatalogNumber, bnNumber, catalogNumber));
+    }
+
+    public void updateQuantity(String bnNumber, String catalogNumber, int quantity) throws SQLException {
+        sqlExecutor.executeWrite(String.format("UPDATE %s SET quantity = %d WHERE bn_number = %s and catalog_number = %s", tableName, catalogNumber, bnNumber));
+    }
+
+    public void updatePrice(String bnNumber, String catalogNumber, double price) throws SQLException {
+        sqlExecutor.executeWrite(String.format("UPDATE %s SET price = %f WHERE bn_number = %s and catalog_number = %s", tableName, price, catalogNumber, bnNumber));
+    }
 }

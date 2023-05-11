@@ -1,6 +1,7 @@
 package presentationLayer.transportModule;
 
 import objects.transportObjects.ItemList;
+import objects.transportObjects.Transport;
 import serviceLayer.transportModule.ItemListsService;
 import utils.JsonUtils;
 import utils.Response;
@@ -55,9 +56,8 @@ public class ItemListsManagement {
         String responseJson = ils.addItemList(json);
         Response response = JsonUtils.deserialize(responseJson, Response.class);
         if(response.success()) {
-            int id = response.dataToInt();
-            list = list.newId(id);
-            uiData.itemLists().put(id,list);
+            ItemList addedItemList = ItemList.fromJson(response.data());
+            uiData.itemLists().put(addedItemList.id(),addedItemList);
         }
         System.out.println("\n"+response.message());
     }
@@ -90,7 +90,9 @@ public class ItemListsManagement {
             String responseJson = ils.updateItemList(json);
             Response response = JsonUtils.deserialize(responseJson, Response.class);
             if(response.success()) {
-                uiData.itemLists().put(id,newList);
+                ItemList updatedItemList = ItemList.fromJson(response.data());
+                uiData.itemLists().put(updatedItemList.id(),updatedItemList);
+
             }
             System.out.println("\n"+response.message());
         }

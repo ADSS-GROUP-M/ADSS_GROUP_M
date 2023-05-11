@@ -135,12 +135,13 @@ public class ResourceManagementService {
 
     public String addSite(String json){
         Site site = JsonUtils.deserialize(json, Site.class);
+        Site added;
         try{
-            sitesController.addSite(site);
+            added= sitesController.addSite(site);
         }catch(TransportException e){
             return Response.getErrorResponse(e).toJson();
         }
-        return new Response("Site added successfully", true).toJson();
+        return new Response("Site added successfully", true,added).toJson();
     }
 
     /**
@@ -158,8 +159,9 @@ public class ResourceManagementService {
 
     public String updateSite(String json){
         Site site = JsonUtils.deserialize(json, Site.class);
+        Site updated;
         try{
-            sitesController.updateSite(site.name(), site);
+            updated = sitesController.updateSite(site.name(), site);
         }catch(TransportException e){
             return Response.getErrorResponse(e).toJson();
         }

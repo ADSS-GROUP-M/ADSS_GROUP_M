@@ -44,7 +44,7 @@ public class SitesController {
      * @param site The site to be added.
      * @throws TransportException If the site already exists.
      */
-    public void addSite(Site site) throws TransportException {
+    public Site addSite(Site site) throws TransportException {
 
         if (siteExists(site.name()) != false) {
             throw new TransportException("Site already exists");
@@ -74,6 +74,7 @@ public class SitesController {
         } catch (DalException e) {
             throw new TransportException(e.getMessage(),e);
         }
+        return site;
     }
 
     private void validateSite(Site site) throws TransportException {
@@ -126,12 +127,12 @@ public class SitesController {
     /**
      * Updates a site in the `SitesController`.
      *
-     * @param address The name of the site to be updated.
+     * @param name The name of the site to be updated.
      * @param newSite The updated site.
      * @throws TransportException If the site is not found.
      */
-    public void updateSite(String address, Site newSite) throws TransportException{
-        if(siteExists(address) == false) {
+    public Site updateSite(String name, Site newSite) throws TransportException{
+        if(siteExists(name) == false) {
             throw new TransportException("Site not found");
         }
 
@@ -140,6 +141,7 @@ public class SitesController {
         } catch (DalException e) {
             throw new TransportException(e.getMessage(),e);
         }
+        return newSite;
     }
 
     /**

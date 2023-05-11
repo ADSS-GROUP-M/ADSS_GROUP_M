@@ -9,6 +9,7 @@ import java.util.Objects;
 
 public record Site (String name, String address, String transportZone, String phoneNumber, String contactName, SiteType siteType, double latitude, double longitude) {
 
+
     // 1) "14441 S Inglewood Ave, Hawthorne, CA 90250"
     // 2) "19503 S Normandie Ave, Torrance, CA 90501"
     // 3) "22015 Hawthorne Blvd, Torrance, CA 90503"

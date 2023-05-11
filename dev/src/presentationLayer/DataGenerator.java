@@ -7,23 +7,20 @@ import businessLayer.employeeModule.Role;
 import businessLayer.transportModule.SitesController;
 import dataAccessLayer.DalFactory;
 import dataAccessLayer.dalUtils.DalException;
-import objects.transportObjects.Driver;
-import objects.transportObjects.ItemList;
-import objects.transportObjects.Site;
-import objects.transportObjects.Truck;
+import objects.transportObjects.*;
 import serviceLayer.ServiceFactory;
 import serviceLayer.employeeModule.Objects.SShiftType;
 import serviceLayer.employeeModule.Services.EmployeesService;
 import serviceLayer.employeeModule.Services.UserService;
 import serviceLayer.transportModule.ItemListsService;
 import serviceLayer.transportModule.ResourceManagementService;
+import serviceLayer.transportModule.TransportsService;
+import utils.Response;
 import utils.transportUtils.TransportException;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
+import java.time.LocalDateTime;
+import java.util.*;
 
 import static serviceLayer.employeeModule.Services.UserService.HR_MANAGER_USERNAME;
 
@@ -33,6 +30,36 @@ public class DataGenerator {
     public static final LocalDate SHIFT_DATE = LocalDate.of(2023,2,2);
     public static UserService us;
     public static EmployeesService es;
+    private static Driver driver1;
+    private static Driver driver2;
+    private static Driver driver3;
+    private static Driver driver4;
+    private static Driver driver5;
+    private static Truck truck1;
+    private static Truck truck2;
+    private static Truck truck3;
+    private static Truck truck4;
+    private static Truck truck5;
+    private static ItemList itemList1;
+    private static ItemList itemList2;
+    private static ItemList itemList3;
+    private static ItemList itemList4;
+    private static ItemList itemList5;
+    private static Site branch1;
+    private static Site branch2;
+    private static Site branch3;
+    private static Site branch4;
+    private static Site branch5;
+    private static Site branch6;
+    private static Site branch7;
+    private static Site branch8;
+    private static Site branch9;
+    private static Site supplier1;
+    private static Site supplier2;
+    private static Site supplier3;
+    private static Site supplier4;
+    private static Site supplier5;
+    private static Site logistical1;
 
     public static void generateData(){
         deleteData();
@@ -47,13 +74,13 @@ public class DataGenerator {
         generateTrucks(factory.resourceManagementService());
 
         // Driver Data
-        Driver driver1 = new Driver("1234", "megan smith", Driver.LicenseType.A1);
-        Driver driver2 = new Driver("5678", "john doe", Driver.LicenseType.B2);
-        Driver driver3 = new Driver("9012", "emily chen", Driver.LicenseType.C2);
-        Driver driver4 = new Driver("3456", "david lee", Driver.LicenseType.C3);
-        Driver driver5 = new Driver("7890", "sarah kim", Driver.LicenseType.C3);
-        List<Driver> morningDrivers = List.of(driver1,driver2);
-        List<Driver> eveningDrivers = List.of(driver3,driver4,driver5);
+        driver1 = new Driver("1234", "megan smith", Driver.LicenseType.A1);
+        driver2 = new Driver("5678", "john doe", Driver.LicenseType.C3);
+        driver3 = new Driver("9012", "emily chen", Driver.LicenseType.C2);
+        driver4 = new Driver("3456", "david lee", Driver.LicenseType.B2);
+        driver5 = new Driver("7890", "sarah kim", Driver.LicenseType.C3);
+        List<Driver> morningDrivers = List.of(driver1, driver2);
+        List<Driver> eveningDrivers = List.of(driver3, driver4, driver5);
         List<Driver> drivers = new ArrayList<>();
         drivers.addAll(morningDrivers);
         drivers.addAll(eveningDrivers);
@@ -61,6 +88,7 @@ public class DataGenerator {
         initializeBranches(drivers);
         initializeShiftDay(morningDrivers, eveningDrivers, SHIFT_DATE);
         assignStorekeepers(SHIFT_DATE);
+        generateTransports(factory.transportsService());
     }
 
     public static void deleteData(){
@@ -68,17 +96,17 @@ public class DataGenerator {
     }
 
     public static void generateTrucks(ResourceManagementService rms) {
-        Truck truck1 = new Truck("abc123", "ford", 1500, 10000, Truck.CoolingCapacity.NONE);
-        Truck truck2 = new Truck("def456", "chevy", 2000, 15000, Truck.CoolingCapacity.COLD);
-        Truck truck3 = new Truck("ghi789", "toyota", 2500, 20000, Truck.CoolingCapacity.COLD);
-        Truck truck4 = new Truck("jkl012", "honda", 3000, 25000, Truck.CoolingCapacity.FROZEN);
-        Truck truck5 = new Truck("mno345", "nissan", 3500, 30000, Truck.CoolingCapacity.FROZEN);
+        truck1 = new Truck("abc123", "ford", 1500, 10000, Truck.CoolingCapacity.NONE);
+        truck2 = new Truck("def456", "chevy", 2000, 15000, Truck.CoolingCapacity.COLD);
+        truck3 = new Truck("ghi789", "toyota", 2500, 20000, Truck.CoolingCapacity.COLD);
+        truck4 = new Truck("jkl012", "honda", 3000, 25000, Truck.CoolingCapacity.FROZEN);
+        truck5 = new Truck("mno345", "nissan", 3500, 30000, Truck.CoolingCapacity.FROZEN);
 
-        rms.addTruck(truck1.toJson());
-        rms.addTruck(truck2.toJson());
-        rms.addTruck(truck3.toJson());
-        rms.addTruck(truck4.toJson());
-        rms.addTruck(truck5.toJson());
+        validateOperation(rms.addTruck(truck1.toJson()));
+        validateOperation(rms.addTruck(truck2.toJson()));
+        validateOperation(rms.addTruck(truck3.toJson()));
+        validateOperation(rms.addTruck(truck4.toJson()));
+        validateOperation(rms.addTruck(truck5.toJson()));
     }
 
     public static void generateItemLists(ItemListsService ils) {
@@ -92,7 +120,7 @@ public class DataGenerator {
         unload1.put("hats", 5);
         unload1.put("gloves", 20);
 
-        ItemList itemList1 = new ItemList(load1, unload1);
+        itemList1 = new ItemList(load1, unload1);
 
         HashMap<String, Integer> load2 = new HashMap<>();
         load2.put("pencils", 50);
@@ -104,7 +132,7 @@ public class DataGenerator {
         unload2.put("markers", 15);
         unload2.put("highlighters", 25);
 
-        ItemList itemList2 = new ItemList(load2, unload2);
+        itemList2 = new ItemList(load2, unload2);
 
         HashMap<String, Integer> load3 = new HashMap<>();
         load3.put("laptops", 5);
@@ -116,7 +144,7 @@ public class DataGenerator {
         unload3.put("monitors", 12);
         unload3.put("printers", 6);
 
-        ItemList itemList3 = new ItemList(load3, unload3);
+        itemList3 = new ItemList(load3, unload3);
 
         HashMap<String, Integer> load4 = new HashMap<>();
         load4.put("carrots", 15);
@@ -128,7 +156,7 @@ public class DataGenerator {
         unload4.put("peppers", 8);
         unload4.put("cucumbers", 18);
 
-        ItemList itemList4 = new ItemList(load4, unload4);
+        itemList4 = new ItemList(load4, unload4);
 
         HashMap<String, Integer> load5 = new HashMap<>();
         load5.put("screws", 500);
@@ -140,48 +168,48 @@ public class DataGenerator {
         unload5.put("anchors", 600);
         unload5.put("clamps", 900);
 
-        ItemList itemList5 = new ItemList(load5, unload5);
+        itemList5 = new ItemList(load5, unload5);
 
-        ils.addItemList(itemList1.toJson());
-        ils.addItemList(itemList2.toJson());
-        ils.addItemList(itemList3.toJson());
-        ils.addItemList(itemList4.toJson());
-        ils.addItemList(itemList5.toJson());
+        validateOperation(ils.addItemList(itemList1.toJson()));
+        validateOperation(ils.addItemList(itemList2.toJson()));
+        validateOperation(ils.addItemList(itemList3.toJson()));
+        validateOperation(ils.addItemList(itemList4.toJson()));
+        validateOperation(ils.addItemList(itemList5.toJson()));
     }
 
     public static void generateSites(SitesController controller){
-        Site site1 = new Site("branch1", "14441 s inglewood ave, hawthorne, ca 90250", "zone1", "111-111-1111", "John Smith", Site.SiteType.BRANCH, 0, 0);
-        Site site2 = new Site("branch2", "19503 s normandie ave, torrance, ca 90501", "zone1", "222-222-2222", "Jane Doe", Site.SiteType.BRANCH, 0, 0);
-        Site site3 = new Site("branch3", "22015 hawthorne blvd, torrance, ca 90503", "zone1", "333-333-3333", "Bob Johnson", Site.SiteType.BRANCH, 0, 0);
-        Site site4 = new Site("branch4", "2100 n long beach blvd, compton, ca 90221", "zone2", "444-444-4444", "Samantha Lee", Site.SiteType.BRANCH, 0, 0);
-        Site site5 = new Site("branch5", "19340 hawthorne blvd, torrance, ca 90503", "zone2", "555-555-5555", "Mike Brown", Site.SiteType.BRANCH, 0, 0);
-        Site site6 = new Site("branch6", "4651 firestone blvd, south gate, ca 90280", "zone2", "666-666-6666", "Emily Wilson", Site.SiteType.BRANCH, 0, 0);
-        Site site7 = new Site("branch7", "1301 n victory pl, burbank, ca 91502", "zone3", "777-777-7777", "Tom Kim", Site.SiteType.BRANCH, 0, 0);
-        Site site8 = new Site("branch8", "6433 fallbrook ave, west hills, ca 91307","zone3", "888-888-8888", "Amanda Garcia", Site.SiteType.BRANCH, 0, 0);
-        Site site9 = new Site("branch9", "8333 van nuys blvd, panorama city, ca 91402","zone4", "123-456-7890" ,"David Kim", Site.SiteType.BRANCH, 0, 0);
-        Site site10 = new Site("supplier1", "8500 washington blvd, pico rivera, ca 90660", "zone4", "456-789-0123", "William Davis", Site.SiteType.SUPPLIER, 0, 0);
-        Site site11 = new Site("supplier2", "20226 avalon blvd, carson, ca 90746", "zone3", "999-999-9999", "Steve Chen", Site.SiteType.SUPPLIER, 0, 0);
-        Site site12 = new Site("supplier3", "9001 apollo way, downey, ca 90242", "zone4", "345-678-9012", "Andrew Chen", Site.SiteType.SUPPLIER, 0, 0);
-        Site site13 = new Site("supplier4", "2770 e carson st, lakewood, ca 90712", "zone5", "123-456-7890", "Andrew Chen", Site.SiteType.SUPPLIER, 0,0);
-        Site site14 = new Site("supplier5", "14501 lakewood blvd, paramount, ca 90723", "zone4", "234-567-8901", "Jessica Park", Site.SiteType.SUPPLIER, 0, 0);
-        Site site15 = new Site("logistical1", "3705 e south st, long beach, ca 90805", "zone5", "123-456-7890", "Jessica Park", Site.SiteType.LOGISTICAL_CENTER, 0,0);
+        branch1 = new Site("branch1", "14441 s inglewood ave, hawthorne, ca 90250", "zone1", "111-111-1111", "John Smith", Site.SiteType.BRANCH, 0, 0);
+        branch2 = new Site("branch2", "19503 s normandie ave, torrance, ca 90501", "zone1", "222-222-2222", "Jane Doe", Site.SiteType.BRANCH, 0, 0);
+        branch3 = new Site("branch3", "22015 hawthorne blvd, torrance, ca 90503", "zone1", "333-333-3333", "Bob Johnson", Site.SiteType.BRANCH, 0, 0);
+        branch4 = new Site("branch4", "2100 n long beach blvd, compton, ca 90221", "zone2", "444-444-4444", "Samantha Lee", Site.SiteType.BRANCH, 0, 0);
+        branch5 = new Site("branch5", "19340 hawthorne blvd, torrance, ca 90503", "zone2", "555-555-5555", "Mike Brown", Site.SiteType.BRANCH, 0, 0);
+        branch6 = new Site("branch6", "4651 firestone blvd, south gate, ca 90280", "zone2", "666-666-6666", "Emily Wilson", Site.SiteType.BRANCH, 0, 0);
+        branch7 = new Site("branch7", "1301 n victory pl, burbank, ca 91502", "zone3", "777-777-7777", "Tom Kim", Site.SiteType.BRANCH, 0, 0);
+        branch8 = new Site("branch8", "6433 fallbrook ave, west hills, ca 91307","zone3", "888-888-8888", "Amanda Garcia", Site.SiteType.BRANCH, 0, 0);
+        branch9 = new Site("branch9", "8333 van nuys blvd, panorama city, ca 91402","zone4", "123-456-7890" ,"David Kim", Site.SiteType.BRANCH, 0, 0);
+        supplier1 = new Site("supplier1", "8500 washington blvd, pico rivera, ca 90660", "zone4", "456-789-0123", "William Davis", Site.SiteType.SUPPLIER, 0, 0);
+        supplier2 = new Site("supplier2", "20226 avalon blvd, carson, ca 90746", "zone3", "999-999-9999", "Steve Chen", Site.SiteType.SUPPLIER, 0, 0);
+        supplier3 = new Site("supplier3", "9001 apollo way, downey, ca 90242", "zone4", "345-678-9012", "Andrew Chen", Site.SiteType.SUPPLIER, 0, 0);
+        supplier4 = new Site("supplier4", "2770 e carson st, lakewood, ca 90712", "zone5", "123-456-7890", "Andrew Chen", Site.SiteType.SUPPLIER, 0,0);
+        supplier5 = new Site("supplier5", "14501 lakewood blvd, paramount, ca 90723", "zone4", "234-567-8901", "Jessica Park", Site.SiteType.SUPPLIER, 0, 0);
+        logistical1 = new Site("logistical1", "3705 e south st, long beach, ca 90805", "zone5", "123-456-7890", "Jessica Park", Site.SiteType.LOGISTICAL_CENTER, 0,0);
 
         List<Site> sites = new LinkedList<>(){{
-            add(site1);
-            add(site2);
-            add(site3);
-            add(site4);
-            add(site5);
-            add(site6);
-            add(site7);
-            add(site8);
-            add(site9);
-            add(site10);
-            add(site11);
-            add(site12);
-            add(site13);
-            add(site14);
-            add(site15);
+            add(branch1);
+            add(branch2);
+            add(branch3);
+            add(branch4);
+            add(branch5);
+            add(branch6);
+            add(branch7);
+            add(branch8);
+            add(branch9);
+            add(supplier1);
+            add(supplier2);
+            add(supplier3);
+            add(supplier4);
+            add(supplier5);
+            add(logistical1);
         }};
 
         try {
@@ -285,5 +313,69 @@ public class DataGenerator {
             es.requestShift(storekeeperId, branchId, date, shiftType, "Storekeeper");
         }
         es.setShiftEmployees(HR_MANAGER_USERNAME, branchId, date, shiftType, "Storekeeper", storekeeperIds);
+    }
+
+    private static void generateTransports(TransportsService ts) {
+
+        Transport transport1 = new Transport(
+                logistical1.name(),
+                new LinkedList<>(){{
+                    add(supplier1.name());
+                    add(branch2.name());
+                    add(supplier2.name());
+                    add(branch3.name());
+                    add(supplier3.name());
+                    add(branch4.name());
+                }},
+                new HashMap<>(){{
+                    put(supplier1.name(), 4);
+                    put(branch2.name(), 1);
+                    put(supplier2.name(), 5);
+                    put(branch3.name(), 2);
+                    put(supplier3.name(), 5);
+                    put(branch4.name(), 3);
+                }},
+                driver2.id(),
+                truck5.id(),
+                LocalDateTime.of(2023,2,2,12,0),
+                27800
+        );
+
+        Transport transport2 = new Transport(
+                logistical1.name(),
+                new LinkedList<>(){{
+                    add(supplier4.name());
+                    add(branch5.name());
+                    add(supplier5.name());
+                    add(branch6.name());
+                    add(branch7.name());
+                    add(branch8.name());
+                    add(branch9.name());
+                }},
+                new HashMap<>(){{
+                    put(supplier4.name(), 4);
+                    put(branch5.name(), 1);
+                    put(supplier5.name(), 5);
+                    put(branch6.name(), 2);
+                    put(branch7.name(), 3);
+                    put(branch8.name(), 3);
+                    put(branch9.name(), 3);
+                }},
+                driver1.id(),
+                truck2.id(),
+                LocalDateTime.of(2023,2,2,12,0),
+                14800
+        );
+
+        validateOperation(ts.addTransport(transport1.toJson()));
+        validateOperation(ts.addTransport(transport2.toJson()));
+    }
+
+    private static void validateOperation(String json) {
+        Response response;
+        response = Response.fromJson(json);
+        if(response.success() == false){
+            throw new RuntimeException("Failed to add transport: " + response.message());
+        }
     }
 }

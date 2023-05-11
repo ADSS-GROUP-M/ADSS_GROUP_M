@@ -23,8 +23,8 @@ public class CategoriesMenu extends MainMenu {
             case 2 -> removeCategory();
             case 3 -> addProductToCategory();
             case 4 -> removeProductFromCategory();
-            case 3 -> new MainMenu().Menu();
-            case 4 -> System.exit(0);
+            case 5 -> new MainMenu().Menu();
+            case 6 -> System.exit(0);
             default -> System.out.println("\nInvalid command");
         }
     }

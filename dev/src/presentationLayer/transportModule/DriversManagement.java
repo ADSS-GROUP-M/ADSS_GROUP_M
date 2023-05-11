@@ -169,8 +169,8 @@ public class DriversManagement {
     private void viewDriver() {
         while(true){
             System.out.println("=========================================");
-            int driverId = uiData.readInt("Enter employee ID of driver to view (enter '-1' to return to previous menu): ");
-            if(driverId == -1) {
+            String driverId = uiData.readLine("Enter employee ID of driver to view (enter 'done!' to return to previous menu): ");
+            if(driverId.equalsIgnoreCase("done!")) {
                 return;
             }
             Driver driver = uiData.drivers().get(driverId);

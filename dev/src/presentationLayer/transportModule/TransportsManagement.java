@@ -63,7 +63,13 @@ public class TransportsManagement {
 
         // date/time
         LocalDate departureDate = uiData.readDate("Departure date (format: yyyy-mm-dd): ");
+        if(departureDate == null){
+            return;
+        }
         LocalTime departureTime = uiData.readTime("Departure time (format: hh:mm): ");
+        if(departureTime == null){
+            return;
+        }
         LocalDateTime departureDateTime = LocalDateTime.of(departureDate, departureTime);
 
         // driver

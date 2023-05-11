@@ -12,7 +12,6 @@ public class Employee {
     private String id;
     private String bankDetails;
     private double hourlySalaryRate;
-
     private double monthlyHours;
     private double salaryBonus;
     private LocalDate employmentDate;

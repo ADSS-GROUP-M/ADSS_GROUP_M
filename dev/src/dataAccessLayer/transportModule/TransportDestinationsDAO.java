@@ -4,6 +4,7 @@ import dataAccessLayer.dalUtils.DalException;
 import dataAccessLayer.dalUtils.OfflineResultSet;
 import dataAccessLayer.dalUtils.SQLExecutor;
 import dataAccessLayer.transportModule.abstracts.ManyToManyDAO;
+import objects.transportObjects.DeliveryRoute;
 import objects.transportObjects.Transport;
 
 import java.sql.SQLException;
@@ -213,8 +214,24 @@ public class TransportDestinationsDAO extends ManyToManyDAO<TransportDestination
                         + object.id() + " was found");
             }
         } catch (SQLException e) {
-            throw new DalException("Failed to delete transport destination", e);
+            throw new DalException("Failed to delete related transport destinations", e);
         }
+    }
+
+    public void insertFromTransport(Transport object) throws DalException {
+        LinkedList<TransportDestination> transportDestinations = new LinkedList<>();
+        DeliveryRoute deliveryRoute = object.deliveryRoute();
+        int i = 1;
+        for(String destination : object.destinations()){
+            transportDestinations.add(new TransportDestination(
+                    object.id(),
+                    i++,
+                    destination,
+                    object.itemLists().get(destination),
+                    deliveryRoute.getEstimatedTimeOfArrival(destination)
+            ));
+        }
+        insertAll(transportDestinations);
     }
 
     @Override
@@ -224,7 +241,6 @@ public class TransportDestinationsDAO extends ManyToManyDAO<TransportDestination
                 resultSet.getInt("destination_index"),
                 resultSet.getString("destination_name"),
                 resultSet.getInt("item_list_id"),
-                resultSet.getLocalTime("expected_arrival_time")
-                );
+                resultSet.getLocalTime("expected_arrival_time"));
     }
 }

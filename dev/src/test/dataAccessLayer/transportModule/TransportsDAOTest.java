@@ -19,6 +19,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static dataAccessLayer.DalFactory.TESTING_DB_NAME;
+import static javafx.beans.binding.Bindings.when;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
@@ -38,7 +39,7 @@ class TransportsDAOTest {
     private Site site;
     private Site source;
     private Employee employee;
-    private SitesRoutesDAO distancesDAO;
+    private SitesRoutesDAO routesDAO;
     private TransportsController transportsController;
 
     @BeforeEach
@@ -77,9 +78,15 @@ class TransportsDAOTest {
                 15000
         );
 
-        SiteRoute distance = new SiteRoute(
+        SiteRoute siteRoute1 = new SiteRoute(
                 source.address(),
                 site.address(),
+                100,100
+        );
+
+        SiteRoute siteRoute2 = new SiteRoute(
+                source.address(),
+                source.address(),
                 100,100
         );
 
@@ -91,12 +98,12 @@ class TransportsDAOTest {
             driversDAO = factory.driversDAO();
             itemListsDAO = factory.itemListsDAO();
             transportsDAO = factory.transportsDAO();
-            distancesDAO = factory.sitesDistancesDAO();
+            routesDAO = factory.sitesDistancesDAO();
             TrucksController trucksController = mock(TrucksController.class);
             ItemListsController itemListsController = mock(ItemListsController.class);
             DriversController driversController = mock(DriversController.class);
             SitesRoutesController distancesController = mock(SitesRoutesController.class);
-            SitesController sitesController =  new SitesController(sitesDAO, distancesDAO, distancesController);
+            SitesController sitesController =  new SitesController(sitesDAO, routesDAO, distancesController);
             transportsController = new TransportsController(
                     trucksController,
                     driversController,
@@ -114,7 +121,8 @@ class TransportsDAOTest {
 
             sitesDAO.insert(site);
             sitesDAO.insert(source);
-            distancesDAO.insert(distance);
+            routesDAO.insert(siteRoute1);
+            routesDAO.insert(siteRoute2);
             trucksDAO.insert(truck);
             employeeDAO.insert(employee);
             driversDAO.insert(driver);
@@ -152,7 +160,7 @@ class TransportsDAOTest {
                 100,100
         );
         try {
-            distancesDAO.insert(distance);
+            routesDAO.insert(distance);
         } catch (DalException e) {
             fail(e);
         }
@@ -205,9 +213,11 @@ class TransportsDAOTest {
             Transport transport2 = new Transport(2,
                     source.name(),
                     new LinkedList<>() {{
+                        add(source.name());
                         add(site.name());
                     }},
                     new HashMap<>() {{
+                        put(source.name(), 1);
                         put(site.name(), 1);
                     }},
                     driver.id(),

@@ -6,7 +6,7 @@ import businessLayer.employeeModule.Employee;
 import businessLayer.employeeModule.Role;
 import businessLayer.employeeModule.Shift;
 import dataAccessLayer.DalFactory;
-import dataAccessLayer.dalUtils.DalException;
+import exceptions.DalException;
 import dataAccessLayer.transportModule.SitesDAO;
 import objects.transportObjects.Site;
 import org.junit.jupiter.api.AfterEach;

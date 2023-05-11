@@ -1,6 +1,6 @@
 package businessLayer.transportModule;
 
-import dataAccessLayer.dalUtils.DalException;
+import exceptions.DalException;
 import dataAccessLayer.transportModule.SitesRoutesDAO;
 import dataAccessLayer.transportModule.TransportsDAO;
 import javafx.util.Pair;
@@ -11,7 +11,7 @@ import org.mockito.Mockito;
 import serviceLayer.employeeModule.Services.EmployeesService;
 import utils.JsonUtils;
 import utils.Response;
-import utils.transportUtils.TransportException;
+import exceptions.TransportException;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

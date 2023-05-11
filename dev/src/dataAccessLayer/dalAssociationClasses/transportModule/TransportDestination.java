@@ -1,4 +1,4 @@
-package dataAccessLayer.transportModule;
+package dataAccessLayer.dalAssociationClasses.transportModule;
 
 import java.time.LocalTime;
 

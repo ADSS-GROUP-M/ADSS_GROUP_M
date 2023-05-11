@@ -1,14 +1,14 @@
 package businessLayer.transportModule;
 
 import businessLayer.transportModule.bingApi.Point;
-import dataAccessLayer.dalUtils.DalException;
+import exceptions.DalException;
 import dataAccessLayer.transportModule.SitesDAO;
 import dataAccessLayer.transportModule.SitesRoutesDAO;
 import objects.transportObjects.Site;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import serviceLayer.employeeModule.Services.EmployeesService;
-import utils.transportUtils.TransportException;
+import exceptions.TransportException;
 
 import java.util.List;
 

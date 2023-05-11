@@ -1,4 +1,4 @@
-package dataAccessLayer.transportModule;
+package dataAccessLayer.dalAssociationClasses.transportModule;
 
 public record SiteRoute(String source, String destination, double distance, double duration) {
 

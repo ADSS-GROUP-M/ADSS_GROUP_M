@@ -1,7 +1,6 @@
-package dataAccessLayer.transportModule.abstracts;
+package dataAccessLayer.dalAbstracts;
 
-import dataAccessLayer.dalUtils.DalException;
-import dataAccessLayer.dalUtils.SQLExecutor;
+import exceptions.DalException;
 
 import java.sql.SQLException;
 

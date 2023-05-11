@@ -1,11 +1,11 @@
 package dataAccessLayer.employeeModule;
 
 import businessLayer.employeeModule.Shift;
-import dataAccessLayer.dalUtils.DalException;
+import exceptions.DalException;
 import dataAccessLayer.dalUtils.OfflineResultSet;
-import dataAccessLayer.dalUtils.SQLExecutor;
-import dataAccessLayer.employeeModule.records.ShiftCancel;
-import dataAccessLayer.transportModule.abstracts.ManyToManyDAO;
+import dataAccessLayer.dalAbstracts.SQLExecutor;
+import dataAccessLayer.dalAssociationClasses.employeeModule.ShiftCancel;
+import dataAccessLayer.dalAbstracts.ManyToManyDAO;
 
 import java.sql.SQLException;
 import java.time.LocalDate;

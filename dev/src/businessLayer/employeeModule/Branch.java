@@ -1,6 +1,6 @@
 package businessLayer.employeeModule;
 
-import utils.employeeUtils.EmployeeException;
+import exceptions.EmployeeException;
 
 import java.time.LocalTime;
 import java.util.Objects;

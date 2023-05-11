@@ -1,7 +1,7 @@
 package dataAccessLayer;
 
-import dataAccessLayer.dalUtils.DalException;
-import dataAccessLayer.dalUtils.SQLExecutor;
+import exceptions.DalException;
+import dataAccessLayer.dalAbstracts.SQLExecutor;
 import dataAccessLayer.dalUtils.SQLExecutorProductionImpl;
 import dataAccessLayer.dalUtils.SQLExecutorTestingImpl;
 import dataAccessLayer.employeeModule.*;

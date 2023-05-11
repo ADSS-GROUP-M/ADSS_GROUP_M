@@ -1,17 +1,17 @@
-package utils.transportUtils;
+package exceptions;
 
 import java.security.PrivilegedActionException;
 
 /**
  * @apiNote  This exception does not create a stack trace.
  */
-public class TransportException extends Exception{
+public class DalException extends Exception{
     /**
      * Constructs a new exception with {@code null} as its detail message.
      * The cause is not initialized, and may subsequently be initialized by a
      * call to {@link #initCause}.
      */
-    public TransportException() {
+    public DalException() {
         super(null, null, true, false);
     }
 
@@ -23,7 +23,7 @@ public class TransportException extends Exception{
      * @param message the detail message. The detail message is saved for
      *                later retrieval by the {@link #getMessage()} method.
      */
-    public TransportException(String message) {
+    public DalException(String message) {
         super(message,null,true,false);
     }
 
@@ -41,7 +41,7 @@ public class TransportException extends Exception{
      *                unknown.)
      * @since 1.4
      */
-    public TransportException(String message, Throwable cause) {
+    public DalException(String message, Throwable cause) {
         super(message, cause, true, false);
     }
 
@@ -59,7 +59,7 @@ public class TransportException extends Exception{
      *              unknown.)
      * @since 1.4
      */
-    public TransportException(Throwable cause) {
+    public DalException(Throwable cause) {
         super(null,cause,true,false);
     }
 }

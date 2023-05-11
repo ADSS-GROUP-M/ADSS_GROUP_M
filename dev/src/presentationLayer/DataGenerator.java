@@ -6,7 +6,7 @@ import businessLayer.employeeModule.Controllers.UserController;
 import businessLayer.employeeModule.Role;
 import businessLayer.transportModule.SitesController;
 import dataAccessLayer.DalFactory;
-import dataAccessLayer.dalUtils.DalException;
+import exceptions.DalException;
 import objects.transportObjects.*;
 import serviceLayer.ServiceFactory;
 import serviceLayer.employeeModule.Objects.SShiftType;
@@ -16,7 +16,7 @@ import serviceLayer.transportModule.ItemListsService;
 import serviceLayer.transportModule.ResourceManagementService;
 import serviceLayer.transportModule.TransportsService;
 import utils.Response;
-import utils.transportUtils.TransportException;
+import exceptions.TransportException;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

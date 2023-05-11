@@ -4,10 +4,10 @@ import businessLayer.employeeModule.Employee;
 import businessLayer.employeeModule.Role;
 import businessLayer.employeeModule.Shift;
 import businessLayer.employeeModule.Shift.ShiftType;
-import dataAccessLayer.dalUtils.DalException;
+import exceptions.DalException;
 import dataAccessLayer.employeeModule.ShiftDAO;
-import utils.employeeUtils.DateUtils;
-import utils.employeeUtils.EmployeeException;
+import utils.DateUtils;
+import exceptions.EmployeeException;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;

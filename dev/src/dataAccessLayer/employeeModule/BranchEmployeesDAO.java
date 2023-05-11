@@ -1,9 +1,9 @@
 package dataAccessLayer.employeeModule;
 
-import dataAccessLayer.dalUtils.DalException;
+import exceptions.DalException;
 import dataAccessLayer.dalUtils.OfflineResultSet;
-import dataAccessLayer.dalUtils.SQLExecutor;
-import dataAccessLayer.transportModule.abstracts.ManyToManyDAO;
+import dataAccessLayer.dalAbstracts.SQLExecutor;
+import dataAccessLayer.dalAbstracts.ManyToManyDAO;
 import javafx.util.Pair;
 
 import java.sql.SQLException;

@@ -1,6 +1,6 @@
-package dataAccessLayer.transportModule.abstracts;
+package dataAccessLayer.dalAbstracts;
 
-import dataAccessLayer.dalUtils.DalException;
+import exceptions.DalException;
 
 public interface CounterDAO {
     Integer selectCounter() throws DalException;

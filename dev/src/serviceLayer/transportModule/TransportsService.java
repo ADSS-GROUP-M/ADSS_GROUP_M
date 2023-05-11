@@ -3,7 +3,7 @@ package serviceLayer.transportModule;
 import businessLayer.transportModule.TransportsController;
 import objects.transportObjects.Transport;
 import utils.Response;
-import utils.transportUtils.TransportException;
+import exceptions.TransportException;
 
 public class TransportsService {
 

@@ -2,10 +2,10 @@ package dataAccessLayer.employeeModule;
 
 import businessLayer.employeeModule.Authorization;
 import businessLayer.employeeModule.User;
-import dataAccessLayer.dalUtils.DalException;
+import exceptions.DalException;
 import dataAccessLayer.dalUtils.OfflineResultSet;
-import dataAccessLayer.dalUtils.SQLExecutor;
-import dataAccessLayer.transportModule.abstracts.DAO;
+import dataAccessLayer.dalAbstracts.SQLExecutor;
+import dataAccessLayer.dalAbstracts.DAO;
 
 import java.sql.SQLException;
 import java.util.LinkedList;

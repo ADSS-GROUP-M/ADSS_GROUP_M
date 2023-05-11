@@ -2,7 +2,7 @@ package businessLayer.employeeModule.Controllers;
 
 import businessLayer.employeeModule.Authorization;
 import businessLayer.employeeModule.User;
-import dataAccessLayer.dalUtils.DalException;
+import exceptions.DalException;
 import dataAccessLayer.employeeModule.UserDAO;
 
 import java.util.List;

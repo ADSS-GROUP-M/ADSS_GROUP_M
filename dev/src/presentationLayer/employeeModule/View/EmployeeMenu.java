@@ -1,7 +1,7 @@
 package presentationLayer.employeeModule.View;
 
 import presentationLayer.employeeModule.ViewModel.EmployeeMenuVM;
-import utils.employeeUtils.DateUtils;
+import utils.DateUtils;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;

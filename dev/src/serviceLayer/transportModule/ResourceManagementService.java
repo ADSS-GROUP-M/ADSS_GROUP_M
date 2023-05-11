@@ -8,7 +8,7 @@ import objects.transportObjects.Site;
 import objects.transportObjects.Truck;
 import utils.JsonUtils;
 import utils.Response;
-import utils.transportUtils.TransportException;
+import exceptions.TransportException;
 
 public class ResourceManagementService {
 

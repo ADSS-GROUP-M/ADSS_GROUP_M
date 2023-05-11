@@ -15,7 +15,7 @@ import serviceLayer.employeeModule.Objects.SEmployee;
 import serviceLayer.employeeModule.Services.EmployeesService;
 import serviceLayer.employeeModule.Services.UserService;
 import utils.Response;
-import utils.transportUtils.TransportException;
+import exceptions.TransportException;
 
 import java.time.LocalDate;
 import java.util.LinkedList;

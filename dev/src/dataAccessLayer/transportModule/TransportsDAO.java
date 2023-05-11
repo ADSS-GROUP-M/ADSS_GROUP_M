@@ -1,10 +1,11 @@
 package dataAccessLayer.transportModule;
 
-import dataAccessLayer.dalUtils.DalException;
+import dataAccessLayer.dalAssociationClasses.transportModule.TransportDestination;
+import exceptions.DalException;
 import dataAccessLayer.dalUtils.OfflineResultSet;
-import dataAccessLayer.dalUtils.SQLExecutor;
-import dataAccessLayer.transportModule.abstracts.CounterDAO;
-import dataAccessLayer.transportModule.abstracts.ManyToManyDAO;
+import dataAccessLayer.dalAbstracts.SQLExecutor;
+import dataAccessLayer.dalAbstracts.CounterDAO;
+import dataAccessLayer.dalAbstracts.ManyToManyDAO;
 import objects.transportObjects.DeliveryRoute;
 import objects.transportObjects.Transport;
 

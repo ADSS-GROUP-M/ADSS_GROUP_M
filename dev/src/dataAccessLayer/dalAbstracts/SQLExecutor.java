@@ -1,4 +1,6 @@
-package dataAccessLayer.dalUtils;
+package dataAccessLayer.dalAbstracts;
+
+import dataAccessLayer.dalUtils.OfflineResultSet;
 
 import java.sql.SQLException;
 

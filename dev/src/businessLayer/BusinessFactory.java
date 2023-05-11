@@ -6,9 +6,9 @@ import businessLayer.employeeModule.Controllers.UserController;
 import businessLayer.transportModule.*;
 import businessLayer.transportModule.bingApi.BingAPI;
 import dataAccessLayer.DalFactory;
-import dataAccessLayer.dalUtils.DalException;
+import exceptions.DalException;
 import serviceLayer.employeeModule.Services.EmployeesService;
-import utils.transportUtils.TransportException;
+import exceptions.TransportException;
 
 public class BusinessFactory {
 

@@ -1,4 +1,4 @@
-package dataAccessLayer.employeeModule.records;
+package dataAccessLayer.dalAssociationClasses.employeeModule;
 
 import businessLayer.employeeModule.Shift;
 

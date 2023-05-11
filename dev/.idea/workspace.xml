@@ -6,18 +6,15 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e454f93c-4ee8-4f4b-9a14-eaaf36aa303c" name="Changes" comment="ContactsInfoDataMapper">
+    <list default="true" id="e454f93c-4ee8-4f4b-9a14-eaaf36aa303c" name="Changes" comment="commit for fixing">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/Backend/BusinessLayer/BillOfQuantitiesTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/Backend/BusinessLayer/BillOfQuantitiesTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/SuppliersModule/Agreement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/BusinessLayer/SuppliersModule/Agreement.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/SuppliersModule/Discounts/CashDiscount.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/BusinessLayer/SuppliersModule/Discounts/CashDiscount.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/SuppliersModule/Discounts/PercentageDiscount.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/BusinessLayer/SuppliersModule/Discounts/PercentageDiscount.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/SuppliersModule/Product.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/BusinessLayer/SuppliersModule/Product.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/DiscountOnAmountDataMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/DiscountOnAmountDataMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/DiscountOnTotalDataMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/DiscountOnTotalDataMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/ProductsDiscountsDataMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/ProductsDiscountsDataMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/SupplierProductDataMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/SupplierProductDataMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/fieldsDataMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/fieldsDataMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/SuppliersModule/BillOfQuantities.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/BusinessLayer/SuppliersModule/BillOfQuantities.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/SuppliersModule/OrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/BusinessLayer/SuppliersModule/OrderController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/SuppliersModule/Supplier.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/BusinessLayer/SuppliersModule/Supplier.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Backend/ServiceLayer/SuppliersModule/SupplierService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/ServiceLayer/SuppliersModule/SupplierService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/UI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/UI.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,7 +34,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$/.." value="amit_new" />
+        <entry key="$PROJECT_DIR$/.." value="master" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
@@ -293,7 +290,14 @@
       <option name="project" value="LOCAL" />
       <updated>1683836280611</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="commit for fixing">
+      <created>1683839743632</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1683839743632</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -339,7 +343,8 @@
     <MESSAGE value="commit" />
     <MESSAGE value="adding branch to order" />
     <MESSAGE value="ContactsInfoDataMapper" />
-    <option name="LAST_COMMIT_MESSAGE" value="ContactsInfoDataMapper" />
+    <MESSAGE value="commit for fixing" />
+    <option name="LAST_COMMIT_MESSAGE" value="commit for fixing" />
   </component>
   <component name="XDebuggerManager">
     <pin-to-top-manager>

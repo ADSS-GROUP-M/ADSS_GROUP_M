@@ -34,8 +34,8 @@ public class Agreement {
         return products;
     }
 
-    public Product getProduct(int productId){
-        return products.get(productId);
+    public Product getProduct(String catalogNumber){
+        return products.get(catalogNumber);
     }
     public DeliveryAgreement getDeliveryAgreement() {
         return deliveryAgreement;
@@ -53,8 +53,8 @@ public class Agreement {
         products.put(product.getCatalogNumber(), product);
     }
 
-    public void removeProduct(Integer productId){
-        products.remove(productId);
+    public void removeProduct(String catalogNumber){
+        products.remove(catalogNumber);
     }
 
     public BillOfQuantities getBillOfQuantities(){

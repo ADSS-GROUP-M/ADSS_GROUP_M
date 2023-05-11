@@ -30,7 +30,7 @@ public class OrderHistoryDataMapper extends AbstractDataMapper {
                 tableName, bnNumber, orderId));
         Order order = new Order();
         while (resultSet.next()){
-            order.addProduct(resultSet.getInt("catalog_number"), resultSet.getInt("quantity"));
+            order.addProduct(resultSet.getString("catalog_number"), resultSet.getInt("quantity"));
         }
         return order;
     }

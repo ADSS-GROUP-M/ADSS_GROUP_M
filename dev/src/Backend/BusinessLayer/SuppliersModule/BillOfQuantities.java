@@ -9,7 +9,7 @@ public class BillOfQuantities {
     /***
      * maps between product's id to its set of discounts by amount ordered
      */
-    private Map<Integer, Map<Integer, Discount>> productsDiscounts;
+    private Map<String, Map<Integer, Discount>> productsDiscounts;
     /***
      * discount to be applied on the total order after discount on amount - T is the price before and R is the price after
      */
@@ -48,34 +48,34 @@ public class BillOfQuantities {
         discountOnTotalOrder = null;
     }
 
-    public void addProductDiscount(int productId, int amount, Discount discount){
+    public void addProductDiscount(String catalogNumber, int amount, Discount discount){
         if(discount == null)
             throw new RuntimeException("discount can't be null");
-        if(productsDiscounts.get(productId) == null)
-            productsDiscounts.put(productId, new HashMap<>());
-        productsDiscounts.get(productId).put(amount, discount);
+        if(productsDiscounts.get(catalogNumber) == null)
+            productsDiscounts.put(catalogNumber, new HashMap<>());
+        productsDiscounts.get(catalogNumber).put(amount, discount);
     }
 
-    public void removeProductDiscount(int productId, int amount){
-        if(productsDiscounts.get(productId) != null)
-            productsDiscounts.get(productId).remove(amount);
+    public void removeProductDiscount(String catalogNumber, int amount){
+        if(productsDiscounts.get(catalogNumber) != null)
+            productsDiscounts.get(catalogNumber).remove(amount);
     }
 
-    public void removeProductDiscount(int productId){
-        productsDiscounts.remove(productId);
+    public void removeProductDiscount(String catalogNumber){
+        productsDiscounts.remove(catalogNumber);
     }
 
-    public void setProductsDiscounts(Map<Integer, Map<Integer, Discount>> productsDiscounts) {
+    public void setProductsDiscounts(Map<String, Map<Integer, Discount>> productsDiscounts) {
         this.productsDiscounts = productsDiscounts;
     }
 
-    public double getProductPriceAfterDiscount(int productId, int amount, double price){
-        if(!productsDiscounts.containsKey(productId))
+    public double getProductPriceAfterDiscount(String catalogNumber, int amount, double price){
+        if(!productsDiscounts.containsKey(catalogNumber))
             return price;
         Discount discount = null;
-        for(int amountCheck : productsDiscounts.get(productId).keySet())
+        for(int amountCheck : productsDiscounts.get(catalogNumber).keySet())
             if(amountCheck <= amount)
-                discount = productsDiscounts.get(productId).get(amountCheck);
+                discount = productsDiscounts.get(catalogNumber).get(amountCheck);
         if(discount != null)
             return discount.applyDiscount(price);
         return price;
@@ -115,7 +115,7 @@ public class BillOfQuantities {
     public String toString(){
         String productsDiscountString = "PRODUCTS DISCOUNT:";
         int counter = 1;
-        for (Map.Entry<Integer, Map<Integer, Discount>> productDiscount: productsDiscounts.entrySet()){
+        for (Map.Entry<String, Map<Integer, Discount>> productDiscount: productsDiscounts.entrySet()){
             productsDiscountString += "\n\t\t\t\t" + counter++ + ". Product id: " + productDiscount.getKey() + "\n\t\t\t\tDiscounts: ";
             for(Map.Entry<Integer, Discount> discount : productDiscount.getValue().entrySet())
                 productsDiscountString += "\n\t\t\t\t\t" + "Amount to reach: " +discount.getKey() + " Discount: " + discount.getValue().toString();

@@ -86,8 +86,8 @@ public class Supplier {
             fields.add(field);
     }
 
-    public boolean productExist(int productId){
-        return agreement.getProduct(productId) != null;
+    public boolean productExist(String catalogNumber){
+        return agreement.getProduct(catalogNumber) != null;
     }
 
     public void removeField(String field){

@@ -16,4 +16,8 @@ public class PercentageDiscount extends Discount {
     public String toString() {
         return "discount in percentages, percentage of discount: " + percentage;
     }
+
+    public double getPercentage() {
+        return percentage;
+    }
 }

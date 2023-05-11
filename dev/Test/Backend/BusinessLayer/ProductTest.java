@@ -1,5 +1,6 @@
 package Backend.BusinessLayer;
 
+import Backend.BusinessLayer.BusinessLayerUsage.Branch;
 import Backend.BusinessLayer.InventoryModule.Product;
 import org.junit.Assert;
 import org.junit.Before;
@@ -13,7 +14,7 @@ public class ProductTest {
     private static String catalog_name = "productTest";
     private static String manufacturer = "tnuva";
     private static double storePrice = 5.0;
-    private static String branch = "beer sheva";
+    private static Branch branch = Branch.branch1;
 
     private static List<String> serialNumbers = new ArrayList<>();
 

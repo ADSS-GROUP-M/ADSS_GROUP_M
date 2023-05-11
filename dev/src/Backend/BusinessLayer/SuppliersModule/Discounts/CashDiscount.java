@@ -15,4 +15,8 @@ public class CashDiscount extends Discount {
     public String toString(){
         return "discount in cash, amount: " + amountOfDiscount;
     }
+
+    public double getAmountOfDiscount(){
+        return amountOfDiscount;
+    }
 }

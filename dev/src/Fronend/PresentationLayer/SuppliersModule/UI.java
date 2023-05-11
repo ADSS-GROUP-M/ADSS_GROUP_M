@@ -106,7 +106,7 @@ public class UI {
                 setDeliveryAgreement();
                 break;
             case 12:
-                setProductCatalogNumber();
+                setProductSuppliersCatalogNumber();
                 break;
             case 13:
                 setProductPrice();
@@ -431,15 +431,15 @@ public class UI {
         }
     }
 
-    public void setProductCatalogNumber(){
+    public void setProductSuppliersCatalogNumber(){
         try {
             System.out.println("enter bn number of the supplier");
             String bnNumber = sc.nextLine();
             System.out.println("enter product's id");
-            int productsId = Integer.parseInt(sc.nextLine());
-            System.out.println("enter new catalog number");
             String catalogNumber = sc.nextLine();
-            System.out.println(gson.fromJson(supplierService.setProductCatalogNumber(bnNumber, productsId, catalogNumber), Response.class).getMsg());
+            System.out.println("enter new catalog number");
+            String suppliersCatalogNumber = sc.nextLine();
+            System.out.println(gson.fromJson(supplierService.setProductCatalogNumber(bnNumber, catalogNumber, suppliersCatalogNumber), Response.class).getMsg());
         }
         catch (Exception e){
             System.out.println("invalid input");
@@ -451,10 +451,10 @@ public class UI {
             System.out.println("enter bn number of the supplier");
             String bnNumber = sc.nextLine();
             System.out.println("enter product's id");
-            int productId = Integer.parseInt(sc.nextLine());
+            String catalogNumber = sc.nextLine();
             System.out.println("enter new price");
             double price = Double.parseDouble(sc.nextLine());
-            System.out.println(gson.fromJson(supplierService.setProductPrice(bnNumber,productId, price), Response.class).getMsg());
+            System.out.println(gson.fromJson(supplierService.setProductPrice(bnNumber,catalogNumber, price), Response.class).getMsg());
         }
         catch (Exception e){
             System.out.println("invalid input");
@@ -466,10 +466,10 @@ public class UI {
             System.out.println("enter bn number of the supplier");
             String bnNumber = sc.nextLine();
             System.out.println("enter product's id");
-            int productId = Integer.parseInt(sc.nextLine());
+            String catalogNumber = sc.nextLine();
             System.out.println("enter amount");
             int amount = Integer.parseInt(sc.nextLine());
-            System.out.println(gson.fromJson(supplierService.setProductAmount(bnNumber,productId, amount), Response.class).getMsg());
+            System.out.println(gson.fromJson(supplierService.setProductAmount(bnNumber,catalogNumber, amount), Response.class).getMsg());
         }
         catch (Exception e){
             System.out.println("invalid input");
@@ -500,7 +500,7 @@ public class UI {
             System.out.println("enter bn number of the supplier");
             String bnNumber = sc.nextLine();
             System.out.println("enter product id");
-            int productId = Integer.parseInt(sc.nextLine());
+            String catalogNumber = sc.nextLine();
             System.out.println("enter number of units");
             int amount = Integer.parseInt(sc.nextLine());
             System.out.println("enter the discount\n\t1.discount in percentage\n\t2.discount in cash");
@@ -516,7 +516,7 @@ public class UI {
                 double cash = Double.parseDouble(sc.nextLine());
                 discount = new CashDiscount(cash);
             }
-            System.out.println(gson.fromJson(supplierService.setProductDiscount(bnNumber, productId, amount, discount), Response.class).getMsg());
+            System.out.println(gson.fromJson(supplierService.setProductDiscount(bnNumber, catalogNumber, amount, discount), Response.class).getMsg());
         }
         catch (Exception e){
             System.out.println("invalid input");
@@ -528,10 +528,10 @@ public class UI {
             System.out.println("enter bn number of the supplier");
             String bnNumber = sc.nextLine();
             System.out.println("enter product id");
-            int productId = Integer.parseInt(sc.nextLine());
+            String catalogNumber = sc.nextLine();
             System.out.println("enter number of units");
             int amount = Integer.parseInt(sc.nextLine());
-            System.out.println(gson.fromJson(supplierService.removeProductDiscount(bnNumber, productId, amount), Response.class).getMsg());
+            System.out.println(gson.fromJson(supplierService.removeProductDiscount(bnNumber, catalogNumber, amount), Response.class).getMsg());
         }
         catch (Exception e){
             System.out.println("invalid input");
@@ -543,8 +543,8 @@ public class UI {
             System.out.println("enter bn number of the supplier");
             String bnNumber = sc.nextLine();
             System.out.println("enter product id");
-            int productId = Integer.parseInt(sc.nextLine());
-            System.out.println(gson.fromJson(supplierService.removeProductDiscounts(bnNumber, productId), Response.class).getMsg());
+            String catalogNumber = sc.nextLine();
+            System.out.println(gson.fromJson(supplierService.removeProductDiscounts(bnNumber, catalogNumber), Response.class).getMsg());
         }
         catch (Exception e){
             System.out.println("invalid input");
@@ -612,14 +612,14 @@ public class UI {
         try {
             System.out.println("enter bn number of the supplier");
             String bnNumber = sc.nextLine();
-            Map<Integer, Map<Integer, Discount>> productsDiscounts = new HashMap<>();
+            Map<String, Map<Integer, Discount>> productsDiscounts = new HashMap<>();
             while (true){
                 System.out.println("enter product id to set discount or exit to submit");
                 String input = sc.nextLine();
                 if(input.equals("exit"))
                     break;
-                int productId = Integer.parseInt(input);
-                productsDiscounts.put(productId, new HashMap<>());
+                String catalogNumber = (input);
+                productsDiscounts.put(catalogNumber, new HashMap<>());
                 while(true) {
                     System.out.println("enter the amount to purchase from this product to activate discount or exit to submit");
                     input = sc.nextLine();
@@ -642,7 +642,7 @@ public class UI {
                     }
                     else
                         throw new RuntimeException("discount can't be null");
-                    productsDiscounts.get(productId).put(amount, discount);
+                    productsDiscounts.get(catalogNumber).put(amount, discount);
                 }
             }
             System.out.println(gson.fromJson(supplierService.setProductsDiscounts(bnNumber,productsDiscounts), Response.class).getMsg());
@@ -741,8 +741,8 @@ public class UI {
             System.out.println("enter bn number of the supplier");
             String bnNumber = sc.nextLine();
             System.out.println("enter product's id");
-            int id = Integer.parseInt(sc.nextLine());
-            System.out.println(gson.fromJson(supplierService.getCatalogNumber(bnNumber, id), Response.class).getReturnValue());
+            String catalogNumber = sc.nextLine();
+            System.out.println(gson.fromJson(supplierService.getCatalogNumber(bnNumber, catalogNumber), Response.class).getReturnValue());
         }
         catch (Exception e){
             System.out.println("invalid input");
@@ -765,8 +765,8 @@ public class UI {
             System.out.println("enter bn number of the supplier");
             String bnNumber = sc.nextLine();
             System.out.println("enter product id");
-            int productId = Integer.parseInt(sc.nextLine());
-            System.out.println(gson.fromJson(supplierService.removeProduct(bnNumber, productId), Response.class).getMsg());
+            String catalogNumber = sc.nextLine();
+            System.out.println(gson.fromJson(supplierService.removeProduct(bnNumber, catalogNumber), Response.class).getMsg());
         }
         catch (Exception e){
             System.out.println("invalid input");

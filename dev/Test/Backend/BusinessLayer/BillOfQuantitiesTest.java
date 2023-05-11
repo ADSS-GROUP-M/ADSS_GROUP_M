@@ -45,49 +45,49 @@ class BillOfQuantitiesTest {
 
     @Test
     void addProductDiscount() {
-        billOfQuantities.addProductDiscount(0, 10, new CashDiscount(15));
-        assertEquals(1000, billOfQuantities.getProductPriceAfterDiscount(0, 100, 1015), "price should be 1000");
+        billOfQuantities.addProductDiscount("0", 10, new CashDiscount(15));
+        assertEquals(1000, billOfQuantities.getProductPriceAfterDiscount("0", 100, 1015), "price should be 1000");
     }
 
     @Test
     void removeProductDiscount() {
-        billOfQuantities.addProductDiscount(0, 10, new CashDiscount(15));
-        billOfQuantities.removeProductDiscount(0, 10);
-        assertEquals(1000, billOfQuantities.getProductPriceAfterDiscount(0, 100, 1000), "price should be 1000");
+        billOfQuantities.addProductDiscount("0", 10, new CashDiscount(15));
+        billOfQuantities.removeProductDiscount("0", 10);
+        assertEquals(1000, billOfQuantities.getProductPriceAfterDiscount("0", 100, 1000), "price should be 1000");
     }
 
     @Test
     void testRemoveProductDiscount() {
-        billOfQuantities.addProductDiscount(0, 10, new CashDiscount(15));
-        billOfQuantities.addProductDiscount(0, 15, new CashDiscount(15));
-        billOfQuantities.removeProductDiscount(0);
-        assertEquals(1000, billOfQuantities.getProductPriceAfterDiscount(0, 100, 1000), "price should be 1000");
+        billOfQuantities.addProductDiscount("0", 10, new CashDiscount(15));
+        billOfQuantities.addProductDiscount("0", 15, new CashDiscount(15));
+        billOfQuantities.removeProductDiscount("0");
+        assertEquals(1000, billOfQuantities.getProductPriceAfterDiscount("0", 100, 1000), "price should be 1000");
     }
 
     @Test
     void setProductsDiscounts() {
-        Map<Integer, Map<Integer, Discount>> productsDiscount = new HashMap<>(){{put(0, new HashMap<>());
+        Map<String, Map<Integer, Discount>> productsDiscount = new HashMap<>(){{put("0", new HashMap<>());
             get(0).put(10, new CashDiscount(10)); get(0).put(15, new PercentageDiscount(10));
-            put(1, new HashMap<>()); get(1).put(10, new PercentageDiscount(20));}};
+            put("1", new HashMap<>()); get(1).put(10, new PercentageDiscount(20));}};
         billOfQuantities.setProductsDiscounts(productsDiscount);
-        assertEquals(900, billOfQuantities.getProductPriceAfterDiscount(0, 100, 1000), "price should be 900");
-        assertEquals(800, billOfQuantities.getProductPriceAfterDiscount(1, 100, 1000), "price should be 800");
+        assertEquals(900, billOfQuantities.getProductPriceAfterDiscount("0", 100, 1000), "price should be 900");
+        assertEquals(800, billOfQuantities.getProductPriceAfterDiscount("1", 100, 1000), "price should be 800");
     }
 
     @Test
     void getProductPriceAfterDiscount() {
-        assertEquals(1000, billOfQuantities.getProductPriceAfterDiscount(0, 100, 1000), "price should be 1000");
-        billOfQuantities.addProductDiscount(0, 10, new CashDiscount(10));
-        assertEquals(1000, billOfQuantities.getProductPriceAfterDiscount(0, 11, 1010), "price should be 1000");
+        assertEquals(1000, billOfQuantities.getProductPriceAfterDiscount("0", 100, 1000), "price should be 1000");
+        billOfQuantities.addProductDiscount("0", 10, new CashDiscount(10));
+        assertEquals(1000, billOfQuantities.getProductPriceAfterDiscount("0", 11, 1010), "price should be 1000");
     }
 
     @Test
     void getPriceAfterDiscounts() {
-        billOfQuantities.addProductDiscount(0, 10, new CashDiscount(10));
+        billOfQuantities.addProductDiscount("0", 10, new CashDiscount(10));
         billOfQuantities.setOrderOfDiscounts(true);
         billOfQuantities.setDiscountOnTotalOrder(1000, new PercentageDiscount(10));
         billOfQuantities.setDiscountOnAmountOfProducts(1000, new CashDiscount(200));
-        double price = billOfQuantities.getProductPriceAfterDiscount(0,2000, 2000);
+        double price = billOfQuantities.getProductPriceAfterDiscount("0",2000, 2000);
         assertEquals(1611, billOfQuantities.getPriceAfterDiscounts(2000, price));
         billOfQuantities.setOrderOfDiscounts(false);
         assertEquals(1591, billOfQuantities.getPriceAfterDiscounts(2000, price));

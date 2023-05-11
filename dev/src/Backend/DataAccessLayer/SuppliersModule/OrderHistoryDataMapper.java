@@ -30,7 +30,7 @@ public class OrderHistoryDataMapper extends AbstractDataMapper {
                 tableName, bnNumber, orderId));
         Order order = new Order();
         while (resultSet.next()){
-            order.addProduct(resultSet.getInt("catalog_number"), resultSet.getInt("quantity"));
+            order.addProduct(resultSet.getString("catalog_number"), resultSet.getInt("quantity"));
         }
         return order;
     }
@@ -43,7 +43,7 @@ public class OrderHistoryDataMapper extends AbstractDataMapper {
         for (int i = 0; i < maxOrderId; i++)
             orderList.add(new Order());
         while (resultSet.next()){
-            //orderList.get(resultSet.getInt("order_id")).addProduct(resultSet.getString("catalog_number"), resultSet.getInt("quantity"));
+            orderList.get(resultSet.getInt("order_id")).addProduct(resultSet.getString("catalog_number"), resultSet.getInt("quantity"));
         }
         return null;
     }

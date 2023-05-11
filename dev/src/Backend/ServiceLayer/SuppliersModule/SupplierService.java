@@ -140,33 +140,33 @@ public class SupplierService {
         }
     }
 
-    public String setProductCatalogNumber(String bnNumber, int productId, String newCatalogNumber){
+    public String setProductCatalogNumber(String bnNumber, String catalogNumber, String newCatalogNumber){
         try {
-            if(!supplierController.getSupplier(bnNumber).productExist(productId))
-                throw new RuntimeException("the supplier does not supply product - " + productId);
-            supplierController.getSupplier(bnNumber).getAgreement().getProduct(productId).setCatalogNumber(newCatalogNumber);
+            if(!supplierController.getSupplier(bnNumber).productExist(catalogNumber))
+                throw new RuntimeException("the supplier does not supply product - " + catalogNumber);
+            supplierController.getSupplier(bnNumber).getAgreement().getProduct(catalogNumber).setSuppliersCatalogNumber(newCatalogNumber);
             return gson.toJson(new Response<String>("product catalog number is edited!", false));
         }
         catch (Exception e){
             return gson.toJson(new Response<>(e.getMessage(), true));
         }
     }
-    public String setProductPrice(String bnNumber, int productId, double price){
+    public String setProductPrice(String bnNumber, String catalogNumber, double price){
         try {
-            if(!supplierController.getSupplier(bnNumber).productExist(productId))
-                throw new RuntimeException("the supplier does not supply product - " + productId);
-            supplierController.getSupplier(bnNumber).getAgreement().getProduct(productId).setPrice(price);
+            if(!supplierController.getSupplier(bnNumber).productExist(catalogNumber))
+                throw new RuntimeException("the supplier does not supply product - " + catalogNumber);
+            supplierController.getSupplier(bnNumber).getAgreement().getProduct(catalogNumber).setPrice(price);
             return gson.toJson(new Response<String>("product price is edited!", false));
         }
         catch (Exception e){
             return gson.toJson(new Response<>(e.getMessage(), true));
         }
     }
-    public String setProductAmount(String bnNumber, int productId, int amount){
+    public String setProductAmount(String bnNumber, String catalogNumber, int amount){
         try {
-            if(!supplierController.getSupplier(bnNumber).productExist(productId))
-                throw new RuntimeException("the supplier does not supply product - " + productId);
-            supplierController.getSupplier(bnNumber).getAgreement().getProduct(productId).setNumberOfUnits(amount);
+            if(!supplierController.getSupplier(bnNumber).productExist(catalogNumber))
+                throw new RuntimeException("the supplier does not supply product - " + catalogNumber);
+            supplierController.getSupplier(bnNumber).getAgreement().getProduct(catalogNumber).setNumberOfUnits(amount);
             return gson.toJson(new Response<String>("product number of units is edited!", false));
         }
         catch (Exception e){
@@ -184,23 +184,23 @@ public class SupplierService {
         }
     }
 
-    public String setProductDiscount(String bnNumber, int productId, int amount, Discount discount){
+    public String setProductDiscount(String bnNumber, String catalogNumber, int amount, Discount discount){
         try {
-            if(!supplierController.getSupplier(bnNumber).productExist(productId))
-                throw new RuntimeException("the supplier does not supply product - " + productId);
-            supplierController.getSupplier(bnNumber).getAgreement().BillOfQuantities().addProductDiscount(productId, amount, discount);
+            if(!supplierController.getSupplier(bnNumber).productExist(catalogNumber))
+                throw new RuntimeException("the supplier does not supply product - " + catalogNumber);
+            supplierController.getSupplier(bnNumber).getAgreement().BillOfQuantities().addProductDiscount(catalogNumber, amount, discount);
             return gson.toJson(new Response<String>("product discount is edited!", false));
         }
         catch (Exception e){
             return gson.toJson(new Response<>(e.getMessage(), true));
         }
     }
-    public String removeProductDiscount(String bnNumber, int productId, int amount){
+    public String removeProductDiscount(String bnNumber, String catalogNumber, int amount){
         try {
-            if(!supplierController.getSupplier(bnNumber).productExist(productId))
-                throw new RuntimeException("the supplier does not supply product - " + productId);
+            if(!supplierController.getSupplier(bnNumber).productExist(catalogNumber))
+                throw new RuntimeException("the supplier does not supply product - " + catalogNumber);
             if(supplierController.getSupplier(bnNumber).getAgreement().getBillOfQuantities() != null)
-                supplierController.getSupplier(bnNumber).getAgreement().BillOfQuantities().removeProductDiscount(productId, amount);
+                supplierController.getSupplier(bnNumber).getAgreement().BillOfQuantities().removeProductDiscount(catalogNumber, amount);
             else
                 return gson.toJson(new Response<String>("there are no products discounts!",true));
             return gson.toJson(new Response<String>("product discount removed!", false));
@@ -209,12 +209,12 @@ public class SupplierService {
             return gson.toJson(new Response<>(e.getMessage(), true));
         }
     }
-    public String removeProductDiscounts(String bnNumber, int productId){
+    public String removeProductDiscounts(String bnNumber, String catalogNumber){
         try {
-            if(!supplierController.getSupplier(bnNumber).productExist(productId))
-                throw new RuntimeException("the supplier does not supply product - " + productId);
+            if(!supplierController.getSupplier(bnNumber).productExist(catalogNumber))
+                throw new RuntimeException("the supplier does not supply product - " + catalogNumber);
             if(supplierController.getSupplier(bnNumber).getAgreement().getBillOfQuantities() != null)
-                supplierController.getSupplier(bnNumber).getAgreement().BillOfQuantities().removeProductDiscount(productId);
+                supplierController.getSupplier(bnNumber).getAgreement().BillOfQuantities().removeProductDiscount(catalogNumber);
             else
                 return gson.toJson(new Response<String>("there are no products discounts!",true));
             return gson.toJson(new Response<String>("product discount removed!", false));
@@ -257,7 +257,7 @@ public class SupplierService {
         }
     }
 
-    public String setProductsDiscounts(String bnNumber, Map<Integer, Map<Integer, Discount>> productsDiscounts){
+    public String setProductsDiscounts(String bnNumber, Map<String, Map<Integer, Discount>> productsDiscounts){
         try {
             supplierController.getSupplier(bnNumber).getAgreement().BillOfQuantities().setProductsDiscounts(productsDiscounts);
             return gson.toJson(new Response<String>("product discounts are set!", false));
@@ -319,9 +319,9 @@ public class SupplierService {
         }
     }
 
-    public String getCatalogNumber(String bnNumber, int productId){
+    public String getCatalogNumber(String bnNumber, String catalogNumber){
         try {
-            return gson.toJson(new Response<String>(supplierController.getSupplier(bnNumber).getAgreement().getProduct(productId).getCatalogNumber()));
+            return gson.toJson(new Response<String>(supplierController.getSupplier(bnNumber).getAgreement().getProduct(catalogNumber).getSuppliersCatalogNumber()));
         }
         catch (Exception e){
             return gson.toJson(new Response<>(e.getMessage(), true));
@@ -336,11 +336,11 @@ public class SupplierService {
             return gson.toJson(new Response<>(e.getMessage(), true));
         }
     }
-    public String removeProduct(String bnNumber, Integer productId){
+    public String removeProduct(String bnNumber, String catalogNumber){
         try {
-            if(!supplierController.getSupplier(bnNumber).productExist(productId))
-                throw new RuntimeException("the supplier does not supply product - " + productId);
-            supplierController.getSupplier(bnNumber).getAgreement().removeProduct(productId);
+            if(!supplierController.getSupplier(bnNumber).productExist(catalogNumber))
+                throw new RuntimeException("the supplier does not supply product - " + catalogNumber);
+            supplierController.getSupplier(bnNumber).getAgreement().removeProduct(catalogNumber);
             return gson.toJson(new Response<String>("product was removed!", false));
         }
         catch (Exception e){
@@ -383,7 +383,7 @@ public class SupplierService {
                     "net", new ArrayList<>(){{add("food");}}, new HashMap<String, Pair<String, String>>(){{put("Noam", new Pair<>("Noam@gmail.com", "053488956"));}}
             , new ArrayList<>(){{add(new Product("pizza", "1", 20, 1200));add(new Product("coffee", "2", 10, 1500));}}
                     ,new DeliveryByInvitation(true, 3));
-            setProductsDiscounts("1234", new HashMap<>(){{put(0, new HashMap<>(){{put(5, new PercentageDiscount(15));
+            setProductsDiscounts("1234", new HashMap<>(){{put("0", new HashMap<>(){{put(5, new PercentageDiscount(15));
             put(10, new CashDiscount(15));}});}});
             setDiscountOnTotalOrder("12345", 1500, new PercentageDiscount(20));
             return gson.toJson(new Response<>("data is loaded!", false));

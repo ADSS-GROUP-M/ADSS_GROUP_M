@@ -35,7 +35,8 @@ public class DeliveryAgreementDataMapper  extends AbstractDataMapper {
 
     public DeliveryAgreement find(String bnNumber) throws SQLException {
         String columnsString = String.join(", ", columns);
-        OfflineResultSet resultSet = sqlExecutor.executeRead(String.format("SELECT %s WHERE bn_number = %s", columnsString, bnNumber));
+        OfflineResultSet resultSet = sqlExecutor.executeRead(String.format("SELECT %s FROM %s WHERE bn_number = %s",columnsString,tableName,
+                bnNumber));
         boolean byInvitation = resultSet.getInt("by_invitation") == 1;
         if(byInvitation)
             return new DeliveryByInvitation(resultSet.getInt("have_transport") == 1, Integer.parseInt(resultSet.getString("days")));

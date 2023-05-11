@@ -6,7 +6,18 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e454f93c-4ee8-4f4b-9a14-eaaf36aa303c" name="Changes" comment="adding branch to order" />
+    <list default="true" id="e454f93c-4ee8-4f4b-9a14-eaaf36aa303c" name="Changes" comment="adding branch to order">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/ContactsInfoDataMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/ContactsInfoDataMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/DeliveryAgreementDataMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/DeliveryAgreementDataMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/DiscountOnAmountDataMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/DiscountOnAmountDataMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/DiscountOnTotalDataMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/DiscountOnTotalDataMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/OrderHistoryDataMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/OrderHistoryDataMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/SupplierDataMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/SupplierDataMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/SupplierProductDataMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/SupplierProductDataMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/fieldsDataMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/fieldsDataMapper.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -267,7 +278,14 @@
       <option name="project" value="LOCAL" />
       <updated>1683821503391</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="adding branch to order">
+      <created>1683825021730</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1683825021730</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

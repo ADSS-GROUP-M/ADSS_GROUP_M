@@ -244,4 +244,9 @@ public class OrderController {
         return sum;
     }
 
+    public int getDaysForOrder(String catalogNumber, Branch branch){
+        //Todo
+        return 0;
+    }
+
 }

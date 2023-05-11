@@ -18,8 +18,9 @@ public class MainMenu {
     }
 
     public void run(){
-        System.out.println("Please select a branch:(number)");
+        System.out.println("Please select a branch number: [example - branch1]");
         branch = in.nextLine();
+
         Menu();
     }
 

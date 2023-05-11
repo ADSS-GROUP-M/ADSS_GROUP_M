@@ -1,5 +1,6 @@
 package Backend.BusinessLayer.InventoryModule;
 
+import Backend.BusinessLayer.BusinessLayerUsage.Branch;
 import Backend.BusinessLayer.SuppliersModule.OrderController;
 
 import java.time.LocalDateTime;
@@ -10,16 +11,16 @@ import java.util.Map;
 
 public class ProductController {
 
-    Map<String, Map<String, Product>> products; // <branch, <catalog_number, Product>
-    Map<String, List<String>> orders; // <branch, <catalog_number>
+    Map<Branch, Map<String, Product>> products; // <branch, <catalog_number, Product>
+    Map<Branch, List<String>> orders; // <branch, <catalog_number>
     DiscountController DCController;
 
     //create the controller as Singleton
     private static ProductController productController = null;
     private ProductController() {
-        //Map<branch, Map<catalog_number, Product>
-        this.products = new HashMap<String, Map<String, Product>>();
-        this.orders = new HashMap<String, List<String>>();
+        //Map<Branch, Map<catalog_number, Product>
+        this.products = new HashMap<Branch, Map<String, Product>>();
+        this.orders = new HashMap<Branch, List<String>>();
         this.DCController = DiscountController.DiscountController();
     }
 
@@ -29,7 +30,7 @@ public class ProductController {
         return productController;
     }
 
-    private Boolean checkIfProductExist(String branch, String catalog_number){
+    private Boolean checkIfProductExist(Branch branch, String catalog_number){
         if(checkIfBranchExist(branch)){
             Map<String, Product> branchProductsType = products.get(branch);
             if(branchProductsType.containsKey(catalog_number)){
@@ -39,7 +40,7 @@ public class ProductController {
         }
         return false;
     }
-    private Boolean checkIfBranchExist(String branch){
+    private Boolean checkIfBranchExist(Branch branch){
         if(products.containsKey(branch)){
             return true;
         }
@@ -49,7 +50,7 @@ public class ProductController {
     }
 
     //check if the amount of product in more than the minimum
-    public boolean isProductLack(String branch,String catalog_number){
+    public boolean isProductLack(Branch branch,String catalog_number){
         boolean isProductLack = products.get(branch).get(catalog_number).isProductLack();
         if(isProductLack) {
             // if there is no waiting order, create new supplier order.
@@ -67,7 +68,7 @@ public class ProductController {
 
 
     // Add new product item
-    public void createProductItem(List<String> serialNumbers, String catalog_number, String branch, String supplierID, double supplierPrice, double supplierDiscount,String location, LocalDateTime expirationDate, String periodicSupplier) {
+    public void createProductItem(List<String> serialNumbers, String catalog_number, Branch branch, String supplierID, double supplierPrice, double supplierDiscount,String location, LocalDateTime expirationDate, String periodicSupplier) {
         if(checkIfProductExist(branch,catalog_number)) {
             for (String serial_number : serialNumbers)
                 products.get(branch).get(catalog_number).addProductItem(serial_number, supplierID, supplierPrice, supplierDiscount, location, expirationDate);
@@ -80,9 +81,9 @@ public class ProductController {
         }
     }
 
-    public int getMinNotification(String branch, String catalog_number){return products.get(branch).get(catalog_number).getNotificationMin();}
+    public int getMinNotification(Branch branch, String catalog_number){return products.get(branch).get(catalog_number).getNotificationMin();}
 
-    public void updateMinAmount(String branch, String catalog_number, int supplierDays){
+    public void updateMinAmount(Branch branch, String catalog_number, int supplierDays){
         if(checkIfProductExist(branch,catalog_number))
             products.get(branch).get(catalog_number).updateMin(supplierDays);
         else{
@@ -92,7 +93,7 @@ public class ProductController {
     }
 
     // Add new product
-    public void createProduct(String catalog_number, String branch, String name, String manufacture, double originalStorePrice){
+    public void createProduct(String catalog_number, Branch branch, String name, String manufacture, double originalStorePrice){
         if(!products.containsKey(branch)){
             products.put(branch, new HashMap<String, Product>());
             orders.put(branch, new ArrayList<String>());
@@ -101,13 +102,13 @@ public class ProductController {
         products.get(branch).put(catalog_number,newProductType);
     }
 
-    public void updateProductItem(String branch, int isDefective, String serial_number, String catalog_number, int isSold, String newSupplier, double newSoldPrice, String newLocation) {
+    public void updateProductItem(Branch branch, int isDefective, String serial_number, String catalog_number, int isSold, String newSupplier, double newSoldPrice, String newLocation) {
         if(checkIfProductExist(branch,catalog_number)){
             ProductItem productItem = products.get(branch).get(catalog_number).getProduct(serial_number);
             Product product = products.get(branch).get(catalog_number);
             if(isDefective != -1){productItem.reportAsDefective();}
             if(isSold != -1){
-                productItem.reportAsSold(DCController.getTodayBiggestStoreDiscount(catalog_number,branch));
+                productItem.reportAsSold(DCController.calcSoldPrice(branch,catalog_number,product.getOriginalStorePrice()));
                 // TODO: need to add supplier function with the days
                 OrderController orderController = new OrderController();
                 updateMinAmount(branch,catalog_number,5);
@@ -120,7 +121,7 @@ public class ProductController {
             throw new RuntimeException(String.format("Product does not exist with the catalog_number : %s",catalog_number));
     }
 
-    public void updateProduct(String branch, String newName, String catalog_number, String newManufacturer, double newStorePrice, int newMinAmount ){
+    public void updateProduct(Branch branch, String newName, String catalog_number, String newManufacturer, double newStorePrice, int newMinAmount ){
         CategoryController categoryController = CategoryController.CategoryController();
         if(checkIfProductExist(branch,catalog_number)){
             Product product = products.get(branch).get(catalog_number);
@@ -135,7 +136,7 @@ public class ProductController {
     }
 
     //in chosen branch, for each ProductType return all related products to the return Map
-    public Map<String,List<ProductItem>> getStockProductsDetails(String branch){
+    public Map<String,List<ProductItem>> getStockProductsDetails(Branch branch){
         Map<String,List<ProductItem>> allProductsList = new HashMap<String,List<ProductItem>>();
         if(checkIfBranchExist(branch)){
             for (Product productType: products.get(branch).values()){
@@ -145,7 +146,7 @@ public class ProductController {
         return allProductsList;
     }
 
-    public Record getProductDetails(String branch, String catalog_number, String serial_number){
+    public Record getProductDetails(Branch branch, String catalog_number, String serial_number){
         if(checkIfProductExist(branch,catalog_number)){
             Product product = products.get(branch).get(catalog_number);
             ProductItem productItem = product.getProductItems().get(serial_number);
@@ -159,34 +160,28 @@ public class ProductController {
             List<Category> subCategory = product.getSubCategory();
             String location = productItem.getLocation();
             //create Record
-            Record record = new Record(catalog_number,serial_number,name,branch,manufacture,supplierPrice,supplierDiscount,storePrice,category,subCategory,location);
+            Record record = new Record(catalog_number,serial_number,name,branch.name(),manufacture,supplierPrice,supplierDiscount,storePrice, location);
             return record;
         }
         return null;
     }
 
     //Report shortages products - inorder to receive all shortages product details
-    public List<Record> getInventoryShortages(String branch){
+    public List<Record> getInventoryShortages(Branch branch){
         List<Record> shortagesProductsRecord = new ArrayList<Record>();
         if(checkIfBranchExist(branch)){
             Map<String, Product> branchCatalogNumber = products.get(branch);
             for (Product product: branchCatalogNumber.values()){
                 if(product.isProductLack()){
-                    for(ProductItem productItem: product.getProductItems().values()){
-                        String productCatalogNumber = product.getCatalogNumber();
-                        String serial_number = productItem.getSerial_number();
-                        String name = product.getName();
-                        String manufacture = product.getManufacturer();
-                        double supplierPrice = productItem.getSupplierPrice();
-                        double supplierDiscount = productItem.getSupplierDiscount();
-                        double storePrice = DCController.calcSoldPrice(branch,productCatalogNumber,product.getOriginalStorePrice());
-                        Category category = product.getCategory();
-                        List<Category> subCategory = product.getSubCategory();
-                        String location = productItem.getLocation();
-                        //create Record
-                        Record record = new Record(productCatalogNumber,serial_number,name,branch,manufacture,supplierPrice,supplierDiscount,storePrice,category,subCategory,location);
-                        shortagesProductsRecord.add(record);
-                    }
+                    String catalog_number = product.getCatalogNumber();
+                    String name = product.getName();
+                    String manufacture = product.getManufacturer();
+                    double storePrice = DCController.calcSoldPrice(branch,catalog_number,product.getOriginalStorePrice());
+                    int warehouse_amount = product.getWarehouseAmount();
+                    int store_amount = product.getStoreAmount();
+                    Record record = new Record(catalog_number,name,branch.name(),manufacture,storePrice,warehouse_amount,store_amount);
+                    shortagesProductsRecord.add(record);
+
                 }
 
             }
@@ -194,8 +189,10 @@ public class ProductController {
         return shortagesProductsRecord;
     }
 
+
+
     // Report defective function - inorder to receive all defective product details
-    public List<Record> getDefectiveProducts(String branch){
+    public List<Record> getDefectiveProducts(Branch branch){
         List<Record> defectiveRecords = new ArrayList<Record>();
         if(checkIfBranchExist(branch)) {
             Map<String, Product> branchCatalogNumber = products.get(branch);
@@ -209,10 +206,9 @@ public class ProductController {
                     double supplierDiscount = productItem.getSupplierDiscount();
                     double storePrice = product.getOriginalStorePrice();
                     Category category = product.getCategory();
-                    List<Category> subCategory = product.getSubCategory();
                     String location = productItem.getLocation();
                     //create Record
-                    Record record = new Record(productCatalogNumber,serial_number,name,branch,manufacture,supplierPrice,storePrice,supplierDiscount,category,subCategory,location);
+                    Record record = new Record(productCatalogNumber,serial_number,name,branch.name(),manufacture,supplierPrice,storePrice,supplierDiscount, location);
                     defectiveRecords.add(record);
                 }
         }

@@ -1,7 +1,5 @@
 package Backend.BusinessLayer.InventoryModule;
 
-import java.util.List;
-
 public class Record {
     private String catalog_number;
     private String serial_number;
@@ -12,16 +10,17 @@ public class Record {
     private double supplier_discount;
     private double store_price; // Product.soldPrice != -1 ? Product.soldPrice : ProductType.originalStorePrice
     private Category category;
-    private List<Category> subCategories;
     private String location;
     private int warehouse_amount;
     private int store_amount;
+
+    private String stringCategory;
 
 
 
     //catalog_number - ProductTypeID
     //serial_number - ProductID
-    public Record(String catalog_number, String serial_number, String name, String branch, String manufacturer, double supplier_price, double supplier_discount, double store_price, Category category, List<Category> subCategories, String location) {
+    public Record(String catalog_number, String serial_number, String name, String branch, String manufacturer, double supplier_price, double supplier_discount, double store_price, String location) {
         this.catalog_number = catalog_number;
         this.serial_number = serial_number;
         this.name = name;
@@ -30,8 +29,6 @@ public class Record {
         this.supplier_price = supplier_price;
         this.supplier_discount = supplier_discount;
         this.store_price = store_price;
-        this.category = category;
-        this.subCategories = subCategories;
         this.location = location;
     }
 
@@ -56,17 +53,20 @@ public class Record {
                 ", supplier_price=" + supplier_price +
                 ", supplier_discount=" + supplier_discount +
                 ", store_price=" + store_price +
-                ", category=" + category.toString() +
-                ", subCategories=" + subCategories.toString() +
                 ", location='" + location + '\'' +
                 '}';
     }
 
     public String toStringProduct() {
+        if(category != null)
+            stringCategory = category.toString();
+        else
+            stringCategory = "";
         return "Record{" +
                 "catalog_number=" + catalog_number +
                 ", name='" + name + '\'' +
                 ", branch='" + branch + '\'' +
+                ", category=" + stringCategory +
                 ", manufacturer=" + manufacturer +
                 ", store_price=" + store_price +
                 ", warehouse_amount='" + warehouse_amount +

@@ -1,16 +1,18 @@
 package Backend.BusinessLayer.InventoryModule;
 
+import Backend.BusinessLayer.BusinessLayerUsage.Branch;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
 public class ProductStoreDiscount {
     private String catalog_number;
-    private String branch;
+    private Branch branch;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     private double discount;
 
-    public ProductStoreDiscount(String catalog_number, String branch, LocalDateTime startDate, LocalDateTime endDate, double discount){
+    public ProductStoreDiscount(String catalog_number, Branch branch, LocalDateTime startDate, LocalDateTime endDate, double discount){
         this.catalog_number= catalog_number;
         this.branch = branch;
         this.startDate = startDate;

@@ -1,5 +1,6 @@
 package Backend.BusinessLayer;
 
+import Backend.BusinessLayer.BusinessLayerUsage.Branch;
 import Backend.BusinessLayer.InventoryModule.Product;
 import Backend.BusinessLayer.InventoryModule.ProductController;
 import Backend.BusinessLayer.InventoryModule.ProductItem;
@@ -18,7 +19,7 @@ public class IntegrationTest {
     private static String catalog_name = "productTest";
     private static String manufacturer = "tnuva";
     private static double storePrice = 5.0;
-    private static String branch = "beer sheva";
+    private static Branch branch = Branch.branch1;
 
 //    private static String serial_number = "0444";
     private static String supplierId = "123";
@@ -30,7 +31,7 @@ public class IntegrationTest {
 //    private Product product;
     private ProductController productController;
 
-    @BeforeEach
+    @Before
     public void setUp() {
         productController = ProductController.ProductController();
         //create new product

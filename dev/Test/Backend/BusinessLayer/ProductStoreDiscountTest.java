@@ -1,22 +1,22 @@
 package Backend.BusinessLayer;
 
+import Backend.BusinessLayer.BusinessLayerUsage.Branch;
 import Backend.BusinessLayer.InventoryModule.ProductStoreDiscount;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.jupiter.api.BeforeEach;
 
 import java.time.LocalDateTime;
 
 public class ProductStoreDiscountTest {
     private static String catalog_number = "0444";
-    private static String branch = "beer sheva";
+    private static Branch branch = Branch.branch1;
     private static LocalDateTime startDate = LocalDateTime.now();
     private static LocalDateTime endDate = LocalDateTime.now().plusDays(3);
     private static double discount = 15;
 
     private ProductStoreDiscount productStoreDiscount;
 
-    @BeforeEach
+    @Before
     public void setUp() {
         //create new product store discount
         productStoreDiscount = new ProductStoreDiscount(catalog_number,branch,startDate,endDate,discount);
@@ -25,7 +25,9 @@ public class ProductStoreDiscountTest {
     // Test 1
     @org.junit.Test
     public void getIfDiscountInDate() {
-        Assert.assertEquals("failed to get discount in date",productStoreDiscount.getDiscount(LocalDateTime.now()),15.0);
+        double expectedDiscount = 15.0;
+        double actualDiscount = productStoreDiscount.getDiscount(LocalDateTime.now());
+        Assert.assertEquals("failed to get discount in date",actualDiscount,expectedDiscount,0.001);
     }
 
     // Test 2

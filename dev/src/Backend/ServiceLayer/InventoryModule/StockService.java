@@ -1,9 +1,9 @@
 package Backend.ServiceLayer.InventoryModule;
 
+import Backend.BusinessLayer.BusinessLayerUsage.Branch;
 import Backend.BusinessLayer.InventoryModule.ProductController;
 import Backend.BusinessLayer.InventoryModule.DiscountController;
 import Backend.BusinessLayer.InventoryModule.CategoryController;
-import Backend.BusinessLayer.SuppliersModule.OrderController;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -21,7 +21,7 @@ public class StockService {
 
     public Response addProduct(String catalog_number, String name, String manufacturer, double store_price, String branch) {
         try {
-            productController.createProduct(catalog_number, branch, name, manufacturer, store_price);
+            productController.createProduct(catalog_number, Branch.valueOf(branch), name, manufacturer, store_price);
             return new Response<>("Product added successfully");
         } catch (Exception e) {
             return Response.createErrorResponse("Error updating product type: " + e.getMessage());
@@ -43,8 +43,8 @@ public class StockService {
     public Response addProductItem(List<String> serialNumbers, String catalog_number, String supplier, double supplierPrice, double supplierDiscount,String branch, String location, LocalDateTime expirationDate, String periodicSupplier) {
         try {
             String isMin = "";
-            productController.createProductItem(serialNumbers, catalog_number, branch, supplier, supplierPrice, supplierDiscount, location, expirationDate,periodicSupplier);
-            if(productController.isProductLack(branch,catalog_number))
+            productController.createProductItem(serialNumbers, catalog_number, Branch.valueOf(branch), supplier, supplierPrice, supplierDiscount, location, expirationDate,periodicSupplier);
+            if(productController.isProductLack(Branch.valueOf(branch),catalog_number))
                 isMin = String.format("\n !!! Notice product %s is less than the minimum",catalog_number);
             return new Response<>("Product added successfully" + isMin);
         } catch (Exception e) {
@@ -52,8 +52,9 @@ public class StockService {
         }
     }
 
-    public Response updateProduct(String name, String catalog_number, String manufacturer, double store_price, int newMinAmount, String branch) {
+    public Response updateProduct(String name, String catalog_number, String manufacturer, double store_price, int newMinAmount, String branchString) {
         try {
+            Branch branch = Branch.valueOf(branchString);
             String isMin = "";
             if (name != null) {
                 productController.updateProduct(branch, name, catalog_number, null, -1,   -1);
@@ -78,9 +79,10 @@ public class StockService {
         }
     }
 
-    public Response updateProduct(int is_defective, String catalog_number, String serial_num, int is_sold, String supplier, int sold_price, String location, String branch) {
+    public Response updateProduct(int is_defective, String catalog_number, String serial_num, int is_sold, String supplier, int sold_price, String location, String branchString) {
         try {
             String isMin = "";
+            Branch branch = Branch.valueOf(branchString);
             if (is_defective != -1) {
                 productController.updateProductItem(branch, is_defective, serial_num,  catalog_number,-1, null, -1, null);
                 if(productController.isProductLack(branch,catalog_number)){
@@ -113,14 +115,14 @@ public class StockService {
 
 
 
-    public Response getDefectiveProducts(String branch) {
+    public Response getDefectiveProducts(Branch branch) {
         try {
             return new Response<>(productController.getDefectiveProducts(branch));
         } catch (Exception e) {
             return Response.createErrorResponse("Error creating category: " + e.getMessage());
         }
     }
-    public Response getShortagesProducts(String branch) {
+    public Response getShortagesProducts(Branch branch) {
         try {
             return new Response<>(productController.getInventoryShortages(branch));
         } catch (Exception e) {
@@ -129,7 +131,7 @@ public class StockService {
     }
 
 
-    public Response updateDiscountPerCategory(String name, String branch, double discount, LocalDateTime startDate, LocalDateTime endDate) {
+    public Response updateDiscountPerCategory(String name, Branch branch, double discount, LocalDateTime startDate, LocalDateTime endDate) {
         try {
             discountController.createCategoryDiscount(name, branch, discount, startDate, endDate);
             return new Response<>("discount added successfully");
@@ -138,7 +140,7 @@ public class StockService {
         }
     }
 
-    public Response updateDiscountPerProduct(String catalog_number, String branch, double discount, LocalDateTime startDate, LocalDateTime endDate) {
+    public Response updateDiscountPerProduct(String catalog_number, Branch branch, double discount, LocalDateTime startDate, LocalDateTime endDate) {
         try {
             discountController.createStoreDiscount(catalog_number, branch, discount, startDate, endDate);
             return new Response<>("discount added successfully");
@@ -149,7 +151,7 @@ public class StockService {
 
     public Response getProductDetails(String catalog_num, String serial_num, String branch) {
         try {
-            return new Response<>(productController.getProductDetails(branch, catalog_num, serial_num));
+            return new Response<>(productController.getProductDetails(Branch.valueOf(branch), catalog_num, serial_num));
         } catch (Exception e) {
             return Response.createErrorResponse("Error updating discount: " + e.getMessage());
         }

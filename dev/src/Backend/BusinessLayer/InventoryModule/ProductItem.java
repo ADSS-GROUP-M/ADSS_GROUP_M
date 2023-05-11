@@ -83,7 +83,12 @@ public class ProductItem {
     }
     public void setSupplierPrice(double newPrice){this.supplierPrice = newPrice;}
     public void setSupplierID(String newSupplierID){this.supplierID = newSupplierID;}
-    public void setSoldPrice(double newSoldPrice){this.soldPrice = newSoldPrice;}
+    public void setSoldPrice(double newSoldPrice){
+        if(!isSold)
+            reportAsSold(newSoldPrice);
+        else
+            this.soldPrice = newSoldPrice;
+    }
     public void setSupplierDiscount(double newDiscount) {this.supplierDiscount = newDiscount;}
     public double getSupplierPrice(){return this.supplierPrice;}
     public double getSupplierDiscount(){return this.supplierDiscount;}

@@ -491,9 +491,8 @@ public class TransportsManagement {
         System.out.println("\n"+response.message());
 
         if(response.success()){
-            Integer id = response.dataToInt();
-            Transport _transport = fetchAddedTransport(id);
-            uiData.transports().put(id, _transport);
+            Transport _added = Transport.fromJson(response.data());
+            uiData.transports().put(_added.id(), _added);
         }
         return response;
     }
@@ -536,6 +535,7 @@ public class TransportsManagement {
         return isMissingData;
     }
 
+    @Deprecated
     private Transport fetchAddedTransport(int _id) {
         String _json = Transport.getLookupObject(_id).toJson();
         String _responseJson = ts.getTransport(_json);

@@ -60,8 +60,8 @@ public class TransportsService {
         Transport transport = Transport.fromJson(json);
         try
         {
-            tc.updateTransport(transport.id(), transport);
-            return new Response("Transport updated successfully",true).toJson();
+            Transport updated = tc.updateTransport(transport.id(), transport);
+            return new Response("Transport updated successfully",true,updated).toJson();
         }
         catch(TransportException e){
             return Response.getErrorResponse(e).toJson();

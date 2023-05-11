@@ -124,7 +124,7 @@ public class TransportsController {
      * @param newTransport The updated transport object.
      * @throws TransportException If the newTransport object is invalid or if a transport with the given ID is not found.
      */
-    public void updateTransport(int id, Transport newTransport) throws TransportException{
+    public Transport updateTransport(int id, Transport newTransport) throws TransportException{
         if(transportExists(id) == false) {
             throw new TransportException("Transport not found");
         }
@@ -133,12 +133,13 @@ public class TransportsController {
         if(newTransport.deliveryRoute().manuallyOverrideEstimatedArrivalTimes() == false){
             initializeEstimatedArrivalTimes(newTransport);
         }
-
+        Transport toUpdate = new Transport(id, newTransport);
         try {
-            dao.update(new Transport(id, newTransport));
+            dao.update(toUpdate);
         } catch (DalException e) {
             throw new TransportException(e.getMessage(),e);
         }
+        return toUpdate;
     }
 
     /**

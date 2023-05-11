@@ -41,7 +41,7 @@ public class DataGenerator {
         us = factory.userService();
         es = factory.employeesService();
         ItemListsService ils = factory.itemListsService();
-        initializeUserData(uc);
+        initializeUserData(us,uc);
         generateSites(factory.businessFactory().sitesController());
         generateItemLists(ils);
         generateTrucks(factory.resourceManagementService());
@@ -192,7 +192,7 @@ public class DataGenerator {
 
     }
 
-    public static void initializeUserData(UserController uc) {
+    public static void initializeUserData(UserService us, UserController uc) {
         try {
             uc.createManagerUser(HR_MANAGER_USERNAME, "123");
         } catch (DalException e) {

@@ -1,11 +1,13 @@
 package serviceLayer.employeeModule;
 
 import businessLayer.employeeModule.Authorization;
+import businessLayer.employeeModule.Controllers.UserController;
 import businessLayer.employeeModule.User;
 import dataAccessLayer.DalFactory;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import presentationLayer.DataGenerator;
 import serviceLayer.ServiceFactory;
 import serviceLayer.employeeModule.Services.UserService;
 import utils.Response;
@@ -24,10 +26,18 @@ public class UserTest {
 
     @BeforeEach
     public void setUp() throws Exception {
+        DalFactory.clearTestDB();
         ServiceFactory serviceFactory = new ServiceFactory(TESTING_DB_NAME);
         userService = serviceFactory.userService();
-        //userService.createData(); // Loads the HR Manager user: "admin123" "123", clears the data in each test
+
+        // Loads the HR Manager user: "admin123" "123", clears the data in each test
+        initUserData(userService, serviceFactory.businessFactory().userController());
+
         user = Response.fromJson(userService.getUser(username)).data(User.class);
+    }
+
+    private void initUserData(UserService us, UserController uc) {
+        DataGenerator.initializeUserData(us,uc);
     }
 
     @AfterEach

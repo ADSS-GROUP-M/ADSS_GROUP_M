@@ -9,16 +9,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e454f93c-4ee8-4f4b-9a14-eaaf36aa303c" name="Changes" comment="commit for cehckout">
-      <change afterPath="$PROJECT_DIR$/src/Backend/BusinessLayer/SuppliersModule/AgreementController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Backend/BusinessLayer/SuppliersModule/BillOfQuantitiesController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Backend/ServiceLayer/SuppliersModule/AgreementService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Backend/ServiceLayer/SuppliersModule/BillOfQuantitiesService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="e454f93c-4ee8-4f4b-9a14-eaaf36aa303c" name="Changes" comment="commit for new feature">
       <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/SuppliersModule/Agreement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/BusinessLayer/SuppliersModule/Agreement.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/SuppliersModule/OrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/BusinessLayer/SuppliersModule/OrderController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/SuppliersModule/Supplier.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/BusinessLayer/SuppliersModule/Supplier.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/ServiceLayer/SuppliersModule/SupplierService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/ServiceLayer/SuppliersModule/SupplierService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/UI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/UI.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -311,7 +305,14 @@
       <option name="project" value="LOCAL" />
       <updated>1683890538697</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="commit for new feature">
+      <created>1683899027219</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1683899027219</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -359,7 +360,8 @@
     <MESSAGE value="SupplierProductDataMapper" />
     <MESSAGE value="add AgreementDataMapper" />
     <MESSAGE value="commit for cehckout" />
-    <option name="LAST_COMMIT_MESSAGE" value="commit for cehckout" />
+    <MESSAGE value="commit for new feature" />
+    <option name="LAST_COMMIT_MESSAGE" value="commit for new feature" />
   </component>
   <component name="XDebuggerManager">
     <pin-to-top-manager>

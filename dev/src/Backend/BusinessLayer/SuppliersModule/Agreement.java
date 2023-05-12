@@ -84,6 +84,10 @@ public class Agreement {
         return products.get(catalogNumber).getSuppliersCatalogNumber();
     }
 
+    public int getNumberOfUnits(String catalogNumber){
+        return products.get(catalogNumber).getNumberOfUnits();
+    }
+
     public void setBillOfQuantities(BillOfQuantities billOfQuantities) {
         this.billOfQuantities = billOfQuantities;
     }

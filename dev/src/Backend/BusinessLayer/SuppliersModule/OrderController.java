@@ -10,10 +10,12 @@ import java.util.stream.Collectors;
 
 public class OrderController {
     private SupplierController supplierController;
-
-
+    private AgreementController agreementController;
+    private BillOfQuantitiesController billOfQuantitiesController;
     public OrderController(){
         this.supplierController = SupplierController.getInstance();
+        this.agreementController = AgreementController.getInstance();
+        billOfQuantitiesController = BillOfQuantitiesController.getInstance();
     }
     /***
      *
@@ -138,12 +140,12 @@ public class OrderController {
             int totalAmountCanBeOrdered = 0;
             Map<Supplier, Integer> suppliersCanSupply = new HashMap<>();
             for(Supplier supplier : suppliers){
-                if(supplier.getAgreement().getProduct(catalogNumber) != null){
-                    if(supplier.getAgreement().getProduct(catalogNumber).getNumberOfUnits() >= amount)
+                if(agreementController.productExist(supplier.getBnNumber(), catalogNumber)){
+                    if(agreementController.getNumberOfUnits(supplier.getBnNumber(), catalogNumber) >= amount)
                         found = true;
                     else
-                       suppliersCanSupply.put(supplier, supplier.getAgreement().getProduct(catalogNumber).getNumberOfUnits());
-                    totalAmountCanBeOrdered += supplier.getAgreement().getProduct(catalogNumber).getNumberOfUnits();
+                       suppliersCanSupply.put(supplier, agreementController.getNumberOfUnits(supplier.getBnNumber(), catalogNumber));
+                    totalAmountCanBeOrdered += agreementController.getNumberOfUnits(supplier.getBnNumber(), catalogNumber);
                 }
             }
             if(!found)
@@ -200,7 +202,7 @@ public class OrderController {
         Map<Supplier, List<String>> suppliersCanSupply = new HashMap<>();
         for(Supplier supplier : suppliersToUse){
             List<String> productsCanBeSupplied = new LinkedList<>();
-            Map<String, Product> suppliersProduct = supplier.getAgreement().getProducts();
+            Map<String, Product> suppliersProduct = agreementController.getProducts(supplier.getBnNumber());
             for(Map.Entry<String, Integer> productOrder : order.entrySet()){
                 String productId = productOrder.getKey();
                 int amount = productOrder.getValue();
@@ -216,33 +218,33 @@ public class OrderController {
         double sum = 0;
         int amountOfProducts = 0;
         for(String catalogNumber : orderFromSupplier.keySet()) {
-            Product product = supplier.getAgreement().getProduct(catalogNumber);
+            Product product = agreementController.getProduct(supplier.getBnNumber(), catalogNumber);
             int amount = orderFromSupplier.get(catalogNumber);
-            if(supplier.getAgreement().getBillOfQuantities() != null)
-                sum += supplier.getAgreement().BillOfQuantities().getProductPriceAfterDiscount(catalogNumber, amount,product.getPrice() * amount);
+            if(billOfQuantitiesController.billOfQuantitiesExist(supplier.getBnNumber()))
+                sum += billOfQuantitiesController.getProductPriceAfterDiscount(supplier.getBnNumber(), catalogNumber, amount,product.getPrice() * amount);
             else
                 sum += product.getPrice() * amount;
             amountOfProducts += amount;
         }
-        if(supplier.getAgreement().getBillOfQuantities() != null)
-            return supplier.getAgreement().BillOfQuantities().getPriceAfterDiscounts(amountOfProducts, sum);
+        if(billOfQuantitiesController.billOfQuantitiesExist(supplier.getBnNumber()))
+            return billOfQuantitiesController.getPriceAfterDiscounts(supplier.getBnNumber(), amountOfProducts, sum);
         return sum;
     }
 
     private double computePriceAfterDiscount(Supplier supplier, Map<String, Integer> order, List<String> productsToSupply){
         double sum = 0;
         int amountOfProducts = 0;
-        for(String productId : productsToSupply) {
-            Product product = supplier.getAgreement().getProduct(productId);
-            int amount = order.get(productId);
-            if(supplier.getAgreement().getBillOfQuantities() != null)
-                sum += supplier.getAgreement().BillOfQuantities().getProductPriceAfterDiscount(productId, amount,product.getPrice() * amount);
+        for(String catalogNumber : productsToSupply) {
+            Product product = agreementController.getProduct(supplier.getBnNumber(), catalogNumber);
+            int amount = order.get(catalogNumber);
+            if(billOfQuantitiesController.billOfQuantitiesExist(supplier.getBnNumber()))
+                sum += billOfQuantitiesController.getProductPriceAfterDiscount(supplier.getBnNumber(), catalogNumber, amount,product.getPrice() * amount);
             else
                 sum += product.getPrice() * amount;
             amountOfProducts += amount;
         }
-        if(supplier.getAgreement().getBillOfQuantities() != null)
-            return supplier.getAgreement().BillOfQuantities().getPriceAfterDiscounts(amountOfProducts, sum);
+        if(billOfQuantitiesController.billOfQuantitiesExist(supplier.getBnNumber()))
+            return billOfQuantitiesController.getPriceAfterDiscounts(supplier.getBnNumber(), amountOfProducts, sum);
         return sum;
     }
 

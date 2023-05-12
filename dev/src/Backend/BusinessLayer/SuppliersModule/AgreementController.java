@@ -74,4 +74,8 @@ public class AgreementController {
     public String getSuppliersCatalogNumber(String bnNumber, String catalogNumber) {
         return getAgreement(bnNumber).getSuppliersCatalogNumber(catalogNumber);
     }
+
+    public int getNumberOfUnits(String bnNumber, String catalogNumber){
+        return getAgreement(bnNumber).getNumberOfUnits(catalogNumber);
+    }
 }

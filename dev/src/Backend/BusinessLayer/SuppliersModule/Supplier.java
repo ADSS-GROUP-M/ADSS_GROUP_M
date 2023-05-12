@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class Supplier {
     private String name;
-    public String bnNumber;
+    private String bnNumber;
     private BankAccount bankAccount;
     private List<String> fields;
     private String paymentMethod;
@@ -69,12 +69,6 @@ public class Supplier {
     }
     public void setContactsPhoneNumber(String email, String phoneNumber){
         contactsInfo.get(email).setSecond(phoneNumber);
-    }
-
-
-
-    public Agreement getAgreement() {
-        return agreement;
     }
 
     public void addField(String field){

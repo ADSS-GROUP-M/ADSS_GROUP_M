@@ -22,10 +22,10 @@ public class OrderService {
         gson = new Gson();
     }
 
-    public String order(Map<Integer, Integer> order, Branch branch){
+    public String order(Map<String, Integer> order, Branch branch){
         try {
-            Map<String, Pair<Map<Integer, Integer>, Double>> fullOrder = orderController.order(order, branch);
-            Response<Map<String, Pair<Map<Integer, Integer>, Double>>> r = new Response<>(fullOrder);
+            Map<String, Pair<Map<String, Integer>, Double>> fullOrder = orderController.order(order, branch);
+            Response<Map<String, Pair<Map<String, Integer>, Double>>> r = new Response<>(fullOrder);
             return gson.toJson(r);
         }
         catch (RuntimeException exception) {

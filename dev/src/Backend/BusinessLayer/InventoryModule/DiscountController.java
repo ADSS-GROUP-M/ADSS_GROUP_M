@@ -47,8 +47,8 @@ public class DiscountController {
     //TODO: need to edit
     public void createCategoryDiscount(String categoryName, Branch branch, double discount, LocalDateTime startDate, LocalDateTime endDate){
         CategoryController categoryController = CategoryController.CategoryController();
-        if(categoryController.checkIfCategoryExist(categoryName)){
-            Map<String, Product> relatedProducts = categoryController.getCategoryProducts(categoryName);
+        if(categoryController.checkIfCategoryExist(branch, categoryName)){
+            Map<String, Product> relatedProducts = categoryController.getCategoryProducts(branch, categoryName);
             for(Product product: relatedProducts.values()){
                createStoreDiscount(product.getCatalogNumber(),branch,discount,startDate,endDate);
             }

@@ -1,6 +1,8 @@
 package Fronend.PresentationLayer.InventoryModule;
 
 
+import Backend.BusinessLayer.BusinessLayerUsage.Branch;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -41,7 +43,7 @@ public class CategoriesMenu extends MainMenu {
             if(subcategory != "null")
                 subcategories.add(subcategory);
         }
-        System.out.println(categoriesService.createCategory(category_name, Optional.of(subcategories)).getReturnValue());
+        System.out.println(categoriesService.createCategory(Branch.valueOf(branch), Optional.of(subcategories), category_name).getReturnValue());
     }
 
 
@@ -49,7 +51,7 @@ public class CategoriesMenu extends MainMenu {
         in.nextLine();
         System.out.println("category name:");
         String category_name = in.nextLine();
-        System.out.println(categoriesService.removeCategory(category_name).getReturnValue());
+        System.out.println(categoriesService.removeCategory(Branch.valueOf(branch), category_name).getReturnValue());
     }
 
     private void addProductToCategory(){
@@ -58,7 +60,7 @@ public class CategoriesMenu extends MainMenu {
         String category_name = in.nextLine();
         System.out.println("catalog number: (string)");
         String catalog_number = in.nextLine();
-        System.out.println(categoriesService.addProductToCategory(category_name,catalog_number).getReturnValue());
+        System.out.println(categoriesService.addProductToCategory(Branch.valueOf(branch), catalog_number, category_name).getReturnValue());
     }
 
     private void removeProductFromCategory(){
@@ -67,7 +69,7 @@ public class CategoriesMenu extends MainMenu {
         String category_name = in.nextLine();
         System.out.println("catalog number: (string)");
         String catalog_number = in.nextLine();
-        System.out.println(categoriesService.removeProductFromCategory(category_name,catalog_number).getReturnValue());
+        System.out.println(categoriesService.removeProductFromCategory(Branch.valueOf(branch), category_name,catalog_number).getReturnValue());
     }
 //    private void addSubcategory() {
 //        in.nextLine();

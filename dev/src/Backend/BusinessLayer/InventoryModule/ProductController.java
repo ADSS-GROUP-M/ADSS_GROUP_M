@@ -40,6 +40,14 @@ public class ProductController {
         }
         return false;
     }
+
+    public Product getProduct(Branch branch, String catalog_number){
+        if(checkIfProductExist(branch,catalog_number))
+            return products.get(branch).get(catalog_number);
+        else
+            {throw new RuntimeException("Product does not exist, please create the product first");}
+    }
+
     private Boolean checkIfBranchExist(Branch branch){
         if(products.containsKey(branch)){
             return true;

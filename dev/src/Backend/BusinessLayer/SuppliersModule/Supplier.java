@@ -77,18 +77,12 @@ public class Supplier {
         return agreement;
     }
 
-    public void addProduct(String name, String catalogNumber, double price, int numberOfUnits){
-        agreement.addProduct(new Product(name, catalogNumber, price, numberOfUnits));
-    }
-
     public void addField(String field){
         if(!fields.contains(field))
             fields.add(field);
     }
 
-    public boolean productExist(String catalogNumber){
-        return agreement.getProduct(catalogNumber) != null;
-    }
+
 
     public void removeField(String field){
         fields.remove(field);

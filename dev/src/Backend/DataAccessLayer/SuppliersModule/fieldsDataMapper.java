@@ -9,7 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class fieldsDataMapper extends AbstractDataMapper {
-        public fieldsDataMapper(String tableName, String columns) {
+        public fieldsDataMapper() {
                 super("fields", new String[] {"bn_number", "field"});
         }
 

@@ -8,7 +8,7 @@ import java.util.List;
 public class SupplierDataMapper extends AbstractDataMapper {
     private List<Supplier> cachedSuppliers;
 
-    public SupplierDataMapper(String tableName, String columns) {
+    public SupplierDataMapper() {
         super("suppliers", new String[]{"bn_number", "name", "bank", "branch", "account_number", "payment_method"});
     }
 }

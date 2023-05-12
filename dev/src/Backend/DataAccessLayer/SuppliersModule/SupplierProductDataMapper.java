@@ -9,7 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class SupplierProductDataMapper extends AbstractDataMapper {
-    public SupplierProductDataMapper(String tableName, String columns) {
+    public SupplierProductDataMapper() {
         super("suppliers_products", new String[]{"bn_number", "catalog_number", "suppliers_catalog_number", "quantity", "price"});
     }
 

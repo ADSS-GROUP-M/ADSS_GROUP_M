@@ -10,7 +10,7 @@ import Backend.DataAccessLayer.dalUtils.OfflineResultSet;
 import java.sql.SQLException;
 
 public class DiscountOnAmountDataMapper  extends AbstractDataMapper {
-    public DiscountOnAmountDataMapper(String tableName, String columns) {
+    public DiscountOnAmountDataMapper() {
         super("discount_on_amount", new String[] {"bn_number", "amount_to_reach", "percentage", "cash"});
     }
 
@@ -45,12 +45,15 @@ public class DiscountOnAmountDataMapper  extends AbstractDataMapper {
     public Pair<Integer, Discount> find(String bnNumber) throws SQLException {
         String columnsString = String.join(", ", columns);
         OfflineResultSet resultSet = sqlExecutor.executeRead(String.format("SELECT %s FROM %s WHERE bn_number = %s", columnsString, tableName, bnNumber));
-        Discount discount = null;
-        if(resultSet.getDouble("percentage") != -1)
-            discount = new PercentageDiscount(resultSet.getDouble("percentage"));
-        else
-            discount = new CashDiscount(resultSet.getDouble("cash"));
-        return new Pair<>(resultSet.getInt("amount_to_reach"), discount);
+        if(resultSet.next()) {
+            Discount discount = null;
+            if (resultSet.getDouble("percentage") != -1)
+                discount = new PercentageDiscount(resultSet.getDouble("percentage"));
+            else
+                discount = new CashDiscount(resultSet.getDouble("cash"));
+            return new Pair<>(resultSet.getInt("amount_to_reach"), discount);
+        }
+        return null;
     }
 
 

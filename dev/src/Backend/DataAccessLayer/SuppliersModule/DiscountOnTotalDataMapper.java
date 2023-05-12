@@ -10,7 +10,7 @@ import Backend.DataAccessLayer.dalUtils.OfflineResultSet;
 import java.sql.SQLException;
 
 public class DiscountOnTotalDataMapper  extends AbstractDataMapper {
-    public DiscountOnTotalDataMapper(String tableName, String columns) {
+    public DiscountOnTotalDataMapper() {
         super("discount_on_total", new String[] {"bn_number", "price_to_reach", "percentage", "cash"});
     }
 
@@ -42,14 +42,17 @@ public class DiscountOnTotalDataMapper  extends AbstractDataMapper {
         sqlExecutor.executeWrite(String.format("UPDATE %s SET cash = %f, percentage = %f  WHERE bn_number = %s", tableName, cash, percentage, bnNumber));
     }
 
-    public Pair<Integer, Discount> find(String bnNumber) throws SQLException {
+    public Pair<Double, Discount> find(String bnNumber) throws SQLException {
         String columnsString = String.join(", ", columns);
         OfflineResultSet resultSet = sqlExecutor.executeRead(String.format("SELECT %s FROM %s WHERE bn_number = %s", columnsString, tableName, bnNumber));
-        Discount discount = null;
-        if(resultSet.getDouble("percentage") != -1)
-            discount = new PercentageDiscount(resultSet.getDouble("percentage"));
-        else
-            discount = new CashDiscount(resultSet.getDouble("cash"));
-        return new Pair<>(resultSet.getInt("price_to_reach"), discount);
+        if(resultSet.next()) {
+            Discount discount = null;
+            if (resultSet.getDouble("percentage") != -1)
+                discount = new PercentageDiscount(resultSet.getDouble("percentage"));
+            else
+                discount = new CashDiscount(resultSet.getDouble("cash"));
+            return new Pair<>(resultSet.getDouble("price_to_reach"), discount);
+        }
+        return null;
     }
 }

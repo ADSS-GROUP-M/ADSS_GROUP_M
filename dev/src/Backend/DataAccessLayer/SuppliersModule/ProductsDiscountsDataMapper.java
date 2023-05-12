@@ -14,7 +14,7 @@ public class ProductsDiscountsDataMapper extends AbstractDataMapper {
     /**
      * maps between supplier's bn number - to map between product's catalog number - to its map of discounts
      */
-    public ProductsDiscountsDataMapper(String tableName, String columns) {
+    public ProductsDiscountsDataMapper() {
         super("products_discounts", new String[]{"bn_number","catalog_number", "amount", "percentage", "cash"});
     }
 
@@ -41,7 +41,7 @@ public class ProductsDiscountsDataMapper extends AbstractDataMapper {
         sqlExecutor.executeWrite(String.format("DROP FROM %s WHERE bn_number = %s and catalog_number = %s and amount = %d", tableName, bnNumber, catalogNumber, amount));
     }
 
-    public Map<String, Map<Integer, Discount>> findAllSuppliersProductDiscounts(String bnNumber) throws SQLException {
+    public Map<String, Map<Integer, Discount>> find(String bnNumber) throws SQLException {
         String columnsString = String.join(", ", columns);
         OfflineResultSet resultSet = sqlExecutor.executeRead(String.format("SELECT %s WHERE bn_number = %s", columnsString, bnNumber));
         Map<String, Map<Integer, Discount>> suppliersProductDiscounts = new HashMap<>();

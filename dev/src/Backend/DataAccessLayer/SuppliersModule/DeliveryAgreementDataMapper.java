@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DeliveryAgreementDataMapper  extends AbstractDataMapper {
-    public DeliveryAgreementDataMapper(String tableName, String columns) {
+    public DeliveryAgreementDataMapper() {
         super("delivery_agreement", new String[] {"bn_number", "have_transport", "by_invitation", "days"});
     }
 

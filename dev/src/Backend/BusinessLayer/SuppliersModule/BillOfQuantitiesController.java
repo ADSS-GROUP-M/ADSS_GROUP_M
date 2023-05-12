@@ -88,4 +88,12 @@ public class BillOfQuantitiesController {
     public boolean getAmountBeforeTotal(String bnNumber){
         return getBillOfQuantities(bnNumber).getAmountBeforeTotal();
     }
+
+    public void removeBillOfQuantities(String bnNumber){
+        supplierBillOfQuantities.remove(bnNumber);
+    }
+
+    public String toString(String bnNumber){
+        return getBillOfQuantities(bnNumber) != null ? getBillOfQuantities(bnNumber).toString() : "";
+    }
 }

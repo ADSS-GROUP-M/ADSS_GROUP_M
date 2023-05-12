@@ -78,4 +78,12 @@ public class AgreementController {
     public int getNumberOfUnits(String bnNumber, String catalogNumber){
         return getAgreement(bnNumber).getNumberOfUnits(catalogNumber);
     }
+
+    public void removeAgreement(String bnNumber){
+        supplierAgreement.remove(bnNumber);
+    }
+
+    public String toString(String bnNumber){
+        return getAgreement(bnNumber).toString();
+    }
 }

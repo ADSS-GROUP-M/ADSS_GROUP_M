@@ -13,17 +13,20 @@ import java.util.*;
 
 public class SupplierService {
     private SupplierController supplierController;
+    private AgreementController agreementController;
     private Gson gson;
 
     public SupplierService(){
         supplierController = SupplierController.getInstance();
+        agreementController = AgreementController.getInstance();
         gson = new Gson();
     }
 
     public String addSupplier(String name, String bnNumber, BankAccount bankAccount, String paymentMethod,
                               List<String> fields, Map<String, Pair<String, String>> contactsInfo,
                               List<Product> productList, DeliveryAgreement deliveryAgreement){
-        supplierController.addSupplier(name,bnNumber,bankAccount,paymentMethod,fields, contactsInfo, productList, deliveryAgreement);
+        supplierController.addSupplier(name,bnNumber,bankAccount,paymentMethod,fields, contactsInfo);
+        agreementController.addAgreement(bnNumber, productList, deliveryAgreement);
         return gson.toJson(new Response<>("new Supplier Registered!", false));
     }
 
@@ -151,7 +154,7 @@ public class SupplierService {
 
     public String getSupplierDetails(String bnNumber){
         try {
-            return gson.toJson(new Response<String>(supplierController.getSupplier(bnNumber).toString(), false));
+            return gson.toJson(new Response<String>(supplierController.getSupplier(bnNumber).toString() + agreementController.toString(bnNumber) + BillOfQuantitiesController.getInstance().toString(bnNumber), false));
         }
         catch (Exception e){
             return gson.toJson(new Response<>(e.getMessage(), true));

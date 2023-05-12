@@ -8,8 +8,8 @@ import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
-public class fieldsDataMapper extends AbstractDataMapper {
-        public fieldsDataMapper() {
+public class FieldsDataMapper extends AbstractDataMapper {
+        public FieldsDataMapper() {
                 super("fields", new String[] {"bn_number", "field"});
         }
 

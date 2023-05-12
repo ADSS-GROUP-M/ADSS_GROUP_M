@@ -97,7 +97,7 @@ public class Agreement {
         for (Product product : products.values())
             productsString += "\n\t\t\t" + product.toString();
 
-        return "AGREEMENT:\n\t\t" + productsString + "\n\t\t" + deliveryAgreement.toString() + "\n\t\t" + (billOfQuantities == null ? "" : billOfQuantities.toString());
+        return "AGREEMENT:\n\t\t" + productsString + "\n\t\t" + deliveryAgreement.toString() + "\n\t\t";
     }
 
 }

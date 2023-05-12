@@ -23,9 +23,8 @@ public class SupplierController {
     }
 
     public void addSupplier(String name, String bnNumber, BankAccount bankAccount, String paymentMethod,
-                            List<String> fields, Map<String,Pair<String, String>> contactsInfo,
-                            List<Product> productList, DeliveryAgreement deliveryAgreement){
-        suppliers.put(bnNumber ,new Supplier(name,bnNumber,bankAccount,paymentMethod,fields, contactsInfo, productList, deliveryAgreement));
+                            List<String> fields, Map<String,Pair<String, String>> contactsInfo){
+        suppliers.put(bnNumber ,new Supplier(name,bnNumber,bankAccount,paymentMethod,fields, contactsInfo));
     }
 
     public void addSupplier(String bnNumber, Supplier supplier){

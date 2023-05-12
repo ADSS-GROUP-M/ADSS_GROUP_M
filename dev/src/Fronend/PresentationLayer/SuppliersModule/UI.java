@@ -269,6 +269,8 @@ public class UI {
         try {
             System.out.println("enter bn number of the supplier to be removed");
             String bnNumber = sc.nextLine();
+            billOfQuantitiesService.removeBillOfQuantities(bnNumber);
+            agreementService.removeAgreement(bnNumber);
             System.out.println(gson.fromJson(supplierService.removeSupplier(bnNumber), Response.class).getMsg()+"\n");
         }
         catch (Exception e){

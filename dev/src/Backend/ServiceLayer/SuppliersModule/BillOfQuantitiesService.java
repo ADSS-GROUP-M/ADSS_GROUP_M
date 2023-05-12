@@ -126,4 +126,14 @@ public class BillOfQuantitiesService {
             return gson.toJson(new Response<>(e.getMessage(), true));
         }
     }
+
+    public String removeBillOfQuantities(String bnNumber){
+        try {
+            billOfQuantitiesController.removeBillOfQuantities(bnNumber);
+            return gson.toJson(new Response<String>("BillOfQuantities is removed!", false));
+        }
+        catch (Exception e){
+            return gson.toJson(new Response<>(e.getMessage(), true));
+        }
+    }
 }

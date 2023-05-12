@@ -17,30 +17,19 @@ public class Supplier {
      * maps between the email of the contact person and his contact info - name, phone number
      */
     private Map<String,Pair<String, String>> contactsInfo;
-    /***
-     * the agreement with the supplier
-     */
-    private Agreement agreement;
+
     /***
      * all the orders that have been ordered from the supplier
      */
     private List<Order> orderHistory;
     public Supplier(String name, String bnNumber, BankAccount bankAccount, String paymentMethod,
-                    List<String> fields, Map<String,Pair<String, String>> contactsInfo,
-                    List<Product> productList, DeliveryAgreement deliveryAgreement){
+                    List<String> fields, Map<String,Pair<String, String>> contactsInfo){
         this.name = name;
         this.bnNumber = bnNumber;
         this.bankAccount = bankAccount;
         this.fields = fields;
         this.contactsInfo = contactsInfo;
         this.paymentMethod = paymentMethod;
-        agreement = new Agreement(productList, deliveryAgreement);
-    }
-    public Supplier(String name, String bnNumber, BankAccount bankAccount, String paymentMethod,
-                    List<String> fields, Map<String,Pair<String, String>> contactsInfo,
-                    List<Product> productList, DeliveryAgreement deliveryAgreement, BillOfQuantities billOfQuantities){
-        this(name, bnNumber, bankAccount, paymentMethod, fields, contactsInfo, productList, deliveryAgreement);
-        agreement = new Agreement(productList, deliveryAgreement, billOfQuantities);
     }
 
     public void setName(String name){
@@ -114,7 +103,7 @@ public class Supplier {
         String bankAccount = "BANK ACCOUNT:\n\t\t" + this.bankAccount.toString();
 
         String res = "SUPPLIER:\n\tNAME: " + name +"\n\tBN NUMBER: " + bnNumber + "\n\t" + bankAccount + "\n\t" + fields
-                + "\n\t" + contactsInfo + "\n\t" + "PAYMENT METHOD: " + paymentMethod +"\n\t" + agreement.toString();
+                + "\n\t" + contactsInfo + "\n\t" + "PAYMENT METHOD: " + paymentMethod +"\n\t";
         return res;
     }
 }

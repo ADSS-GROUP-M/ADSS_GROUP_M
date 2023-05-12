@@ -113,4 +113,14 @@ public class AgreementService {
             return gson.toJson(new Response<>(e.getMessage(), true));
         }
     }
+
+    public String removeAgreement(String bnNumber){
+        try {
+            agreementController.removeAgreement(bnNumber);
+            return gson.toJson(new Response<String>("agreement was removed!", false));
+        }
+        catch (Exception e){
+            return gson.toJson(new Response<>(e.getMessage(), true));
+        }
+    }
 }

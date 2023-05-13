@@ -50,6 +50,7 @@ class TransportsControllerTest {
     Site destination2;
     ItemList itemList1;
     ItemList itemList2;
+    private SitesRoutesController sitesRoutesController;
 
     @BeforeEach
     void setUp() {
@@ -59,7 +60,9 @@ class TransportsControllerTest {
         sitesController = mock(SitesController.class);
         driversController = mock(DriversController.class);
         transportsDAO = mock(TransportsDAO.class);
-        sitesRoutesDAO = mock(SitesRoutesDAO.class);
+        sitesRoutesController = mock(SitesRoutesController.class);
+//        sitesRoutesDAO = mock(SitesRoutesDAO.class);
+
 
         try {
             when(transportsDAO.selectCounter()).thenReturn(1);
@@ -73,6 +76,7 @@ class TransportsControllerTest {
                     driversController,
                     sitesController,
                     itemListsController,
+                    sitesRoutesController,
                     transportsDAO
             );
         } catch (TransportException e) {
@@ -177,11 +181,11 @@ class TransportsControllerTest {
                     25000
             );
             initializeMocksToPassTransportValidation();
-            List<String> route = List.of(destination1.name(), destination2.name());
+            List<Site> route = List.of(destination1, destination2);
             HashMap<Pair<String,String>, Double> siteDistances = new HashMap<>(){{
                 put(new Pair<>(destination1.name(), destination2.name()), 100.0);
             }};
-            when(sitesController.buildSitesTravelTimes(route)).thenReturn(siteDistances);
+            when(sitesRoutesController.buildSitesTravelTimes(route)).thenReturn(siteDistances);
             when(transportsDAO.exists(updatedTransport)).thenReturn(true);
 
 
@@ -421,16 +425,17 @@ class TransportsControllerTest {
     void initializeEstimatedArrivalTimes() {
 
         //set up
-        List<String> route = new LinkedList<>();
-        route.add(transport.source());
-        route.addAll(transport.destinations());
+        List<Site> route = new LinkedList<>();
+        route.add(source);
+        route.add(destination1);
+        route.add(destination2);
         HashMap<Pair<String, String>, Double> siteRoutes = new HashMap<>(){{
             put(new Pair<>(source.name(), destination1.name()), 100.0);
             put(new Pair<>(destination1.name(), destination2.name()), 100.0);
         }};
 
         try {
-            when(sitesController.buildSitesTravelTimes(eq(route))).thenReturn(siteRoutes);
+            when(sitesRoutesController.buildSitesTravelTimes(route)).thenReturn(siteRoutes);
             //test
             transportController.initializeEstimatedArrivalTimes(transport);
             assertEquals(
@@ -468,14 +473,15 @@ class TransportsControllerTest {
         when(itemListsController.listExists(itemList1.id())).thenReturn(true);
         when(itemListsController.listExists(itemList2.id())).thenReturn(true);
 
-        List<String> route = new LinkedList<>();
-        route.add(transport.source());
-        route.addAll(transport.destinations());
+        List<Site> route = new LinkedList<>();
+        route.add(source);
+        route.add(destination1);
+        route.add(destination2);
         HashMap<Pair<String, String>, Double> siteRoutes = new HashMap<>(){{
             put(new Pair<>(source.name(), destination1.name()), 100.0);
             put(new Pair<>(destination1.name(), destination2.name()), 100.0);
         }};
-        when(sitesController.buildSitesTravelTimes(route)).thenReturn(siteRoutes);
+        when(sitesRoutesController.buildSitesTravelTimes(route)).thenReturn(siteRoutes);
     }
 
     private void assertDeepEquals(Transport transport1, Transport transport2) {

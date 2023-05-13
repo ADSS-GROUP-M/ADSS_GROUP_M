@@ -115,17 +115,18 @@ class TransportDestinationsDAOTest {
                     mock(TransportDestinationsDAO.class),
                     new TransportIdCounterDAO(factory.cursor()));
 
-            SitesRoutesDAO sitesRoutesDAO = factory.sitesDistancesDAO();
+            SitesRoutesDAO sitesRoutesDAO = factory.sitesRoutesDAO();
             TrucksController trucksController = mock(TrucksController.class);
             ItemListsController itemListsController = mock(ItemListsController.class);
             DriversController driversController = mock(DriversController.class);
-            SitesRoutesController distancesController = mock(SitesRoutesController.class);
-            SitesController sitesController =  new SitesController(sitesDAO, sitesRoutesDAO, distancesController);
+            SitesRoutesController sitesRoutesController = mock(SitesRoutesController.class);
+            SitesController sitesController =  new SitesController(sitesDAO,sitesRoutesController);
             transportsController = new TransportsController(
                     trucksController,
                     driversController,
                     sitesController,
                     itemListsController,
+                    sitesRoutesController,
                     transportsDAO
             );
 

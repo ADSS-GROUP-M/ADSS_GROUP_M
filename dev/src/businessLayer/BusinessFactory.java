@@ -22,7 +22,7 @@ public class BusinessFactory {
     private UserController userController;
     private final DalFactory dalFactory;
 
-    private SitesRoutesController distancesController;
+    private SitesRoutesController sitesRoutesController;
 
     public BusinessFactory() throws DalException{
         dalFactory = new DalFactory();
@@ -48,15 +48,16 @@ public class BusinessFactory {
 
         try {
             // ======================== Dependencies ===================== |
-            /*(1)*/ distancesController = new SitesRoutesController(new BingAPI());
+            /*(1)*/ sitesRoutesController = new SitesRoutesController(new BingAPI(),dalFactory.sitesRoutesDAO());
             /*(1)*/ trucksController = new TrucksController(dalFactory.trucksDAO());
-            /*(1)*/ sitesController = new SitesController(dalFactory.sitesDAO(), dalFactory.sitesDistancesDAO(), distancesController);
+            /*(1)*/ sitesController = new SitesController(dalFactory.sitesDAO(), sitesRoutesController);
             /*(1)*/ driversController = new DriversController(dalFactory.driversDAO());
             /*(1)*/ itemListsController = new ItemListsController(dalFactory.itemListsDAO());
             /*(2)*/ transportsController = new TransportsController(trucksController,
                     driversController,
                     sitesController,
                     itemListsController,
+                    sitesRoutesController,
                     dalFactory.transportsDAO()
             );
             //========================================================= |
@@ -102,8 +103,8 @@ public class BusinessFactory {
         return userController;
     }
 
-    public SitesRoutesController getDistancesController() {
-        return distancesController;
+    public SitesRoutesController getSitesRoutesController() {
+        return sitesRoutesController;
     }
 
     public DalFactory dalFactory() {

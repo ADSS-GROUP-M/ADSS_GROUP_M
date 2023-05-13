@@ -129,7 +129,7 @@ public class DalFactory {
         return transportsDAO;
     }
 
-    public SitesRoutesDAO sitesDistancesDAO() {
+    public SitesRoutesDAO sitesRoutesDAO() {
         return sitesRoutesDAO;
     }
 
@@ -162,7 +162,7 @@ public class DalFactory {
 
             factory.branchEmployeesDAO().clearTable();
             factory.branchesDAO().clearTable();
-            factory.sitesDistancesDAO().clearTable();
+            factory.sitesRoutesDAO().clearTable();
             factory.sitesDAO().clearTable();
 
             factory.driversDAO().clearTable();

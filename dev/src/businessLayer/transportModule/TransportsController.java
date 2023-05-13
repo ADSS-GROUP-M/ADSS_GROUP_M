@@ -33,17 +33,20 @@ public class TransportsController {
     private final ItemListsController ilc;
     private EmployeesService es;
     private final TransportsDAO dao;
+    private final SitesRoutesController src;
     private int idCounter;
 
     public TransportsController(TrucksController tc,
                                 DriversController dc,
                                 SitesController sc,
                                 ItemListsController ic,
+                                SitesRoutesController src,
                                 TransportsDAO dao) throws TransportException{
         this.sc = sc;
         this.ilc = ic;
         this.tc = tc;
         this.dc = dc;
+        this.src = src;
         this.dao = dao;
         try {
             idCounter = dao.selectCounter();
@@ -256,10 +259,12 @@ public class TransportsController {
 
         Map<String,LocalTime> estimatedArrivalTimes = new HashMap<>();
 
-        List<String> route = new LinkedList<>();
-        route.add(transport.source());
-        route.addAll(transport.destinations());
-        Map<Pair<String,String>,Double> durations = sc.buildSitesTravelTimes(route);
+        List<Site> route = new LinkedList<>();
+        route.add(sc.getSite(transport.source()));
+        for (String x : transport.destinations()) {
+            route.add(sc.getSite(x));
+        }
+        Map<Pair<String,String>,Double> durations = src.buildSitesTravelTimes(route);
 
         ListIterator<String> destinationsIterator = transport.destinations().listIterator();
         LocalTime time = transport.departureTime().toLocalTime();

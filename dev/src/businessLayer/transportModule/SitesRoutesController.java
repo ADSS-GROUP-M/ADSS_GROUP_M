@@ -2,6 +2,8 @@ package businessLayer.transportModule;
 
 import businessLayer.transportModule.bingApi.*;
 import dataAccessLayer.dalAssociationClasses.transportModule.SiteRoute;
+import dataAccessLayer.transportModule.SitesRoutesDAO;
+import exceptions.DalException;
 import exceptions.TransportException;
 import javafx.util.Pair;
 import objects.transportObjects.Site;
@@ -13,8 +15,11 @@ public class SitesRoutesController {
 
     private final BingAPI bingAPI;
 
-    public SitesRoutesController(BingAPI bingAPI) {
+    private final SitesRoutesDAO dao;
+
+    public SitesRoutesController(BingAPI bingAPI, SitesRoutesDAO dao) {
         this.bingAPI = bingAPI;
+        this.dao = dao;
     }
 
     public Point getCoordinates(Site site) throws TransportException {
@@ -31,31 +36,36 @@ public class SitesRoutesController {
         return locationResources[0].point();
     }
 
-    public List<SiteRoute> createDistanceObjects(Site site , List<Site> sites) throws TransportException {
+    public void addRoutes(Site site , List<Site> otherSites) throws TransportException {
 
-        Map<Pair<String,String>,Pair<Double,Double>> travelMatrix = getTravelData(site,sites);
+        Map<Pair<String,String>,Pair<Double,Double>> travelMatrix = getTravelData(site,otherSites);
 
-        List<SiteRoute> distances = new LinkedList<>();
+        List<SiteRoute> routes = new LinkedList<>();
 
         for(var entry : travelMatrix.entrySet()){
-            distances.add(new SiteRoute(
+            routes.add(new SiteRoute(
                     entry.getKey().getKey(), //source
                     entry.getKey().getValue(), //destination
                     entry.getValue().getKey(), //distance
                     entry.getValue().getValue()) //duration
             );
         }
-        return distances;
+        try {
+            dao.insertAll(routes);
+        } catch (DalException e) {
+            throw new TransportException(e.getMessage(), e);
+        }
     }
 
     /**
-     * Returns a map of all the distances between the given site and the other sites.
+     * @return  a map of all the routes between the given site and the other sites.
+     * The map is of the form <br/> &lt;source,destination&gt; -> &lt;distance,duration&gt;.
      * @implNote this implementation calculates efficiently but requires a lot of different API calls.
      * this is the method that should be used when adding a single new site.
      */
     public Map<Pair<String,String>, Pair<Double,Double>> getTravelData(Site site, List<Site> otherSites) throws TransportException {
 
-        Map<Pair<String,String>, Pair<Double,Double>> distances = new HashMap<>();
+        Map<Pair<String,String>, Pair<Double,Double>> routes = new HashMap<>();
 
         Point newSitePoint = new Point(site.address(), new double[]{site.latitude(),site.longitude()});
 
@@ -72,24 +82,32 @@ public class SitesRoutesController {
                     .filter(result -> result.originIndex() != result.destinationIndex())
                     .toArray(Result[]::new);
 
-            distances.put(new Pair<>(site.address(),other.address()),
+            routes.put(new Pair<>(site.address(),other.address()),
                     new Pair<>(results[0].travelDistance(),results[0].travelDuration()));
-            distances.put(new Pair<>(other.address(),site.address()),
+            routes.put(new Pair<>(other.address(),site.address()),
                     new Pair<>(results[1].travelDistance(),results[1].travelDuration()));
         }
 
-        distances.put(new Pair<>(site.address(),site.address()),new Pair<>(0.0,0.0));
-        return distances;
+        routes.put(new Pair<>(site.address(),site.address()),new Pair<>(0.0,0.0));
+        return routes;
     }
 
-    public List<SiteRoute> createAllDistanceObjectsFirstTimeLoad(List<Site> sites) throws IOException {
+    /**
+     * This method is used to create all the route objects for the first time the program is run.
+     */
+    public void addAllRouteObjectsFirstTimeLoad(List<Site> sites) throws TransportException {
         Map<Pair<String,String>, Pair<Double,Double>> data = new HashMap<>();
 
         Point[] points = sites.stream()
                 .map(site -> new Point(site.address(), new double[]{site.latitude(),site.longitude()}))
                 .toArray(Point[]::new);
 
-        DistanceMatrixResponse response = bingAPI.distanceMatrix(Arrays.stream(points).toList());
+        DistanceMatrixResponse response = null;
+        try {
+            response = bingAPI.distanceMatrix(Arrays.stream(points).toList());
+        } catch (IOException e) {
+            throw new TransportException(e.getMessage(), e);
+        }
         Result[] results = response.resourceSets()[0].resources()[0].results();
         Arrays.stream(results).forEach(result -> {
             int originIndex = result.originIndex();
@@ -98,15 +116,46 @@ public class SitesRoutesController {
                     new Pair<>(result.travelDistance(),result.travelDuration()));
         });
 
-        List<SiteRoute> distances = new LinkedList<>();
+        List<SiteRoute> routes = new LinkedList<>();
 
         for(var entry : data.entrySet()){
-            distances.add(new SiteRoute(
+            routes.add(new SiteRoute(
                     entry.getKey().getKey(), //source
                     entry.getKey().getValue(), //destination
                     entry.getValue().getKey(), //distance
                     entry.getValue().getValue()) //duration
             );
+        }
+        try {
+            dao.insertAll(routes);
+        } catch (DalException e) {
+            throw new TransportException(e.getMessage(), e);
+        }
+    }
+
+    public Map<Pair<String,String>,Double> buildSitesTravelTimes(List<Site> route) throws TransportException {
+
+        HashMap<Pair<String,String>,Double> distances = new HashMap<>();
+        ListIterator<Site> destinationsIterator = route.listIterator();
+        Site curr = destinationsIterator.next();
+        Site next;
+
+        // map distances between following sites
+        while (destinationsIterator.hasNext()) {
+            next = destinationsIterator.next();
+
+            String currAddress = curr.address();
+            String nextAddress = next.address();
+
+            SiteRoute lookUpObject = SiteRoute.getLookupObject(currAddress,nextAddress);
+            double distance;
+            try {
+                distance = dao.select(lookUpObject).duration();
+            } catch (DalException e) {
+                throw new TransportException(e.getMessage(),e);
+            }
+            distances.put(new Pair<>(curr.name(),next.name()),distance);
+            curr = next;
         }
         return distances;
     }

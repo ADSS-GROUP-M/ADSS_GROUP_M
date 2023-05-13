@@ -3,18 +3,13 @@ package businessLayer.transportModule;
 import businessLayer.transportModule.bingApi.Point;
 import dataAccessLayer.dalAssociationClasses.transportModule.SiteRoute;
 import dataAccessLayer.transportModule.SitesDAO;
-import dataAccessLayer.transportModule.SitesRoutesDAO;
 import exceptions.DalException;
 import exceptions.TransportException;
-import javafx.util.Pair;
 import objects.transportObjects.Site;
 import serviceLayer.employeeModule.Services.EmployeesService;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.ListIterator;
-import java.util.Map;
 
 import static serviceLayer.employeeModule.Services.UserService.TRANSPORT_MANAGER_USERNAME;
 
@@ -24,14 +19,12 @@ import static serviceLayer.employeeModule.Services.UserService.TRANSPORT_MANAGER
  */
 public class SitesController {
     private final SitesDAO dao;
-    private final SitesRoutesDAO sitesRoutesDAO;
     private EmployeesService employeesService;
-    private final SitesRoutesController distancesController;
+    private final SitesRoutesController sitesRoutesController;
 
-    public SitesController(SitesDAO dao, SitesRoutesDAO sitesRoutesDAO, SitesRoutesController distancesController){
+    public SitesController(SitesDAO dao, SitesRoutesController sitesRoutesController){
         this.dao = dao;
-        this.sitesRoutesDAO = sitesRoutesDAO;
-        this.distancesController = distancesController;
+        this.sitesRoutesController = sitesRoutesController;
     }
 
     public void injectDependencies(EmployeesService employeesService) {
@@ -56,17 +49,13 @@ public class SitesController {
             List<Site> otherSites = getAllSites();
 
             // get latitude and longitude
-            Point coordinates = distancesController.getCoordinates(site);
+            Point coordinates = sitesRoutesController.getCoordinates(site);
             site = new Site(site,
                     coordinates.coordinates()[0],
                     coordinates.coordinates()[1]);
             dao.insert(site);
+            sitesRoutesController.addRoutes(site,otherSites);
 
-            if(otherSites.isEmpty() == false) {
-                sitesRoutesDAO.insertAll(distancesController.createDistanceObjects(site,otherSites));
-            } else {
-                sitesRoutesDAO.insert(new SiteRoute(site.name(),site.name(),0,0));
-            }
             if(site.siteType() == Site.SiteType.BRANCH){
                 employeesService.createBranch(TRANSPORT_MANAGER_USERNAME,site.name());
             }
@@ -166,68 +155,36 @@ public class SitesController {
         }
     }
 
-    public Map<Pair<String,String>,Double> buildSitesTravelTimes(List<String> route) throws TransportException {
-
-        HashMap<Pair<String,String>,Double> distances = new HashMap<>();
-        ListIterator<String> destinationsIterator = route.listIterator();
-        String curr = destinationsIterator.next();
-        String next;
-
-        // map distances between following sites
-        while (destinationsIterator.hasNext()) {
-            next = destinationsIterator.next();
-
-            String currAddress = getSite(curr).address();
-            String nextAddress = getSite(next).address();
-
-            SiteRoute lookUpObject = SiteRoute.getLookupObject(currAddress,nextAddress);
-            double distance;
-            try {
-                distance = sitesRoutesDAO.select(lookUpObject).duration();
-            } catch (DalException e) {
-                throw new TransportException(e.getMessage(),e);
-            }
-            distances.put(new Pair<>(curr,next),distance);
-            curr = next;
-        }
-        return distances;
-    }
-
     /**
      * this method is used only for the first time the system is loaded.
      * this method assumes that there are no sites in the system.
      */
     public void addAllSitesFirstTimeSystemLoad(List<Site> sites) throws TransportException {
 
-        try {
-            // get latitude and longitude
-            sites = sites.stream().map(site -> {
-                try {
-                    Point p = distancesController.getCoordinates(site);
-                    return new Site(site, p.latitude(), p.longitude());
-                } catch (TransportException e) {
-                    throw new RuntimeException(e);
-                }
-            }).toList();
-
-            sites.forEach(site -> {
-                try {
-                    dao.insert(site);
-                } catch (DalException e) {
-                    throw new RuntimeException(e);
-                }
-            });
-            List<SiteRoute> distanceObjects = distancesController.createAllDistanceObjectsFirstTimeLoad(sites);
-            sitesRoutesDAO.insertAll(distanceObjects);
-
-            for(Site site : sites){
-                if(site.siteType() == Site.SiteType.BRANCH){
-                    employeesService.createBranch(TRANSPORT_MANAGER_USERNAME,site.name());
-                }
+        // get latitude and longitude
+        sites = sites.stream().map(site -> {
+            try {
+                Point p = sitesRoutesController.getCoordinates(site);
+                return new Site(site, p.latitude(), p.longitude());
+            } catch (TransportException e) {
+                throw new RuntimeException(e);
             }
-        } catch (DalException | IOException e) {
-            throw new TransportException(e.getMessage(),e);
-        }
+        }).toList();
 
+        sites.forEach(site -> {
+            try {
+                dao.insert(site);
+            } catch (DalException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+        sitesRoutesController.addAllRouteObjectsFirstTimeLoad(sites);
+
+        for(Site site : sites){
+            if(site.siteType() == Site.SiteType.BRANCH){
+                employeesService.createBranch(TRANSPORT_MANAGER_USERNAME,site.name());
+            }
+        }
     }
 }

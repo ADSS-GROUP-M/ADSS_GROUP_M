@@ -30,7 +30,7 @@ class SitesControllerTest {
         EmployeesService employeesService = mock(EmployeesService.class);
         sitesRoutesDAO = mock(SitesRoutesDAO.class);
         sitesRoutesController = mock(SitesRoutesController.class);
-        controller = new SitesController(dao, sitesRoutesDAO, sitesRoutesController);
+        controller = new SitesController(dao, sitesRoutesController);
         controller.injectDependencies(employeesService);
 
         site = new Site("site1", "address1", "zone1", "phone1", "contact1", Site.SiteType.BRANCH);

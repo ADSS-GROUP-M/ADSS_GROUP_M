@@ -55,7 +55,7 @@ public class Product {
     }
 
     public void addProductItem(String serialNumber, String supplierID, double supplierPrice, double supplierDiscount,String location, LocalDateTime expirationDate){
-        productItems.put(serialNumber,new ProductItem(serialNumber,supplierID, supplierPrice, supplierDiscount, location, expirationDate));
+        productItems.put(serialNumber,new ProductItem(serialNumber,supplierID, supplierPrice, supplierDiscount, location, expirationDate, catalog_number, branch));
     }
 
 

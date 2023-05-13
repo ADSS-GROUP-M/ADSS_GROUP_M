@@ -57,4 +57,8 @@ public class ProductsDataMapper  extends AbstractDataMapper {
         }
         return false;
     }
+
+    public List<ProductDAO> getCachedProducts() {
+        return cachedProducts;
+    }
 }

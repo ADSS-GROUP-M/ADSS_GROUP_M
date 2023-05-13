@@ -19,9 +19,9 @@ public class CategoriesService {
         discountController = DiscountController.DiscountController();
     }
 
-    public Response createCategory(String name, Optional<List<String>> subcategories) {
+    public Response createCategory(Branch branch, Optional<List<String>> subcategories, String name) {
         try {
-            categoryController.createCategory(name,subcategories);
+            categoryController.createCategory(branch, subcategories, name);
             return new Response<>("Category created successfully");
         } catch (Exception e) {
             return Response.createErrorResponse("Error creating catagory: " + e.getMessage());
@@ -29,27 +29,27 @@ public class CategoriesService {
     }
 
 
-    public Response removeCategory(String name) {
+    public Response removeCategory(Branch branch, String name) {
         try {
-            categoryController.removeCategory(name);
+            categoryController.removeCategory(branch, name);
             return new Response<>("Category removed successfully");
         } catch (Exception e) {
             return Response.createErrorResponse("Error removing category: " + e.getMessage());
         }
     }
 
-    public Response addProductToCategory(String name, String catalog_number){
+    public Response addProductToCategory(Branch branch, String catalog_number, String name){
         try {
-            categoryController.addProductToCategory(name,catalog_number);
+            categoryController.addProductToCategory(branch, catalog_number, name);
             return new Response<>(String.format("catalog number: %s added to category: %s successfully",catalog_number,name));
         } catch (Exception e) {
             return Response.createErrorResponse("Error removing category: " + e.getMessage());
         }
     }
 
-    public Response removeProductFromCategory(String name, String catalog_number){
+    public Response removeProductFromCategory(Branch branch, String catalog_number, String name){
         try {
-            categoryController.removeProductFromCategory(name,catalog_number);
+            categoryController.removeProductFromCategory(branch,catalog_number, name);
             return new Response<>(String.format("catalog number: %s added to category: %s successfully",catalog_number,name));
         } catch (Exception e) {
             return Response.createErrorResponse("Error removing category: " + e.getMessage());

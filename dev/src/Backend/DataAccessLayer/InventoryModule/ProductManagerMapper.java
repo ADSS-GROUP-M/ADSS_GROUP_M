@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 public class ProductManagerMapper {
-    private Map<Branch, Map<String, List<Product>>> cachedProducts; //Map<Branch, Map<catalog_number, Product>
+    private Map<Branch, Map<String, Product>> cachedProducts; //Map<Branch, Map<catalog_number, Product>
     private Map<String, List<ProductItem>> cachedItems;
     private final ProductsDataMapper productsDataMapper;
     private final ProductItemDataMapper productItemDataMapper;
@@ -42,8 +42,7 @@ public class ProductManagerMapper {
                     product = new Product(dao.getCatalog_number(), dao.getName(), dao.getManufacture(), -1, null);
                 }
                 cachedProducts.computeIfAbsent(product.getBranch(), k -> new HashMap<>())
-                        .computeIfAbsent(product.getCatalogNumber(), k -> new ArrayList<>())
-                        .add(product);
+                        .put(product.getCatalogNumber(), product);
             }
         } catch (SQLException e) {
             //TODO: Handle the exception appropriately
@@ -64,9 +63,8 @@ public class ProductManagerMapper {
                 productsDataMapper.insert(catalog_number, name, manufacture);
                 productPairBranchDataMapper.insert(branch, catalog_number, originalStorePrice);
                 Product product = new Product(catalog_number, name, manufacture, originalStorePrice, Branch.valueOf(branch));
-                cachedProducts.computeIfAbsent(Branch.valueOf(branch), k -> new HashMap<>())
-                        .computeIfAbsent(catalog_number, k -> new ArrayList<>())
-                        .add(product);
+                cachedProducts.computeIfAbsent(product.getBranch(), k -> new HashMap<>())
+                        .put(product.getCatalogNumber(), product);
             }
         } catch (SQLException e) {
             //TODO: Handle the exception appropriately
@@ -79,8 +77,7 @@ public class ProductManagerMapper {
                 crateProduct(catalog_number,branch, name, manufacture, originalStorePrice);
                 Product product = new Product(catalog_number, name, manufacture, originalStorePrice, Branch.valueOf(branch));
                 cachedProducts.computeIfAbsent(product.getBranch(), k -> new HashMap<>())
-                        .computeIfAbsent(product.getCatalogNumber(), k -> new ArrayList<>())
-                        .add(product);
+                        .put(product.getCatalogNumber(), product);
                 productPairBranchDataMapper.insert(branch, catalog_number, originalStorePrice);
             }
 
@@ -103,18 +100,13 @@ public class ProductManagerMapper {
     }
 
     public boolean isProductExists(String catalogNumber) {
-        for (Map<String, List<Product>> branchProducts : cachedProducts.values()) {
-            for (List<Product> products : branchProducts.values()) {
-                for (Product product : products) {
-                    if (product.getCatalogNumber().equals(catalogNumber)) {
-                        return true;
-                    }
-                }
+        for (Map<String, Product> branchProducts : cachedProducts.values()) {
+            if (branchProducts.containsKey(catalogNumber)) {
+                return true;
             }
         }
         return false;
     }
-
 
     public boolean isItemExists(String serial_number, String catalog_number, String branch){
         for (List<ProductItem> productItemList : cachedItems.values()) {
@@ -128,4 +120,13 @@ public class ProductManagerMapper {
         }
         return false;
     }
+
+    public Map<Branch, Map<String, Product>> getCachedProducts(){
+        return this.cachedProducts;
+    }
+
+    public Map<String, List<ProductItem>> getCachedItems() {
+        return this.cachedItems;
+    }
+
 }

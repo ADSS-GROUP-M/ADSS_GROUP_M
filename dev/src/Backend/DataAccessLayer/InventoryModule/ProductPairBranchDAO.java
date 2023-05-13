@@ -12,6 +12,4 @@ public class ProductPairBranchDAO {
         this.original_store_price = original_store_price;
     }
 
-
-
 }

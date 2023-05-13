@@ -26,6 +26,7 @@ class ItemListsDAOTest {
 
     @BeforeEach
     void setUp() {
+        DalFactory.clearTestDB();
         HashMap<String, Integer> load = new HashMap<>(){{
             put("item1", 1);
             put("item2", 2);
@@ -41,34 +42,30 @@ class ItemListsDAOTest {
         try {
             factory = new DalFactory(TESTING_DB_NAME);
             dao = factory.itemListsDAO();
-            dao.clearTable();
-            dao.insert(itemList);
         } catch (DalException e) {
             fail(e);
         }
-        dao.clearCache();
     }
 
     @AfterEach
     void tearDown() {
-        try {
-            dao.selectAll().forEach(itemList -> {
-                try {
-                    dao.delete(itemList);
-                } catch (DalException e) {
-                    fail(e);
-                }
-            });
-        } catch (DalException e) {
-            fail(e);
-        }
-        dao = null;
-        itemList = null;
+        DalFactory.clearTestDB();
     }
 
     @Test
-    void select() {
+    void insert_and_select_no_cache() {
         try {
+            dao.insert(itemList);
+            dao.clearCache();
+            assertDeepEquals(itemList, dao.select(itemList));
+        } catch (DalException e) {
+            fail(e);
+        }
+    }
+    @Test
+    void insert_and_select_with_cache() {
+        try {
+            dao.insert(itemList);
             assertDeepEquals(itemList, dao.select(itemList));
         } catch (DalException e) {
             fail(e);
@@ -79,8 +76,7 @@ class ItemListsDAOTest {
     void selectAll() {
         // setup
         LinkedList<ItemList> itemLists = new LinkedList<>();
-        itemLists.add(itemList);
-        List.of(2,3,4,5,6).forEach(i -> {
+        List.of(1,2,3,4,5).forEach(i -> {
             try {
                 HashMap<String, Integer> load = new HashMap<>(){{
                     put("item1", 1);
@@ -112,67 +108,87 @@ class ItemListsDAOTest {
     }
 
     @Test
-    void insert() {
-        HashMap<String, Integer> load = new HashMap<>(){{
-            put("item1", 1);
-            put("item2", 2);
-            put("item3", 3);
-        }};
-        HashMap<String, Integer> unload = new HashMap<>(){{
-            put("item4", 4);
-            put("item5", 5);
-            put("item6", 6);
-        }};
-        ItemList itemList2 = new ItemList(2, load, unload);
-        try {
-            dao.insert(itemList2);
-            assertDeepEquals(itemList2, dao.select(itemList2));
-        } catch (DalException e) {
-            fail(e);
-        }
-    }
-
-    @Test
     void update() {
-        HashMap<String, Integer> load = new HashMap<>(){{
-            put("item1", 2); // should be updated
-            //put("item2", 2); // should be removed
-            put("item3", 3); // should not change
-            put("item7", 7); // should be added
-        }};
-        HashMap<String, Integer> unload = new HashMap<>(){{
-            put("item4", 2); // should be updated
-            //put("item5", 5); // should be removed
-            put("item6", 6); // should not change
-            put("item8", 8); // should be added
-        }};
-        ItemList itemList2 = new ItemList(itemList.id(), load, unload);
 
         try {
+            //set up
+            dao.insert(itemList);
+
+            //test
+            HashMap<String, Integer> load = new HashMap<>(){{
+                put("item1", 2); // should be updated
+                //put("item2", 2); // should be removed
+                put("item3", 3); // should not change
+                put("item7", 7); // should be added
+            }};
+            HashMap<String, Integer> unload = new HashMap<>(){{
+                put("item4", 2); // should be updated
+                //put("item5", 5); // should be removed
+                put("item6", 6); // should not change
+                put("item8", 8); // should be added
+            }};
+            ItemList itemList2 = new ItemList(itemList.id(), load, unload);
             dao.update(itemList2);
             assertDeepEquals(itemList2, dao.select(itemList2));
         } catch (DalException e) {
             fail(e);
         }
     }
+    @Test
+    void update_does_not_exist(){
+        assertThrows(DalException.class, () -> dao.update(ItemList.getLookupObject(5)));
+    }
 
     @Test
     void delete() {
         try {
-            dao.delete(itemList);
+            //set up
+            dao.insert(itemList);
+            dao.clearCache();
         } catch (DalException e) {
             fail(e);
         }
+
+        //test
+        assertDoesNotThrow(() -> dao.delete(itemList));
         assertThrows(DalException.class, () -> dao.select(itemList));
+    }
+
+    @Test
+    void delete_does_not_exist(){
+        assertThrows(DalException.class, () -> dao.delete(ItemList.getLookupObject(5)));
+    }
+
+    @Test
+    void exists_with_cache() {
+        try {
+            dao.insert(itemList);
+            assertTrue(dao.exists(itemList));
+        } catch (DalException e) {
+            fail(e);
+        }
+    }
+
+    @Test
+    void exists_no_cache() {
+        try {
+            dao.insert(itemList);
+            dao.clearCache();
+            assertTrue(dao.exists(itemList));
+        } catch (DalException e) {
+            fail(e);
+        }
     }
 
     @Test
     void getObjectFromResultSet() {
         SQLExecutor cursor = factory.cursor();
         try {
+            dao.insert(itemList);
+
             OfflineResultSet resultSet = cursor.executeRead("SELECT * FROM item_lists_items WHERE id = "+itemList.id());
             assertDeepEquals(itemList, dao.getObjectFromResultSet(resultSet));
-        } catch (SQLException e) {
+        } catch (SQLException | DalException e) {
             fail(e);
         }
     }

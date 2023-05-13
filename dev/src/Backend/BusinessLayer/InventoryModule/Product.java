@@ -127,7 +127,8 @@ public class Product {
     public String getName(){return this.name;}
     public String getManufacturer(){return this.manufacturer;}
     public Category getCategory(){return this.category;}
+    public String getCatalogNum() {return this.catalog_number;}
     public List<Category> getSubCategory(){return this.subCategory;}
-
+    public Branch getBranch() {return this.branch;}
     public int getNotificationMin(){return this.notificationMin;}
 }

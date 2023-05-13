@@ -11,12 +11,6 @@
   <component name="ChangeListManager">
     <list default="true" id="e454f93c-4ee8-4f4b-9a14-eaaf36aa303c" name="Changes" comment="commit">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test/Backend/BusinessLayer/ReportTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/Backend/BusinessLayer/ReportTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/InventoryModule/CategoryController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/BusinessLayer/InventoryModule/CategoryController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/InventoryModule/DiscountController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/BusinessLayer/InventoryModule/DiscountController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/InventoryModule/ProductController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/BusinessLayer/InventoryModule/ProductController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/ServiceLayer/InventoryModule/CategoriesService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/ServiceLayer/InventoryModule/CategoriesService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/InventoryModule/CategoriesMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/InventoryModule/CategoriesMenu.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,7 +28,7 @@
     </option>
   </component>
   <component name="Git.Merge.Settings">
-    <option name="BRANCH" value="Suppliers_Inventory_208671990_207161605_324988880_325294429" />
+    <option name="BRANCH" value="origin/Suppliers_Inventory_Or" />
   </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">

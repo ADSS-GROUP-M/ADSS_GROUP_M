@@ -2,7 +2,9 @@ package Backend.BusinessLayer.InventoryModule;
 
 import Backend.BusinessLayer.BusinessLayerUsage.Branch;
 import Backend.BusinessLayer.SuppliersModule.OrderController;
-
+import Backend.DataAccessLayer.InventoryModule.ProductDAO;
+import Backend.DataAccessLayer.InventoryModule.ProductManagerMapper;
+import Backend.DataAccessLayer.SuppliersModule.ProductsDataMapper;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,12 +16,13 @@ public class ProductController {
     Map<Branch, Map<String, Product>> products; // <branch, <catalog_number, Product>
     Map<Branch, List<String>> orders; // <branch, <catalog_number>
     DiscountController DCController;
+    ProductManagerMapper productManagerMapper;
 
     //create the controller as Singleton
     private static ProductController productController = null;
     private ProductController() {
-        //Map<Branch, Map<catalog_number, Product>
-        this.products = new HashMap<Branch, Map<String, Product>>();
+        productManagerMapper = ProductManagerMapper.getInstance();
+        products = productManagerMapper.getCachedProducts();
         this.orders = new HashMap<Branch, List<String>>();
         this.DCController = DiscountController.DiscountController();
     }

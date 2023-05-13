@@ -157,7 +157,7 @@ class TransportsDAOTest {
 
     @Test
     void selectAll() {
-        
+
         //set up
         LinkedList<Transport> transports = new LinkedList<>();
         List.of(1,2,3,4,5).forEach(
@@ -202,6 +202,32 @@ class TransportsDAOTest {
         }
     }
 
+    @Test
+    void select_from_cache() {
+        try {
+            //set up
+            transportsDAO.insert(transport);
+            Transport selected = transportsDAO.select(transport);
+            assertDeepEquals(transport, selected);
+        } catch (DalException e) {
+            fail(e);
+        }
+    }
+
+    @Test
+    void select_does_not_exist(){
+        assertThrows(DalException.class, () -> transportsDAO.select(transport));
+    }
+
+    @Test
+    void select_all_does_not_exist(){
+        try {
+            assertEquals(0, transportsDAO.selectAll().size());
+        } catch (DalException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
     @Test
     void update() {
@@ -236,6 +262,11 @@ class TransportsDAOTest {
     }
 
     @Test
+    void update_does_not_exist() {
+        assertThrows(DalException.class, () -> transportsDAO.update(transport));
+    }
+
+    @Test
     void delete() {
         try {
             //set up
@@ -251,6 +282,91 @@ class TransportsDAOTest {
             fail(e);
         }
     }
+
+    @Test
+    void delete_does_not_exist() {
+        assertThrows(DalException.class, () -> transportsDAO.delete(transport));
+    }
+
+    @Test
+    void exists_not_in_cache(){
+        try {
+            //set up
+            transportsDAO.insert(transport);
+            transportsDAO.clearCache();
+
+            //test
+            assertTrue(transportsDAO.exists(transport));
+        } catch (DalException e) {
+            fail(e);
+        }
+    }
+
+    @Test
+    void exists_in_cache(){
+        try {
+            //set up
+            transportsDAO.insert(transport);
+
+            //test
+            assertTrue(transportsDAO.exists(transport));
+        } catch (DalException e) {
+            fail(e);
+        }
+    }
+
+
+    @Test
+    void exists_does_not_exist(){
+        try {
+            assertFalse(transportsDAO.exists(transport));
+        } catch (DalException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Test
+    void getCounter(){
+        try {
+            assertEquals(1, transportsDAO.selectCounter());
+        } catch (DalException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Test
+    void incrementCounter(){
+        try {
+            transportsDAO.incrementCounter();
+            assertEquals(2, transportsDAO.selectCounter());
+            transportsDAO.incrementCounter();
+            assertEquals(3, transportsDAO.selectCounter());
+        } catch (DalException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    @Test
+    void resetCounter(){
+        try {
+            transportsDAO.incrementCounter();
+            transportsDAO.incrementCounter();
+            transportsDAO.resetCounter();
+            assertEquals(1, transportsDAO.selectCounter());
+        } catch (DalException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Test
+    void insert_counter(){
+        try{
+            transportsDAO.insertCounter(5);
+            assertEquals(5, transportsDAO.selectCounter());
+        } catch (DalException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
     private void assertDeepEquals(Transport transport1, Transport transport2) {
         assertEquals(transport1.id(), transport2.id());

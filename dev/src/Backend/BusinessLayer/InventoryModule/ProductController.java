@@ -145,7 +145,7 @@ public class ProductController {
         if(checkIfProductExist(branch,catalog_number)){
             Product product = products.get(branch).get(catalog_number);
             if(newName != null){
-                productManagerMapper.updateProduct(catalog_number,branch.name(),newName,product.getManufacturer(),product.getOriginalStorePrice());
+                productManagerMapper.updateProduct(catalog_number,branch.name(),newName,product.getManufacturer(),product.getOriginalStorePrice(),-1);
                 product.setName(newName);
             }
             if(newManufacturer != null){product.setManufacturer(newManufacturer);}

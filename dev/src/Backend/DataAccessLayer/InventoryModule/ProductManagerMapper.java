@@ -61,6 +61,7 @@ public class ProductManagerMapper {
         try {
             if(!isProductExists(catalog_number)){
                 productsDataMapper.insert(catalog_number, name, manufacture);
+                // TODO add min notification?
                 productPairBranchDataMapper.insert(branch, catalog_number, originalStorePrice);
                 Product product = new Product(catalog_number, name, manufacture, originalStorePrice, Branch.valueOf(branch));
                 cachedProducts.computeIfAbsent(product.getBranch(), k -> new HashMap<>())
@@ -98,11 +99,11 @@ public class ProductManagerMapper {
     }
 
     //TODO
-    public void updateProduct(String catalog_number, String branch, String name, String manufacture, double originalStorePrice){
+    public void updateProduct(String catalog_number, String branch, String name, String manufacture, double originalStorePrice, int newMinAmount){
         try {
             if(isProductExists(catalog_number)){
-
                 productsDataMapper.update(catalog_number, name, manufacture);
+                productPairBranchDataMapper.update(branch, catalog_number, originalStorePrice,newMinAmount);
                 productPairBranchDataMapper.insert(branch, catalog_number, originalStorePrice);
                 Product product = new Product(catalog_number, name, manufacture, originalStorePrice, Branch.valueOf(branch));
                 cachedProducts.computeIfAbsent(product.getBranch(), k -> new HashMap<>())

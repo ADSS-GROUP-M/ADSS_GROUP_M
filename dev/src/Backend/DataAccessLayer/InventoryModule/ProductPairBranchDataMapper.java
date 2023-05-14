@@ -32,6 +32,22 @@ public class ProductPairBranchDataMapper extends AbstractDataMapper {
         }
     }
 
+    public void update(String branch_name, String product_catalog_number, double original_store_price, int notification_min){
+        try {
+            if (isExists(product_catalog_number, branch_name)) {
+                if (original_store_price != -1)
+                    sqlExecutor.executeWrite(String.format("UPDATE %s SET original_store_price = '%s' WHERE catalog_number = '%s' and branch = '%s'", tableName, original_store_price, product_catalog_number, branch_name));
+                if (notification_min != -1) {
+                    sqlExecutor.executeWrite(String.format("UPDATE %s SET notification_min = '%s' WHERE catalog_number = '%s' and branch = '%s'", tableName, notification_min, product_catalog_number, branch_name));
+                }
+            }
+        }
+        catch (SQLException e){
+            //TODO: Handle the exception appropriately
+        }
+
+    }
+
     public List<ProductPairBranchDAO> getCachedProductsPairBranch() {
         return cachedProductsPairBranch;
     }

@@ -43,7 +43,6 @@ public class CategoryController {
             }
             categories.put(categoryName,new Category(categoryName,subcategories));
         }
-        categories.get(branch).put(categoryName,new Category(categoryName,subcategories));
     }
 
     public void removeCategory(Branch branch, String categoryName){

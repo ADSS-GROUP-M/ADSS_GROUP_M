@@ -26,26 +26,27 @@ public class ProductsDataMapper  extends AbstractDataMapper {
     }
 
     public void insert(String catalog_number, String name, String manufacture) throws SQLException {
-        if (!isExists(catalog_number)){
-            String columnsString = String.join(", ", columns);
-            sqlExecutor.executeWrite(String.format("INSERT INTO %s (%s) VALUES('%s', %s, '%s')",
-                    tableName, columnsString, name, catalog_number, manufacture));
+        try {
+            if (!isExists(catalog_number)) {
+                String columnsString = String.join(", ", columns);
+                sqlExecutor.executeWrite(String.format("INSERT INTO %s (%s) VALUES('%s', %s, '%s')",
+                        tableName, columnsString, name, catalog_number, manufacture));
 //            ProductDAO productDAO = new ProductDAO(catalog_number, name);
 //            productDAO.setManufacture(manufacture);
 //            cachedProducts.add(productDAO);
+            }
+        }
+        catch (SQLException e){
+            //TODO: Handle the exception appropriately
         }
     }
 
     public void update(String catalog_number, String newName, String newManufacture) throws SQLException {
         if (!isExists(catalog_number)){
             if(newName != null)
-                //TODO : add branch
-                sqlExecutor.executeWrite(String.format("UPDATE %s SET name = '%s' WHERE catalog_number = '%s' and branch = '%s'", tableName,newName,catalog_number,catalog_number));
+                sqlExecutor.executeWrite(String.format("UPDATE %s SET name = '%s' WHERE catalog_number = '%s'", tableName,newName,catalog_number));
             if(newManufacture != null)
-                sqlExecutor.executeWrite(String.format("UPDATE %s SET manufacture = '%s' WHERE catalog_number = '%s' and branch = '%s'", tableName,newManufacture,catalog_number,catalog_number));
-//            ProductDAO productDAO = new ProductDAO(catalog_number, name);
-//            productDAO.setManufacture(manufacture);
-//            cachedProducts.add(productDAO);
+                sqlExecutor.executeWrite(String.format("UPDATE %s SET manufacture = '%s' WHERE catalog_number = '%s'", tableName,newManufacture,catalog_number));
         }
     }
 

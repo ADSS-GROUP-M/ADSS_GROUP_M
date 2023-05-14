@@ -51,18 +51,18 @@ public class CategoryManagerMapper{
         }
     }
 
-//    public void removeCategory(String category_name) {
-//        try {
-//            categoryDataMapper.delete(category_name);
-//            if (!sub_category.isEmpty()) {
-//                for (Category sub : sub_category) {
-//                    categoryHierarchyDataMapper.insert(category_name, sub.getCategoryName());
-//                }
-//            }
-//        } catch (SQLException e) {
-//            //TODO: Handle the exception appropriately
-//        }
-//    }
+    public void removeCategory(String category_name, List<Category> sub_category) {
+        try {
+            categoryDataMapper.delete(category_name);
+            if (!sub_category.isEmpty()) {
+                for (Category sub : sub_category) {
+                    categoryHierarchyDataMapper.insert(category_name, sub.getCategoryName());
+                }
+            }
+        } catch (SQLException e) {
+            //TODO: Handle the exception appropriately
+        }
+    }
 
     public Map<String, Category> getCached_categories(){
         return this.cached_categories;

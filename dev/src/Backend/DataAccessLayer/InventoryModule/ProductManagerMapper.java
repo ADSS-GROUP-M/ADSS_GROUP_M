@@ -102,7 +102,7 @@ public class ProductManagerMapper {
     public void updateProduct(String catalog_number, String branch, String name, String manufacture, double originalStorePrice, int newMinAmount){
         try {
             if(isProductExists(catalog_number)){
-                productsDataMapper.update(catalog_number, name, manufacture);
+                productsDataMapper.update(catalog_number, name, manufacture,null);
                 productPairBranchDataMapper.update(branch, catalog_number, originalStorePrice,newMinAmount);
             }
         } catch (SQLException e) {
@@ -120,8 +120,24 @@ public class ProductManagerMapper {
         }
     }
 
-    public void addCategoryToProduct() {
+    public void addCategoryToProduct(String catalog_number, String category_name) {
+        try {
+            if (isProductExists( catalog_number)) {
+                productsDataMapper.update(catalog_number,null,null,category_name);
+            }
+        } catch (SQLException e) {
+            // TODO: Handle the exception appropriately
+        }
+    }
 
+    public void removeCategoryFromProduct(String catalog_number) {
+        try {
+            if (isProductExists( catalog_number)) {
+                productsDataMapper.update(catalog_number,null,null,"");
+            }
+        } catch (SQLException e) {
+            // TODO: Handle the exception appropriately
+        }
     }
 
     public boolean isProductExists(String catalogNumber) {

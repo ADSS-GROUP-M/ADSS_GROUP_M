@@ -41,12 +41,14 @@ public class ProductsDataMapper  extends AbstractDataMapper {
         }
     }
 
-    public void update(String catalog_number, String newName, String newManufacture) throws SQLException {
+    public void update(String catalog_number, String newName, String newManufacture,String category) throws SQLException {
         if (!isExists(catalog_number)){
             if(newName != null)
                 sqlExecutor.executeWrite(String.format("UPDATE %s SET name = '%s' WHERE catalog_number = '%s'", tableName,newName,catalog_number));
             if(newManufacture != null)
                 sqlExecutor.executeWrite(String.format("UPDATE %s SET manufacture = '%s' WHERE catalog_number = '%s'", tableName,newManufacture,catalog_number));
+            if(category != null)
+                sqlExecutor.executeWrite(String.format("UPDATE %s SET category = '%s' WHERE catalog_number = '%s'", tableName,newManufacture,catalog_number));
         }
     }
 

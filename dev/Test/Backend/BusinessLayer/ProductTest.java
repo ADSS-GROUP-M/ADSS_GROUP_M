@@ -37,8 +37,10 @@ public class ProductTest {
     public void setUp() {
         //create new product
         productController.createProduct(catalog_number,branch,catalog_name,manufacturer,storePrice);
-        productController.createProductItem();
-//        serialNumbers.add(serial_number);
+        List<String> serial_numbers = new ArrayList<>();
+        serial_numbers.add(serial_number);
+        productController.createProductItem(serial_numbers,catalog_number,branch,supplierId,supplierPrice,supplierDiscount, location,expireDate, "y");
+
     }
 
     @After

@@ -65,7 +65,7 @@ public class IntegrationTest {
     public void calcMinAccordingToSupplierInf(){
         //TODO: update supplier days
         productController.updateProduct(branch,null,catalog_number,null,-1,5);
-        productController.updateProductItem(branch,-1,"0",catalog_number,1,null,-1,null);
+        productController.updateProductItem(branch,-1,"0",catalog_number,1,null,-1,-1,-1,null);
         // TODO: compere between the min value before and now
         // Assert.assertTrue();
     }

@@ -57,7 +57,7 @@ public class ProductController {
             if(!orders.get(branch).contains(catalog_number)) {
                 //TODO: order automatic
                 int inventory_amount = productController.getMinNotification(branch,catalog_number);
-                OrderController orderController = new OrderController();
+                OrderController orderController = OrderController.getInstance();
 //                orderController.order()
                 orders.get(branch).add(catalog_number);
             }
@@ -110,7 +110,7 @@ public class ProductController {
             if(isSold != -1){
                 productItem.reportAsSold(DCController.calcSoldPrice(branch,catalog_number,product.getOriginalStorePrice()));
                 // TODO: need to add supplier function with the days
-                OrderController orderController = new OrderController();
+                OrderController orderController = OrderController.getInstance();
                 updateMinAmount(branch,catalog_number,5);
             }
             if(newSupplier != null){productItem.setSupplierID(newSupplier);}

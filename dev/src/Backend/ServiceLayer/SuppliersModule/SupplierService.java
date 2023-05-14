@@ -9,6 +9,7 @@ import Backend.BusinessLayer.SuppliersModule.Discounts.Discount;
 import Backend.BusinessLayer.SuppliersModule.Discounts.PercentageDiscount;
 import com.google.gson.Gson;
 
+import java.sql.SQLException;
 import java.util.*;
 
 public class SupplierService {
@@ -24,10 +25,15 @@ public class SupplierService {
 
     public String addSupplier(String name, String bnNumber, BankAccount bankAccount, String paymentMethod,
                               List<String> fields, Map<String, Pair<String, String>> contactsInfo,
-                              List<Product> productList, DeliveryAgreement deliveryAgreement){
-        supplierController.addSupplier(name,bnNumber,bankAccount,paymentMethod,fields, contactsInfo);
-        agreementController.addAgreement(bnNumber, productList, deliveryAgreement);
-        return gson.toJson(new Response<>("new Supplier Registered!", false));
+                              List<Product> productList, DeliveryAgreement deliveryAgreement) {
+        try {
+            supplierController.addSupplier(name,bnNumber,bankAccount,paymentMethod,fields, contactsInfo);
+            agreementController.addAgreement(bnNumber, productList, deliveryAgreement);
+            return gson.toJson(new Response<>("new Supplier Registered!", false));
+        }
+        catch (Exception e){
+            return gson.toJson(new Response<>(e.getMessage(), true));
+        }
     }
 
     public String removeSupplier(String bnNumber){
@@ -42,7 +48,7 @@ public class SupplierService {
 
     public String setSupplierName(String bnNumber, String name){
         try {
-            supplierController.getSupplier(bnNumber).setName(name);
+            supplierController.setName(bnNumber, name);
             return gson.toJson(new Response<String>("supplier's name is set!", false));
         }
         catch (Exception e){
@@ -52,10 +58,7 @@ public class SupplierService {
 
     public String setSupplierBnNumber(String bnNumber, String newBnNumber){
         try {
-            Supplier supplier = supplierController.getSupplier(bnNumber);
-            supplierController.removeSupplier(bnNumber);
-            supplier.setBnNumber(newBnNumber);
-            supplierController.addSupplier(bnNumber, supplier);
+            supplierController.setBnNumber(bnNumber, newBnNumber);
             return gson.toJson(new Response<String>("supplier's bn number is set!", false));
         }
         catch (Exception e){
@@ -65,7 +68,7 @@ public class SupplierService {
 
     public String setSupplierBankAccount(String bnNumber, String bank, String branch, String accountNumber){
         try {
-            supplierController.getSupplier(bnNumber).setBankAccount(bank, branch, accountNumber);
+            supplierController.setBankAccount(bnNumber, bank, branch, accountNumber);
             return gson.toJson(new Response<String>("supplier's bank account is set!", false));
         }
         catch (Exception e){
@@ -75,7 +78,7 @@ public class SupplierService {
 
     public String setSupplierPaymentMethod(String bnNumber, String paymentMethod){
         try {
-            supplierController.getSupplier(bnNumber).setPaymentMethod(paymentMethod);
+            supplierController.setPaymentMethod(bnNumber, paymentMethod);
             return gson.toJson(new Response<String>("supplier's payment method is set!", false));
         }
         catch (Exception e){
@@ -83,10 +86,10 @@ public class SupplierService {
         }
     }
 
-    public String removeContactInfo(String bnNumber, String contactsName){
+    public String removeContactInfo(String bnNumber, String contactsEmail){
         try {
-            supplierController.getSupplier(bnNumber).removeContactInfo(contactsName);
-            return gson.toJson(new Response<String>("contact " + contactsName + " removed!", false));
+            supplierController.removeContactInfo(bnNumber, contactsEmail);
+            return gson.toJson(new Response<String>("contact " + contactsEmail + " removed!", false));
         }
         catch (Exception e){
             return gson.toJson(new Response<>(e.getMessage(), true));
@@ -95,7 +98,7 @@ public class SupplierService {
 
     public String addContactInfo(String bnNumber, String contactName, String email, String phoneNumber){
         try {
-            supplierController.getSupplier(bnNumber).addContactInfo(contactName, email, phoneNumber);
+            supplierController.addContactInfo(bnNumber, contactName, email, phoneNumber);
             return gson.toJson(new Response<String>("contact info is added!", false));
         }
         catch (Exception e){
@@ -105,7 +108,7 @@ public class SupplierService {
 
     public String setContactsEmail(String bnNumber, String email, String newEmail){
         try {
-            supplierController.getSupplier(bnNumber).setContactsEmail(email, newEmail);
+            supplierController.setContactsEmail(bnNumber, email, newEmail);
             return gson.toJson(new Response<String>("contact email is edited!", false));
         }
         catch (Exception e){
@@ -115,7 +118,7 @@ public class SupplierService {
 
     public String setContactsPhoneNumber(String bnNumber, String email, String phoneNumber){
         try {
-            supplierController.getSupplier(bnNumber).setContactsPhoneNumber(email, phoneNumber);
+            supplierController.setContactsPhoneNumber(bnNumber, email, phoneNumber);
             return gson.toJson(new Response<String>("contact phone number is edited!", false));
         }
         catch (Exception e){
@@ -123,18 +126,11 @@ public class SupplierService {
         }
     }
 
-    public String getOrderHistory(String bnNumber){
-        try {
-            return gson.toJson(new Response<List<Order>>(supplierController.getSupplier(bnNumber).getOrderHistory()));
-        }
-        catch (Exception e){
-            return gson.toJson(new Response<>(e.getMessage(), true));
-        }
-    }
+
 
     public String addField(String bnNumber, String field){
         try {
-            supplierController.getSupplier(bnNumber).addField(field);
+            supplierController.addField(bnNumber, field);
             return gson.toJson(new Response<String>("field was added!", false));
         }
         catch (Exception e){
@@ -144,7 +140,7 @@ public class SupplierService {
 
     public String removeField(String bnNumber, String field){
         try {
-            supplierController.getSupplier(bnNumber).removeField(field);
+            supplierController.removeField(bnNumber, field);
             return gson.toJson(new Response<String>("field was removed!", false));
         }
         catch (Exception e){
@@ -163,7 +159,7 @@ public class SupplierService {
 
     public String getSuppliersName(String bnNumber){
         try {
-            return gson.toJson(new Response<>(supplierController.getSupplier(bnNumber).getName(), false));
+            return gson.toJson(new Response<>(supplierController.getName(bnNumber), false));
         }
         catch (Exception e){
             return gson.toJson(new Response<>(e.getMessage(), true));

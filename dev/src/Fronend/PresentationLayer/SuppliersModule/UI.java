@@ -363,9 +363,9 @@ public class UI {
         try {
             System.out.println("enter bn number of the supplier");
             String bnNumber = sc.nextLine();
-            System.out.println("enter contact name");
-            String name = sc.nextLine();
-            System.out.println(gson.fromJson(supplierService.removeContactInfo(bnNumber, name), Response.class).getMsg());
+            System.out.println("enter contact email");
+            String email = sc.nextLine();
+            System.out.println(gson.fromJson(supplierService.removeContactInfo(bnNumber, email), Response.class).getMsg());
         }
         catch (Exception e){
             System.out.println("invalid input");
@@ -703,7 +703,7 @@ public class UI {
             System.out.println("enter bn number of the supplier");
             String bnNumber = sc.nextLine();
             Type responseOfList = new TypeToken<Response<List<Order>>>(){}.getType();
-            List<Order> orders = ((Response<List<Order>>)gson.fromJson(supplierService.getOrderHistory(bnNumber), responseOfList)).getReturnValue();
+            List<Order> orders = ((Response<List<Order>>)gson.fromJson(orderService.getOrderHistory(bnNumber), responseOfList)).getReturnValue();
             if(orders == null)
                 System.out.println("no orders have been ordered from this supplier");
             else {

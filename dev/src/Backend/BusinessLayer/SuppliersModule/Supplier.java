@@ -44,11 +44,11 @@ public class Supplier {
         this.bnNumber = bnNumber;
     }
 
-    public void removeContactInfo(String contactsName) {
-        contactsInfo.remove(contactsName);
+    public void removeContactInfo(String contactsEmail) {
+        contactsInfo.remove(contactsEmail);
     }
     public void addContactInfo(String contactName, String email, String phoneNumber){
-        this.contactsInfo.put(email, new Pair<>(name, phoneNumber));
+        this.contactsInfo.put(email, new Pair<>(contactName, phoneNumber));
     }
 
     public void setContactsEmail(String email, String newEmail){
@@ -71,11 +71,6 @@ public class Supplier {
         fields.remove(field);
     }
 
-    public void addOrder(Order order){
-        if(orderHistory == null)
-            orderHistory = new LinkedList<>();
-        orderHistory.add(order);
-    }
     public String getBnNumber(){
         return bnNumber;
     }

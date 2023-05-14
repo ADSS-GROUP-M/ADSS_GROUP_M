@@ -11,20 +11,31 @@ import java.util.stream.Collectors;
 
 
 public class OrderController {
+    private static OrderController instance;
     private SupplierController supplierController;
     private AgreementController agreementController;
     private BillOfQuantitiesController billOfQuantitiesController;
-    public OrderController(){
+
+    private Map<String, List<Order>> suppliersOrderHistory;
+    private OrderController(){
         this.supplierController = SupplierController.getInstance();
         this.agreementController = AgreementController.getInstance();
         billOfQuantitiesController = BillOfQuantitiesController.getInstance();
+
+        suppliersOrderHistory = new HashMap<>();
+    }
+
+    public static OrderController getInstance(){
+        if(instance == null)
+            instance = new OrderController();
+        return instance;
     }
     /***
      *
      * @param order maps between productId to the amount to be ordered
      * @return map between supplier to the products he supplies from the order
      */
-    public Map<String, Pair<Map<String, Integer>, Double>> order(Map<String, Integer> order, Branch branch){
+    public Map<String, Pair<Map<String, Integer>, Double>> order(Map<String, Integer> order, Branch branch) throws SQLException {
         List<Supplier> suppliers = supplierController.getCopyOfSuppliers();
         Map<String, Map<Supplier, Integer>> cantBeOrderedByOneSupplier = findProductsWithoutSupplierToFullySupply(order, suppliers);
         Map<String, Integer> notOneSupplierOrder = new HashMap<>();
@@ -55,7 +66,7 @@ public class OrderController {
             Supplier supplier = supplierToOrder.getKey();
             double price = computePriceAfterDiscount(supplier, supplierToOrder.getValue());
             finalOrderWithPrice.put(supplier.getBnNumber(), new Pair<>(supplierToOrder.getValue(), price));
-            supplier.addOrder(new Order(supplierToOrder.getValue()));
+            addSuppliersOrder(supplier.getBnNumber(), new Order(supplierToOrder.getValue()));
         }
 
         return finalOrderWithPrice;
@@ -276,6 +287,16 @@ public class OrderController {
     public int getDaysForOrder(String catalogNumber, Branch branch){
         //Todo
         return 0;
+    }
+
+    public void addSuppliersOrder(String bnNumber, Order order){
+        if(!suppliersOrderHistory.containsKey(bnNumber))
+            suppliersOrderHistory.put(bnNumber, new LinkedList<>());
+        suppliersOrderHistory.get(bnNumber).add(order);
+    }
+
+    public List<Order> getOrderHistory(String bnNumber){
+        return suppliersOrderHistory.get(bnNumber);
     }
 
 }

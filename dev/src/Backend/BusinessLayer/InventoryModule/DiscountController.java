@@ -1,6 +1,7 @@
 package Backend.BusinessLayer.InventoryModule;
 
 import Backend.BusinessLayer.BusinessLayerUsage.Branch;
+import Backend.DataAccessLayer.InventoryModule.StoreProductDiscountDataMapper;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -12,7 +13,6 @@ public class DiscountController {
 
     //Map<branch,Map<catalog_number, List<ProductStoreDiscount>>>
     public Map<Branch, Map<String,List<ProductStoreDiscount>>> storeDiscounts;
-
 
     //create the controller as Singleton
     private static DiscountController discountController = null;
@@ -28,7 +28,6 @@ public class DiscountController {
     private Boolean checkIfBranchExist(Branch branch){
         return storeDiscounts.containsKey(branch.name());
     }
-
 
     private Boolean checkIfProductExist(Branch branch, String catalog_number){
         if(checkIfBranchExist(branch))

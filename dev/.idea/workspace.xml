@@ -10,15 +10,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e454f93c-4ee8-4f4b-9a14-eaaf36aa303c" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/DiscountManagerMapper.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test/Backend/BusinessLayer/IntegrationTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/Backend/BusinessLayer/IntegrationTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test/Backend/BusinessLayer/ProductItemTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/Backend/BusinessLayer/ProductItemTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test/Backend/BusinessLayer/ProductTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/Backend/BusinessLayer/ProductTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test/Backend/BusinessLayer/ReportTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/Backend/BusinessLayer/ReportTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/InventoryModule/CategoryController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/BusinessLayer/InventoryModule/CategoryController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/InventoryModule/DiscountController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/BusinessLayer/InventoryModule/DiscountController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/InventoryModule/ProductController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/BusinessLayer/InventoryModule/ProductController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/InventoryModule/ProductStoreDiscount.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/BusinessLayer/InventoryModule/ProductStoreDiscount.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/CategoryManagerMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/CategoryManagerMapper.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/ProductManagerMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/ProductManagerMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/ProductsDataMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/ProductsDataMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/StoreProductDiscountDataMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/StoreProductDiscountDataMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/super_lee.sqlite" beforeDir="false" afterPath="$PROJECT_DIR$/super_lee.sqlite" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

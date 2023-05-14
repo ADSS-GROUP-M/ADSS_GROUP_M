@@ -24,7 +24,6 @@ public class ProductManagerMapper {
         productsDataMapper = ProductsDataMapper.getInstance();
         productItemDataMapper = ProductItemDataMapper.getInstance();
         productPairBranchDataMapper = ProductPairBranchDataMapper.getInstance();
-
         try {
             cachedItems = productItemDataMapper.initializeCache();
             cachedProducts = new HashMap<>();

@@ -228,8 +228,6 @@ public class ProductController {
         return shortagesProductsRecord;
     }
 
-
-
     // Report defective function - inorder to receive all defective product details
     public List<Record> getDefectiveProducts(Branch branch){
         List<Record> defectiveRecords = new ArrayList<Record>();

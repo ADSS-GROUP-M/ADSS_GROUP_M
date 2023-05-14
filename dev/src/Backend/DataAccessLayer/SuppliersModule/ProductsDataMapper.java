@@ -21,7 +21,7 @@ public class ProductsDataMapper  extends AbstractDataMapper {
     public void insert(String catalog_number, String name, String manufacture) throws SQLException {
         if (!isExists(catalog_number)){
             String columnsString = String.join(", ", columns);
-            sqlExecutor.executeWrite(String.format("INSERT INTO %s (%s) VALUES('%s', %s, '%s')",
+            sqlExecutor.executeWrite(String.format("INSERT INTO %s (%s) VALUES('%s', '%s', '%s')",
                     tableName, columnsString, name, catalog_number, manufacture));
             ProductDAO productDAO = new ProductDAO(catalog_number, name);
             productDAO.setManufacture(manufacture);
@@ -31,7 +31,7 @@ public class ProductsDataMapper  extends AbstractDataMapper {
 
     public void delete(String catalog_number) throws SQLException {
         if (isExists(catalog_number)) {
-            sqlExecutor.executeWrite(String.format("DROP FROM %s WHERE catalog_number = %s", tableName, catalog_number));
+            sqlExecutor.executeWrite(String.format("DELETE FROM %s WHERE catalog_number = '%s'", tableName, catalog_number));
             cachedProducts.removeIf(productDAO -> productDAO.getCatalog_number().equals(catalog_number));
         }
     }

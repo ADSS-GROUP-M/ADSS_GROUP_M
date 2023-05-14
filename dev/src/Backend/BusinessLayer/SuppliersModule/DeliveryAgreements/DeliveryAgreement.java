@@ -8,6 +8,10 @@ public abstract class DeliveryAgreement {
     }
     public void setHavaTransport(boolean havaTransport){this.havaTransport = havaTransport;}
 
+    public boolean getHavaTransport() {
+        return havaTransport;
+    }
+
     @Override
     public String toString() {
         return "DELIVERY AGREEMENT:\n\t\t\ttransport: " + havaTransport;

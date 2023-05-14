@@ -1,7 +1,10 @@
 package Backend.BusinessLayer.SuppliersModule;
 
 import Backend.BusinessLayer.BusinessLayerUsage.Branch;
+import Backend.DataAccessLayer.SuppliersModule.OrderHistoryDataMappers.OrderHistoryDataMapper;
+import Backend.DataAccessLayer.dalUtils.DalException;
 
+import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -9,18 +12,35 @@ import java.util.stream.Collectors;
 
 
 public class OrderController {
+    private static OrderController instance;
     private SupplierController supplierController;
-
-
-    public OrderController(){
+    private AgreementController agreementController;
+    private BillOfQuantitiesController billOfQuantitiesController;
+    private OrderHistoryDataMapper orderHistoryDataMapper;
+    /**
+     * maps between supplier bn number to a pair of <number of orders - counter, List - of his order history>
+     */
+    private Map<String, Pair<Integer, List<Order>>> suppliersOrderHistory;
+    private OrderController(){
         this.supplierController = SupplierController.getInstance();
+        this.agreementController = AgreementController.getInstance();
+        billOfQuantitiesController = BillOfQuantitiesController.getInstance();
+        orderHistoryDataMapper = new OrderHistoryDataMapper();
+
+        suppliersOrderHistory = new HashMap<>();
+    }
+
+    public static OrderController getInstance(){
+        if(instance == null)
+            instance = new OrderController();
+        return instance;
     }
     /***
      *
      * @param order maps between productId to the amount to be ordered
      * @return map between supplier to the products he supplies from the order
      */
-    public Map<String, Pair<Map<String, Integer>, Double>> order(Map<String, Integer> order, Branch branch){
+    public Map<String, Pair<Map<String, Integer>, Double>> order(Map<String, Integer> order, Branch branch) throws SQLException {
         List<Supplier> suppliers = supplierController.getCopyOfSuppliers();
         Map<String, Map<Supplier, Integer>> cantBeOrderedByOneSupplier = findProductsWithoutSupplierToFullySupply(order, suppliers);
         Map<String, Integer> notOneSupplierOrder = new HashMap<>();
@@ -51,7 +71,7 @@ public class OrderController {
             Supplier supplier = supplierToOrder.getKey();
             double price = computePriceAfterDiscount(supplier, supplierToOrder.getValue());
             finalOrderWithPrice.put(supplier.getBnNumber(), new Pair<>(supplierToOrder.getValue(), price));
-            supplier.addOrder(new Order(supplierToOrder.getValue()));
+            addSuppliersOrder(supplier.getBnNumber(), new Order(supplierToOrder.getValue()));
         }
 
         return finalOrderWithPrice;
@@ -138,13 +158,16 @@ public class OrderController {
             int totalAmountCanBeOrdered = 0;
             Map<Supplier, Integer> suppliersCanSupply = new HashMap<>();
             for(Supplier supplier : suppliers){
-                if(supplier.getAgreement().getProduct(catalogNumber) != null){
-                    if(supplier.getAgreement().getProduct(catalogNumber).getNumberOfUnits() >= amount)
-                        found = true;
-                    else
-                       suppliersCanSupply.put(supplier, supplier.getAgreement().getProduct(catalogNumber).getNumberOfUnits());
-                    totalAmountCanBeOrdered += supplier.getAgreement().getProduct(catalogNumber).getNumberOfUnits();
+                try {
+                    if(agreementController.productExist(supplier.getBnNumber(), catalogNumber)){
+                        if(agreementController.getNumberOfUnits(supplier.getBnNumber(), catalogNumber) >= amount)
+                            found = true;
+                        else
+                            suppliersCanSupply.put(supplier, agreementController.getNumberOfUnits(supplier.getBnNumber(), catalogNumber));
+                        totalAmountCanBeOrdered += agreementController.getNumberOfUnits(supplier.getBnNumber(), catalogNumber);
+                    }
                 }
+                catch (Exception ignored){}
             }
             if(!found)
                 productToSuppliers.put(catalogNumber, suppliersCanSupply);
@@ -200,7 +223,7 @@ public class OrderController {
         Map<Supplier, List<String>> suppliersCanSupply = new HashMap<>();
         for(Supplier supplier : suppliersToUse){
             List<String> productsCanBeSupplied = new LinkedList<>();
-            Map<String, Product> suppliersProduct = supplier.getAgreement().getProducts();
+            Map<String, Product> suppliersProduct = agreementController.getProducts(supplier.getBnNumber());
             for(Map.Entry<String, Integer> productOrder : order.entrySet()){
                 String productId = productOrder.getKey();
                 int amount = productOrder.getValue();
@@ -212,43 +235,71 @@ public class OrderController {
         return suppliersCanSupply;
     }
 
-    private double computePriceAfterDiscount(Supplier supplier, Map<String, Integer> orderFromSupplier){
+    private double computePriceAfterDiscount(Supplier supplier, Map<String, Integer> orderFromSupplier) {
         double sum = 0;
         int amountOfProducts = 0;
         for(String catalogNumber : orderFromSupplier.keySet()) {
-            Product product = supplier.getAgreement().getProduct(catalogNumber);
+            Product product = agreementController.getProduct(supplier.getBnNumber(), catalogNumber);
             int amount = orderFromSupplier.get(catalogNumber);
-            if(supplier.getAgreement().getBillOfQuantities() != null)
-                sum += supplier.getAgreement().BillOfQuantities().getProductPriceAfterDiscount(catalogNumber, amount,product.getPrice() * amount);
-            else
+            try {
+                sum += billOfQuantitiesController.getProductPriceAfterDiscount(supplier.getBnNumber(), catalogNumber, amount,product.getPrice() * amount);
+            }
+            catch (Exception e){// if the supplier doesn't have Bill Of Quantities
                 sum += product.getPrice() * amount;
+            }
             amountOfProducts += amount;
         }
-        if(supplier.getAgreement().getBillOfQuantities() != null)
-            return supplier.getAgreement().BillOfQuantities().getPriceAfterDiscounts(amountOfProducts, sum);
-        return sum;
+        try {
+            return billOfQuantitiesController.getPriceAfterDiscounts(supplier.getBnNumber(), amountOfProducts, sum);
+        }
+        catch (Exception e){
+            return sum;
+        }
     }
+
+    /***
+     * computes the price of the products the supplier can supply after discounts
+     * @param supplier the supplier that his price is being computed
+     * @param order the total order
+     * @param productsToSupply the products of the order the supplier can supply
+     * @return the price of the products the supplier can supply after discounts
+     * @throws SQLException
+     * @throws DalException
+     */
 
     private double computePriceAfterDiscount(Supplier supplier, Map<String, Integer> order, List<String> productsToSupply){
         double sum = 0;
         int amountOfProducts = 0;
-        for(String productId : productsToSupply) {
-            Product product = supplier.getAgreement().getProduct(productId);
-            int amount = order.get(productId);
-            if(supplier.getAgreement().getBillOfQuantities() != null)
-                sum += supplier.getAgreement().BillOfQuantities().getProductPriceAfterDiscount(productId, amount,product.getPrice() * amount);
-            else
+        for(String catalogNumber : productsToSupply) {
+            Product product = agreementController.getProduct(supplier.getBnNumber(), catalogNumber);
+            int amount = order.get(catalogNumber);
+            try {
+                sum += billOfQuantitiesController.getProductPriceAfterDiscount(supplier.getBnNumber(), catalogNumber, amount,product.getPrice() * amount);
+            }
+            catch (Exception e){
                 sum += product.getPrice() * amount;
+            }
             amountOfProducts += amount;
         }
-        if(supplier.getAgreement().getBillOfQuantities() != null)
-            return supplier.getAgreement().BillOfQuantities().getPriceAfterDiscounts(amountOfProducts, sum);
-        return sum;
+        try {
+            return billOfQuantitiesController.getPriceAfterDiscounts(supplier.getBnNumber(), amountOfProducts, sum);
+        }
+        catch (Exception e){
+            return sum;
+        }
     }
 
     public int getDaysForOrder(String catalogNumber, Branch branch){
         //Todo
         return 0;
+    }
+
+    public void addSuppliersOrder(String bnNumber, Order order) throws SQLException {
+        orderHistoryDataMapper.insert(bnNumber, order);
+    }
+
+    public List<Order> getOrderHistory(String bnNumber) throws SQLException {
+        return orderHistoryDataMapper.getOrderHistory(bnNumber);
     }
 
 }

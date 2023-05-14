@@ -14,6 +14,10 @@ public class DeliveryByInvitation extends DeliveryAgreement{
         this.numberOfDays = numberOfDays;
     }
 
+    public int getNumberOfDays() {
+        return numberOfDays;
+    }
+
     @Override
     public String toString() {
         return super.toString() + "\n\t\t\tnumber of days for order to arrive: " + numberOfDays;

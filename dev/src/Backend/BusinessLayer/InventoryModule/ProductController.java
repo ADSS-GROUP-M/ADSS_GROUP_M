@@ -81,7 +81,6 @@ public class ProductController {
     }
 
 
-
     // Add new product item
     public void createProductItem(List<String> serialNumbers, String catalog_number, Branch branch, String supplierID, double supplierPrice, double supplierDiscount,String location, LocalDateTime expirationDate, String periodicSupplier) {
         Product product = null;
@@ -122,19 +121,38 @@ public class ProductController {
 //        products.get(branch).put(catalog_number,newProductType);
     }
 
-    public void updateProductItem(Branch branch, int isDefective, String serial_number, String catalog_number, int isSold, String newSupplier, double newSoldPrice, String newLocation) {
+    public void updateProductItem(Branch branch, int isDefective, String serial_number, String catalog_number, int isSold, String newSupplier, double newSupplierPrice, double newSupplierDiscount,double newSoldPrice, String newLocation) {
         if(checkIfProductExist(branch,catalog_number)){
             ProductItem productItem = products.get(branch).get(catalog_number).getProduct(serial_number);
             Product product = products.get(branch).get(catalog_number);
-            if(isDefective != -1){productItem.reportAsDefective();}
+            if(isDefective != -1){
+                productManagerMapper.updateProductItem(catalog_number,branch.name(),serial_number,isDefective,LocalDateTime.now(),null,-1,-1,-1,null,null);
+                productItem.reportAsDefective();
+            }
             if(isSold != -1){
-                productItem.reportAsSold(DCController.calcSoldPrice(branch,catalog_number,product.getOriginalStorePrice()));
+                double sold_price = DCController.calcSoldPrice(branch,catalog_number,product.getOriginalStorePrice());
+                productManagerMapper.updateProductItem(catalog_number,branch.name(),serial_number,-1,null,null,-1,-1,sold_price,null,null);
+                productItem.reportAsSold(sold_price);
                 OrderController orderController = new OrderController();
                 updateMinAmount(branch,catalog_number,orderController.getDaysForOrder(catalog_number,branch));
+                productManagerMapper.updateProduct(catalog_number,branch.name(),null,null,-1,product.getNotificationMin());
             }
-            if(newSupplier != null){productItem.setSupplierID(newSupplier);}
-            if(newSoldPrice != -1){productItem.setSoldPrice(newSoldPrice);}
-            if(newLocation != null){productItem.setLocation(newLocation);}
+            if(newSupplier != null){
+                productManagerMapper.updateProductItem(catalog_number,branch.name(),serial_number,-1,null,newSupplier,-1,-1,-1,null,null);
+                productItem.setSupplierID(newSupplier);
+            }
+            if(newSupplierPrice != -1){
+                productManagerMapper.updateProductItem(catalog_number,branch.name(),serial_number,-1,null,null,newSupplierPrice,-1,-1,null,null);
+                productItem.setSupplierPrice(newSupplierPrice);}
+            if(newSupplierDiscount != -1){
+                productManagerMapper.updateProductItem(catalog_number,branch.name(),serial_number,-1,null,null,-1,newSupplierDiscount,-1,null,null);
+                productItem.setSupplierDiscount(newSupplierDiscount);}
+            if(newSoldPrice != -1){
+                productManagerMapper.updateProductItem(catalog_number,branch.name(),serial_number,-1,null,null,-1,-1,newSoldPrice,null,null);
+                productItem.setSoldPrice(newSoldPrice);}
+            if(newLocation != null){
+                productManagerMapper.updateProductItem(catalog_number,branch.name(),serial_number,-1,null,null,-1,-1,-1,null,newLocation);
+                productItem.setLocation(newLocation);}
         }
         else
             throw new RuntimeException(String.format("Product does not exist with the catalog_number : %s",catalog_number));

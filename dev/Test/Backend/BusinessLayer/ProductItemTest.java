@@ -1,5 +1,6 @@
 package Backend.BusinessLayer;
 
+import Backend.BusinessLayer.InventoryModule.ProductController;
 import Backend.BusinessLayer.InventoryModule.ProductItem;
 import org.junit.Assert;
 import org.junit.Before;
@@ -18,6 +19,8 @@ public class ProductItemTest {
     private static LocalDateTime expireDate = LocalDateTime.now().plusDays(7);
 
     private ProductItem item;
+
+    private ProductController productController = ProductController.ProductController();
 
     @Before
     public void setUp() {

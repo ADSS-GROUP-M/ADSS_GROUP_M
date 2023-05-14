@@ -104,13 +104,19 @@ public class ProductManagerMapper {
             if(isProductExists(catalog_number)){
                 productsDataMapper.update(catalog_number, name, manufacture);
                 productPairBranchDataMapper.update(branch, catalog_number, originalStorePrice,newMinAmount);
-                productPairBranchDataMapper.insert(branch, catalog_number, originalStorePrice);
-                Product product = new Product(catalog_number, name, manufacture, originalStorePrice, Branch.valueOf(branch));
-                cachedProducts.computeIfAbsent(product.getBranch(), k -> new HashMap<>())
-                        .put(product.getCatalogNumber(), product);
             }
         } catch (SQLException e) {
             //TODO: Handle the exception appropriately
+        }
+    }
+
+    public void updateProductItem(String catalog_number, String branch, String serial_number,int is_defective, LocalDateTime defective_date, String supplier_id, double supplier_price, double supplier_discount, double sold_price, LocalDateTime expiration_date, String location){
+        try {
+            if (isItemExists(serial_number, catalog_number, branch)) {
+                productItemDataMapper.update(serial_number,is_defective,defective_date,supplier_id,supplier_price,supplier_discount,sold_price,expiration_date,location,catalog_number,branch);
+            }
+        } catch (SQLException e) {
+            // TODO: Handle the exception appropriately
         }
     }
 

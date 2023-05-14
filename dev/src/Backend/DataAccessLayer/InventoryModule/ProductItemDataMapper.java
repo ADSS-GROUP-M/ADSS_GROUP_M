@@ -35,12 +35,12 @@ public class ProductItemDataMapper extends AbstractDataMapper {
         }
     }
 
-    public void update(String serial_number, int is_defective, String defection_date, String supplier_id, double supplier_price, double supplier_discount, double sold_price, LocalDateTime expiration_date, String location, String catalog_number, String branch) throws SQLException {
+    public void update(String serial_number, int is_defective, LocalDateTime defection_date, String supplier_id, double supplier_price, double supplier_discount, double sold_price, LocalDateTime expiration_date, String location, String catalog_number, String branch) throws SQLException {
         if(isExists(serial_number, catalog_number, branch)){
             if(is_defective != -1)
                 sqlExecutor.executeWrite(String.format("UPDATE %s SET is_defective = '%s' WHERE catalog_number = '%s' and branch = '%s'", tableName,is_defective,catalog_number,branch));
             if(defection_date != null)
-                sqlExecutor.executeWrite(String.format("UPDATE %s SET defection_date = '%s' WHERE catalog_number = '%s' and branch = '%s'", tableName,defection_date,catalog_number,branch));
+                sqlExecutor.executeWrite(String.format("UPDATE %s SET defection_date = '%s' WHERE catalog_number = '%s' and branch = '%s'", tableName,defection_date.toString(),catalog_number,branch));
             if(supplier_id != null)
                 sqlExecutor.executeWrite(String.format("UPDATE %s SET supplier_id = '%s' WHERE catalog_number = '%s' and branch = '%s'", tableName,supplier_id,catalog_number,branch));
             if(supplier_price != -1)
@@ -50,7 +50,7 @@ public class ProductItemDataMapper extends AbstractDataMapper {
             if(sold_price != -1)
                 sqlExecutor.executeWrite(String.format("UPDATE %s SET sold_price = '%s' WHERE catalog_number = '%s' and branch = '%s'", tableName,sold_price,catalog_number,branch));
             if(expiration_date != null)
-                sqlExecutor.executeWrite(String.format("UPDATE %s SET expiration_date = '%s' WHERE catalog_number = '%s' and branch = '%s'", tableName,expiration_date,catalog_number,branch));
+                sqlExecutor.executeWrite(String.format("UPDATE %s SET expiration_date = '%s' WHERE catalog_number = '%s' and branch = '%s'", tableName,expiration_date.toString(),catalog_number,branch));
             if(location != null)
                 sqlExecutor.executeWrite(String.format("UPDATE %s SET location = '%s' WHERE catalog_number = '%s' and branch = '%s'", tableName,location,catalog_number,branch));
         }

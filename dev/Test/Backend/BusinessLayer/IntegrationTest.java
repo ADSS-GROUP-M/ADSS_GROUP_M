@@ -5,6 +5,7 @@ import Backend.BusinessLayer.InventoryModule.Product;
 import Backend.BusinessLayer.InventoryModule.ProductController;
 import Backend.BusinessLayer.InventoryModule.ProductItem;
 import Backend.BusinessLayer.InventoryModule.ProductStoreDiscount;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -43,6 +44,9 @@ public class IntegrationTest {
         serial_numbers.add("3");
         productController.createProductItem(serial_numbers,catalog_number,branch,supplierId,supplierPrice,supplierDiscount, location,expireDate, "y");
     }
+
+    @After
+    public void after(){}
 
     /**
      * Test1: product contain less than the min expected amount --> should send automatic order

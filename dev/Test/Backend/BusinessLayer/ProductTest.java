@@ -2,6 +2,9 @@ package Backend.BusinessLayer;
 
 import Backend.BusinessLayer.BusinessLayerUsage.Branch;
 import Backend.BusinessLayer.InventoryModule.Product;
+import Backend.BusinessLayer.InventoryModule.ProductController;
+import Backend.DataAccessLayer.InventoryModule.ProductManagerMapper;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 
@@ -27,18 +30,28 @@ public class ProductTest {
 
     private Product product;
 
+    private ProductController productController = ProductController.ProductController();
+
 
     @Before
     public void setUp() {
         //create new product
-        product = new Product(catalog_number, catalog_name, manufacturer, storePrice,branch );
+        productController.createProduct(catalog_number,branch,catalog_name,manufacturer,storePrice);
 //        serialNumbers.add(serial_number);
+    }
+
+    @After
+    public void after(){
+//        productController.
     }
 
     // Test 1
     @org.junit.Test
     public void getProductItemFromList() {
-        product.addProductItem(serial_number,supplierId,supplierPrice,supplierDiscount,location,expireDate);
+        List<String> serialNumbers = new ArrayList<>();
+        serialNumbers.add(serial_number);
+        // TODO verify @amit
+        productController.createProductItem(serialNumbers,catalog_number,branch,supplierId,supplierPrice,supplierDiscount,location,expireDate,"n");
         Assert.assertEquals("get item from product list failed",product.getProduct(serial_number).getSerial_number(),serial_number);
     }
 
@@ -52,8 +65,9 @@ public class ProductTest {
     // Test 3
     @org.junit.Test
     public void productDefective() {
-        product.addProductItem(serial_number,supplierId,supplierPrice,supplierDiscount,location,expireDate);
-        product.reportAsDefective(serial_number);
+        productController.createProductItem(serialNumbers,catalog_number,branch,supplierId,supplierPrice,supplierDiscount,location,expireDate,"n");
+        productController.updateProductItem(branch,1,serial_number,catalog_number,-1,null,-1,-1,-1,null);
+//        product.reportAsDefective(serial_number);
         Assert.assertFalse("get defective item failed",product.getDefectiveProductItems().isEmpty());
     }
 

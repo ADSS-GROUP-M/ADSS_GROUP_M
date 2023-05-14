@@ -142,13 +142,16 @@ public class OrderController {
             int totalAmountCanBeOrdered = 0;
             Map<Supplier, Integer> suppliersCanSupply = new HashMap<>();
             for(Supplier supplier : suppliers){
-                if(agreementController.productExist(supplier.getBnNumber(), catalogNumber)){
-                    if(agreementController.getNumberOfUnits(supplier.getBnNumber(), catalogNumber) >= amount)
-                        found = true;
-                    else
-                       suppliersCanSupply.put(supplier, agreementController.getNumberOfUnits(supplier.getBnNumber(), catalogNumber));
-                    totalAmountCanBeOrdered += agreementController.getNumberOfUnits(supplier.getBnNumber(), catalogNumber);
+                try {
+                    if(agreementController.productExist(supplier.getBnNumber(), catalogNumber)){
+                        if(agreementController.getNumberOfUnits(supplier.getBnNumber(), catalogNumber) >= amount)
+                            found = true;
+                        else
+                            suppliersCanSupply.put(supplier, agreementController.getNumberOfUnits(supplier.getBnNumber(), catalogNumber));
+                        totalAmountCanBeOrdered += agreementController.getNumberOfUnits(supplier.getBnNumber(), catalogNumber);
+                    }
                 }
+                catch (Exception ignored){}
             }
             if(!found)
                 productToSuppliers.put(catalogNumber, suppliersCanSupply);
@@ -225,7 +228,7 @@ public class OrderController {
             try {
                 sum += billOfQuantitiesController.getProductPriceAfterDiscount(supplier.getBnNumber(), catalogNumber, amount,product.getPrice() * amount);
             }
-            catch (Exception e){
+            catch (Exception e){// if the supplier doesn't have Bill Of Quantities
                 sum += product.getPrice() * amount;
             }
             amountOfProducts += amount;

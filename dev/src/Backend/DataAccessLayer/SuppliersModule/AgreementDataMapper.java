@@ -19,20 +19,20 @@ import java.util.stream.Collectors;
 public class AgreementDataMapper {
     private SupplierProductDataMapper supplierProductDataMapper;
     private DeliveryAgreementDataMapper deliveryAgreementDataMapper;
+    private ProductsDataMapper productsDataMapper;
     private Map<String, Agreement> suppliersAgreement;
 
     public AgreementDataMapper(){
         supplierProductDataMapper = new SupplierProductDataMapper();
         deliveryAgreementDataMapper = new DeliveryAgreementDataMapper();
+        productsDataMapper = new ProductsDataMapper();
         suppliersAgreement = new HashMap<>();
     }
 
-    public Agreement getAgreement(String bnNumber) throws SQLException, DalException {
+    public Agreement getAgreement(String bnNumber) throws SQLException{
         if(suppliersAgreement.containsKey(bnNumber))
             return suppliersAgreement.get(bnNumber);
         Agreement agreement = find(bnNumber);
-        if(agreement == null)
-            throw new DalException("no such Agreement for supplier - " + bnNumber);
         suppliersAgreement.put(bnNumber, agreement);
         return agreement;
     }
@@ -55,5 +55,42 @@ public class AgreementDataMapper {
         Agreement agreement = new Agreement(products, deliveryAgreement);
         suppliersAgreement.put(bnNumber, agreement);
         return agreement;
+    }
+
+    public void setFixedDeliveryAgreement(String bnNumber, boolean haveTransport, List<Integer> days) throws SQLException {
+        deliveryAgreementDataMapper.delete(bnNumber);
+        deliveryAgreementDataMapper.insert(bnNumber, haveTransport, false, days.stream().map(i -> String.valueOf(i)).collect(Collectors.joining(",")));
+    }
+
+    public void setByInvitationDeliveryAgreement(String bnNumber, boolean haveTransport, int numOfDays) throws SQLException {
+        deliveryAgreementDataMapper.delete(bnNumber);
+        deliveryAgreementDataMapper.insert(bnNumber, haveTransport, true, numOfDays + "");
+    }
+
+    public void addProduct(String bnNumber, String catalogNumber, String supplierCatalogNumber,double price, int numberOfUnits) throws DalException, SQLException {
+        if(!productsDataMapper.isExists(catalogNumber))
+            throw new DalException("no such product - " + catalogNumber);
+        supplierProductDataMapper.insert(bnNumber, catalogNumber, supplierCatalogNumber, numberOfUnits, price);
+    }
+
+    public void removeProduct(String bnNumber, String catalogNumber) throws SQLException {
+        supplierProductDataMapper.delete(bnNumber, catalogNumber);
+    }
+
+    public void setSuppliersCatalogNumber(String bnNumber, String catalogNumber, String newSuppliersCatalogNumber) throws SQLException {
+        supplierProductDataMapper.updateSuppliersCatalogNumber(bnNumber, catalogNumber, newSuppliersCatalogNumber);
+    }
+
+    public void setPrice(String bnNumber, String catalogNumber, double price) throws SQLException {
+        supplierProductDataMapper.updatePrice(bnNumber, catalogNumber, price);
+    }
+
+    public void setNumberOfUnits(String bnNumber, String catalogNumber, int numberOfUnits) throws SQLException {
+        supplierProductDataMapper.updateQuantity(bnNumber, catalogNumber, numberOfUnits);
+    }
+
+    public void removeAgreement(String bnNumber) throws SQLException {
+        deliveryAgreementDataMapper.delete(bnNumber);
+        supplierProductDataMapper.delete(bnNumber);
     }
 }

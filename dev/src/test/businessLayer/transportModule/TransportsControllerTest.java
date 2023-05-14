@@ -487,7 +487,7 @@ class TransportsControllerTest {
     private void assertDeepEquals(Transport transport1, Transport transport2) {
         assertEquals(transport1.id(), transport2.id());
         assertEquals(transport1.source(), transport2.source());
-        assertEquals(transport1.destinations(), transport2.destinations());
+        assertEquals(transport1.route(), transport2.route());
         assertEquals(transport1.itemLists(), transport2.itemLists());
         assertEquals(transport1.driverId(), transport2.driverId());
         assertEquals(transport1.truckId(), transport2.truckId());

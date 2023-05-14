@@ -136,7 +136,7 @@ class TransportsServiceIT {
         Transport updatedTransport = updatedResponse.data(Transport.class);
         assertEquals(newTransport.id(), updatedTransport.id());
         assertEquals(newTransport.source(), updatedTransport.source());
-        assertEquals(newTransport.destinations(), updatedTransport.destinations());
+        assertEquals(newTransport.route(), updatedTransport.route());
         assertEquals(newTransport.itemLists(), updatedTransport.itemLists());
         assertEquals(newTransport.truckId(), updatedTransport.truckId());
         assertEquals(newTransport.driverId(), updatedTransport.driverId());
@@ -202,7 +202,7 @@ class TransportsServiceIT {
         Transport updatedTransport = updatedResponse.data(Transport.class);
         assertEquals(newTransport.id(), updatedTransport.id());
         assertEquals(newTransport.source(), updatedTransport.source());
-        assertEquals(newTransport.destinations(), updatedTransport.destinations());
+        assertEquals(newTransport.route(), updatedTransport.route());
         assertEquals(newTransport.itemLists(), updatedTransport.itemLists());
         assertEquals(newTransport.truckId(), updatedTransport.truckId());
         assertEquals(newTransport.driverId(), updatedTransport.driverId());
@@ -242,7 +242,7 @@ class TransportsServiceIT {
         Transport TransportReceived = response.data(Transport.class);
         assertEquals(transport.id(), TransportReceived.id());
         assertEquals(transport.source(), TransportReceived.source());
-        assertEquals(transport.destinations(), TransportReceived.destinations());
+        assertEquals(transport.route(), TransportReceived.route());
         assertEquals(transport.itemLists(), TransportReceived.itemLists());
         assertEquals(transport.truckId(), TransportReceived.truckId());
         assertEquals(transport.driverId(), TransportReceived.driverId());

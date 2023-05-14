@@ -98,7 +98,7 @@ public class TransportsManagement {
 
         Transport newTransport = new Transport(
                 new DeliveryRoute(
-                        source.name(),
+                        transportId, source.name(),
                         destinations,
                         itemsList
                 ),
@@ -146,8 +146,8 @@ public class TransportsManagement {
                     Driver driver = pickFromAvailableDrivers(newTransport.departureTime());
                     newTransport = new Transport(
                             new DeliveryRoute(
-                                    newTransport.source(),
-                                    newTransport.destinations(),
+                                    transportId, newTransport.source(),
+                                    newTransport.route(),
                                     newTransport.itemLists()),
                             driver.id(),
                             truckId,
@@ -167,7 +167,7 @@ public class TransportsManagement {
                     int weight = uiData.readInt();
                     newTransport = new Transport(
                             new DeliveryRoute(
-                                    newTransport.source(),
+                                    transportId, newTransport.source(),
                                     destinations,
                                     itemsList),
                             newTransport.driverId(),
@@ -220,7 +220,7 @@ public class TransportsManagement {
                     updateTransportHelperMethod(
                             oldtransport.id(),
                             oldtransport.source(),
-                            oldtransport.destinations(),
+                            oldtransport.route(),
                             oldtransport.itemLists(),
                             oldtransport.truckId(),
                             driver.id(),
@@ -234,7 +234,7 @@ public class TransportsManagement {
                     updateTransportHelperMethod(
                             oldtransport.id(),
                             oldtransport.source(),
-                            oldtransport.destinations(),
+                            oldtransport.route(),
                             oldtransport.itemLists(),
                             truckId,
                             oldtransport.driverId(),
@@ -248,7 +248,7 @@ public class TransportsManagement {
                     updateTransportHelperMethod(
                             oldtransport.id(),
                             source.name(),
-                            oldtransport.destinations(),
+                            oldtransport.route(),
                             oldtransport.itemLists(),
                             oldtransport.truckId(),
                             oldtransport.driverId(),
@@ -278,7 +278,7 @@ public class TransportsManagement {
                     updateTransportHelperMethod(
                             oldtransport.id(),
                             oldtransport.source(),
-                            oldtransport.destinations(),
+                            oldtransport.route(),
                             oldtransport.itemLists(),
                             oldtransport.truckId(),
                             oldtransport.driverId(),
@@ -312,7 +312,7 @@ public class TransportsManagement {
     private void overrideArrivalTimes(Transport oldtransport) {
         System.out.println("Select new arrival times (enter 'cancel!' to cancel): ");
         HashMap<String, LocalTime> arrivalTimes = new HashMap<>();
-        for (String destination : oldtransport.destinations()) {
+        for (String destination : oldtransport.route()) {
             System.out.println("Arrival time for " + destination + ": ");
             LocalTime arrivalTime = uiData.readTime("(format: hh:mm): ");
             if(arrivalTime == null) {
@@ -384,7 +384,7 @@ public class TransportsManagement {
         System.out.println("Weight:       "+ transport.weight());
         System.out.println("Source:       "+ transport.source());
         System.out.println("Destinations: ");
-        for(String address : transport.destinations()){
+        for(String address : transport.route()){
             Site destination = uiData.sites().get(address);
             LocalTime arrivalTime = transport.deliveryRoute().getEstimatedTimeOfArrival(address);
             String time = String.format("[%02d:%02d] ", arrivalTime.getHour(), arrivalTime.getMinute());
@@ -427,7 +427,7 @@ public class TransportsManagement {
                                              int weight) {
         Transport newTransport = new Transport(
                 id,
-                new DeliveryRoute(source, destinations, itemLists),
+                new DeliveryRoute(transportId, source, destinations, itemLists),
                 driverId,
                 truckId,
                 departureDateTime,

@@ -21,7 +21,7 @@ public record Transport (
     public Transport(int id, String source, List<String> destinations,Map<String,Integer> itemLists , String driverId, String truckId, LocalDateTime departureTime, int weight){
         this(
                 id,
-                new DeliveryRoute(source, destinations, itemLists),
+                new DeliveryRoute(id, source, departureTime.toLocalTime(), destinations, itemLists),
                 driverId,
                 truckId,
                 departureTime,
@@ -40,39 +40,35 @@ public record Transport (
         );
     }
 
+    public Transport(DeliveryRoute route, Transport transport) {
+        this(
+                transport.id(),
+                route,
+                transport.driverId(),
+                transport.truckId(),
+                transport.departureTime(),
+                transport.weight()
+        );
+    }
+
     /**
      * this constructor sets the id to be -1
      */
     public Transport(String source, List<String> destinations,Map<String,Integer> itemLists , String driverId, String truckId, LocalDateTime departureTime, int weight){
-        this(
-                new DeliveryRoute(source, destinations, itemLists),
-                driverId,
-                truckId,
-                departureTime,
-                weight
+        this(1,
+            new DeliveryRoute(-1, source, departureTime.toLocalTime(), destinations, itemLists),
+            driverId,
+            truckId,
+            departureTime,
+            weight
         );
     }
 
     /**
-     * this constructor sets the id to be -1
+     * source is the first destination
      */
-    public Transport(DeliveryRoute deliveryRoute, String driverId, String truckId, LocalDateTime scheduledTime, int weight){
-        this(
-                -1,
-                deliveryRoute,
-                driverId,
-                truckId,
-                scheduledTime,
-                weight
-        );
-    }
-
-    public String source(){
-        return deliveryRoute.source();
-    }
-
-    public List<String> destinations(){
-        return deliveryRoute.destinations();
+    public List<String> route(){
+        return deliveryRoute.route();
     }
 
     public Map<String,Integer> itemLists(){

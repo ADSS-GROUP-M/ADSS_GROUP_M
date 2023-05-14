@@ -212,7 +212,7 @@ public class TransportsController {
 
         // destinations + itemLists validation
         int destIndex = 0;
-        for(String name : transport.destinations()){
+        for(String name : transport.route()){
 
             //destination validation
             if(sc.siteExists(name) == false){
@@ -261,12 +261,12 @@ public class TransportsController {
 
         List<Site> route = new LinkedList<>();
         route.add(sc.getSite(transport.source()));
-        for (String x : transport.destinations()) {
+        for (String x : transport.route()) {
             route.add(sc.getSite(x));
         }
         Map<Pair<String,String>,Double> durations = src.buildSitesTravelTimes(route);
 
-        ListIterator<String> destinationsIterator = transport.destinations().listIterator();
+        ListIterator<String> destinationsIterator = transport.route().listIterator();
         LocalTime time = transport.departureTime().toLocalTime();
         String curr = transport.source();
         String next;

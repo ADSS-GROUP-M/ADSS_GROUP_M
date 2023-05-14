@@ -23,11 +23,8 @@ public class DalFactory {
     private DriversDAO driversDAO;
     private TransportsDAO transportsDAO;
     private SitesRoutesDAO sitesRoutesDAO;
-
-    private TransportDestinationsDAO transportDestinationsDAO;
-
+    private DeliveryRoutesDAO deliveryRoutesDAO;
     private ItemListsItemsDAO itemListsItemsDAO;
-
     private final SQLExecutor cursor;
 
     public DalFactory() throws DalException {
@@ -49,6 +46,7 @@ public class DalFactory {
         itemListsItemsDAO = new ItemListsItemsDAO(cursor);
         trucksDAO = new TrucksDAO(cursor);
         driversDAO = new DriversDAO(cursor);
+        deliveryRoutesDAO = new DeliveryRoutesDAO(cursor);
 
         //============== dependencies ============== |
         /*(1)*/ userAuthorizationsDAO = new UserAuthorizationsDAO(cursor);
@@ -79,9 +77,8 @@ public class DalFactory {
         //========================================== |
 
         //============== dependencies ============== |
-        /*(1)*/ transportDestinationsDAO = new TransportDestinationsDAO(cursor);
         /*(1)*/ TransportIdCounterDAO transportIdCounterDAO = new TransportIdCounterDAO(cursor);
-        /*(2)*/ transportsDAO = new TransportsDAO(cursor, transportDestinationsDAO, transportIdCounterDAO);
+        /*(2)*/ transportsDAO = new TransportsDAO(cursor, transportIdCounterDAO);
         //========================================== |
     }
 
@@ -133,8 +130,8 @@ public class DalFactory {
         return sitesRoutesDAO;
     }
 
-    public TransportDestinationsDAO transportDestinationsDAO() {
-        return transportDestinationsDAO;
+    public DeliveryRoutesDAO transportDestinationsDAO() {
+        return deliveryRoutesDAO;
     }
 
     public ItemListsItemsDAO itemListsItemsDAO() {

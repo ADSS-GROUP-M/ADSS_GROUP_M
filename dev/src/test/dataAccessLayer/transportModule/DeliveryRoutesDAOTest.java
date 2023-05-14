@@ -10,7 +10,6 @@ import dataAccessLayer.dalAssociationClasses.transportModule.TransportDestinatio
 import dataAccessLayer.dalUtils.OfflineResultSet;
 import dataAccessLayer.employeeModule.EmployeeDAO;
 import exceptions.DalException;
-import exceptions.TransportException;
 import objects.transportObjects.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,7 +27,7 @@ import static dataAccessLayer.DalFactory.TESTING_DB_NAME;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
-class TransportDestinationsDAOTest {
+class DeliveryRoutesDAOTest {
 
     public static final int TRANSPORT_ID = 1;
     public static final int LIST_ID = 1;
@@ -36,7 +35,7 @@ class TransportDestinationsDAOTest {
     public static final String SOURCE_NAME = "source1";
     public static final String DEST_NAME1 = "dest1";
     private static final String DEST_NAME2 = "dest2";
-    private TransportDestinationsDAO dao;
+    private DeliveryRoutesDAO dao;
     private TransportDestination transportDestination1;
     private TransportDestination transportDestination2;
     private TransportDestination transportDestination3;

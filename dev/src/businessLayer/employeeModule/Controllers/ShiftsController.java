@@ -35,7 +35,7 @@ public class ShiftsController {
         try {
             shift = shiftDAO.select(branchId, shiftDate,shiftType);
         } catch (DalException e) {
-            throw new RuntimeException(e);
+            throw new EmployeeException(e);
         }
         if (shift == null) {
             throw new EmployeeException("The shift " + shiftDate + shiftType + " does not exist in the branch " + branchId + ".");
@@ -52,19 +52,23 @@ public class ShiftsController {
         }
     }
 
-    public Shift createShift(String branchId, LocalDate shiftDate, ShiftType shiftType) throws Exception {
+    public Shift createShift(String branchId, LocalDate shiftDate, ShiftType shiftType) throws EmployeeException {
         Shift shift = new Shift(branchId, shiftDate, shiftType);
-        shiftDAO.insert(shift);
+        try {
+            shiftDAO.insert(shift);
+        } catch (DalException e) {
+            throw new EmployeeException(e);
+        }
         return shift;
     }
 
-    public void createWeekShifts(String branchId, LocalDate weekStart) throws Exception {
+    public void createWeekShifts(String branchId, LocalDate weekStart) throws EmployeeException {
         // Get dates until the end of the week
         List<LocalDate> dates = weekStart.datesUntil(weekStart.with(next(DayOfWeek.SUNDAY))).toList();
         // Check if any shift in the week already exists
         for (LocalDate date : dates) {
             if (shiftExists(branchId, date, ShiftType.Morning) || shiftExists(branchId, date, ShiftType.Evening)) {
-                throw new Exception("Invalid week start date, there are already existing shifts during this week, please edit them or delete them to start over.");
+                throw new EmployeeException("Invalid week start date, there are already existing shifts during this week, please edit them or delete them to start over.");
             }
         }
         // Create the week shifts
@@ -74,9 +78,13 @@ public class ShiftsController {
         }
     }
 
-    public void deleteShift(String branchId, LocalDate shiftDate, ShiftType shiftType) throws Exception {
+    public void deleteShift(String branchId, LocalDate shiftDate, ShiftType shiftType) throws EmployeeException {
         Shift shift = getShift(branchId, shiftDate, shiftType);
-        shiftDAO.delete(shift);
+        try {
+            shiftDAO.delete(shift);
+        } catch (DalException e) {
+            throw new EmployeeException(e);
+        }
     }
 
     public List<Shift[]> getWeekShifts(String branchId, LocalDate weekStart) {
@@ -99,68 +107,84 @@ public class ShiftsController {
         return result;
     }
 
-    public void setShiftNeededAmount(String branchId, LocalDate shiftDate, ShiftType shiftType, Role role, int amount) throws Exception {
+    public void setShiftNeededAmount(String branchId, LocalDate shiftDate, ShiftType shiftType, Role role, int amount) throws EmployeeException {
         Shift shift = getShift(branchId, shiftDate, shiftType);
         shift.setNeededRole(role, amount);
-        shiftDAO.update(shift);
+        try {
+            shiftDAO.update(shift);
+        } catch (DalException e) {
+            throw new EmployeeException(e);
+        }
     }
 
-    public void requestShift(Employee employee, String branchId, LocalDate shiftDate, ShiftType shiftType, Role role) throws Exception {
+    public void requestShift(Employee employee, String branchId, LocalDate shiftDate, ShiftType shiftType, Role role) throws EmployeeException {
         Shift shift = getShift(branchId, shiftDate, shiftType);
         if (!employee.getRoles().contains(role)) {
-            throw new Exception("Invalid shift request, the employee is not certified for this role: " + role + ".");
+            throw new EmployeeException("Invalid shift request, the employee is not certified for this role: " + role + ".");
         }
         if (shift.isEmployeeWorking(employee)) {
-            throw new Exception("Invalid shift request, the employee is already working in this shift.");
+            throw new EmployeeException("Invalid shift request, the employee is already working in this shift.");
         }
         if (shift.isEmployeeRequesting(employee)) {
-            throw new Exception("Invalid shift request, the employee has already requested to work in this shift.");
+            throw new EmployeeException("Invalid shift request, the employee has already requested to work in this shift.");
         }
         if (employeeRequestedInDate(employee, shiftDate)) {
-            throw new Exception("Invalid shift request, the employee has already requested to work in this day.");
+            throw new EmployeeException("Invalid shift request, the employee has already requested to work in this day.");
         }
         if (numEmployeeShiftRequestsInWeek(employee, shift.getShiftDate()) >= 6 && !employeeRequestedInDate(employee,shift.getShiftDate())) {
-            throw new Exception("Invalid shift request, the employee has already requested to work in 6 days of this week.");
+            throw new EmployeeException("Invalid shift request, the employee has already requested to work in 6 days of this week.");
         }
         shift.addShiftRequest(role, employee);
-        shiftDAO.update(shift);
+        try {
+            shiftDAO.update(shift);
+        } catch (DalException e) {
+            throw new EmployeeException(e);
+        }
     }
 
-    public void cancelShiftRequest(Employee employee, String branchId, LocalDate shiftDate, ShiftType shiftType, Role role) throws Exception {
+    public void cancelShiftRequest(Employee employee, String branchId, LocalDate shiftDate, ShiftType shiftType, Role role) throws EmployeeException {
         Shift shift = getShift(branchId, shiftDate, shiftType);
         if (!shift.isEmployeeRequestingForRole(employee, role)) {
-            throw new Exception("Invalid shift request, the employee hasn't requested to work in this shift and this role.");
+            throw new EmployeeException("Invalid shift request, the employee hasn't requested to work in this shift and this role.");
         }
         shift.removeShiftRequest(role, employee);
-        shiftDAO.update(shift);
+        try {
+            shiftDAO.update(shift);
+        } catch (DalException e) {
+            throw new EmployeeException(e);
+        }
     }
 
-    private List<Shift> employeeShiftRequestsInWeek(Employee employee, LocalDate dayInWeek) throws Exception {
+    private List<Shift> employeeShiftRequestsInWeek(Employee employee, LocalDate dayInWeek) throws EmployeeException {
         List<Shift> morningShifts = getEmployeeRequests(employee).stream().map(s->s[0]).toList();
         List<Shift> eveningShifts = getEmployeeRequests(employee).stream().map(s->s[1]).toList();
         List<Shift> shifts = Stream.concat(morningShifts.stream(),eveningShifts.stream()).toList();
         return shifts.stream().filter(s-> s != null && DateUtils.getWeekNumber(s.getShiftDate()) == DateUtils.getWeekNumber(dayInWeek)).toList();
     }
 
-    private int numEmployeeShiftRequestsInWeek(Employee employee, LocalDate dayInWeek) throws Exception {
+    private int numEmployeeShiftRequestsInWeek(Employee employee, LocalDate dayInWeek) throws EmployeeException {
         return employeeShiftRequestsInWeek(employee, dayInWeek).size();
     }
 
-    private boolean employeeRequestedInDate(Employee employee, LocalDate dayInWeek) throws Exception {
+    private boolean employeeRequestedInDate(Employee employee, LocalDate dayInWeek) throws EmployeeException {
         return !getEmployeeRequests(employee).stream().filter(s-> s[0].getShiftDate().equals(dayInWeek)).toList().isEmpty();
     }
 
-    public void setShiftEmployees(String branchId, LocalDate shiftDate, ShiftType shiftType, Role role, List<Employee> employees) throws Exception {
+    public void setShiftEmployees(String branchId, LocalDate shiftDate, ShiftType shiftType, Role role, List<Employee> employees) throws EmployeeException {
         Shift shift = getShift(branchId, shiftDate, shiftType);
         for (Employee employee : employees) {
             if (!employee.getRoles().contains(role)) {
-                throw new Exception("Invalid shift request, the employee " + employee.getId() + " is not certified for this role: " + role + ".");
+                throw new EmployeeException("Invalid shift request, the employee " + employee.getId() + " is not certified for this role: " + role + ".");
             }
         }
         for (Employee employee : employees) {
             shift.addShiftWorker(role, employee);
         }
-        shiftDAO.update(shift);
+        try {
+            shiftDAO.update(shift);
+        } catch (DalException e) {
+            throw new EmployeeException(e);
+        }
     }
 
     /**
@@ -169,87 +193,107 @@ public class ShiftsController {
      * @return a list containing the shift days that belong to the employee
      * @throws Exception if any database error has occurred
      */
-    public List<Shift[]> getEmployeeShifts(Employee employee) throws Exception {
+    public List<Shift[]> getEmployeeShifts(Employee employee) throws EmployeeException {
         List<Shift[]> result = new ArrayList<>();
-        for (Shift shift : shiftDAO.getEmployeeShifts(employee)) {
-            boolean foundDate = false;
-            for (Shift[] shiftDay : result) {
-                if(shiftDay[0] != null && shiftDay[0].getShiftDate().equals(shift.getShiftDate())) {
-                    if(shift.getShiftType().equals(ShiftType.Evening)) {
-                        shiftDay[1] = shift;
-                        foundDate = true;
-                        break;
+        try {
+            for (Shift shift : shiftDAO.getEmployeeShifts(employee)) {
+                boolean foundDate = false;
+                for (Shift[] shiftDay : result) {
+                    if(shiftDay[0] != null && shiftDay[0].getShiftDate().equals(shift.getShiftDate())) {
+                        if(shift.getShiftType().equals(ShiftType.Evening)) {
+                            shiftDay[1] = shift;
+                            foundDate = true;
+                            break;
+                        }
+                    }
+                    else if(shiftDay[1] != null && shiftDay[1].getShiftDate().equals(shift.getShiftDate())) {
+                        if(shift.getShiftType().equals(ShiftType.Morning)) {
+                            shiftDay[0] = shift;
+                            foundDate = true;
+                            break;
+                        }
                     }
                 }
-                else if(shiftDay[1] != null && shiftDay[1].getShiftDate().equals(shift.getShiftDate())) {
+                if (!foundDate) {
+                    Shift[] shiftDay = new Shift[2];
                     if(shift.getShiftType().equals(ShiftType.Morning)) {
                         shiftDay[0] = shift;
-                        foundDate = true;
-                        break;
+                    } else if(shift.getShiftType().equals(ShiftType.Evening)) {
+                        shiftDay[1] = shift;
                     }
+                    result.add(shiftDay);
                 }
             }
-            if (!foundDate) {
-                Shift[] shiftDay = new Shift[2];
-                if(shift.getShiftType().equals(ShiftType.Morning)) {
-                    shiftDay[0] = shift;
-                } else if(shift.getShiftType().equals(ShiftType.Evening)) {
-                    shiftDay[1] = shift;
-                }
-                result.add(shiftDay);
-            }
+        } catch (DalException e) {
+            throw new EmployeeException(e);
         }
         return result;
     }
 
-    public List<Shift[]> getEmployeeRequests(Employee employee) throws Exception {
+    public List<Shift[]> getEmployeeRequests(Employee employee) throws EmployeeException {
         List<Shift[]> result = new ArrayList<>();
-        for (Shift shift : shiftDAO.getEmployeeRequests(employee)) {
-            boolean foundDate = false;
-            for (Shift[] shiftDay : result) {
-                if(shiftDay[0] != null && shiftDay[0].getShiftDate().equals(shift.getShiftDate())) {
-                    if(shift.getShiftType().equals(ShiftType.Evening)) {
-                        shiftDay[1] = shift;
-                        foundDate = true;
-                        break;
+        try {
+            for (Shift shift : shiftDAO.getEmployeeRequests(employee)) {
+                boolean foundDate = false;
+                for (Shift[] shiftDay : result) {
+                    if(shiftDay[0] != null && shiftDay[0].getShiftDate().equals(shift.getShiftDate())) {
+                        if(shift.getShiftType().equals(ShiftType.Evening)) {
+                            shiftDay[1] = shift;
+                            foundDate = true;
+                            break;
+                        }
+                    }
+                    else if(shiftDay[1] != null && shiftDay[1].getShiftDate().equals(shift.getShiftDate())) {
+                        if(shift.getShiftType().equals(ShiftType.Morning)) {
+                            shiftDay[0] = shift;
+                            foundDate = true;
+                            break;
+                        }
                     }
                 }
-                else if(shiftDay[1] != null && shiftDay[1].getShiftDate().equals(shift.getShiftDate())) {
+                if (!foundDate) {
+                    Shift[] shiftDay = new Shift[2];
                     if(shift.getShiftType().equals(ShiftType.Morning)) {
                         shiftDay[0] = shift;
-                        foundDate = true;
-                        break;
+                    } else if(shift.getShiftType().equals(ShiftType.Evening)) {
+                        shiftDay[1] = shift;
                     }
+                    result.add(shiftDay);
                 }
             }
-            if (!foundDate) {
-                Shift[] shiftDay = new Shift[2];
-                if(shift.getShiftType().equals(ShiftType.Morning)) {
-                    shiftDay[0] = shift;
-                } else if(shift.getShiftType().equals(ShiftType.Evening)) {
-                    shiftDay[1] = shift;
-                }
-                result.add(shiftDay);
-            }
+        } catch (DalException e) {
+            throw new EmployeeException(e);
         }
         return result;
     }
 
-    public void approveShift(String branchId, LocalDate shiftDate, ShiftType shiftType) throws Exception {
+    public void approveShift(String branchId, LocalDate shiftDate, ShiftType shiftType) throws EmployeeException {
         Shift shift = getShift(branchId, shiftDate, shiftType);
         shift.approve();
-        shiftDAO.update(shift);
+        try {
+            shiftDAO.update(shift);
+        } catch (DalException e) {
+            throw new EmployeeException(e);
+        }
     }
 
-    public void applyCancelCard(String branchId, LocalDate shiftDate, ShiftType shiftType, String employeeId, String productId) throws Exception {
+    public void applyCancelCard(String branchId, LocalDate shiftDate, ShiftType shiftType, String employeeId, String productId) throws EmployeeException {
         Shift shift = getShift(branchId, shiftDate, shiftType);
         shift.useCancelCard(employeeId, productId);
-        shiftDAO.update(shift);
+        try {
+            shiftDAO.update(shift);
+        } catch (DalException e) {
+            throw new EmployeeException(e);
+        }
     }
 
-    public void reportShiftActivity(String branchId, LocalDate shiftDate, ShiftType shiftType, String reportingEmployeeId, String activity) throws Exception {
+    public void reportShiftActivity(String branchId, LocalDate shiftDate, ShiftType shiftType, String reportingEmployeeId, String activity) throws EmployeeException {
         Shift shift = getShift(branchId, shiftDate, shiftType);
         shift.reportActivity(reportingEmployeeId, activity);
-        shiftDAO.update(shift);
+        try {
+            shiftDAO.update(shift);
+        } catch (DalException e) {
+            throw new EmployeeException(e);
+        }
     }
 }

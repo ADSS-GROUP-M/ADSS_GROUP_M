@@ -1,5 +1,7 @@
 package businessLayer.employeeModule;
 
+import exceptions.EmployeeException;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -74,11 +76,11 @@ public class Shift {
         }
         return duplicateEmployees.stream().toList();
     }
-    public void approve() throws Exception {
+    public void approve() throws EmployeeException {
         if (this.isApproved)
-            throw new Exception("This shift is already approved.");
+            throw new EmployeeException("This shift is already approved.");
         if (!this.checkLegality())
-            throw new Exception("Notice that the shift constraints are not met! \n" + getLegalityProblems());
+            throw new EmployeeException("Notice that the shift constraints are not met! \n" + getLegalityProblems());
         this.isApproved = true;
     }
 
@@ -148,27 +150,27 @@ public class Shift {
         return this.neededRoles;
     }
 
-    public void addShiftRequest(Role role, Employee employee) throws Exception {
+    public void addShiftRequest(Role role, Employee employee) throws EmployeeException {
         if (!this.neededRoles.containsKey(role))
-            throw new Exception("Invalid shift request, the role " + role + " is not needed in the shift.");
+            throw new EmployeeException("Invalid shift request, the role " + role + " is not needed in the shift.");
         if (!this.shiftRequests.containsKey(role))
             this.shiftRequests.put(role, new ArrayList<>());
         this.shiftRequests.get(role).add(employee);
     }
 
-    public void removeShiftRequest(Role role, Employee employee) throws Exception {
+    public void removeShiftRequest(Role role, Employee employee) throws EmployeeException {
         if (!this.shiftRequests.containsKey(role))
-            throw new Exception("Invalid shift cancellation request, the given role doesn't have any shift requests in this shift.");
+            throw new EmployeeException("Invalid shift cancellation request, the given role doesn't have any shift requests in this shift.");
         if (!this.shiftRequests.get(role).contains(employee))
-            throw new Exception("Invalid shift cancellation request, the given employee didn't have a request for this role in this shift.");
+            throw new EmployeeException("Invalid shift cancellation request, the given employee didn't have a request for this role in this shift.");
         this.shiftRequests.get(role).remove(employee);
     }
 
-    public void addShiftWorker(Role role, Employee employee) throws Exception {
+    public void addShiftWorker(Role role, Employee employee) throws EmployeeException {
         if (!this.neededRoles.containsKey(role))
-            throw new Exception("Invalid shift employee addition, the role " + role + " is not needed in the shift.");
+            throw new EmployeeException("Invalid shift employee addition, the role " + role + " is not needed in the shift.");
         if (!isEmployeeRequestingForRole(employee, role))
-            throw new Exception("Invalid shift employee addition, the employee did not request for this shift in this role.");
+            throw new EmployeeException("Invalid shift employee addition, the employee did not request for this shift in this role.");
         if (!this.shiftWorkers.containsKey(role))
             this.shiftWorkers.put(role, new ArrayList<>());
         this.shiftWorkers.get(role).add(employee);
@@ -221,9 +223,6 @@ public class Shift {
     public List<String> getShiftCancels() {
         return cancelCardApplies;
     }
-    public List<String> getCancelCardApplications(){
-        return this.cancelCardApplies;
-    }
 
     public List<String> getShiftActivities(){
         return this.shiftActivities;
@@ -272,10 +271,6 @@ public class Shift {
 
     public void setShiftWorkers(Map<Role, List<Employee>> shiftWorkers) {
         this.shiftWorkers = shiftWorkers;
-    }
-
-    public List<String> getCancelCardApplies() {
-        return cancelCardApplies;
     }
 
     public void setCancelCardApplies(List<String> cancelCardApplies) {

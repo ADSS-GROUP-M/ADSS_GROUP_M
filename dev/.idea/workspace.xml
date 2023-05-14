@@ -9,9 +9,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e454f93c-4ee8-4f4b-9a14-eaaf36aa303c" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/e2642f43-4db7-4d07-904c-1c675551b637.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/e2642f43-4db7-4d07-904c-1c675551b637.xml" afterDir="false" />
-    </list>
+    <list default="true" id="e454f93c-4ee8-4f4b-9a14-eaaf36aa303c" name="Changes" comment="ProductsDataMapper added resultSet.next()" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -87,13 +85,13 @@
       <recent name="PresentationLayer" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.DeliveryAgreementDataMapper">
-    <configuration name="DeliveryAgreementDataMapper" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="Backend.DataAccessLayer.SuppliersModule.DeliveryAgreementDataMapper" />
+  <component name="RunManager" selected="Application.Main">
+    <configuration name="Main (1)" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Fronend.PresentationLayer.InventoryModule.Main" />
       <module name="code" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="Backend.DataAccessLayer.SuppliersModule.*" />
+          <option name="PATTERN" value="Fronend.PresentationLayer.InventoryModule.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -101,12 +99,12 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Main (1)" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="Fronend.PresentationLayer.InventoryModule.Main" />
-      <module name="code" />
+    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Fronend.PresentationLayer.SuppliersModule.Main" />
+      <module name="dev" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="Fronend.PresentationLayer.InventoryModule.*" />
+          <option name="PATTERN" value="Fronend.PresentationLayer.SuppliersModule.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -161,13 +159,26 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="dev" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="dev" />
+      <option name="filePath" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.Main" />
         <item itemvalue="JUnit.BillOfQuantitiesTest.setOrderOfDiscounts" />
         <item itemvalue="JUnit.BillOfQuantitiesTest.removeDiscountOnAmountOfProducts" />
         <item itemvalue="JUnit.BillOfQuantitiesTest" />
         <item itemvalue="Application.Main (1)" />
-        <item itemvalue="Application.DeliveryAgreementDataMapper" />
       </list>
     </recent_temporary>
   </component>
@@ -295,7 +306,14 @@
       <option name="project" value="LOCAL" />
       <updated>1684091161779</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="ProductsDataMapper added resultSet.next()">
+      <created>1684099834858</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1684099834858</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -340,7 +358,8 @@
     <MESSAGE value="commit before dal" />
     <MESSAGE value="adding branch to order" />
     <MESSAGE value="commit" />
-    <option name="LAST_COMMIT_MESSAGE" value="commit" />
+    <MESSAGE value="ProductsDataMapper added resultSet.next()" />
+    <option name="LAST_COMMIT_MESSAGE" value="ProductsDataMapper added resultSet.next()" />
   </component>
   <component name="XDebuggerManager">
     <pin-to-top-manager>

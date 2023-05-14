@@ -1,9 +1,11 @@
 package businessLayer.employeeModule.Controllers;
 
 import businessLayer.employeeModule.Authorization;
+import businessLayer.employeeModule.Employee;
 import businessLayer.employeeModule.User;
 import dataAccessLayer.employeeModule.UserDAO;
 import exceptions.DalException;
+import exceptions.EmployeeException;
 
 import java.util.List;
 
@@ -21,51 +23,74 @@ public class UserController {
         } catch (Exception ignore) {}
     }
 
-    public void login(String username, String password) throws Exception {
+    public void login(String username, String password) throws EmployeeException {
         User user = getUser(username); // Throws an exception if the user is not found
-        boolean success = user.login(password);
+        boolean success = false;
+        try {
+            success = user.login(password);
+        } catch (Exception e) {
+            throw new EmployeeException(e);
+        }
         if(!success)
-            throw new Exception("Invalid password.");
+            throw new EmployeeException("Invalid password.");
     }
 
-    public void logout(String username) throws DalException {
+    public void logout(String username) throws EmployeeException {
         getUser(username).logout(); // Throws an exception if the user is not found
     }
 
-    public User getUser(String username) throws DalException {
-        User user = userDAO.select(username);
+    public User getUser(String username) throws EmployeeException {
+        User user = null;
+        try {
+            user = userDAO.select(username);
+        } catch (DalException e) {
+            throw new EmployeeException(e);
+        }
         if (user == null)
-            throw new DalException("The given username doesn't exist.");
+            throw new EmployeeException("The given username doesn't exist.");
         return user;
     }
 
-    public void createUser(String username, String password) throws DalException {
+    public void createUser(String username, String password) throws EmployeeException {
         User user = new User(username, password);
-        userDAO.insert(user);
+        try {
+            userDAO.insert(user);
+        } catch (DalException e) {
+            throw new EmployeeException(e);
+        }
     }
 
-    public void createManagerUser(String username, String password) throws DalException {
+    public void createManagerUser(String username, String password) throws EmployeeException {
         User user = new User(username, password, Authorization.HRManager);
-        userDAO.insert(user);
+        try {
+            userDAO.insert(user);
+        } catch (DalException e) {
+            throw new EmployeeException(e);
+        }
     }
 
-    public boolean isAuthorized(String username, Authorization auth) throws DalException {
+    public boolean isAuthorized(String username, Authorization auth) throws EmployeeException {
         User user = getUser(username);
         return user.isAuthorized(auth);
     }
 
-    public List<Authorization> getUserAuthorizations(String username) throws DalException {
+    public List<Authorization> getUserAuthorizations(String username) throws EmployeeException {
         User user = getUser(username);
         return user.getAuthorizations();
     }
 
-    public void authorizeUser(String username, Authorization auth) throws DalException {
-        User user = getUser(username);
-        user.authorize(auth);
-        userDAO.update(user);
+    public void authorizeUser(String username, Authorization auth) throws EmployeeException {
+        User user = null;
+        try {
+            user = getUser(username);
+            user.authorize(auth);
+            userDAO.update(user);
+        } catch (DalException e) {
+            throw new EmployeeException(e);
+        }
     }
 
-    public boolean isLoggedIn(String username) throws DalException {
+    public boolean isLoggedIn(String username) throws EmployeeException {
         return getUser(username).isLoggedIn();
     }
 }

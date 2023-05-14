@@ -80,7 +80,7 @@ public class User {// This class represents a user in the system and manages its
             return false;
         }
         User user = (User) o;
-        return username == user.username;
+        return username.equals(user.username);
     }
 
     @Override

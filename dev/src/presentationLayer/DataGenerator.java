@@ -7,6 +7,7 @@ import businessLayer.employeeModule.Role;
 import businessLayer.transportModule.SitesController;
 import dataAccessLayer.DalFactory;
 import exceptions.DalException;
+import exceptions.EmployeeException;
 import exceptions.TransportException;
 import objects.transportObjects.*;
 import serviceLayer.ServiceFactory;
@@ -226,7 +227,7 @@ public class DataGenerator {
     public static void initializeUserData(UserService us, UserController uc) {
         try {
             uc.createManagerUser(HR_MANAGER_USERNAME, "123");
-        } catch (DalException e) {
+        } catch (EmployeeException e) {
             throw new RuntimeException(e);
         }
         us.createUser(HR_MANAGER_USERNAME, UserService.TRANSPORT_MANAGER_USERNAME, "123");

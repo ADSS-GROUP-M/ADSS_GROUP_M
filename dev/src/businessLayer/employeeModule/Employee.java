@@ -162,7 +162,7 @@ public class Employee {
             return false;
         }
         Employee employee = (Employee) o;
-        return id == employee.id;
+        return id.equals(employee.id);
     }
 
     @Override

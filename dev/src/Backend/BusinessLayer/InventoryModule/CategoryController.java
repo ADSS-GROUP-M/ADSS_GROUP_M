@@ -42,6 +42,7 @@ public class CategoryController {
                 }
             }
             categories.put(categoryName,new Category(categoryName,subcategories));
+            categoryManagerMapper.createCategory(categoryName, subcategories);
         }
     }
 

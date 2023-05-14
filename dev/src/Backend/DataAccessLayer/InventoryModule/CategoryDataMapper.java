@@ -46,5 +46,10 @@ public class CategoryDataMapper extends AbstractDataMapper {
         return cachedCategory;
     }
 
+    public boolean isExists(String category_name) throws SQLException {
+        OfflineResultSet resultSet = sqlExecutor.executeRead(String.format("SELECT COUNT(*) as count FROM %s WHERE category_name = '%s'", tableName, category_name));
+        return resultSet.getInt("count") > 0;
+    }
+
 }
 

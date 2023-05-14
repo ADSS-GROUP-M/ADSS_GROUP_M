@@ -4,8 +4,18 @@ import Backend.DataAccessLayer.dalUtils.AbstractDataMapper;
 import java.sql.SQLException;
 
 public class CategoryHierarchyDataMapper extends AbstractDataMapper {
-    public CategoryHierarchyDataMapper() {
+    private static CategoryHierarchyDataMapper instance = null;
+
+    private CategoryHierarchyDataMapper() {
         super("category_hierarchy", new String[]{"category", "sub_category"});
+    }
+
+    public static CategoryHierarchyDataMapper getInstance(){
+        if (instance == null) {
+            return new CategoryHierarchyDataMapper();
+        } else {
+            return instance;
+        }
     }
 
     public void insert(String category_name, String sub_category) throws SQLException {

@@ -5,8 +5,7 @@ import Backend.BusinessLayer.BusinessLayerUsage.Branch;
 import java.util.*;
 
 public class CategoryController {
-    // Map<name, Category>
-    public Map<Branch,Map<String,Category>> categories;
+    public Map<String,Category> categories; // Map<name, Category>
 
     //create the controller as Singleton
     private static CategoryController categoryController = null;

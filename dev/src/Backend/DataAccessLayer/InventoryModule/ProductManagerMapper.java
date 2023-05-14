@@ -91,7 +91,6 @@ public class ProductManagerMapper {
                     product = cachedProducts.get(Branch.valueOf(branch)).get(catalog_number);
                 product.addProductItem(productItem);
             }
-
         } catch (SQLException e) {
             //TODO: Handle the exception appropriately
         }

@@ -1,7 +1,9 @@
 package Backend.BusinessLayer.SuppliersModule;
 
 import Backend.BusinessLayer.BusinessLayerUsage.Branch;
+import Backend.DataAccessLayer.dalUtils.DalException;
 
+import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -214,22 +216,37 @@ public class OrderController {
         return suppliersCanSupply;
     }
 
-    private double computePriceAfterDiscount(Supplier supplier, Map<String, Integer> orderFromSupplier){
+    private double computePriceAfterDiscount(Supplier supplier, Map<String, Integer> orderFromSupplier) {
         double sum = 0;
         int amountOfProducts = 0;
         for(String catalogNumber : orderFromSupplier.keySet()) {
             Product product = agreementController.getProduct(supplier.getBnNumber(), catalogNumber);
             int amount = orderFromSupplier.get(catalogNumber);
-            if(billOfQuantitiesController.billOfQuantitiesExist(supplier.getBnNumber()))
+            try {
                 sum += billOfQuantitiesController.getProductPriceAfterDiscount(supplier.getBnNumber(), catalogNumber, amount,product.getPrice() * amount);
-            else
+            }
+            catch (Exception e){
                 sum += product.getPrice() * amount;
+            }
             amountOfProducts += amount;
         }
-        if(billOfQuantitiesController.billOfQuantitiesExist(supplier.getBnNumber()))
+        try {
             return billOfQuantitiesController.getPriceAfterDiscounts(supplier.getBnNumber(), amountOfProducts, sum);
-        return sum;
+        }
+        catch (Exception e){
+            return sum;
+        }
     }
+
+    /***
+     * computes the price of the products the supplier can supply after discounts
+     * @param supplier the supplier that his price is being computed
+     * @param order the total order
+     * @param productsToSupply the products of the order the supplier can supply
+     * @return the price of the products the supplier can supply after discounts
+     * @throws SQLException
+     * @throws DalException
+     */
 
     private double computePriceAfterDiscount(Supplier supplier, Map<String, Integer> order, List<String> productsToSupply){
         double sum = 0;
@@ -237,15 +254,20 @@ public class OrderController {
         for(String catalogNumber : productsToSupply) {
             Product product = agreementController.getProduct(supplier.getBnNumber(), catalogNumber);
             int amount = order.get(catalogNumber);
-            if(billOfQuantitiesController.billOfQuantitiesExist(supplier.getBnNumber()))
+            try {
                 sum += billOfQuantitiesController.getProductPriceAfterDiscount(supplier.getBnNumber(), catalogNumber, amount,product.getPrice() * amount);
-            else
+            }
+            catch (Exception e){
                 sum += product.getPrice() * amount;
+            }
             amountOfProducts += amount;
         }
-        if(billOfQuantitiesController.billOfQuantitiesExist(supplier.getBnNumber()))
+        try {
             return billOfQuantitiesController.getPriceAfterDiscounts(supplier.getBnNumber(), amountOfProducts, sum);
-        return sum;
+        }
+        catch (Exception e){
+            return sum;
+        }
     }
 
     public int getDaysForOrder(String catalogNumber, Branch branch){

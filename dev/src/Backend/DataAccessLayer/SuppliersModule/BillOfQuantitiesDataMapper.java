@@ -54,74 +54,38 @@ public class BillOfQuantitiesDataMapper {
         return billOfQuantities;
     }
 
-    private BillOfQuantities addBillOfQuantities(String bnNumber){
+    public BillOfQuantities addBillOfQuantities(String bnNumber){
         suppliersBillOfQuantities.put(bnNumber, new BillOfQuantities());
         return suppliersBillOfQuantities.get(bnNumber);
     }
 
     public void setOrderOfDiscounts(String bnNumber, boolean amountBeforeTotal) throws SQLException, DalException {
-        BillOfQuantities billOfQuantities = null;
-        try {
-            billOfQuantities = getBillOfQuantities(bnNumber);
-        }
-        catch (Exception e){
-            billOfQuantities = addBillOfQuantities(bnNumber);
-        }
         orderOfDiscountsDataMapper.delete(bnNumber);
         orderOfDiscountsDataMapper.insert(bnNumber, amountBeforeTotal);
-        billOfQuantities.setOrderOfDiscounts(amountBeforeTotal);
     }
 
     public void setDiscountOnTotalOrder(String bnNumber, double priceToActivateDiscount, Discount discount) throws SQLException {
-        BillOfQuantities billOfQuantities = null;
-        try {
-            billOfQuantities = getBillOfQuantities(bnNumber);
-        }
-        catch (Exception e){
-            billOfQuantities = addBillOfQuantities(bnNumber);
-        }
         discountOnTotalDataMapper.delete(bnNumber);
         discountOnTotalDataMapper.insert(bnNumber, priceToActivateDiscount, discount);
-        billOfQuantities.setDiscountOnTotalOrder(priceToActivateDiscount, discount);
     }
 
     public void removeDiscountOnTotalOrder(String bnNumber) throws SQLException, DalException {
-        BillOfQuantities billOfQuantities = getBillOfQuantities(bnNumber);
         discountOnTotalDataMapper.delete(bnNumber);
-        billOfQuantities.removeDiscountOnTotalOrder();
     }
 
     public void addProductDiscount(String bnNumber, String catalogNumber, int amount, Discount discount) throws SQLException {
-        BillOfQuantities billOfQuantities = null;
-        try {
-            billOfQuantities = getBillOfQuantities(bnNumber);
-        }
-        catch (Exception e){
-            billOfQuantities = addBillOfQuantities(bnNumber);
-        }
         productsDiscountsDataMapper.insert(bnNumber, catalogNumber, amount, discount);
-        billOfQuantities.addProductDiscount(catalogNumber, amount, discount);
     }
 
     public void removeProductDiscount(String bnNumber, String catalogNumber, int amount) throws SQLException, DalException {
-        BillOfQuantities billOfQuantities = getBillOfQuantities(bnNumber);
         productsDiscountsDataMapper.delete(bnNumber, catalogNumber, amount);
-        billOfQuantities.removeProductDiscount(catalogNumber, amount);
     }
 
     public void removeProductDiscount(String bnNumber, String catalogNumber) throws SQLException, DalException {
-        BillOfQuantities billOfQuantities = getBillOfQuantities(bnNumber);
         productsDiscountsDataMapper.delete(bnNumber, catalogNumber);
-        billOfQuantities.removeProductDiscount(catalogNumber);    }
-
+    }
     public void setProductsDiscounts(String bnNumber, Map<String, Map<Integer, Discount>> productsDiscounts) throws SQLException {
-        BillOfQuantities billOfQuantities = null;
-        try {
-            billOfQuantities = getBillOfQuantities(bnNumber);
-        }
-        catch (Exception e){
-            billOfQuantities = addBillOfQuantities(bnNumber);
-        }
+        productsDiscountsDataMapper.delete(bnNumber);
         for (Map.Entry<String, Map<Integer, Discount>> productDiscount : productsDiscounts.entrySet()){
             String catalogNumber = productDiscount.getKey();
             Map<Integer, Discount> amountsDiscounts = productDiscount.getValue();
@@ -131,36 +95,14 @@ public class BillOfQuantitiesDataMapper {
                 productsDiscountsDataMapper.insert(bnNumber, catalogNumber, amount, discount);
             }
         }
-        billOfQuantities.setProductsDiscounts(productsDiscounts);
     }
 
     public void setDiscountOnAmountOfProducts(String bnNumber, int amountOfProductsForDiscount, Discount discount) throws SQLException {
-        BillOfQuantities billOfQuantities = null;
-        try {
-            billOfQuantities = getBillOfQuantities(bnNumber);
-        }
-        catch (Exception e){
-            billOfQuantities = addBillOfQuantities(bnNumber);
-        }
         discountOnAmountDataMapper.insert(bnNumber, amountOfProductsForDiscount, discount);
-        billOfQuantities.setDiscountOnAmountOfProducts(amountOfProductsForDiscount, discount);
     }
 
     public void removeDiscountOnAmountOfProducts(String bnNumber) throws SQLException, DalException {
-        BillOfQuantities billOfQuantities = getBillOfQuantities(bnNumber);
         discountOnAmountDataMapper.delete(bnNumber);
-        billOfQuantities.removeDiscountOnAmountOfProducts();
-    }
-
-    public boolean getAmountBeforeTotal(String bnNumber){
-        BillOfQuantities billOfQuantities = null;
-        try {
-            billOfQuantities = getBillOfQuantities(bnNumber);
-        }
-        catch (Exception e){
-            billOfQuantities = addBillOfQuantities(bnNumber);
-        }
-        return billOfQuantities.getAmountBeforeTotal();
     }
 
     public void removeBillOfQuantities(String bnNumber) throws SQLException, DalException {

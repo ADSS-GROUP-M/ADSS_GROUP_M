@@ -38,7 +38,7 @@ public class CategoryTest {
     @org.junit.Test
     public void addProductToCategory() {
         category.addProductToCategory(product);
-        Assert.assertTrue("failed to add product to category",category.isProductIDRelated(product.getCatalogNumber()));
+        Assert.assertTrue("failed to add product to category",category.isProductIDRelated(product.getCatalogNumber(),branch));
     }
 
     //Test 2
@@ -46,9 +46,9 @@ public class CategoryTest {
     @org.junit.Test
     public void removeProductFromCategory() {
         category.addProductToCategory(product);
-        Assert.assertTrue("failed to add product to category",category.isProductIDRelated(product.getCatalogNumber()));
-        category.removeProduct(product.getCatalogNumber());
-        Assert.assertFalse("failed to remove product from category",category.isProductIDRelated(product.getCatalogNumber()));
+        Assert.assertTrue("failed to add product to category",category.isProductIDRelated(product.getCatalogNumber(),branch));
+        category.removeProduct(product);
+        Assert.assertFalse("failed to remove product from category",category.isProductIDRelated(product.getCatalogNumber(),branch));
     }
 
     //Test 3

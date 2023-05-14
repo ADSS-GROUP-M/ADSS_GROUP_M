@@ -12,7 +12,6 @@ public class Product {
     private  String catalog_number;
     private  String name;
     private String manufacturer;
-//    private double originalSupplierPrice;
     private double originalStorePrice;
     private Category category;
     private List<Category> subCategory;
@@ -54,10 +53,11 @@ public class Product {
         this.notificationMin = newVal;
     }
 
-    public void addProductItem(String serialNumber, String supplierID, double supplierPrice, double supplierDiscount,String location, LocalDateTime expirationDate){
-        productItems.put(serialNumber,new ProductItem(serialNumber,supplierID, supplierPrice, supplierDiscount, location, expirationDate, catalog_number, branch));
-    }
+//    public void addProductItem(String serialNumber, String supplierID, double supplierPrice, double supplierDiscount,String location, LocalDateTime expirationDate){
+//        productItems.put(serialNumber,new ProductItem(serialNumber,supplierID, supplierPrice, supplierDiscount, location, expirationDate, catalog_number, branch));
+//    }
 
+    public void addProductItem(ProductItem item){productItems.put(item.getSerial_number(), item);}
 
     public List<ProductItem> getDefectiveProductItems(){
         List<ProductItem> defectiveList = new ArrayList<ProductItem>();

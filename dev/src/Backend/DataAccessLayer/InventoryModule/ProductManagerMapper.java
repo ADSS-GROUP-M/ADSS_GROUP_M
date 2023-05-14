@@ -57,7 +57,7 @@ public class ProductManagerMapper {
         }
     }
 
-    public void crateProduct(String catalog_number, String branch, String name, String manufacture, double originalStorePrice){
+    public void createProduct(String catalog_number, String branch, String name, String manufacture, double originalStorePrice){
         try {
             if(!isProductExists(catalog_number)){
                 productsDataMapper.insert(catalog_number, name, manufacture);
@@ -71,28 +71,47 @@ public class ProductManagerMapper {
         }
     }
 
-    public void crateProductItem(String serial_number, int is_defective, String defection_date, String supplier_id, double supplier_price, double supplier_discount, double sold_price, LocalDateTime expiration_date, String location, String catalog_number, String branch, String name, String manufacture, double originalStorePrice) {
+    public void createProductItem(String serial_number, int is_defective, String defection_date, String supplier_id, double supplier_price, double supplier_discount, double sold_price, LocalDateTime expiration_date, String location, String catalog_number, String branch, String name, String manufacture, double originalStorePrice) {
         try {
+            Product product = null;
             if (!isProductExists(catalog_number)) {
-                crateProduct(catalog_number,branch, name, manufacture, originalStorePrice);
-                Product product = new Product(catalog_number, name, manufacture, originalStorePrice, Branch.valueOf(branch));
+                createProduct(catalog_number,branch, name, manufacture, originalStorePrice);
+                product = new Product(catalog_number, name, manufacture, originalStorePrice, Branch.valueOf(branch));
                 cachedProducts.computeIfAbsent(product.getBranch(), k -> new HashMap<>())
                         .put(product.getCatalogNumber(), product);
                 productPairBranchDataMapper.insert(branch, catalog_number, originalStorePrice);
             }
-
             if (!isItemExists(serial_number, catalog_number, branch)) {
                 productItemDataMapper.insert(serial_number, is_defective, defection_date, supplier_id, supplier_price,
                         supplier_discount, sold_price, expiration_date, location, catalog_number, branch);
                 ProductItem productItem = new ProductItem(serial_number, supplier_id, supplier_price, supplier_discount,
                         location, expiration_date, catalog_number, Branch.valueOf(branch));
                 cachedItems.computeIfAbsent(catalog_number, k -> new ArrayList<>()).add(productItem);
+                if(product == null)
+                    product = cachedProducts.get(Branch.valueOf(branch)).get(catalog_number);
+                product.addProductItem(productItem);
             }
 
         } catch (SQLException e) {
             //TODO: Handle the exception appropriately
         }
 
+    }
+
+    //TODO
+    public void updateProduct(String catalog_number, String branch, String name, String manufacture, double originalStorePrice){
+        try {
+            if(isProductExists(catalog_number)){
+
+                productsDataMapper.update(catalog_number, name, manufacture);
+                productPairBranchDataMapper.insert(branch, catalog_number, originalStorePrice);
+                Product product = new Product(catalog_number, name, manufacture, originalStorePrice, Branch.valueOf(branch));
+                cachedProducts.computeIfAbsent(product.getBranch(), k -> new HashMap<>())
+                        .put(product.getCatalogNumber(), product);
+            }
+        } catch (SQLException e) {
+            //TODO: Handle the exception appropriately
+        }
     }
 
     public void addCategoryToProduct() {

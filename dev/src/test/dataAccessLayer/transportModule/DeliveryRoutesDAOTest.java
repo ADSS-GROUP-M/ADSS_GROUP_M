@@ -28,17 +28,7 @@ import static org.mockito.Mockito.mock;
 
 class DeliveryRoutesDAOTest {
 
-    public static final int TRANSPORT_ID = 1;
-    public static final int LIST_ID = 1;
-    public static final LocalTime ARRIVAL_TIME = LocalTime.of(20, 20);
-    public static final String SOURCE_NAME = "source1";
-    public static final String DEST_NAME1 = "dest1";
-    private static final String DEST_NAME2 = "dest2";
     private DeliveryRoutesDAO dao;
-//    private TransportDestination transportDestination1;
-//    private TransportDestination transportDestination2;
-//    private TransportDestination transportDestination3;
-//    private TransportDestination transportDestination4;
     private Site source;
     private Site dest1;
     private Site dest2;
@@ -107,6 +97,7 @@ class DeliveryRoutesDAOTest {
 
             //initialize transport arrival times
             arrivalTimes = new HashMap<>();
+            arrivalTimes.put(source.name(), LocalTime.of(12, 0));
             arrivalTimes.put(dest1.name(), LocalTime.of(12, (int) route1.duration()));
             arrivalTimes.put(dest2.name(), LocalTime.of(12, (int)(route1.duration() + route2.duration() + TransportsController.AVERAGE_TIME_PER_VISIT)));
 
@@ -133,6 +124,7 @@ class DeliveryRoutesDAOTest {
             itemListsDAO = factory.itemListsDAO();
             transportsDAO = factory.transportsDAO();
             routesDAO = factory.sitesRoutesDAO();
+            dao = factory.deliveryRoutesDAO();
 
             sitesDAO.insert(source);
             sitesDAO.insert(dest1);
@@ -368,14 +360,15 @@ class DeliveryRoutesDAOTest {
     void getObjectFromResultSet() {
         SQLExecutor cursor = factory.cursor();
         try{
-            
-            String query = String.format("SELECT * FROM delivery_routes WHERE transport_id = %d",
-                    transport.id());
+            //set up
+            dao.insert(deliveryRoute);
+
+            //test
+            String query = String.format("SELECT * FROM delivery_routes WHERE transport_id = %d; ",transport.id());
             OfflineResultSet resultSet = cursor.executeRead(query);
-            resultSet.next();
             DeliveryRoute selected = dao.getObjectFromResultSet(resultSet);
             assertDeepEquals(deliveryRoute, selected);
-        } catch (SQLException e){
+        } catch (SQLException | DalException e){
             fail(e.getMessage(),e.getCause());
         }
     }

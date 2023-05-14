@@ -152,6 +152,7 @@ public class DalFactory {
             factory.shiftDAO().clearTable();
             factory.userDAO().clearTable();
 
+            factory.deliveryRoutesDAO().clearTable();
             factory.transportsDAO().clearTable();
 
             factory.trucksDAO().clearTable();

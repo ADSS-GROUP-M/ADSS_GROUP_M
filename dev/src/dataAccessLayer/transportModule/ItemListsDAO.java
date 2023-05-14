@@ -30,6 +30,18 @@ public class ItemListsDAO extends DAO<ItemList> implements CounterDAO {
         initTable();
     }
 
+    @Override
+    protected void initTable() throws DalException{
+        super.initTable();
+        try {
+            if(exists(ItemList.getLookupObject(-1)) == false){
+                cursor.executeWrite("INSERT INTO %s (id) VALUES (-1);".formatted(TABLE_NAME));
+            }
+        } catch (SQLException e) {
+            throw new DalException("Failed to initialize item lists table", e);
+        }
+    }
+
     /**
      * @param object getLookUpObject(identifier) of the object to select
      * @return the object with the given identifier

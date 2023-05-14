@@ -31,6 +31,8 @@ class DriversDAOTest {
 
     @BeforeEach
     void setUp() {
+        DalFactory.clearTestDB();
+
         employee = new Employee("name1","12345","Poalim",50, LocalDate.of(1999,10,10),"conditions","details");
         employee.addRole(Role.Driver);
         employee.addRole(Role.GeneralWorker);
@@ -54,18 +56,7 @@ class DriversDAOTest {
 
     @AfterEach
     void tearDown() {
-        try {
-            dao.selectAll().forEach(driver ->{
-                try {
-                    dao.delete(driver);
-                } catch (DalException e) {
-                    fail(e.getMessage(),e.getCause());
-                }
-            });
-            empDao.clearTable();
-        } catch (DalException e) {
-            fail(e.getMessage(),e.getCause());
-        }
+        DalFactory.clearTestDB();
     }
 
     @Test

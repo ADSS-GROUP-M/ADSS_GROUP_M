@@ -45,11 +45,11 @@ class SitesDAOTest {
                 try {
                     dao.delete(site);
                 } catch (DalException e) {
-                    fail(e);
+                    fail(e.getMessage(),e.getCause());
                 }
             });
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
         dao = null;
         site = null;
@@ -60,7 +60,7 @@ class SitesDAOTest {
         try {
             assertDeepEquals(site,dao.select(Site.getLookupObject(site.name())));
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
     }
 
@@ -76,7 +76,7 @@ class SitesDAOTest {
                 dao.insert(site);
                 sites.add(site);
             } catch (DalException e) {
-                fail(e);
+                fail(e.getMessage(),e.getCause());
             }
         });
 
@@ -88,7 +88,7 @@ class SitesDAOTest {
                 assertDeepEquals(sites.get(i),sitesFromDB.get(i));
             }
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
     }
 
@@ -99,7 +99,7 @@ class SitesDAOTest {
             dao.insert(site2);
             assertDeepEquals(site2,dao.select(Site.getLookupObject(site2.name())));
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
     }
 
@@ -110,7 +110,7 @@ class SitesDAOTest {
             dao.update(site2);
             assertDeepEquals(site2,dao.select(Site.getLookupObject(site2.name())));
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
     }
 
@@ -120,7 +120,7 @@ class SitesDAOTest {
             dao.delete(site);
             assertThrows(DalException.class,() -> dao.select(Site.getLookupObject(site.name())));
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
     }
 
@@ -133,7 +133,7 @@ class SitesDAOTest {
             Site siteFromDB = dao.getObjectFromResultSet(resultSet);
             assertDeepEquals(site,siteFromDB);
         } catch (SQLException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
     }
 

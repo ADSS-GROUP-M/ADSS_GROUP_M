@@ -41,7 +41,7 @@ class EmployeeDAOTest {
             dao.insert(employee1);
             dao.insert(employee2);
         } catch (DalException | RuntimeException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
     }
 
@@ -55,7 +55,7 @@ class EmployeeDAOTest {
         try {
             assertDeepEquals(employee1,dao.select(employee1.getId()));
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
     }
 
@@ -72,7 +72,7 @@ class EmployeeDAOTest {
                 assertDeepEquals(expectedEmployees.get(i), selectedEmployees.get(i));
             }
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
     }
 
@@ -81,7 +81,7 @@ class EmployeeDAOTest {
         try {
             dao.insert(employee3);
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
     }
 
@@ -102,7 +102,7 @@ class EmployeeDAOTest {
             dao.update(updatedEmployee1);
             assertDeepEquals(updatedEmployee1, dao.select(updatedEmployee1.getId()));
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
     }
 
@@ -123,7 +123,7 @@ class EmployeeDAOTest {
         try {
             dao.delete(employee2);
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
         assertThrows(DalException.class, () -> dao.select(employee2.getId()));
     }
@@ -136,7 +136,7 @@ class EmployeeDAOTest {
             resultSet.next();
             assertDeepEquals(employee1, dao.getObjectFromResultSet(resultSet));
         } catch (SQLException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
     }
 

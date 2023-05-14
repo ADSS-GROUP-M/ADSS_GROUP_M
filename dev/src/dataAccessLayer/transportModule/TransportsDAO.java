@@ -3,31 +3,27 @@ package dataAccessLayer.transportModule;
 import dataAccessLayer.dalAbstracts.CounterDAO;
 import dataAccessLayer.dalAbstracts.ManyToManyDAO;
 import dataAccessLayer.dalAbstracts.SQLExecutor;
-import dataAccessLayer.dalAssociationClasses.transportModule.TransportDestination;
 import dataAccessLayer.dalUtils.OfflineResultSet;
 import exceptions.DalException;
-import objects.transportObjects.DeliveryRoute;
 import objects.transportObjects.Transport;
 
 import java.sql.SQLException;
-import java.time.LocalTime;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
 
 public class TransportsDAO extends ManyToManyDAO<Transport> implements CounterDAO {
 
-    private static final String[] types = {"INTEGER", "TEXT", "TEXT", "TEXT", "TEXT", "INTEGER"};
-    private static final String[] parent_tables = {"truck_drivers", "trucks", "sites"};
+    private static final String[] types = {"INTEGER", "TEXT", "TEXT", "TEXT", "INTEGER"};
+    private static final String[] parent_tables = {"truck_drivers", "trucks"};
     private static final String[] primary_keys = {"id"};
-    private static final String[][] foreign_keys = {{"driver_id"}, {"truck_id"},{"source_name"}};
-    private static final String[][] references = {{"id"}, {"id"}, {"name"}};
-    public static final String tableName = "transports";
+    private static final String[][] foreign_keys = {{"driver_id"}, {"truck_id"}};
+    private static final String[][] references = {{"id"}, {"id"}};
+    private static final String tableName = "transports";
 
-    private final TransportDestinationsDAO destinationsDAO;
     private final TransportIdCounterDAO counterDAO;
 
-    public TransportsDAO(SQLExecutor cursor, TransportDestinationsDAO destinationsDAO, TransportIdCounterDAO counterDAO) throws DalException{
+    public TransportsDAO(SQLExecutor cursor, TransportIdCounterDAO counterDAO) throws DalException{
         super(cursor,
 				tableName,
                 parent_tables,
@@ -36,13 +32,11 @@ public class TransportsDAO extends ManyToManyDAO<Transport> implements CounterDA
                 foreign_keys,
                 references,
                 "id",
-                "source_name",
                 "driver_id",
                 "truck_id",
                 "departure_time",
                 "weight"
         );
-        this.destinationsDAO = destinationsDAO;
         this.counterDAO = counterDAO;
         initTable();
     }
@@ -59,7 +53,6 @@ public class TransportsDAO extends ManyToManyDAO<Transport> implements CounterDA
             return cache.get(object);
         }
 
-        List<TransportDestination> transportDestinations = destinationsDAO.selectAllRelated(object);
         String query = String.format("SELECT * FROM %s WHERE id = %d;",
                 TABLE_NAME,
                 object.id()
@@ -68,10 +61,10 @@ public class TransportsDAO extends ManyToManyDAO<Transport> implements CounterDA
         try {
             resultSet = cursor.executeRead(query);
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DalException("Failed to select transport", e);
         }
         if (resultSet.next()){
-            Transport selected = getObjectFromResultSet(resultSet, transportDestinations);
+            Transport selected = getObjectFromResultSet(resultSet);
             cache.put(selected);
             return selected;
         } else {
@@ -91,13 +84,11 @@ public class TransportsDAO extends ManyToManyDAO<Transport> implements CounterDA
         try {
             resultSet = cursor.executeRead(query);
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DalException("Failed to select all transports", e);
         }
         while (resultSet.next()){
-            Transport lookupObject = Transport.getLookupObject(resultSet.getInt("id"));
-            transports.add(getObjectFromResultSet(
-                    resultSet,
-                    destinationsDAO.selectAllRelated(lookupObject)));
+            Transport selected = getObjectFromResultSet(resultSet);
+            transports.add(selected);
         }
         cache.putAll(transports);
         return transports;
@@ -109,10 +100,9 @@ public class TransportsDAO extends ManyToManyDAO<Transport> implements CounterDA
      */
     @Override
     public void insert(Transport object) throws DalException {
-        String query = String.format("INSERT INTO %s VALUES (%d, '%s', '%s', '%s', '%s', %d);",
+        String query = String.format("INSERT INTO %s VALUES (%d, '%s', '%s', '%s', %d);",
                 TABLE_NAME,
                 object.id(),
-                object.source(),
                 object.driverId(),
                 object.truckId(),
                 object.departureTime(),
@@ -120,13 +110,12 @@ public class TransportsDAO extends ManyToManyDAO<Transport> implements CounterDA
         );
         try {
             if(cursor.executeWrite(query) == 1){
-                destinationsDAO.insertFromTransport(object);
                 cache.put(object);
             } else {
                 throw new RuntimeException("Unexpected error while inserting transport");
             }
         } catch (SQLException e) {
-            throw new DalException("Failed to insert transport");
+            throw new DalException("Failed to insert transport",e);
         }
     }
 
@@ -136,9 +125,8 @@ public class TransportsDAO extends ManyToManyDAO<Transport> implements CounterDA
      */
     @Override
     public void update(Transport object) throws DalException {
-        String query = String.format("UPDATE %s SET source_name = '%s', driver_id = '%s', truck_id = '%s', departure_time = '%s', weight = %d WHERE id = %d;",
+        String query = String.format("UPDATE %s SET driver_id = '%s', truck_id = '%s', departure_time = '%s', weight = %d WHERE id = %d;",
                 TABLE_NAME,
-                object.source(),
                 object.driverId(),
                 object.truckId(),
                 object.departureTime(),
@@ -146,15 +134,13 @@ public class TransportsDAO extends ManyToManyDAO<Transport> implements CounterDA
                 object.id()
         );
         try {
-            destinationsDAO.deleteAllRelated(object);
             if(cursor.executeWrite(query) == 1){
-                destinationsDAO.insertFromTransport(object);
                 cache.put(object);
             } else {
                 throw new DalException("No transport with id " + object.id() + " was found");
             }
         } catch (SQLException e) {
-            throw new DalException("Failed to update transport");
+            throw new DalException("Failed to update transport",e);
         }
     }
 
@@ -168,14 +154,13 @@ public class TransportsDAO extends ManyToManyDAO<Transport> implements CounterDA
                 object.id()
         );
         try {
-            destinationsDAO.deleteAllRelated(object);
             if(cursor.executeWrite(query) == 1){
                 cache.remove(object);
             } else {
                 throw new DalException("No transport with id " + object.id() + " was found");
             }
         } catch (SQLException e) {
-            throw new DalException("Failed to delete transport");
+            throw new DalException("Failed to delete transport",e);
         }
     }
 
@@ -193,34 +178,12 @@ public class TransportsDAO extends ManyToManyDAO<Transport> implements CounterDA
         try{
             return cursor.executeRead(query).isEmpty() == false;
         } catch (SQLException e) {
-            throw new DalException("Failed to check if transport exists");
+            throw new DalException("Failed to check if transport exists",e);
         }
-    }
-
-    protected Transport getObjectFromResultSet(OfflineResultSet resultSet, List<TransportDestination> transportDestinations){
-        LinkedList<String> destinations = new LinkedList<>();
-        HashMap<String,Integer> itemLists = new HashMap<>();
-        HashMap<String, LocalTime> estimatedTimesOfArrival = new HashMap<>();
-        for(TransportDestination transportDestination : transportDestinations){
-            destinations.add(transportDestination.name());
-            itemLists.put(transportDestination.name(), transportDestination.itemListId());
-            estimatedTimesOfArrival.put(transportDestination.name(), transportDestination.expectedArrivalTime());
-        }
-
-        String sourceAddress = resultSet.getString("source_name");
-        return new Transport(
-                resultSet.getInt("id"),
-                new DeliveryRoute(sourceAddress, destinations,itemLists, estimatedTimesOfArrival),
-                resultSet.getString("driver_id"),
-                resultSet.getString("truck_id"),
-                resultSet.getLocalDateTime("departure_time"),
-                resultSet.getInt("weight")
-        );
     }
 
     @Override
     public void clearTable() {
-        destinationsDAO.clearTable();
         try {
             resetCounter();
         } catch (DalException e) {
@@ -230,11 +193,18 @@ public class TransportsDAO extends ManyToManyDAO<Transport> implements CounterDA
     }
 
     /**
-     * @deprecated use {@link #getObjectFromResultSet(OfflineResultSet, List)} instead
+     * @return Transport object where <br/> DeliveryRoute == null -> true
      */
-    @Deprecated
+    @Override
     protected Transport getObjectFromResultSet(OfflineResultSet resultSet) {
-        throw new UnsupportedOperationException("Not implemented");
+        return new Transport(
+                resultSet.getInt("id"),
+                null,
+                resultSet.getString("driver_id"),
+                resultSet.getString("truck_id"),
+                resultSet.getLocalDateTime("departure_time"),
+                resultSet.getInt("weight")
+        );
     }
 
     @Override

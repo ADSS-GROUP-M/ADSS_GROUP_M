@@ -57,7 +57,7 @@ class UserDAOTest {
         try {
             userDAO.insert(user2);
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
     }
 
@@ -77,7 +77,7 @@ class UserDAOTest {
             userDAO.update(updatedUser1);
             assertDeepEquals(updatedUser1, userDAO.select(updatedUser1.getUsername()));
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
     }
 
@@ -97,7 +97,7 @@ class UserDAOTest {
         try {
             userDAO.delete(user1);
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
         assertThrows(DalException.class, () -> userDAO.select(user1.getUsername()));
         //try {
@@ -110,7 +110,7 @@ class UserDAOTest {
         try {
             assertDeepEquals(user1, userDAO.select(user1.getUsername()));
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
     }
 
@@ -127,7 +127,7 @@ class UserDAOTest {
                 assertDeepEquals(expectedUsers.get(i), selectedUsers.get(i));
             }
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
     }
 
@@ -139,7 +139,7 @@ class UserDAOTest {
             resultSet.next();
             assertDeepEquals(user1, userDAO.getObjectFromResultSet(resultSet));
         } catch (SQLException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
     }
 

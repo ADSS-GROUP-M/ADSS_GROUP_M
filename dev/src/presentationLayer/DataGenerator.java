@@ -330,8 +330,8 @@ public class DataGenerator {
     private static void generateTransports(TransportsService ts) {
 
         Transport transport1 = new Transport(
-                logistical1.name(),
                 new LinkedList<>(){{
+                    add(logistical1.name());
                     add(supplier1.name());
                     add(branch2.name());
                     add(supplier2.name());
@@ -340,6 +340,7 @@ public class DataGenerator {
                     add(branch4.name());
                 }},
                 new HashMap<>(){{
+                    put(logistical1.name(), -1);
                     put(supplier1.name(), 4);
                     put(branch2.name(), 1);
                     put(supplier2.name(), 5);
@@ -354,8 +355,8 @@ public class DataGenerator {
         );
 
         Transport transport2 = new Transport(
-                logistical1.name(),
                 new LinkedList<>(){{
+                    add(logistical1.name());
                     add(supplier4.name());
                     add(branch5.name());
                     add(supplier5.name());
@@ -365,6 +366,7 @@ public class DataGenerator {
                     add(branch9.name());
                 }},
                 new HashMap<>(){{
+                    put(logistical1.name(), -1);
                     put(supplier4.name(), 4);
                     put(branch5.name(), 1);
                     put(supplier5.name(), 5);

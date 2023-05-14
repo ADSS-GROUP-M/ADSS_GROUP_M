@@ -30,7 +30,7 @@ class TrucksDAOTest {
             dao = factory.trucksDAO();
             truck = new Truck("1", "model1", 1000, 20000, Truck.CoolingCapacity.FROZEN);
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
     }
 
@@ -49,7 +49,7 @@ class TrucksDAOTest {
             // test
             assertDeepEquals(truck,dao.select(Truck.getLookupObject(truck.id())));
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
     }
 
@@ -68,7 +68,7 @@ class TrucksDAOTest {
                 trucks.add(new Truck(String.valueOf(i), "model" + i, 1000, 20000, Truck.CoolingCapacity.FROZEN));
                 dao.insert(trucks.getLast());
             } catch (DalException e) {
-                fail(e);
+                fail(e.getMessage(),e.getCause());
             }
         });
 
@@ -80,7 +80,7 @@ class TrucksDAOTest {
                 assertDeepEquals(trucks.get(i), selectedTrucks.get(i));
             }
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
     }
 
@@ -89,7 +89,7 @@ class TrucksDAOTest {
         try {
             assertEquals(0, dao.selectAll().size());
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
     }
 
@@ -104,7 +104,7 @@ class TrucksDAOTest {
             dao.update(updatedTruck);
             assertDeepEquals(updatedTruck, dao.select(Truck.getLookupObject(truck.id())));
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
     }
 
@@ -121,7 +121,7 @@ class TrucksDAOTest {
             dao.insert(truck);
             dao.clearCache();
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
 
         // test
@@ -149,7 +149,7 @@ class TrucksDAOTest {
             resultSet.next();
             assertDeepEquals(truck, dao.getObjectFromResultSet(resultSet));
         } catch (SQLException | DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
     }
 
@@ -160,7 +160,7 @@ class TrucksDAOTest {
             dao.clearCache();
             assertTrue(dao.exists(Truck.getLookupObject(truck.id())));
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
     }
 
@@ -170,7 +170,7 @@ class TrucksDAOTest {
             dao.insert(truck);
             assertTrue(dao.exists(Truck.getLookupObject(truck.id())));
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
     }
 
@@ -180,7 +180,7 @@ class TrucksDAOTest {
             dao.insert(truck);
             assertDeepEquals(truck, dao.select(Truck.getLookupObject(truck.id())));
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
     }
 

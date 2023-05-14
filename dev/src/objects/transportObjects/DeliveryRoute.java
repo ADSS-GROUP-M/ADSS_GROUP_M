@@ -1,40 +1,51 @@
 package objects.transportObjects;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class DeliveryRoute {
 
-    private final String source;
-    private final List<String> destinations;
+    private final int transportId;
+    private final List<String> route;
     private final Set<String> destinationsSet;
     private final Map<String,Integer> destinations_itemListIds;
     private Map<String, LocalTime> estimatedArrivalTimes;
     private boolean manualOverride;
-
-    public DeliveryRoute(String source,
-                         List<String> destinations,
+    public DeliveryRoute(int transportId,
+                         List<String> route,
                          Map<String, Integer> destinations_itemListIds,
                          Map<String, LocalTime> estimatedArrivalTimes){
-        this.source = source;
-        this.destinations = destinations;
-        this.destinationsSet = new HashSet<>(destinations);
+        this.transportId = transportId;
+        this.route = route;
+        this.destinationsSet = new HashSet<>(route);
         this.destinations_itemListIds = destinations_itemListIds;
         this.estimatedArrivalTimes = estimatedArrivalTimes;
     }
 
-    public DeliveryRoute(String source,
-                         List<String> destinations,
+
+    /**
+     * this constructor sets the id to be -1
+     */
+    public DeliveryRoute(
+                         List<String> route,
                          Map<String, Integer> destinations_itemListIds){
-        this(source,destinations,destinations_itemListIds,null);
+        this(-1,route,destinations_itemListIds,null);
+    }
+
+    public DeliveryRoute(int newId, DeliveryRoute deliveryRoute) {
+        this(newId, deliveryRoute.route, deliveryRoute.destinations_itemListIds, deliveryRoute.estimatedArrivalTimes);
+    }
+
+    public DeliveryRoute(int transportId,
+                         List<String> route,
+                         Map<String, Integer> destinations_itemListIds){
+        this(transportId,route,destinations_itemListIds,null);
     }
 
     public void initializeArrivalTimes(Map<String,LocalTime> estimatedArrivalTimes){
         // check there is an arrival time for each destination
-        for(String destination : destinations){
+        for(String destination : route){
             if(estimatedArrivalTimes.containsKey(destination) == false){
                 throw new RuntimeException("Incomplete estimated arrival times");
             }
@@ -62,12 +73,15 @@ public class DeliveryRoute {
         manualOverride = true;
     }
 
-    public String source() {
-        return source;
+    public int transportId() {
+        return transportId;
     }
 
-    public List<String> destinations() {
-        return destinations;
+    /**
+     * @apiNote route().get(0) is the source
+     */
+    public List<String> route() {
+        return route;
     }
 
     public Map<String, Integer> itemLists() {
@@ -80,5 +94,22 @@ public class DeliveryRoute {
 
     public boolean manuallyOverrideEstimatedArrivalTimes() {
         return manualOverride;
+    }
+
+    public static DeliveryRoute getLookupObject(int transportId){
+        return new DeliveryRoute(transportId,new LinkedList<>(),null);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DeliveryRoute that = (DeliveryRoute) o;
+        return transportId == that.transportId;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(transportId);
     }
 }

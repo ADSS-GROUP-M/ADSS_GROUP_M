@@ -31,6 +31,8 @@ class DriversDAOTest {
 
     @BeforeEach
     void setUp() {
+        DalFactory.clearTestDB();
+
         employee = new Employee("name1","12345","Poalim",50, LocalDate.of(1999,10,10),"conditions","details");
         employee.addRole(Role.Driver);
         employee.addRole(Role.GeneralWorker);
@@ -47,25 +49,14 @@ class DriversDAOTest {
             empDao.insert(employee);
             dao.insert(driver);
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
         dao.clearCache();
     }
 
     @AfterEach
     void tearDown() {
-        try {
-            dao.selectAll().forEach(driver ->{
-                try {
-                    dao.delete(driver);
-                } catch (DalException e) {
-                    fail(e);
-                }
-            });
-            empDao.clearTable();
-        } catch (DalException e) {
-            fail(e);
-        }
+        DalFactory.clearTestDB();
     }
 
     @Test
@@ -74,7 +65,7 @@ class DriversDAOTest {
             Driver selectedDriver = dao.select(Driver.getLookupObject(driver.id()));
             assertDeepEquals(driver,selectedDriver);
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
     }
 
@@ -91,7 +82,7 @@ class DriversDAOTest {
                 dao.insert(newDriver);
                 drivers.add(newDriver);
             } catch (DalException e) {
-                fail(e);
+                fail(e.getMessage(),e.getCause());
             }
         });
 
@@ -103,7 +94,7 @@ class DriversDAOTest {
                 assertDeepEquals(drivers.get(i),selectedDrivers.get(i));
             }
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
     }
 
@@ -117,7 +108,7 @@ class DriversDAOTest {
             Driver selectedDriver = dao.select(Driver.getLookupObject(driver2.id()));
             assertDeepEquals(driver2,selectedDriver);
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
     }
 
@@ -129,7 +120,7 @@ class DriversDAOTest {
             Driver selectedDriver = dao.select(Driver.getLookupObject(driver.id()));
             assertDeepEquals(updatedDriver,selectedDriver);
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
     }
 
@@ -139,7 +130,7 @@ class DriversDAOTest {
             dao.delete(driver);
             assertThrows(DalException.class,() -> dao.select(Driver.getLookupObject(driver.id())));
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
     }
 
@@ -160,7 +151,7 @@ class DriversDAOTest {
             Driver selectedDriver = dao.getObjectFromResultSet(resultSet);
             assertDeepEquals(driver,selectedDriver);
         } catch (SQLException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
     }
 

@@ -18,10 +18,10 @@ public record Transport (
         LocalDateTime departureTime,
         int weight) {
 
-    public Transport(int id, String source, List<String> destinations,Map<String,Integer> itemLists , String driverId, String truckId, LocalDateTime departureTime, int weight){
+    public Transport(int id, List<String> route ,Map<String,Integer> itemLists , String driverId, String truckId, LocalDateTime departureTime, int weight){
         this(
                 id,
-                new DeliveryRoute(source, destinations, itemLists),
+                new DeliveryRoute(id, route, itemLists),
                 driverId,
                 truckId,
                 departureTime,
@@ -29,10 +29,24 @@ public record Transport (
         );
     }
 
-    public Transport(int id, Transport transport) {
+    /**
+     * this constructor sets the id to be -1
+     */
+    public Transport(List<String> destinations,Map<String,Integer> itemLists , String driverId, String truckId, LocalDateTime departureTime, int weight){
+        this(
+                -1,
+                new DeliveryRoute(-1, destinations, itemLists),
+                driverId,
+                truckId,
+                departureTime,
+                weight
+        );
+    }
+
+    public Transport(int id, DeliveryRoute route, Transport transport) {
         this(
                 id,
-                transport.deliveryRoute(),
+                route,
                 transport.driverId(),
                 transport.truckId(),
                 transport.departureTime(),
@@ -40,39 +54,33 @@ public record Transport (
         );
     }
 
-    /**
-     * this constructor sets the id to be -1
-     */
-    public Transport(String source, List<String> destinations,Map<String,Integer> itemLists , String driverId, String truckId, LocalDateTime departureTime, int weight){
+    public Transport(int id, Transport newTransport) {
         this(
-                new DeliveryRoute(source, destinations, itemLists),
-                driverId,
-                truckId,
-                departureTime,
-                weight
+                id,
+                newTransport.deliveryRoute,
+                newTransport.driverId,
+                newTransport.truckId,
+                newTransport.departureTime,
+                newTransport.weight
+        );
+    }
+
+    public Transport(DeliveryRoute selectedRoute, Transport selectedTransport) {
+        this(
+                selectedTransport.id,
+                selectedRoute,
+                selectedTransport.driverId,
+                selectedTransport.truckId,
+                selectedTransport.departureTime,
+                selectedTransport.weight
         );
     }
 
     /**
-     * this constructor sets the id to be -1
+     * source is the first destination
      */
-    public Transport(DeliveryRoute deliveryRoute, String driverId, String truckId, LocalDateTime scheduledTime, int weight){
-        this(
-                -1,
-                deliveryRoute,
-                driverId,
-                truckId,
-                scheduledTime,
-                weight
-        );
-    }
-
-    public String source(){
-        return deliveryRoute.source();
-    }
-
-    public List<String> destinations(){
-        return deliveryRoute.destinations();
+    public List<String> route(){
+        return deliveryRoute.route();
     }
 
     public Map<String,Integer> itemLists(){

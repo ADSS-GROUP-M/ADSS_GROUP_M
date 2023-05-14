@@ -70,7 +70,7 @@ public class ItemListsItemsDAO extends ManyToManyDAO<ItemList> {
     public List<ItemList> selectAll() throws DalException {
         OfflineResultSet resultSet;
 
-        String idsQuery = String.format("SELECT id FROM %s;", PARENT_TABLE_NAME[0]);
+        String idsQuery = String.format("SELECT id FROM %s where id != -1;", PARENT_TABLE_NAME[0]);
         try{
             resultSet = cursor.executeRead(idsQuery);
         } catch(SQLException e){

@@ -87,7 +87,7 @@ public class ShiftDAOTest {
             shiftDAO.insert(shift1);
             shiftDAO.insert(shift2);
         } catch (Exception e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
     }
 
@@ -109,7 +109,7 @@ public class ShiftDAOTest {
             //assertNull(shiftDAO.select(shift1.getBranch(), shift1.getShiftDate(), shift1.getShiftType()));
             assertThrows(DalException.class, () -> shiftDAO.select(shift1.getBranch(), shift1.getShiftDate(), shift1.getShiftType()));
         } catch(Exception e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
     }
 
@@ -121,7 +121,7 @@ public class ShiftDAOTest {
             assertEquals(sh.getShiftDate().getDayOfYear(),shift1.getShiftDate().getDayOfYear());
             assertEquals(sh.getShiftWorkers().get(Role.GeneralWorker).get(0).getId(), shift1.getShiftWorkers().get(Role.GeneralWorker).get(0).getId());
         } catch(Exception e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
     }
 
@@ -140,7 +140,7 @@ public class ShiftDAOTest {
             Shift s2 = shiftDAO.select("branch1", shift1.getShiftDate(), shift1.getShiftType());
             assertEquals(s2.getShiftWorkers().get(Role.GeneralWorker).get(0).getId(), worker.get(0).getId());
         } catch(Exception e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
     }
 
@@ -161,7 +161,7 @@ public class ShiftDAOTest {
             assertEquals(s2.getShiftWorkers().get(Role.SecurityGuard).get(0).getId(), employee4.getId());
             assertTrue(s2.getShiftWorkers().get(Role.SecurityGuard).get(0).getRoles().contains(Role.SecurityGuard));
         } catch(Exception e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
     }
 
@@ -171,7 +171,7 @@ public class ShiftDAOTest {
             List<Shift> list = shiftDAO.selectAll();
             assertEquals(list.size(), 2);
         } catch(Exception e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
     }
 
@@ -190,7 +190,7 @@ public class ShiftDAOTest {
 
             assertTrue(sFlag && noiseFlag);
         } catch(Exception e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
     }
 
@@ -211,7 +211,7 @@ public class ShiftDAOTest {
             Shift testShift = shiftDAO.select(branch, dt,st);
             assertTrue(testShift.getIsApproved());
         } catch(Exception e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
     }
 }

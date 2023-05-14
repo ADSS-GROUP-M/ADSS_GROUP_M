@@ -16,17 +16,17 @@ import java.util.List;
 public class ShiftToCancelsDAO extends ManyToManyDAO<ShiftCancel> {
 
     private static final String[] types = {"TEXT", "TEXT" , "TEXT", "TEXT"};
-    private static final String[] parent_tables = {"SHIFTS"};
-    private static final String[] primary_keys = {Columns.BranchId.name(), Columns.ShiftDate.name(), Columns.ShiftType.name(), Columns.CancelAction.name()};
-    private static final String[][] foreign_keys = {{Columns.BranchId.name(), Columns.ShiftDate.name(), Columns.ShiftType.name()}};
-    private static final String[][] references = {{"Branch", "ShiftDate", "ShiftType"}};
-    public static final String tableName = "SHIFT_CANCELS";
+    private static final String[] parent_tables = {"shifts"};
+    private static final String[] primary_keys = {Columns.branch.name(), Columns.shift_date.name(), Columns.shift_type.name(), Columns.cancel_action.name()};
+    private static final String[][] foreign_keys = {{Columns.branch.name(), Columns.shift_date.name(), Columns.shift_type.name()}};
+    private static final String[][] references = {{"branch", "shift_date", "shift_type"}};
+    public static final String tableName = "shift_cancels";
 
     private enum Columns {
-        BranchId,
-        ShiftDate,
-        ShiftType,
-        CancelAction
+        branch,
+        shift_date,
+        shift_type,
+        cancel_action
     }
 
     public ShiftToCancelsDAO(SQLExecutor cursor) throws DalException{
@@ -37,10 +37,10 @@ public class ShiftToCancelsDAO extends ManyToManyDAO<ShiftCancel> {
                 primary_keys,
                 foreign_keys,
                 references,
-                Columns.BranchId.name(),
-                Columns.ShiftDate.name(),
-                Columns.ShiftType.name(),
-                Columns.CancelAction.name()
+                Columns.branch.name(),
+                Columns.shift_date.name(),
+                Columns.shift_type.name(),
+                Columns.cancel_action.name()
         );
         initTable();
     }
@@ -54,13 +54,13 @@ public class ShiftToCancelsDAO extends ManyToManyDAO<ShiftCancel> {
     public ShiftCancel select(ShiftCancel object) throws DalException {
         String query = String.format("SELECT * FROM %s WHERE %s = '%s' AND %s = '%s' AND %s = '%s' AND %s = '%s';",
                 TABLE_NAME,
-                Columns.BranchId.name(),
+                Columns.branch.name(),
                 object.branchId(),
-                Columns.ShiftDate.name(),
+                Columns.shift_date.name(),
                 object.shiftDate().toString(),
-                Columns.ShiftType.name(),
+                Columns.shift_type.name(),
                 object.shiftType().name(),
-                Columns.CancelAction.name(),
+                Columns.cancel_action.name(),
                 object.cancelAction()
         );
         OfflineResultSet resultSet;
@@ -86,11 +86,11 @@ public class ShiftToCancelsDAO extends ManyToManyDAO<ShiftCancel> {
     public List<String> selectAllByShiftIds(String branchId, LocalDate shiftDate, Shift.ShiftType shiftType) throws DalException {
         String query = String.format("SELECT * FROM %s WHERE %s = '%s' AND %s = '%s' AND %s = '%s';",
                 TABLE_NAME,
-                Columns.BranchId.name(),
+                Columns.branch.name(),
                 branchId,
-                Columns.ShiftDate.name(),
+                Columns.shift_date.name(),
                 shiftDate.toString(),
-                Columns.ShiftType.name(),
+                Columns.shift_type.name(),
                 shiftType.name()
         );
         OfflineResultSet resultSet;
@@ -182,15 +182,15 @@ public class ShiftToCancelsDAO extends ManyToManyDAO<ShiftCancel> {
     public void update(ShiftCancel object) throws DalException {
         String query = String.format("UPDATE %s SET %s = '%s' WHERE %s = '%s' AND %s = '%s' AND %s = '%s' AND %s = '%s';",
                 TABLE_NAME,
-                Columns.CancelAction.name(),
+                Columns.cancel_action.name(),
                 object.cancelAction(),
-                Columns.BranchId.name(),
+                Columns.branch.name(),
                 object.branchId(),
-                Columns.ShiftDate.name(),
+                Columns.shift_date.name(),
                 object.shiftDate().toString(),
-                Columns.ShiftType.name(),
+                Columns.shift_type.name(),
                 object.shiftType().name(),
-                Columns.CancelAction.name(),
+                Columns.cancel_action.name(),
                 object.cancelAction()
         );
         try {
@@ -211,11 +211,11 @@ public class ShiftToCancelsDAO extends ManyToManyDAO<ShiftCancel> {
     public void delete(Shift shift) throws DalException {
         String query = String.format("DELETE FROM %s WHERE %s = '%s' AND %s = '%s' AND %s = '%s';",
                 TABLE_NAME,
-                Columns.BranchId.name(),
+                Columns.branch.name(),
                 shift.getBranch(),
-                Columns.ShiftDate.name(),
+                Columns.shift_date.name(),
                 shift.getShiftDate().toString(),
-                Columns.ShiftType.name(),
+                Columns.shift_type.name(),
                 shift.getShiftType().name());
         try {
             if(cursor.executeWrite(query) != 0) {
@@ -236,13 +236,13 @@ public class ShiftToCancelsDAO extends ManyToManyDAO<ShiftCancel> {
     public void delete(ShiftCancel object) throws DalException {
         String query = String.format("DELETE FROM %s WHERE %s = '%s' AND %s = '%s' AND %s = '%s' AND %s = '%s';",
                 TABLE_NAME,
-                Columns.BranchId.name(),
+                Columns.branch.name(),
                 object.branchId(),
-                Columns.ShiftDate.name(),
+                Columns.shift_date.name(),
                 object.shiftType(),
-                Columns.ShiftType.name(),
+                Columns.shift_type.name(),
                 object.shiftType().name(),
-                Columns.CancelAction.name(),
+                Columns.cancel_action.name(),
                 object.cancelAction()
         );
         try {
@@ -260,13 +260,13 @@ public class ShiftToCancelsDAO extends ManyToManyDAO<ShiftCancel> {
     public boolean exists(ShiftCancel object) throws DalException {
         String query = String.format("SELECT * FROM %s WHERE %s = '%s' AND %s = '%s' AND %s = '%s' AND %s = '%s';",
                 TABLE_NAME,
-                Columns.BranchId.name(),
+                Columns.branch.name(),
                 object.branchId(),
-                Columns.ShiftDate.name(),
+                Columns.shift_date.name(),
                 object.shiftDate().toString(),
-                Columns.ShiftType.name(),
+                Columns.shift_type.name(),
                 object.shiftType().name(),
-                Columns.CancelAction.name(),
+                Columns.cancel_action.name(),
                 object.cancelAction()
         );
         try {
@@ -279,10 +279,10 @@ public class ShiftToCancelsDAO extends ManyToManyDAO<ShiftCancel> {
     @Override
     protected ShiftCancel getObjectFromResultSet(OfflineResultSet resultSet) {
         return new ShiftCancel(
-                resultSet.getString(Columns.BranchId.name()),
-                resultSet.getLocalDate(Columns.ShiftDate.name()),
-                Shift.ShiftType.valueOf(resultSet.getString(Columns.ShiftType.name())),
-                resultSet.getString(Columns.CancelAction.name())
+                resultSet.getString(Columns.branch.name()),
+                resultSet.getLocalDate(Columns.shift_date.name()),
+                Shift.ShiftType.valueOf(resultSet.getString(Columns.shift_type.name())),
+                resultSet.getString(Columns.cancel_action.name())
         );
     }
 }

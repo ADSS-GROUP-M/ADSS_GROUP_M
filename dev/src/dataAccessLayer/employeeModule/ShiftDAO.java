@@ -17,10 +17,10 @@ import java.util.stream.Collectors;
 public class ShiftDAO extends ManyToManyDAO<Shift> { //DAO {
     private static final String[] types = new String[]{"TEXT", "TEXT", "TEXT", "TEXT", "TEXT"};
     private static final String[] parent_table_names = {"branches"};
-    private static final String[] primary_keys = {Columns.Branch.name(), Columns.ShiftDate.name(), Columns.ShiftType.name()};
-    private static final String[][] foreign_keys = {{Columns.Branch.name()}};
+    private static final String[] primary_keys = {Columns.branch.name(), Columns.shift_date.name(), Columns.shift_type.name()};
+    private static final String[][] foreign_keys = {{Columns.branch.name()}};
     private static final String[][] references = {{"name"}};
-    public static final String tableName = "SHIFTS";
+    public static final String tableName = "shifts";
 
     private final ShiftToNeededRolesDAO shiftToNeededRolesDAO;
     private final ShiftToRequestsDAO shiftToRequestsDAO;
@@ -29,10 +29,10 @@ public class ShiftDAO extends ManyToManyDAO<Shift> { //DAO {
     private final ShiftToActivityDAO shiftToActivityDAO;
 
     private enum Columns {
-        Branch,
-        ShiftDate,
-        ShiftType,
-        IsApproved;
+        branch,
+        shift_date,
+        shift_type,
+        is_approved;
     }
 
     public ShiftDAO(SQLExecutor cursor, ShiftToNeededRolesDAO shiftToNeededRolesDAO, ShiftToRequestsDAO shiftToRequestsDAO,
@@ -44,10 +44,10 @@ public class ShiftDAO extends ManyToManyDAO<Shift> { //DAO {
                 primary_keys,
                 foreign_keys,
                 references,
-                Columns.Branch.name(),
-                Columns.ShiftDate.name(),
-                Columns.ShiftType.name(),
-                Columns.IsApproved.name());
+                Columns.branch.name(),
+                Columns.shift_date.name(),
+                Columns.shift_type.name(),
+                Columns.is_approved.name());
         initTable();
         this.shiftToNeededRolesDAO = shiftToNeededRolesDAO;
         this.shiftToRequestsDAO = shiftToRequestsDAO;
@@ -80,11 +80,11 @@ public class ShiftDAO extends ManyToManyDAO<Shift> { //DAO {
 
         String query = String.format("SELECT * FROM %s WHERE %s = '%s' AND %s = '%s' AND %s = '%s';",
                 TABLE_NAME,
-                Columns.Branch.name(),
+                Columns.branch.name(),
                 object.getBranch(),
-                Columns.ShiftDate.name(),
+                Columns.shift_date.name(),
                 object.getShiftDate().toString(),
-                Columns.ShiftType.name(),
+                Columns.shift_type.name(),
                 object.getShiftType().name());
         OfflineResultSet resultSet;
         try {
@@ -166,13 +166,13 @@ public class ShiftDAO extends ManyToManyDAO<Shift> { //DAO {
     public void update(Shift object) throws DalException {
         String query = String.format("UPDATE %s SET %s = '%s' WHERE %s = '%s' AND %s = '%s' AND %s = '%s';",
                 TABLE_NAME,
-                Columns.IsApproved.name(),
+                Columns.is_approved.name(),
                 object.getIsApproved(),
-                Columns.Branch.name(),
+                Columns.branch.name(),
                 object.getBranch(),
-                Columns.ShiftDate.name(),
+                Columns.shift_date.name(),
                 object.getShiftDate().toString(),
-                Columns.ShiftType.name(),
+                Columns.shift_type.name(),
                 object.getShiftType().name());
         try {
             if (cursor.executeWrite(query) == 1) {
@@ -198,11 +198,11 @@ public class ShiftDAO extends ManyToManyDAO<Shift> { //DAO {
     public void delete(Shift object) throws DalException {
         String query = String.format("DELETE FROM %s WHERE %s = '%s' AND %s = '%s' AND %s = '%s';",
                 TABLE_NAME,
-                Columns.Branch.name(),
+                Columns.branch.name(),
                 object.getBranch(),
-                Columns.ShiftDate.name(),
+                Columns.shift_date.name(),
                 object.getShiftDate().toString(),
-                Columns.ShiftType.name(),
+                Columns.shift_type.name(),
                 object.getShiftType().name());
         try {
             this.shiftToNeededRolesDAO.delete(object);
@@ -242,11 +242,11 @@ public class ShiftDAO extends ManyToManyDAO<Shift> { //DAO {
     }
 
     public Shift getObjectFromResultSet(OfflineResultSet resultSet) {
-        String branchId = resultSet.getString(Columns.Branch.name());
-        LocalDate shiftDate = resultSet.getLocalDate(Columns.ShiftDate.name());
-        ShiftType shiftType = ShiftType.valueOf(resultSet.getString(Columns.ShiftType.name()));
+        String branchId = resultSet.getString(Columns.branch.name());
+        LocalDate shiftDate = resultSet.getLocalDate(Columns.shift_date.name());
+        ShiftType shiftType = ShiftType.valueOf(resultSet.getString(Columns.shift_type.name()));
         Shift result = new Shift(branchId,shiftDate,shiftType);
-        result.setApproved(Boolean.parseBoolean(resultSet.getString(Columns.IsApproved.name())));
+        result.setApproved(Boolean.parseBoolean(resultSet.getString(Columns.is_approved.name())));
         try {
             result.setNeededRoles(this.shiftToNeededRolesDAO.selectAllByShiftIds(branchId, shiftDate, shiftType));
             result.setShiftRequests(this.shiftToRequestsDAO.selectAllByShiftIds(branchId, shiftDate, shiftType));

@@ -16,19 +16,19 @@ import java.util.*;
 public class ShiftToWorkersDAO extends ManyToManyDAO<ShiftWorker> {
 
     private static final String[] types = {"TEXT", "TEXT" , "TEXT", "TEXT", "TEXT"};
-    private static final String[] parent_tables = {"SHIFTS", "employees"};
-    private static final String[] primary_keys = {Columns.BranchId.name(), Columns.ShiftDate.name(), Columns.ShiftType.name(), Columns.EmployeeId.name()};
-    private static final String[][] foreign_keys = {{Columns.BranchId.name(), Columns.ShiftDate.name(), Columns.ShiftType.name()}, {Columns.EmployeeId.name()}};
-    private static final String[][] references = {{"Branch", "ShiftDate", "ShiftType"}, {"id"}};
-    public static final String tableName = "SHIFT_WORKERS";
+    private static final String[] parent_tables = {"shifts", "employees"};
+    private static final String[] primary_keys = {Columns.branch.name(), Columns.shift_date.name(), Columns.shift_type.name(), Columns.employee_id.name()};
+    private static final String[][] foreign_keys = {{Columns.branch.name(), Columns.shift_date.name(), Columns.shift_type.name()}, {Columns.employee_id.name()}};
+    private static final String[][] references = {{"branch", "shift_date", "shift_type"}, {"id"}};
+    public static final String tableName = "shift_workers";
     private final EmployeeDAO employeeDAO;
 
     private enum Columns {
-        BranchId,
-        ShiftDate,
-        ShiftType,
-        EmployeeId,
-        Role
+        branch,
+        shift_date,
+        shift_type,
+        employee_id,
+        role
     }
 
     public ShiftToWorkersDAO(SQLExecutor cursor, EmployeeDAO employeeDAO) throws DalException{
@@ -39,11 +39,11 @@ public class ShiftToWorkersDAO extends ManyToManyDAO<ShiftWorker> {
                 primary_keys,
                 foreign_keys,
                 references,
-                Columns.BranchId.name(),
-                Columns.ShiftDate.name(),
-                Columns.ShiftType.name(),
-                Columns.EmployeeId.name(),
-                Columns.Role.name()
+                Columns.branch.name(),
+                Columns.shift_date.name(),
+                Columns.shift_type.name(),
+                Columns.employee_id.name(),
+                Columns.role.name()
         );
         initTable();
         this.employeeDAO = employeeDAO;
@@ -58,13 +58,13 @@ public class ShiftToWorkersDAO extends ManyToManyDAO<ShiftWorker> {
     public ShiftWorker select(ShiftWorker object) throws DalException {
         String query = String.format("SELECT * FROM %s WHERE %s = '%s' AND %s = '%s' AND %s = '%s' AND %s = '%s';",
                 TABLE_NAME,
-                Columns.BranchId.name(),
+                Columns.branch.name(),
                 object.branchId(),
-                Columns.ShiftDate.name(),
+                Columns.shift_date.name(),
                 object.shiftDate().toString(),
-                Columns.ShiftType.name(),
+                Columns.shift_type.name(),
                 object.shiftType().name(),
-                Columns.EmployeeId.name(),
+                Columns.employee_id.name(),
                 object.employeeId()
         );
         OfflineResultSet resultSet;
@@ -90,11 +90,11 @@ public class ShiftToWorkersDAO extends ManyToManyDAO<ShiftWorker> {
     public Map<Role,List<Employee>> selectAllByShiftIds(String branchId, LocalDate shiftDate, Shift.ShiftType shiftType) throws DalException {
         String query = String.format("SELECT * FROM %s WHERE %s = '%s' AND %s = '%s' AND %s = '%s';",
                 TABLE_NAME,
-                Columns.BranchId.name(),
+                Columns.branch.name(),
                 branchId,
-                Columns.ShiftDate.name(),
+                Columns.shift_date.name(),
                 shiftDate.toString(),
-                Columns.ShiftType.name(),
+                Columns.shift_type.name(),
                 shiftType.name()
         );
         OfflineResultSet resultSet;
@@ -191,15 +191,15 @@ public class ShiftToWorkersDAO extends ManyToManyDAO<ShiftWorker> {
     public void update(ShiftWorker object) throws DalException {
         String query = String.format("UPDATE %s SET %s = %d WHERE %s = '%s' AND %s = '%s' AND %s = '%s' AND %s = '%s';",
                 TABLE_NAME,
-                Columns.Role.name(),
+                Columns.role.name(),
                 object.role(),
-                Columns.BranchId.name(),
+                Columns.branch.name(),
                 object.branchId(),
-                Columns.ShiftDate.name(),
+                Columns.shift_date.name(),
                 object.shiftDate().toString(),
-                Columns.ShiftType.name(),
+                Columns.shift_type.name(),
                 object.shiftType().name(),
-                Columns.EmployeeId.name(),
+                Columns.employee_id.name(),
                 object.employeeId()
         );
         try {
@@ -220,11 +220,11 @@ public class ShiftToWorkersDAO extends ManyToManyDAO<ShiftWorker> {
     public void delete(Shift shift) throws DalException {
         String query = String.format("DELETE FROM %s WHERE %s = '%s' AND %s = '%s' AND %s = '%s';",
                 TABLE_NAME,
-                Columns.BranchId.name(),
+                Columns.branch.name(),
                 shift.getBranch(),
-                Columns.ShiftDate.name(),
+                Columns.shift_date.name(),
                 shift.getShiftDate().toString(),
-                Columns.ShiftType.name(),
+                Columns.shift_type.name(),
                 shift.getShiftType().name());
         try {
             if(cursor.executeWrite(query) != 0) {
@@ -247,13 +247,13 @@ public class ShiftToWorkersDAO extends ManyToManyDAO<ShiftWorker> {
     public void delete(ShiftWorker object) throws DalException {
         String query = String.format("DELETE FROM %s WHERE %s = '%s' AND %s = '%s' AND %s = '%s' AND %s = '%s';",
                 TABLE_NAME,
-                Columns.BranchId.name(),
+                Columns.branch.name(),
                 object.branchId(),
-                Columns.ShiftDate.name(),
+                Columns.shift_date.name(),
                 object.shiftType(),
-                Columns.ShiftType.name(),
+                Columns.shift_type.name(),
                 object.shiftType().name(),
-                Columns.EmployeeId.name(),
+                Columns.employee_id.name(),
                 object.employeeId()
         );
         try {
@@ -271,13 +271,13 @@ public class ShiftToWorkersDAO extends ManyToManyDAO<ShiftWorker> {
     public boolean exists(ShiftWorker object) throws DalException {
         String query = String.format("SELECT * FROM %s WHERE %s = '%s' AND %s = '%s' AND %s = '%s' AND %s = '%s';",
                 TABLE_NAME,
-                Columns.BranchId.name(),
+                Columns.branch.name(),
                 object.branchId(),
-                Columns.ShiftDate.name(),
+                Columns.shift_date.name(),
                 object.shiftDate().toString(),
-                Columns.ShiftType.name(),
+                Columns.shift_type.name(),
                 object.shiftType().name(),
-                Columns.EmployeeId.name(),
+                Columns.employee_id.name(),
                 object.employeeId()
         );
         try {
@@ -290,11 +290,11 @@ public class ShiftToWorkersDAO extends ManyToManyDAO<ShiftWorker> {
     @Override
     protected ShiftWorker getObjectFromResultSet(OfflineResultSet resultSet) {
         return new ShiftWorker(
-                resultSet.getString(Columns.BranchId.name()),
-                resultSet.getLocalDate(Columns.ShiftDate.name()),
-                Shift.ShiftType.valueOf(resultSet.getString(Columns.ShiftType.name())),
-                resultSet.getString(Columns.EmployeeId.name()),
-                Role.valueOf(resultSet.getString(Columns.Role.name()))
+                resultSet.getString(Columns.branch.name()),
+                resultSet.getLocalDate(Columns.shift_date.name()),
+                Shift.ShiftType.valueOf(resultSet.getString(Columns.shift_type.name())),
+                resultSet.getString(Columns.employee_id.name()),
+                Role.valueOf(resultSet.getString(Columns.role.name()))
         );
     }
 }

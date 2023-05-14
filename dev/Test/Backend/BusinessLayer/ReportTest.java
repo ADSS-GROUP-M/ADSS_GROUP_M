@@ -29,6 +29,8 @@ public class ReportTest {
     private CategoryController categoryController;
 
     private String test1Result = "Record{catalog_number=0x123, name='productTest', branch='beer sheva', manufacturer=tnuva, store_price=5.0, warehouse_amount='0, store_amount='4, total_amount='4'}";
+
+    private String test2Result = "Record{catalog_number=0x123, name='productTest', branch='branch1', category=, manufacturer=tnuva, store_price=5.0, warehouse_amount='0, store_amount='4, total_amount='4'}";
     private String test3Result = "Record{catalog_number=0x123, serial_number=3, name='productTest', branch='beer sheva', manufacturer=tnuva, supplier_price=7.7, supplier_discount=5.0, store_price=6.7, location='store'}";
     @Before
     public void setUp() {
@@ -49,7 +51,7 @@ public class ReportTest {
         subCategoriesList.add("yogurt");
         subCategoriesList.add("milk");
         Optional<List<String>> subCategories = Optional.of(subCategoriesList);
-        categoryController.createCategory("Dairy products",subCategories);
+        categoryController.createCategory(branch, subCategories, "Dairy products");
     }
 
 
@@ -67,12 +69,13 @@ public class ReportTest {
     //Test 2 - get discount per Category report
     @org.junit.Test
     public void getCategoryReport() {
-
-        productController.updateProduct(branch,null,catalog_number,null,-1,6);
-        List<Record> records = productController.getInventoryShortages(branch);
+        categoryController.addProductToCategory(branch,catalog_number,"yogurt");
+        List<String> categoryList = new ArrayList<String>();
+        categoryList.add("Dairy products");
+        List<Record> records = categoryController.getProductsPerCategory( categoryList,branch );
         for (Record record: records){
-            System.out.println("Shortage repost: " + record.toStringProduct());
-            Assert.assertEquals("Shortage repost not as expected",record.toStringProduct(),test1Result);
+            System.out.println("Category repost: " + record.toStringProduct());
+            Assert.assertEquals("Category repost not as expected",record.toStringProduct(),test2Result);
         }
     }
 
@@ -80,7 +83,7 @@ public class ReportTest {
     //Test 3 - get defective product report
     @org.junit.Test
     public void getDefectiveProductReport() {
-        productController.updateProductItem(branch,1,"3",catalog_number,-1,null,-1,null);
+        productController.updateProductItem(branch,1,"3",catalog_number,-1,null,-1,-1,-1,null);
         List<Record> records = productController.getDefectiveProducts(branch);
         for (Record record: records){
             System.out.println("Defective repost: " + record.toString());
@@ -91,7 +94,7 @@ public class ReportTest {
     //Test 4 - get defective product report with category
     @org.junit.Test
     public void getDefectiveProductReportWithCategory() {
-        productController.updateProductItem(branch,1,"3",catalog_number,-1,null,-1,null);
+        productController.updateProductItem(branch,1,"3",catalog_number,-1,null,-1,-1,-1,null);
 
         List<Record> records = productController.getDefectiveProducts(branch);
         for (Record record: records){

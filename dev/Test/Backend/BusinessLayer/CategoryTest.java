@@ -1,5 +1,6 @@
 package Backend.BusinessLayer;
 
+import Backend.BusinessLayer.BusinessLayerUsage.Branch;
 import Backend.BusinessLayer.InventoryModule.Category;
 import Backend.BusinessLayer.InventoryModule.Product;
 import org.junit.Assert;
@@ -18,7 +19,7 @@ public class CategoryTest {
     private static String catalog_name = "productTest";
     private static String manufacturer = "tnuva";
     private static double storePrice = 5.0;
-    private static String branch = "beer sheva";
+    private static Branch branch = Branch.branch1;
     private Category category;
     private Product product;
 
@@ -37,7 +38,7 @@ public class CategoryTest {
     @org.junit.Test
     public void addProductToCategory() {
         category.addProductToCategory(product);
-        Assert.assertTrue("failed to add product to category",category.isProductIDRelated(product.getCatalogNumber()));
+        Assert.assertTrue("failed to add product to category",category.isProductIDRelated(product.getCatalogNumber(),branch));
     }
 
     //Test 2
@@ -45,9 +46,9 @@ public class CategoryTest {
     @org.junit.Test
     public void removeProductFromCategory() {
         category.addProductToCategory(product);
-        Assert.assertTrue("failed to add product to category",category.isProductIDRelated(product.getCatalogNumber()));
-        category.removeProduct(product.getCatalogNumber());
-        Assert.assertFalse("failed to remove product from category",category.isProductIDRelated(product.getCatalogNumber()));
+        Assert.assertTrue("failed to add product to category",category.isProductIDRelated(product.getCatalogNumber(),branch));
+        category.removeProduct(product);
+        Assert.assertFalse("failed to remove product from category",category.isProductIDRelated(product.getCatalogNumber(),branch));
     }
 
     //Test 3

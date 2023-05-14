@@ -1,28 +1,72 @@
 package Backend.DataAccessLayer.InventoryModule;
+import Backend.BusinessLayer.BusinessLayerUsage.Branch;
+import Backend.BusinessLayer.InventoryModule.Category;
 import Backend.DataAccessLayer.InventoryModule.CategoryDataMapper;
 import Backend.DataAccessLayer.InventoryModule.CategoryHierarchyDataMapper;
+import Backend.DataAccessLayer.dalUtils.OfflineResultSet;
 
 import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
 
 
 public class CategoryManagerMapper{
-    CategoryDataMapper categoryDataMapper = new CategoryDataMapper();
-    CategoryHierarchyDataMapper categoryHierarchyDataMapper = new CategoryHierarchyDataMapper();
+    CategoryDataMapper categoryDataMapper;
+    CategoryHierarchyDataMapper categoryHierarchyDataMapper;
+    public static CategoryManagerMapper instance = null;
+    Map<String, Category> cached_categories;
 
-    public void createCategoryWithSub(String category_name, String sub_category) {
-        try {
-            categoryDataMapper.insert(category_name);
-            categoryHierarchyDataMapper.insert(category_name, sub_category);
+    private CategoryManagerMapper(){
+        categoryDataMapper = CategoryDataMapper.getInstance();
+        categoryHierarchyDataMapper = CategoryHierarchyDataMapper.getInstance();
+        try{
+            cached_categories = categoryHierarchyDataMapper.initializedCache(categoryDataMapper.initializedCache());
         } catch (SQLException e) {
             //TODO: Handle the exception appropriately
         }
     }
 
-    public void createCategoryWithoutSub(String category_name) {
-        try {
-            categoryDataMapper.insert(category_name);
-        } catch (SQLException e) {
-            // TODO: Handle the exception appropriately
+    public static CategoryManagerMapper getInstance(){
+        if (instance == null) {
+            return new CategoryManagerMapper();
+        } else {
+            return instance;
         }
     }
+
+    public void createCategory(String category_name, List<Category> sub_category) {
+        try {
+            if(!categoryDataMapper.isExists(category_name)){
+                categoryDataMapper.insert(category_name);
+            }
+            if(!sub_category.isEmpty()){
+                for (Category sub : sub_category) {
+                    if(!categoryHierarchyDataMapper.isExists(category_name, sub.getCategoryName())){
+                        categoryHierarchyDataMapper.insert(category_name, sub.getCategoryName());
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            //TODO: Handle the exception appropriately
+        }
+    }
+
+    public void removeCategory(String category_name, List<Category> sub_category) {
+        try {
+            categoryDataMapper.delete(category_name);
+            if (!sub_category.isEmpty()) {
+                for (Category sub : sub_category) {
+                    categoryHierarchyDataMapper.insert(category_name, sub.getCategoryName());
+                }
+            }
+        } catch (SQLException e) {
+            //TODO: Handle the exception appropriately
+        }
+    }
+
+    public Map<String, Category> getCached_categories(){
+        return this.cached_categories;
+    }
+
+
 }

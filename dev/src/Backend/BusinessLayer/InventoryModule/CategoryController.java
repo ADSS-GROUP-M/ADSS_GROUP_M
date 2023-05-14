@@ -1,17 +1,24 @@
 package Backend.BusinessLayer.InventoryModule;
 
 import Backend.BusinessLayer.BusinessLayerUsage.Branch;
+import Backend.DataAccessLayer.InventoryModule.CategoryManagerMapper;
+import Backend.DataAccessLayer.InventoryModule.ProductManagerMapper;
 
 import java.util.*;
 
 public class CategoryController {
-    // Map<name, Category>
-    public Map<String,Category> categories;
+    public Map<String,Category> categories; // Map<name, Category>
 
     //create the controller as Singleton
     private static CategoryController categoryController = null;
+    private CategoryManagerMapper categoryManagerMapper;
+    private ProductManagerMapper productManagerMapper;
     private CategoryController() {
-        this.categories = new HashMap<String,Category>();}
+        categoryManagerMapper = CategoryManagerMapper.getInstance();
+        productManagerMapper = ProductManagerMapper.getInstance();
+        this.categories = categoryManagerMapper.getCached_categories();
+    }
+
     public static CategoryController CategoryController(){
         if(categoryController == null)
             categoryController = new CategoryController();
@@ -22,22 +29,28 @@ public class CategoryController {
             return categories.containsKey(categoryName);
     }
 
-    public void createCategory(String categoryName, Optional<List<String>> subcategoriesName){
-        List<Category> subcategories = new ArrayList<Category>();
-        if(subcategoriesName.isPresent() && !subcategoriesName.get().isEmpty()){
-            for (String subcategoryName: subcategoriesName.get()){
-                if(!categories.containsKey(subcategoryName))
-                    createCategory(subcategoryName, Optional.empty());
-                subcategories.add(getCategory(subcategoryName));
+    public void createCategory(Branch branch, Optional<List<String>> subcategoriesName, String categoryName){
+        if(!checkIfCategoryExist(categoryName)){
+            List<Category> subcategories = new ArrayList<Category>();
+            if(subcategoriesName.isPresent() && !subcategoriesName.get().isEmpty()){
+                for (String subcategoryName: subcategoriesName.get()){
+                    if(!categories.containsKey(subcategoryName))
+                        createCategory(branch, Optional.empty(), subcategoryName);
+                    subcategories.add(getCategory(subcategoryName));
+                }
             }
+            categories.put(categoryName,new Category(categoryName,subcategories));
+            categoryManagerMapper.createCategory(categoryName, subcategories);
         }
-        categories.put(categoryName,new Category(categoryName,subcategories));
     }
 
-    public void removeCategory(String categoryName){
+    public void removeCategory(Branch branch, String categoryName){
         if(checkIfCategoryExist(categoryName)){
             if(!categories.get(categoryName).isRelatedProductEmpty()){
                 // verify in each category that the category does not contain the remove category
+                Collection<Category> categoriesCollection = categories.get(categoryName).getSubcategories().values();
+                List<Category> subcategories = new ArrayList<>(categoriesCollection);
+                categoryManagerMapper.removeCategory(categoryName,subcategories);
                 for(Category category: categories.values())
                     category.removeSubCategory(categoryName);
                 categories.remove(categoryName);
@@ -50,50 +63,30 @@ public class CategoryController {
         }
     }
 
-    // TODO
-    public void addProductToCategory(String categoryName, String catalog_number){
+    public void addProductToCategory(Branch branch, String catalog_number, String categoryName){
         if(checkIfCategoryExist(categoryName)){
-//            categories.get(categoryName).addProductToCategory(catalog_number);
-        }
-        else{
-            throw new RuntimeException("Category does not exist");
-        }
-    }
-
-    // TODO
-    public void removeProductFromCategory(String categoryName, String catalog_number){
-        if(checkIfCategoryExist(categoryName)){
-            categories.get(categoryName).removeProduct(catalog_number);
-        }
-        else{
-            throw new RuntimeException("Category does not exist");
-        }
-    }
-
-    //TODO
-    public void addSubcategory(String categoryName, List<String> subcategoriesName){
-        List<Category> subcategories = new ArrayList<Category>();
-        if(!subcategoriesName.isEmpty() || subcategoriesName != null){
-            for (String subcategoryName: subcategoriesName){
-                if(!categories.containsKey(subcategoryName))
-                    createCategory(subcategoryName,null);
-                subcategories.add(getCategory(subcategoryName));
+            if(!categories.get(categoryName).isProductIDRelated(catalog_number, branch)) {
+                productManagerMapper.addCategoryToProduct(catalog_number,categoryName);
+                ProductController pc = ProductController.ProductController();
+                categories.get(categoryName).addProductToCategory(pc.getProduct(branch, catalog_number));
             }
         }
-        categories.get(categoryName).addSubcategories(subcategories);
+        else{
+            throw new RuntimeException("Category does not exist");
+        }
     }
 
-    public void removeSubcategory(String name,  List<String> subcategoriesName){
-        if(!checkIfCategoryExist(name)){
-            Category category = categories.get(name);
-            for(String subcategoryName: subcategoriesName)
-                category.removeSubCategory(subcategoryName);
+    public void removeProductFromCategory(Branch branch, String catalog_number, String categoryName){
+        if(checkIfCategoryExist(categoryName)){
+            productManagerMapper.removeCategoryFromProduct(catalog_number);
+            ProductController pc = ProductController.ProductController();
+            categories.get(categoryName).removeProduct(pc.getProduct(branch,catalog_number));
         }
         else{
             throw new RuntimeException("Category does not exist");
         }
-
     }
+
     public Category getCategory(String categoryName){
         if(checkIfCategoryExist(categoryName))
             return categories.get(categoryName);
@@ -102,12 +95,16 @@ public class CategoryController {
     }
 
     //TODO
-    public Map<String, Product> getCategoryProducts(String categoryName){
-        return categories.get(categoryName).getProductsRelated();
+    public List <Product> getCategoryProducts(Branch branch, String categoryName){
+        if(checkIfCategoryExist(categoryName))
+            return categories.get(categoryName).getProductsRelated(branch);
+        else
+            throw new RuntimeException("Category does not exist");
     }
 
+
     private List<Record> getProductRecordPerCategory(String categoryName, Branch branch, List<Record> records){
-        for(Product product: categories.get(categoryName).getProductsRelated().values()){
+        for(Product product: categories.get(categoryName).getProductsRelated(branch)){
             String catalog_number = product.getCatalogNumber();
             String name = product.getName();
             String manufacture = product.getManufacturer();

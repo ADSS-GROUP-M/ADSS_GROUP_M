@@ -18,4 +18,8 @@ public class ProductDAO {
         this.category = category;
     }
     public String getCatalog_number(){return this.catalog_number;}
+    public String getName() {return this.name;}
+    public String getManufacture() {return this.manufacture;}
+    public String GetCategory() {return this.category;}
+
 }

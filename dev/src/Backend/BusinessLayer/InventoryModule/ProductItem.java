@@ -1,4 +1,5 @@
 package Backend.BusinessLayer.InventoryModule;
+import Backend.BusinessLayer.BusinessLayerUsage.Branch;
 import Backend.BusinessLayer.SuppliersModule.OrderController;
 
 import java.time.LocalDateTime;
@@ -15,6 +16,8 @@ public class ProductItem {
     private double soldPrice;
     private String location;
     private LocalDateTime expirationDate;
+    private Branch branch;
+    private String catalog_number;
 
     protected class productPair<F, S> {
         private final F first;
@@ -31,7 +34,7 @@ public class ProductItem {
             return second;
         }
     }
-    public ProductItem(String serial_number,String supplierID, double supplierPrice, double supplierDiscount, String location, LocalDateTime expirationDate) {
+    public ProductItem(String serial_number,String supplierID, double supplierPrice, double supplierDiscount, String location, LocalDateTime expirationDate, String catalog_number, Branch branch) {
         this.serial_number = serial_number;
         this.supplierID = supplierID;
         this.location = location;
@@ -42,7 +45,8 @@ public class ProductItem {
         this.expirationDate = expirationDate;
         this.supplierPrice = supplierPrice;
         this.supplierDiscount = supplierDiscount;
-
+        this.branch = branch;
+        this.catalog_number = catalog_number;
     }
     public boolean isDefective(){
         if(isDefective == null)
@@ -94,4 +98,6 @@ public class ProductItem {
     public double getSupplierDiscount(){return this.supplierDiscount;}
     public String getSerial_number(){return this.serial_number;}
     public String getLocation(){return this.location;}
+    public String getCatalog_number() {return this.catalog_number;}
+    public Branch getBranch() {return this.branch;}
 }

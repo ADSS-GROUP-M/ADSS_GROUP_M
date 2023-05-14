@@ -5,6 +5,7 @@ import Backend.BusinessLayer.InventoryModule.Product;
 import Backend.BusinessLayer.InventoryModule.ProductController;
 import Backend.BusinessLayer.InventoryModule.ProductItem;
 import Backend.BusinessLayer.InventoryModule.ProductStoreDiscount;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -44,6 +45,9 @@ public class IntegrationTest {
         productController.createProductItem(serial_numbers,catalog_number,branch,supplierId,supplierPrice,supplierDiscount, location,expireDate, "y");
     }
 
+    @After
+    public void after(){}
+
     /**
      * Test1: product contain less than the min expected amount --> should send automatic order
      */
@@ -61,7 +65,7 @@ public class IntegrationTest {
     public void calcMinAccordingToSupplierInf(){
         //TODO: update supplier days
         productController.updateProduct(branch,null,catalog_number,null,-1,5);
-        productController.updateProductItem(branch,-1,"0",catalog_number,1,null,-1,null);
+        productController.updateProductItem(branch,-1,"0",catalog_number,1,null,-1,-1,-1,null);
         // TODO: compere between the min value before and now
         // Assert.assertTrue();
     }

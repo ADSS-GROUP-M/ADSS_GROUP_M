@@ -11,9 +11,11 @@
   <component name="ChangeListManager">
     <list default="true" id="e454f93c-4ee8-4f4b-9a14-eaaf36aa303c" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/InventoryModule/ProductController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/BusinessLayer/InventoryModule/ProductController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/InventoryModule/CategoryController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/BusinessLayer/InventoryModule/CategoryController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/CategoryDataMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/CategoryDataMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/CategoryHierarchyDataMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/CategoryHierarchyDataMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/CategoryManagerMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/CategoryManagerMapper.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/ProductManagerMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/ProductManagerMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/ProductPairBranchDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/ProductPairBranchDAO.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -60,6 +62,11 @@
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="project.structure.last.edited" value="SDKs" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.15977012" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">

@@ -88,7 +88,6 @@ public class ProductManagerMapper {
                         location, expiration_date, catalog_number, Branch.valueOf(branch));
                 cachedItems.computeIfAbsent(catalog_number, k -> new ArrayList<>()).add(productItem);
             }
-
         } catch (SQLException e) {
             //TODO: Handle the exception appropriately
         }

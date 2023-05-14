@@ -23,7 +23,7 @@ class ForeignKeyTest {
             DalFactory factory = new DalFactory(TESTING_DB_NAME);
             dao = factory.itemListsItemsDAO();
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
     }
 

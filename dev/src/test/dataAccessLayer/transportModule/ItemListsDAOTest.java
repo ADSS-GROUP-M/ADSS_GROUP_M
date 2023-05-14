@@ -43,7 +43,7 @@ class ItemListsDAOTest {
             factory = new DalFactory(TESTING_DB_NAME);
             dao = factory.itemListsDAO();
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
     }
 
@@ -59,7 +59,7 @@ class ItemListsDAOTest {
             dao.clearCache();
             assertDeepEquals(itemList, dao.select(itemList));
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
     }
     @Test
@@ -68,7 +68,7 @@ class ItemListsDAOTest {
             dao.insert(itemList);
             assertDeepEquals(itemList, dao.select(itemList));
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
     }
 
@@ -91,7 +91,7 @@ class ItemListsDAOTest {
                 itemLists.add(new ItemList(i, load,unload));
                 dao.insert(itemLists.getLast());
             } catch (DalException e) {
-                fail(e);
+                fail(e.getMessage(),e.getCause());
             }
         });
 
@@ -103,7 +103,7 @@ class ItemListsDAOTest {
                 assertDeepEquals(itemLists.get(i), select.get(i));
             }
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
     }
 
@@ -131,7 +131,7 @@ class ItemListsDAOTest {
             dao.update(itemList2);
             assertDeepEquals(itemList2, dao.select(itemList2));
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
     }
     @Test
@@ -146,7 +146,7 @@ class ItemListsDAOTest {
             dao.insert(itemList);
             dao.clearCache();
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
 
         //test
@@ -165,7 +165,7 @@ class ItemListsDAOTest {
             dao.insert(itemList);
             assertTrue(dao.exists(itemList));
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
     }
 
@@ -176,7 +176,7 @@ class ItemListsDAOTest {
             dao.clearCache();
             assertTrue(dao.exists(itemList));
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
     }
 
@@ -189,7 +189,7 @@ class ItemListsDAOTest {
             OfflineResultSet resultSet = cursor.executeRead("SELECT * FROM item_lists_items WHERE id = "+itemList.id());
             assertDeepEquals(itemList, dao.getObjectFromResultSet(resultSet));
         } catch (SQLException | DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
     }
 

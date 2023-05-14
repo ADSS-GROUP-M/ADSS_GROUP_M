@@ -44,7 +44,7 @@ class SitesControllerTest {
             when(dao.isAddressUnique(site.address())).thenReturn(true); //checks address
             when(sitesRoutesController.getCoordinates(site)).thenReturn(new Point(site.address(), coordinates));
         } catch (DalException | TransportException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
         Site returned = assertDoesNotThrow(() -> controller.addSite(site));
         assertEquals(coordinates[0], returned.latitude());
@@ -60,7 +60,7 @@ class SitesControllerTest {
         try{
             when(dao.exists(Site.getLookupObject(site.name()))).thenReturn(true); //checks name
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
         assertThrows(TransportException.class, () -> controller.addSite(site));
     }
@@ -71,7 +71,7 @@ class SitesControllerTest {
             when(dao.exists(Site.getLookupObject(site.name()))).thenReturn(false); //checks name
             when(dao.isAddressUnique(site.address())).thenReturn(false); //checks address
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
         assertThrows(TransportException.class, () -> controller.addSite(site));
     }
@@ -81,7 +81,7 @@ class SitesControllerTest {
         try{
             when(dao.exists(Site.getLookupObject(site.name()))).thenReturn(true);
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
         assertDoesNotThrow(() -> controller.removeSite(site.name()));
     }
@@ -91,7 +91,7 @@ class SitesControllerTest {
         try{
             when(dao.exists(Site.getLookupObject(site.name()))).thenReturn(false);
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
         assertThrows(TransportException.class, () -> controller.removeSite(site.name()));
     }
@@ -104,7 +104,7 @@ class SitesControllerTest {
             when(dao.exists(lookupObject)).thenReturn(true);
             when(dao.select(lookupObject)).thenReturn(site);
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
         assertDoesNotThrow(()->controller.updateSite(updatedSite.name(), updatedSite));
     }
@@ -115,7 +115,7 @@ class SitesControllerTest {
         try{
             when(dao.exists(Site.getLookupObject(site.name()))).thenReturn(false);
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
         assertThrows(TransportException.class, ()->controller.updateSite(updatedSite.name(), updatedSite));
     }
@@ -127,7 +127,7 @@ class SitesControllerTest {
             when(dao.exists(lookupObject)).thenReturn(true);
             when(dao.select(lookupObject)).thenReturn(site);
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
         Site result = assertDoesNotThrow(()->controller.getSite(site.name()));
         assertDeepEquals(site, result);
@@ -138,7 +138,7 @@ class SitesControllerTest {
         try{
             when(dao.exists(Site.getLookupObject(site.name()))).thenReturn(false);
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
         assertThrows(TransportException.class, ()->controller.getSite(site.name()));
     }
@@ -149,7 +149,7 @@ class SitesControllerTest {
         try{
             when(dao.selectAll()).thenReturn(List.of(site, site2));
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
         List<Site> result = assertDoesNotThrow(()->controller.getAllSites());
         assertEquals(2, result.size());

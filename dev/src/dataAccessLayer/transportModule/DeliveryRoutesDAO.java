@@ -2,7 +2,6 @@ package dataAccessLayer.transportModule;
 
 import dataAccessLayer.dalAbstracts.ManyToManyDAO;
 import dataAccessLayer.dalAbstracts.SQLExecutor;
-import dataAccessLayer.dalAssociationClasses.transportModule.TransportDestination;
 import dataAccessLayer.dalUtils.OfflineResultSet;
 import exceptions.DalException;
 import objects.transportObjects.DeliveryRoute;
@@ -22,7 +21,7 @@ public class DeliveryRoutesDAO extends ManyToManyDAO<DeliveryRoute> {
     private static final String[] primary_keys = {"transport_id", "destination_index"};
     private static final String[][] foreign_keys = {{"transport_id"}, {"destination_name"}, {"item_list_id"}};
     private static final String[][] references = {{"id"}, {"name"}, {"id"}};
-    public static final String tableName = "transport_destinations";
+    public static final String tableName = "delivery_routes";
 
     public DeliveryRoutesDAO(SQLExecutor cursor) throws DalException{
         super(cursor,
@@ -74,19 +73,31 @@ public class DeliveryRoutesDAO extends ManyToManyDAO<DeliveryRoute> {
     @Override
     public List<DeliveryRoute> selectAll() throws DalException {
 
-        throw new RuntimeException("Not implemented yet");
-//        String query = String.format("SELECT * FROM %s;", TABLE_NAME);
-//        OfflineResultSet resultSet;
-//        try {
-//            resultSet = cursor.executeRead(query);
-//        } catch (SQLException e) {
-//            throw new DalException("Failed to select all delivery routes", e);
-//        }
-//        List<DeliveryRoute> deliveryRoutes = new LinkedList<>();
-//        while(resultSet.next()) {
-//            deliveryRoutes.add(getObjectFromResultSet(resultSet));
-//        }
-//        return deliveryRoutes;
+        String idQuery = String.format("SELECT DISTINCT transport_id FROM %s;", TABLE_NAME);
+        OfflineResultSet idResultSet;
+        try {
+            idResultSet = cursor.executeRead(idQuery);
+        } catch (SQLException e) {
+            throw new DalException("Failed to select all delivery routes", e);
+        }
+        List<Integer> ids = new LinkedList<>();
+        while(idResultSet.next()) {
+            ids.add(idResultSet.getInt("transport_id"));
+        }
+        List<DeliveryRoute> deliveryRoutes = new LinkedList<>();
+        for(Integer id : ids){
+            String query = String.format("SELECT * FROM %s where transport_id = %d;", TABLE_NAME, id);
+            OfflineResultSet resultSet;
+            try {
+                resultSet = cursor.executeRead(query);
+            } catch (SQLException e) {
+                throw new DalException("Failed to select all delivery routes", e);
+            }
+            while(resultSet.isEmpty() == false) {
+                deliveryRoutes.add(getObjectFromResultSet(resultSet));
+            }
+        }
+        return deliveryRoutes;
     }
 
     /**
@@ -103,21 +114,6 @@ public class DeliveryRoutesDAO extends ManyToManyDAO<DeliveryRoute> {
         } catch (SQLException e) {
             throw new DalException("Failed to insert delivery route", e);
         }
-    }
-
-    private String buildInsertQuery(DeliveryRoute object) {
-        StringBuilder queryBuilder = new StringBuilder();
-        int i = 0;
-        for(String destination : object.route()) {
-            queryBuilder.append(String.format("INSERT INTO %s VALUES (%d, %d, '%s', %d, '%s');\n",
-                    TABLE_NAME,
-                    object.transportId(),
-                    i++,
-                    destination,
-                    object.itemLists().get(destination),
-                    object.getEstimatedTimeOfArrival(destination).toString()));
-        }
-        return queryBuilder.toString();
     }
 
     /**
@@ -152,12 +148,6 @@ public class DeliveryRoutesDAO extends ManyToManyDAO<DeliveryRoute> {
         }
     }
 
-    private String buildDeleteQuery(DeliveryRoute object) {
-        return String.format("DELETE FROM %s WHERE transport_id = %d;\n",
-                TABLE_NAME,
-                object.transportId());
-    }
-
     @Override
     public boolean exists(DeliveryRoute object) throws DalException {
         String query = String.format("SELECT * FROM %s WHERE transport_id = %d;",
@@ -171,40 +161,38 @@ public class DeliveryRoutesDAO extends ManyToManyDAO<DeliveryRoute> {
         }
     }
 
-    public Transport buildDeliveryRoute(Transport transport) throws DalException{
-
-        throw new RuntimeException("Not implemented yet");
-
-//        List<TransportDestination> transportDestinations = selectAllRelated(transport);
-//
-//        ListIterator<TransportDestination> iterator = transportDestinations.listIterator();
-//        TransportDestination curr = iterator.next();
-//        TransportDestination next;
-//
-//        LinkedList<String> destinations = new LinkedList<>();
-//        HashMap<String,Integer> itemLists = new HashMap<>();
-//        HashMap<String, LocalTime> estimatedTimesOfArrival = new HashMap<>();
-//
-//        String source = curr.name();
-//        while(iterator.hasNext()){
-//            next = iterator.next();
-//            destinations.add(next.name());
-//            itemLists.put(next.name(), next.itemListId());
-//            estimatedTimesOfArrival.put(next.name(), next.expectedArrivalTime());
-//        }
-//        DeliveryRoute deliveryRoute = new DeliveryRoute(transportId, source, destinations, itemLists);
-//        deliveryRoute.initializeArrivalTimes(estimatedTimesOfArrival);
-//        return new Transport(deliveryRoute,transport);
-    }
-
     @Override
     protected DeliveryRoute getObjectFromResultSet(OfflineResultSet resultSet) {
-        throw new RuntimeException("Not implemented yet");
-//        return new TransportDestination(
-//                resultSet.getInt("transport_id"),
-//                resultSet.getInt("destination_index"),
-//                resultSet.getString("destination_name"),
-//                resultSet.getInt("item_list_id"),
-//                resultSet.getLocalTime("expected_arrival_time"));
+        List<String> route = new LinkedList<>();
+        HashMap<String, Integer> itemLists = new HashMap<>();
+        HashMap<String, LocalTime> estimatedTimesOfArrival = new HashMap<>();
+        while(resultSet.next()) {
+            route.add(resultSet.getString("destination_name"));
+            itemLists.put(resultSet.getString("destination_name"), resultSet.getInt("item_list_id"));
+            estimatedTimesOfArrival.put(resultSet.getString("destination_name"), resultSet.getLocalTime("expected_arrival_time"));
+        }
+        int transportId = resultSet.getInt("transport_id");
+        return new DeliveryRoute(transportId, route, itemLists, estimatedTimesOfArrival);
+    }
+
+    private String buildInsertQuery(DeliveryRoute object) {
+        StringBuilder queryBuilder = new StringBuilder();
+        int i = 0;
+        for(String destination : object.route()) {
+            queryBuilder.append(String.format("INSERT INTO %s VALUES (%d, %d, '%s', %d, '%s');\n",
+                    TABLE_NAME,
+                    object.transportId(),
+                    i++,
+                    destination,
+                    object.itemLists().get(destination),
+                    object.getEstimatedTimeOfArrival(destination).toString()));
+        }
+        return queryBuilder.toString();
+    }
+
+    private String buildDeleteQuery(DeliveryRoute object) {
+        return String.format("DELETE FROM %s WHERE transport_id = %d;\n",
+                TABLE_NAME,
+                object.transportId());
     }
 }

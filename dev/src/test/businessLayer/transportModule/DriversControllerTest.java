@@ -33,7 +33,7 @@ class DriversControllerTest {
         try{
             when(dao.exists(Driver.getLookupObject(DRIVER_ID))).thenReturn(false);
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
         assertDoesNotThrow(() -> controller.addDriver(driver));
     }
@@ -43,7 +43,7 @@ class DriversControllerTest {
         try{
             when(dao.exists(Driver.getLookupObject(DRIVER_ID))).thenReturn(true);
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
         assertThrows(TransportException.class, () -> controller.addDriver(driver));
     }
@@ -53,7 +53,7 @@ class DriversControllerTest {
         try{
             when(dao.exists(Driver.getLookupObject(DRIVER_ID))).thenReturn(true);
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
         assertDoesNotThrow(() -> controller.removeDriver(DRIVER_ID));
     }
@@ -63,7 +63,7 @@ class DriversControllerTest {
         try{
             when(dao.exists(Driver.getLookupObject(DRIVER_ID))).thenReturn(false);
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
         assertThrows(TransportException.class, () -> controller.removeDriver(DRIVER_ID));
     }
@@ -73,7 +73,7 @@ class DriversControllerTest {
         try{
             when(dao.exists(Driver.getLookupObject(DRIVER_ID))).thenReturn(true);
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
         assertDoesNotThrow(() -> controller.updateDriver(driver.id(), driver));
     }
@@ -83,7 +83,7 @@ class DriversControllerTest {
         try{
             when(dao.exists(Driver.getLookupObject(DRIVER_ID))).thenReturn(false);
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
         assertThrows(TransportException.class, () -> controller.updateDriver(driver.id(), driver));
     }
@@ -94,7 +94,7 @@ class DriversControllerTest {
             when(dao.exists(Driver.getLookupObject(DRIVER_ID))).thenReturn(true);
             when(dao.select(Driver.getLookupObject(DRIVER_ID))).thenReturn(driver);
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
         Driver fetched = assertDoesNotThrow(() -> controller.getDriver(DRIVER_ID));
         assertDeepEquals(driver, fetched);
@@ -105,7 +105,7 @@ class DriversControllerTest {
         try{
             when(dao.exists(Driver.getLookupObject(DRIVER_ID))).thenReturn(false);
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
         assertThrows(TransportException.class, () -> controller.getDriver(DRIVER_ID));
     }
@@ -116,7 +116,7 @@ class DriversControllerTest {
         try{
             when(dao.selectAll()).thenReturn(List.of(driver, driver2));
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
         List<Driver> fetched = assertDoesNotThrow(() -> controller.getAllDrivers());
         assertEquals(2, fetched.size());

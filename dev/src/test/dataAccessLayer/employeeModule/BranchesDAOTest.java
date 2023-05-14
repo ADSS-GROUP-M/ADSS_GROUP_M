@@ -66,7 +66,7 @@ class BranchesDAOTest {
         try {
             assertDeepEquals(branch1, branchesDAO.select(branch1.name()));
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
     }
 
@@ -83,7 +83,7 @@ class BranchesDAOTest {
                 assertDeepEquals(expectedBranches.get(i), selectedBranches.get(i));
             }
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
     }
 
@@ -92,7 +92,7 @@ class BranchesDAOTest {
         try {
             branchesDAO.insert(branch3);
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
     }
 
@@ -113,7 +113,7 @@ class BranchesDAOTest {
             branchesDAO.update(updatedBranch1);
             assertDeepEquals(updatedBranch1, branchesDAO.select(updatedBranch1.name()));
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
     }
 
@@ -133,7 +133,7 @@ class BranchesDAOTest {
         try {
             branchesDAO.delete(branch2);
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
         assertThrows(DalException.class, () -> branchesDAO.select(branch2.name()));
     }
@@ -146,7 +146,7 @@ class BranchesDAOTest {
             resultSet.next();
             assertDeepEquals(branch1, branchesDAO.getObjectFromResultSet(resultSet));
         } catch (SQLException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
     }
 

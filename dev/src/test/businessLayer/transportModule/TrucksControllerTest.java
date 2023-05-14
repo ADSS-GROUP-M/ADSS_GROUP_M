@@ -32,7 +32,7 @@ class TrucksControllerTest {
         try{
             when(dao.exists(Truck.getLookupObject(truck.id()))).thenReturn(false);
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
         assertDoesNotThrow(() -> controller.addTruck(truck));
     }
@@ -42,7 +42,7 @@ class TrucksControllerTest {
         try{
             when(dao.exists(Truck.getLookupObject(truck.id()))).thenReturn(true);
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
         assertThrows(TransportException.class, () -> controller.addTruck(truck));
     }
@@ -54,7 +54,7 @@ class TrucksControllerTest {
         try{
             when(dao.exists(Truck.getLookupObject(truck.id()))).thenReturn(false);
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
         Throwable ex = assertThrows(TransportException.class, () -> controller.addTruck(badTruck));
         assertEquals("negativeBaseWeight", ex.getCause().getMessage());
@@ -67,7 +67,7 @@ class TrucksControllerTest {
         try{
             when(dao.exists(Truck.getLookupObject(truck.id()))).thenReturn(false);
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
         Throwable ex = assertThrows(TransportException.class, () -> controller.addTruck(badTruck));
         assertEquals("negativeMaxWeight,baseWeightGreaterThanMaxWeight", ex.getCause().getMessage());
@@ -80,7 +80,7 @@ class TrucksControllerTest {
         try{
             when(dao.exists(Truck.getLookupObject(truck.id()))).thenReturn(false);
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
         Throwable ex = assertThrows(TransportException.class, () -> controller.addTruck(badTruck));
         assertEquals("baseWeightGreaterThanMaxWeight", ex.getCause().getMessage());
@@ -91,7 +91,7 @@ class TrucksControllerTest {
         try{
             when(dao.exists(Truck.getLookupObject(truck.id()))).thenReturn(true);
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
         assertDoesNotThrow(() -> controller.removeTruck(truck.id()));
     }
@@ -101,7 +101,7 @@ class TrucksControllerTest {
         try{
             when(dao.exists(Truck.getLookupObject(truck.id()))).thenReturn(false);
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
         assertThrows(TransportException.class, () -> controller.removeTruck(truck.id()));
     }
@@ -111,7 +111,7 @@ class TrucksControllerTest {
         try{
             when(dao.exists(Truck.getLookupObject(truck.id()))).thenReturn(true);
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
         assertDoesNotThrow(() -> controller.updateTruck(truck.id(),truck));
     }
@@ -121,7 +121,7 @@ class TrucksControllerTest {
         try{
             when(dao.exists(Truck.getLookupObject(truck.id()))).thenReturn(false);
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
         assertThrows(TransportException.class, () -> controller.updateTruck(truck.id(),truck));
     }
@@ -132,7 +132,7 @@ class TrucksControllerTest {
         try{
             when(dao.exists(Truck.getLookupObject(truck.id()))).thenReturn(true);
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
         Throwable ex = assertThrows(TransportException.class, () -> controller.updateTruck(truck.id(),badTruck));
         assertEquals("negativeBaseWeight", ex.getCause().getMessage());
@@ -144,7 +144,7 @@ class TrucksControllerTest {
         try{
             when(dao.exists(Truck.getLookupObject(truck.id()))).thenReturn(true);
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
         Throwable ex = assertThrows(TransportException.class, () -> controller.updateTruck(truck.id(),badTruck));
         assertEquals("negativeMaxWeight,baseWeightGreaterThanMaxWeight", ex.getCause().getMessage());
@@ -156,7 +156,7 @@ class TrucksControllerTest {
         try{
             when(dao.exists(Truck.getLookupObject(truck.id()))).thenReturn(true);
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
         Throwable ex = assertThrows(TransportException.class, () -> controller.updateTruck(truck.id(),badTruck));
         assertEquals("baseWeightGreaterThanMaxWeight", ex.getCause().getMessage());
@@ -169,7 +169,7 @@ class TrucksControllerTest {
             when(dao.exists(lookupObject)).thenReturn(true);
             when(dao.select(lookupObject)).thenReturn(truck);
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
         Truck fetched = assertDoesNotThrow(() -> controller.getTruck(truck.id()));
         assertDeepEquals(truck, fetched);
@@ -180,7 +180,7 @@ class TrucksControllerTest {
         try{
             when(dao.exists(Truck.getLookupObject(truck.id()))).thenReturn(false);
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
         assertThrows(TransportException.class, () -> controller.getTruck(truck.id()));
     }
@@ -191,7 +191,7 @@ class TrucksControllerTest {
         try{
             when(dao.selectAll()).thenReturn(List.of(truck, truck2));
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
         List<Truck> fetched = assertDoesNotThrow(() -> controller.getAllTrucks());
         assertEquals(2, fetched.size());

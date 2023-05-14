@@ -130,16 +130,16 @@ public class DalFactory {
         return sitesRoutesDAO;
     }
 
-    public DeliveryRoutesDAO transportDestinationsDAO() {
-        return deliveryRoutesDAO;
-    }
-
     public ItemListsItemsDAO itemListsItemsDAO() {
         return itemListsItemsDAO;
     }
 
     public SQLExecutor cursor() {
         return cursor;
+    }
+
+    public DeliveryRoutesDAO deliveryRoutesDAO() {
+        return deliveryRoutesDAO;
     }
 
     public static void clearTestDB(){

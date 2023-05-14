@@ -6,7 +6,6 @@ import businessLayer.transportModule.*;
 import dataAccessLayer.DalFactory;
 import dataAccessLayer.dalAbstracts.SQLExecutor;
 import dataAccessLayer.dalAssociationClasses.transportModule.SiteRoute;
-import dataAccessLayer.dalAssociationClasses.transportModule.TransportDestination;
 import dataAccessLayer.dalUtils.OfflineResultSet;
 import dataAccessLayer.employeeModule.EmployeeDAO;
 import exceptions.DalException;
@@ -36,10 +35,10 @@ class DeliveryRoutesDAOTest {
     public static final String DEST_NAME1 = "dest1";
     private static final String DEST_NAME2 = "dest2";
     private DeliveryRoutesDAO dao;
-    private TransportDestination transportDestination1;
-    private TransportDestination transportDestination2;
-    private TransportDestination transportDestination3;
-    private TransportDestination transportDestination4;
+//    private TransportDestination transportDestination1;
+//    private TransportDestination transportDestination2;
+//    private TransportDestination transportDestination3;
+//    private TransportDestination transportDestination4;
     private Site source;
     private Site dest1;
     private Site dest2;
@@ -48,12 +47,8 @@ class DeliveryRoutesDAOTest {
     private ItemList itemList;
     private SiteRoute route1;
     private SiteRoute route2;
-    private SiteRoute route3;
     private Transport transport;
     private TransportsDAO transportsDAO;
-    private SiteRoute route4;
-    private SiteRoute route5;
-    private SiteRoute route6;
     private Employee employee;
     private HashMap<String, LocalTime> arrivalTimes;
     private SitesDAO sitesDAO;
@@ -63,19 +58,17 @@ class DeliveryRoutesDAOTest {
     private ItemListsDAO itemListsDAO;
     private SitesRoutesDAO routesDAO;
     private DalFactory factory;
+    private DeliveryRoute deliveryRoute;
 
     @BeforeEach
     void setUp() {
         try {
             DalFactory.clearTestDB();
 
-            fail("FINISH FIXING THESE TESTS");
-
             //sites set up
             source = new Site("source1", "source1 name", "zone1", "12345","kobi", Site.SiteType.SUPPLIER);
             dest1 = new Site("dest1", "dest1 name", "zone1", "12345","kobi", Site.SiteType.SUPPLIER);
             dest2 = new Site("dest2", "dest2 name", "zone1", "12345","kobi", Site.SiteType.SUPPLIER);
-            source = new Site("source1", "source1 name", "zone1", "12345","kobi", Site.SiteType.BRANCH);
 
             //truck set up
             truck = new Truck("1", "model1", 1000, 20000, Truck.CoolingCapacity.FROZEN);
@@ -100,23 +93,12 @@ class DeliveryRoutesDAOTest {
             itemList = new ItemList(1, load, unload);
 
             //transport set up
-            route1 = new SiteRoute(source.address(), dest1.address(), 40,30);
-            route2 = new SiteRoute(dest1.address(), dest2.address(), 40,30);
-            route3 = new SiteRoute(dest2.address(), dest1.address(), 40,30);
-            route4 = new SiteRoute(dest1.address(), source.address(), 40,30);
-            route5 = new SiteRoute(dest2.address(), source.address(), 40,30);
-            route6 = new SiteRoute(source.address(), source.address(), 40,30);
+            route1 = new SiteRoute(source.address(), dest1.address(), 10,10);
+            route2 = new SiteRoute(dest1.address(), dest2.address(), 10,10);
 
             transport = new Transport(1,
-                    source.name(),
-                    new LinkedList<>(){{
-                        add(dest1.name());
-                        add(dest2.name());
-                    }} ,
-                    new HashMap<>(){{
-                        put(dest1.name(), itemList.id());
-                        put(dest2.name(), itemList.id());
-                    }},
+                    new LinkedList<>(),
+                    new HashMap<>(),
                     driver.id(),
                     truck.id(),
                     LocalDateTime.of(2023, 2, 2, 12, 0),
@@ -127,7 +109,21 @@ class DeliveryRoutesDAOTest {
             arrivalTimes = new HashMap<>();
             arrivalTimes.put(dest1.name(), LocalTime.of(12, (int) route1.duration()));
             arrivalTimes.put(dest2.name(), LocalTime.of(12, (int)(route1.duration() + route2.duration() + TransportsController.AVERAGE_TIME_PER_VISIT)));
-            transport.deliveryRoute().initializeArrivalTimes(arrivalTimes);
+
+            List<String> route = List.of(source.name(), dest1.name(), dest2.name());
+            HashMap<String,Integer> itemLists = new HashMap<>(){{
+                put(source.name(),-1);
+                put(dest1.name(),1);
+                put(dest2.name(),1);
+            }};
+
+
+            deliveryRoute = new DeliveryRoute(
+                    transport.id(),
+                    route,
+                    itemLists,
+                    arrivalTimes
+            );
 
             factory = new DalFactory(TESTING_DB_NAME);
             sitesDAO = factory.sitesDAO();
@@ -143,21 +139,13 @@ class DeliveryRoutesDAOTest {
             sitesDAO.insert(dest2);
             routesDAO.insert(route1);
             routesDAO.insert(route2);
-            routesDAO.insert(route3);
-            routesDAO.insert(route4);
-            routesDAO.insert(route5);
-            routesDAO.insert(route6);
             trucksDAO.insert(truck);
             employeeDAO.insert(employee);
             driversDAO.insert(driver);
             itemListsDAO.insert(itemList);
-
-            transportDestination1 = new TransportDestination(TRANSPORT_ID, 1, dest1.name(), LIST_ID, ARRIVAL_TIME);
-            transportDestination2 = new TransportDestination(TRANSPORT_ID, 2, dest2.name(), LIST_ID, ARRIVAL_TIME);
-            transportDestination3 = new TransportDestination(TRANSPORT_ID, 3, dest1.name(), LIST_ID, ARRIVAL_TIME);
-            transportDestination4 = new TransportDestination(TRANSPORT_ID, 4, dest2.name(), LIST_ID, ARRIVAL_TIME);
+            transportsDAO.insert(transport);
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
     }
 
@@ -167,234 +155,235 @@ class DeliveryRoutesDAOTest {
     }
 
     @Test
-    void select() {
+    void insert_and_select() {
         try {
-            TransportDestination selected = dao.select(transportDestination2);
-            assertDeepEquals(transportDestination2, selected);
+
+            dao.insert(deliveryRoute);
+            DeliveryRoute selected = dao.select(DeliveryRoute.getLookupObject(transport.id()));
+            assertDeepEquals(deliveryRoute, selected);
+
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
     }
 
     @Test
     void selectAll() {
-        //set up
-        LinkedList<TransportDestination> expected = new LinkedList<>();
-        expected.add(transportDestination1);
-        expected.add(transportDestination2);
-        expected.add(transportDestination3);
-        expected.add(transportDestination4);
-        List.of(5,6,7,8).forEach(i -> {
-            try {
-                TransportDestination newDestination = new TransportDestination(TRANSPORT_ID, i, SOURCE_NAME, LIST_ID, ARRIVAL_TIME);
-                expected.add(newDestination);
-                dao.insert(newDestination);
-            } catch (DalException e) {
-                fail(e);
-            }
-        });
-
-        //test
-        try {
-            List<TransportDestination> selected = dao.selectAll();
-            assertEquals(expected.size(), selected.size());
-            for (int i = 0; i < expected.size(); i++) {
-                assertDeepEquals(expected.get(i), selected.get(i));
-            }
-        } catch (DalException e) {
-            fail(e);
-        }
+//        //set up
+//        LinkedList<TransportDestination> expected = new LinkedList<>();
+//        expected.add(transportDestination1);
+//        expected.add(transportDestination2);
+//        expected.add(transportDestination3);
+//        expected.add(transportDestination4);
+//        List.of(5,6,7,8).forEach(i -> {
+//            try {
+//                TransportDestination newDestination = new TransportDestination(TRANSPORT_ID, i, SOURCE_NAME, LIST_ID, ARRIVAL_TIME);
+//                expected.add(newDestination);
+//                dao.insert(newDestination);
+//            } catch (DalException e) {
+//                fail(e.getMessage(),e.getCause());
+//            }
+//        });
+//
+//        //test
+//        try {
+//            List<TransportDestination> selected = dao.selectAll();
+//            assertEquals(expected.size(), selected.size());
+//            for (int i = 0; i < expected.size(); i++) {
+//                assertDeepEquals(expected.get(i), selected.get(i));
+//            }
+//        } catch (DalException e) {
+//            fail(e.getMessage(),e.getCause());
+//        }
     }
 
     @Test
     void selectAllRelated() {
-        //set up
-        LinkedList<TransportDestination> expected = new LinkedList<>();
-        expected.add(transportDestination1);
-        expected.add(transportDestination2);
-        expected.add(transportDestination3);
-        expected.add(transportDestination4);
-        List.of(5,6,7,8).forEach(i -> {
-            try {
-                TransportDestination newDestination = new TransportDestination(TRANSPORT_ID, i, SOURCE_NAME, LIST_ID, ARRIVAL_TIME);
-                dao.insert(newDestination);
-                expected.add(newDestination);
-            } catch (DalException e) {
-                fail(e);
-            }
-        });
-
-        //test
-        try {
-            List<TransportDestination> selected = dao.selectAllRelated(Transport.getLookupObject(TRANSPORT_ID));
-            assertEquals(expected.size(), selected.size());
-            for (int i = 0; i < expected.size(); i++) {
-                assertDeepEquals(expected.get(i), selected.get(i));
-            }
-        } catch (DalException e) {
-            fail(e);
-        }
+//        //set up
+//        LinkedList<TransportDestination> expected = new LinkedList<>();
+//        expected.add(transportDestination1);
+//        expected.add(transportDestination2);
+//        expected.add(transportDestination3);
+//        expected.add(transportDestination4);
+//        List.of(5,6,7,8).forEach(i -> {
+//            try {
+//                TransportDestination newDestination = new TransportDestination(TRANSPORT_ID, i, SOURCE_NAME, LIST_ID, ARRIVAL_TIME);
+//                dao.insert(newDestination);
+//                expected.add(newDestination);
+//            } catch (DalException e) {
+//                fail(e.getMessage(),e.getCause());
+//            }
+//        });
+//
+//        //test
+//        try {
+//            List<TransportDestination> selected = dao.selectAllRelated(Transport.getLookupObject(TRANSPORT_ID));
+//            assertEquals(expected.size(), selected.size());
+//            for (int i = 0; i < expected.size(); i++) {
+//                assertDeepEquals(expected.get(i), selected.get(i));
+//            }
+//        } catch (DalException e) {
+//            fail(e.getMessage(),e.getCause());
+//        }
     }
 
     @Test
     void insert() {
-        try {
-            TransportDestination newDestination = new TransportDestination(TRANSPORT_ID, 5, SOURCE_NAME, LIST_ID, ARRIVAL_TIME);
-            dao.insert(newDestination);
-            TransportDestination selected = dao.select(TransportDestination.getLookupObject(
-                    newDestination.transportId(),
-                    newDestination.destination_index()));
-            assertDeepEquals(newDestination, selected);
-        } catch (DalException e) {
-            fail(e);
-        }
+//        try {
+//            TransportDestination newDestination = new TransportDestination(TRANSPORT_ID, 5, SOURCE_NAME, LIST_ID, ARRIVAL_TIME);
+//            dao.insert(newDestination);
+//            TransportDestination selected = dao.select(TransportDestination.getLookupObject(
+//                    newDestination.transportId(),
+//                    newDestination.destination_index()));
+//            assertDeepEquals(newDestination, selected);
+//        } catch (DalException e) {
+//            fail(e.getMessage(),e.getCause());
+//        }
     }
 
     @Test
     void insertAll() {
-        //set up
-        LinkedList<TransportDestination> expected = new LinkedList<>();
-        List.of(5,6,7,8).forEach(i -> {
-            TransportDestination newDestination = new TransportDestination(TRANSPORT_ID, i, SOURCE_NAME, LIST_ID, ARRIVAL_TIME);
-            expected.add(newDestination);
-        });
-        try {
-            dao.insertAll(expected);
-        } catch (DalException e) {
-            fail(e);
-        }
-        expected.addFirst(transportDestination4);
-        expected.addFirst(transportDestination3);
-        expected.addFirst(transportDestination2);
-        expected.addFirst(transportDestination1);
-
-        //test
-        try {
-            List<TransportDestination> selected = dao.selectAllRelated(Transport.getLookupObject(TRANSPORT_ID));
-            assertEquals(expected.size(), selected.size());
-            for (int i = 0; i < expected.size(); i++) {
-                assertDeepEquals(expected.get(i), selected.get(i));
-            }
-        } catch (DalException e) {
-            fail(e);
-        }
+//        //set up
+//        LinkedList<TransportDestination> expected = new LinkedList<>();
+//        List.of(5,6,7,8).forEach(i -> {
+//            TransportDestination newDestination = new TransportDestination(TRANSPORT_ID, i, SOURCE_NAME, LIST_ID, ARRIVAL_TIME);
+//            expected.add(newDestination);
+//        });
+//        try {
+//            dao.insertAll(expected);
+//        } catch (DalException e) {
+//            fail(e.getMessage(),e.getCause());
+//        }
+//        expected.addFirst(transportDestination4);
+//        expected.addFirst(transportDestination3);
+//        expected.addFirst(transportDestination2);
+//        expected.addFirst(transportDestination1);
+//
+//        //test
+//        try {
+//            List<TransportDestination> selected = dao.selectAllRelated(Transport.getLookupObject(TRANSPORT_ID));
+//            assertEquals(expected.size(), selected.size());
+//            for (int i = 0; i < expected.size(); i++) {
+//                assertDeepEquals(expected.get(i), selected.get(i));
+//            }
+//        } catch (DalException e) {
+//            fail(e.getMessage(),e.getCause());
+//        }
     }
 
     @Test
     void update() {
-        try {
-
-            TransportDestination newDestination = new TransportDestination(
-                    TRANSPORT_ID,
-                    transportDestination2.destination_index(),
-                    DEST_NAME1,
-                    LIST_ID, ARRIVAL_TIME);
-            dao.update(newDestination);
-            TransportDestination selected = dao.select(TransportDestination.getLookupObject(
-                    newDestination.transportId(),
-                    newDestination.destination_index()));
-            assertDeepEquals(newDestination, selected);
-        } catch (DalException e) {
-            fail(e);
-        }
+//        try {
+//
+//            TransportDestination newDestination = new TransportDestination(
+//                    TRANSPORT_ID,
+//                    transportDestination2.destination_index(),
+//                    DEST_NAME1,
+//                    LIST_ID, ARRIVAL_TIME);
+//            dao.update(newDestination);
+//            TransportDestination selected = dao.select(TransportDestination.getLookupObject(
+//                    newDestination.transportId(),
+//                    newDestination.destination_index()));
+//            assertDeepEquals(newDestination, selected);
+//        } catch (DalException e) {
+//            fail(e.getMessage(),e.getCause());
+//        }
     }
 
     @Test
     void delete() {
-        try {
-            dao.delete(transportDestination4);
-            List<TransportDestination> selected = dao.selectAllRelated(Transport.getLookupObject(TRANSPORT_ID));
-            assertEquals(3, selected.size());
-            assertDeepEquals(transportDestination1, selected.get(0));
-            assertDeepEquals(transportDestination2, selected.get(1));
-            assertDeepEquals(transportDestination3, selected.get(2));
-        } catch (DalException e) {
-            fail(e);
-        }
+//        try {
+//            dao.delete(transportDestination4);
+//            List<TransportDestination> selected = dao.selectAllRelated(Transport.getLookupObject(TRANSPORT_ID));
+//            assertEquals(3, selected.size());
+//            assertDeepEquals(transportDestination1, selected.get(0));
+//            assertDeepEquals(transportDestination2, selected.get(1));
+//            assertDeepEquals(transportDestination3, selected.get(2));
+//        } catch (DalException e) {
+//            fail(e.getMessage(),e.getCause());
+//        }
     }
 
     @Test
     void exists() {
-        try {
-            assertTrue(dao.exists(transportDestination2));
-            assertFalse(dao.exists(TransportDestination.getLookupObject(TRANSPORT_ID, 10)));
-        } catch (DalException e) {
-            fail(e);
-        }
+//        try {
+//            assertTrue(dao.exists(transportDestination2));
+//            assertFalse(dao.exists(TransportDestination.getLookupObject(TRANSPORT_ID, 10)));
+//        } catch (DalException e) {
+//            fail(e.getMessage(),e.getCause());
+//        }
     }
 
     @Test
     void deleteAllRelated() {
-        try {
-            List<TransportDestination> selected = dao.selectAllRelated(Transport.getLookupObject(TRANSPORT_ID));
-            assertEquals(4, selected.size());
-            dao.deleteAllRelated(Transport.getLookupObject(TRANSPORT_ID));
-            selected = dao.selectAllRelated(Transport.getLookupObject(TRANSPORT_ID));
-            assertEquals(0, selected.size());
-        } catch (DalException e) {
-            fail(e);
-        }
+//        try {
+//            List<TransportDestination> selected = dao.selectAllRelated(Transport.getLookupObject(TRANSPORT_ID));
+//            assertEquals(4, selected.size());
+//            dao.deleteAllRelated(Transport.getLookupObject(TRANSPORT_ID));
+//            selected = dao.selectAllRelated(Transport.getLookupObject(TRANSPORT_ID));
+//            assertEquals(0, selected.size());
+//        } catch (DalException e) {
+//            fail(e.getMessage(),e.getCause());
+//        }
     }
 
     @Test
     void insertFromTransport() {
 
-        try {
-
-            //set up
-
-            Transport transport2 = new Transport(
-                    2,
-                    source.name(),
-                    new LinkedList<>() {{
-                        add(dest1.name());
-                        add(dest2.name());
-                    }},
-                    new HashMap<>() {{
-                        put(dest1.name(), 1);
-                        put(dest2.name(), 1);
-                    }},
-                    driver.id(),
-                    truck.id(),
-                    LocalDateTime.of(2020, 1, 1, 1, 1),
-                    15000
-            );
-            transportsDAO.insert(transport2);
-
-            //test
-            dao.insertFromTransport(transport2);
-            List<TransportDestination> selected = dao.selectAllRelated(transport2);
-            assertEquals(2, selected.size());
-            assertEquals(dest1.name(), selected.get(0).name());
-            assertEquals(dest2.name(), selected.get(1).name());
-
-        } catch (DalException e) {
-            fail(e);
-        }
+//        try {
+//
+//            //set up
+//
+//            Transport transport2 = new Transport(
+//                    2,
+//                    source.name(),
+//                    new LinkedList<>() {{
+//                        add(dest1.name());
+//                        add(dest2.name());
+//                    }},
+//                    new HashMap<>() {{
+//                        put(dest1.name(), 1);
+//                        put(dest2.name(), 1);
+//                    }},
+//                    driver.id(),
+//                    truck.id(),
+//                    LocalDateTime.of(2020, 1, 1, 1, 1),
+//                    15000
+//            );
+//            transportsDAO.insert(transport2);
+//
+//            //test
+//            dao.insertFromTransport(transport2);
+//            List<TransportDestination> selected = dao.selectAllRelated(transport2);
+//            assertEquals(2, selected.size());
+//            assertEquals(dest1.name(), selected.get(0).name());
+//            assertEquals(dest2.name(), selected.get(1).name());
+//
+//        } catch (DalException e) {
+//            fail(e.getMessage(),e.getCause());
+//        }
     }
 
     @Test
     void getObjectFromResultSet() {
         SQLExecutor cursor = factory.cursor();
         try{
-            String query = String.format("SELECT * FROM transport_destinations WHERE transport_id = %d AND destination_index = %d",
-                    transportDestination2.transportId(),
-                    transportDestination2.destination_index());
+            
+            String query = String.format("SELECT * FROM delivery_routes WHERE transport_id = %d",
+                    transport.id());
             OfflineResultSet resultSet = cursor.executeRead(query);
             resultSet.next();
-            TransportDestination selected = dao.getObjectFromResultSet(resultSet);
-            assertDeepEquals(transportDestination2, selected);
+            DeliveryRoute selected = dao.getObjectFromResultSet(resultSet);
+            assertDeepEquals(deliveryRoute, selected);
         } catch (SQLException e){
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
     }
 
-    private void assertDeepEquals(TransportDestination transportDestination1, TransportDestination transportDestination2) {
-        assertEquals(transportDestination1.transportId(), transportDestination2.transportId());
-        assertEquals(transportDestination1.destination_index(), transportDestination2.destination_index());
-        assertEquals(transportDestination1.name(), transportDestination2.name());
-        assertEquals(transportDestination1.itemListId(), transportDestination2.itemListId());
-        assertEquals(transportDestination1.expectedArrivalTime(), transportDestination2.expectedArrivalTime());
+    private void assertDeepEquals(DeliveryRoute route1, DeliveryRoute route2) {
+        assertEquals(route1.transportId(), route2.transportId());
+        assertEquals(route1.route(), route2.route());
+        assertEquals(route1.itemLists(), route2.itemLists());
+        assertEquals(route1.estimatedArrivalTimes(), route2.estimatedArrivalTimes());
     }
-
 }

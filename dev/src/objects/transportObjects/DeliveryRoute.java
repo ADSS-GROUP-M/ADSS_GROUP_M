@@ -2,10 +2,7 @@ package objects.transportObjects;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class DeliveryRoute {
 
@@ -16,8 +13,6 @@ public class DeliveryRoute {
     private Map<String, LocalTime> estimatedArrivalTimes;
     private boolean manualOverride;
     public DeliveryRoute(int transportId,
-                         String source,
-                         LocalTime departureTime,
                          List<String> route,
                          Map<String, Integer> destinations_itemListIds,
                          Map<String, LocalTime> estimatedArrivalTimes){
@@ -26,16 +21,26 @@ public class DeliveryRoute {
         this.destinationsSet = new HashSet<>(route);
         this.destinations_itemListIds = destinations_itemListIds;
         this.estimatedArrivalTimes = estimatedArrivalTimes;
-        route.add(0,source);
-        estimatedArrivalTimes.put(source,departureTime);
+    }
+
+
+    /**
+     * this constructor sets the id to be -1
+     */
+    public DeliveryRoute(
+                         List<String> route,
+                         Map<String, Integer> destinations_itemListIds){
+        this(-1,route,destinations_itemListIds,null);
+    }
+
+    public DeliveryRoute(int newId, DeliveryRoute deliveryRoute) {
+        this(newId, deliveryRoute.route, deliveryRoute.destinations_itemListIds, deliveryRoute.estimatedArrivalTimes);
     }
 
     public DeliveryRoute(int transportId,
-                         String source,
-                         LocalTime departureTime,
                          List<String> route,
                          Map<String, Integer> destinations_itemListIds){
-        this(transportId, source, route,destinations_itemListIds,null);
+        this(transportId,route,destinations_itemListIds,null);
     }
 
     public void initializeArrivalTimes(Map<String,LocalTime> estimatedArrivalTimes){
@@ -89,5 +94,22 @@ public class DeliveryRoute {
 
     public boolean manuallyOverrideEstimatedArrivalTimes() {
         return manualOverride;
+    }
+
+    public static DeliveryRoute getLookupObject(int transportId){
+        return new DeliveryRoute(transportId,new LinkedList<>(),null);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DeliveryRoute that = (DeliveryRoute) o;
+        return transportId == that.transportId;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(transportId);
     }
 }

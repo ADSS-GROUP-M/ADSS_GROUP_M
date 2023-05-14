@@ -30,7 +30,7 @@ class ItemListsControllerTest {
             when(dao.selectCounter()).thenReturn(1);
             controller = new ItemListsController(dao);
         } catch (TransportException | DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
 
         HashMap<String, Integer> load1 = new HashMap<>();
@@ -51,7 +51,7 @@ class ItemListsControllerTest {
         try{
             when(dao.exists(ItemList.getLookupObject(LIST_ID))).thenReturn(false);
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
         ItemList itemList1 = assertDoesNotThrow(() -> controller.addItemList(itemList));
         assertEquals(LIST_ID, itemList1.id());
@@ -63,7 +63,7 @@ class ItemListsControllerTest {
         try{
             when(dao.exists(badItemList)).thenReturn(false);
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
         assertThrows(RuntimeException.class, () -> controller.addItemList(badItemList));
     }
@@ -73,7 +73,7 @@ class ItemListsControllerTest {
         try{
             when(dao.exists(ItemList.getLookupObject(LIST_ID))).thenReturn(true);
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
         assertDoesNotThrow(() -> controller.removeItemList(LIST_ID));
     }
@@ -83,7 +83,7 @@ class ItemListsControllerTest {
         try{
             when(dao.exists(ItemList.getLookupObject(LIST_ID))).thenReturn(false);
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
         assertThrows(TransportException.class, () -> controller.removeItemList(LIST_ID));
     }
@@ -94,7 +94,7 @@ class ItemListsControllerTest {
         try{
             when(dao.exists(ItemList.getLookupObject(LIST_ID))).thenReturn(true);
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
         assertDoesNotThrow(() -> controller.updateItemList(updatedItemList.id(), updatedItemList));
     }
@@ -104,7 +104,7 @@ class ItemListsControllerTest {
         try{
             when(dao.exists(ItemList.getLookupObject(LIST_ID))).thenReturn(false);
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
         assertThrows(TransportException.class, () -> controller.updateItemList(LIST_ID, itemList));
     }
@@ -116,7 +116,7 @@ class ItemListsControllerTest {
             when(dao.exists(lookupObject)).thenReturn(true);
             when(dao.select(lookupObject)).thenReturn(itemList);
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
         ItemList fetched = assertDoesNotThrow(() -> controller.getItemList(LIST_ID));
         assertDeepEquals(itemList, fetched);
@@ -127,7 +127,7 @@ class ItemListsControllerTest {
         try{
             when(dao.exists(ItemList.getLookupObject(LIST_ID))).thenReturn(false);
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
         assertThrows(TransportException.class, () -> controller.getItemList(LIST_ID));
     }
@@ -138,7 +138,7 @@ class ItemListsControllerTest {
         try{
             when(dao.selectAll()).thenReturn(List.of(itemList, itemList2));
         } catch (DalException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
         List<ItemList> fetched = assertDoesNotThrow(() -> controller.getAllItemLists());
         assertEquals(2, fetched.size());

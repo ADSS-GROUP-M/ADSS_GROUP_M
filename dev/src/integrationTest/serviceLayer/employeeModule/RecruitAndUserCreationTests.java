@@ -85,7 +85,7 @@ public class RecruitAndUserCreationTests {
         try {
             sc.addAllSitesFirstTimeSystemLoad(sites);
         } catch (TransportException e) {
-            fail(e);
+            fail(e.getMessage(),e.getCause());
         }
     }
 

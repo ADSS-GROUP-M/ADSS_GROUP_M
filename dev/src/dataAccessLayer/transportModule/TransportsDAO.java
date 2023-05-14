@@ -61,7 +61,7 @@ public class TransportsDAO extends ManyToManyDAO<Transport> implements CounterDA
         try {
             resultSet = cursor.executeRead(query);
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DalException("Failed to select transport", e);
         }
         if (resultSet.next()){
             Transport selected = getObjectFromResultSet(resultSet);
@@ -84,7 +84,7 @@ public class TransportsDAO extends ManyToManyDAO<Transport> implements CounterDA
         try {
             resultSet = cursor.executeRead(query);
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DalException("Failed to select all transports", e);
         }
         while (resultSet.next()){
             Transport selected = getObjectFromResultSet(resultSet);
@@ -115,7 +115,7 @@ public class TransportsDAO extends ManyToManyDAO<Transport> implements CounterDA
                 throw new RuntimeException("Unexpected error while inserting transport");
             }
         } catch (SQLException e) {
-            throw new DalException("Failed to insert transport");
+            throw new DalException("Failed to insert transport",e);
         }
     }
 
@@ -125,7 +125,7 @@ public class TransportsDAO extends ManyToManyDAO<Transport> implements CounterDA
      */
     @Override
     public void update(Transport object) throws DalException {
-        String query = String.format("UPDATE %s SET, driver_id = '%s', truck_id = '%s', departure_time = '%s', weight = %d WHERE id = %d;",
+        String query = String.format("UPDATE %s SET driver_id = '%s', truck_id = '%s', departure_time = '%s', weight = %d WHERE id = %d;",
                 TABLE_NAME,
                 object.driverId(),
                 object.truckId(),
@@ -140,7 +140,7 @@ public class TransportsDAO extends ManyToManyDAO<Transport> implements CounterDA
                 throw new DalException("No transport with id " + object.id() + " was found");
             }
         } catch (SQLException e) {
-            throw new DalException("Failed to update transport");
+            throw new DalException("Failed to update transport",e);
         }
     }
 
@@ -160,7 +160,7 @@ public class TransportsDAO extends ManyToManyDAO<Transport> implements CounterDA
                 throw new DalException("No transport with id " + object.id() + " was found");
             }
         } catch (SQLException e) {
-            throw new DalException("Failed to delete transport");
+            throw new DalException("Failed to delete transport",e);
         }
     }
 
@@ -178,7 +178,7 @@ public class TransportsDAO extends ManyToManyDAO<Transport> implements CounterDA
         try{
             return cursor.executeRead(query).isEmpty() == false;
         } catch (SQLException e) {
-            throw new DalException("Failed to check if transport exists");
+            throw new DalException("Failed to check if transport exists",e);
         }
     }
 

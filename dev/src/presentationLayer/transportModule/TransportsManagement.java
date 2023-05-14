@@ -83,25 +83,17 @@ public class TransportsManagement {
         System.out.println("Truck: ");
         String truckId = uiData.pickTruck(false).id();
 
-
-        // source
-        System.out.println("Source: ");
-        Site source = uiData.pickSite(false);
-
-        // destinations and items lists
-        LinkedList<String> destinations = new LinkedList<>();
+        // route
+        LinkedList<String> route = new LinkedList<>();
         HashMap<String, Integer> itemsList = new HashMap<>();
-        destinationsMaker(destinations, itemsList, departureDateTime);
+        routeMaker(route, itemsList, departureDateTime);
 
         //weight
         int truckWeight = uiData.readInt("Truck weight: ");
 
         Transport newTransport = new Transport(
-                new DeliveryRoute(
-                        transportId, source.name(),
-                        destinations,
-                        itemsList
-                ),
+                route,
+                itemsList,
                 driver.id(),
                 truckId,
                 departureDateTime,
@@ -145,10 +137,8 @@ public class TransportsManagement {
                     System.out.println("Driver: ");
                     Driver driver = pickFromAvailableDrivers(newTransport.departureTime());
                     newTransport = new Transport(
-                            new DeliveryRoute(
-                                    transportId, newTransport.source(),
-                                    newTransport.route(),
-                                    newTransport.itemLists()),
+                            newTransport.route(),
+                            newTransport.itemLists(),
                             driver.id(),
                             truckId,
                             newTransport.departureTime(),
@@ -162,14 +152,12 @@ public class TransportsManagement {
                 case 2 -> {
                     LinkedList<String> destinations = new LinkedList<>();
                     HashMap<String, Integer> itemsList = new HashMap<>();
-                    destinationsMaker(destinations, itemsList, newTransport.departureTime());
+                    routeMaker(destinations, itemsList, newTransport.departureTime());
                     System.out.println("New weight :");
                     int weight = uiData.readInt();
                     newTransport = new Transport(
-                            new DeliveryRoute(
-                                    transportId, newTransport.source(),
-                                    destinations,
-                                    itemsList),
+                            destinations,
+                            itemsList,
                             newTransport.driverId(),
                             newTransport.truckId(),
                             newTransport.departureTime(),
@@ -202,8 +190,7 @@ public class TransportsManagement {
             System.out.println("Please select an option:");
             System.out.println("1. Update driver");
             System.out.println("2. Update truck");
-            System.out.println("3. Update source");
-            System.out.println("4. Update destinations");
+            System.out.println("3. Update route");
             System.out.println("5. Update weight");
             System.out.println("6. Set manual arrival times");
             System.out.println("7. Return to previous menu");
@@ -219,7 +206,6 @@ public class TransportsManagement {
 
                     updateTransportHelperMethod(
                             oldtransport.id(),
-                            oldtransport.source(),
                             oldtransport.route(),
                             oldtransport.itemLists(),
                             oldtransport.truckId(),
@@ -233,7 +219,6 @@ public class TransportsManagement {
                     String truckId = uiData.pickTruck(false).id();
                     updateTransportHelperMethod(
                             oldtransport.id(),
-                            oldtransport.source(),
                             oldtransport.route(),
                             oldtransport.itemLists(),
                             truckId,
@@ -247,7 +232,6 @@ public class TransportsManagement {
                     Site source = uiData.pickSite(false);
                     updateTransportHelperMethod(
                             oldtransport.id(),
-                            source.name(),
                             oldtransport.route(),
                             oldtransport.itemLists(),
                             oldtransport.truckId(),
@@ -260,11 +244,10 @@ public class TransportsManagement {
                     System.out.println("Select new destinations and item lists: ");
                     HashMap<String, Integer> itemsList = new HashMap<>();
                     LinkedList<String> destinations = new LinkedList<>();
-                    destinationsMaker(destinations, itemsList, oldtransport.departureTime());
+                    routeMaker(destinations, itemsList, oldtransport.departureTime());
 
                     updateTransportHelperMethod(
                             oldtransport.id(),
-                            oldtransport.source(),
                             destinations,
                             itemsList,
                             oldtransport.truckId(),
@@ -277,7 +260,6 @@ public class TransportsManagement {
                     int truckWeight = uiData.readInt("Truck weight: ");
                     updateTransportHelperMethod(
                             oldtransport.id(),
-                            oldtransport.source(),
                             oldtransport.route(),
                             oldtransport.itemLists(),
                             oldtransport.truckId(),
@@ -382,13 +364,14 @@ public class TransportsManagement {
         System.out.println("DriverId:     "+ transport.driverId());
         System.out.println("TruckId:      "+ transport.truckId());
         System.out.println("Weight:       "+ transport.weight());
-        System.out.println("Source:       "+ transport.source());
-        System.out.println("Destinations: ");
+        System.out.println("Route: ");
         for(String address : transport.route()){
             Site destination = uiData.sites().get(address);
             LocalTime arrivalTime = transport.deliveryRoute().getEstimatedTimeOfArrival(address);
             String time = String.format("[%02d:%02d] ", arrivalTime.getHour(), arrivalTime.getMinute());
-            System.out.println(time+destination + " (items list id: "+ transport.itemLists().get(address)+")");
+            Integer itemListId = transport.itemLists().get(address);
+            String itemListIdStr = itemListId == -1 ? "" : " (items list id: "+ itemListId +")";
+            System.out.println(time+destination + itemListIdStr);
         }
     }
 
@@ -418,7 +401,6 @@ public class TransportsManagement {
     }
 
     private void updateTransportHelperMethod(int id,
-                                             String source,
                                              List<String> destinations,
                                              Map<String, Integer> itemLists,
                                              String truckId,
@@ -427,7 +409,7 @@ public class TransportsManagement {
                                              int weight) {
         Transport newTransport = new Transport(
                 id,
-                new DeliveryRoute(transportId, source, destinations, itemLists),
+                new DeliveryRoute(destinations, itemLists),
                 driverId,
                 truckId,
                 departureDateTime,
@@ -456,9 +438,16 @@ public class TransportsManagement {
         return uiData.transports().get(transportId);
     }
 
-    private void destinationsMaker(LinkedList<String> destinations, HashMap<String, Integer> itemsList, LocalDateTime departureDateTime) {
+    private void routeMaker(LinkedList<String> destinations, HashMap<String, Integer> itemsList, LocalDateTime departureDateTime) {
+        System.out.println("Pick route source, destinations and items lists:\n");
+        // source
+        System.out.println("Source: ");
+        Site source = uiData.pickSite(false);
+        destinations.add(source.name());
+        itemsList.put(source.name(), -1);
+
+        // destinations
         int destinationId = 1;
-        System.out.println("Pick destinations and items lists:");
         while(true){
             System.out.println("=========================================");
             System.out.println("Destination number "+destinationId+": ");

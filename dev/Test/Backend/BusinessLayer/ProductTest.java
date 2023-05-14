@@ -37,6 +37,7 @@ public class ProductTest {
     public void setUp() {
         //create new product
         productController.createProduct(catalog_number,branch,catalog_name,manufacturer,storePrice);
+        productController.createProductItem();
 //        serialNumbers.add(serial_number);
     }
 
@@ -51,7 +52,7 @@ public class ProductTest {
         List<String> serialNumbers = new ArrayList<>();
         serialNumbers.add(serial_number);
         // TODO verify @amit
-        productController.createProductItem(serialNumbers,catalog_number,branch,supplierId,supplierPrice,supplierDiscount,location,expireDate,"n");
+        productController.createProductItem(serialNumbers,catalog_number,branch,supplierId,supplierPrice,supplierDiscount,location,expireDate,"y");
         Assert.assertEquals("get item from product list failed",product.getProduct(serial_number).getSerial_number(),serial_number);
     }
 

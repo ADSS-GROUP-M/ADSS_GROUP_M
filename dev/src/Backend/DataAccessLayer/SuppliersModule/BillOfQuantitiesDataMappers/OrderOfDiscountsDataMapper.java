@@ -1,4 +1,4 @@
-package Backend.DataAccessLayer.SuppliersModule;
+package Backend.DataAccessLayer.SuppliersModule.BillOfQuantitiesDataMappers;
 
 import Backend.DataAccessLayer.dalUtils.AbstractDataMapper;
 import Backend.DataAccessLayer.dalUtils.OfflineResultSet;

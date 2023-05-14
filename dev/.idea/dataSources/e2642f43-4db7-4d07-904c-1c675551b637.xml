@@ -1431,517 +1431,542 @@
     <table id="509" parent="173" name="discounts_on_amount"/>
     <table id="510" parent="173" name="discounts_on_total"/>
     <table id="511" parent="173" name="fields"/>
-    <table id="512" parent="173" name="order_of_discounts"/>
-    <table id="513" parent="173" name="orders_history"/>
-    <table id="514" parent="173" name="product_items"/>
-    <table id="515" parent="173" name="product_pair_branch"/>
-    <table id="516" parent="173" name="products"/>
-    <table id="517" parent="173" name="products_discounts"/>
-    <table id="518" parent="173" name="sqlite_master">
+    <table id="512" parent="173" name="number_of_order_counter"/>
+    <table id="513" parent="173" name="order_of_discounts"/>
+    <table id="514" parent="173" name="orders_history"/>
+    <table id="515" parent="173" name="product_items"/>
+    <table id="516" parent="173" name="product_pair_branch"/>
+    <table id="517" parent="173" name="products"/>
+    <table id="518" parent="173" name="products_discounts"/>
+    <table id="519" parent="173" name="sqlite_master">
       <System>1</System>
     </table>
-    <table id="519" parent="173" name="store_product_discount"/>
-    <table id="520" parent="173" name="supplier_product"/>
-    <table id="521" parent="173" name="suppliers"/>
-    <column id="522" parent="504" name="branch_name">
+    <table id="520" parent="173" name="store_product_discount"/>
+    <table id="521" parent="173" name="supplier_product"/>
+    <table id="522" parent="173" name="suppliers"/>
+    <column id="523" parent="504" name="branch_name">
       <DataType>TEXT|0s</DataType>
       <Position>1</Position>
     </column>
-    <index id="523" parent="504" name="sqlite_autoindex_branch_1">
+    <index id="524" parent="504" name="sqlite_autoindex_branch_1">
       <ColNames>branch_name</ColNames>
       <NameSurrogate>1</NameSurrogate>
       <Unique>1</Unique>
     </index>
-    <key id="524" parent="504">
+    <key id="525" parent="504">
       <ColNames>branch_name</ColNames>
       <Primary>1</Primary>
       <UnderlyingIndexName>sqlite_autoindex_branch_1</UnderlyingIndexName>
     </key>
-    <column id="525" parent="505" name="category_name">
+    <column id="526" parent="505" name="category_name">
       <DataType>TEXT|0s</DataType>
       <Position>1</Position>
     </column>
-    <index id="526" parent="505" name="sqlite_autoindex_category_1">
+    <index id="527" parent="505" name="sqlite_autoindex_category_1">
       <ColNames>category_name</ColNames>
       <NameSurrogate>1</NameSurrogate>
       <Unique>1</Unique>
     </index>
-    <key id="527" parent="505">
+    <key id="528" parent="505">
       <ColNames>category_name</ColNames>
       <Primary>1</Primary>
       <UnderlyingIndexName>sqlite_autoindex_category_1</UnderlyingIndexName>
     </key>
-    <column id="528" parent="506" name="category">
+    <column id="529" parent="506" name="category">
       <DataType>TEXT|0s</DataType>
       <Position>1</Position>
     </column>
-    <column id="529" parent="506" name="sub_category">
+    <column id="530" parent="506" name="sub_category">
       <DataType>TEXT|0s</DataType>
       <Position>2</Position>
     </column>
-    <foreign-key id="530" parent="506">
+    <foreign-key id="531" parent="506">
       <ColNames>category</ColNames>
       <RefColNames>category_name</RefColNames>
       <RefTableName>category</RefTableName>
     </foreign-key>
-    <foreign-key id="531" parent="506">
+    <foreign-key id="532" parent="506">
       <ColNames>sub_category</ColNames>
       <RefColNames>category_name</RefColNames>
       <RefTableName>category</RefTableName>
     </foreign-key>
-    <index id="532" parent="506" name="sqlite_autoindex_category_Hierarchy_1">
+    <index id="533" parent="506" name="sqlite_autoindex_category_Hierarchy_1">
       <ColNames>category
 sub_category</ColNames>
       <NameSurrogate>1</NameSurrogate>
       <Unique>1</Unique>
     </index>
-    <key id="533" parent="506">
+    <key id="534" parent="506">
       <ColNames>category
 sub_category</ColNames>
       <Primary>1</Primary>
       <UnderlyingIndexName>sqlite_autoindex_category_Hierarchy_1</UnderlyingIndexName>
     </key>
-    <column id="534" parent="507" name="bn_number">
+    <column id="535" parent="507" name="bn_number">
       <DataType>varchar(20)|0s</DataType>
       <Position>1</Position>
     </column>
-    <column id="535" parent="507" name="name">
+    <column id="536" parent="507" name="name">
       <DataType>varchar(20)|0s</DataType>
       <Position>2</Position>
     </column>
-    <column id="536" parent="507" name="phone_number">
+    <column id="537" parent="507" name="phone_number">
       <DataType>varchar(10)|0s</DataType>
       <Position>3</Position>
     </column>
-    <column id="537" parent="507" name="email">
+    <column id="538" parent="507" name="email">
       <DataType>varchar(30)|0s</DataType>
       <Position>4</Position>
     </column>
-    <foreign-key id="538" parent="507">
+    <foreign-key id="539" parent="507">
       <ColNames>bn_number</ColNames>
       <OnDelete>cascade</OnDelete>
       <OnUpdate>cascade</OnUpdate>
       <RefColNames>bn_number</RefColNames>
       <RefTableName>suppliers</RefTableName>
     </foreign-key>
-    <index id="539" parent="507" name="sqlite_autoindex_contacts_info_1">
+    <index id="540" parent="507" name="sqlite_autoindex_contacts_info_1">
       <ColNames>bn_number
 email</ColNames>
       <NameSurrogate>1</NameSurrogate>
       <Unique>1</Unique>
     </index>
-    <key id="540" parent="507" name="tab_pk">
+    <key id="541" parent="507" name="tab_pk">
       <ColNames>bn_number
 email</ColNames>
       <Primary>1</Primary>
       <UnderlyingIndexName>sqlite_autoindex_contacts_info_1</UnderlyingIndexName>
     </key>
-    <check id="541" parent="508">
+    <check id="542" parent="508">
       <Predicate>&quot;by_invitation&quot; &gt;= 0 &amp; &quot;by_invitation&quot; &lt;= 1</Predicate>
     </check>
-    <check id="542" parent="508">
+    <check id="543" parent="508">
       <Predicate>&quot;have_transport&quot; &gt;= 0 &amp; &quot;have_transport&quot; &lt;= 1</Predicate>
     </check>
-    <column id="543" parent="508" name="bn_number">
+    <column id="544" parent="508" name="bn_number">
       <DataType>varchar(20)|0s</DataType>
       <Position>1</Position>
     </column>
-    <column id="544" parent="508" name="have_transport">
+    <column id="545" parent="508" name="have_transport">
       <DataType>INTEGER|0s</DataType>
       <Position>2</Position>
     </column>
-    <column id="545" parent="508" name="by_invitation">
+    <column id="546" parent="508" name="by_invitation">
       <DataType>INTEGER|0s</DataType>
       <Position>3</Position>
     </column>
-    <column id="546" parent="508" name="days">
+    <column id="547" parent="508" name="days">
       <DataType>varchar(20)|0s</DataType>
       <Position>4</Position>
     </column>
-    <foreign-key id="547" parent="508">
+    <foreign-key id="548" parent="508">
       <ColNames>bn_number</ColNames>
       <OnDelete>cascade</OnDelete>
       <OnUpdate>cascade</OnUpdate>
       <RefColNames>bn_number</RefColNames>
       <RefTableName>suppliers</RefTableName>
     </foreign-key>
-    <column id="548" parent="509" name="bn_number">
+    <column id="549" parent="509" name="bn_number">
       <DataType>varchar(20)|0s</DataType>
       <Position>1</Position>
     </column>
-    <column id="549" parent="509" name="amount_to_reach">
+    <column id="550" parent="509" name="amount_to_reach">
       <DataType>numeric|0s</DataType>
       <Position>2</Position>
     </column>
-    <column id="550" parent="509" name="percentage">
+    <column id="551" parent="509" name="percentage">
       <DataType>numeric|0s</DataType>
       <Position>3</Position>
     </column>
-    <column id="551" parent="509" name="cash">
+    <column id="552" parent="509" name="cash">
       <DataType>numeric|0s</DataType>
       <Position>4</Position>
     </column>
-    <foreign-key id="552" parent="509">
+    <foreign-key id="553" parent="509">
       <ColNames>bn_number</ColNames>
       <OnDelete>cascade</OnDelete>
       <OnUpdate>cascade</OnUpdate>
       <RefColNames>bn_number</RefColNames>
       <RefTableName>suppliers</RefTableName>
     </foreign-key>
-    <index id="553" parent="509" name="sqlite_autoindex_discounts_on_amount_1">
+    <index id="554" parent="509" name="sqlite_autoindex_discounts_on_amount_1">
       <ColNames>bn_number</ColNames>
       <NameSurrogate>1</NameSurrogate>
       <Unique>1</Unique>
     </index>
-    <key id="554" parent="509">
+    <key id="555" parent="509">
       <ColNames>bn_number</ColNames>
       <Primary>1</Primary>
       <UnderlyingIndexName>sqlite_autoindex_discounts_on_amount_1</UnderlyingIndexName>
     </key>
-    <column id="555" parent="510" name="bn_number">
+    <column id="556" parent="510" name="bn_number">
       <DataType>varchar(20)|0s</DataType>
       <Position>1</Position>
     </column>
-    <column id="556" parent="510" name="price_to_reach">
+    <column id="557" parent="510" name="price_to_reach">
       <DataType>numeric|0s</DataType>
       <Position>2</Position>
     </column>
-    <column id="557" parent="510" name="percentage">
+    <column id="558" parent="510" name="percentage">
       <DataType>numeric|0s</DataType>
       <Position>3</Position>
     </column>
-    <column id="558" parent="510" name="cash">
+    <column id="559" parent="510" name="cash">
       <DataType>numeric|0s</DataType>
       <Position>4</Position>
     </column>
-    <foreign-key id="559" parent="510">
+    <foreign-key id="560" parent="510">
       <ColNames>bn_number</ColNames>
       <OnDelete>cascade</OnDelete>
       <OnUpdate>cascade</OnUpdate>
       <RefColNames>bn_number</RefColNames>
       <RefTableName>suppliers</RefTableName>
     </foreign-key>
-    <column id="560" parent="511" name="bnNumber">
+    <column id="561" parent="511" name="bnNumber">
       <DataType>varchar(20)|0s</DataType>
       <Position>1</Position>
     </column>
-    <column id="561" parent="511" name="field">
+    <column id="562" parent="511" name="field">
       <DataType>varchar(20)|0s</DataType>
       <Position>2</Position>
     </column>
-    <foreign-key id="562" parent="511">
+    <foreign-key id="563" parent="511">
       <ColNames>bnNumber</ColNames>
       <OnDelete>cascade</OnDelete>
       <OnUpdate>cascade</OnUpdate>
       <RefColNames>bn_number</RefColNames>
       <RefTableName>suppliers</RefTableName>
     </foreign-key>
-    <index id="563" parent="511" name="sqlite_autoindex_fields_1">
+    <index id="564" parent="511" name="sqlite_autoindex_fields_1">
       <ColNames>bnNumber
 field</ColNames>
       <NameSurrogate>1</NameSurrogate>
       <Unique>1</Unique>
     </index>
-    <key id="564" parent="511" name="tab_pk">
+    <key id="565" parent="511" name="tab_pk">
       <ColNames>bnNumber
 field</ColNames>
       <Primary>1</Primary>
       <UnderlyingIndexName>sqlite_autoindex_fields_1</UnderlyingIndexName>
     </key>
-    <check id="565" parent="512" name="check_name">
-      <Predicate>amount_before_total = 0 or amount_before_total = 1</Predicate>
-    </check>
     <column id="566" parent="512" name="bn_number">
       <DataType>varchar(20)|0s</DataType>
+      <NotNull>1</NotNull>
       <Position>1</Position>
     </column>
-    <column id="567" parent="512" name="amount_before_total">
+    <column id="567" parent="512" name="order_number_counter">
       <DataType>INTEGER|0s</DataType>
       <Position>2</Position>
     </column>
-    <foreign-key id="568" parent="512" name="order_of_discounts_suppliers_null_fk">
+    <foreign-key id="568" parent="512" name="number_of_order_counter_suppliers_null_fk">
       <ColNames>bn_number</ColNames>
       <RefColNames>bn_number</RefColNames>
       <RefTableName>suppliers</RefTableName>
     </foreign-key>
-    <index id="569" parent="512" name="sqlite_autoindex_order_of_discounts_1">
+    <index id="569" parent="512" name="sqlite_autoindex_number_of_order_counter_1">
       <ColNames>bn_number</ColNames>
       <NameSurrogate>1</NameSurrogate>
       <Unique>1</Unique>
     </index>
-    <key id="570" parent="512" name="order_of_discounts_pk">
+    <key id="570" parent="512" name="number_of_order_counter_pk">
+      <ColNames>bn_number</ColNames>
+      <Primary>1</Primary>
+      <UnderlyingIndexName>sqlite_autoindex_number_of_order_counter_1</UnderlyingIndexName>
+    </key>
+    <check id="571" parent="513" name="check_name">
+      <Predicate>amount_before_total = 0 or amount_before_total = 1</Predicate>
+    </check>
+    <column id="572" parent="513" name="bn_number">
+      <DataType>varchar(20)|0s</DataType>
+      <Position>1</Position>
+    </column>
+    <column id="573" parent="513" name="amount_before_total">
+      <DataType>INTEGER|0s</DataType>
+      <Position>2</Position>
+    </column>
+    <foreign-key id="574" parent="513" name="order_of_discounts_suppliers_null_fk">
+      <ColNames>bn_number</ColNames>
+      <RefColNames>bn_number</RefColNames>
+      <RefTableName>suppliers</RefTableName>
+    </foreign-key>
+    <index id="575" parent="513" name="sqlite_autoindex_order_of_discounts_1">
+      <ColNames>bn_number</ColNames>
+      <NameSurrogate>1</NameSurrogate>
+      <Unique>1</Unique>
+    </index>
+    <key id="576" parent="513" name="order_of_discounts_pk">
       <ColNames>bn_number</ColNames>
       <Primary>1</Primary>
       <UnderlyingIndexName>sqlite_autoindex_order_of_discounts_1</UnderlyingIndexName>
     </key>
-    <column id="571" parent="513" name="bn_number">
+    <column id="577" parent="514" name="bn_number">
       <DataType>varchar(20)|0s</DataType>
       <Position>1</Position>
     </column>
-    <column id="572" parent="513" name="order_id">
+    <column id="578" parent="514" name="order_id">
       <DataType>INTEGER|0s</DataType>
       <Position>2</Position>
     </column>
-    <column id="573" parent="513" name="catalog_number">
+    <column id="579" parent="514" name="catalog_number">
       <DataType>varchar(30)|0s</DataType>
       <Position>3</Position>
     </column>
-    <column id="574" parent="513" name="quantity">
+    <column id="580" parent="514" name="quantity">
       <DataType>INTEGER|0s</DataType>
       <Position>4</Position>
     </column>
-    <foreign-key id="575" parent="513">
+    <foreign-key id="581" parent="514">
       <ColNames>bn_number</ColNames>
       <OnDelete>cascade</OnDelete>
       <OnUpdate>cascade</OnUpdate>
       <RefColNames>bn_number</RefColNames>
       <RefTableName>suppliers</RefTableName>
     </foreign-key>
-    <foreign-key id="576" parent="513">
+    <foreign-key id="582" parent="514">
       <ColNames>catalog_number</ColNames>
       <OnUpdate>cascade</OnUpdate>
       <RefColNames>catalog_number</RefColNames>
       <RefTableName>products</RefTableName>
     </foreign-key>
-    <index id="577" parent="513" name="sqlite_autoindex_orders_history_1">
+    <index id="583" parent="514" name="sqlite_autoindex_orders_history_1">
       <ColNames>bn_number
 order_id</ColNames>
       <NameSurrogate>1</NameSurrogate>
       <Unique>1</Unique>
     </index>
-    <key id="578" parent="513">
+    <key id="584" parent="514">
       <ColNames>bn_number
 order_id</ColNames>
       <Primary>1</Primary>
       <UnderlyingIndexName>sqlite_autoindex_orders_history_1</UnderlyingIndexName>
     </key>
-    <column id="579" parent="514" name="serial_number">
+    <column id="585" parent="515" name="serial_number">
       <DataType>TEXT|0s</DataType>
       <Position>1</Position>
     </column>
-    <column id="580" parent="514" name="is_defective">
+    <column id="586" parent="515" name="is_defective">
       <DataType>INTEGER|0s</DataType>
       <DefaultExpression>0</DefaultExpression>
       <Position>2</Position>
     </column>
-    <column id="581" parent="514" name="defection_date">
+    <column id="587" parent="515" name="defection_date">
       <DataType>TEXT|0s</DataType>
       <Position>3</Position>
     </column>
-    <column id="582" parent="514" name="supplier_id">
+    <column id="588" parent="515" name="supplier_id">
       <DataType>TEXT|0s</DataType>
       <Position>4</Position>
     </column>
-    <column id="583" parent="514" name="supplier_price">
+    <column id="589" parent="515" name="supplier_price">
       <DataType>NUMERIC|0s</DataType>
       <Position>5</Position>
     </column>
-    <column id="584" parent="514" name="supplier_discount">
+    <column id="590" parent="515" name="supplier_discount">
       <DataType>NUMERIC|0s</DataType>
       <Position>6</Position>
     </column>
-    <column id="585" parent="514" name="sold_price">
+    <column id="591" parent="515" name="sold_price">
       <DataType>NUMERIC|0s</DataType>
       <DefaultExpression>-1</DefaultExpression>
       <Position>7</Position>
     </column>
-    <column id="586" parent="514" name="expiration_date">
+    <column id="592" parent="515" name="expiration_date">
       <DataType>TEXT|0s</DataType>
       <Position>8</Position>
     </column>
-    <column id="587" parent="514" name="location">
+    <column id="593" parent="515" name="location">
       <DataType>TEXT|0s</DataType>
       <Position>9</Position>
     </column>
-    <column id="588" parent="514" name="catalog_number">
+    <column id="594" parent="515" name="catalog_number">
       <DataType>TEXT|0s</DataType>
       <Position>10</Position>
     </column>
-    <column id="589" parent="514" name="branch">
+    <column id="595" parent="515" name="branch">
       <DataType>TEXT|0s</DataType>
       <Position>11</Position>
     </column>
-    <foreign-key id="590" parent="514">
+    <foreign-key id="596" parent="515">
       <ColNames>catalog_number</ColNames>
       <RefColNames>product_catalog_num</RefColNames>
       <RefTableName>product_pair_branch</RefTableName>
     </foreign-key>
-    <foreign-key id="591" parent="514">
+    <foreign-key id="597" parent="515">
       <ColNames>branch</ColNames>
       <RefColNames>branch_name</RefColNames>
       <RefTableName>product_pair_branch</RefTableName>
     </foreign-key>
-    <index id="592" parent="514" name="sqlite_autoindex_product_items_1">
+    <index id="598" parent="515" name="sqlite_autoindex_product_items_1">
       <ColNames>serial_number
 catalog_number
 branch</ColNames>
       <NameSurrogate>1</NameSurrogate>
       <Unique>1</Unique>
     </index>
-    <key id="593" parent="514">
+    <key id="599" parent="515">
       <ColNames>serial_number
 catalog_number
 branch</ColNames>
       <Primary>1</Primary>
       <UnderlyingIndexName>sqlite_autoindex_product_items_1</UnderlyingIndexName>
     </key>
-    <column id="594" parent="515" name="branch_name">
+    <column id="600" parent="516" name="branch_name">
       <DataType>TEXT|0s</DataType>
       <Position>1</Position>
     </column>
-    <column id="595" parent="515" name="product_catalog_num">
+    <column id="601" parent="516" name="product_catalog_num">
       <DataType>TEXT|0s</DataType>
       <Position>2</Position>
     </column>
-    <column id="596" parent="515" name="original_store_price">
+    <column id="602" parent="516" name="original_store_price">
       <DataType>NUMERIC|0s</DataType>
       <Position>3</Position>
     </column>
-    <column id="597" parent="515" name="notification_min">
+    <column id="603" parent="516" name="notification_min">
       <DataType>NUMERIC|0s</DataType>
       <Position>4</Position>
     </column>
-    <foreign-key id="598" parent="515">
+    <foreign-key id="604" parent="516">
       <ColNames>branch_name</ColNames>
       <RefColNames>branch_name</RefColNames>
       <RefTableName>branch</RefTableName>
     </foreign-key>
-    <foreign-key id="599" parent="515">
+    <foreign-key id="605" parent="516">
       <ColNames>product_catalog_num</ColNames>
       <RefColNames>catalog_number</RefColNames>
       <RefTableName>products</RefTableName>
     </foreign-key>
-    <index id="600" parent="515" name="sqlite_autoindex_product_pair_branch_1">
+    <index id="606" parent="516" name="sqlite_autoindex_product_pair_branch_1">
       <ColNames>branch_name
 product_catalog_num</ColNames>
       <NameSurrogate>1</NameSurrogate>
       <Unique>1</Unique>
     </index>
-    <key id="601" parent="515">
+    <key id="607" parent="516">
       <ColNames>branch_name
 product_catalog_num</ColNames>
       <Primary>1</Primary>
       <UnderlyingIndexName>sqlite_autoindex_product_pair_branch_1</UnderlyingIndexName>
     </key>
-    <column id="602" parent="516" name="catalog_number">
+    <column id="608" parent="517" name="catalog_number">
       <DataType>varchar(30)|0s</DataType>
       <Position>1</Position>
     </column>
-    <column id="603" parent="516" name="name">
+    <column id="609" parent="517" name="name">
       <DataType>varchar(20)|0s</DataType>
       <Position>2</Position>
     </column>
-    <column id="604" parent="516" name="manufacture">
+    <column id="610" parent="517" name="manufacture">
       <DataType>varchar(20)|0s</DataType>
       <Position>3</Position>
     </column>
-    <column id="605" parent="516" name="category">
+    <column id="611" parent="517" name="category">
       <DataType>TEXT|0s</DataType>
       <Position>4</Position>
     </column>
-    <foreign-key id="606" parent="516">
+    <foreign-key id="612" parent="517">
       <ColNames>category</ColNames>
       <RefColNames>category_name</RefColNames>
       <RefTableName>category</RefTableName>
     </foreign-key>
-    <index id="607" parent="516" name="sqlite_autoindex_products_1">
+    <index id="613" parent="517" name="sqlite_autoindex_products_1">
       <ColNames>catalog_number</ColNames>
       <NameSurrogate>1</NameSurrogate>
       <Unique>1</Unique>
     </index>
-    <key id="608" parent="516">
+    <key id="614" parent="517">
       <ColNames>catalog_number</ColNames>
       <Primary>1</Primary>
       <UnderlyingIndexName>sqlite_autoindex_products_1</UnderlyingIndexName>
     </key>
-    <column id="609" parent="517" name="bn_number">
+    <column id="615" parent="518" name="bn_number">
       <DataType>varchar(20)|0s</DataType>
       <Position>1</Position>
     </column>
-    <column id="610" parent="517" name="catalog_number">
+    <column id="616" parent="518" name="catalog_number">
       <DataType>varchar(30)|0s</DataType>
       <Position>2</Position>
     </column>
-    <column id="611" parent="517" name="amount">
+    <column id="617" parent="518" name="amount">
       <DataType>INTEGER|0s</DataType>
       <Position>3</Position>
     </column>
-    <column id="612" parent="517" name="percentage">
+    <column id="618" parent="518" name="percentage">
       <DataType>numeric|0s</DataType>
       <Position>4</Position>
     </column>
-    <column id="613" parent="517" name="cash">
+    <column id="619" parent="518" name="cash">
       <DataType>numeric|0s</DataType>
       <Position>5</Position>
     </column>
-    <foreign-key id="614" parent="517">
+    <foreign-key id="620" parent="518">
       <ColNames>bn_number</ColNames>
       <OnDelete>cascade</OnDelete>
       <OnUpdate>cascade</OnUpdate>
       <RefColNames>bn_number</RefColNames>
       <RefTableName>suppliers</RefTableName>
     </foreign-key>
-    <foreign-key id="615" parent="517">
+    <foreign-key id="621" parent="518">
       <ColNames>catalog_number</ColNames>
       <OnDelete>cascade</OnDelete>
       <OnUpdate>cascade</OnUpdate>
       <RefColNames>catalog_number</RefColNames>
       <RefTableName>products</RefTableName>
     </foreign-key>
-    <index id="616" parent="517" name="sqlite_autoindex_products_discounts_1">
+    <index id="622" parent="518" name="sqlite_autoindex_products_discounts_1">
       <ColNames>bn_number
 catalog_number</ColNames>
       <NameSurrogate>1</NameSurrogate>
       <Unique>1</Unique>
     </index>
-    <key id="617" parent="517">
+    <key id="623" parent="518">
       <ColNames>bn_number
 catalog_number</ColNames>
       <Primary>1</Primary>
       <UnderlyingIndexName>sqlite_autoindex_products_discounts_1</UnderlyingIndexName>
     </key>
-    <column id="618" parent="518" name="type">
+    <column id="624" parent="519" name="type">
       <DataType>TEXT|0s</DataType>
       <Position>1</Position>
     </column>
-    <column id="619" parent="518" name="name">
+    <column id="625" parent="519" name="name">
       <DataType>TEXT|0s</DataType>
       <Position>2</Position>
     </column>
-    <column id="620" parent="518" name="tbl_name">
+    <column id="626" parent="519" name="tbl_name">
       <DataType>TEXT|0s</DataType>
       <Position>3</Position>
     </column>
-    <column id="621" parent="518" name="rootpage">
+    <column id="627" parent="519" name="rootpage">
       <DataType>INT|0s</DataType>
       <Position>4</Position>
     </column>
-    <column id="622" parent="518" name="sql">
+    <column id="628" parent="519" name="sql">
       <DataType>TEXT|0s</DataType>
       <Position>5</Position>
     </column>
-    <column id="623" parent="519" name="catalog_number">
+    <column id="629" parent="520" name="catalog_number">
       <DataType>TEXT|0s</DataType>
       <Position>1</Position>
     </column>
-    <column id="624" parent="519" name="start_date">
+    <column id="630" parent="520" name="start_date">
       <DataType>TEXT|0s</DataType>
       <Position>2</Position>
     </column>
-    <column id="625" parent="519" name="end_date">
+    <column id="631" parent="520" name="end_date">
       <DataType>INTEGER|0s</DataType>
       <Position>3</Position>
     </column>
-    <column id="626" parent="519" name="discount">
+    <column id="632" parent="520" name="discount">
       <DataType>NUMERIC|0s</DataType>
       <Position>4</Position>
     </column>
-    <foreign-key id="627" parent="519">
+    <foreign-key id="633" parent="520">
       <ColNames>catalog_number</ColNames>
       <RefColNames>catalog_number</RefColNames>
       <RefTableName>products</RefTableName>
     </foreign-key>
-    <index id="628" parent="519" name="sqlite_autoindex_store_product_discount_1">
+    <index id="634" parent="520" name="sqlite_autoindex_store_product_discount_1">
       <ColNames>catalog_number
 start_date
 end_date
@@ -1949,7 +1974,7 @@ discount</ColNames>
       <NameSurrogate>1</NameSurrogate>
       <Unique>1</Unique>
     </index>
-    <key id="629" parent="519">
+    <key id="635" parent="520">
       <ColNames>catalog_number
 start_date
 end_date
@@ -1957,92 +1982,92 @@ discount</ColNames>
       <Primary>1</Primary>
       <UnderlyingIndexName>sqlite_autoindex_store_product_discount_1</UnderlyingIndexName>
     </key>
-    <column id="630" parent="520" name="bn_number">
+    <column id="636" parent="521" name="bn_number">
       <DataType>varchar(20)|0s</DataType>
       <Position>1</Position>
     </column>
-    <column id="631" parent="520" name="catalog_number">
+    <column id="637" parent="521" name="catalog_number">
       <DataType>varchar(30)|0s</DataType>
       <Position>2</Position>
     </column>
-    <column id="632" parent="520" name="suppliers_catalog_number">
+    <column id="638" parent="521" name="suppliers_catalog_number">
       <DataType>varchar(30)|0s</DataType>
       <Position>3</Position>
     </column>
-    <column id="633" parent="520" name="quantity">
+    <column id="639" parent="521" name="quantity">
       <DataType>INTEGER|0s</DataType>
       <Position>4</Position>
     </column>
-    <column id="634" parent="520" name="price">
+    <column id="640" parent="521" name="price">
       <DataType>numeric|0s</DataType>
       <Position>5</Position>
     </column>
-    <foreign-key id="635" parent="520">
+    <foreign-key id="641" parent="521">
       <ColNames>bn_number</ColNames>
       <OnDelete>cascade</OnDelete>
       <OnUpdate>cascade</OnUpdate>
       <RefColNames>bn_number</RefColNames>
       <RefTableName>suppliers</RefTableName>
     </foreign-key>
-    <foreign-key id="636" parent="520">
+    <foreign-key id="642" parent="521">
       <ColNames>catalog_number</ColNames>
       <OnDelete>cascade</OnDelete>
       <OnUpdate>cascade</OnUpdate>
       <RefColNames>catalog_number</RefColNames>
       <RefTableName>products</RefTableName>
     </foreign-key>
-    <index id="637" parent="520" name="sqlite_autoindex_supplier_product_1">
+    <index id="643" parent="521" name="sqlite_autoindex_supplier_product_1">
       <ColNames>bn_number
 catalog_number</ColNames>
       <NameSurrogate>1</NameSurrogate>
       <Unique>1</Unique>
     </index>
-    <key id="638" parent="520">
+    <key id="644" parent="521">
       <ColNames>bn_number
 catalog_number</ColNames>
       <Primary>1</Primary>
       <UnderlyingIndexName>sqlite_autoindex_supplier_product_1</UnderlyingIndexName>
     </key>
-    <column id="639" parent="521" name="name">
+    <column id="645" parent="522" name="name">
       <DataType>varchar(20)|0s</DataType>
       <Position>1</Position>
     </column>
-    <column id="640" parent="521" name="bn_number">
+    <column id="646" parent="522" name="bn_number">
       <DataType>varchar(20)|0s</DataType>
       <Position>2</Position>
     </column>
-    <column id="641" parent="521" name="bank">
+    <column id="647" parent="522" name="bank">
       <DataType>varchar(20)|0s</DataType>
       <Position>3</Position>
     </column>
-    <column id="642" parent="521" name="branch">
+    <column id="648" parent="522" name="branch">
       <DataType>varchar(20)|0s</DataType>
       <Position>4</Position>
     </column>
-    <column id="643" parent="521" name="account_number">
+    <column id="649" parent="522" name="account_number">
       <DataType>varchar(20)|0s</DataType>
       <Position>5</Position>
     </column>
-    <column id="644" parent="521" name="payment_method">
+    <column id="650" parent="522" name="payment_method">
       <DataType>varchar(20)|0s</DataType>
       <Position>6</Position>
     </column>
-    <index id="645" parent="521" name="sqlite_autoindex_suppliers_1">
+    <index id="651" parent="522" name="sqlite_autoindex_suppliers_1">
       <ColNames>name</ColNames>
       <NameSurrogate>1</NameSurrogate>
       <Unique>1</Unique>
     </index>
-    <index id="646" parent="521" name="sqlite_autoindex_suppliers_2">
+    <index id="652" parent="522" name="sqlite_autoindex_suppliers_2">
       <ColNames>bn_number</ColNames>
       <NameSurrogate>1</NameSurrogate>
       <Unique>1</Unique>
     </index>
-    <key id="647" parent="521">
+    <key id="653" parent="522">
       <ColNames>bn_number</ColNames>
       <Primary>1</Primary>
       <UnderlyingIndexName>sqlite_autoindex_suppliers_2</UnderlyingIndexName>
     </key>
-    <key id="648" parent="521">
+    <key id="654" parent="522">
       <ColNames>name</ColNames>
       <UnderlyingIndexName>sqlite_autoindex_suppliers_1</UnderlyingIndexName>
     </key>

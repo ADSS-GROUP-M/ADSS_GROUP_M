@@ -1,6 +1,7 @@
 package Backend.BusinessLayer.SuppliersModule;
 
 import Backend.BusinessLayer.BusinessLayerUsage.Branch;
+import Backend.DataAccessLayer.SuppliersModule.OrderHistoryDataMapper;
 import Backend.DataAccessLayer.dalUtils.DalException;
 
 import java.sql.SQLException;
@@ -15,12 +16,16 @@ public class OrderController {
     private SupplierController supplierController;
     private AgreementController agreementController;
     private BillOfQuantitiesController billOfQuantitiesController;
-
-    private Map<String, List<Order>> suppliersOrderHistory;
+    private OrderHistoryDataMapper orderHistoryDataMapper;
+    /**
+     * maps between supplier bn number to a pair of <number of orders - counter, List - of his order history>
+     */
+    private Map<String, Pair<Integer, List<Order>>> suppliersOrderHistory;
     private OrderController(){
         this.supplierController = SupplierController.getInstance();
         this.agreementController = AgreementController.getInstance();
         billOfQuantitiesController = BillOfQuantitiesController.getInstance();
+        orderHistoryDataMapper = new OrderHistoryDataMapper();
 
         suppliersOrderHistory = new HashMap<>();
     }
@@ -289,14 +294,17 @@ public class OrderController {
         return 0;
     }
 
-    public void addSuppliersOrder(String bnNumber, Order order){
+    public void addSuppliersOrder(String bnNumber, Order order) throws SQLException {
         if(!suppliersOrderHistory.containsKey(bnNumber))
-            suppliersOrderHistory.put(bnNumber, new LinkedList<>());
-        suppliersOrderHistory.get(bnNumber).add(order);
+            suppliersOrderHistory.put(bnNumber, new Pair<>(1, new LinkedList<>()));
+        suppliersOrderHistory.get(bnNumber).getSecond().add(order);
+        suppliersOrderHistory.get(bnNumber).setFirst(suppliersOrderHistory.get(bnNumber).getFirst() + 1);
+
+        orderHistoryDataMapper.insert(bnNumber, order);
     }
 
-    public List<Order> getOrderHistory(String bnNumber){
-        return suppliersOrderHistory.get(bnNumber);
+    public List<Order> getOrderHistory(String bnNumber) throws SQLException {
+        return orderHistoryDataMapper.getOrderHistory(bnNumber);
     }
 
 }

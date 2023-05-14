@@ -1,7 +1,7 @@
 package Backend.BusinessLayer.SuppliersModule;
 
 import Backend.BusinessLayer.SuppliersModule.Discounts.Discount;
-import Backend.DataAccessLayer.SuppliersModule.BillOfQuantitiesDataMapper;
+import Backend.DataAccessLayer.SuppliersModule.BillOfQuantitiesDataMappers.BillOfQuantitiesDataMapper;
 import Backend.DataAccessLayer.dalUtils.DalException;
 
 import java.sql.SQLException;

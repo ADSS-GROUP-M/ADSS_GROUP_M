@@ -1,4 +1,4 @@
-package Backend.DataAccessLayer.SuppliersModule;
+package Backend.DataAccessLayer.SuppliersModule.BillOfQuantitiesDataMappers;
 
 import Backend.BusinessLayer.SuppliersModule.BillOfQuantities;
 import Backend.BusinessLayer.SuppliersModule.Discounts.Discount;

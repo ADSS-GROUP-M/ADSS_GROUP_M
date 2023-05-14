@@ -9,16 +9,27 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e454f93c-4ee8-4f4b-9a14-eaaf36aa303c" name="Changes" comment="connect between AgreementController to AgreementDataMapper">
+    <list default="true" id="e454f93c-4ee8-4f4b-9a14-eaaf36aa303c" name="Changes" comment="connect between all layers of supplier services, and moved OrderHistory management to OrderController">
+      <change afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/NumberOfOrdersCounterDataMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/e2642f43-4db7-4d07-904c-1c675551b637.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/e2642f43-4db7-4d07-904c-1c675551b637.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/InventoryModule/ProductController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/BusinessLayer/InventoryModule/ProductController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/SuppliersModule/AgreementController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/BusinessLayer/SuppliersModule/AgreementController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/SuppliersModule/BillOfQuantitiesController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/BusinessLayer/SuppliersModule/BillOfQuantitiesController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/SuppliersModule/OrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/BusinessLayer/SuppliersModule/OrderController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/SuppliersModule/Supplier.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/BusinessLayer/SuppliersModule/Supplier.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/SuppliersModule/SupplierController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/BusinessLayer/SuppliersModule/SupplierController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/SupplierDataMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/SupplierDataMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/ServiceLayer/SuppliersModule/OrderService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/ServiceLayer/SuppliersModule/OrderService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/ServiceLayer/SuppliersModule/SupplierService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/ServiceLayer/SuppliersModule/SupplierService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/UI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/UI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/AgreementDataMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/AgreementDataMappers/AgreementDataMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/BillOfQuantitiesDataMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/BillOfQuantitiesDataMappers/BillOfQuantitiesDataMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/ContactsInfoDataMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/SuppliersDataMappers/ContactsInfoDataMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/DeliveryAgreementDataMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/AgreementDataMappers/DeliveryAgreementDataMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/DiscountOnAmountDataMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/BillOfQuantitiesDataMappers/DiscountOnAmountDataMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/DiscountOnTotalDataMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/BillOfQuantitiesDataMappers/DiscountOnTotalDataMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/FieldsDataMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/SuppliersDataMappers/FieldsDataMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/OrderHistoryDataMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/OrderHistoryDataMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/OrderOfDiscountsDataMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/BillOfQuantitiesDataMappers/OrderOfDiscountsDataMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/ProductsDiscountsDataMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/BillOfQuantitiesDataMappers/ProductsDiscountsDataMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/SupplierDataMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/SuppliersDataMappers/SupplierDataMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/SupplierProductDataMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/AgreementDataMappers/SupplierProductDataMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/super_lee.sqlite" beforeDir="false" afterPath="$PROJECT_DIR$/super_lee.sqlite" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -111,11 +122,11 @@
       </method>
     </configuration>
     <configuration name="SupplierDataMapper" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="Backend.DataAccessLayer.SuppliersModule.SupplierDataMapper" />
+      <option name="MAIN_CLASS_NAME" value="Backend.DataAccessLayer.SuppliersModule.SuppliersDataMappers.SupplierDataMapper" />
       <module name="code" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="Backend.DataAccessLayer.SuppliersModule.*" />
+          <option name="PATTERN" value="Backend.DataAccessLayer.SuppliersModule.AgreementDataMappers.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -367,7 +378,14 @@
       <option name="project" value="LOCAL" />
       <updated>1684064360714</updated>
     </task>
-    <option name="localTasksCounter" value="25" />
+    <task id="LOCAL-00025" summary="connect between all layers of supplier services, and moved OrderHistory management to OrderController">
+      <created>1684069746043</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1684069746043</updated>
+    </task>
+    <option name="localTasksCounter" value="26" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -421,7 +439,8 @@
     <MESSAGE value="added functionality to BillOfQuantitiesDataMapper" />
     <MESSAGE value="connect between BillOfQuantitiesController to BillOfQuantitiesDataMapper" />
     <MESSAGE value="connect between AgreementController to AgreementDataMapper" />
-    <option name="LAST_COMMIT_MESSAGE" value="connect between AgreementController to AgreementDataMapper" />
+    <MESSAGE value="connect between all layers of supplier services, and moved OrderHistory management to OrderController" />
+    <option name="LAST_COMMIT_MESSAGE" value="connect between all layers of supplier services, and moved OrderHistory management to OrderController" />
   </component>
   <component name="XDebuggerManager">
     <pin-to-top-manager>

@@ -1,9 +1,10 @@
-package Backend.DataAccessLayer.SuppliersModule;
+package Backend.DataAccessLayer.SuppliersModule.SuppliersDataMappers;
 
 import Backend.BusinessLayer.SuppliersModule.BankAccount;
-import Backend.BusinessLayer.SuppliersModule.BillOfQuantities;
 import Backend.BusinessLayer.SuppliersModule.Pair;
 import Backend.BusinessLayer.SuppliersModule.Supplier;
+import Backend.DataAccessLayer.SuppliersModule.SuppliersDataMappers.ContactsInfoDataMapper;
+import Backend.DataAccessLayer.SuppliersModule.SuppliersDataMappers.FieldsDataMapper;
 import Backend.DataAccessLayer.dalUtils.AbstractDataMapper;
 import Backend.DataAccessLayer.dalUtils.DalException;
 import Backend.DataAccessLayer.dalUtils.OfflineResultSet;

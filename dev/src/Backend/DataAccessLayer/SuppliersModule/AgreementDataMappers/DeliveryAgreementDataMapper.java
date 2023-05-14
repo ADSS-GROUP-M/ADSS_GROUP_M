@@ -1,4 +1,4 @@
-package Backend.DataAccessLayer.SuppliersModule;
+package Backend.DataAccessLayer.SuppliersModule.AgreementDataMappers;
 
 import Backend.BusinessLayer.SuppliersModule.DeliveryAgreements.DeliveryAgreement;
 import Backend.BusinessLayer.SuppliersModule.DeliveryAgreements.DeliveryByInvitation;

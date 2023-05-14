@@ -1,19 +1,17 @@
-package Backend.DataAccessLayer.SuppliersModule;
+package Backend.DataAccessLayer.SuppliersModule.AgreementDataMappers;
 
 import Backend.BusinessLayer.SuppliersModule.Agreement;
 import Backend.BusinessLayer.SuppliersModule.DeliveryAgreements.DeliveryAgreement;
 import Backend.BusinessLayer.SuppliersModule.DeliveryAgreements.DeliveryByInvitation;
 import Backend.BusinessLayer.SuppliersModule.DeliveryAgreements.DeliveryFixedDays;
-import Backend.BusinessLayer.SuppliersModule.Pair;
 import Backend.BusinessLayer.SuppliersModule.Product;
+import Backend.DataAccessLayer.SuppliersModule.ProductsDataMapper;
 import Backend.DataAccessLayer.dalUtils.DalException;
-import org.sqlite.util.StringUtils;
 
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.StringJoiner;
 import java.util.stream.Collectors;
 
 public class AgreementDataMapper {

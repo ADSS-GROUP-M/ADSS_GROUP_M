@@ -1,4 +1,4 @@
-package Backend.DataAccessLayer.SuppliersModule;
+package Backend.DataAccessLayer.SuppliersModule.SuppliersDataMappers;
 
 
 import Backend.DataAccessLayer.dalUtils.AbstractDataMapper;

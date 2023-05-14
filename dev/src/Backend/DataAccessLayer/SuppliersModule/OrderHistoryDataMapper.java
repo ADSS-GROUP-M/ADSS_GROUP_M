@@ -5,23 +5,31 @@ import Backend.DataAccessLayer.dalUtils.AbstractDataMapper;
 import Backend.DataAccessLayer.dalUtils.OfflineResultSet;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class OrderHistoryDataMapper extends AbstractDataMapper {
+    private NumberOfOrdersCounterDataMapper numberOfOrdersCounterDataMapper;
+    private Map<String, List<Order>> suppliersOrderHistory;
     public OrderHistoryDataMapper() {
         super("orders_history", new String[]{"bn_number", "order_id", "catalog_number", "quantity"});
+        numberOfOrdersCounterDataMapper = new NumberOfOrdersCounterDataMapper();
+        suppliersOrderHistory = new HashMap<>();
     }
-    public void insert(String bnNumber, int orderId, String catalog_number, int quantity) throws SQLException {
+    private void insert(String bnNumber, String catalog_number, int quantity) throws SQLException {
+        int orderId = numberOfOrdersCounterDataMapper.getAndIncrement(bnNumber);
         String columnsString = String.join(", ", columns);
         sqlExecutor.executeWrite(String.format("INSERT INTO %s (%s) VALUES(%s, %d, %s, %d)",tableName, columnsString, bnNumber,
                 orderId, catalog_number, quantity));
     }
 
-    public void delete(String bnNumber, int orderId) throws SQLException {
-        sqlExecutor.executeWrite(String.format("DROP FROM %s WHERE bn_number = %s and order_id = %d", tableName, bnNumber, orderId));
+    public void insert(String bnNumber, Order order) throws SQLException {
+        Map<String, Integer> products = order.getProducts();
+        for(Map.Entry<String, Integer> productOrder : products.entrySet())
+            insert(bnNumber, productOrder.getKey(), productOrder.getValue());
+    }
+
+    public void delete(String bnNumber) throws SQLException {
+        sqlExecutor.executeWrite(String.format("DROP FROM %s WHERE bn_number = %s", tableName, bnNumber));
     }
 
     public Order find(String bnNumber, int orderId) throws SQLException {
@@ -35,12 +43,12 @@ public class OrderHistoryDataMapper extends AbstractDataMapper {
         return order;
     }
 
-    public List<Order> findAll(String bnNumber, int maxOrderId) throws SQLException {
+    public List<Order> findAll(String bnNumber, int numberOfOrders) throws SQLException {
         String columnsString = String.join(", ", columns);
-        OfflineResultSet resultSet = sqlExecutor.executeRead(String.format("SELECT %s FROM %s WHERE bn_number = %s and order_id = %d", columnsString,
+        OfflineResultSet resultSet = sqlExecutor.executeRead(String.format("SELECT %s FROM %s WHERE bn_number = %s", columnsString,
                 tableName, bnNumber));
         List<Order> orderList = new ArrayList<>();
-        for (int i = 0; i < maxOrderId; i++)
+        for (int i = 0; i < numberOfOrders; i++)
             orderList.add(new Order());
         while (resultSet.next()){
             orderList.get(resultSet.getInt("order_id")).addProduct(resultSet.getString("catalog_number"), resultSet.getInt("quantity"));
@@ -48,9 +56,12 @@ public class OrderHistoryDataMapper extends AbstractDataMapper {
         return null;
     }
 
-    public static void main(String[] args) {
-        List<String> orderList = new ArrayList<>(3);
-        orderList.add(2, "hello");
-    System.out.println(orderList);
+    public List<Order> getOrderHistory(String bnNumber) throws SQLException {
+        if(suppliersOrderHistory.containsKey(bnNumber))
+            return new LinkedList<>(suppliersOrderHistory.get(bnNumber));
+        int numberOfOrders = numberOfOrdersCounterDataMapper.getOrderNumber(bnNumber);
+        List<Order> orderHistory = findAll(bnNumber, numberOfOrders);
+        suppliersOrderHistory.put(bnNumber, orderHistory);
+        return orderHistory;
     }
 }

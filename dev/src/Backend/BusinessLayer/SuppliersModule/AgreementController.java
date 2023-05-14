@@ -1,11 +1,10 @@
 package Backend.BusinessLayer.SuppliersModule;
 
 import Backend.BusinessLayer.SuppliersModule.DeliveryAgreements.DeliveryAgreement;
-import Backend.DataAccessLayer.SuppliersModule.AgreementDataMapper;
+import Backend.DataAccessLayer.SuppliersModule.AgreementDataMappers.AgreementDataMapper;
 import Backend.DataAccessLayer.dalUtils.DalException;
 
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 

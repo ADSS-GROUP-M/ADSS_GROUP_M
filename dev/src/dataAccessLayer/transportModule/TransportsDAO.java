@@ -197,32 +197,6 @@ public class TransportsDAO extends ManyToManyDAO<Transport> implements CounterDA
         }
     }
 
-    protected Transport buildDeliveryRoute(Transport transport, List<TransportDestination> transportDestinations){
-
-        ListIterator<TransportDestination> iterator = transportDestinations.listIterator();
-        String curr = iterator.next().name();;
-        String next;
-
-        String source = transportDestinations.
-        LinkedList<String> destinations = new LinkedList<>();
-        HashMap<String,Integer> itemLists = new HashMap<>();
-        HashMap<String, LocalTime> estimatedTimesOfArrival = new HashMap<>();
-        for(TransportDestination transportDestination : transportDestinations){
-            destinations.add(transportDestination.name());
-            itemLists.put(transportDestination.name(), transportDestination.itemListId());
-            estimatedTimesOfArrival.put(transportDestination.name(), transportDestination.expectedArrivalTime());
-        }
-        DeliveryRoute deliveryRoute = new DeliveryRoute(
-
-
-                destinations,
-                itemLists,
-
-
-        );
-        deliveryRoute.initializeArrivalTimes(estimatedTimesOfArrival);
-    }
-
     @Override
     public void clearTable() {
         destinationsDAO.clearTable();

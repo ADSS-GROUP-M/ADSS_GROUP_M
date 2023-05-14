@@ -9,8 +9,11 @@ import objects.transportObjects.DeliveryRoute;
 import objects.transportObjects.Transport;
 
 import java.sql.SQLException;
+import java.time.LocalTime;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
 
 public class TransportDestinationsDAO extends ManyToManyDAO<TransportDestination> {
 
@@ -233,6 +236,30 @@ public class TransportDestinationsDAO extends ManyToManyDAO<TransportDestination
             ));
         }
         insertAll(transportDestinations);
+    }
+
+    public Transport buildDeliveryRoute(Transport transport) throws DalException{
+
+        List<TransportDestination> transportDestinations = selectAllRelated(transport);
+
+        ListIterator<TransportDestination> iterator = transportDestinations.listIterator();
+        TransportDestination curr = iterator.next();
+        TransportDestination next;
+
+        LinkedList<String> destinations = new LinkedList<>();
+        HashMap<String,Integer> itemLists = new HashMap<>();
+        HashMap<String, LocalTime> estimatedTimesOfArrival = new HashMap<>();
+
+        String source = curr.name();
+        while(iterator.hasNext()){
+            next = iterator.next();
+            destinations.add(next.name());
+            itemLists.put(next.name(), next.itemListId());
+            estimatedTimesOfArrival.put(next.name(), next.expectedArrivalTime());
+        }
+        DeliveryRoute deliveryRoute = new DeliveryRoute(source, destinations, itemLists);
+        deliveryRoute.initializeArrivalTimes(estimatedTimesOfArrival);
+        return new Transport(deliveryRoute,transport);
     }
 
     @Override

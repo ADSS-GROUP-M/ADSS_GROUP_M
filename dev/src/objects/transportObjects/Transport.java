@@ -40,6 +40,17 @@ public record Transport (
         );
     }
 
+    public Transport(DeliveryRoute route, Transport transport) {
+        this(
+                transport.id(),
+                route,
+                transport.driverId(),
+                transport.truckId(),
+                transport.departureTime(),
+                transport.weight()
+        );
+    }
+
     /**
      * this constructor sets the id to be -1
      */

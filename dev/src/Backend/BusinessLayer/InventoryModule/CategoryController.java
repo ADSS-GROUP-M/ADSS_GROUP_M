@@ -42,6 +42,7 @@ public class CategoryController {
             }
         }
         categories.get(branch).put(categoryName,new Category(categoryName,subcategories));
+        categoryManagerMapper.createCategory(categoryName, subcategories);
     }
 
     public void removeCategory(Branch branch, String categoryName){

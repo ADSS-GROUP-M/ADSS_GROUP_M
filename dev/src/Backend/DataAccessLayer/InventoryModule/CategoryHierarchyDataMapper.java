@@ -45,4 +45,10 @@ public class CategoryHierarchyDataMapper extends AbstractDataMapper {
         }
         return map;
     }
+
+    public boolean isExists(String category_name, String sub_category_name) throws SQLException {
+        OfflineResultSet resultSet = sqlExecutor.executeRead(String.format("SELECT COUNT(*) as count FROM %s WHERE category = '%s' AND sub_category = '%s'", tableName, category_name, sub_category_name));
+        return resultSet.getInt("count") > 0;
+    }
+
 }

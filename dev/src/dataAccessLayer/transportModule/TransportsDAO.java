@@ -10,6 +10,7 @@ import objects.transportObjects.Transport;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
 
 public class TransportsDAO extends ManyToManyDAO<Transport> implements CounterDAO {
 
@@ -19,6 +20,7 @@ public class TransportsDAO extends ManyToManyDAO<Transport> implements CounterDA
     private static final String[][] foreign_keys = {{"driver_id"}, {"truck_id"}};
     private static final String[][] references = {{"id"}, {"id"}};
     private static final String tableName = "transports";
+
     private final TransportIdCounterDAO counterDAO;
 
     public TransportsDAO(SQLExecutor cursor, TransportIdCounterDAO counterDAO) throws DalException{

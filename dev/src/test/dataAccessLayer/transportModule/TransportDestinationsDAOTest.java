@@ -41,8 +41,6 @@ class TransportDestinationsDAOTest {
     private TransportDestination transportDestination2;
     private TransportDestination transportDestination3;
     private TransportDestination transportDestination4;
-    private DalFactory factory;
-    private TransportsController transportsController;
     private Site source;
     private Site dest1;
     private Site dest2;
@@ -57,45 +55,52 @@ class TransportDestinationsDAOTest {
     private SiteRoute route4;
     private SiteRoute route5;
     private SiteRoute route6;
+    private Employee employee;
+    private HashMap<String, LocalTime> arrivalTimes;
+    private SitesDAO sitesDAO;
+    private TrucksDAO trucksDAO;
+    private EmployeeDAO employeeDAO;
+    private DriversDAO driversDAO;
+    private ItemListsDAO itemListsDAO;
+    private SitesRoutesDAO routesDAO;
+    private DalFactory factory;
 
     @BeforeEach
     void setUp() {
         try {
-            source = new Site(SOURCE_NAME, "source_address1", "zone1", "12345", "kobi", Site.SiteType.SUPPLIER);
-            dest1 = new Site(DEST_NAME1, "dest_address1", "zone1", "12345", "kobi", Site.SiteType.SUPPLIER);
-            dest2 = new Site(DEST_NAME2, "dest_address2", "zone1", "12345", "kobi", Site.SiteType.SUPPLIER);
+            DalFactory.clearTestDB();
+
+            fail("FINISH FIXING THESE TESTS");
+
+            //sites set up
+            source = new Site("source1", "source1 name", "zone1", "12345","kobi", Site.SiteType.SUPPLIER);
+            dest1 = new Site("dest1", "dest1 name", "zone1", "12345","kobi", Site.SiteType.SUPPLIER);
+            dest2 = new Site("dest2", "dest2 name", "zone1", "12345","kobi", Site.SiteType.SUPPLIER);
+            source = new Site("source1", "source1 name", "zone1", "12345","kobi", Site.SiteType.BRANCH);
+
+            //truck set up
             truck = new Truck("1", "model1", 1000, 20000, Truck.CoolingCapacity.FROZEN);
-            Employee employee = new Employee(SOURCE_NAME, "12345", "Poalim", 50, LocalDate.of(1999, 10, 10), "conditions", "details");
+
+            //driver set up
+            employee = new Employee("name1","12345","Poalim",50, LocalDate.of(1999,10,10),"conditions","details");
             employee.addRole(Role.Driver);
             employee.addRole(Role.GeneralWorker);
-            driver = new Driver(employee.getId(), employee.getName(), Driver.LicenseType.C3);
+            driver = new Driver(employee.getId(),employee.getName(), Driver.LicenseType.C3);
 
-            HashMap<String, Integer> load = new HashMap<>() {{
+            //itemList set up
+            HashMap<String, Integer> load = new HashMap<>(){{
                 put("item1", 1);
                 put("item2", 2);
                 put("item3", 3);
             }};
-            HashMap<String, Integer> unload = new HashMap<>() {{
+            HashMap<String, Integer> unload = new HashMap<>(){{
                 put("item4", 4);
                 put("item5", 5);
                 put("item6", 6);
             }};
-            itemList = new ItemList(LIST_ID, load, unload);
+            itemList = new ItemList(1, load, unload);
 
-            transport = new Transport(TRANSPORT_ID,
-                    source.name(),
-                    new LinkedList<>(){{
-                        add(dest1.name());
-                    }},
-                    new HashMap<>(){{
-                        put(dest1.name(), LIST_ID);
-                    }},
-                    driver.id(),
-                    truck.id(),
-                    LocalDateTime.of(2020, 1, 1, 19, 50),
-                    15000
-            );
-
+            //transport set up
             route1 = new SiteRoute(source.address(), dest1.address(), 40,30);
             route2 = new SiteRoute(dest1.address(), dest2.address(), 40,30);
             route3 = new SiteRoute(dest2.address(), dest1.address(), 40,30);
@@ -103,67 +108,56 @@ class TransportDestinationsDAOTest {
             route5 = new SiteRoute(dest2.address(), source.address(), 40,30);
             route6 = new SiteRoute(source.address(), source.address(), 40,30);
 
-            factory = new DalFactory(TESTING_DB_NAME);
-            dao = factory.transportDestinationsDAO();
-            SitesDAO sitesDAO = factory.sitesDAO();
-            TrucksDAO trucksDAO = factory.trucksDAO();
-            EmployeeDAO employeeDAO = factory.employeeDAO();
-            DriversDAO driversDAO = factory.driversDAO();
-            ItemListsDAO itemListsDAO = factory.itemListsDAO();
-            transportsDAO = new TransportsDAO(
-                    factory.cursor(),
-                    mock(TransportDestinationsDAO.class),
-                    new TransportIdCounterDAO(factory.cursor()));
-
-            SitesRoutesDAO sitesRoutesDAO = factory.sitesRoutesDAO();
-            TrucksController trucksController = mock(TrucksController.class);
-            ItemListsController itemListsController = mock(ItemListsController.class);
-            DriversController driversController = mock(DriversController.class);
-            SitesRoutesController sitesRoutesController = mock(SitesRoutesController.class);
-            SitesController sitesController =  new SitesController(sitesDAO,sitesRoutesController);
-            transportsController = new TransportsController(
-                    trucksController,
-                    driversController,
-                    sitesController,
-                    itemListsController,
-                    sitesRoutesController,
-                    transportsDAO
+            transport = new Transport(1,
+                    source.name(),
+                    new LinkedList<>(){{
+                        add(dest1.name());
+                        add(dest2.name());
+                    }} ,
+                    new HashMap<>(){{
+                        put(dest1.name(), itemList.id());
+                        put(dest2.name(), itemList.id());
+                    }},
+                    driver.id(),
+                    truck.id(),
+                    LocalDateTime.of(2023, 2, 2, 12, 0),
+                    15000
             );
 
-            transportsDAO.clearTable();
-            itemListsDAO.clearTable();
-            driversDAO.clearTable();
-            trucksDAO.clearTable();
-            sitesDAO.clearTable();
-            employeeDAO.clearTable();
+            //initialize transport arrival times
+            arrivalTimes = new HashMap<>();
+            arrivalTimes.put(dest1.name(), LocalTime.of(12, (int) route1.duration()));
+            arrivalTimes.put(dest2.name(), LocalTime.of(12, (int)(route1.duration() + route2.duration() + TransportsController.AVERAGE_TIME_PER_VISIT)));
+            transport.deliveryRoute().initializeArrivalTimes(arrivalTimes);
+
+            factory = new DalFactory(TESTING_DB_NAME);
+            sitesDAO = factory.sitesDAO();
+            trucksDAO = factory.trucksDAO();
+            employeeDAO = factory.employeeDAO();
+            driversDAO = factory.driversDAO();
+            itemListsDAO = factory.itemListsDAO();
+            transportsDAO = factory.transportsDAO();
+            routesDAO = factory.sitesRoutesDAO();
 
             sitesDAO.insert(source);
             sitesDAO.insert(dest1);
             sitesDAO.insert(dest2);
+            routesDAO.insert(route1);
+            routesDAO.insert(route2);
+            routesDAO.insert(route3);
+            routesDAO.insert(route4);
+            routesDAO.insert(route5);
+            routesDAO.insert(route6);
             trucksDAO.insert(truck);
             employeeDAO.insert(employee);
             driversDAO.insert(driver);
             itemListsDAO.insert(itemList);
-            sitesRoutesDAO.insert(route1);
-            sitesRoutesDAO.insert(route2);
-            sitesRoutesDAO.insert(route3);
-            sitesRoutesDAO.insert(route4);
-            sitesRoutesDAO.insert(route5);
-            sitesRoutesDAO.insert(route6);
-            transportsController.initializeEstimatedArrivalTimes(transport);
-            transportsDAO.insert(transport);
 
             transportDestination1 = new TransportDestination(TRANSPORT_ID, 1, dest1.name(), LIST_ID, ARRIVAL_TIME);
             transportDestination2 = new TransportDestination(TRANSPORT_ID, 2, dest2.name(), LIST_ID, ARRIVAL_TIME);
             transportDestination3 = new TransportDestination(TRANSPORT_ID, 3, dest1.name(), LIST_ID, ARRIVAL_TIME);
             transportDestination4 = new TransportDestination(TRANSPORT_ID, 4, dest2.name(), LIST_ID, ARRIVAL_TIME);
-
-            dao.insert(transportDestination1);
-            dao.insert(transportDestination2);
-            dao.insert(transportDestination3);
-            dao.insert(transportDestination4);
-
-        } catch (DalException | TransportException e) {
+        } catch (DalException e) {
             fail(e);
         }
     }
@@ -366,7 +360,6 @@ class TransportDestinationsDAOTest {
                     LocalDateTime.of(2020, 1, 1, 1, 1),
                     15000
             );
-            transportsController.initializeEstimatedArrivalTimes(transport2);
             transportsDAO.insert(transport2);
 
             //test
@@ -376,7 +369,7 @@ class TransportDestinationsDAOTest {
             assertEquals(dest1.name(), selected.get(0).name());
             assertEquals(dest2.name(), selected.get(1).name());
 
-        } catch (DalException | TransportException e) {
+        } catch (DalException e) {
             fail(e);
         }
     }

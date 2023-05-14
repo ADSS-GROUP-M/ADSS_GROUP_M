@@ -14,14 +14,15 @@ import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
 
 public class TransportsDAO extends ManyToManyDAO<Transport> implements CounterDAO {
 
-    private static final String[] types = {"INTEGER", "TEXT", "TEXT", "TEXT", "TEXT", "INTEGER"};
-    private static final String[] parent_tables = {"truck_drivers", "trucks", "sites"};
+    private static final String[] types = {"INTEGER", "TEXT", "TEXT", "TEXT", "INTEGER"};
+    private static final String[] parent_tables = {"truck_drivers", "trucks"};
     private static final String[] primary_keys = {"id"};
-    private static final String[][] foreign_keys = {{"driver_id"}, {"truck_id"},{"source_name"}};
-    private static final String[][] references = {{"id"}, {"id"}, {"name"}};
+    private static final String[][] foreign_keys = {{"driver_id"}, {"truck_id"}};
+    private static final String[][] references = {{"id"}, {"id"}};
     public static final String tableName = "transports";
 
     private final TransportDestinationsDAO destinationsDAO;
@@ -36,7 +37,6 @@ public class TransportsDAO extends ManyToManyDAO<Transport> implements CounterDA
                 foreign_keys,
                 references,
                 "id",
-                "source_name",
                 "driver_id",
                 "truck_id",
                 "departure_time",
@@ -71,7 +71,7 @@ public class TransportsDAO extends ManyToManyDAO<Transport> implements CounterDA
             throw new RuntimeException(e);
         }
         if (resultSet.next()){
-            Transport selected = getObjectFromResultSet(resultSet, transportDestinations);
+            Transport selected = buildDeliveryRoute(resultSet, transportDestinations);
             cache.put(selected);
             return selected;
         } else {
@@ -95,7 +95,7 @@ public class TransportsDAO extends ManyToManyDAO<Transport> implements CounterDA
         }
         while (resultSet.next()){
             Transport lookupObject = Transport.getLookupObject(resultSet.getInt("id"));
-            transports.add(getObjectFromResultSet(
+            transports.add(buildDeliveryRoute(
                     resultSet,
                     destinationsDAO.selectAllRelated(lookupObject)));
         }
@@ -197,7 +197,13 @@ public class TransportsDAO extends ManyToManyDAO<Transport> implements CounterDA
         }
     }
 
-    protected Transport getObjectFromResultSet(OfflineResultSet resultSet, List<TransportDestination> transportDestinations){
+    protected Transport buildDeliveryRoute(Transport transport, List<TransportDestination> transportDestinations){
+
+        ListIterator<TransportDestination> iterator = transportDestinations.listIterator();
+        String curr = iterator.next().name();;
+        String next;
+
+        String source = transportDestinations.
         LinkedList<String> destinations = new LinkedList<>();
         HashMap<String,Integer> itemLists = new HashMap<>();
         HashMap<String, LocalTime> estimatedTimesOfArrival = new HashMap<>();
@@ -206,16 +212,15 @@ public class TransportsDAO extends ManyToManyDAO<Transport> implements CounterDA
             itemLists.put(transportDestination.name(), transportDestination.itemListId());
             estimatedTimesOfArrival.put(transportDestination.name(), transportDestination.expectedArrivalTime());
         }
+        DeliveryRoute deliveryRoute = new DeliveryRoute(
 
-        String sourceAddress = resultSet.getString("source_name");
-        return new Transport(
-                resultSet.getInt("id"),
-                new DeliveryRoute(sourceAddress, destinations,itemLists, estimatedTimesOfArrival),
-                resultSet.getString("driver_id"),
-                resultSet.getString("truck_id"),
-                resultSet.getLocalDateTime("departure_time"),
-                resultSet.getInt("weight")
+
+                destinations,
+                itemLists,
+
+
         );
+        deliveryRoute.initializeArrivalTimes(estimatedTimesOfArrival);
     }
 
     @Override
@@ -230,11 +235,18 @@ public class TransportsDAO extends ManyToManyDAO<Transport> implements CounterDA
     }
 
     /**
-     * @deprecated use {@link #getObjectFromResultSet(OfflineResultSet, List)} instead
+     * @return Transport object where <br/> DeliveryRoute == null -> true
      */
-    @Deprecated
+    @Override
     protected Transport getObjectFromResultSet(OfflineResultSet resultSet) {
-        throw new UnsupportedOperationException("Not implemented");
+        return new Transport(
+                resultSet.getInt("id"),
+                null,
+                resultSet.getString("driver_id"),
+                resultSet.getString("truck_id"),
+                resultSet.getLocalDateTime("departure_time"),
+                resultSet.getInt("weight")
+        );
     }
 
     @Override

@@ -37,14 +37,17 @@ public class DeliveryAgreementDataMapper  extends AbstractDataMapper {
         String columnsString = String.join(", ", columns);
         OfflineResultSet resultSet = sqlExecutor.executeRead(String.format("SELECT %s FROM %s WHERE bn_number = %s",columnsString,tableName,
                 bnNumber));
-        boolean byInvitation = resultSet.getInt("by_invitation") == 1;
-        if(byInvitation)
-            return new DeliveryByInvitation(resultSet.getInt("have_transport") == 1, Integer.parseInt(resultSet.getString("days")));
-        String[] daysString = resultSet.getString("days").split(",");
-        List<Integer> days = new ArrayList<>();
-        for (int i = 0; i < daysString.length; i++)
-            days.add(Integer.parseInt(daysString[i]));
-        return new DeliveryFixedDays(resultSet.getInt("have_transport") == 1, days);
+        if(resultSet.next()) {
+            boolean byInvitation = resultSet.getInt("by_invitation") == 1;
+            if (byInvitation)
+                return new DeliveryByInvitation(resultSet.getInt("have_transport") == 1, Integer.parseInt(resultSet.getString("days")));
+            String[] daysString = resultSet.getString("days").split(",");
+            List<Integer> days = new ArrayList<>();
+            for (int i = 0; i < daysString.length; i++)
+                days.add(Integer.parseInt(daysString[i]));
+            return new DeliveryFixedDays(resultSet.getInt("have_transport") == 1, days);
+        }
+        return null;
     }
 
     public void delete(String bnNumber) throws SQLException {

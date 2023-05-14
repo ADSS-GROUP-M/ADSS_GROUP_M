@@ -9,19 +9,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e454f93c-4ee8-4f4b-9a14-eaaf36aa303c" name="Changes" comment="added controllers">
+    <list default="true" id="e454f93c-4ee8-4f4b-9a14-eaaf36aa303c" name="Changes" comment="added services and adapt UI to it">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/SuppliersModule/Agreement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/BusinessLayer/SuppliersModule/Agreement.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/SuppliersModule/AgreementController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/BusinessLayer/SuppliersModule/AgreementController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/SuppliersModule/BillOfQuantitiesController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/BusinessLayer/SuppliersModule/BillOfQuantitiesController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/SuppliersModule/Supplier.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/BusinessLayer/SuppliersModule/Supplier.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/SuppliersModule/SupplierController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/BusinessLayer/SuppliersModule/SupplierController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/SupplierDataMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/SupplierDataMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/fieldsDataMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/FieldsDataMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/ServiceLayer/SuppliersModule/AgreementService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/ServiceLayer/SuppliersModule/AgreementService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/ServiceLayer/SuppliersModule/BillOfQuantitiesService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/ServiceLayer/SuppliersModule/BillOfQuantitiesService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/ServiceLayer/SuppliersModule/SupplierService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/ServiceLayer/SuppliersModule/SupplierService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/UI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/UI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/SuppliersModule/DeliveryAgreements/DeliveryAgreement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/BusinessLayer/SuppliersModule/DeliveryAgreements/DeliveryAgreement.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/SuppliersModule/DeliveryAgreements/DeliveryByInvitation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/BusinessLayer/SuppliersModule/DeliveryAgreements/DeliveryByInvitation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/SuppliersModule/DeliveryAgreements/DeliveryFixedDays.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/BusinessLayer/SuppliersModule/DeliveryAgreements/DeliveryFixedDays.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/AgreementDataMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/AgreementDataMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/BillOfQuantitiesDataMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/BillOfQuantitiesDataMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/DeliveryAgreementDataMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/DeliveryAgreementDataMapper.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -335,7 +330,14 @@
       <option name="project" value="LOCAL" />
       <updated>1683899874874</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="added services and adapt UI to it">
+      <created>1683907424166</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1683907424166</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -385,7 +387,8 @@
     <MESSAGE value="commit for cehckout" />
     <MESSAGE value="commit for new feature" />
     <MESSAGE value="added controllers" />
-    <option name="LAST_COMMIT_MESSAGE" value="added controllers" />
+    <MESSAGE value="added services and adapt UI to it" />
+    <option name="LAST_COMMIT_MESSAGE" value="added services and adapt UI to it" />
   </component>
   <component name="XDebuggerManager">
     <pin-to-top-manager>

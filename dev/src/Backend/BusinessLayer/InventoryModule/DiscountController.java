@@ -47,9 +47,9 @@ public class DiscountController {
     //TODO: need to edit
     public void createCategoryDiscount(String categoryName, Branch branch, double discount, LocalDateTime startDate, LocalDateTime endDate){
         CategoryController categoryController = CategoryController.CategoryController();
-        if(categoryController.checkIfCategoryExist(branch, categoryName)){
-            Map<String, Product> relatedProducts = categoryController.getCategoryProducts(branch, categoryName);
-            for(Product product: relatedProducts.values()){
+        if(categoryController.checkIfCategoryExist(categoryName)){
+            List<Product> relatedProducts = categoryController.getCategoryProducts(branch, categoryName);
+            for(Product product: relatedProducts){
                createStoreDiscount(product.getCatalogNumber(),branch,discount,startDate,endDate);
             }
         }
@@ -95,33 +95,4 @@ public class DiscountController {
             throw new RuntimeException("Branch does not exist, please create discount in order to continue");
     }
 
-
-    //TODO : remove
-// Report Category function - inorder to receive all category product details
-    public List<Record> getProductsPerCategory(List<Category> categories, Branch branch){
-        if(checkIfBranchExist(branch)){
-            List<Record> productsCategoryRecords = new ArrayList<Record>();
-            for(Category category: categories){
-                for(Product product: category.getProductsRelated().values()){
-                    for(ProductItem productItem: product.getProductItems().values()){
-                        String catalog_number = product.getCatalogNumber();
-                        String serial_number = productItem.getSerial_number();
-                        String name = product.getName();
-                        String manufacture = product.getManufacturer();
-                        double supplierPrice = productItem.getSupplierPrice();
-                        double supplierDiscount = productItem.getSupplierDiscount();
-                        double storePrice = calcSoldPrice(branch,catalog_number,product.getOriginalStorePrice());
-                        List<Category> subCategory = product.getSubCategory();
-                        String location = productItem.getLocation();
-                        //create Record
-                        Record record = new Record(catalog_number,serial_number,name,branch.name(),manufacture,supplierPrice,supplierDiscount,storePrice, location);
-                        productsCategoryRecords.add(record);
-                    }
-                }
-            }
-            return productsCategoryRecords;
-        }
-        else
-            throw new RuntimeException("Branch does not exist, please create discount in order to continue");
-    }
 }

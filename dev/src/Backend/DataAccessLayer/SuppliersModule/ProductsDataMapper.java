@@ -36,6 +36,19 @@ public class ProductsDataMapper  extends AbstractDataMapper {
         }
     }
 
+    public void update(String catalog_number, String newName, String newManufacture) throws SQLException {
+        if (!isExists(catalog_number)){
+            if(newName != null)
+                //TODO : add branch
+                sqlExecutor.executeWrite(String.format("UPDATE %s SET name = '%s' WHERE catalog_number = '%s' and branch = '%s'", tableName,newName,catalog_number,catalog_number));
+            if(newManufacture != null)
+                sqlExecutor.executeWrite(String.format("UPDATE %s SET manufacture = '%s' WHERE catalog_number = '%s' and branch = '%s'", tableName,newManufacture,catalog_number,catalog_number));
+//            ProductDAO productDAO = new ProductDAO(catalog_number, name);
+//            productDAO.setManufacture(manufacture);
+//            cachedProducts.add(productDAO);
+        }
+    }
+
     public void delete(String catalog_number) throws SQLException {
         if (isExists(catalog_number)) {
             sqlExecutor.executeWrite(String.format("DROP FROM %s WHERE catalog_number = %s", tableName, catalog_number));

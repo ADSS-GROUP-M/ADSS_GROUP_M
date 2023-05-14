@@ -1,5 +1,8 @@
 package Backend.BusinessLayer.InventoryModule;
 
+import Backend.BusinessLayer.BusinessLayerUsage.Branch;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -7,7 +10,7 @@ import java.util.Map;
 public class Category {
     private String categoryName;
     // map<catalog_number, Product obj>
-    private Map<String, Product> productsRelated;
+    private List<Product> productsRelated;
 
 
     //map<category_name, Category obj>
@@ -17,7 +20,7 @@ public class Category {
     public Category(String nameCategory, List<Category> subcategories){
         this.categoryName = nameCategory;
         this.subCategories = new HashMap<String, Category>();
-        this.productsRelated = new HashMap<String, Product>();
+        this.productsRelated = new ArrayList<Product>();
         if(!subcategories.isEmpty()){
             for(Category category: subcategories)
                 subCategories.put(category.getCategoryName(), category);
@@ -25,27 +28,37 @@ public class Category {
     }
 
     public void addProductToCategory(Product product){
-        productsRelated.put(product.getCatalogNumber(),product);
+        if(!isProductIDRelated(product.getCatalogNumber(),product.getBranch()))
+            productsRelated.add(product);
     }
 
 
-
-//    public void addDiscountCategory(String categoryName, String branch, double discount, LocalDateTime startDate, LocalDateTime endDate){
-//        categoriesDiscount.add(new CategoryDiscount(startDate,endDate,discount,categoryName,branch));
-//    }
-
-    public Boolean isProductIDRelated(String catalog_number){
-        return this.productsRelated.containsKey(catalog_number);
+    public Boolean isProductIDRelated(String catalog_number, Branch branch){
+        for(Product product: productsRelated){
+            if(product.getBranch() == branch && product.getCatalogNumber() == catalog_number)
+                return true;
+        }
+        return false;
     }
 
     public String getCategoryName(){return this.categoryName;}
 
     public Boolean isRelatedProductEmpty(){return productsRelated.isEmpty();}
 
-    public Map<String, Product> getProductsRelated(){return this.productsRelated;}
+    public List<Product> getProductsRelated(Branch branch){
+        List<Product> productsRelatedList = new ArrayList<Product>();
+        for(Product product : productsRelated){
+            if(product.getBranch() == branch)
+                productsRelatedList.add(product);
+        }
+        return productsRelatedList;
+    }
 
-    public void removeProduct(String catalog_number){
-        productsRelated.remove(catalog_number);
+    public void removeProduct(Product product){
+        for(Product productRelated: productsRelated){
+            if(productRelated.getBranch() == product.getBranch() && productRelated.getCatalogNumber() == product.getCatalogNumber())
+                productsRelated.remove(product);
+        }
     }
 
     public boolean isSubcategory(String subcategoryName){

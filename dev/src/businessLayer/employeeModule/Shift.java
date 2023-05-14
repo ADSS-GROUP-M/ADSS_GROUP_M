@@ -77,9 +77,9 @@ public class Shift {
     public void approve() throws Exception {
         if (this.isApproved)
             throw new Exception("This shift is already approved.");
-        this.isApproved = true;
         if (!this.checkLegality())
-            throw new Exception("Shift approved, but notice that the shift constraints are not met! \n" + getLegalityProblems());
+            throw new Exception("Notice that the shift constraints are not met! \n" + getLegalityProblems());
+        this.isApproved = true;
     }
 
     public void disapprove(){

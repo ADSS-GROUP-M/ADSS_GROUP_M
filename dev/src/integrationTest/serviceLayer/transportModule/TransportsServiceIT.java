@@ -1,5 +1,6 @@
 package serviceLayer.transportModule;
 
+import businessLayer.employeeModule.Branch;
 import dataAccessLayer.DalFactory;
 import objects.transportObjects.*;
 import org.junit.jupiter.api.AfterEach;
@@ -22,6 +23,8 @@ import java.util.List;
 
 import static dataAccessLayer.DalFactory.TESTING_DB_NAME;
 import static org.junit.jupiter.api.Assertions.*;
+import static serviceLayer.employeeModule.Services.UserService.HR_MANAGER_USERNAME;
+
 class TransportsServiceIT {
 
     private Transport transport;
@@ -363,6 +366,11 @@ class TransportsServiceIT {
         es.updateBranchWorkingHours("admin123",HQAddress, LocalTime.of(0,0),LocalTime.of(14,0),LocalTime.of(14,0),LocalTime.of(23,0));
         es.createWeekShifts("admin123",HQAddress,shiftDate);
         es.setShiftNeededAmount("admin123",HQAddress,shiftDate,SShiftType.Morning,"Driver",1);
+        es.setShiftNeededAmount(HR_MANAGER_USERNAME,HQAddress,shiftDate,SShiftType.Morning,"Cashier",0);
+        es.setShiftNeededAmount(HR_MANAGER_USERNAME,HQAddress,shiftDate,SShiftType.Morning,"GeneralWorker",0);
+        es.setShiftNeededAmount(HR_MANAGER_USERNAME,HQAddress,shiftDate,SShiftType.Morning,"Storekeeper",0);
+        es.setShiftNeededAmount(HR_MANAGER_USERNAME,HQAddress,shiftDate,SShiftType.Morning,"ShiftManager",0);
+
         es.recruitEmployee("admin123", HQAddress, "megan smith", driverId1,"Bank01",15, LocalDate.now(),"","");
         es.recruitEmployee("admin123", HQAddress, "name", driverId2,"Bank02",15, LocalDate.now(),"","");
         es.certifyEmployee("admin123",driverId1,"Driver"); // This call should probably be responsible for calling the rms.addDriver method that adds the driver, when executed normally through the HR Manager Menu (Employees Module CLI).
@@ -377,6 +385,14 @@ class TransportsServiceIT {
     private void initBranchSite1() {
         es.updateBranchWorkingHours("admin123",site1Address, LocalTime.of(0,0),LocalTime.of(14,0),LocalTime.of(14,0),LocalTime.of(23,0));
         es.createWeekShifts("admin123",site1Address,shiftDate);
+        es.setShiftNeededAmount(HR_MANAGER_USERNAME, site1Address,shiftDate,SShiftType.Morning,"Cashier",0);
+        es.setShiftNeededAmount(HR_MANAGER_USERNAME,site1Address,shiftDate,SShiftType.Morning,"GeneralWorker",0);
+        es.setShiftNeededAmount(HR_MANAGER_USERNAME,site1Address,shiftDate,SShiftType.Morning,"Storekeeper",1);
+        es.setShiftNeededAmount(HR_MANAGER_USERNAME,site1Address,shiftDate,SShiftType.Morning,"ShiftManager", 0);
+        es.setShiftNeededAmount(HR_MANAGER_USERNAME, site1Address,shiftDate,SShiftType.Evening,"Cashier",0);
+        es.setShiftNeededAmount(HR_MANAGER_USERNAME,site1Address,shiftDate,SShiftType.Evening,"GeneralWorker",0);
+        es.setShiftNeededAmount(HR_MANAGER_USERNAME,site1Address,shiftDate,SShiftType.Evening,"Storekeeper",1);
+        es.setShiftNeededAmount(HR_MANAGER_USERNAME,site1Address,shiftDate,SShiftType.Evening,"ShiftManager", 0);
         es.recruitEmployee("admin123", site1Address, "Test Storekeeper5", storekeeperId3,"Bank5",25, LocalDate.now(),"","");
         es.recruitEmployee("admin123", site1Address, "Test Storekeeper6", storekeeperId4,"Bank6",25, LocalDate.now(),"","");
         es.certifyEmployee("admin123", storekeeperId3,"Storekeeper");
@@ -392,6 +408,14 @@ class TransportsServiceIT {
     private void initBranchSiteDestination() {
         es.updateBranchWorkingHours("admin123", updatedBranchDestination, LocalTime.of(0,0),LocalTime.of(14,0),LocalTime.of(14,0),LocalTime.of(23,0));
         es.createWeekShifts("admin123", updatedBranchDestination,shiftDate);
+        es.setShiftNeededAmount(HR_MANAGER_USERNAME,updatedBranchDestination,shiftDate,SShiftType.Morning,"Cashier",0);
+        es.setShiftNeededAmount(HR_MANAGER_USERNAME,updatedBranchDestination,shiftDate,SShiftType.Morning,"GeneralWorker",0);
+        es.setShiftNeededAmount(HR_MANAGER_USERNAME,updatedBranchDestination,shiftDate,SShiftType.Morning,"Storekeeper",1);
+        es.setShiftNeededAmount(HR_MANAGER_USERNAME,updatedBranchDestination,shiftDate,SShiftType.Morning,"ShiftManager", 0);
+        es.setShiftNeededAmount(HR_MANAGER_USERNAME,updatedBranchDestination,shiftDate,SShiftType.Evening,"Cashier",0);
+        es.setShiftNeededAmount(HR_MANAGER_USERNAME,updatedBranchDestination,shiftDate,SShiftType.Evening,"GeneralWorker",0);
+        es.setShiftNeededAmount(HR_MANAGER_USERNAME,updatedBranchDestination,shiftDate,SShiftType.Evening,"Storekeeper",1);
+        es.setShiftNeededAmount(HR_MANAGER_USERNAME,updatedBranchDestination,shiftDate,SShiftType.Evening,"ShiftManager", 0);
         es.recruitEmployee("admin123", updatedBranchDestination, "Test Storekeeper3", storekeeperId1,"Bank3",25, LocalDate.now(),"","");
         es.recruitEmployee("admin123", updatedBranchDestination, "Test Storekeeper4", storekeeperId2,"Bank4",25, LocalDate.now(),"","");
         es.certifyEmployee("admin123", storekeeperId1,"Storekeeper");

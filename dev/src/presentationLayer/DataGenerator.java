@@ -275,10 +275,18 @@ public class DataGenerator {
     public static void initializeShiftDay(List<Driver> morningDrivers, List<Driver> eveningDrivers, LocalDate date) {
         // Shift Creation
         es.createShiftDay(HR_MANAGER_USERNAME,Branch.HEADQUARTERS_ID,date);
+        es.setShiftNeededAmount(HR_MANAGER_USERNAME,Branch.HEADQUARTERS_ID,date,SShiftType.Morning,"Cashier",0);
+        es.setShiftNeededAmount(HR_MANAGER_USERNAME,Branch.HEADQUARTERS_ID,date,SShiftType.Morning,"GeneralWorker",0);
+        es.setShiftNeededAmount(HR_MANAGER_USERNAME,Branch.HEADQUARTERS_ID,date,SShiftType.Morning,"Storekeeper",0);
+        // Only one ShiftManager is still necessary to fully approve the shift at the end of the employees assignments
 
         for (int i = 2; i <= 9; i++) {
             String branchId = "branch"+i;
             es.createShiftDay(HR_MANAGER_USERNAME,branchId,date);
+            es.setShiftNeededAmount(HR_MANAGER_USERNAME,Branch.HEADQUARTERS_ID,date,SShiftType.Morning,"Cashier",0);
+            es.setShiftNeededAmount(HR_MANAGER_USERNAME,Branch.HEADQUARTERS_ID,date,SShiftType.Morning,"GeneralWorker",0);
+            es.setShiftNeededAmount(HR_MANAGER_USERNAME,Branch.HEADQUARTERS_ID,date,SShiftType.Morning,"Storekeeper",0);
+            // Only one ShiftManager is still necessary to fully approve the shift at the end of the employees assignments
         }
 
         // Drivers Assignment

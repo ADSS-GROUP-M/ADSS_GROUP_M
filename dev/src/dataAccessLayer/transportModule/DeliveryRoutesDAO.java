@@ -93,7 +93,7 @@ public class DeliveryRoutesDAO extends ManyToManyDAO<DeliveryRoute> {
             } catch (SQLException e) {
                 throw new DalException("Failed to select all delivery routes", e);
             }
-            while(resultSet.isEmpty() == false) {
+            if(resultSet.isEmpty() == false) {
                 deliveryRoutes.add(getObjectFromResultSet(resultSet));
             }
         }
@@ -124,7 +124,7 @@ public class DeliveryRoutesDAO extends ManyToManyDAO<DeliveryRoute> {
     public void update(DeliveryRoute object) throws DalException {
         String query = buildDeleteQuery(object) + buildInsertQuery(object);
         try {
-            if(cursor.executeWrite(query) != 1) {
+            if(cursor.executeWrite(query) == 0){
                 throw new DalException("Failed to update delivery route");
             }
         } catch (SQLException e) {

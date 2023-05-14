@@ -1,4 +1,4 @@
-package Backend.DataAccessLayer.SuppliersModule;
+package Backend.DataAccessLayer.SuppliersModule.OrderHistoryDataMappers;
 
 import Backend.DataAccessLayer.dalUtils.AbstractDataMapper;
 import Backend.DataAccessLayer.dalUtils.OfflineResultSet;
@@ -17,17 +17,17 @@ public class NumberOfOrdersCounterDataMapper extends AbstractDataMapper {
 
     public void init(String bnNumber) throws SQLException {
         String columnsString = String.join(", ", columns);
-        sqlExecutor.executeWrite(String.format("INSERT INTO %s (%s) VALUES(%s, %d)",tableName, columnsString, bnNumber,
+        sqlExecutor.executeWrite(String.format("INSERT INTO %s (%s) VALUES('%s', %d)",tableName, columnsString, bnNumber,
                 0));
         suppliersCounters.put(bnNumber, 0);
     }
 
     public void delete(String bnNumber) throws SQLException {
-        sqlExecutor.executeWrite(String.format("DROP FROM %s WHERE bn_number = %s", tableName, bnNumber));
+        sqlExecutor.executeWrite(String.format("DELETE FROM %s WHERE bn_number = '%s'", tableName, bnNumber));
     }
 
     public void update(String bnNumber, int numberOfOrders) throws SQLException {
-        sqlExecutor.executeWrite(String.format("UPDATE %s SET order_number_counter = %d WHERE bn_number = %s", tableName, numberOfOrders, bnNumber));
+        sqlExecutor.executeWrite(String.format("UPDATE %s SET order_number_counter = %d WHERE bn_number = '%s'", tableName, numberOfOrders, bnNumber));
         suppliersCounters.put(bnNumber, numberOfOrders);
     }
 
@@ -42,7 +42,7 @@ public class NumberOfOrdersCounterDataMapper extends AbstractDataMapper {
 
     public Integer find(String bnNumber) throws SQLException {
         String columnsString = String.join(", ", columns);
-        OfflineResultSet resultSet = sqlExecutor.executeRead(String.format("SELECT %s FROM %s WHERE bn_number = %s", columnsString,
+        OfflineResultSet resultSet = sqlExecutor.executeRead(String.format("SELECT %s FROM %s WHERE bn_number = '%s'", columnsString,
                 tableName, bnNumber));
         if(resultSet.next())
             return resultSet.getInt("order_number_counter");

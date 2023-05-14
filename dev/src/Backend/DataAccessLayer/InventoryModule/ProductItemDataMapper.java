@@ -15,7 +15,7 @@ public class ProductItemDataMapper extends AbstractDataMapper {
     public ProductItemDataMapper() {
         super("product_items", new String[]{"serial_number", "is_defective", "defection_date", "supplier_id", "supplier_price", "supplier_discount", "sold_price", "expiration_date", "location", "catalog_number", "branch"});
     }
-
+/*
     public void insert(String serial_number, int is_defective, String defection_date, String supplier_id, double supplier_price, double supplier_discount, double sold_price, String expiration_date, String location, String catalog_number, String branch) throws SQLException {
 
         String columnsString = String.join(", ", columns);
@@ -89,5 +89,5 @@ public class ProductItemDataMapper extends AbstractDataMapper {
 //        }
 //        return false;
 //    }
-
+*/
 }

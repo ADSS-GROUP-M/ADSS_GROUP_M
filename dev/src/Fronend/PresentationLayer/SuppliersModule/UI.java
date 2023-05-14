@@ -211,12 +211,12 @@ public class UI {
                 if (input.equals("exit"))
                     break;
                 String[] contactInfo = input.split(" ");
-                contactsInfo.put(contactInfo[0], new Pair<>(contactInfo[1], contactInfo[2]));
+                contactsInfo.put(contactInfo[1], new Pair<>(contactInfo[0], contactInfo[2]));
             }
             System.out.println("enter supplier's products");
             List<Product> products = new LinkedList<>();
             while (true) {
-                System.out.println("enter product:<name> <supplier's catalog number> <price> <number of units>. or enter exit submit the products");
+                System.out.println("enter product:<catalog number> <supplier's catalog number> <price> <number of units>. or enter exit submit the products");
                 String input = sc.nextLine();
                 if (input.equals("exit"))
                     break;
@@ -488,15 +488,15 @@ public class UI {
         try {
             System.out.println("enter bn number of the supplier");
             String bnNumber = sc.nextLine();
-            System.out.println("enter product's name");
-            String name = sc.nextLine();
-            System.out.println("enter catalog number");
+            System.out.println("enter product's catalog number");
             String catalogNumber = sc.nextLine();
+            System.out.println("enter suppliers catalog number");
+            String suppliersCatalogNumber = sc.nextLine();
             System.out.println("enter price");
             double price = Double.parseDouble(sc.nextLine());
             System.out.println("enter number of units");
             int amount = Integer.parseInt(sc.nextLine());
-            System.out.println(gson.fromJson(agreementService.addProduct(bnNumber,name, catalogNumber, price, amount), Response.class).getMsg());
+            System.out.println(gson.fromJson(agreementService.addProduct(bnNumber,catalogNumber, suppliersCatalogNumber, price, amount), Response.class).getMsg());
         }
         catch (Exception e){
             System.out.println("invalid input");

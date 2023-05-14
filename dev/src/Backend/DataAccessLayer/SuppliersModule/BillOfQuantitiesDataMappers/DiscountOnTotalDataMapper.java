@@ -21,16 +21,16 @@ public class DiscountOnTotalDataMapper  extends AbstractDataMapper {
         else
             cash = ((CashDiscount)discount).getAmountOfDiscount();
         String columnsString = String.join(", ", columns);
-        sqlExecutor.executeWrite(String.format("INSERT INTO %s (%s) VALUES(%s, %d, %f, %f)",tableName, columnsString, bnNumber,
+        sqlExecutor.executeWrite(String.format("INSERT INTO %s (%s) VALUES('%s', %d, %f, %f)",tableName, columnsString, bnNumber,
                 priceToReach, percentage, cash));
     }
 
     public void delete(String bnNumber) throws SQLException {
-        sqlExecutor.executeWrite(String.format("DROP FROM %s WHERE bn_number = %s", tableName, bnNumber));
+        sqlExecutor.executeWrite(String.format("DELETE FROM %s WHERE bn_number = '%s'", tableName, bnNumber));
     }
 
     public void updatePriceToReach(String bnNumber, double priceToReach) throws SQLException {
-        sqlExecutor.executeWrite(String.format("UPDATE %s SET price_to_reach = %d WHERE bn_number = %s", tableName, priceToReach, bnNumber));
+        sqlExecutor.executeWrite(String.format("UPDATE %s SET price_to_reach = %d WHERE bn_number = '%s'", tableName, priceToReach, bnNumber));
     }
 
     public void updateDiscount(String bnNumber, Discount discount) throws SQLException {
@@ -39,12 +39,12 @@ public class DiscountOnTotalDataMapper  extends AbstractDataMapper {
             percentage = ((PercentageDiscount) discount).getPercentage();
         else
             cash = ((CashDiscount)discount).getAmountOfDiscount();
-        sqlExecutor.executeWrite(String.format("UPDATE %s SET cash = %f, percentage = %f  WHERE bn_number = %s", tableName, cash, percentage, bnNumber));
+        sqlExecutor.executeWrite(String.format("UPDATE %s SET cash = %f, percentage = %f  WHERE bn_number = '%s'", tableName, cash, percentage, bnNumber));
     }
 
     public Pair<Double, Discount> find(String bnNumber) throws SQLException {
         String columnsString = String.join(", ", columns);
-        OfflineResultSet resultSet = sqlExecutor.executeRead(String.format("SELECT %s FROM %s WHERE bn_number = %s", columnsString, tableName, bnNumber));
+        OfflineResultSet resultSet = sqlExecutor.executeRead(String.format("SELECT %s FROM %s WHERE bn_number = '%s'", columnsString, tableName, bnNumber));
         if(resultSet.next()) {
             Discount discount = null;
             if (resultSet.getDouble("percentage") != -1)

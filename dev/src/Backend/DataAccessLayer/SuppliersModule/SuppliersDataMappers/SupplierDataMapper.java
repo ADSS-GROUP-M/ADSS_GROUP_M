@@ -51,7 +51,7 @@ public class SupplierDataMapper extends AbstractDataMapper {
     public void insert(String bnNumber, String name, String bank, String branch, String accountNumber, String paymentMethod,
                        List<String> fields, Map<String, Pair<String, String>> contactsInfo) throws SQLException {
         String columnsString = String.join(", ", columns);
-        sqlExecutor.executeWrite(String.format("INSERT INTO %s (%s) VALUES(%s, %s, %s, %s, %s, %s)",tableName, columnsString, bnNumber,
+        sqlExecutor.executeWrite(String.format("INSERT INTO %s (%s) VALUES('%s', '%s', '%s', '%s', '%s', '%s')",tableName, columnsString, bnNumber,
                 name, bank, branch, accountNumber, paymentMethod));
         for(String field : fields)
             fieldsDataMapper.insert(bnNumber, field);
@@ -60,12 +60,12 @@ public class SupplierDataMapper extends AbstractDataMapper {
     }
 
     public void delete(String bnNumber) throws SQLException {
-        sqlExecutor.executeWrite(String.format("DROP FROM %s WHERE bn_number = %s", tableName, bnNumber));
+        sqlExecutor.executeWrite(String.format("DELETE FROM %s WHERE bn_number = '%s'", tableName, bnNumber));
     }
 
     public Supplier find(String bnNumber) throws SQLException {
         String columnsString = String.join(", ", columns);
-        OfflineResultSet resultSet = sqlExecutor.executeRead(String.format("SELECT %s FROM %s WHERE bn_number = %s", columnsString, tableName, bnNumber));
+        OfflineResultSet resultSet = sqlExecutor.executeRead(String.format("SELECT %s FROM %s WHERE bn_number = '%s'", columnsString, tableName, bnNumber));
         if(resultSet.next())
             return new Supplier(resultSet.getString("name"), resultSet.getString("bn_number"),
                     new BankAccount(resultSet.getString("bank"), resultSet.getString("branch"), resultSet.getString("account_number")),
@@ -74,22 +74,22 @@ public class SupplierDataMapper extends AbstractDataMapper {
     }
 
     public void updateBankAccount(String bnNumber,String bank, String branch, String accountNumber) throws SQLException {
-        sqlExecutor.executeWrite(String.format("UPDATE %s SET bank = %s, branch = %s, account_number = %s WHERE bn_number = %s", tableName,
+        sqlExecutor.executeWrite(String.format("UPDATE %s SET bank = '%s', branch = '%s', account_number = '%s' WHERE bn_number = '%s'", tableName,
                 bank, branch, accountNumber, bnNumber));
     }
 
     public void updateName(String bnNumber, String name) throws SQLException {
-        sqlExecutor.executeWrite(String.format("UPDATE %s SET name = %s WHERE bn_number = %s", tableName, name, bnNumber));
+        sqlExecutor.executeWrite(String.format("UPDATE %s SET name = '%s' WHERE bn_number = '%s'", tableName, name, bnNumber));
     }
 
     public void updatePaymentMethod(String bnNumber, String paymentMethod) throws SQLException {
-        sqlExecutor.executeWrite(String.format("UPDATE %s SET payment_method = %s WHERE bn_number = %s", tableName, paymentMethod, bnNumber));
+        sqlExecutor.executeWrite(String.format("UPDATE %s SET payment_method = '%s' WHERE bn_number = '%s'", tableName, paymentMethod, bnNumber));
     }
 
 
     public void updateBnNumber(String bnNumber, String newBnNumber) throws SQLException, DalException {
         Supplier supplier = getSupplier(bnNumber);
-        sqlExecutor.executeWrite(String.format("UPDATE %s SET bn_number = %s WHERE bn_number = %s", tableName, newBnNumber, bnNumber));
+        sqlExecutor.executeWrite(String.format("UPDATE %s SET bn_number = '%s' WHERE bn_number = '%s'", tableName, newBnNumber, bnNumber));
         suppliers.remove(bnNumber);
         supplier.setBnNumber(newBnNumber);
         suppliers.put(newBnNumber, supplier);
@@ -118,7 +118,7 @@ public class SupplierDataMapper extends AbstractDataMapper {
     }
 
     public void removeSupplier(String bnNumber) throws SQLException {
-        sqlExecutor.executeWrite(String.format("DROP FROM %s WHERE bn_number = %s", tableName, bnNumber));
+        sqlExecutor.executeWrite(String.format("DELETE FROM %s WHERE bn_number = '%s'", tableName, bnNumber));
         fieldsDataMapper.delete(bnNumber);
         contactsInfoDataMapper.delete(bnNumber);
         suppliers.remove(bnNumber);

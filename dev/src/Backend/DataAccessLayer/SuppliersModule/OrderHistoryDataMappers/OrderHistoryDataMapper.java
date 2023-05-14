@@ -1,6 +1,7 @@
-package Backend.DataAccessLayer.SuppliersModule;
+package Backend.DataAccessLayer.SuppliersModule.OrderHistoryDataMappers;
 
 import Backend.BusinessLayer.SuppliersModule.Order;
+import Backend.DataAccessLayer.SuppliersModule.OrderHistoryDataMappers.NumberOfOrdersCounterDataMapper;
 import Backend.DataAccessLayer.dalUtils.AbstractDataMapper;
 import Backend.DataAccessLayer.dalUtils.OfflineResultSet;
 
@@ -17,7 +18,7 @@ public class OrderHistoryDataMapper extends AbstractDataMapper {
     }
     private void insert(String bnNumber, String catalog_number, int quantity, int orderId) throws SQLException {
         String columnsString = String.join(", ", columns);
-        sqlExecutor.executeWrite(String.format("INSERT INTO %s (%s) VALUES(%s, %d, %s, %d)",tableName, columnsString, bnNumber,
+        sqlExecutor.executeWrite(String.format("INSERT INTO %s (%s) VALUES('%s', %d, '%s', %d)",tableName, columnsString, bnNumber,
                 orderId, catalog_number, quantity));
     }
 
@@ -34,12 +35,12 @@ public class OrderHistoryDataMapper extends AbstractDataMapper {
     }
 
     public void delete(String bnNumber) throws SQLException {
-        sqlExecutor.executeWrite(String.format("DROP FROM %s WHERE bn_number = %s", tableName, bnNumber));
+        sqlExecutor.executeWrite(String.format("DELETE FROM %s WHERE bn_number = '%s'", tableName, bnNumber));
     }
 
     public Order find(String bnNumber, int orderId) throws SQLException {
         String columnsString = String.join(", ", columns);
-        OfflineResultSet resultSet = sqlExecutor.executeRead(String.format("SELECT %s FROM %s WHERE bn_number = %s and order_id = %d", columnsString,
+        OfflineResultSet resultSet = sqlExecutor.executeRead(String.format("SELECT %s FROM %s WHERE bn_number = '%s' and order_id = %d", columnsString,
                 tableName, bnNumber, orderId));
         Order order = new Order();
         while (resultSet.next()){
@@ -50,7 +51,7 @@ public class OrderHistoryDataMapper extends AbstractDataMapper {
 
     public List<Order> findAll(String bnNumber, int numberOfOrders) throws SQLException {
         String columnsString = String.join(", ", columns);
-        OfflineResultSet resultSet = sqlExecutor.executeRead(String.format("SELECT %s FROM %s WHERE bn_number = %s", columnsString,
+        OfflineResultSet resultSet = sqlExecutor.executeRead(String.format("SELECT %s FROM %s WHERE bn_number = '%s'", columnsString,
                 tableName, bnNumber));
         List<Order> orderList = new ArrayList<>();
         for (int i = 0; i < numberOfOrders; i++)

@@ -1,7 +1,7 @@
 package Backend.BusinessLayer.SuppliersModule;
 
 import Backend.BusinessLayer.BusinessLayerUsage.Branch;
-import Backend.DataAccessLayer.SuppliersModule.OrderHistoryDataMapper;
+import Backend.DataAccessLayer.SuppliersModule.OrderHistoryDataMappers.OrderHistoryDataMapper;
 import Backend.DataAccessLayer.dalUtils.DalException;
 
 import java.sql.SQLException;

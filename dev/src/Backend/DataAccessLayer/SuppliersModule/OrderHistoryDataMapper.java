@@ -15,17 +15,22 @@ public class OrderHistoryDataMapper extends AbstractDataMapper {
         numberOfOrdersCounterDataMapper = new NumberOfOrdersCounterDataMapper();
         suppliersOrderHistory = new HashMap<>();
     }
-    private void insert(String bnNumber, String catalog_number, int quantity) throws SQLException {
-        int orderId = numberOfOrdersCounterDataMapper.getAndIncrement(bnNumber);
+    private void insert(String bnNumber, String catalog_number, int quantity, int orderId) throws SQLException {
         String columnsString = String.join(", ", columns);
         sqlExecutor.executeWrite(String.format("INSERT INTO %s (%s) VALUES(%s, %d, %s, %d)",tableName, columnsString, bnNumber,
                 orderId, catalog_number, quantity));
     }
 
     public void insert(String bnNumber, Order order) throws SQLException {
+        int orderId = numberOfOrdersCounterDataMapper.getAndIncrement(bnNumber);
         Map<String, Integer> products = order.getProducts();
         for(Map.Entry<String, Integer> productOrder : products.entrySet())
-            insert(bnNumber, productOrder.getKey(), productOrder.getValue());
+            insert(bnNumber, productOrder.getKey(), productOrder.getValue(), orderId);
+        if(orderId == 0)
+            suppliersOrderHistory.put(bnNumber, new LinkedList<>());
+        else if(!suppliersOrderHistory.containsKey(bnNumber))
+            suppliersOrderHistory.put(bnNumber, findAll(bnNumber, orderId));
+        suppliersOrderHistory.get(bnNumber).add(order);
     }
 
     public void delete(String bnNumber) throws SQLException {
@@ -62,6 +67,6 @@ public class OrderHistoryDataMapper extends AbstractDataMapper {
         int numberOfOrders = numberOfOrdersCounterDataMapper.getOrderNumber(bnNumber);
         List<Order> orderHistory = findAll(bnNumber, numberOfOrders);
         suppliersOrderHistory.put(bnNumber, orderHistory);
-        return orderHistory;
+        return new LinkedList<>(orderHistory);
     }
 }

@@ -28,6 +28,7 @@ public class NumberOfOrdersCounterDataMapper extends AbstractDataMapper {
 
     public void update(String bnNumber, int numberOfOrders) throws SQLException {
         sqlExecutor.executeWrite(String.format("UPDATE %s SET order_number_counter = %d WHERE bn_number = %s", tableName, numberOfOrders, bnNumber));
+        suppliersCounters.put(bnNumber, numberOfOrders);
     }
 
     public Integer getOrderNumber(String bnNumber) throws SQLException {

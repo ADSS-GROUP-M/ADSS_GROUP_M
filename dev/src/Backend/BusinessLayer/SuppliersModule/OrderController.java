@@ -295,11 +295,6 @@ public class OrderController {
     }
 
     public void addSuppliersOrder(String bnNumber, Order order) throws SQLException {
-        if(!suppliersOrderHistory.containsKey(bnNumber))
-            suppliersOrderHistory.put(bnNumber, new Pair<>(1, new LinkedList<>()));
-        suppliersOrderHistory.get(bnNumber).getSecond().add(order);
-        suppliersOrderHistory.get(bnNumber).setFirst(suppliersOrderHistory.get(bnNumber).getFirst() + 1);
-
         orderHistoryDataMapper.insert(bnNumber, order);
     }
 

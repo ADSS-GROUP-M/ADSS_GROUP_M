@@ -43,7 +43,8 @@ public class ProductsDiscountsDataMapper extends AbstractDataMapper {
 
     public Map<String, Map<Integer, Discount>> find(String bnNumber) throws SQLException {
         String columnsString = String.join(", ", columns);
-        OfflineResultSet resultSet = sqlExecutor.executeRead(String.format("SELECT %s WHERE bn_number = '%s'", columnsString, bnNumber));
+        OfflineResultSet resultSet = sqlExecutor.executeRead(String.format("SELECT %s FROM %s WHERE bn_number = '%s'", columnsString,
+                tableName, bnNumber));
         Map<String, Map<Integer, Discount>> suppliersProductDiscounts = new HashMap<>();
         while (resultSet.next()) {
             String catalogNumber = resultSet.getString("catalog_number");

@@ -11,7 +11,7 @@ import java.sql.SQLException;
 
 public class DiscountOnTotalDataMapper  extends AbstractDataMapper {
     public DiscountOnTotalDataMapper() {
-        super("discount_on_total", new String[] {"bn_number", "price_to_reach", "percentage", "cash"});
+        super("discounts_on_total", new String[] {"bn_number", "price_to_reach", "percentage", "cash"});
     }
 
     public void insert(String bnNumber, double priceToReach, Discount discount) throws SQLException {
@@ -21,7 +21,7 @@ public class DiscountOnTotalDataMapper  extends AbstractDataMapper {
         else
             cash = ((CashDiscount)discount).getAmountOfDiscount();
         String columnsString = String.join(", ", columns);
-        sqlExecutor.executeWrite(String.format("INSERT INTO %s (%s) VALUES('%s', %d, %f, %f)",tableName, columnsString, bnNumber,
+        sqlExecutor.executeWrite(String.format("INSERT INTO %s (%s) VALUES('%s', %f, %f, %f)",tableName, columnsString, bnNumber,
                 priceToReach, percentage, cash));
     }
 

@@ -24,13 +24,14 @@ public class OrderHistoryDataMapper extends AbstractDataMapper {
 
     public void insert(String bnNumber, Order order) throws SQLException {
         int orderId = numberOfOrdersCounterDataMapper.getAndIncrement(bnNumber);
-        Map<String, Integer> products = order.getProducts();
-        for(Map.Entry<String, Integer> productOrder : products.entrySet())
-            insert(bnNumber, productOrder.getKey(), productOrder.getValue(), orderId);
         if(orderId == 0)
             suppliersOrderHistory.put(bnNumber, new LinkedList<>());
         else if(!suppliersOrderHistory.containsKey(bnNumber))
             suppliersOrderHistory.put(bnNumber, findAll(bnNumber, orderId));
+
+        Map<String, Integer> products = order.getProducts();
+        for(Map.Entry<String, Integer> productOrder : products.entrySet())
+            insert(bnNumber, productOrder.getKey(), productOrder.getValue(), orderId);
         suppliersOrderHistory.get(bnNumber).add(order);
     }
 
@@ -59,7 +60,7 @@ public class OrderHistoryDataMapper extends AbstractDataMapper {
         while (resultSet.next()){
             orderList.get(resultSet.getInt("order_id")).addProduct(resultSet.getString("catalog_number"), resultSet.getInt("quantity"));
         }
-        return null;
+        return orderList;
     }
 
     public List<Order> getOrderHistory(String bnNumber) throws SQLException {

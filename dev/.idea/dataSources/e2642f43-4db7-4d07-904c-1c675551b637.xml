@@ -1571,7 +1571,7 @@ email</ColNames>
       <Position>1</Position>
     </column>
     <column id="550" parent="509" name="amount_to_reach">
-      <DataType>REAL|0s</DataType>
+      <DataType>INTEGER|0s</DataType>
       <Position>2</Position>
     </column>
     <column id="551" parent="509" name="percentage">

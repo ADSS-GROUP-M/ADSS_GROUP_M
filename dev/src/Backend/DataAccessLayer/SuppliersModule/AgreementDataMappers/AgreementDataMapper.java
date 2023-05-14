@@ -23,7 +23,7 @@ public class AgreementDataMapper {
     public AgreementDataMapper(){
         supplierProductDataMapper = new SupplierProductDataMapper();
         deliveryAgreementDataMapper = new DeliveryAgreementDataMapper();
-        productsDataMapper = new ProductsDataMapper();
+        productsDataMapper = ProductsDataMapper.getInstance();
         suppliersAgreement = new HashMap<>();
     }
 

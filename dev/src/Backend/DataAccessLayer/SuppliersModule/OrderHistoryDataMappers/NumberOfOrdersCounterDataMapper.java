@@ -35,9 +35,11 @@ public class NumberOfOrdersCounterDataMapper extends AbstractDataMapper {
         if(suppliersCounters.containsKey(bnNumber))
             return suppliersCounters.get(bnNumber);
         Integer orderNumber = find(bnNumber);
-        if(orderNumber == null)
+        if(orderNumber == null) {
             init(bnNumber);
-        return 0;
+            orderNumber = 0;
+        }
+        return orderNumber;
     }
 
     public Integer find(String bnNumber) throws SQLException {

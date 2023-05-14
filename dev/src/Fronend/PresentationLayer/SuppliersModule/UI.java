@@ -1,5 +1,6 @@
 package Fronend.PresentationLayer.SuppliersModule;
 
+import Backend.BusinessLayer.BusinessLayerUsage.Branch;
 import Backend.BusinessLayer.SuppliersModule.BankAccount;
 import Backend.BusinessLayer.SuppliersModule.DeliveryAgreements.DeliveryAgreement;
 import Backend.BusinessLayer.SuppliersModule.DeliveryAgreements.DeliveryByInvitation;
@@ -794,19 +795,19 @@ public class UI {
     }
 
     public void order(){
-        /*
+
         try {
-            Map<Integer, Integer> order = new HashMap<>();
+            Map<String, Integer> order = new HashMap<>();
             try {
                 while (true) {
                     System.out.println("enter product id to purchase or exit to submit");
                     String input = sc.nextLine();
                     if (input.equals("exit"))
                         break;
-                    int productId = Integer.parseInt(input);
+                    String catalogNumber = input;
                     System.out.println("enter amount to order");
                     int amount = Integer.parseInt(sc.nextLine());
-                    order.put(productId, amount);
+                    order.put(catalogNumber, amount);
                 }
             }
             catch (Exception e){
@@ -816,7 +817,7 @@ public class UI {
 //                Response<Map<String, Pair<Map<Integer, Integer>, Double>>> finalOrderResponse =
 //                        gson.fromJson(orderService.order(order), orderResponse);
             Response<Map<String, Pair<Map<Integer, Integer>, Double>>> finalOrderResponse =
-                    gson.fromJson(orderService.order(order), orderResponse);
+                    gson.fromJson(orderService.order(order, Branch.branch1), orderResponse);
             if(finalOrderResponse.getReturnValue() == null)
                 throw new RuntimeException(finalOrderResponse.getMsg());
             Map<String, Pair<Map<Integer, Integer>, Double>> finalOrder = finalOrderResponse.getReturnValue();
@@ -842,7 +843,7 @@ public class UI {
             System.out.println(e.getMessage());
         }
 
-         */
+
     }
     public void loadData(){
         System.out.println(gson.fromJson(supplierService.loadData(), Response.class).getMsg());

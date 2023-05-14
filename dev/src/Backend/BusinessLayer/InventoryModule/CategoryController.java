@@ -1,6 +1,7 @@
 package Backend.BusinessLayer.InventoryModule;
 
 import Backend.BusinessLayer.BusinessLayerUsage.Branch;
+import Backend.DataAccessLayer.InventoryModule.CategoryManagerMapper;
 
 import java.util.*;
 
@@ -9,8 +10,13 @@ public class CategoryController {
 
     //create the controller as Singleton
     private static CategoryController categoryController = null;
+    private CategoryManagerMapper categoryManagerMapper;
+
     private CategoryController() {
-        this.categories = new HashMap<Branch, Map<String,Category>>();}
+        categoryManagerMapper = CategoryManagerMapper.getInstance();
+        this.categories = categoryManagerMapper.getCached_categories();
+    }
+
     public static CategoryController CategoryController(){
         if(categoryController == null)
             categoryController = new CategoryController();

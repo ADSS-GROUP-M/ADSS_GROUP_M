@@ -12,12 +12,16 @@ public class CategoryManagerMapper{
     CategoryDataMapper categoryDataMapper;
     CategoryHierarchyDataMapper categoryHierarchyDataMapper;
     public static CategoryManagerMapper instance = null;
-    Map<Branch, Map<String, Category>> categories;
+    Map<String, Category> cached_categories;
 
     private CategoryManagerMapper(){
         categoryDataMapper = CategoryDataMapper.getInstance();
         categoryHierarchyDataMapper = CategoryHierarchyDataMapper.getInstance();
-
+        try{
+            cached_categories = categoryHierarchyDataMapper.initializedCache(categoryDataMapper.initializedCache());
+        } catch (SQLException e) {
+            //TODO: Handle the exception appropriately
+        }
     }
 
     public static CategoryManagerMapper getInstance(){
@@ -43,5 +47,9 @@ public class CategoryManagerMapper{
         } catch (SQLException e) {
             // TODO: Handle the exception appropriately
         }
+    }
+
+    public Map<String, Category> getCached_categories(){
+        return this.cached_categories;
     }
 }

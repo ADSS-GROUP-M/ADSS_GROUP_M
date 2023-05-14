@@ -15,7 +15,6 @@
       <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/CategoryDataMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/CategoryDataMapper.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/CategoryHierarchyDataMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/CategoryHierarchyDataMapper.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/CategoryManagerMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/CategoryManagerMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/ProductManagerMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/ProductManagerMapper.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

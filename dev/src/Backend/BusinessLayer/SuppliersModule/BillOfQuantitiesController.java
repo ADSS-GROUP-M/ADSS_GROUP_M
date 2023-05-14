@@ -84,7 +84,7 @@ public class BillOfQuantitiesController {
 
     public void removeProductDiscount(String bnNumber, String catalogNumber) throws SQLException, DalException {
         BillOfQuantities billOfQuantities = getBillOfQuantities(bnNumber);
-        getBillOfQuantities(bnNumber).removeProductDiscount(catalogNumber);
+        billOfQuantitiesDataMapper.removeProductDiscount(bnNumber, catalogNumber);
         billOfQuantities.removeProductDiscount(catalogNumber);
     }
 

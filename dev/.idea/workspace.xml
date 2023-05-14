@@ -9,11 +9,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e454f93c-4ee8-4f4b-9a14-eaaf36aa303c" name="Changes" comment="added functionality to BillOfQuantitiesDataMapper">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="e454f93c-4ee8-4f4b-9a14-eaaf36aa303c" name="Changes" comment="connect between BillOfQuantitiesController to BillOfQuantitiesDataMapper">
       <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/SuppliersModule/BillOfQuantitiesController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/BusinessLayer/SuppliersModule/BillOfQuantitiesController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/SuppliersModule/OrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/BusinessLayer/SuppliersModule/OrderController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/BillOfQuantitiesDataMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/BillOfQuantitiesDataMapper.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -341,7 +338,14 @@
       <option name="project" value="LOCAL" />
       <updated>1684058643048</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="connect between BillOfQuantitiesController to BillOfQuantitiesDataMapper">
+      <created>1684061048286</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1684061048286</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -393,7 +397,8 @@
     <MESSAGE value="added controllers" />
     <MESSAGE value="added services and adapt UI to it" />
     <MESSAGE value="added functionality to BillOfQuantitiesDataMapper" />
-    <option name="LAST_COMMIT_MESSAGE" value="added functionality to BillOfQuantitiesDataMapper" />
+    <MESSAGE value="connect between BillOfQuantitiesController to BillOfQuantitiesDataMapper" />
+    <option name="LAST_COMMIT_MESSAGE" value="connect between BillOfQuantitiesController to BillOfQuantitiesDataMapper" />
   </component>
   <component name="XDebuggerManager">
     <pin-to-top-manager>

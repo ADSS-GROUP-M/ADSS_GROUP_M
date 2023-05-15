@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class Supplier {
     private String name;
-    public String bnNumber;
+    private String bnNumber;
     private BankAccount bankAccount;
     private List<String> fields;
     private String paymentMethod;
@@ -17,30 +17,19 @@ public class Supplier {
      * maps between the email of the contact person and his contact info - name, phone number
      */
     private Map<String,Pair<String, String>> contactsInfo;
-    /***
-     * the agreement with the supplier
-     */
-    private Agreement agreement;
+
     /***
      * all the orders that have been ordered from the supplier
      */
     private List<Order> orderHistory;
     public Supplier(String name, String bnNumber, BankAccount bankAccount, String paymentMethod,
-                    List<String> fields, Map<String,Pair<String, String>> contactsInfo,
-                    List<Product> productList, DeliveryAgreement deliveryAgreement){
+                    List<String> fields, Map<String,Pair<String, String>> contactsInfo){
         this.name = name;
         this.bnNumber = bnNumber;
         this.bankAccount = bankAccount;
         this.fields = fields;
         this.contactsInfo = contactsInfo;
         this.paymentMethod = paymentMethod;
-        agreement = new Agreement(productList, deliveryAgreement);
-    }
-    public Supplier(String name, String bnNumber, BankAccount bankAccount, String paymentMethod,
-                    List<String> fields, Map<String,Pair<String, String>> contactsInfo,
-                    List<Product> productList, DeliveryAgreement deliveryAgreement, BillOfQuantities billOfQuantities){
-        this(name, bnNumber, bankAccount, paymentMethod, fields, contactsInfo, productList, deliveryAgreement);
-        agreement = new Agreement(productList, deliveryAgreement, billOfQuantities);
     }
 
     public void setName(String name){
@@ -55,11 +44,11 @@ public class Supplier {
         this.bnNumber = bnNumber;
     }
 
-    public void removeContactInfo(String contactsName) {
-        contactsInfo.remove(contactsName);
+    public void removeContactInfo(String contactsEmail) {
+        contactsInfo.remove(contactsEmail);
     }
     public void addContactInfo(String contactName, String email, String phoneNumber){
-        this.contactsInfo.put(email, new Pair<>(name, phoneNumber));
+        this.contactsInfo.put(email, new Pair<>(contactName, phoneNumber));
     }
 
     public void setContactsEmail(String email, String newEmail){
@@ -71,34 +60,17 @@ public class Supplier {
         contactsInfo.get(email).setSecond(phoneNumber);
     }
 
-
-
-    public Agreement getAgreement() {
-        return agreement;
-    }
-
-    public void addProduct(String name, String catalogNumber, double price, int numberOfUnits){
-        agreement.addProduct(new Product(name, catalogNumber, price, numberOfUnits));
-    }
-
     public void addField(String field){
         if(!fields.contains(field))
             fields.add(field);
     }
 
-    public boolean productExist(String catalogNumber){
-        return agreement.getProduct(catalogNumber) != null;
-    }
+
 
     public void removeField(String field){
         fields.remove(field);
     }
 
-    public void addOrder(Order order){
-        if(orderHistory == null)
-            orderHistory = new LinkedList<>();
-        orderHistory.add(order);
-    }
     public String getBnNumber(){
         return bnNumber;
     }
@@ -126,7 +98,7 @@ public class Supplier {
         String bankAccount = "BANK ACCOUNT:\n\t\t" + this.bankAccount.toString();
 
         String res = "SUPPLIER:\n\tNAME: " + name +"\n\tBN NUMBER: " + bnNumber + "\n\t" + bankAccount + "\n\t" + fields
-                + "\n\t" + contactsInfo + "\n\t" + "PAYMENT METHOD: " + paymentMethod +"\n\t" + agreement.toString();
+                + "\n\t" + contactsInfo + "\n\t" + "PAYMENT METHOD: " + paymentMethod +"\n\t";
         return res;
     }
 }

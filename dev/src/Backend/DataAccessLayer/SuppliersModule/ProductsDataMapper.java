@@ -76,7 +76,9 @@ public class ProductsDataMapper  extends AbstractDataMapper {
 
     public boolean isExists(String catalogNumber) throws SQLException {
         OfflineResultSet resultSet = sqlExecutor.executeRead(String.format("SELECT COUNT(*) as count FROM %s WHERE catalog_number = '%s'", tableName, catalogNumber));
-        return resultSet.getInt("count") > 0;
+        if(resultSet.next())
+            return resultSet.getInt("count") > 0;
+        return false;
     }
 
 //    public List<ProductDAO> getCachedProductsPairBranch() {

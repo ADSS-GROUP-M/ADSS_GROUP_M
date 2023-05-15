@@ -1,8 +1,6 @@
 import org.junit.jupiter.api.Test;
 import presentationLayer.DataGenerator;
 import presentationLayer.employeeModule.View.MenuManager;
-import presentationLayer.transportModule.TransportUI;
-import serviceLayer.ServiceFactory;
 
 @SuppressWarnings("NewClassNamingConvention")
 public class Main {
@@ -14,6 +12,6 @@ public class Main {
 
     @Test
     public void generate(){
-        DataGenerator.generateData();
+        DataGenerator.generateData("SuperLiDB.db");
     }
 }

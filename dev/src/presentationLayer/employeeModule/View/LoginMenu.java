@@ -48,7 +48,7 @@ public class LoginMenu implements Menu {
         else if (command[0].equals("generate_data") && command.length == 1) {
             // Call the generate_data function
             System.out.println("Generating data... this may take a while....");
-            output = DataGenerator.generateData();
+            output = DataGenerator.generateData("SuperLiDB.db");
         }
         else if (command[0].equals("login")) {
             if (command.length != 3) {

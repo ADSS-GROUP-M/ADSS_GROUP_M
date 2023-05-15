@@ -178,7 +178,7 @@ public class SitesController {
 
         sitesRoutesController.addAllRouteObjectsFirstTimeLoad(_sites);
 
-        for(Site site : sites){
+        for(Site site : _sites){
             if(site.siteType() == Site.SiteType.BRANCH){
                 employeesService.createBranch(TRANSPORT_MANAGER_USERNAME,site.name());
             }

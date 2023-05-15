@@ -235,8 +235,8 @@ class TransportsControllerTest {
         try{
             transportController = spy(transportController);
             initializeMocksToPassTransportValidation();
-            when(transportsDAO.exists(Transport.getLookupObject(TRANSPORT_ID))).thenReturn(true);
-            when(deliveryRoutesDAO.select(DeliveryRoute.getLookupObject(TRANSPORT_ID))).thenReturn(transport.deliveryRoute());
+            when(transportsDAO.exists(Transport.getLookupObject(transport.id()))).thenReturn(true);
+            when(deliveryRoutesDAO.select(DeliveryRoute.getLookupObject(transport.id()))).thenReturn(transport.deliveryRoute());
             transportController.initializeEstimatedArrivalTimes(transport);
             transport.deliveryRoute().overrideArrivalTime(destination2.name(), LocalTime.of(16,0));
             Mockito.doThrow(new RuntimeException("Entered arrival time init when not supposed to")).when(transportController).initializeEstimatedArrivalTimes(transport);

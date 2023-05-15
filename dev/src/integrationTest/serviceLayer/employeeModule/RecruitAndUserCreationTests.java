@@ -57,11 +57,7 @@ public class RecruitAndUserCreationTests {
     }
 
     private void initUserData(UserService us, UserController uc) {
-        try {
-            DataGenerator.initializeUserData(us,uc);
-        } catch (EmployeeException e) {
-            fail(e.getMessage(),e);
-        }
+        us.initializeManagers();
     }
 
     private void initBranchData(SitesController sc) {

@@ -6,7 +6,6 @@ import businessLayer.employeeModule.Controllers.UserController;
 import businessLayer.employeeModule.Role;
 import businessLayer.transportModule.SitesController;
 import dataAccessLayer.DalFactory;
-import exceptions.DalException;
 import exceptions.EmployeeException;
 import exceptions.TransportException;
 import objects.transportObjects.*;
@@ -31,9 +30,9 @@ import static serviceLayer.employeeModule.Services.UserService.HR_MANAGER_USERNA
 public class DataGenerator {
 
     private static final LocalDate EMPLOYMENT_DATE = LocalDate.of(2020,2,2);
-    public static final LocalDate SHIFT_DATE = LocalDate.of(2023,2,2);
-    public static UserService us;
-    public static EmployeesService es;
+    private static final LocalDate SHIFT_DATE = LocalDate.of(2023,2,2);
+    private static UserService us;
+    private static EmployeesService es;
     private static Driver driver1;
     private static Driver driver2;
     private static Driver driver3;
@@ -65,15 +64,14 @@ public class DataGenerator {
     private static Site supplier5;
     private static Site logistical1;
 
-    public static String generateData(){
+    public static String generateData(String dbName){
         try{
-            deleteData();
-            ServiceFactory factory = new ServiceFactory();
-            UserController uc = factory.businessFactory().userController();
+            DalFactory.clearDB(dbName);
+            ServiceFactory factory = new ServiceFactory(dbName);
             us = factory.userService();
             es = factory.employeesService();
             ItemListsService ils = factory.itemListsService();
-            initializeUserData(us,uc);
+            us.initializeManagers();
             generateSites(factory.businessFactory().sitesController());
             generateItemLists(ils);
             generateTrucks(factory.resourceManagementService());
@@ -94,15 +92,11 @@ public class DataGenerator {
             initializeShiftDay(morningDrivers, eveningDrivers, SHIFT_DATE);
             assignStorekeepers(SHIFT_DATE);
             generateTransports(factory.transportsService());
-        } catch (TransportException | EmployeeException e) {
+        } catch (TransportException e) {
             return "\n"+e.getMessage()+"\n";
         }
 
         return "\nGenerated data successfully.";
-    }
-
-    public static void deleteData(){
-        DalFactory.clearDB("SuperLiDB.db");
     }
 
     public static void generateTrucks(ResourceManagementService rms) throws TransportException {
@@ -224,11 +218,11 @@ public class DataGenerator {
         controller.addAllSitesFirstTimeSystemLoad(sites);
     }
 
-    public static void initializeUserData(UserService us, UserController uc) throws EmployeeException {
-        uc.createManagerUser(HR_MANAGER_USERNAME, "123");
-        us.createUser(HR_MANAGER_USERNAME, UserService.TRANSPORT_MANAGER_USERNAME, "123");
-        us.authorizeUser(HR_MANAGER_USERNAME, UserService.TRANSPORT_MANAGER_USERNAME, Authorization.TransportManager.name());
-    }
+//    public static void initializeUserData(UserService us, UserController uc) throws EmployeeException {
+//        uc.createManagerUser(HR_MANAGER_USERNAME, "123");
+//        us.createUser(HR_MANAGER_USERNAME, UserService.TRANSPORT_MANAGER_USERNAME, "123");
+//        us.authorizeUser(HR_MANAGER_USERNAME, UserService.TRANSPORT_MANAGER_USERNAME, Authorization.TransportManager.name());
+//    }
 
     public static void initializeBranches(List<Driver> drivers) {
         initializeHeadquarters(drivers);
@@ -279,9 +273,9 @@ public class DataGenerator {
         for (int i = 2; i <= 9; i++) {
             String branchId = "branch"+i;
             es.createShiftDay(HR_MANAGER_USERNAME,branchId,date);
-            es.setShiftNeededAmount(HR_MANAGER_USERNAME,Branch.HEADQUARTERS_ID,date,SShiftType.Morning,"Cashier",0);
-            es.setShiftNeededAmount(HR_MANAGER_USERNAME,Branch.HEADQUARTERS_ID,date,SShiftType.Morning,"GeneralWorker",0);
-            es.setShiftNeededAmount(HR_MANAGER_USERNAME,Branch.HEADQUARTERS_ID,date,SShiftType.Morning,"Storekeeper",0);
+            es.setShiftNeededAmount(HR_MANAGER_USERNAME,branchId,date,SShiftType.Morning,"Cashier",0);
+            es.setShiftNeededAmount(HR_MANAGER_USERNAME,branchId,date,SShiftType.Morning,"GeneralWorker",0);
+            es.setShiftNeededAmount(HR_MANAGER_USERNAME,branchId,date,SShiftType.Morning,"Storekeeper",0);
             // Only one ShiftManager is still necessary to fully approve the shift at the end of the employees assignments
         }
 

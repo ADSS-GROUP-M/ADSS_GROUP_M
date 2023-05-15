@@ -3,6 +3,7 @@ package serviceLayer.employeeModule.Services;
 import businessLayer.employeeModule.Authorization;
 import businessLayer.employeeModule.Controllers.UserController;
 import businessLayer.employeeModule.User;
+import exceptions.EmployeeException;
 import utils.Response;
 
 import java.util.List;
@@ -18,6 +19,14 @@ public class UserService {
 
     public UserService(UserController userController) {
         this.userController = userController;
+    }
+
+    public void initializeManagers(){
+        try {
+            userController.createManagerUser(HR_MANAGER_USERNAME, "123");
+        } catch (EmployeeException ignored) {}
+        createUser(HR_MANAGER_USERNAME, UserService.TRANSPORT_MANAGER_USERNAME, "123");
+        authorizeUser(HR_MANAGER_USERNAME, UserService.TRANSPORT_MANAGER_USERNAME, Authorization.TransportManager.name());
     }
 
     public String login(String username, String password) {

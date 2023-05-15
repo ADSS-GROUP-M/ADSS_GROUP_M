@@ -189,7 +189,8 @@ public class TransportsManagement {
             System.out.println("=========================================");
             System.out.println("Please select an option:");
             System.out.println("1. Update driver");
-            System.out.println("2. Update truck");
+
+        System.out.println("2. Update truck");
             System.out.println("3. Update route");
             System.out.println("5. Update weight");
             System.out.println("6. Set manual arrival times");

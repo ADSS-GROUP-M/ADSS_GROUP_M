@@ -9,10 +9,7 @@ import objects.transportObjects.Transport;
 
 import java.sql.SQLException;
 import java.time.LocalTime;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
 
 public class DeliveryRoutesDAO extends ManyToManyDAO<DeliveryRoute> {
 
@@ -126,6 +123,12 @@ public class DeliveryRoutesDAO extends ManyToManyDAO<DeliveryRoute> {
      */
     @Override
     public void update(DeliveryRoute object) throws DalException {
+
+        if(exists(object) == false){
+            throw new DalException("No delivery route with transport id "
+                    + object.transportId() + " was found");
+        }
+
         String query = buildDeleteQuery(object) + buildInsertQuery(object);
         try {
             if(cursor.executeWrite(query) == 0){
@@ -199,4 +202,5 @@ public class DeliveryRoutesDAO extends ManyToManyDAO<DeliveryRoute> {
                 TABLE_NAME,
                 object.transportId());
     }
-}
+
+   }

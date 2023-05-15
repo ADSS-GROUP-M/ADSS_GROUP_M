@@ -146,7 +146,12 @@ public class TransportsController {
         Transport toUpdate = new Transport(id, newTransport);
         try {
             dao.update(toUpdate);
-            drDao.update(toUpdate.deliveryRoute());
+
+            DeliveryRoute oldRoute = drDao.select(DeliveryRoute.getLookupObject(id));
+            if(oldRoute.deepEquals(oldRoute) == false){
+                drDao.update(toUpdate.deliveryRoute());
+            }
+
         } catch (DalException e) {
             throw new TransportException(e.getMessage(),e);
         }

@@ -26,7 +26,7 @@ public class ItemListsService {
         } catch (TransportException e) {
             return Response.getErrorResponse(e).toJson();
         }
-        return new Response("Item list added successfully with id"+id, true, added).toJson();
+        return new Response("Item list added successfully with id "+added.id(), true, added).toJson();
     }
 
     /**

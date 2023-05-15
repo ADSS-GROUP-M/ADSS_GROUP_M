@@ -112,4 +112,12 @@ public class DeliveryRoute {
     public int hashCode() {
         return Objects.hash(transportId);
     }
+
+
+    public boolean deepEquals(DeliveryRoute other) {
+        return this.equals(other) &&
+                this.route.equals(other.route) &&
+                this.destinations_itemListIds.equals(other.destinations_itemListIds) &&
+                this.estimatedArrivalTimes.equals(other.estimatedArrivalTimes);
+    }
 }

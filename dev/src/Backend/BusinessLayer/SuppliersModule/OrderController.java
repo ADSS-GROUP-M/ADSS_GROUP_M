@@ -322,6 +322,15 @@ public class OrderController {
         }
     }
 
+    private Map<String, Map<String, Integer>> mapSupplierQuantitiesByTime(Map<String, Integer> order, List<Supplier> suppliers){
+        Map<String, Map<String, Integer>> productsToSuppliers = new HashMap<>();
+        for(Map.Entry<String, Integer> product : order.entrySet()){
+            String catalogNumber = product.getKey();
+            int quantity = product.getValue();
+        }
+        return null;
+    }
+
     private Map<String, Integer> mapSupplierQuantitiesByTime(String catalogNumber, int quantity, List<Supplier> suppliersToUse) throws SQLException {
         if(quantity <= 0)
             return new HashMap<>();

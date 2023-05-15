@@ -17,11 +17,11 @@ Max   - 208850529
 
 1) **Bing Maps REST services:** used to calculate travel times between sites in order to approximate arrival times for transport destinations (not a library, but an external dependency)
 
-2) **Gson:** Used for serializing jsons
+2) **Gson:** used for serializing jsons
 
-3) **Junit:** Used for unit testing
+3) **Junit:** used for unit testing
 
-4) **Mockito:** Used for unit testing
+4) **Mockito:** used for unit testing
 
 5) **javafx.base:** used for predefined collections such as Pair<T,K>
 

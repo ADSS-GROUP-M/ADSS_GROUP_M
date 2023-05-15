@@ -27,9 +27,11 @@ public class StoreProductDiscountDataMapper extends AbstractDataMapper {
     }
     public void insert(String catalog_number, String start_date, String end_date, double discount, String branch) throws SQLException {
         try {
-            String columnsString = String.join(", ", columns);
-            sqlExecutor.executeWrite(String.format("INSERT INTO %s (%s) VALUES('%s', '%s', '%s', '%s')",
-                    tableName, columnsString, catalog_number, start_date, end_date, discount, branch));
+            if(!isExists(catalog_number, start_date, end_date, discount, branch)){
+                String columnsString = String.join(", ", columns);
+                sqlExecutor.executeWrite(String.format("INSERT INTO %s (%s) VALUES('%s', '%s', '%s', '%s')",
+                        tableName, columnsString, catalog_number, start_date, end_date, discount, branch));
+            }
         }
         catch (SQLException e){
             //TODO: Handle the exception appropriately
@@ -59,6 +61,14 @@ public class StoreProductDiscountDataMapper extends AbstractDataMapper {
             cachedDiscount.get(branch).get(catalog_number).add(productStoreDiscount);
         }
         return cachedDiscount;
+    }
+
+    public boolean isExists(String catalog_number, String start_date, String end_date, double discount, String branch) throws SQLException {
+        OfflineResultSet resultSet = sqlExecutor.executeRead(String.format("SELECT COUNT(*) as count FROM %s WHERE catalog_number = '%s' AND start_date = '%s' AND end_date = '%s' AND discount = %f AND branch = '%s'", tableName, catalog_number, start_date, end_date,
+        discount, branch));
+        if (resultSet.next())
+            return resultSet.getInt("count") > 0;
+        return false;
     }
 
 

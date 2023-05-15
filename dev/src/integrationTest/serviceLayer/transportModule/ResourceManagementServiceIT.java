@@ -10,7 +10,9 @@ import objects.transportObjects.Site;
 import objects.transportObjects.Truck;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledIf;
 import serviceLayer.ServiceFactory;
 import utils.ErrorCollection;
 import utils.Response;
@@ -308,117 +310,92 @@ class ResourceManagementServiceIT {
         }
     }
 
-//    @Test
-//    void addSite() {
-//        Site site3 = new Site("TODO: INSERT NAME HERE", "name a", "zone a", "123456","bob", Site.SiteType.BRANCH);
-//
-//        String json1 = rms.addSite(site3.toJson());
-//        Response response1 = Response.fromJson(json1);
-//        assertTrue(response1.success(),response1.message());
-//
-//        String json2 = rms.getSite(Site.getLookupObject(site3.address()).toJson());
-//        Response response2 = Response.fromJson(json2);
-//        assertTrue(response2.success(),response2.message());
-//        Site siteToCheck = response2.data(Site.class);
-//        assertEquals(site3.transportZone(), siteToCheck.transportZone());
-//        assertEquals(site3.address(), siteToCheck.address());
-//        assertEquals(site3.phoneNumber(), siteToCheck.phoneNumber());
-//        assertEquals(site3.contactName(), siteToCheck.contactName());
-//    }
-//
-//    @Test
-//    void addSiteAlreadyExists(){
-//        String json1 = rms.addSite(site.toJson());
-//        Response response1 = Response.fromJson(json1);
-//        assertFalse(response1.success());
-//    }
-//
-//    @Test
-//    void removeSite() {
-//        String json1 = rms.removeSite(site.toJson());
-//        Response response1 = Response.fromJson(json1);
-//        assertTrue(response1.success(),response1.message());
-//
-//        String json2 = rms.getSite(Site.getLookupObject(site.name()).toJson());
-//        Response response2 = Response.fromJson(json2);
-//        assertFalse(response2.success());
-//    }
-//
-//    @Test
-//    void removeSiteDoesNotExist(){
-//        Site site3 = new Site("TODO: INSERT NAME HERE", "name a", "zone a", "123456","bob", Site.SiteType.BRANCH);
-//        String json1 = rms.removeSite(site3.toJson());
-//        Response response1 = Response.fromJson(json1);
-//        assertFalse(response1.success());
-//    }
-//
-//    @Test
-//    void updateSite() {
-//        Site siteUpdate = new Site("TODO: INSERT NAME HERE", site.address(), site.transportZone(), "123456981251","new bob", Site.SiteType.BRANCH);
-//
-//        String json1 = rms.updateSite(siteUpdate.toJson());
-//        Response response1 = Response.fromJson(json1);
-//        assertTrue(response1.success(),response1.message());
-//
-//        String json2 = rms.getSite(Site.getLookupObject(site.name()).toJson());
-//        Response response2 = Response.fromJson(json2);
-//        assertTrue(response2.success(),response2.message());
-//        Site siteToCheck = response2.data(Site.class);
-//        assertEquals(siteUpdate.transportZone(), siteToCheck.transportZone());
-//        assertEquals(siteUpdate.address(), siteToCheck.address());
-//        assertEquals(siteUpdate.phoneNumber(), siteToCheck.phoneNumber());
-//        assertEquals(siteUpdate.contactName(), siteToCheck.contactName());
-//        assertEquals(siteUpdate.siteType(), siteToCheck.siteType());
-//    }
-//
-//    @Test
-//    void updateSiteDoesNotExist(){
-//        Site site3 = new Site("TODO: INSERT NAME HERE", "name a", "zone a", "123456","bob", Site.SiteType.BRANCH);
-//        String json1 = rms.updateSite(site3.toJson());
-//        Response response1 = Response.fromJson(json1);
-//        assertFalse(response1.success());
-//    }
-//
-//    @Test
-//    void getSite() {
-//        String responseJson = rms.getSite(Site.getLookupObject(site.name()).toJson());
-//        Response response = Response.fromJson(responseJson);
-//        assertTrue(response.success(),response.message());
-//        Site siteToCheck = response.data(Site.class);
-//        assertEquals(site.transportZone(), siteToCheck.transportZone());
-//        assertEquals(site.address(), siteToCheck.address());
-//        assertEquals(site.phoneNumber(), siteToCheck.phoneNumber());
-//        assertEquals(site.contactName(), siteToCheck.contactName());
-//        assertEquals(site.siteType(), siteToCheck.siteType());
-//    }
-//
-//    @Test
-//    void getSiteDoesNotExist(){
-//        Site site3 = Site.getLookupObject("name a");
-//        String responseJson = rms.getSite(site3.toJson());
-//        Response response = Response.fromJson(responseJson);
-//        assertFalse(response.success());
-//    }
-//
-//    @Test
-//    void getAllSites() {
-//        //generate more sites
-//        for (int i = 0; i < 20; i++) {
-//            Site site = new Site("TODO: INSERT NAME HERE", "name" + i, "abc" + i, "123456","bob", Site.SiteType.BRANCH);
-//            rms.addSite(site.toJson());
-//        }
-//
-//        String responseJson = rms.getAllSites();
-//        Response response = Response.fromJson(responseJson);
-//        assertTrue(response.success(),response.message());
-//
-//        assertEquals(21, Site.listFromJson(response.data()).size());
-//    }
+    @Test
+    void addSite() {
+        assertSuccessValue(rms.addSite(site.toJson()),true);
+        Response response = assertSuccessValue(rms.getSite(Site.getLookupObject(site.name()).toJson()),true);
+        Site fetched = Site.fromJson(response.data());
+        assertSiteDeepEquals(site, fetched);
+    }
 
-    private void assertItemListDeepEquals(ItemList itemList1, ItemList itemList2) {
-        assertEquals(itemList1.id(), itemList2.id());
-        assertEquals(itemList1.load(), itemList2.load());
-        assertEquals(itemList1.unload(), itemList2.unload());
+    @Test
+    void addSiteAlreadyExists(){
+        //set up
+        assertSuccessValue(rms.addSite(site.toJson()),true);
+
+        //test
+        assertSuccessValue(rms.addSite(site.toJson()),false);
+    }
+
+    @Disabled
+    @Deprecated
+    void removeSite() {
+        //set up
+        assertSuccessValue(rms.addSite(site.toJson()),true);
+
+        //test
+        assertSuccessValue(rms.removeSite(site.toJson()),true);
+        assertSuccessValue(rms.getSite(Site.getLookupObject(site.name()).toJson()),false);
+    }
+
+    @Disabled
+    @Deprecated
+    void removeSiteDoesNotExist(){
+        String lookupObject = Site.getLookupObject("Some made up id").toJson();
+        assertSuccessValue(rms.removeSite(lookupObject),false);
+    }
+
+    @Test
+    void updateSite() {
+        //set up
+        assertSuccessValue(rms.addSite(site.toJson()),true);
+
+        //test
+        Site siteUpdate = new Site(site.name(), site.address(), site.transportZone(), "123456","bob", Site.SiteType.SUPPLIER);
+        assertSuccessValue(rms.updateSite(siteUpdate.toJson()),true);
+        Response response = assertSuccessValue(rms.getSite(Site.getLookupObject(site.name()).toJson()),true);
+        Site fetched = Site.fromJson(response.data());
+        assertSiteDeepEquals(siteUpdate, fetched);
+    }
+
+    @Test
+    void updateSiteDoesNotExist(){
+        String lookupObject = Site.getLookupObject("Some made up id").toJson();
+        assertSuccessValue(rms.updateSite(lookupObject),false);
+    }
+
+    @Test
+    void getSite() {
+        //set up
+        assertSuccessValue(rms.addSite(site.toJson()),true);
+
+        //test
+        Response response = assertSuccessValue(rms.getSite(Site.getLookupObject(site.name()).toJson()),true);
+        Site fetched = Site.fromJson(response.data());
+        assertSiteDeepEquals(site, fetched);
+    }
+
+    @Test
+    void getSiteDoesNotExist(){
+        String lookupObject = Site.getLookupObject("Some made up id").toJson();
+        assertSuccessValue(rms.getSite(lookupObject),false);
+    }
+
+    @Test
+    void getAllSites() {
+        //generate another site
+        Site site2 = new Site("site2", "19503 s normandie ave, torrance, ca 90501, united states", "transportZone2", "123456","bob", Site.SiteType.SUPPLIER);
+        List<Site> sites = List.of(site, site2);
+        for (Site site : sites) {
+            assertSuccessValue(rms.addSite(site.toJson()),true);
+        }
+
+        Response response = assertSuccessValue(rms.getAllSites(),true);
+        List<Site> fetched = Site.listFromJson(response.data());
+        assertEquals(sites.size(), fetched.size());
+        for(int i = 0; i < sites.size(); i++){
+            assertSiteDeepEquals(sites.get(i), fetched.get(i));
+        }
     }
 
     private void assertDriverDeepEquals(Driver driver1, Driver driver2) {

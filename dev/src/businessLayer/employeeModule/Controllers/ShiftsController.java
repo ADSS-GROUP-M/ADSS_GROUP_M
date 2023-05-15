@@ -35,7 +35,7 @@ public class ShiftsController {
         try {
             shift = shiftDAO.select(branchId, shiftDate,shiftType);
         } catch (DalException e) {
-            throw new EmployeeException(e);
+            throw new EmployeeException(e.getMessage(),e);
         }
         if (shift == null) {
             throw new EmployeeException("The shift " + shiftDate + shiftType + " does not exist in the branch " + branchId + ".");
@@ -57,7 +57,7 @@ public class ShiftsController {
         try {
             shiftDAO.insert(shift);
         } catch (DalException e) {
-            throw new EmployeeException(e);
+            throw new EmployeeException(e.getMessage(),e);
         }
         return shift;
     }
@@ -83,7 +83,7 @@ public class ShiftsController {
         try {
             shiftDAO.delete(shift);
         } catch (DalException e) {
-            throw new EmployeeException(e);
+            throw new EmployeeException(e.getMessage(),e);
         }
     }
 
@@ -113,7 +113,7 @@ public class ShiftsController {
         try {
             shiftDAO.update(shift);
         } catch (DalException e) {
-            throw new EmployeeException(e);
+            throw new EmployeeException(e.getMessage(),e);
         }
     }
 
@@ -138,7 +138,7 @@ public class ShiftsController {
         try {
             shiftDAO.update(shift);
         } catch (DalException e) {
-            throw new EmployeeException(e);
+            throw new EmployeeException(e.getMessage(),e);
         }
     }
 
@@ -151,7 +151,7 @@ public class ShiftsController {
         try {
             shiftDAO.update(shift);
         } catch (DalException e) {
-            throw new EmployeeException(e);
+            throw new EmployeeException(e.getMessage(),e);
         }
     }
 
@@ -183,7 +183,7 @@ public class ShiftsController {
         try {
             shiftDAO.update(shift);
         } catch (DalException e) {
-            throw new EmployeeException(e);
+            throw new EmployeeException(e.getMessage(),e);
         }
     }
 
@@ -225,7 +225,7 @@ public class ShiftsController {
                 }
             }
         } catch (DalException e) {
-            throw new EmployeeException(e);
+            throw new EmployeeException(e.getMessage(),e);
         }
         return result;
     }
@@ -262,7 +262,7 @@ public class ShiftsController {
                 }
             }
         } catch (DalException e) {
-            throw new EmployeeException(e);
+            throw new EmployeeException(e.getMessage(),e);
         }
         return result;
     }
@@ -273,7 +273,7 @@ public class ShiftsController {
         try {
             shiftDAO.update(shift);
         } catch (DalException e) {
-            throw new EmployeeException(e);
+            throw new EmployeeException(e.getMessage(),e);
         }
     }
 
@@ -283,7 +283,7 @@ public class ShiftsController {
         try {
             shiftDAO.update(shift);
         } catch (DalException e) {
-            throw new EmployeeException(e);
+            throw new EmployeeException(e.getMessage(),e);
         }
     }
 
@@ -293,7 +293,7 @@ public class ShiftsController {
         try {
             shiftDAO.update(shift);
         } catch (DalException e) {
-            throw new EmployeeException(e);
+            throw new EmployeeException(e.getMessage(),e);
         }
     }
 }

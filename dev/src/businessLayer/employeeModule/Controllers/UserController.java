@@ -29,7 +29,7 @@ public class UserController {
         try {
             success = user.login(password);
         } catch (Exception e) {
-            throw new EmployeeException(e);
+            throw new EmployeeException(e.getMessage(),e);
         }
         if(!success)
             throw new EmployeeException("Invalid password.");
@@ -44,7 +44,7 @@ public class UserController {
         try {
             user = userDAO.select(username);
         } catch (DalException e) {
-            throw new EmployeeException(e);
+            throw new EmployeeException(e.getMessage(),e);
         }
         if (user == null)
             throw new EmployeeException("The given username doesn't exist.");
@@ -56,7 +56,7 @@ public class UserController {
         try {
             userDAO.insert(user);
         } catch (DalException e) {
-            throw new EmployeeException(e);
+            throw new EmployeeException(e.getMessage(),e);
         }
     }
 
@@ -65,7 +65,7 @@ public class UserController {
         try {
             userDAO.insert(user);
         } catch (DalException e) {
-            throw new EmployeeException(e);
+            throw new EmployeeException(e.getMessage(),e);
         }
     }
 
@@ -86,7 +86,7 @@ public class UserController {
             user.authorize(auth);
             userDAO.update(user);
         } catch (DalException e) {
-            throw new EmployeeException(e);
+            throw new EmployeeException(e.getMessage(),e);
         }
     }
 

@@ -1,263 +1,436 @@
-//package serviceLayer.transportModule;
-//
-//import businessLayer.employeeModule.Branch;
-//import dataAccessLayer.DalFactory;
-//import objects.transportObjects.*;
-//import org.junit.jupiter.api.AfterEach;
-//import org.junit.jupiter.api.BeforeEach;
-//import org.junit.jupiter.api.Test;
-//import serviceLayer.ServiceFactory;
-//import serviceLayer.employeeModule.Objects.SShiftType;
-//import serviceLayer.employeeModule.Services.EmployeesService;
-//import serviceLayer.employeeModule.Services.UserService;
-//import utils.JsonUtils;
-//import utils.Response;
-//
-//import java.time.LocalDate;
-//import java.time.LocalDateTime;
-//import java.time.LocalTime;
-//import java.util.ArrayList;
-//import java.util.HashMap;
-//import java.util.LinkedList;
-//import java.util.List;
-//
-//import static dataAccessLayer.DalFactory.TESTING_DB_NAME;
-//import static org.junit.jupiter.api.Assertions.*;
-//import static serviceLayer.employeeModule.Services.UserService.HR_MANAGER_USERNAME;
-//
-//class TransportsServiceIT {
-//
-//    private Transport transport;
-//    private TransportsService ts;
-//    private EmployeesService es;
-//    private UserService us;
-//    private ItemListsService ils;
-//    private ResourceManagementService rms;
-//    private Site source;
-//    private Site dest1;
-//    private Site dest2;
-//
-//    @AfterEach
-//    void tearDown() {
-//        DalFactory.clearTestDB();
-//    }
-//
-//    @BeforeEach
-//    void setUp() {
-//        DalFactory.clearTestDB();
-//        ServiceFactory factory = new ServiceFactory(TESTING_DB_NAME);
-//        ts = factory.transportsService();
-//        ils = factory.itemListsService();
-//        rms = factory.resourceManagementService();
-//        es = factory.employeesService();
-//        us = factory.userService();
-//
-//        branch1 = new Site("branch1", "14441 s inglewood ave, hawthorne, ca 90250, united states", "zone1", "111-111-1111", "John Smith", Site.SiteType.LOGISTICAL_CENTER, 0, 0);
-//        branch2 = new Site("branch2", "19503 s normandie ave, torrance, ca 90501, united states", "zone1", "222-222-2222", "Jane Doe", Site.SiteType.SUPPLIER, 0, 0);
-//        branch3 = new Site("branch3", "22015 hawthorne blvd, torrance, ca 90503, united states", "zone1", "333-333-3333", "Bob Johnson", Site.SiteType.SUPPLIER, 0, 0);
-//        Driver driver1 = new Driver("123", "megan smith", Driver.LicenseType.C3);
-//        Truck truck1 = new Truck("abc123", "ford", 1500, 10000, Truck.CoolingCapacity.FROZEN);
-//        HashMap<String, Integer> load1 = new HashMap<>();
-//        load1.put("shirts", 20);
-//        load1.put("pants", 15);
-//        load1.put("socks", 30);
-//        HashMap<String, Integer> unload1 = new HashMap<>();
-//        unload1.put("jackets", 10);
-//        unload1.put("hats", 5);
-//        unload1.put("gloves", 20);
-//        ItemList itemList1 = new ItemList(load1, unload1);
-//
-//        String json = ils.addItemList(itemList1.toJson());
-//        int id = Response.fromJson(json).dataToInt();
-//        itemList1 = itemList1.newId(id);
-//
-//        initEmployeesModuleTestData();
-//        rms.addDriver(driver1.toJson()); // Should probably be removed if the services are fully integrated, it should create the driver automatically when certifying a driver employee.
-//        rms.addTruck(truck1.toJson());
-//        rms.addSite(site1.toJson());
-//        initBranchSite1();
-//        rms.addSite(site2.toJson());
-//
-//        HashMap<String,Integer> hm = new HashMap<>();
-//        hm.put(site2.address(), itemList1.id());
-//
-//        Transport transportToAdd = new Transport(
-//                site1.address(),
-//                new LinkedList<>(List.of(site2.address())),
-//                hm,
-//                driver1.id(),
-//                truck1.id(),
-//                LocalDateTime.of(2020, 1, 1, 0, 0),
-//                100
-//        );
-//        String json2 = ts.addTransport(transportToAdd.toJson());
-//        Response response = Response.fromJson(json2);
-//        if(response.success() == false){
-//            fail("Setup failed:\n" + response.message() + "\ncause: " + response.data());
-//        } else {
-//            int _id = response.dataToInt();
-//            transport = fetchAddedTransport(_id);
-//        }
-//    }
-//
-//    @Test
-//    void addTransport() {
-//
-//    }
-//
-//    @Test
-//    void addTransportPredefinedId(){
-//
-//    }
-//
-//    @Test
-//    void updateTransport() {
-//
-//    }
-//
-//    @Test
-//    void updateTransportDoesNotExist(){
-//
-//    }
-//
-//    @Test
-//    void removeTransport() {
-//
-//    }
-//
-//    @Test
-//    void removeTransportDoesNotExist(){
-//
-//    }
-//
-//    @Test
-//    void getTransport() {
-//
-//    }
-//
-//    @Test
-//    void getTransportDoesNotExist(){
-//
-//    }
-//
-//    @Test
-//    void getAllTransports() {
-//
-//    }
-//
-//    @Test
-//    void createTransportWithTooMuchWeight(){
-//
-//    }
-//
-//    @Test
-//    void createTransportWithBadLicense(){
-//
-//    }
-//
-//    @Test
-//    void createTransportWithBadLicenseAndTooMuchWeight(){
-//
-//    }
-//    @Test
-//    void createTransportEverythingDoesNotExist(){
-//
-//    }
-//
-//    String driverId1 = "123", driverId2 = "12345";
-//
-//    String storekeeperId1 = "126", storekeeperId2 = "127", storekeeperId3 = "128", storekeeperId4 = "129";
-//    String HQAddress = "1", updatedBranchDestination = "123 main st UPDATED", site1Address = "123 main st";
-//    LocalDate shiftDate = LocalDate.of(2020, 1, 1);
-//    private void initEmployeesModuleTestData() {
-//        // Used for testing Employees module integration:
-//        // Creating the test branch and shifts, recruiting and certifying the employees
-////        es.createData();
-//        es.updateBranchWorkingHours("admin123",HQAddress, LocalTime.of(0,0),LocalTime.of(14,0),LocalTime.of(14,0),LocalTime.of(23,0));
-//        es.createWeekShifts("admin123",HQAddress,shiftDate);
-//        es.setShiftNeededAmount("admin123",HQAddress,shiftDate,SShiftType.Morning,"Driver",1);
-//        es.setShiftNeededAmount(HR_MANAGER_USERNAME,HQAddress,shiftDate,SShiftType.Morning,"Cashier",0);
-//        es.setShiftNeededAmount(HR_MANAGER_USERNAME,HQAddress,shiftDate,SShiftType.Morning,"GeneralWorker",0);
-//        es.setShiftNeededAmount(HR_MANAGER_USERNAME,HQAddress,shiftDate,SShiftType.Morning,"Storekeeper",0);
-//        es.setShiftNeededAmount(HR_MANAGER_USERNAME,HQAddress,shiftDate,SShiftType.Morning,"ShiftManager",0);
-//
-//        es.recruitEmployee("admin123", HQAddress, "megan smith", driverId1,"Bank01",15, LocalDate.now(),"","");
-//        es.recruitEmployee("admin123", HQAddress, "name", driverId2,"Bank02",15, LocalDate.now(),"","");
-//        es.certifyEmployee("admin123",driverId1,"Driver"); // This call should probably be responsible for calling the rms.addDriver method that adds the driver, when executed normally through the HR Manager Menu (Employees Module CLI).
-//        es.certifyEmployee("admin123",driverId2,"Driver"); // This call should probably be responsible for calling the rms.addDriver method that adds the driver, when executed normally through the HR Manager Menu (Employees Module CLI).
-//        es.requestShift(driverId1,HQAddress,shiftDate,SShiftType.Morning,"Driver");
-//        es.requestShift(driverId2,HQAddress,shiftDate,SShiftType.Morning,"Driver");
-//        // Assigning the employees to the relevant shifts.
-//        es.setShiftEmployees("admin123",HQAddress,shiftDate, SShiftType.Morning,"Driver",new ArrayList<>(){{add(driverId1);add(driverId2);}});
-//        es.approveShift("admin123",HQAddress,shiftDate, SShiftType.Morning);
-//    }
-//
-//    private void initBranchSite1() {
-//        es.updateBranchWorkingHours("admin123",site1Address, LocalTime.of(0,0),LocalTime.of(14,0),LocalTime.of(14,0),LocalTime.of(23,0));
-//        es.createWeekShifts("admin123",site1Address,shiftDate);
-//        es.setShiftNeededAmount(HR_MANAGER_USERNAME, site1Address,shiftDate,SShiftType.Morning,"Cashier",0);
-//        es.setShiftNeededAmount(HR_MANAGER_USERNAME,site1Address,shiftDate,SShiftType.Morning,"GeneralWorker",0);
-//        es.setShiftNeededAmount(HR_MANAGER_USERNAME,site1Address,shiftDate,SShiftType.Morning,"Storekeeper",1);
-//        es.setShiftNeededAmount(HR_MANAGER_USERNAME,site1Address,shiftDate,SShiftType.Morning,"ShiftManager", 0);
-//        es.setShiftNeededAmount(HR_MANAGER_USERNAME, site1Address,shiftDate,SShiftType.Evening,"Cashier",0);
-//        es.setShiftNeededAmount(HR_MANAGER_USERNAME,site1Address,shiftDate,SShiftType.Evening,"GeneralWorker",0);
-//        es.setShiftNeededAmount(HR_MANAGER_USERNAME,site1Address,shiftDate,SShiftType.Evening,"Storekeeper",1);
-//        es.setShiftNeededAmount(HR_MANAGER_USERNAME,site1Address,shiftDate,SShiftType.Evening,"ShiftManager", 0);
-//        es.recruitEmployee("admin123", site1Address, "Test Storekeeper5", storekeeperId3,"Bank5",25, LocalDate.now(),"","");
-//        es.recruitEmployee("admin123", site1Address, "Test Storekeeper6", storekeeperId4,"Bank6",25, LocalDate.now(),"","");
-//        es.certifyEmployee("admin123", storekeeperId3,"Storekeeper");
-//        es.certifyEmployee("admin123", storekeeperId4,"Storekeeper");
-//        es.requestShift(storekeeperId3,site1Address,shiftDate,SShiftType.Morning,"Storekeeper");
-//        es.requestShift(storekeeperId4,site1Address,shiftDate,SShiftType.Evening,"Storekeeper");
-//        es.setShiftEmployees("admin123",site1Address,shiftDate, SShiftType.Morning,"Storekeeper",new ArrayList<>(){{add(storekeeperId3);}});
-//        es.setShiftEmployees("admin123",site1Address,shiftDate, SShiftType.Evening,"Storekeeper",new ArrayList<>(){{add(storekeeperId4);}});
-//        es.approveShift("admin123",site1Address,shiftDate, SShiftType.Morning);
-//        es.approveShift("admin123",site1Address,shiftDate, SShiftType.Evening);
-//    }
-//
-//    private void initBranchSiteDestination() {
-//        es.updateBranchWorkingHours("admin123", updatedBranchDestination, LocalTime.of(0,0),LocalTime.of(14,0),LocalTime.of(14,0),LocalTime.of(23,0));
-//        es.createWeekShifts("admin123", updatedBranchDestination,shiftDate);
-//        es.setShiftNeededAmount(HR_MANAGER_USERNAME,updatedBranchDestination,shiftDate,SShiftType.Morning,"Cashier",0);
-//        es.setShiftNeededAmount(HR_MANAGER_USERNAME,updatedBranchDestination,shiftDate,SShiftType.Morning,"GeneralWorker",0);
-//        es.setShiftNeededAmount(HR_MANAGER_USERNAME,updatedBranchDestination,shiftDate,SShiftType.Morning,"Storekeeper",1);
-//        es.setShiftNeededAmount(HR_MANAGER_USERNAME,updatedBranchDestination,shiftDate,SShiftType.Morning,"ShiftManager", 0);
-//        es.setShiftNeededAmount(HR_MANAGER_USERNAME,updatedBranchDestination,shiftDate,SShiftType.Evening,"Cashier",0);
-//        es.setShiftNeededAmount(HR_MANAGER_USERNAME,updatedBranchDestination,shiftDate,SShiftType.Evening,"GeneralWorker",0);
-//        es.setShiftNeededAmount(HR_MANAGER_USERNAME,updatedBranchDestination,shiftDate,SShiftType.Evening,"Storekeeper",1);
-//        es.setShiftNeededAmount(HR_MANAGER_USERNAME,updatedBranchDestination,shiftDate,SShiftType.Evening,"ShiftManager", 0);
-//        es.recruitEmployee("admin123", updatedBranchDestination, "Test Storekeeper3", storekeeperId1,"Bank3",25, LocalDate.now(),"","");
-//        es.recruitEmployee("admin123", updatedBranchDestination, "Test Storekeeper4", storekeeperId2,"Bank4",25, LocalDate.now(),"","");
-//        es.certifyEmployee("admin123", storekeeperId1,"Storekeeper");
-//        es.certifyEmployee("admin123", storekeeperId2,"Storekeeper");
-//        es.requestShift(storekeeperId1, updatedBranchDestination,shiftDate,SShiftType.Morning,"Storekeeper");
-//        es.requestShift(storekeeperId2, updatedBranchDestination,shiftDate,SShiftType.Evening,"Storekeeper");
-//        es.setShiftEmployees("admin123", updatedBranchDestination,shiftDate, SShiftType.Morning,"Storekeeper",new ArrayList<>(){{add(storekeeperId1);}});
-//        es.setShiftEmployees("admin123", updatedBranchDestination,shiftDate, SShiftType.Evening,"Storekeeper",new ArrayList<>(){{add(storekeeperId2);}});
-//        es.approveShift("admin123", updatedBranchDestination,shiftDate, SShiftType.Morning);
-//        es.approveShift("admin123", updatedBranchDestination,shiftDate, SShiftType.Evening);
-//    }
-//
-//    private void assertDeepEquals(Transport transport1, Transport transport2) {
+package serviceLayer.transportModule;
+
+import businessLayer.employeeModule.Authorization;
+import businessLayer.employeeModule.Branch;
+import businessLayer.employeeModule.Controllers.UserController;
+import businessLayer.employeeModule.Role;
+import businessLayer.employeeModule.Shift;
+import businessLayer.transportModule.SitesController;
+import dataAccessLayer.DalFactory;
+import exceptions.TransportException;
+import objects.transportObjects.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import presentationLayer.DataGenerator;
+import serviceLayer.ServiceFactory;
+import serviceLayer.employeeModule.Objects.SShiftType;
+import serviceLayer.employeeModule.Services.EmployeesService;
+import serviceLayer.employeeModule.Services.UserService;
+import utils.ErrorCollection;
+import utils.JsonUtils;
+import utils.Response;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.*;
+
+import static dataAccessLayer.DalFactory.TESTING_DB_NAME;
+import static org.junit.jupiter.api.Assertions.*;
+import static serviceLayer.employeeModule.Services.UserService.HR_MANAGER_USERNAME;
+
+class TransportsServiceIT {
+
+    public static final LocalDateTime DEPARTURE_TIME = LocalDateTime.of(2023, 2, 2, 9, 0);
+    private Transport transport;
+    private TransportsService ts;
+    private EmployeesService es;
+    private UserService us;
+    private ItemListsService ils;
+    private ResourceManagementService rms;
+    private Site source;
+    private Site dest1;
+    private Site dest2;
+    private Driver driver;
+    private Truck truck;
+    private ItemList itemList;
+    private static int ITEM_LIST_ID = 1;
+    private static int TRANSPORT_ID = 1;
+    private SitesController sc;
+
+    @AfterEach
+    void tearDown() {
+        DalFactory.clearTestDB();
+    }
+
+    @BeforeEach
+    void setUp() {
+        DalFactory.clearTestDB();
+        ServiceFactory factory = new ServiceFactory(TESTING_DB_NAME);
+        ts = factory.transportsService();
+        ils = factory.itemListsService();
+        rms = factory.resourceManagementService();
+        es = factory.employeesService();
+        us = factory.userService();
+        sc = factory.businessFactory().sitesController();
+
+        us.initializeManagers();
+
+        // sites
+        source = new Site("logistical1", "14441 s inglewood ave, hawthorne, ca 90250, united states", "zone1", "111-111-1111", "John Smith", Site.SiteType.LOGISTICAL_CENTER, 0, 0);
+        dest1 = new Site("branch1", "19503 s normandie ave, torrance, ca 90501, united states", "zone1", "222-222-2222", "Jane Doe", Site.SiteType.BRANCH, 0, 0);
+        dest2 = new Site("branch2", "22015 hawthorne blvd, torrance, ca 90503, united states", "zone1", "333-333-3333", "Bob Johnson", Site.SiteType.BRANCH, 0, 0);
+        List<Site> sites = new LinkedList<>(){{
+            add(source);
+            add(dest1);
+            add(dest2);
+        }};
+        try {
+            sc.addAllSitesFirstTimeSystemLoad(sites);
+        } catch (TransportException e) {
+            fail(e.getMessage(),e);
+        }
+
+        // item lists
+        HashMap<String, Integer> load1 = new HashMap<>();
+        load1.put("shirts", 20);
+        load1.put("pants", 15);
+        load1.put("socks", 30);
+        HashMap<String, Integer> unload1 = new HashMap<>();
+        unload1.put("jackets", 10);
+        unload1.put("hats", 5);
+        unload1.put("gloves", 20);
+        itemList = new ItemList(load1, unload1);
+        assertSuccessValue(ils.addItemList(itemList.toJson()), true);
+
+        // truck
+        truck = new Truck("abc123", "ford", 1500, 30000, Truck.CoolingCapacity.FROZEN);
+        assertSuccessValue(rms.addTruck(truck.toJson()),true);
+
+        initializeEmployeesData();
+
+        transport = new Transport(
+                new LinkedList<>() {{
+                    add(source.name());
+                    add(dest1.name());
+                    add(dest2.name());
+                }},
+                new HashMap<>(){{
+                    put(source.name(), ITEM_LIST_ID);
+                    put(dest1.name(), ITEM_LIST_ID);
+                    put(dest2.name(), ITEM_LIST_ID);
+                }},
+                driver.id(),
+                truck.id(),
+                DEPARTURE_TIME,
+                29800
+        );
+
+    }
+
+    @Test
+    void addTransport() {
+        Response response = assertSuccessValue(ts.addTransport(transport.toJson()), true);
+        Transport returned = Transport.fromJson(response.data());
+        assertEquals(TRANSPORT_ID, returned.id());
+        assertDeepEquals(transport, returned);
+        assertDoesNotThrow(() -> returned.deliveryRoute().getEstimatedTimeOfArrival(source.name()));
+        assertDoesNotThrow(() -> returned.deliveryRoute().getEstimatedTimeOfArrival(dest1.name()));
+        assertDoesNotThrow(() -> returned.deliveryRoute().getEstimatedTimeOfArrival(dest2.name()));
+    }
+
+    @Test
+    void addTransportPredefinedId(){
+        assertThrows(UnsupportedOperationException.class, () -> ts.addTransport(Transport.getLookupObject(5).toJson()));
+    }
+
+    @Test
+    void updateTransport() {
+        // set up
+        Response _r = assertSuccessValue(ts.addTransport(transport.toJson()), true);
+        transport = Transport.fromJson(_r.data());
+
+        // update
+        Transport updated = new Transport(
+                transport.id(),
+                new LinkedList<>() {{
+                    add(source.name());
+                    add(dest1.name());
+                }},
+                new HashMap<>(){{
+                    put(source.name(), ITEM_LIST_ID);
+                    put(dest1.name(), ITEM_LIST_ID);
+                }},
+                driver.id(),
+                truck.id(),
+                DEPARTURE_TIME,
+                15000
+        );
+
+        Response response = assertSuccessValue(ts.updateTransport(updated.toJson()), true);
+        Transport returned = Transport.fromJson(response.data());
+        assertDeepEquals(updated, returned);
+        assertDoesNotThrow(() -> returned.deliveryRoute().getEstimatedTimeOfArrival(source.name()));
+        assertDoesNotThrow(() -> returned.deliveryRoute().getEstimatedTimeOfArrival(dest1.name()));
+    }
+
+    @Test
+    void updateTransportDoesNotExist(){
+        assertSuccessValue(ts.updateTransport(transport.toJson()), false);
+    }
+
+    @Test
+    void removeTransport() {
+        // set up
+        Response _r = assertSuccessValue(ts.addTransport(transport.toJson()), true);
+        transport = Transport.fromJson(_r.data());
+
+        // test
+        assertSuccessValue(ts.removeTransport(transport.toJson()), true);
+        assertSuccessValue(ts.getTransport(Transport.getLookupObject(transport.id()).toJson()),false);
+    }
+
+    @Test
+    void removeTransportDoesNotExist(){
+        assertSuccessValue(ts.removeTransport(transport.toJson()), false);
+    }
+
+    @Test
+    void getTransport() {
+        // set up
+        Response _r = assertSuccessValue(ts.addTransport(transport.toJson()), true);
+        transport = Transport.fromJson(_r.data());
+
+        // test
+        Response response = assertSuccessValue(ts.getTransport(Transport.getLookupObject(transport.id()).toJson()), true);
+        Transport returned = Transport.fromJson(response.data());
+        assertDeepEquals(transport, returned);
+        assertDoesNotThrow(() -> returned.deliveryRoute().getEstimatedTimeOfArrival(source.name()));
+        assertDoesNotThrow(() -> returned.deliveryRoute().getEstimatedTimeOfArrival(dest1.name()));
+        assertDoesNotThrow(() -> returned.deliveryRoute().getEstimatedTimeOfArrival(dest2.name()));
+    }
+
+    @Test
+    void getTransportDoesNotExist(){
+        assertSuccessValue(ts.getTransport(Transport.getLookupObject(transport.id()).toJson()), false);
+    }
+
+    @Test
+    void getAllTransports() {
+        // set up
+        Response _r = assertSuccessValue(ts.addTransport(transport.toJson()), true);
+        transport = Transport.fromJson(_r.data());
+
+        // test
+        Response response = assertSuccessValue(ts.getAllTransports(), true);
+        List<Transport> returned = Transport.listFromJson(response.data());
+        assertEquals(1, returned.size());
+        assertDeepEquals(transport, returned.get(0));
+        assertDoesNotThrow(() -> returned.get(0).deliveryRoute().getEstimatedTimeOfArrival(source.name()));
+        assertDoesNotThrow(() -> returned.get(0).deliveryRoute().getEstimatedTimeOfArrival(dest1.name()));
+        assertDoesNotThrow(() -> returned.get(0).deliveryRoute().getEstimatedTimeOfArrival(dest2.name()));
+    }
+
+    @Test
+    void createTransportWithTooMuchWeight(){
+        transport = new Transport(
+                new LinkedList<>() {{
+                    add(source.name());
+                    add(dest1.name());
+                    add(dest2.name());
+                }},
+                new HashMap<>(){{
+                    put(source.name(), ITEM_LIST_ID);
+                    put(dest1.name(), ITEM_LIST_ID);
+                    put(dest2.name(), ITEM_LIST_ID);
+                }},
+                driver.id(),
+                truck.id(),
+                DEPARTURE_TIME,
+                35000
+        );
+        Response response = assertSuccessValue(ts.addTransport(transport.toJson()), false);
+        ErrorCollection errors = new ErrorCollection(response.message(),response.data());
+        assertTrue(Arrays.asList(errors.causesAsArray()).contains("weight"));
+    }
+
+    @Test
+    void createTransportWithBadLicense(){
+
+        driver = new Driver(
+                driver.id(),
+                driver.name(),
+                Driver.LicenseType.A1
+        );
+        assertSuccessValue(rms.updateDriver(driver.toJson()),true);
+
+        transport = new Transport(
+                new LinkedList<>() {{
+                    add(source.name());
+                    add(dest1.name());
+                    add(dest2.name());
+                }},
+                new HashMap<>(){{
+                    put(source.name(), ITEM_LIST_ID);
+                    put(dest1.name(), ITEM_LIST_ID);
+                    put(dest2.name(), ITEM_LIST_ID);
+                }},
+                driver.id(),
+                truck.id(),
+                DEPARTURE_TIME,
+                35000
+        );
+        Response response = assertSuccessValue(ts.addTransport(transport.toJson()), false);
+        ErrorCollection errors = new ErrorCollection(response.message(),response.data());
+        assertTrue(Arrays.asList(errors.causesAsArray()).contains("license"));
+    }
+
+    @Test
+    void createTransportWithBadLicenseAndTooMuchWeight(){
+
+        driver = new Driver(
+                driver.id(),
+                driver.name(),
+                Driver.LicenseType.A1
+        );
+        assertSuccessValue(rms.updateDriver(driver.toJson()),true);
+
+        transport = new Transport(
+                new LinkedList<>() {{
+                    add(source.name());
+                    add(dest1.name());
+                    add(dest2.name());
+                }},
+                new HashMap<>(){{
+                    put(source.name(), ITEM_LIST_ID);
+                    put(dest1.name(), ITEM_LIST_ID);
+                    put(dest2.name(), ITEM_LIST_ID);
+                }},
+                driver.id(),
+                truck.id(),
+                DEPARTURE_TIME,
+                35000
+        );
+        Response response = assertSuccessValue(ts.addTransport(transport.toJson()), false);
+        ErrorCollection errors = new ErrorCollection(response.message(),response.data());
+        assertTrue(Arrays.asList(errors.causesAsArray()).contains("weight"));
+        assertTrue(Arrays.asList(errors.causesAsArray()).contains("license"));
+    }
+
+    @Test
+    void createTransportEverythingDoesNotExist(){
+
+        // generate some made up sites
+        Site sourceBad = new Site("site1","address1","tz1","25125","awgawgaw", Site.SiteType.SUPPLIER);
+        Site dest1Bad = new Site("site2","address2","tz1","25125","awgawgaw", Site.SiteType.BRANCH);
+        Site dest2Bad = new Site("site3","address3","tz1","25125","awgawgaw", Site.SiteType.BRANCH);
+
+        transport = new Transport(
+                new LinkedList<>() {{
+                    add(sourceBad.name());
+                    add(dest1Bad.name());
+                    add(dest2Bad.name());
+                }},
+                new HashMap<>(){{
+                    put(sourceBad.name(), 5);
+                    put(dest1Bad.name(), 5);
+                    put(dest2Bad.name(), 5);
+                }},
+                "fake driver",
+                "fake truck",
+                DEPARTURE_TIME,
+                35000
+        );
+        Response response = assertSuccessValue(ts.addTransport(transport.toJson()), false);
+        ErrorCollection errors = new ErrorCollection(response.message(),response.data());
+        assertTrue(Arrays.asList(errors.causesAsArray()).contains("truck"));
+        assertTrue(Arrays.asList(errors.causesAsArray()).contains("driver"));
+        assertTrue(Arrays.asList(errors.causesAsArray()).contains("source"));
+        assertTrue(Arrays.asList(errors.causesAsArray()).contains("destination:0"));
+        assertTrue(Arrays.asList(errors.causesAsArray()).contains("destination:1"));
+        assertTrue(Arrays.asList(errors.causesAsArray()).contains("itemList:0"));
+        assertTrue(Arrays.asList(errors.causesAsArray()).contains("itemList:1"));
+    }
+
+    private void assertDeepEquals(Transport transport1, Transport transport2) {
 //        assertEquals(transport1.id(),transport2.id());
-//        assertEquals(transport1.route(),transport2.route());
-//        assertEquals(transport1.itemLists(),transport2.itemLists());
+        assertEquals(transport1.route(),transport2.route());
+        assertEquals(transport1.itemLists(),transport2.itemLists());
 //        assertEquals(transport1.deliveryRoute().estimatedArrivalTimes(),transport2.deliveryRoute().estimatedArrivalTimes());
-//        assertEquals(transport1.departureTime(),transport2.departureTime());
-//        assertEquals(transport1.driverId(),transport2.driverId());
-//        assertEquals(transport1.weight(),transport2.weight());
-//    }
-//
-//    private Response assertSuccessValue(String json, boolean expectedSuccess) {
-//        Response response = Response.fromJson(json);
-//        if(response.success() != expectedSuccess){
-//            fail("Operation failed:\n" +
-//                    "Expected success value: "+expectedSuccess + "\n" +
-//                    "Actual success value: "+response.success() + "\n" +
-//                    "Response message:" + response.message() + "\n" +
-//                    "Response data:" + response.data());
-//        }
-//        return response;
-//    }
-//
-//}
+        assertEquals(transport1.departureTime(),transport2.departureTime());
+        assertEquals(transport1.driverId(),transport2.driverId());
+        assertEquals(transport1.weight(),transport2.weight());
+    }
+
+    private Response assertSuccessValue(String json, boolean expectedSuccess) {
+        Response response = Response.fromJson(json);
+        if(response.success() != expectedSuccess){
+            fail("Operation failed:\n" +
+                    "Expected success value: "+expectedSuccess + "\n" +
+                    "Actual success value: "+response.success() + "\n" +
+                    "Response message:" + response.message() + "\n" +
+                    "Response data:" + response.data());
+        }
+        return response;
+    }
+
+    private void initializeEmployeesData() {
+
+        // headquarters initialization
+        assertSuccessValue(es.recruitEmployee(HR_MANAGER_USERNAME, Branch.HEADQUARTERS_ID, "Moshe Biton", "111","Hapoalim 12 230", 50, LocalDate.of(2023,2,2),"Employment Conditions Test", "More details about Moshe"),true);
+        assertSuccessValue(es.certifyEmployee(HR_MANAGER_USERNAME,"111", Role.ShiftManager.name()),true);
+        assertSuccessValue(es.certifyEmployee(HR_MANAGER_USERNAME,"111",Role.Storekeeper.name()),true);
+        assertSuccessValue(us.createUser(HR_MANAGER_USERNAME,"111","1234"),true);
+
+        // driver initialization
+        driver = new Driver("123", "megan smith", Driver.LicenseType.C3);
+        assertSuccessValue(es.recruitEmployee(HR_MANAGER_USERNAME, Branch.HEADQUARTERS_ID, driver.name(), driver.id(), "Hapoalim 12 230", 40, LocalDate.of(2023,2,2), "Employment Conditions Test", "More details about Driver"),true);
+        assertSuccessValue(es.certifyDriver(HR_MANAGER_USERNAME, driver.id(), driver.licenseType().toString()),true);
+        assertSuccessValue(us.createUser(HR_MANAGER_USERNAME, driver.id(), "123"),true);
+
+        // storekeeper initialization
+        List<String> storekeeperIds_dest1 = new LinkedList<>(){{
+            add(dest1.name()+"morning");
+            add(dest1.name()+"evening");
+        }};
+        for (String storekeeperId : storekeeperIds_dest1) {
+            assertSuccessValue(es.recruitEmployee(HR_MANAGER_USERNAME, dest1.name(), "Name " + storekeeperId, storekeeperId, "Hapoalim 12 250", 30, LocalDate.of(2020, 2, 2), "Employment Conditions Test", "More details about Storekeeper"),true);
+            assertSuccessValue(es.certifyEmployee(HR_MANAGER_USERNAME, storekeeperId, Role.Storekeeper.name()),true);
+            assertSuccessValue(us.createUser(HR_MANAGER_USERNAME, storekeeperId, "123"),true);
+        }
+        List<String> storekeeperIds_dest2 = new LinkedList<>(){{
+            add(dest2.name()+"morning");
+            add(dest2.name()+"evening");
+        }};
+        for (String storekeeperId : storekeeperIds_dest2) {
+            assertSuccessValue(es.recruitEmployee(HR_MANAGER_USERNAME, dest2.name(), "Name " + storekeeperId, storekeeperId, "Hapoalim 12 250", 30, LocalDate.of(2020, 2, 2), "Employment Conditions Test", "More details about Storekeeper"),true);
+            assertSuccessValue(es.certifyEmployee(HR_MANAGER_USERNAME, storekeeperId, Role.Storekeeper.name()),true);
+            assertSuccessValue(us.createUser(HR_MANAGER_USERNAME, storekeeperId, "123"),true);
+        }
+
+        //==================================== initialize shifts ==================================== |
+
+        //                                  Shift Creation for dest1
+        assertSuccessValue(es.createShiftDay(HR_MANAGER_USERNAME,dest1.name(),DEPARTURE_TIME.toLocalDate()),true);
+        assertSuccessValue(es.setShiftNeededAmount(HR_MANAGER_USERNAME,dest1.name(),DEPARTURE_TIME.toLocalDate(),SShiftType.Morning,"Cashier",0),true);
+        assertSuccessValue(es.setShiftNeededAmount(HR_MANAGER_USERNAME,dest1.name(),DEPARTURE_TIME.toLocalDate(),SShiftType.Morning,"GeneralWorker",0),true);
+        assertSuccessValue(es.setShiftNeededAmount(HR_MANAGER_USERNAME,dest1.name(),DEPARTURE_TIME.toLocalDate(),SShiftType.Morning,"Storekeeper",0),true);
+        //                                  Shift Creation for dest2
+        assertSuccessValue(es.createShiftDay(HR_MANAGER_USERNAME,dest2.name(),DEPARTURE_TIME.toLocalDate()),true);
+        assertSuccessValue(es.setShiftNeededAmount(HR_MANAGER_USERNAME,dest2.name(),DEPARTURE_TIME.toLocalDate(),SShiftType.Morning,"Cashier",0),true);
+        assertSuccessValue(es.setShiftNeededAmount(HR_MANAGER_USERNAME,dest2.name(),DEPARTURE_TIME.toLocalDate(),SShiftType.Morning,"GeneralWorker",0),true);
+        assertSuccessValue(es.setShiftNeededAmount(HR_MANAGER_USERNAME,dest2.name(),DEPARTURE_TIME.toLocalDate(),SShiftType.Morning,"Storekeeper",0),true);
+        //                                  Assign drivers to shifts
+        assertSuccessValue(es.setShiftNeededAmount(HR_MANAGER_USERNAME,Branch.HEADQUARTERS_ID,DEPARTURE_TIME.toLocalDate(), SShiftType.Morning,"Driver",1),true);
+        assertSuccessValue(es.requestShift(driver.id(), Branch.HEADQUARTERS_ID, DEPARTURE_TIME.toLocalDate(), SShiftType.Morning, "Driver"),true);
+        assertSuccessValue(es.setShiftEmployees(HR_MANAGER_USERNAME,Branch.HEADQUARTERS_ID,DEPARTURE_TIME.toLocalDate(), SShiftType.Morning,"Driver", List.of(driver.id())),true);
+        //                                 Assign storekeepers to shifts
+        // dest1 - morning
+        assertSuccessValue(es.setShiftNeededAmount(HR_MANAGER_USERNAME, dest1.name(), DEPARTURE_TIME.toLocalDate(), SShiftType.Morning, "Storekeeper", 1),true);
+        assertSuccessValue(es.requestShift(storekeeperIds_dest1.get(0), dest1.name(), DEPARTURE_TIME.toLocalDate(), SShiftType.Morning, "Storekeeper"),true);
+        assertSuccessValue(es.setShiftEmployees(HR_MANAGER_USERNAME, dest1.name(), DEPARTURE_TIME.toLocalDate(), SShiftType.Morning, "Storekeeper", List.of(storekeeperIds_dest1.get(0))),true);
+        // dest1 - evening
+        assertSuccessValue(es.setShiftNeededAmount(HR_MANAGER_USERNAME, dest1.name(), DEPARTURE_TIME.toLocalDate(), SShiftType.Evening, "Storekeeper", 1),true);
+        assertSuccessValue(es.requestShift(storekeeperIds_dest1.get(1), dest1.name(), DEPARTURE_TIME.toLocalDate(), SShiftType.Evening, "Storekeeper"),true);
+        assertSuccessValue(es.setShiftEmployees(HR_MANAGER_USERNAME, dest1.name(), DEPARTURE_TIME.toLocalDate(), SShiftType.Evening, "Storekeeper", List.of(storekeeperIds_dest1.get(1))),true);
+        // dest2 - morning
+        assertSuccessValue(es.setShiftNeededAmount(HR_MANAGER_USERNAME, dest2.name(), DEPARTURE_TIME.toLocalDate(), SShiftType.Morning, "Storekeeper", 1),true);
+        assertSuccessValue(es.requestShift(storekeeperIds_dest2.get(0), dest2.name(), DEPARTURE_TIME.toLocalDate(), SShiftType.Morning, "Storekeeper"),true);
+        assertSuccessValue(es.setShiftEmployees(HR_MANAGER_USERNAME, dest2.name(), DEPARTURE_TIME.toLocalDate(), SShiftType.Morning, "Storekeeper", List.of(storekeeperIds_dest2.get(0))),true);
+        // dest2 - evening
+        assertSuccessValue(es.setShiftNeededAmount(HR_MANAGER_USERNAME, dest2.name(), DEPARTURE_TIME.toLocalDate(), SShiftType.Evening, "Storekeeper", 1),true);
+        assertSuccessValue(es.requestShift(storekeeperIds_dest2.get(1), dest2.name(), DEPARTURE_TIME.toLocalDate(), SShiftType.Evening, "Storekeeper"),true);
+        assertSuccessValue(es.setShiftEmployees(HR_MANAGER_USERNAME, dest2.name(), DEPARTURE_TIME.toLocalDate(), SShiftType.Evening, "Storekeeper", List.of(storekeeperIds_dest2.get(1))),true);
+    }
+}

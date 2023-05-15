@@ -42,8 +42,8 @@ public class ProductItemTest {
     // Test 1
     @org.junit.Test
     public void testDefectiveItem() {
-        item.reportAsDefective();
-        Assert.assertNotNull("update defective Item failed",item.isDefective());
+        productController.updateProductItem(branch,1,serial_number,catalog_number,-1,null,-1,-1,-1,null);
+        Assert.assertNotNull("update defective Item failed",productController.getProduct(branch,catalog_number).getProduct(serial_number).isDefective());
     }
 
     // Test 2

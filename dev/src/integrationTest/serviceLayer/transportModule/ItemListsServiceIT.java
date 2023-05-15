@@ -9,6 +9,8 @@ import serviceLayer.ServiceFactory;
 import utils.Response;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 
 import static dataAccessLayer.DalFactory.TESTING_DB_NAME;
 import static org.junit.jupiter.api.Assertions.*;
@@ -20,6 +22,9 @@ class ItemListsServiceIT {
 
     @BeforeEach
     void setUp() {
+
+        DalFactory.clearTestDB();
+
         ils = new ServiceFactory(TESTING_DB_NAME).itemListsService();
 
         HashMap<String, Integer> load1 = new HashMap<>();
@@ -33,9 +38,6 @@ class ItemListsServiceIT {
         unload1.put("Gloves", 20);
 
         itemList = new ItemList(load1, unload1);
-        String json = ils.addItemList(itemList.toJson());
-        int id = Response.fromJson(json).dataToInt();
-        itemList = itemList.newId(id);
     }
 
     @AfterEach
@@ -45,123 +47,108 @@ class ItemListsServiceIT {
 
     @Test
     void addItemList() {
-        HashMap<String, Integer> load2 = new HashMap<>();
-        load2.put("Cups", 50);
-        load2.put("Plates", 20);
-        load2.put("Forks", 30);
-
-        HashMap<String, Integer> unload2 = new HashMap<>();
-        unload2.put("Knives", 40);
-        unload2.put("Spoons", 15);
-        unload2.put("Napkins", 25);
-
-        ItemList itemList2 = new ItemList(load2, unload2);
-        String json1 = ils.addItemList(itemList2.toJson());
-        Response response1 = Response.fromJson(json1);
-        assertTrue(response1.success(),response1.message());
-
-        String json2 = ils.getItemList(ItemList.getLookupObject(response1.dataToInt()).toJson());
-        Response response2 = Response.fromJson(json2);
-        ItemList addedItemList = response2.data(ItemList.class);
-        assertEquals(itemList2.load(), addedItemList.load());
-        assertEquals(itemList2.unload(), addedItemList.unload());
+        Response response = assertSuccessValue(ils.addItemList(itemList.toJson()),true);
+        ItemList addedItemList = ItemList.fromJson(response.data());
+        assertEquals(itemList.load(), addedItemList.load());
     }
 
     @Test
     void addItemListPredefinedId() {
-
-        try {
-            ils.addItemList(ItemList.getLookupObject(1001).toJson());
-        } catch (UnsupportedOperationException e) {
-            return;
-        }
-        fail();
+        assertThrows(UnsupportedOperationException.class, () -> ils.addItemList(ItemList.getLookupObject(1001).toJson()));
     }
 
     @Test
     void removeItemList() {
-        String json1 = ils.removeItemList(itemList.toJson());
-        Response response1 = Response.fromJson(json1);
-        assertTrue(response1.success(),response1.message());
+        //set up
+        Response _r = assertSuccessValue(ils.addItemList(itemList.toJson()),true);
+        itemList = ItemList.fromJson(_r.data());
 
-        String json2 = ils.getItemList(ItemList.getLookupObject(itemList.id()).toJson());
-        Response response2 = Response.fromJson(json2);
-        assertFalse(response2.success());
+        //test
+        assertSuccessValue(ils.removeItemList(itemList.toJson()),true);
+        assertSuccessValue(ils.getItemList(itemList.toJson()),false);
     }
 
     @Test
     void removeItemListDoesNotExist() {
         ItemList list = ItemList.getLookupObject(1002);
-        String json1 = ils.removeItemList(list.toJson());
-        Response response1 = Response.fromJson(json1);
-        assertFalse(response1.success());
+        assertSuccessValue(ils.removeItemList(list.toJson()),false);
     }
 
     @Test
     void updateItemList() {
+
+        //set up
+        Response _r = assertSuccessValue(ils.addItemList(itemList.toJson()),true);
+        itemList = ItemList.fromJson(_r.data());
+
+        //test
         itemList.load().put("Shirts", 25);
         itemList.unload().put("Jackets", 15);
-        String json1 = ils.updateItemList(itemList.toJson());
-        Response response1 = Response.fromJson(json1);
-        assertTrue(response1.success(),response1.message());
+        assertSuccessValue(ils.updateItemList(itemList.toJson()),true);
 
-        String json2 = ils.getItemList(ItemList.getLookupObject(itemList.id()).toJson());
-        Response response2 = Response.fromJson(json2);
-        assertTrue(response2.success(),response2.message());
-        ItemList updatedItemList = response2.data(ItemList.class);
+        Response response = assertSuccessValue(ils.getItemList(ItemList.getLookupObject(itemList.id()).toJson()),true);
+        ItemList updatedItemList = ItemList.fromJson(response.data());
         assertEquals(itemList.load(), updatedItemList.load());
-        assertEquals(itemList.unload(), updatedItemList.unload());
     }
 
     @Test
     void updateItemListDoesNotExist() {
         ItemList list = ItemList.getLookupObject(1002);
-        String json1 = ils.updateItemList(list.toJson());
-        Response response1 = Response.fromJson(json1);
-        assertFalse(response1.success());
+        assertSuccessValue(ils.updateItemList(list.toJson()),false);
     }
 
     @Test
     void getItemList() {
-        String json1 = ils.getItemList(ItemList.getLookupObject(itemList.id()).toJson());
-        Response response1 = Response.fromJson(json1);
-        assertTrue(response1.success(),response1.message());
+        //set up
+        Response _r = assertSuccessValue(ils.addItemList(itemList.toJson()),true);
+        itemList = ItemList.fromJson(_r.data());
 
-        ItemList retrievedItemList = response1.data(ItemList.class);
-        assertEquals(itemList.load(), retrievedItemList.load());
-        assertEquals(itemList.unload(), retrievedItemList.unload());
+        //test
+        String lookupObject = ItemList.getLookupObject(1).toJson();
+        Response response = assertSuccessValue(ils.getItemList(lookupObject),true);
+        ItemList addedItemList = ItemList.fromJson(response.data());
+        assertDeepEquals(itemList, addedItemList);
     }
 
     @Test
     void getItemListDoesNotExist() {
         ItemList list = ItemList.getLookupObject(1002);
-        String json1 = ils.getItemList(list.toJson());
-        Response response1 = Response.fromJson(json1);
-        assertFalse(response1.success());
+        assertSuccessValue(ils.getItemList(list.toJson()),false);
     }
 
     @Test
     void getAllItemLists() {
         //generate more item lists
-        for(int i = 0; i < 20; i++){
-            HashMap<String, Integer> load = new HashMap<>();
-            load.put("Shirts", 20);
-            load.put("Pants", 15);
-            load.put("Socks", 30);
-
-            HashMap<String, Integer> unload = new HashMap<>();
-            unload.put("Jackets", 10);
-            unload.put("Hats", 5);
-            unload.put("Gloves", 20);
-
-            ItemList itemList = new ItemList(load, unload);
-            ils.addItemList(itemList.toJson());
+        List<ItemList> itemLists = new LinkedList<>();
+        for(int i = 0; i < 5; i++){
+            ItemList newList = new ItemList(itemList.load(), itemList.unload());
+            Response _r = assertSuccessValue(ils.addItemList(newList.toJson()),true);
+            itemLists.add(ItemList.fromJson(_r.data()));
         }
 
-        String json1 = ils.getAllItemLists();
-        Response response1 = Response.fromJson(json1);
-        assertTrue(response1.success(),response1.message());
-        assertEquals(21, ItemList.listFromJson(response1.data()).size());
+        Response response = assertSuccessValue(ils.getAllItemLists(),true);
+        List<ItemList> addedItemLists = ItemList.listFromJson(response.data());
+        assertEquals(itemLists.size(), addedItemLists.size());
+        for(int i = 0; i < itemLists.size(); i++){
+            assertDeepEquals(itemLists.get(i), addedItemLists.get(i));
+        }
+    }
 
+    private void assertDeepEquals(ItemList itemList1, ItemList itemList2) {
+        assertEquals(itemList1.id(), itemList2.id());
+        assertEquals(itemList1.load(), itemList2.load());
+        assertEquals(itemList1.unload(), itemList2.unload());
+    }
+
+    private Response assertSuccessValue(String json, boolean expectedSuccess) {
+        Response response = Response.fromJson(json);
+        if(response.success() != expectedSuccess){
+            fail("Operation failed:\n" +
+                    "Expected success value: "+expectedSuccess + "\n" +
+                    "Actual success value: "+response.success() + "\n" +
+                    "Response message:" + response.message() + "\n" +
+                    "Response data:" + response.data());
+        }
+        return response;
     }
 }

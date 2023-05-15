@@ -9,7 +9,7 @@ import exceptions.DalException;
 
 public class DalFactory {
 
-    public static String TESTING_DB_NAME = ":memory:";
+    public static String TESTING_DB_NAME = "TestingDB.db";
 
     private EmployeeDAO employeeDAO;
     private UserDAO userDAO;

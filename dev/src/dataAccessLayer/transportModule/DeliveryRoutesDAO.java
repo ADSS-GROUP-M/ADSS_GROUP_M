@@ -60,7 +60,9 @@ public class DeliveryRoutesDAO extends ManyToManyDAO<DeliveryRoute> {
             throw new DalException("Failed to select delivery route", e);
         }
         if(resultSet.isEmpty() == false) {
-            return getObjectFromResultSet(resultSet);
+            DeliveryRoute selected =  getObjectFromResultSet(resultSet);
+            cache.put(selected);
+            return selected;
         } else {
             throw new DalException("No delivery route with transport id " + object.transportId() + " was found");
         }
@@ -97,6 +99,7 @@ public class DeliveryRoutesDAO extends ManyToManyDAO<DeliveryRoute> {
                 deliveryRoutes.add(getObjectFromResultSet(resultSet));
             }
         }
+        cache.putAll(deliveryRoutes);
         return deliveryRoutes;
     }
 
@@ -111,6 +114,7 @@ public class DeliveryRoutesDAO extends ManyToManyDAO<DeliveryRoute> {
             if(cursor.executeWrite(query) != object.route().size()){
                 throw new RuntimeException("Unexpected error while trying to insert delivery route");
             }
+            cache.put(object);
         } catch (SQLException e) {
             throw new DalException("Failed to insert delivery route", e);
         }

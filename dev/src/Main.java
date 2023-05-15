@@ -9,8 +9,6 @@ public class Main {
 
     public static void main(String[] args) {
         System.out.println("Welcome to the Transport-Employees CLI");
-        //DataGenerator.generateData();
-        //new TransportUI(new ServiceFactory()).run();
         new MenuManager().run();
     }
 

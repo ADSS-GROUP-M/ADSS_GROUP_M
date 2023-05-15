@@ -4,6 +4,7 @@ import businessLayer.employeeModule.Authorization;
 import businessLayer.employeeModule.Controllers.UserController;
 import businessLayer.employeeModule.User;
 import dataAccessLayer.DalFactory;
+import exceptions.EmployeeException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,7 +38,11 @@ public class UserTest {
     }
 
     private void initUserData(UserService us, UserController uc) {
-        DataGenerator.initializeUserData(us,uc);
+        try {
+            DataGenerator.initializeUserData(us,uc);
+        } catch (EmployeeException e) {
+            fail(e.getMessage(),e);
+        }
     }
 
     @AfterEach

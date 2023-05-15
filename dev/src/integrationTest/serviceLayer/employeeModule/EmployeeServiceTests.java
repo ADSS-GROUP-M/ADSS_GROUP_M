@@ -7,6 +7,7 @@ import businessLayer.employeeModule.User;
 import businessLayer.transportModule.SitesController;
 import com.google.gson.reflect.TypeToken;
 import dataAccessLayer.DalFactory;
+import exceptions.EmployeeException;
 import exceptions.TransportException;
 import objects.transportObjects.Site;
 import org.junit.jupiter.api.AfterEach;
@@ -114,7 +115,11 @@ public class EmployeeServiceTests {
     }
 
     private void initUserData(UserService us, UserController uc) {
-        DataGenerator.initializeUserData(us,uc);
+        try {
+            DataGenerator.initializeUserData(us,uc);
+        } catch (EmployeeException e) {
+            fail(e.getMessage(),e);
+        }
     }
 
     private void initBranchData(SitesController sc) {

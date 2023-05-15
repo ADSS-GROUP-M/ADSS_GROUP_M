@@ -1,7 +1,6 @@
 package businessLayer.transportModule;
 
 import dataAccessLayer.transportModule.DeliveryRoutesDAO;
-import dataAccessLayer.transportModule.SitesRoutesDAO;
 import dataAccessLayer.transportModule.TransportsDAO;
 import exceptions.DalException;
 import exceptions.TransportException;
@@ -178,12 +177,12 @@ class TransportsControllerTest {
             Transport updatedTransport = new Transport(
                     1,
                     new LinkedList<>() {{
+                        add(source.name());
                         add(destination1.name());
-                        add(destination2.name());
                     }},
                     new HashMap<>() {{
-                        put(destination1.name(), -1);
-                        put(destination2.name(), itemList1.id());
+                        put(source.name(), -1);
+                        put(destination1.name(), itemList1.id());
                     }},
                     driver.id(),
                     truck.id(),
@@ -191,16 +190,29 @@ class TransportsControllerTest {
                     25000
             );
             initializeMocksToPassTransportValidation();
-            List<Site> route = List.of(destination1, destination2);
+            List<String> route = List.of(source.name(), destination1.name(), destination2.name());
+            List<Site> sites = List.of(source, destination1);
             HashMap<Pair<String,String>, Double> siteDistances = new HashMap<>(){{
-                put(new Pair<>(destination1.name(), destination2.name()), 100.0);
+                put(new Pair<>(source.name(), destination1.name()), 10.0);
+                put(new Pair<>(destination1.name(), destination2.name()), 10.0);
             }};
-            when(sitesRoutesController.buildSitesTravelTimes(route)).thenReturn(siteDistances);
-            when(transportsDAO.exists(updatedTransport)).thenReturn(true);
 
+            HashMap<String,LocalTime> arrivalTime = new HashMap<>(){{
+                put(source.name(),DEPARTURE_TIME.toLocalTime());
+                put(destination1.name(),DEPARTURE_TIME.toLocalTime().plusMinutes(10));
+                put(destination2.name(),DEPARTURE_TIME.toLocalTime().plusMinutes(20));
+            }};
+
+            DeliveryRoute deliveryRoute = new DeliveryRoute(1, route, itemLists, arrivalTime);
+            transport = new Transport(deliveryRoute,transport);
+
+            when(sitesRoutesController.buildSitesTravelTimes(sites)).thenReturn(siteDistances);
+            when(transportsDAO.exists(updatedTransport)).thenReturn(true);
+            when(deliveryRoutesDAO.select(DeliveryRoute.getLookupObject(updatedTransport.id()))).thenReturn(transport.deliveryRoute());
 
             //test
-            assertDoesNotThrow(() -> transportController.updateTransport(updatedTransport.id(), updatedTransport));
+            Transport returned = assertDoesNotThrow(() -> transportController.updateTransport(updatedTransport));
+            assertDeepEquals(updatedTransport, returned);
         } catch (DalException | TransportException e) {
             fail(e.getMessage(),e.getCause());
         }
@@ -213,7 +225,7 @@ class TransportsControllerTest {
         } catch (DalException e) {
             fail(e.getMessage(),e.getCause());
         }
-        assertThrows(TransportException.class,() -> transportController.updateTransport(transport.id(), transport));
+        assertThrows(TransportException.class,() -> transportController.updateTransport(transport));
     }
 
     @Test
@@ -224,6 +236,7 @@ class TransportsControllerTest {
             transportController = spy(transportController);
             initializeMocksToPassTransportValidation();
             when(transportsDAO.exists(Transport.getLookupObject(TRANSPORT_ID))).thenReturn(true);
+            when(deliveryRoutesDAO.select(DeliveryRoute.getLookupObject(TRANSPORT_ID))).thenReturn(transport.deliveryRoute());
             transportController.initializeEstimatedArrivalTimes(transport);
             transport.deliveryRoute().overrideArrivalTime(destination2.name(), LocalTime.of(16,0));
             Mockito.doThrow(new RuntimeException("Entered arrival time init when not supposed to")).when(transportController).initializeEstimatedArrivalTimes(transport);
@@ -233,7 +246,7 @@ class TransportsControllerTest {
 
         //test
         try {
-            transportController.updateTransport(TRANSPORT_ID, transport);
+            transportController.updateTransport(transport);
         } catch (TransportException | RuntimeException e) {
             fail(e.getMessage(),e.getCause());
         }

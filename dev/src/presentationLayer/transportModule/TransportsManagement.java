@@ -189,12 +189,11 @@ public class TransportsManagement {
             System.out.println("=========================================");
             System.out.println("Please select an option:");
             System.out.println("1. Update driver");
-
-        System.out.println("2. Update truck");
+            System.out.println("2. Update truck");
             System.out.println("3. Update route");
-            System.out.println("5. Update weight");
-            System.out.println("6. Set manual arrival times");
-            System.out.println("7. Return to previous menu");
+            System.out.println("4. Update weight");
+            System.out.println("5. Set manual arrival times");
+            System.out.println("6. Return to previous menu");
             int option = uiData.readInt();
             switch (option) {
 
@@ -228,20 +227,7 @@ public class TransportsManagement {
                             oldtransport.weight()
                     );
                 }
-                case 3 -> {
-                    System.out.println("Select source: ");
-                    Site source = uiData.pickSite(false);
-                    updateTransportHelperMethod(
-                            oldtransport.id(),
-                            oldtransport.route(),
-                            oldtransport.itemLists(),
-                            oldtransport.truckId(),
-                            oldtransport.driverId(),
-                            oldtransport.departureTime(),
-                            oldtransport.weight()
-                    );
-                }
-                case 4 ->{
+                case 3 ->{
                     System.out.println("Select new destinations and item lists: ");
                     HashMap<String, Integer> itemsList = new HashMap<>();
                     LinkedList<String> destinations = new LinkedList<>();
@@ -257,7 +243,7 @@ public class TransportsManagement {
                             oldtransport.weight()
                     );
                 }
-                case 5 -> {
+                case 4 -> {
                     int truckWeight = uiData.readInt("Truck weight: ");
                     updateTransportHelperMethod(
                             oldtransport.id(),
@@ -269,7 +255,7 @@ public class TransportsManagement {
                             truckWeight
                     );
                 }
-                case 6 -> {
+                case 5 -> {
                     overrideArrivalTimes(oldtransport);
                     updateTransportHelperMethod(
                             oldtransport.id(),
@@ -280,7 +266,7 @@ public class TransportsManagement {
                             oldtransport.weight()
                     );
                 }
-                case 7 -> {
+                case 6 -> {
                     return;
                 }
                 default -> {
@@ -413,7 +399,7 @@ public class TransportsManagement {
                                              int weight) {
         Transport newTransport = new Transport(
                 id,
-                new DeliveryRoute(destinations, itemLists),
+                new DeliveryRoute(id,destinations, itemLists),
                 driverId,
                 truckId,
                 departureDateTime,
@@ -534,11 +520,4 @@ public class TransportsManagement {
         return isMissingData;
     }
 
-    @Deprecated
-    private Transport fetchAddedTransport(int _id) {
-        String _json = Transport.getLookupObject(_id).toJson();
-        String _responseJson = ts.getTransport(_json);
-        Response _response = JsonUtils.deserialize(_responseJson, Response.class);
-        return Transport.fromJson(_response.data());
-    }
 }

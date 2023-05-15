@@ -1,7 +1,7 @@
 package Fronend.PresentationLayer.SuppliersModule;
 
-public class Main {
-    public static void main(String[] args) {
+public class SupplierMain {
+    public void run() {
         UI ui = new UI();
         boolean run = true;
         while (run)

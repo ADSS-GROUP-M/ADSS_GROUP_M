@@ -3,9 +3,9 @@ import Fronend.PresentationLayer.InventoryModule.MainMenu;
 
 import java.util.*;
 
-public class Main {
+public class InventoryMain {
 
-    public static void main(String[] args)
+    public void run()
     {
         System.out.println("Welcome to the Inventory CLI");
         new MainMenu().run();

@@ -58,6 +58,7 @@ public class CategoryDataMapper extends AbstractDataMapper {
                     Map<String, Product> productMap =iteratorProduct.next();
                     for (Product product : productMap.values()) {
                         if (product.getCatalogNumber().equals(resultSet.getString("catalog_number")))
+                            if(cached_categories.get(resultSet.getString("category")) != null)
                             cached_categories.get(resultSet.getString("category")).addProductToCategory(product);
                     }
                 }

@@ -9,11 +9,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a1a5eabd-8794-4991-be68-217dff7970da" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/StoreProductDiscountDataMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/StoreProductDiscountDataMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/super_lee.sqbpro" beforeDir="false" afterPath="$PROJECT_DIR$/super_lee.sqbpro" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/super_lee.sqlite" beforeDir="false" afterPath="$PROJECT_DIR$/super_lee.sqlite" afterDir="false" />
+    <list default="true" id="e454f93c-4ee8-4f4b-9a14-eaaf36aa303c" name="Changes" comment="order flow">
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/864717b1-9f72-42cf-a082-e041517c4184.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/864717b1-9f72-42cf-a082-e041517c4184.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -311,7 +308,14 @@
       <option name="project" value="LOCAL" />
       <updated>1684099834858</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="order flow">
+      <created>1684193666799</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1684193666799</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -357,7 +361,8 @@
     <MESSAGE value="adding branch to order" />
     <MESSAGE value="commit" />
     <MESSAGE value="ProductsDataMapper added resultSet.next()" />
-    <option name="LAST_COMMIT_MESSAGE" value="ProductsDataMapper added resultSet.next()" />
+    <MESSAGE value="order flow" />
+    <option name="LAST_COMMIT_MESSAGE" value="order flow" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

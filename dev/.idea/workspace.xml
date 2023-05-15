@@ -9,26 +9,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a1a5eabd-8794-4991-be68-217dff7970da" name="Changes" comment="ProductsDataMapper added resultSet.next()">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_05_2023__11_59__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_05_2023__11_59__Changes_.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_05_2023__18_02__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_05_2023__18_02__Changes_.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_05_2023__22_36__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_05_2023__22_36__Changes_.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_05_2023__22_36__Changes_1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_05_2023__22_36__Changes_1.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_05_2023__22_37__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_05_2023__22_37__Changes_.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_5_15_2023_10_51_AM__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_5_15_2023_10_51_AM__Changes_.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_5_15_2023_11_28_PM__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_5_15_2023_11_28_PM__Changes_.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_5_15_2023_11_45_PM__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_5_15_2023_11_45_PM__Changes_.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_5_15_2023_1_45_AM__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_5_15_2023_1_45_AM__Changes_.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_5_15_2023_1_46_AM__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_5_15_2023_1_46_AM__Changes_.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Merge_at_10_05_2023__12_00__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Merge_at_10_05_2023__12_00__Changes_.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_16_05_2023_0_18__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_16_05_2023_0_18__Changes_.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_5_15_2023_10_50_AM__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_5_15_2023_10_50_AM__Changes_.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_5_15_2023_10_50_AM__Changes_1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_5_15_2023_10_50_AM__Changes_1.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_5_15_2023_11_47_PM__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_5_15_2023_11_47_PM__Changes_.xml" afterDir="false" />
+    <list default="true" id="a1a5eabd-8794-4991-be68-217dff7970da" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test/Backend/BusinessLayer/IntegrationTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/Backend/BusinessLayer/IntegrationTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/InventoryModule/ProductController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/BusinessLayer/InventoryModule/ProductController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/StoreProductDiscountDataMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/StoreProductDiscountDataMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/super_lee.sqbpro" beforeDir="false" afterPath="$PROJECT_DIR$/super_lee.sqbpro" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/super_lee.sqlite" beforeDir="false" afterPath="$PROJECT_DIR$/super_lee.sqlite" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -99,7 +83,7 @@
       <recent name="PresentationLayer" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.ProductTest.getProductItemFromList">
+  <component name="RunManager" selected="Application.Main">
     <configuration name="InventoryMain" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="Fronend.PresentationLayer.InventoryModule.Main" />
       <module name="dev" />
@@ -167,18 +151,15 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="ProductTest.getProductItemFromList" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration default="true" type="JetRunConfigurationType">
       <module name="dev" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="Backend.BusinessLayer.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="Backend.BusinessLayer" />
-      <option name="MAIN_CLASS_NAME" value="Backend.BusinessLayer.ProductTest" />
-      <option name="METHOD_NAME" value="getProductItemFromList" />
-      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="dev" />
+      <option name="filePath" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -186,14 +167,12 @@
     <list>
       <item itemvalue="Application.InventoryMain" />
       <item itemvalue="Application.Main" />
-      <item itemvalue="JUnit.ProductTest.getProductItemFromList" />
       <item itemvalue="JUnit.BillOfQuantitiesTest" />
       <item itemvalue="JUnit.BillOfQuantitiesTest.removeDiscountOnAmountOfProducts" />
       <item itemvalue="JUnit.BillOfQuantitiesTest.setOrderOfDiscounts" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.ProductTest.getProductItemFromList" />
         <item itemvalue="Application.Main" />
         <item itemvalue="JUnit.BillOfQuantitiesTest.setOrderOfDiscounts" />
         <item itemvalue="JUnit.BillOfQuantitiesTest.removeDiscountOnAmountOfProducts" />
@@ -339,6 +318,15 @@
     <option name="version" value="3" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
     <option name="RECENT_FILTERS">
       <map>
         <entry key="User">
@@ -350,15 +338,6 @@
                 </option>
               </RecentGroup>
             </list>
-          </value>
-        </entry>
-      </map>
-    </option>
-    <option name="TAB_STATES">
-      <map>
-        <entry key="MAIN">
-          <value>
-            <State />
           </value>
         </entry>
       </map>
@@ -394,6 +373,11 @@
           <option name="timeStamp" value="14" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/Backend/BusinessLayer/InventoryModule/ProductController.java</url>
+          <line>114</line>
+          <option name="timeStamp" value="17" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/ProductsDataMapper.java</url>
           <line>31</line>
           <option name="timeStamp" value="21" />
@@ -409,6 +393,11 @@
           <option name="timeStamp" value="42" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/Backend/BusinessLayer/InventoryModule/ProductController.java</url>
+          <line>164</line>
+          <option name="timeStamp" value="45" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/ProductManagerMapper.java</url>
           <line>133</line>
           <option name="timeStamp" value="51" />
@@ -419,9 +408,29 @@
           <option name="timeStamp" value="52" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/Backend/BusinessLayer/InventoryModule/ProductController.java</url>
+          <line>125</line>
+          <option name="timeStamp" value="53" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/Backend/BusinessLayer/InventoryModule/ProductController.java</url>
+          <line>140</line>
+          <option name="timeStamp" value="58" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/ProductItemDataMapper.java</url>
           <line>92</line>
           <option name="timeStamp" value="59" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/Fronend/PresentationLayer/InventoryModule/DiscountsManu.java</url>
+          <line>41</line>
+          <option name="timeStamp" value="64" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/Backend/ServiceLayer/InventoryModule/StockService.java</url>
+          <line>139</line>
+          <option name="timeStamp" value="65" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

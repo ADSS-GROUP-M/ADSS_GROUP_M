@@ -29,7 +29,7 @@ public class StoreProductDiscountDataMapper extends AbstractDataMapper {
         try {
             if(!isExists(catalog_number, start_date, end_date, discount, branch)){
                 String columnsString = String.join(", ", columns);
-                sqlExecutor.executeWrite(String.format("INSERT INTO %s (%s) VALUES('%s', '%s', '%s', '%s')",
+                sqlExecutor.executeWrite(String.format("INSERT INTO %s (%s) VALUES('%s', '%s', '%s', '%s', '%s')",
                         tableName, columnsString, catalog_number, start_date, end_date, discount, branch));
             }
         }
@@ -47,7 +47,7 @@ public class StoreProductDiscountDataMapper extends AbstractDataMapper {
                     Branch.valueOf(resultSet.getString("branch")),
                     LocalDateTime.parse(resultSet.getString("start_date")),
                     LocalDateTime.parse(resultSet.getString("end_date")),
-                    Double.parseDouble("discount"));
+                    resultSet.getDouble("discount"));
             Branch branch = productStoreDiscount.getBranch();
             String catalog_number = productStoreDiscount.getCatalog_number();
             if(!cachedDiscount.containsKey(branch)) {

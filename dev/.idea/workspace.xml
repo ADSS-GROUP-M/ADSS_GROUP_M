@@ -144,6 +144,8 @@
         <item itemvalue="JUnit.BillOfQuantitiesTest.setOrderOfDiscounts" />
         <item itemvalue="JUnit.BillOfQuantitiesTest.removeDiscountOnAmountOfProducts" />
         <item itemvalue="JUnit.BillOfQuantitiesTest" />
+        <item itemvalue="JUnit.BillOfQuantitiesTest.setOrderOfDiscounts" />
+        <item itemvalue="JUnit.BillOfQuantitiesTest.removeDiscountOnAmountOfProducts" />
       </list>
     </recent_temporary>
   </component>

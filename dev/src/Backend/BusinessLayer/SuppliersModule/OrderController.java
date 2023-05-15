@@ -322,12 +322,34 @@ public class OrderController {
         }
     }
 
-    private Map<String, Map<String, Integer>> mapSupplierQuantitiesByTime(Map<String, Integer> order, List<Supplier> suppliers){
+    private Map<String, Map<String, Integer>> mapSupplierQuantitiesByTime(Map<String, Integer> order, List<Supplier> suppliers) throws SQLException {
         Map<String, Map<String, Integer>> productsToSuppliers = new HashMap<>();
         for(Map.Entry<String, Integer> product : order.entrySet()){
             String catalogNumber = product.getKey();
             int quantity = product.getValue();
+            productsToSuppliers.put(catalogNumber, new HashMap<>());
+            Map<String, Integer> suppliersToQuantity = mapSupplierQuantitiesByTime(catalogNumber, quantity, suppliers);
+            for(Map.Entry<String, Integer> supplierToQuantity : suppliersToQuantity.entrySet()){
+                String bnNumber = supplierToQuantity.getKey();
+                int quantityOfSupplier = supplierToQuantity.getValue();
+                productsToSuppliers.get(catalogNumber).put(bnNumber, quantityOfSupplier);
+            }
         }
+
+        Map<String, Map<String, Integer>> suppliersToProducts = new HashMap<>();
+        for(Map.Entry<String, Map<String, Integer>> productToSuppliers : productsToSuppliers.entrySet()){
+            Map<String, Integer> suppliersToQuantities = productToSuppliers.getValue();
+            String catalogNumber = productToSuppliers.getKey();
+            for(Map.Entry<String, Integer> supplierToQuantity : suppliersToQuantities.entrySet()){
+                String bnNumber = supplierToQuantity.getKey();
+                int quantityOfSupplier = supplierToQuantity.getValue();
+                if(!suppliersToProducts.containsKey(bnNumber))
+                    suppliersToProducts.put(bnNumber, new HashMap<>());
+                suppliersToProducts.get(bnNumber).put(catalogNumber, quantityOfSupplier);
+            }
+        }
+
+
         return null;
     }
 
@@ -337,7 +359,9 @@ public class OrderController {
         Map<String, Integer> supplierToDay = mapSuppliersToDay(catalogNumber, suppliersToUse);
         Supplier supplierShortest = suppliersToUse.get(0);
         for(Supplier supplier : suppliersToUse){
-            if(getDay(supplier.getBnNumber()) < getDay(supplierShortest.getBnNumber()))
+            int quantityCanSupplyShortest = agreementController.getNumberOfUnits(supplierShortest.getBnNumber(), catalogNumber);
+            int quantityCanSupplySupplier = agreementController.getNumberOfUnits(supplier.getBnNumber(), catalogNumber);
+            if(getDay(supplier.getBnNumber()) < getDay(supplierShortest.getBnNumber()) || (getDay(supplier.getBnNumber()) == getDay(supplierShortest.getBnNumber()) && (quantityCanSupplyShortest < quantity && quantityCanSupplySupplier > quantityCanSupplyShortest)))
                 supplierShortest = supplier;
         }
         int quantityCanSupply = agreementController.getNumberOfUnits(supplierShortest.getBnNumber(), catalogNumber);

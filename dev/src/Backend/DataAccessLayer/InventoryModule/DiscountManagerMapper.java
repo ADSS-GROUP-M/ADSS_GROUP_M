@@ -23,7 +23,7 @@ public class DiscountManagerMapper {
         try {
             cached_discounts = storeProductDiscountDataMapper.initializeCache();
         } catch (SQLException e) {
-            //TODO: Handle the exception appropriately
+            throw new RuntimeException(e.getMessage());
         }
     }
     public static DiscountManagerMapper getInstance(){
@@ -36,15 +36,17 @@ public class DiscountManagerMapper {
 
     public void createDiscount(String catalog_number, String branch, LocalDateTime startDate, LocalDateTime endtDate, double discount){
         try {
-            ProductStoreDiscount productStoreDiscount = null;
             storeProductDiscountDataMapper.insert(catalog_number,startDate.toString(),endtDate.toString(),discount,branch);
-            productStoreDiscount = new ProductStoreDiscount(catalog_number,Branch.valueOf(branch),startDate,endtDate,discount);
+            ProductStoreDiscount productStoreDiscount = new ProductStoreDiscount(catalog_number,Branch.valueOf(branch),startDate,endtDate,discount);
             cached_discounts.computeIfAbsent(Branch.valueOf(branch), k -> new HashMap<>())
                     .computeIfAbsent(catalog_number, k -> new ArrayList<>())
                     .add(productStoreDiscount);
         } catch (SQLException e) {
-            //TODO: Handle the exception appropriately
+            throw new RuntimeException(e.getMessage());
         }
     }
 
+    public Map<Branch, Map<String, List<ProductStoreDiscount>>> getCached_discounts() {
+        return cached_discounts;
+    }
 }

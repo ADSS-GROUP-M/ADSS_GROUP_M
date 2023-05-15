@@ -9,7 +9,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="94b5d018-328b-414f-abd3-a4eb1049cbfc" name="Changes" comment="commit" />
+    <list default="true" id="a1a5eabd-8794-4991-be68-217dff7970da" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/StoreProductDiscountDataMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/StoreProductDiscountDataMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/super_lee.sqbpro" beforeDir="false" afterPath="$PROJECT_DIR$/super_lee.sqbpro" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/super_lee.sqlite" beforeDir="false" afterPath="$PROJECT_DIR$/super_lee.sqlite" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -78,10 +83,23 @@
       <recent name="PresentationLayer" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.InventoryMain">
+  <component name="RunManager" selected="Application.Main">
     <configuration name="InventoryMain" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="Fronend.PresentationLayer.InventoryModule.Main" />
       <module name="dev" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Fronend.PresentationLayer.Main" />
+      <module name="dev" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="Fronend.PresentationLayer.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -133,14 +151,29 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="dev" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="dev" />
+      <option name="filePath" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <list>
       <item itemvalue="Application.InventoryMain" />
+      <item itemvalue="Application.Main" />
       <item itemvalue="JUnit.BillOfQuantitiesTest" />
       <item itemvalue="JUnit.BillOfQuantitiesTest.removeDiscountOnAmountOfProducts" />
       <item itemvalue="JUnit.BillOfQuantitiesTest.setOrderOfDiscounts" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.Main" />
         <item itemvalue="JUnit.BillOfQuantitiesTest.setOrderOfDiscounts" />
         <item itemvalue="JUnit.BillOfQuantitiesTest.removeDiscountOnAmountOfProducts" />
         <item itemvalue="JUnit.BillOfQuantitiesTest" />
@@ -388,6 +421,16 @@
           <url>file://$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/ProductItemDataMapper.java</url>
           <line>92</line>
           <option name="timeStamp" value="59" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/Fronend/PresentationLayer/InventoryModule/DiscountsManu.java</url>
+          <line>41</line>
+          <option name="timeStamp" value="64" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/Backend/ServiceLayer/InventoryModule/StockService.java</url>
+          <line>139</line>
+          <option name="timeStamp" value="65" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

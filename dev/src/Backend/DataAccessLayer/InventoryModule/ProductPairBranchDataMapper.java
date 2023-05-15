@@ -31,7 +31,7 @@ public class ProductPairBranchDataMapper extends AbstractDataMapper {
             ProductPairBranchDAO productPairBranchDAO = new ProductPairBranchDAO(branch_name, product_catalog_number, original_store_price, notification_min);
             cachedProductsPairBranch.add(productPairBranchDAO);
             } catch (SQLException e) {
-                //TODO: Handle the exception appropriately
+                throw new RuntimeException(e.getMessage());
             }
         }
     }
@@ -47,7 +47,7 @@ public class ProductPairBranchDataMapper extends AbstractDataMapper {
             }
         }
         catch (SQLException e){
-            //TODO: Handle the exception appropriately
+            throw new RuntimeException(e.getMessage());
         }
 
     }

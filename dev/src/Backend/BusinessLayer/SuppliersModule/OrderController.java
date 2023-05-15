@@ -1,10 +1,14 @@
 package Backend.BusinessLayer.SuppliersModule;
 
 import Backend.BusinessLayer.BusinessLayerUsage.Branch;
+import Backend.BusinessLayer.SuppliersModule.DeliveryAgreements.DeliveryAgreement;
+import Backend.BusinessLayer.SuppliersModule.DeliveryAgreements.DeliveryByInvitation;
+import Backend.BusinessLayer.SuppliersModule.DeliveryAgreements.DeliveryFixedDays;
 import Backend.DataAccessLayer.SuppliersModule.OrderHistoryDataMappers.OrderHistoryDataMapper;
 import Backend.DataAccessLayer.dalUtils.DalException;
 
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -286,6 +290,35 @@ public class OrderController {
         }
         catch (Exception e){
             return sum;
+        }
+    }
+
+    private int getDay(String bnNumber) throws SQLException {
+        int dayNow = Calendar.DAY_OF_WEEK;
+        DeliveryAgreement deliveryAgreement = agreementController.getDeliveryAgreement(bnNumber);
+        if(deliveryAgreement instanceof DeliveryByInvitation){
+            DeliveryByInvitation deliveryByInvitation = (DeliveryByInvitation) deliveryAgreement;
+            return (deliveryByInvitation.getNumberOfDays() + dayNow) % 7;
+        }
+        else {
+            DeliveryFixedDays deliveryFixedDays = (DeliveryFixedDays) deliveryAgreement;
+            if(deliveryFixedDays.getDaysOfTheWeek().contains(dayNow))
+                return dayNow;
+            //try to look for day greater than now, but in this week
+            int dayChosen = dayNow;
+            int maxDay = 7;
+            for(int day : deliveryFixedDays.getDaysOfTheWeek())
+                if(day > dayNow && day < maxDay) {
+                    dayChosen = day;
+                    maxDay = day;
+                }
+            if(dayChosen != dayNow)
+                return dayChosen;
+            //try to look for day smaller than now, that in next week
+            for(int day : deliveryFixedDays.getDaysOfTheWeek())
+                if(day < dayChosen)
+                    dayChosen = day;
+            return dayChosen;
         }
     }
 

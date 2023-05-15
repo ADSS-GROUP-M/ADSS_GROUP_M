@@ -27,7 +27,7 @@ public class Product {
         this.originalStorePrice = originalStorePrice;
         this.category = null;
         this.subCategory = new ArrayList<Category>();
-        this.notificationMin = -1;
+        this.notificationMin = 5;
         // Map<productID, product>
         this.productItems = new HashMap<String, ProductItem>();
         this.branch = branch;

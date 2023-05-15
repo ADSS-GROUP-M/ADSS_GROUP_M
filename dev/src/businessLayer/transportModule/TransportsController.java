@@ -1,6 +1,5 @@
 package businessLayer.transportModule;
 
-import com.google.gson.JsonStreamParser;
 import com.google.gson.reflect.TypeToken;
 import dataAccessLayer.transportModule.DeliveryRoutesDAO;
 import dataAccessLayer.transportModule.TransportsDAO;
@@ -130,12 +129,11 @@ public class TransportsController {
     /**
      * Updates a transport object with the given ID in the TransportsController.
      *
-     * @param id The ID of the transport object to update.
      * @param newTransport The updated transport object.
      * @throws TransportException If the newTransport object is invalid or if a transport with the given ID is not found.
      */
-    public Transport updateTransport(int id, Transport newTransport) throws TransportException{
-        if(transportExists(id) == false) {
+    public Transport updateTransport(Transport newTransport) throws TransportException{
+        if(transportExists(newTransport.id()) == false) {
             throw new TransportException("Transport not found");
         }
 
@@ -143,19 +141,18 @@ public class TransportsController {
         if(newTransport.deliveryRoute().manuallyOverrideEstimatedArrivalTimes() == false){
             initializeEstimatedArrivalTimes(newTransport);
         }
-        Transport toUpdate = new Transport(id, newTransport);
+
         try {
-            dao.update(toUpdate);
+            dao.update(newTransport);
 
-            DeliveryRoute oldRoute = drDao.select(DeliveryRoute.getLookupObject(id));
-            if(oldRoute.deepEquals(oldRoute) == false){
-                drDao.update(toUpdate.deliveryRoute());
+            DeliveryRoute oldRoute = drDao.select(DeliveryRoute.getLookupObject(newTransport.id()));
+            if(oldRoute.deepEquals(newTransport.deliveryRoute()) == false){
+                drDao.update(newTransport.deliveryRoute());
             }
-
         } catch (DalException e) {
             throw new TransportException(e.getMessage(),e);
         }
-        return toUpdate;
+        return newTransport;
     }
 
     /**

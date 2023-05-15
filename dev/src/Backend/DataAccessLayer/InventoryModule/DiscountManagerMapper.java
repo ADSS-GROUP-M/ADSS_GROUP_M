@@ -36,9 +36,8 @@ public class DiscountManagerMapper {
 
     public void createDiscount(String catalog_number, String branch, LocalDateTime startDate, LocalDateTime endtDate, double discount){
         try {
-            ProductStoreDiscount productStoreDiscount = null;
             storeProductDiscountDataMapper.insert(catalog_number,startDate.toString(),endtDate.toString(),discount,branch);
-            productStoreDiscount = new ProductStoreDiscount(catalog_number,Branch.valueOf(branch),startDate,endtDate,discount);
+            ProductStoreDiscount productStoreDiscount = new ProductStoreDiscount(catalog_number,Branch.valueOf(branch),startDate,endtDate,discount);
             cached_discounts.computeIfAbsent(Branch.valueOf(branch), k -> new HashMap<>())
                     .computeIfAbsent(catalog_number, k -> new ArrayList<>())
                     .add(productStoreDiscount);
@@ -47,4 +46,7 @@ public class DiscountManagerMapper {
         }
     }
 
+    public Map<Branch, Map<String, List<ProductStoreDiscount>>> getCached_discounts() {
+        return cached_discounts;
+    }
 }

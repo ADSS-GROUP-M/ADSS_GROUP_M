@@ -49,14 +49,28 @@ public class Agreement {
         deliveryAgreement = new DeliveryByInvitation(haveTransport, numOfDays);
     }
 
-    public void addProduct(Product product){
-        products.put(product.getCatalogNumber(), product);
+    public void addProduct(String catalogNumber, String supplierCatalogNumber, double price, int numberOfUnits){
+        products.put(catalogNumber, new Product(catalogNumber, supplierCatalogNumber, price, numberOfUnits));
     }
 
     public void removeProduct(String catalogNumber){
         products.remove(catalogNumber);
     }
 
+    public boolean productExist(String catalogNumber){
+        return getProduct(catalogNumber) != null;
+    }
+    public void setSuppliersCatalogNumber(String catalogNumber, String newSuppliersCatalogNumber){
+        getProduct(catalogNumber).setSuppliersCatalogNumber(newSuppliersCatalogNumber);
+    }
+
+    public void setPrice(String catalogNumber, double price){
+        getProduct(catalogNumber).setPrice(price);
+    }
+
+    public void setNumberOfUnits(String catalogNumber, int numberOfUnits){
+        getProduct(catalogNumber).setNumberOfUnits(numberOfUnits);
+    }
     public BillOfQuantities getBillOfQuantities(){
         return billOfQuantities;
     }
@@ -64,6 +78,14 @@ public class Agreement {
         if(billOfQuantities == null)
             billOfQuantities = new BillOfQuantities();
         return billOfQuantities;
+    }
+
+    public String getSuppliersCatalogNumber(String catalogNumber){
+        return products.get(catalogNumber).getSuppliersCatalogNumber();
+    }
+
+    public int getNumberOfUnits(String catalogNumber){
+        return products.get(catalogNumber).getNumberOfUnits();
     }
 
     public void setBillOfQuantities(BillOfQuantities billOfQuantities) {
@@ -75,7 +97,7 @@ public class Agreement {
         for (Product product : products.values())
             productsString += "\n\t\t\t" + product.toString();
 
-        return "AGREEMENT:\n\t\t" + productsString + "\n\t\t" + deliveryAgreement.toString() + "\n\t\t" + (billOfQuantities == null ? "" : billOfQuantities.toString());
+        return "AGREEMENT:\n\t\t" + productsString + "\n\t\t" + deliveryAgreement.toString() + "\n\t\t";
     }
 
 }

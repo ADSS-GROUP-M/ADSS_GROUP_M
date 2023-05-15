@@ -62,7 +62,7 @@ public class UserDAO extends DAO<User> {
         if (resultSet.next()) {
             ans = getObjectFromResultSet(resultSet);
         } else {
-            throw new DalException("No truck with id " + object.getUsername() + " was found");
+            throw new DalException("No user with username " + object.getUsername() + " was found");
         }
         cache.put(ans);
         return ans;

@@ -61,13 +61,12 @@ public class ProductManagerMapper {
             if(!isProductExists(catalog_number)){
                 Product product = new Product(catalog_number, name, manufacture, originalStorePrice, Branch.valueOf(branch));
                 productsDataMapper.insert(catalog_number, name, manufacture);
-                // TODO add min notification?
                 productPairBranchDataMapper.insert(branch, catalog_number, originalStorePrice, product.getNotificationMin());
                 cachedProducts.computeIfAbsent(product.getBranch(), k -> new HashMap<>())
                         .put(product.getCatalogNumber(), product);
             }
         } catch (SQLException e) {
-            //TODO: Handle the exception appropriately
+            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -92,12 +91,11 @@ public class ProductManagerMapper {
                 product.addProductItem(productItem);
             }
         } catch (SQLException e) {
-            //TODO: Handle the exception appropriately
+            throw new RuntimeException(e.getMessage());
         }
 
     }
 
-    //TODO
     public void updateProduct(String catalog_number, String branch, String name, String manufacture, double originalStorePrice, int newMinAmount){
         try {
             if(isProductExists(catalog_number)){
@@ -105,7 +103,7 @@ public class ProductManagerMapper {
                 productPairBranchDataMapper.update(branch, catalog_number, originalStorePrice,newMinAmount);
             }
         } catch (SQLException e) {
-            //TODO: Handle the exception appropriately
+            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -115,7 +113,7 @@ public class ProductManagerMapper {
                 productItemDataMapper.update(serial_number,is_defective,defective_date,supplier_id,supplier_price,supplier_discount,sold_price,expiration_date,location,catalog_number,branch);
             }
         } catch (SQLException e) {
-            // TODO: Handle the exception appropriately
+            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -125,7 +123,7 @@ public class ProductManagerMapper {
                 productsDataMapper.update(catalog_number,null,null,category_name);
             }
         } catch (SQLException e) {
-            // TODO: Handle the exception appropriately
+            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -135,7 +133,7 @@ public class ProductManagerMapper {
                 productsDataMapper.update(catalog_number,null,null,"");
             }
         } catch (SQLException e) {
-            // TODO: Handle the exception appropriately
+            throw new RuntimeException(e.getMessage());
         }
     }
 

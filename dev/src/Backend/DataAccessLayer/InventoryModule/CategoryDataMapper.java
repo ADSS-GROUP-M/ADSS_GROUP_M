@@ -1,6 +1,8 @@
 package Backend.DataAccessLayer.InventoryModule;
 import Backend.BusinessLayer.BusinessLayerUsage.Branch;
 import Backend.BusinessLayer.InventoryModule.Category;
+import Backend.BusinessLayer.InventoryModule.Product;
+import Backend.BusinessLayer.InventoryModule.ProductController;
 import Backend.BusinessLayer.InventoryModule.ProductItem;
 import Backend.DataAccessLayer.dalUtils.AbstractDataMapper;
 import Backend.DataAccessLayer.dalUtils.OfflineResultSet;
@@ -44,6 +46,25 @@ public class CategoryDataMapper extends AbstractDataMapper {
             cachedCategory.put(resultSet.getString("category_name"), category);
         }
         return cachedCategory;
+    }
+
+    public void initProductsWithCategory(Map<String, Category>cached_categories){
+        try{
+            Collection<Map<String,Product>> mapProductCollection = ProductManagerMapper.getInstance().getCachedProducts().values();
+            Iterator<Map<String,Product>> iteratorProduct = mapProductCollection.iterator();
+            OfflineResultSet resultSet = sqlExecutor.executeRead(String.format("SELECT %s , %s FROM %s", "catalog_number","category", "products"));
+            while (resultSet.next()) {
+                while (iteratorProduct.hasNext()) {
+                    Map<String, Product> productMap =iteratorProduct.next();
+                    for (Product product : productMap.values()) {
+                        if (product.getCatalogNumber().equals(resultSet.getString("catalog_number")))
+                            cached_categories.get(resultSet.getString("category")).addProductToCategory(product);
+                    }
+                }
+            }
+        }
+        catch (SQLException e){throw new RuntimeException(e.getMessage());}
+
     }
 
     public boolean isExists(String category_name) throws SQLException {

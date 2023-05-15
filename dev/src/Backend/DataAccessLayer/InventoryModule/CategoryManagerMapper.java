@@ -1,11 +1,14 @@
 package Backend.DataAccessLayer.InventoryModule;
 import Backend.BusinessLayer.BusinessLayerUsage.Branch;
 import Backend.BusinessLayer.InventoryModule.Category;
+import Backend.BusinessLayer.InventoryModule.Product;
 import Backend.DataAccessLayer.InventoryModule.CategoryDataMapper;
 import Backend.DataAccessLayer.InventoryModule.CategoryHierarchyDataMapper;
 import Backend.DataAccessLayer.dalUtils.OfflineResultSet;
 
 import java.sql.SQLException;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,6 +27,7 @@ public class CategoryManagerMapper{
         } catch (SQLException e) {
             throw new RuntimeException(e.getMessage());
         }
+        categoryDataMapper.initProductsWithCategory(cached_categories);
     }
 
     public static CategoryManagerMapper getInstance(){

@@ -295,7 +295,10 @@ public class TransportsManagement {
     private void overrideArrivalTimes(Transport oldtransport) {
         System.out.println("Select new arrival times (enter 'cancel!' to cancel): ");
         HashMap<String, LocalTime> arrivalTimes = new HashMap<>();
-        for (String destination : oldtransport.route()) {
+        ListIterator<String> iterator = oldtransport.route().listIterator();
+        iterator.next(); // skip source
+        while(iterator.hasNext()) {
+            String destination = iterator.next();
             System.out.println("Arrival time for " + destination + ": ");
             LocalTime arrivalTime = uiData.readTime("(format: hh:mm): ");
             if(arrivalTime == null) {

@@ -1,5 +1,6 @@
 package businessLayer.transportModule.bingApi;
 
+import exceptions.TransportException;
 import utils.JsonUtils;
 
 import java.io.IOException;
@@ -15,7 +16,7 @@ public class BingAPI {
     public BingAPI() {
     }
 
-    public LocationByQueryResponse locationByQuery(String address) throws IOException{
+    public LocationByQueryResponse locationByQuery(String address) throws TransportException {
 
         String urlPrefix = "http://dev.virtualearth.net/REST/v1/Locations?q=";
         String urlSuffix = "&key=" + key;
@@ -25,7 +26,7 @@ public class BingAPI {
         return JsonUtils.deserialize(json, LocationByQueryResponse.class);
     }
 
-    public DistanceMatrixResponse distanceMatrix(List<Point> list) throws IOException {
+    public DistanceMatrixResponse distanceMatrix(List<Point> list) throws TransportException {
         String urlPrefix = "http://dev.virtualearth.net/REST/v1/Routes/DistanceMatrix?";
         String urlSuffix = "&travelMode=driving&key=" + key;
         StringBuilder originsString = new StringBuilder("origins=");
@@ -46,29 +47,49 @@ public class BingAPI {
         return JsonUtils.deserialize(json, DistanceMatrixResponse.class);
     }
 
-    private String sendRequest(String _url) throws IOException {
-        URL url = new URL(_url);
+    private String sendRequest(String _url) throws TransportException {
 
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("GET");
-        conn.connect();
+        HttpURLConnection conn = null;
 
-        //Check if connect is made
-        int responseCode = conn.getResponseCode();
+        try{
+            URL url = new URL(_url);
 
-        StringBuilder informationString = new StringBuilder();
-        // 200 OK
-        if (responseCode != 200) {
-            throw new IOException("HttpResponseCode: " + responseCode);
+            conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            conn.connect();
+
+            //Check if connect is made
+            int responseCode = conn.getResponseCode();
+
+            StringBuilder informationString = new StringBuilder();
+            // 200 OK
+            if (responseCode != 200) {
+                throw new TransportException("Connection to Bing Maps API failed with error code "+responseCode);
+            }
+            Scanner scanner = new Scanner(url.openStream());
+
+            while (scanner.hasNext()) {
+                informationString.append(scanner.nextLine());
+            }
+            //Close the scanner
+            scanner.close();
+
+            return informationString.toString();
+        } catch (IOException e) {
+            StringBuilder message = new StringBuilder();
+            try {
+                message.append("Connection to Bing Maps API failed, ")
+                        .append(e.getClass().getName())
+                        .append("\n")
+                        .append("please make sure that you can access http://dev.virtualearth.net/");
+                if (conn != null) {
+                    int responseCode = conn.getResponseCode();
+                    message.append("\n")
+                            .append("Error code: ")
+                            .append(responseCode);
+                }
+            } catch (IOException ignored) {}
+            throw new TransportException(message.toString(), e);
         }
-        Scanner scanner = new Scanner(url.openStream());
-
-        while (scanner.hasNext()) {
-            informationString.append(scanner.nextLine());
-        }
-        //Close the scanner
-        scanner.close();
-
-        return informationString.toString();
     }
 }

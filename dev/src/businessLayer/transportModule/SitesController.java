@@ -9,6 +9,7 @@ import objects.transportObjects.Site;
 import serviceLayer.employeeModule.Services.EmployeesService;
 
 import java.io.IOException;
+import java.util.LinkedList;
 import java.util.List;
 
 import static serviceLayer.employeeModule.Services.UserService.TRANSPORT_MANAGER_USERNAME;
@@ -162,24 +163,20 @@ public class SitesController {
     public void addAllSitesFirstTimeSystemLoad(List<Site> sites) throws TransportException {
 
         // get latitude and longitude
-        sites = sites.stream().map(site -> {
-            try {
-                Point p = sitesRoutesController.getCoordinates(site);
-                return new Site(site, p.latitude(), p.longitude());
-            } catch (TransportException e) {
-                throw new RuntimeException(e);
-            }
-        }).toList();
 
-        sites.forEach(site -> {
+        List<Site> _sites = new LinkedList<>();
+        for(Site site : sites){
+            Point p = sitesRoutesController.getCoordinates(site);
+            Site _site = new Site(site, p.latitude(), p.longitude());
+            _sites.add(_site);
             try {
-                dao.insert(site);
+                dao.insert(_site);
             } catch (DalException e) {
-                throw new RuntimeException(e);
+                throw new TransportException(e.getMessage(),e);
             }
-        });
+        }
 
-        sitesRoutesController.addAllRouteObjectsFirstTimeLoad(sites);
+        sitesRoutesController.addAllRouteObjectsFirstTimeLoad(_sites);
 
         for(Site site : sites){
             if(site.siteType() == Site.SiteType.BRANCH){

@@ -65,41 +65,47 @@ public class DataGenerator {
     private static Site supplier5;
     private static Site logistical1;
 
-    public static void generateData(){
-        deleteData();
-        ServiceFactory factory = new ServiceFactory();
-        UserController uc = factory.businessFactory().userController();
-        us = factory.userService();
-        es = factory.employeesService();
-        ItemListsService ils = factory.itemListsService();
-        initializeUserData(us,uc);
-        generateSites(factory.businessFactory().sitesController());
-        generateItemLists(ils);
-        generateTrucks(factory.resourceManagementService());
+    public static String generateData(){
+        try{
+            deleteData();
+            ServiceFactory factory = new ServiceFactory();
+            UserController uc = factory.businessFactory().userController();
+            us = factory.userService();
+            es = factory.employeesService();
+            ItemListsService ils = factory.itemListsService();
+            initializeUserData(us,uc);
+            generateSites(factory.businessFactory().sitesController());
+            generateItemLists(ils);
+            generateTrucks(factory.resourceManagementService());
 
-        // Driver Data
-        driver1 = new Driver("1234", "megan smith", Driver.LicenseType.A1);
-        driver2 = new Driver("5678", "john doe", Driver.LicenseType.C3);
-        driver3 = new Driver("9012", "emily chen", Driver.LicenseType.C2);
-        driver4 = new Driver("3456", "david lee", Driver.LicenseType.B2);
-        driver5 = new Driver("7890", "sarah kim", Driver.LicenseType.C3);
-        List<Driver> morningDrivers = List.of(driver1, driver2);
-        List<Driver> eveningDrivers = List.of(driver3, driver4, driver5);
-        List<Driver> drivers = new ArrayList<>();
-        drivers.addAll(morningDrivers);
-        drivers.addAll(eveningDrivers);
+            // Driver Data
+            driver1 = new Driver("1234", "megan smith", Driver.LicenseType.A1);
+            driver2 = new Driver("5678", "john doe", Driver.LicenseType.C3);
+            driver3 = new Driver("9012", "emily chen", Driver.LicenseType.C2);
+            driver4 = new Driver("3456", "david lee", Driver.LicenseType.B2);
+            driver5 = new Driver("7890", "sarah kim", Driver.LicenseType.C3);
+            List<Driver> morningDrivers = List.of(driver1, driver2);
+            List<Driver> eveningDrivers = List.of(driver3, driver4, driver5);
+            List<Driver> drivers = new ArrayList<>();
+            drivers.addAll(morningDrivers);
+            drivers.addAll(eveningDrivers);
 
-        initializeBranches(drivers);
-        initializeShiftDay(morningDrivers, eveningDrivers, SHIFT_DATE);
-        assignStorekeepers(SHIFT_DATE);
-        generateTransports(factory.transportsService());
+            initializeBranches(drivers);
+            initializeShiftDay(morningDrivers, eveningDrivers, SHIFT_DATE);
+            assignStorekeepers(SHIFT_DATE);
+            generateTransports(factory.transportsService());
+        } catch (TransportException | EmployeeException e) {
+            return "\n"+e.getMessage()+"\n";
+        }
+
+        return "\nGenerated data successfully.";
     }
 
     public static void deleteData(){
         DalFactory.clearDB("SuperLiDB.db");
     }
 
-    public static void generateTrucks(ResourceManagementService rms) {
+    public static void generateTrucks(ResourceManagementService rms) throws TransportException {
         truck1 = new Truck("abc123", "ford", 1500, 10000, Truck.CoolingCapacity.NONE);
         truck2 = new Truck("def456", "chevy", 2000, 15000, Truck.CoolingCapacity.COLD);
         truck3 = new Truck("ghi789", "toyota", 2500, 20000, Truck.CoolingCapacity.COLD);
@@ -113,7 +119,7 @@ public class DataGenerator {
         validateOperation(rms.addTruck(truck5.toJson()));
     }
 
-    public static void generateItemLists(ItemListsService ils) {
+    public static void generateItemLists(ItemListsService ils) throws TransportException {
         HashMap<String, Integer> load1 = new HashMap<>();
         load1.put("shirts", 20);
         load1.put("pants", 15);
@@ -181,7 +187,7 @@ public class DataGenerator {
         validateOperation(ils.addItemList(itemList5.toJson()));
     }
 
-    public static void generateSites(SitesController controller){
+    public static void generateSites(SitesController controller) throws TransportException {
         branch1 = new Site("branch1", "14441 s inglewood ave, hawthorne, ca 90250, united states", "zone1", "111-111-1111", "John Smith", Site.SiteType.BRANCH, 0, 0);
         branch2 = new Site("branch2", "19503 s normandie ave, torrance, ca 90501, united states", "zone1", "222-222-2222", "Jane Doe", Site.SiteType.BRANCH, 0, 0);
         branch3 = new Site("branch3", "22015 hawthorne blvd, torrance, ca 90503, united states", "zone1", "333-333-3333", "Bob Johnson", Site.SiteType.BRANCH, 0, 0);
@@ -215,21 +221,11 @@ public class DataGenerator {
             add(supplier5);
             add(logistical1);
         }};
-
-        try {
-            controller.addAllSitesFirstTimeSystemLoad(sites);
-        } catch (TransportException e) {
-            throw new RuntimeException(e);
-        }
-
+        controller.addAllSitesFirstTimeSystemLoad(sites);
     }
 
-    public static void initializeUserData(UserService us, UserController uc) {
-        try {
-            uc.createManagerUser(HR_MANAGER_USERNAME, "123");
-        } catch (EmployeeException e) {
-            throw new RuntimeException(e);
-        }
+    public static void initializeUserData(UserService us, UserController uc) throws EmployeeException {
+        uc.createManagerUser(HR_MANAGER_USERNAME, "123");
         us.createUser(HR_MANAGER_USERNAME, UserService.TRANSPORT_MANAGER_USERNAME, "123");
         us.authorizeUser(HR_MANAGER_USERNAME, UserService.TRANSPORT_MANAGER_USERNAME, Authorization.TransportManager.name());
     }
@@ -327,7 +323,7 @@ public class DataGenerator {
         es.setShiftEmployees(HR_MANAGER_USERNAME, branchId, date, shiftType, "Storekeeper", storekeeperIds);
     }
 
-    private static void generateTransports(TransportsService ts) {
+    private static void generateTransports(TransportsService ts) throws TransportException {
 
         Transport transport1 = new Transport(
                 new LinkedList<>(){{
@@ -385,11 +381,11 @@ public class DataGenerator {
         validateOperation(ts.addTransport(transport2.toJson()));
     }
 
-    private static void validateOperation(String json) {
+    private static void validateOperation(String json) throws TransportException {
         Response response;
         response = Response.fromJson(json);
         if(response.success() == false){
-            throw new RuntimeException("Failed to add transport: " + response.message());
+            throw new TransportException(response.message());
         }
     }
 }

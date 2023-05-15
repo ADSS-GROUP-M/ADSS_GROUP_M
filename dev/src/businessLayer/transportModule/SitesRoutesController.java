@@ -24,11 +24,7 @@ public class SitesRoutesController {
 
     public Point getCoordinates(Site site) throws TransportException {
         LocationByQueryResponse queryResponse;
-        try {
-            queryResponse = bingAPI.locationByQuery(site.address());
-        } catch (IOException e) {
-            throw new TransportException(e.getMessage(), e);
-        }
+        queryResponse = bingAPI.locationByQuery(site.address());
         LocationResource[] locationResources = queryResponse.resourceSets()[0].resources();
         if (locationResources.length != 1) {
             throw new TransportException("Could not find site or found multiple sites");
@@ -73,11 +69,7 @@ public class SitesRoutesController {
             Point otherSitePoint = new Point(other.address(), new double[]{other.latitude(),other.longitude()});
 
             DistanceMatrixResponse response;
-            try {
-                response = bingAPI.distanceMatrix(List.of(newSitePoint,otherSitePoint));
-            } catch (IOException e) {
-                throw new TransportException(e.getMessage(), e);
-            }
+            response = bingAPI.distanceMatrix(List.of(newSitePoint,otherSitePoint));
             Result[] results = Arrays.stream(response.resourceSets()[0].resources()[0].results())
                     .filter(result -> result.originIndex() != result.destinationIndex())
                     .toArray(Result[]::new);
@@ -103,11 +95,7 @@ public class SitesRoutesController {
                 .toArray(Point[]::new);
 
         DistanceMatrixResponse response = null;
-        try {
-            response = bingAPI.distanceMatrix(Arrays.stream(points).toList());
-        } catch (IOException e) {
-            throw new TransportException(e.getMessage(), e);
-        }
+        response = bingAPI.distanceMatrix(Arrays.stream(points).toList());
         Result[] results = response.resourceSets()[0].resources()[0].results();
         Arrays.stream(results).forEach(result -> {
             int originIndex = result.originIndex();

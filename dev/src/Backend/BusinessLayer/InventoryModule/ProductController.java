@@ -3,6 +3,7 @@ package Backend.BusinessLayer.InventoryModule;
 
 import Backend.BusinessLayer.BusinessLayerUsage.Branch;
 import Backend.BusinessLayer.SuppliersModule.OrderController;
+import Backend.BusinessLayer.SuppliersModule.PeriodicOrderController;
 import Backend.DataAccessLayer.InventoryModule.ProductDAO;
 import Backend.DataAccessLayer.InventoryModule.ProductManagerMapper;
 import Backend.DataAccessLayer.SuppliersModule.ProductsDataMapper;
@@ -130,12 +131,17 @@ public class ProductController {
                 productItem.reportAsDefective();
             }
             if(isSold != -1){
-                double sold_price = DCController.calcSoldPrice(branch,catalog_number,product.getOriginalStorePrice());
-                productManagerMapper.updateProductItem(catalog_number,branch.name(),serial_number,-1,null,null,-1,-1,sold_price,null,null);
-                productItem.reportAsSold(sold_price);
-                OrderController orderController = OrderController.getInstance();
-                updateMinAmount(branch,catalog_number,orderController.getDaysForOrder(catalog_number,branch));
-                productManagerMapper.updateProduct(catalog_number,branch.name(),null,null,-1,product.getNotificationMin());
+                try {
+                    double sold_price = DCController.calcSoldPrice(branch,catalog_number,product.getOriginalStorePrice());
+                    productManagerMapper.updateProductItem(catalog_number,branch.name(),serial_number,-1,null,null,-1,-1,sold_price,null,null);
+                    productItem.reportAsSold(sold_price);
+                    PeriodicOrderController periodicOrderController = PeriodicOrderController.getInstance();
+                    updateMinAmount(branch,catalog_number,periodicOrderController.getDaysForOrder(catalog_number,branch));
+                    productManagerMapper.updateProduct(catalog_number,branch.name(),null,null,-1,product.getNotificationMin());
+                }
+                catch (SQLException e){
+                    throw new RuntimeException(e.getMessage());
+                }
             }
             if(newSupplier != null){
                 productManagerMapper.updateProductItem(catalog_number,branch.name(),serial_number,-1,null,newSupplier,-1,-1,-1,null,null);

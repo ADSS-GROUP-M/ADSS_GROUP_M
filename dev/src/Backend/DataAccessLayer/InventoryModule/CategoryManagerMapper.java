@@ -22,7 +22,7 @@ public class CategoryManagerMapper{
         try{
             cached_categories = categoryHierarchyDataMapper.initializedCache(categoryDataMapper.initializedCache());
         } catch (SQLException e) {
-            //TODO: Handle the exception appropriately
+            // TODO: Handle the exception appropriately
         }
     }
 

@@ -27,7 +27,7 @@ public class ProductManagerMapper {
         try {
             cachedItems = productItemDataMapper.initializeCache();
             cachedProducts = new HashMap<>();
-            List<ProductPairBranchDAO> cachedProductsPairBranch = productPairBranchDataMapper.getCachedProductsPairBranch();
+            List<ProductPairBranchDAO> cachedProductsPairBranch = productPairBranchDataMapper.initializeCache();
             for (ProductDAO dao : productsDataMapper.initializeCache()) {
                 Product product = null;
                 for (ProductPairBranchDAO pair : cachedProductsPairBranch) {
@@ -59,10 +59,10 @@ public class ProductManagerMapper {
     public void createProduct(String catalog_number, String branch, String name, String manufacture, double originalStorePrice){
         try {
             if(!isProductExists(catalog_number)){
+                Product product = new Product(catalog_number, name, manufacture, originalStorePrice, Branch.valueOf(branch));
                 productsDataMapper.insert(catalog_number, name, manufacture);
                 // TODO add min notification?
-                productPairBranchDataMapper.insert(branch, catalog_number, originalStorePrice);
-                Product product = new Product(catalog_number, name, manufacture, originalStorePrice, Branch.valueOf(branch));
+                productPairBranchDataMapper.insert(branch, catalog_number, originalStorePrice, product.getNotificationMin());
                 cachedProducts.computeIfAbsent(product.getBranch(), k -> new HashMap<>())
                         .put(product.getCatalogNumber(), product);
             }
@@ -79,7 +79,7 @@ public class ProductManagerMapper {
                 product = new Product(catalog_number, name, manufacture, originalStorePrice, Branch.valueOf(branch));
                 cachedProducts.computeIfAbsent(product.getBranch(), k -> new HashMap<>())
                         .put(product.getCatalogNumber(), product);
-                productPairBranchDataMapper.insert(branch, catalog_number, originalStorePrice);
+                productPairBranchDataMapper.insert(branch, catalog_number, originalStorePrice, product.getNotificationMin());
             }
             if (!isItemExists(serial_number, catalog_number, branch)) {
                 productItemDataMapper.insert(serial_number, is_defective, defection_date, supplier_id, supplier_price,

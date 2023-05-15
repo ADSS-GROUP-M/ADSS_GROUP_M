@@ -29,8 +29,8 @@ public class ProductsDataMapper  extends AbstractDataMapper {
         try {
             if (!isExists(catalog_number)) {
                 String columnsString = String.join(", ", columns);
-                sqlExecutor.executeWrite(String.format("INSERT INTO %s (%s) VALUES('%s', %s, '%s')",
-                        tableName, columnsString, name, catalog_number, manufacture));
+                sqlExecutor.executeWrite(String.format("INSERT INTO %s (%s) VALUES('%s', '%s', '%s', null)",
+                        tableName, columnsString, catalog_number, name, manufacture));
 //            ProductDAO productDAO = new ProductDAO(catalog_number, name);
 //            productDAO.setManufacture(manufacture);
 //            cachedProducts.add(productDAO);

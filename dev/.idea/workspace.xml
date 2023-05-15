@@ -312,7 +312,14 @@
       <option name="project" value="LOCAL" />
       <updated>1684099834858</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="commit">
+      <created>1684188802869</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1684188802869</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -356,9 +363,9 @@
     <MESSAGE value="jdk 18" />
     <MESSAGE value="commit before dal" />
     <MESSAGE value="adding branch to order" />
-    <MESSAGE value="commit" />
     <MESSAGE value="ProductsDataMapper added resultSet.next()" />
-    <option name="LAST_COMMIT_MESSAGE" value="ProductsDataMapper added resultSet.next()" />
+    <MESSAGE value="commit" />
+    <option name="LAST_COMMIT_MESSAGE" value="commit" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -372,11 +379,6 @@
           <url>file://$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/OrderHistoryDataMappers/OrderHistoryDataMapper.java</url>
           <line>25</line>
           <option name="timeStamp" value="14" />
-        </line-breakpoint>
-        <line-breakpoint type="java-line">
-          <url>file://$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/ProductsDataMapper.java</url>
-          <line>31</line>
-          <option name="timeStamp" value="21" />
         </line-breakpoint>
         <line-breakpoint type="java-line">
           <url>file://$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/ProductItemDataMapper.java</url>
@@ -402,11 +404,6 @@
           <url>file://$PROJECT_DIR$/Test/Backend/BusinessLayer/ProductTest.java</url>
           <line>51</line>
           <option name="timeStamp" value="88" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/Test/Backend/BusinessLayer/ProductTest.java</url>
-          <line>41</line>
-          <option name="timeStamp" value="89" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/ProductManagerMapper.java</url>

@@ -46,4 +46,6 @@ public class ProductStoreDiscount {
         return discountSuppliersList;
     }
 
+    public Branch getBranch(){return this.branch;}
+    public String getCatalog_number(){return this.catalog_number;}
 }

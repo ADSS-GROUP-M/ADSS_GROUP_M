@@ -10,8 +10,8 @@ import Backend.DataAccessLayer.dalUtils.OfflineResultSet;
 import java.sql.SQLException;
 
 public class DiscountOnAmountDataMapper  extends AbstractDataMapper {
-    public DiscountOnAmountDataMapper() {
-        super("discounts_on_amount", new String[] {"bn_number", "amount_to_reach", "percentage", "cash"});
+    public DiscountOnAmountDataMapper(String tableName, String columns) {
+        super("discount_on_amount", new String[] {"bn_number", "amount_to_reach", "percentage", "cash"});
     }
 
     public void insert(String bnNumber, int amountToReach, Discount discount) throws SQLException {

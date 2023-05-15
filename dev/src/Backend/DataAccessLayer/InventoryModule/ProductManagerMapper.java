@@ -43,6 +43,22 @@ public class ProductManagerMapper {
                 cachedProducts.computeIfAbsent(product.getBranch(), k -> new HashMap<>())
                         .put(product.getCatalogNumber(), product);
             }
+            for (List<ProductItem> itemList : cachedItems.values()) {
+                // Iterate over each ProductItem in the current list
+                for (ProductItem item : itemList) {
+                    String catalogNumber = item.getCatalog_number();
+                    Branch branch = item.getBranch();
+
+                    // Check if the branch exists in cachedProducts
+                    if (cachedProducts.containsKey(branch)) {
+                        if (cachedProducts.get(branch).containsKey(catalogNumber)) {
+                            // Put the ProductItem in cachedProducts with the same catalog number and branch
+                            cachedProducts.get(branch).get(catalogNumber).addProductItem(item);
+                        }
+
+                    }
+                }
+            }
         } catch (SQLException e) {
             //TODO: Handle the exception appropriately
         }

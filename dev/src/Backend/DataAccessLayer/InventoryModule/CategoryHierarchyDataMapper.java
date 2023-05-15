@@ -28,7 +28,7 @@ public class CategoryHierarchyDataMapper extends AbstractDataMapper {
     }
 
     public void delete(String category_name, String sub_category) throws SQLException {
-        sqlExecutor.executeWrite(String.format("DROP FROM %s WHERE category = %s and sub_category = %s", tableName, category_name, sub_category));
+        sqlExecutor.executeWrite(String.format("DELETE FROM %s WHERE category = %s and sub_category = %s", tableName, category_name, sub_category));
     }
 
     public Map<String, Category> initializedCache(Map<String, Category> map) throws SQLException {
@@ -48,7 +48,13 @@ public class CategoryHierarchyDataMapper extends AbstractDataMapper {
 
     public boolean isExists(String category_name, String sub_category_name) throws SQLException {
         OfflineResultSet resultSet = sqlExecutor.executeRead(String.format("SELECT COUNT(*) as count FROM %s WHERE category = '%s' AND sub_category = '%s'", tableName, category_name, sub_category_name));
-        return resultSet.getInt("count") > 0;
+        if (resultSet.next()) {
+            Integer count = resultSet.getInt("count");
+            return count > 0;
+        }
+        else {
+            return false;
+        }
     }
 
 }

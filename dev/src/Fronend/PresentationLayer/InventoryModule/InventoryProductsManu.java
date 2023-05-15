@@ -35,9 +35,9 @@ public class InventoryProductsManu extends MainMenu {
 
     private void createNewProduct() {
         System.out.println("Enter the following product details:");
-        System.out.println("Catalog Number: (number)");
-        String catalog_num = in.nextLine();
+        System.out.println("Catalog Number: (String)");
         in.nextLine();
+        String catalog_num = in.nextLine();
         System.out.println("Name: (string)");
         String name = in.nextLine();
         System.out.println("Manufacturer: (string)");

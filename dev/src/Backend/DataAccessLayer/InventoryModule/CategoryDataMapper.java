@@ -32,7 +32,7 @@ public class CategoryDataMapper extends AbstractDataMapper {
     }
 
     public void delete(String category_name) throws SQLException {
-        sqlExecutor.executeWrite(String.format("DROP FROM %s WHERE category_name = %s", tableName, category_name));
+        sqlExecutor.executeWrite(String.format("DELETE FROM %s WHERE category_name = '%s'", tableName, category_name));
     }
 
     public Map<String, Category> initializedCache() throws SQLException {
@@ -48,7 +48,13 @@ public class CategoryDataMapper extends AbstractDataMapper {
 
     public boolean isExists(String category_name) throws SQLException {
         OfflineResultSet resultSet = sqlExecutor.executeRead(String.format("SELECT COUNT(*) as count FROM %s WHERE category_name = '%s'", tableName, category_name));
-        return resultSet.getInt("count") > 0;
+        if (resultSet.next()) {
+            Integer count = resultSet.getInt("count");
+            return count > 0;
+        }
+        else {
+            return false;
+        }
     }
 
 }

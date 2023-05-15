@@ -19,7 +19,7 @@ public class CategoriesService {
         discountController = DiscountController.DiscountController();
     }
 
-    public Response createCategory(Branch branch, Optional<List<String>> subcategories, String name) {
+    public Response createCategory(Branch branch, List<String> subcategories, String name) {
         try {
             categoryController.createCategory(branch, subcategories, name);
             return new Response<>("Category created successfully");

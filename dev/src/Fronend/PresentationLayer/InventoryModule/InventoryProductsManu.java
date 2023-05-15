@@ -78,6 +78,7 @@ public class InventoryProductsManu extends MainMenu {
 
     private void updateProduct() {
         System.out.println("what is the product's catalog num?: (int)");
+        in.nextLine();
         String catalog_num = in.nextLine();
         System.out.println("Choose details to update:");
         System.out.println("1. name (String)");
@@ -102,6 +103,7 @@ public class InventoryProductsManu extends MainMenu {
 
     private void updateItem() {
         System.out.println("what is the product's catalog number?");
+        in.nextLine(); // Consume the remaining newline character
         String catalog_num = in.nextLine();
         System.out.println("what is the product's serial number?");
         String serial_number = in.nextLine();

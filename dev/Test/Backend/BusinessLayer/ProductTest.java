@@ -43,17 +43,12 @@ public class ProductTest {
 
     }
 
-    @After
-    public void after(){
-//        productController.
-    }
 
     // Test 1
     @org.junit.Test
     public void getProductItemFromList() {
         List<String> serialNumbers = new ArrayList<>();
         serialNumbers.add(serial_number);
-        // TODO verify @amit
         productController.createProductItem(serialNumbers,catalog_number,branch,supplierId,supplierPrice,supplierDiscount,location,expireDate,"y");
         Assert.assertEquals("get item from product list failed",product.getProduct(serial_number).getSerial_number(),serial_number);
     }

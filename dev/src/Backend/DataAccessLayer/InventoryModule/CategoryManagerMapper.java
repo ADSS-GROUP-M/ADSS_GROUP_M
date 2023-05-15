@@ -27,7 +27,8 @@ public class CategoryManagerMapper{
         } catch (SQLException e) {
             throw new RuntimeException(e.getMessage());
         }
-        categoryDataMapper.initProductsWithCategory(cached_categories);
+        if(cached_categories != null && !cached_categories.isEmpty())
+            categoryDataMapper.initProductsWithCategory(cached_categories);
     }
 
     public static CategoryManagerMapper getInstance(){

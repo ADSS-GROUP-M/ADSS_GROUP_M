@@ -15,15 +15,15 @@ Max   - 208850529
 
 ## External dependencies:
 
-1) Bing Maps REST services: used to calculate travel times between sites in order to approximate arrival times for transport destinations (not a library, but an external dependency)
+1) **Bing Maps REST services:** used to calculate travel times between sites in order to approximate arrival times for transport destinations (not a library, but an external dependency)
 
-2) Gson: Used for serializing jsons
+2) **Gson:** Used for serializing jsons
 
-3) Junit: Used for unit testing
+3) **Junit:** Used for unit testing
 
-4) Mockito: Used for unit testing
+4) **Mockito:** Used for unit testing
 
-5) javafx.base: used for predefined collections such as Pair<T,K>
+5) **javafx.base:** used for predefined collections such as Pair<T,K>
 
-6) sqlite.jdbc: database engine
+6) **sqlite.jdbc:** database engine
 

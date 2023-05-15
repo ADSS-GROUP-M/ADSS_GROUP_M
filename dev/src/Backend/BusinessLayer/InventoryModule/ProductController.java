@@ -168,12 +168,20 @@ public class ProductController {
         if(checkIfProductExist(branch,catalog_number)){
             Product product = products.get(branch).get(catalog_number);
             if(newName != null){
-                productManagerMapper.updateProduct(catalog_number,branch.name(),newName,product.getManufacturer(),product.getOriginalStorePrice(),-1);
+                productManagerMapper.updateProduct(catalog_number,branch.name(),newName,null,-1,-1);
                 product.setName(newName);
             }
-            if(newManufacturer != null){product.setManufacturer(newManufacturer);}
-            if(newStorePrice != -1){product.setOriginalStorePrice(newStorePrice);}
-            if(newMinAmount != -1){product.setNotificationMin(newMinAmount);}
+            if(newManufacturer != null){
+                productManagerMapper.updateProduct(catalog_number,branch.name(),null,newManufacturer,-1,-1);
+                product.setManufacturer(newManufacturer);}
+            if(newStorePrice != -1){
+                productManagerMapper.updateProduct(catalog_number,branch.name(),null,null,newStorePrice,-1);
+                product.setOriginalStorePrice(newStorePrice);
+            }
+            if(newMinAmount != -1){
+                productManagerMapper.updateProduct(catalog_number,branch.name(),null,null,-1,newMinAmount);
+                product.setNotificationMin(newMinAmount);
+            }
         }
         else
             throw new RuntimeException(String.format("Product does not exist with the catalog_number : %s",catalog_number));

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class InventoryProductsManu extends InventoryModule {
+public class InventoryProductsManu extends MainMenu {
 
     private String branch;
 
@@ -28,7 +28,7 @@ public class InventoryProductsManu extends InventoryModule {
             case 3 -> updateProduct();
             case 4 -> updateItem();
             case 5 -> getProductDetails();
-            case 6 -> new InventoryModule().Menu();
+            case 6 -> new MainMenu().Menu();
             case 7 -> System.exit(0);
             default -> System.out.println("\nInvalid command");
         }

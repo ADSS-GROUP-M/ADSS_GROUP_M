@@ -6,8 +6,8 @@ import Backend.BusinessLayer.SuppliersModule.OrderController;
 import Backend.DataAccessLayer.InventoryModule.ProductDAO;
 import Backend.DataAccessLayer.InventoryModule.ProductManagerMapper;
 import Backend.DataAccessLayer.SuppliersModule.ProductsDataMapper;
-import Backend.DataAccessLayer.SuppliersModule.ProductsDiscountsDataMapper;
 
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -64,13 +64,13 @@ public class ProductController {
     }
 
     //check if the amount of product in more than the minimum
-    public boolean isProductLack(Branch branch,String catalog_number){
+    public boolean isProductLack(Branch branch,String catalog_number) throws SQLException {
         boolean isProductLack = products.get(branch).get(catalog_number).isProductLack();
         if(isProductLack) {
             // if there is no waiting order, create new supplier order.
             if(!orders.get(branch).contains(catalog_number)) {
                 int inventory_amount = productController.getMinNotification(branch,catalog_number);
-                OrderController orderController = new OrderController();
+                OrderController orderController = OrderController.getInstance();
                 HashMap<String,Integer> order = new HashMap<>();
                 order.put(catalog_number,inventory_amount);
                 orderController.order(order, branch);
@@ -133,7 +133,7 @@ public class ProductController {
                 double sold_price = DCController.calcSoldPrice(branch,catalog_number,product.getOriginalStorePrice());
                 productManagerMapper.updateProductItem(catalog_number,branch.name(),serial_number,-1,null,null,-1,-1,sold_price,null,null);
                 productItem.reportAsSold(sold_price);
-                OrderController orderController = new OrderController();
+                OrderController orderController = OrderController.getInstance();
                 updateMinAmount(branch,catalog_number,orderController.getDaysForOrder(catalog_number,branch));
                 productManagerMapper.updateProduct(catalog_number,branch.name(),null,null,-1,product.getNotificationMin());
             }

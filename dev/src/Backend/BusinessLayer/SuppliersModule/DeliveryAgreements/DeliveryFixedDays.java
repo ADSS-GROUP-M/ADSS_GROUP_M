@@ -29,4 +29,7 @@ public class DeliveryFixedDays extends DeliveryAgreement{
         return super.toString2() + "\n\tdays of the week: " + daysOfTheWeek.toString().substring(1,daysOfTheWeek.toString().length() - 1);
     }
 
+    public List<Integer> getDaysOfTheWeek() {
+        return daysOfTheWeek;
+    }
 }

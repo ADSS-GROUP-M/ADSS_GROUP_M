@@ -303,7 +303,7 @@ public class OrderController {
         else {
             DeliveryFixedDays deliveryFixedDays = (DeliveryFixedDays) deliveryAgreement;
             if(deliveryFixedDays.getDaysOfTheWeek().contains(dayNow))
-                return dayNow;
+                return 0;
             //try to look for day greater than now, but in this week
             int dayChosen = dayNow;
             int maxDay = 7;
@@ -313,13 +313,41 @@ public class OrderController {
                     maxDay = day;
                 }
             if(dayChosen != dayNow)
-                return dayChosen;
+                return dayChosen - dayChosen;
             //try to look for day smaller than now, that in next week
             for(int day : deliveryFixedDays.getDaysOfTheWeek())
                 if(day < dayChosen)
                     dayChosen = day;
-            return dayChosen;
+            return (dayChosen + 7) - dayNow;
         }
+    }
+
+    private Map<String, Integer> mapSupplierQuantitiesByTime(String catalogNumber, int quantity, List<Supplier> suppliersToUse) throws SQLException {
+        if(quantity <= 0)
+            return new HashMap<>();
+        Map<String, Integer> supplierToDay = mapSuppliersToDay(catalogNumber, suppliersToUse);
+        Supplier supplierShortest = suppliersToUse.get(0);
+        for(Supplier supplier : suppliersToUse){
+            if(getDay(supplier.getBnNumber()) < getDay(supplierShortest.getBnNumber()))
+                supplierShortest = supplier;
+        }
+        int quantityCanSupply = agreementController.getNumberOfUnits(supplierShortest.getBnNumber(), catalogNumber);
+
+        suppliersToUse.remove(supplierShortest);
+        Map<String, Integer> supplierToQuantity = mapSupplierQuantitiesByTime(catalogNumber, quantity - quantityCanSupply, suppliersToUse);
+        if(quantityCanSupply > quantity)
+            supplierToQuantity.put(supplierShortest.getBnNumber(), quantity);
+        else
+            supplierToQuantity.put(supplierShortest.getBnNumber(), quantityCanSupply);
+        return supplierToQuantity;
+    }
+
+    private Map<String, Integer> mapSuppliersToDay(String catalogNumber, List<Supplier> suppliersToUse) throws SQLException {
+        Map<String, Integer> supplierToDay = new HashMap<>();
+        for(Supplier supplier : suppliersToUse)
+            if(agreementController.productExist(supplier.getBnNumber(), catalogNumber))
+                supplierToDay.put(supplier.getBnNumber(), getDay(supplier.getBnNumber()));
+        return supplierToDay;
     }
 
     public int getDaysForOrder(String catalogNumber, Branch branch){

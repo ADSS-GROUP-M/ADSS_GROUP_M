@@ -2,6 +2,7 @@ package Fronend.PresentationLayer.InventoryModule;
 
 
 import Backend.BusinessLayer.BusinessLayerUsage.Branch;
+import Backend.ServiceLayer.InventoryModule.Response;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +47,6 @@ public class CategoriesMenu extends MainMenu {
         System.out.println(categoriesService.createCategory(Branch.valueOf(branch), Optional.of(subcategories), category_name).getReturnValue());
     }
 
-
     private void removeCategory() {
         in.nextLine();
         System.out.println("category name:");
@@ -60,7 +60,11 @@ public class CategoriesMenu extends MainMenu {
         String category_name = in.nextLine();
         System.out.println("catalog number: (string)");
         String catalog_number = in.nextLine();
-        System.out.println(categoriesService.addProductToCategory(Branch.valueOf(branch), catalog_number, category_name).getReturnValue());
+        Response response = categoriesService.addProductToCategory(Branch.valueOf(branch), catalog_number, category_name);
+        if (response.errorOccurred())
+            System.out.println(response.getErrorMessage());
+        else
+            System.out.println(response.getReturnValue());
     }
 
     private void removeProductFromCategory(){

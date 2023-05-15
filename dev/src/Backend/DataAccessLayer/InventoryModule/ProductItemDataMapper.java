@@ -89,7 +89,7 @@ public class ProductItemDataMapper extends AbstractDataMapper {
 
     public boolean isExists(String catalog_number, String serial_number, String branch) throws SQLException {
         OfflineResultSet resultSet = sqlExecutor.executeRead(String.format("SELECT COUNT(*) as count FROM %s WHERE catalog_number = '%s' AND serial_number = '%s' AND branch = '%s'", tableName, catalog_number, serial_number, branch));
-        return resultSet.getInt("count") > 0;
-    }
-
+        if (resultSet.next())
+            return resultSet.getInt("count") > 0;
+        return false;    }
 }

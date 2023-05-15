@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class InventoryProductsManu extends MainMenu {
@@ -52,16 +53,11 @@ public class InventoryProductsManu extends MainMenu {
         //supplier should be ID
         System.out.println("Enter the following product details:");
         System.out.println("Catalog Number: (string)");
+        in.nextLine(); // Consume the remaining newline character
         String catalog_num = in.nextLine();
-        in.nextLine();
-        System.out.println("Serial Number: (string) >> add all the serials number, if you done write null");
-        List<String> serialNumbers = new ArrayList<String>();
+        System.out.println("Serial Number: (string - 23,24,25 for example)");
         String serial_num = in.nextLine();
-        while(serial_num != "null") {
-            serialNumbers.add(serial_num);
-            System.out.println("Serial Number: (string) >> add all the serials number, if you done write null");
-            serial_num = in.nextLine();
-        }
+        List<String> serialNumbers = Arrays.asList(serial_num.split(","));
         System.out.println("Supplier: (string)");
         String supplier = in.nextLine();
         System.out.println("Supplier price: (double)");
@@ -69,6 +65,7 @@ public class InventoryProductsManu extends MainMenu {
         System.out.println("Supplier price after discount: (double)");
         double supplier_discount_price = in.nextDouble();
         System.out.println("location: (string)");
+        in.nextLine();
         String location = in.nextLine();
         System.out.println("expiration date: (string format: yyyy-MM-dd)");
         String dateString = in.nextLine();

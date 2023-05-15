@@ -8,6 +8,8 @@ import Backend.DataAccessLayer.dalUtils.OfflineResultSet;
 
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 public class PeriodicOrderDataMapper extends AbstractDataMapper {
@@ -91,4 +93,15 @@ public class PeriodicOrderDataMapper extends AbstractDataMapper {
         }
         return periodicOrders;
     }
+
+    public int findDay(String catalogNumber, Branch branch) throws SQLException {
+        OfflineResultSet resultSet = sqlExecutor.executeRead(String.format("select day from periodic_order JOIN periodic_order_details on periodic_order.order_id = periodic_order_details.order_id where periodic_order_details.branch = '%s' and periodic_order.catalog_number = '%s'", branch.name(), catalogNumber));
+        int minDay = 8;
+        while (resultSet.next()) {
+            if (resultSet.getInt("day") < minDay)
+                minDay = resultSet.getInt("day");
+        }
+        return minDay;
+    }
+
 }

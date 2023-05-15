@@ -24,4 +24,18 @@ public class Order {
     public Map<String, Integer> getProducts() {
         return products;
     }
+
+    public boolean equals(Object other){
+        if(!(other instanceof Order))
+            return false;
+        Order otherOrder = (Order) other;
+        return products.equals(otherOrder.getProducts());
+    }
+
+    public String toString(){
+        String res = "";
+        for(Map.Entry<String, Integer> order : products.entrySet())
+            res = res + "catalog number: " + order.getKey() + " , quantity: " + order.getValue() + "\n";
+        return res;
+    }
 }

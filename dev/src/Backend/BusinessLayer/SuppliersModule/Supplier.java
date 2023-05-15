@@ -101,4 +101,13 @@ public class Supplier {
                 + "\n\t" + contactsInfo + "\n\t" + "PAYMENT METHOD: " + paymentMethod +"\n\t";
         return res;
     }
+
+    public boolean equals(Object other){
+        if(!(other instanceof  Supplier))
+            return false;
+        Supplier otherSupplier = (Supplier) other;
+        if(bnNumber.equals(otherSupplier.bnNumber))
+            return true;
+        return false;
+    }
 }

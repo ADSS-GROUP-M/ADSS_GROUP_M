@@ -3,6 +3,7 @@ package Backend.BusinessLayer.InventoryModule;
 import Backend.BusinessLayer.BusinessLayerUsage.Branch;
 import Backend.DataAccessLayer.InventoryModule.StoreProductDiscountDataMapper;
 
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,7 +17,9 @@ public class DiscountController {
 
     //create the controller as Singleton
     private static DiscountController discountController = null;
+    private StoreProductDiscountDataMapper storeProductDiscountDataMapper;
     private DiscountController() {
+        storeProductDiscountDataMapper = StoreProductDiscountDataMapper.getInstance();
         this.storeDiscounts = new HashMap<Branch, Map<String,List<ProductStoreDiscount>>>();}
 
     public static DiscountController DiscountController(){
@@ -36,26 +39,37 @@ public class DiscountController {
     }
 
     public void createStoreDiscount(String catalog_number, Branch branch, double discount, LocalDateTime startDate, LocalDateTime endDate){
-        if(!checkIfBranchExist(branch))
-            storeDiscounts.put(branch, new HashMap<String,List<ProductStoreDiscount>>());
-        if(!checkIfProductExist(branch,catalog_number))
-            storeDiscounts.get(branch).put(catalog_number,new ArrayList<ProductStoreDiscount>());
-        storeDiscounts.get(branch).get(catalog_number).add(new ProductStoreDiscount(catalog_number,branch,startDate,endDate,discount));
+        try {
+            if (!checkIfBranchExist(branch))
+                storeDiscounts.put(branch, new HashMap<String, List<ProductStoreDiscount>>());
+            if (!checkIfProductExist(branch, catalog_number))
+                storeDiscounts.get(branch).put(catalog_number, new ArrayList<ProductStoreDiscount>());
+            storeProductDiscountDataMapper.insert(catalog_number, startDate.toString(), endDate.toString(), discount, branch.name());
+            storeDiscounts.get(branch).get(catalog_number).add(new ProductStoreDiscount(catalog_number, branch, startDate, endDate, discount));
+        }
+        catch (SQLException e){
+            //TODO: Handle the exception appropriately
+        }
     }
 
     //TODO: need to edit
     public void createCategoryDiscount(String categoryName, Branch branch, double discount, LocalDateTime startDate, LocalDateTime endDate){
-        CategoryController categoryController = CategoryController.CategoryController();
-        if(categoryController.checkIfCategoryExist(categoryName)){
-            List<Product> relatedProducts = categoryController.getCategoryProducts(branch, categoryName);
-            for(Product product: relatedProducts){
-               createStoreDiscount(product.getCatalogNumber(),branch,discount,startDate,endDate);
-            }
+        try {
+            CategoryController categoryController = CategoryController.CategoryController();
+            if (categoryController.checkIfCategoryExist(categoryName)) {
+                List<Product> relatedProducts = categoryController.getCategoryProducts(branch, categoryName);
+                for (Product product : relatedProducts) {
+                    storeProductDiscountDataMapper.insert(product.getCatalogNumber(), startDate.toString(), endDate.toString(), discount, branch.name());
+                    createStoreDiscount(product.getCatalogNumber(), branch, discount, startDate, endDate);
+                }
+            } else
+                throw new RuntimeException("Category does not exist, please create category in order to continue");
         }
-        else
-            throw new RuntimeException("Category does not exist, please create category in order to continue");
+        catch (SQLException e){
+            //TODO: Handle the exception appropriately
+        }
     }
-    //TODO : need to edit and verify
+
     public double getTodayBiggestStoreDiscount(String catalog_number, Branch branch){
         if(checkIfBranchExist(branch)){
             double maxDiscount = 0;

@@ -26,9 +26,14 @@ public class StoreProductDiscountDataMapper extends AbstractDataMapper {
         }
     }
     public void insert(String catalog_number, String start_date, String end_date, double discount, String branch) throws SQLException {
-        String columnsString = String.join(", ", columns);
-        sqlExecutor.executeWrite(String.format("INSERT INTO %s (%s) VALUES('%s', '%s', '%s', '%s')",
-                tableName, columnsString, catalog_number, start_date, end_date, discount, branch));
+        try {
+            String columnsString = String.join(", ", columns);
+            sqlExecutor.executeWrite(String.format("INSERT INTO %s (%s) VALUES('%s', '%s', '%s', '%s')",
+                    tableName, columnsString, catalog_number, start_date, end_date, discount, branch));
+        }
+        catch (SQLException e){
+            //TODO: Handle the exception appropriately
+        }
     }
 
     public Map<Branch, Map<String, List<ProductStoreDiscount>>> initializeCache() throws SQLException {

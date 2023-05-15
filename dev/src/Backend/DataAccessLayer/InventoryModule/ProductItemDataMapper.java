@@ -8,10 +8,7 @@ import Backend.DataAccessLayer.dalUtils.OfflineResultSet;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ProductItemDataMapper extends AbstractDataMapper {
     private static ProductItemDataMapper instance = null;
@@ -75,9 +72,10 @@ public class ProductItemDataMapper extends AbstractDataMapper {
                     LocalDateTime.parse(resultSet.getString("expiration_date")),
                     resultSet.getString("catalog_number"),
                     Branch.valueOf(resultSet.getString("branch")));
-            item.setIntIsDefective(resultSet.getInt("is_defective"), LocalDateTime.parse(resultSet.getString("defection_date")));
+            if(!Objects.equals(resultSet.getString("defection_date"), "")) {
+                item.setIntIsDefective(resultSet.getInt("is_defective"), LocalDateTime.parse(resultSet.getString("defection_date")));
+            }
             item.setSoldPrice(resultSet.getDouble("sold_price"));
-
             String catalog_num = resultSet.getString("catalog_number");
             cachedItems.put(catalog_num, new ArrayList<>());
             // add the item to the existing list in the map

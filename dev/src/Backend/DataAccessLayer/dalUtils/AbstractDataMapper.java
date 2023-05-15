@@ -12,4 +12,8 @@ public abstract class AbstractDataMapper{
         this.columns = columns;
         sqlExecutor = new SQLExecutorProductionImpl("super_lee.sqlite");
     }
+
+    public String getTableName(){
+        return tableName;
+    }
 }

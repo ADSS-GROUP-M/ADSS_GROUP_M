@@ -10,10 +10,7 @@ import Backend.BusinessLayer.SuppliersModule.Discounts.Discount;
 import Backend.BusinessLayer.SuppliersModule.Discounts.PercentageDiscount;
 import Backend.BusinessLayer.SuppliersModule.Pair;
 import Backend.BusinessLayer.SuppliersModule.Product;
-import Backend.ServiceLayer.SuppliersModule.AgreementService;
-import Backend.ServiceLayer.SuppliersModule.BillOfQuantitiesService;
-import Backend.ServiceLayer.SuppliersModule.OrderService;
-import Backend.ServiceLayer.SuppliersModule.SupplierService;
+import Backend.ServiceLayer.SuppliersModule.*;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -25,6 +22,7 @@ public class UI {
     private SupplierService supplierService;
     private AgreementService agreementService;
     private BillOfQuantitiesService billOfQuantitiesService;
+    private PeriodicOrderService periodicOrderService;
     private Scanner sc;
     private Gson gson;
     public UI(){
@@ -32,6 +30,7 @@ public class UI {
         supplierService = new SupplierService();
         agreementService = new AgreementService();
         billOfQuantitiesService = new BillOfQuantitiesService();
+        periodicOrderService = new PeriodicOrderService();
         sc = new Scanner(System.in);
         gson = new Gson();
     }
@@ -69,8 +68,8 @@ public class UI {
         System.out.println("29. get delivery agreement");
         System.out.println("30. remove product");
         System.out.println("31. get supplier details");
-        System.out.println("32. order");
-        System.out.println("33. load data");
+        System.out.println("32. add periodic order");
+        System.out.println("33. get periodic orders details");
         System.out.println("34. exit");
     }
 
@@ -173,10 +172,10 @@ public class UI {
                 getSupplierDetails();
                 break;
             case 32:
-                order();
+                addPeriodicOrder();
                 break;
             case 33:
-                loadData();
+                getPeriodicOrdersDetails();
                 break;
             case 34:
                 return false;
@@ -794,9 +793,64 @@ public class UI {
         }
     }
 
-    public void order(){
+//    public void order(){
+//
+//        try {
+//            Map<String, Integer> order = new HashMap<>();
+//            try {
+//                while (true) {
+//                    System.out.println("enter product id to purchase or exit to submit");
+//                    String input = sc.nextLine();
+//                    if (input.equals("exit"))
+//                        break;
+//                    String catalogNumber = input;
+//                    System.out.println("enter amount to order");
+//                    int amount = Integer.parseInt(sc.nextLine());
+//                    order.put(catalogNumber, amount);
+//                }
+//            }
+//            catch (Exception e){
+//                System.out.println("invalid input");
+//            }
+//            Type orderResponse = new TypeToken<Response< Map<String, Pair<Map<Integer, Integer>, Double>>>>(){}.getType();
+////                Response<Map<String, Pair<Map<Integer, Integer>, Double>>> finalOrderResponse =
+////                        gson.fromJson(orderService.order(order), orderResponse);
+//            Response<Map<String, Pair<Map<Integer, Integer>, Double>>> finalOrderResponse =
+//                    gson.fromJson(orderService.order(order, Branch.branch1), orderResponse);
+//            if(finalOrderResponse.getReturnValue() == null)
+//                throw new RuntimeException(finalOrderResponse.getMsg());
+//            Map<String, Pair<Map<Integer, Integer>, Double>> finalOrder = finalOrderResponse.getReturnValue();
+//            double finalPrice = 0;
+//            String orderString = "ORDER DETAILS:";
+//            for(Map.Entry<String, Pair<Map<Integer, Integer>, Double>> supplierOrder : finalOrder.entrySet()){
+//                String supplierBnNumber = supplierOrder.getKey();
+//                String supplierName = gson.fromJson(supplierService.getSuppliersName(supplierBnNumber), Response.class).getMsg();
+//                Map<Integer, Integer> supplierOrderDetails = supplierOrder.getValue().getFirst();
+//                double finalSupplierPrice = supplierOrder.getValue().getSecond();
+//                String supplierOrderString = "ORDER:";
+//                int counter = 1;
+//                for(Map.Entry<Integer, Integer> productOrder : supplierOrderDetails.entrySet())
+//                    supplierOrderString += "\n\t\t\t" + counter++ + ". Product id: " + productOrder.getKey() + " Amount: " + productOrder.getValue();
+//                orderString += "\n\tSUPPLIER:\n\t\tName: " + supplierName + "\n\t\tBn number: " + supplierBnNumber +
+//                        "\n\t\t" + supplierOrderString + "\n\t\tFinal price for supplier: " + finalSupplierPrice;
+//                finalPrice += finalSupplierPrice;
+//            }
+//            orderString += "\n\tFINAL PRICE: " + finalPrice;
+//            System.out.println(orderString);
+//        }
+//        catch (Exception e){
+//            System.out.println(e.getMessage());
+//        }
+//
+//
+//    }
 
+    public void addPeriodicOrder(){
         try {
+            System.out.println("enter bn number of supplier");
+            String bnNumber = sc.nextLine();
+            System.out.println("choose products");
+            System.out.println(gson.fromJson(supplierService.getSupplierDetails(bnNumber), Response.class).getMsg());
             Map<String, Integer> order = new HashMap<>();
             try {
                 while (true) {
@@ -809,44 +863,58 @@ public class UI {
                     int amount = Integer.parseInt(sc.nextLine());
                     order.put(catalogNumber, amount);
                 }
-            }
-            catch (Exception e){
+            } catch (Exception e) {
                 System.out.println("invalid input");
             }
-            Type orderResponse = new TypeToken<Response< Map<String, Pair<Map<Integer, Integer>, Double>>>>(){}.getType();
-//                Response<Map<String, Pair<Map<Integer, Integer>, Double>>> finalOrderResponse =
-//                        gson.fromJson(orderService.order(order), orderResponse);
-            Response<Map<String, Pair<Map<Integer, Integer>, Double>>> finalOrderResponse =
-                    gson.fromJson(orderService.order(order, Branch.branch1), orderResponse);
-            if(finalOrderResponse.getReturnValue() == null)
-                throw new RuntimeException(finalOrderResponse.getMsg());
-            Map<String, Pair<Map<Integer, Integer>, Double>> finalOrder = finalOrderResponse.getReturnValue();
-            double finalPrice = 0;
-            String orderString = "ORDER DETAILS:";
-            for(Map.Entry<String, Pair<Map<Integer, Integer>, Double>> supplierOrder : finalOrder.entrySet()){
-                String supplierBnNumber = supplierOrder.getKey();
-                String supplierName = gson.fromJson(supplierService.getSuppliersName(supplierBnNumber), Response.class).getMsg();
-                Map<Integer, Integer> supplierOrderDetails = supplierOrder.getValue().getFirst();
-                double finalSupplierPrice = supplierOrder.getValue().getSecond();
-                String supplierOrderString = "ORDER:";
-                int counter = 1;
-                for(Map.Entry<Integer, Integer> productOrder : supplierOrderDetails.entrySet())
-                    supplierOrderString += "\n\t\t\t" + counter++ + ". Product id: " + productOrder.getKey() + " Amount: " + productOrder.getValue();
-                orderString += "\n\tSUPPLIER:\n\t\tName: " + supplierName + "\n\t\tBn number: " + supplierBnNumber +
-                        "\n\t\t" + supplierOrderString + "\n\t\tFinal price for supplier: " + finalSupplierPrice;
-                finalPrice += finalSupplierPrice;
+            System.out.println("enter day of order");
+            int day = Integer.parseInt(sc.nextLine());
+            System.out.println("enter branch to order to");
+            System.out.println("1. branch1\n2. branch2\n3. branch3\n4. branch4\n5. branch5\n6. branch6\n7. branch7\n8. branch8\n9. branch9");
+            int choice = Integer.parseInt(sc.nextLine());
+            Branch branch = Branch.branch1;
+            switch (choice) {
+                case 1:
+                    branch = Branch.branch1;
+                    break;
+                case 2:
+                    branch = Branch.branch2;
+                    break;
+                case 3:
+                    branch = Branch.branch3;
+                    break;
+                case 4:
+                    branch = Branch.branch4;
+                    break;
+                case 5:
+                    branch = Branch.branch5;
+                    break;
+                case 6:
+                    branch = Branch.branch6;
+                    break;
+                case 7:
+                    branch = Branch.branch7;
+                    break;
+                case 8:
+                    branch = Branch.branch8;
+                    break;
+                case 9:
+                    branch = Branch.branch9;
+                    break;
             }
-            orderString += "\n\tFINAL PRICE: " + finalPrice;
-            System.out.println(orderString);
+            System.out.println(gson.fromJson(periodicOrderService.addPeriodicOrder(bnNumber, order, day, branch), Response.class).getMsg());
         }
         catch (Exception e){
-            System.out.println(e.getMessage());
+            System.out.println("invalid input");
         }
-
-
     }
-    public void loadData(){
-        System.out.println(gson.fromJson(supplierService.loadData(), Response.class).getMsg());
+
+    public void getPeriodicOrdersDetails(){
+        try {
+            System.out.println(gson.fromJson(periodicOrderService.getDetails(), Response.class).getMsg());
+        }
+        catch (Exception e){
+            System.out.println("invalid input");
+        }
     }
 
 

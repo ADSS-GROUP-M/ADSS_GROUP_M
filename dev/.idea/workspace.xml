@@ -10,8 +10,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e454f93c-4ee8-4f4b-9a14-eaaf36aa303c" name="Changes" comment="delete data from sqlite">
-      <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/SuppliersModule/BillOfQuantities.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/BusinessLayer/SuppliersModule/BillOfQuantities.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/BillOfQuantitiesDataMappers/DiscountOnAmountDataMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/BillOfQuantitiesDataMappers/DiscountOnAmountDataMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Backend/BusinessLayer/SuppliersModule/PeriodicOrder.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Backend/BusinessLayer/SuppliersModule/PeriodicOrderController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/PeriodicOrderDataMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/PeriodicOrderDetailsDataMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Backend/ServiceLayer/SuppliersModule/PeriodicOrderService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/e2642f43-4db7-4d07-904c-1c675551b637.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/e2642f43-4db7-4d07-904c-1c675551b637.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/BusinessLayerUsage/Branch.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/BusinessLayer/BusinessLayerUsage/Branch.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/SuppliersModule/Order.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/BusinessLayer/SuppliersModule/Order.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/dalUtils/AbstractDataMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/dalUtils/AbstractDataMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/UI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/UI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/super_lee.sqlite" beforeDir="false" afterPath="$PROJECT_DIR$/super_lee.sqlite" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -60,14 +70,14 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/yossi/OneDrive/שולחן העבודה/ניתוצ/Assignment2 - Copy/dev/sqlite-jdbc-3.41.2.1.jar&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "last_opened_file_path": "C:/Users/yossi/OneDrive/שולחן העבודה/ניתוצ/Assignment2 - Copy/dev/sqlite-jdbc-3.41.2.1.jar",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\yossi\OneDrive\שולחן העבודה\ניתוצ\Assignment1\Assignment1\dev\PresentationLayer" />
@@ -91,12 +101,12 @@
     </key>
   </component>
   <component name="RunManager" selected="Application.Main">
-    <configuration name="Main (1)" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="Fronend.PresentationLayer.InventoryModule.Main" />
-      <module name="code" />
+    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Fronend.PresentationLayer.SuppliersModule.Main" />
+      <module name="dev" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="Fronend.PresentationLayer.InventoryModule.*" />
+          <option name="PATTERN" value="Fronend.PresentationLayer.SuppliersModule.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -104,12 +114,12 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="Fronend.PresentationLayer.SuppliersModule.Main" />
+    <configuration name="PeriodicOrderDetailsDataMapper" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Backend.DataAccessLayer.SuppliersModule.PeriodicOrderDetailsDataMapper" />
       <module name="dev" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="Fronend.PresentationLayer.SuppliersModule.*" />
+          <option name="PATTERN" value="Backend.DataAccessLayer.SuppliersModule.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -164,13 +174,26 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="dev" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="dev" />
+      <option name="filePath" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="Application.Main" />
+        <item itemvalue="Application.PeriodicOrderDetailsDataMapper" />
         <item itemvalue="JUnit.BillOfQuantitiesTest.setOrderOfDiscounts" />
         <item itemvalue="JUnit.BillOfQuantitiesTest.removeDiscountOnAmountOfProducts" />
         <item itemvalue="JUnit.BillOfQuantitiesTest" />
-        <item itemvalue="Application.Main (1)" />
       </list>
     </recent_temporary>
   </component>
@@ -373,8 +396,18 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/UI.java</url>
-          <line>777</line>
+          <line>776</line>
           <option name="timeStamp" value="10" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/UI.java</url>
+          <line>903</line>
+          <option name="timeStamp" value="15" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/UI.java</url>
+          <line>912</line>
+          <option name="timeStamp" value="16" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

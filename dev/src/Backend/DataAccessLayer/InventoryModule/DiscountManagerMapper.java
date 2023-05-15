@@ -23,7 +23,7 @@ public class DiscountManagerMapper {
         try {
             cached_discounts = storeProductDiscountDataMapper.initializeCache();
         } catch (SQLException e) {
-            //TODO: Handle the exception appropriately
+            throw new RuntimeException(e.getMessage());
         }
     }
     public static DiscountManagerMapper getInstance(){
@@ -42,7 +42,7 @@ public class DiscountManagerMapper {
                     .computeIfAbsent(catalog_number, k -> new ArrayList<>())
                     .add(productStoreDiscount);
         } catch (SQLException e) {
-            //TODO: Handle the exception appropriately
+            throw new RuntimeException(e.getMessage());
         }
     }
 

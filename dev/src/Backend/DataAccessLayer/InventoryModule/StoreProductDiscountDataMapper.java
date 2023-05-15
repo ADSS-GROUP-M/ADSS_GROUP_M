@@ -34,7 +34,7 @@ public class StoreProductDiscountDataMapper extends AbstractDataMapper {
             }
         }
         catch (SQLException e){
-            //TODO: Handle the exception appropriately
+            throw new RuntimeException(e.getMessage());
         }
     }
 

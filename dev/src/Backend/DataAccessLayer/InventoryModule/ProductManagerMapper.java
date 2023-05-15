@@ -27,7 +27,7 @@ public class ProductManagerMapper {
         try {
             cachedItems = productItemDataMapper.initializeCache();
             cachedProducts = new HashMap<>();
-            List<ProductPairBranchDAO> cachedProductsPairBranch = productPairBranchDataMapper.getCachedProductsPairBranch();
+            List<ProductPairBranchDAO> cachedProductsPairBranch = productPairBranchDataMapper.initializeCache();
             for (ProductDAO dao : productsDataMapper.initializeCache()) {
                 Product product = null;
                 for (ProductPairBranchDAO pair : cachedProductsPairBranch) {
@@ -42,6 +42,22 @@ public class ProductManagerMapper {
                 }
                 cachedProducts.computeIfAbsent(product.getBranch(), k -> new HashMap<>())
                         .put(product.getCatalogNumber(), product);
+            }
+            for (List<ProductItem> itemList : cachedItems.values()) {
+                // Iterate over each ProductItem in the current list
+                for (ProductItem item : itemList) {
+                    String catalogNumber = item.getCatalog_number();
+                    Branch branch = item.getBranch();
+
+                    // Check if the branch exists in cachedProducts
+                    if (cachedProducts.containsKey(branch)) {
+                        if (cachedProducts.get(branch).containsKey(catalogNumber)) {
+                            // Put the ProductItem in cachedProducts with the same catalog number and branch
+                            cachedProducts.get(branch).get(catalogNumber).addProductItem(item);
+                        }
+
+                    }
+                }
             }
         } catch (SQLException e) {
             //TODO: Handle the exception appropriately
@@ -59,15 +75,14 @@ public class ProductManagerMapper {
     public void createProduct(String catalog_number, String branch, String name, String manufacture, double originalStorePrice){
         try {
             if(!isProductExists(catalog_number)){
-                productsDataMapper.insert(catalog_number, name, manufacture);
-                // TODO add min notification?
-                productPairBranchDataMapper.insert(branch, catalog_number, originalStorePrice);
                 Product product = new Product(catalog_number, name, manufacture, originalStorePrice, Branch.valueOf(branch));
+                productsDataMapper.insert(catalog_number, name, manufacture);
+                productPairBranchDataMapper.insert(branch, catalog_number, originalStorePrice, product.getNotificationMin());
                 cachedProducts.computeIfAbsent(product.getBranch(), k -> new HashMap<>())
                         .put(product.getCatalogNumber(), product);
             }
         } catch (SQLException e) {
-            //TODO: Handle the exception appropriately
+            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -79,7 +94,7 @@ public class ProductManagerMapper {
                 product = new Product(catalog_number, name, manufacture, originalStorePrice, Branch.valueOf(branch));
                 cachedProducts.computeIfAbsent(product.getBranch(), k -> new HashMap<>())
                         .put(product.getCatalogNumber(), product);
-                productPairBranchDataMapper.insert(branch, catalog_number, originalStorePrice);
+                productPairBranchDataMapper.insert(branch, catalog_number, originalStorePrice, product.getNotificationMin());
             }
             if (!isItemExists(serial_number, catalog_number, branch)) {
                 productItemDataMapper.insert(serial_number, is_defective, defection_date, supplier_id, supplier_price,
@@ -92,12 +107,11 @@ public class ProductManagerMapper {
                 product.addProductItem(productItem);
             }
         } catch (SQLException e) {
-            //TODO: Handle the exception appropriately
+            throw new RuntimeException(e.getMessage());
         }
 
     }
 
-    //TODO
     public void updateProduct(String catalog_number, String branch, String name, String manufacture, double originalStorePrice, int newMinAmount){
         try {
             if(isProductExists(catalog_number)){
@@ -105,7 +119,7 @@ public class ProductManagerMapper {
                 productPairBranchDataMapper.update(branch, catalog_number, originalStorePrice,newMinAmount);
             }
         } catch (SQLException e) {
-            //TODO: Handle the exception appropriately
+            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -115,7 +129,7 @@ public class ProductManagerMapper {
                 productItemDataMapper.update(serial_number,is_defective,defective_date,supplier_id,supplier_price,supplier_discount,sold_price,expiration_date,location,catalog_number,branch);
             }
         } catch (SQLException e) {
-            // TODO: Handle the exception appropriately
+            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -125,7 +139,7 @@ public class ProductManagerMapper {
                 productsDataMapper.update(catalog_number,null,null,category_name);
             }
         } catch (SQLException e) {
-            // TODO: Handle the exception appropriately
+            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -135,7 +149,7 @@ public class ProductManagerMapper {
                 productsDataMapper.update(catalog_number,null,null,"");
             }
         } catch (SQLException e) {
-            // TODO: Handle the exception appropriately
+            throw new RuntimeException(e.getMessage());
         }
     }
 

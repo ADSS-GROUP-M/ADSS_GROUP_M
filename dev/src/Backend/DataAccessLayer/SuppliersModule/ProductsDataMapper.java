@@ -29,26 +29,26 @@ public class ProductsDataMapper  extends AbstractDataMapper {
         try {
             if (!isExists(catalog_number)) {
                 String columnsString = String.join(", ", columns);
-                sqlExecutor.executeWrite(String.format("INSERT INTO %s (%s) VALUES('%s', %s, '%s')",
-                        tableName, columnsString, name, catalog_number, manufacture));
+                sqlExecutor.executeWrite(String.format("INSERT INTO %s (%s) VALUES('%s', '%s', '%s', null)",
+                        tableName, columnsString, catalog_number, name, manufacture));
 //            ProductDAO productDAO = new ProductDAO(catalog_number, name);
 //            productDAO.setManufacture(manufacture);
 //            cachedProducts.add(productDAO);
             }
         }
         catch (SQLException e){
-            //TODO: Handle the exception appropriately
+            throw new RuntimeException(e.getMessage());
         }
     }
 
     public void update(String catalog_number, String newName, String newManufacture,String category) throws SQLException {
-        if (!isExists(catalog_number)){
+        if (isExists(catalog_number)){
             if(newName != null)
                 sqlExecutor.executeWrite(String.format("UPDATE %s SET name = '%s' WHERE catalog_number = '%s'", tableName,newName,catalog_number));
             if(newManufacture != null)
                 sqlExecutor.executeWrite(String.format("UPDATE %s SET manufacture = '%s' WHERE catalog_number = '%s'", tableName,newManufacture,catalog_number));
             if(category != null)
-                sqlExecutor.executeWrite(String.format("UPDATE %s SET category = '%s' WHERE catalog_number = '%s'", tableName,newManufacture,catalog_number));
+                sqlExecutor.executeWrite(String.format("UPDATE %s SET category = '%s' WHERE catalog_number = '%s'", tableName,category,catalog_number));
         }
     }
 

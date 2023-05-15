@@ -1,0 +1,264 @@
+Index: src/Backend/BusinessLayer/SuppliersModule/Agreement.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package Backend.BusinessLayer.SuppliersModule;\r\n\r\n\r\nimport Backend.BusinessLayer.SuppliersModule.DeliveryAgreements.DeliveryAgreement;\r\nimport Backend.BusinessLayer.SuppliersModule.DeliveryAgreements.DeliveryByInvitation;\r\nimport Backend.BusinessLayer.SuppliersModule.DeliveryAgreements.DeliveryFixedDays;\r\n\r\nimport java.util.HashMap;\r\nimport java.util.List;\r\nimport java.util.Map;\r\n\r\npublic class Agreement {\r\n\r\n    /***\r\n     * products on the agreement - maps between product's id to the product and its amount\r\n     */\r\n    private Map<String, Product> products;\r\n    private BillOfQuantities billOfQuantities;\r\n    private DeliveryAgreement deliveryAgreement;\r\n\r\n    public Agreement(List<Product> productsList, DeliveryAgreement deliveryAgreement){\r\n        products = new HashMap<>();\r\n        for (Product p : productsList)\r\n            products.put(p.getCatalogNumber(), p);\r\n        this.deliveryAgreement = deliveryAgreement;\r\n    }\r\n\r\n    public Agreement(List<Product> productsList, DeliveryAgreement deliveryAgreement, BillOfQuantities billOfQuantities){\r\n        this(productsList, deliveryAgreement);\r\n        this.billOfQuantities = billOfQuantities;\r\n    }\r\n\r\n    public Map<String, Product> getProducts() {\r\n        return products;\r\n    }\r\n\r\n    public Product getProduct(String catalogNumber){\r\n        return products.get(catalogNumber);\r\n    }\r\n    public DeliveryAgreement getDeliveryAgreement() {\r\n        return deliveryAgreement;\r\n    }\r\n\r\n    public void setFixedDeliveryAgreement(boolean haveTransport, List<Integer> days){\r\n        this.deliveryAgreement = new DeliveryFixedDays(haveTransport, days);\r\n    }\r\n\r\n    public void setByInvitationDeliveryAgreement(boolean haveTransport, int numOfDays){\r\n        deliveryAgreement = new DeliveryByInvitation(haveTransport, numOfDays);\r\n    }\r\n\r\n    public void addProduct(Product product){\r\n        products.put(product.getCatalogNumber(), product);\r\n    }\r\n\r\n    public void removeProduct(String catalogNumber){\r\n        products.remove(catalogNumber);\r\n    }\r\n\r\n    public BillOfQuantities getBillOfQuantities(){\r\n        return billOfQuantities;\r\n    }\r\n    public BillOfQuantities BillOfQuantities(){\r\n        if(billOfQuantities == null)\r\n            billOfQuantities = new BillOfQuantities();\r\n        return billOfQuantities;\r\n    }\r\n\r\n    public void setBillOfQuantities(BillOfQuantities billOfQuantities) {\r\n        this.billOfQuantities = billOfQuantities;\r\n    }\r\n\r\n    public String toString(){\r\n        String productsString = \"PRODUCTS DETAILS:\";\r\n        for (Product product : products.values())\r\n            productsString += \"\\n\\t\\t\\t\" + product.toString();\r\n\r\n        return \"AGREEMENT:\\n\\t\\t\" + productsString + \"\\n\\t\\t\" + deliveryAgreement.toString() + \"\\n\\t\\t\" + (billOfQuantities == null ? \"\" : billOfQuantities.toString());\r\n    }\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/Backend/BusinessLayer/SuppliersModule/Agreement.java b/src/Backend/BusinessLayer/SuppliersModule/Agreement.java
+--- a/src/Backend/BusinessLayer/SuppliersModule/Agreement.java	(revision 4d39d804fb66f47a3f28196a3341e5c90a3053e1)
++++ b/src/Backend/BusinessLayer/SuppliersModule/Agreement.java	(date 1684151906701)
+@@ -49,14 +49,28 @@
+         deliveryAgreement = new DeliveryByInvitation(haveTransport, numOfDays);
+     }
+ 
+-    public void addProduct(Product product){
+-        products.put(product.getCatalogNumber(), product);
++    public void addProduct(String catalogNumber, String supplierCatalogNumber, double price, int numberOfUnits){
++        products.put(catalogNumber, new Product(catalogNumber, supplierCatalogNumber, price, numberOfUnits));
+     }
+ 
+     public void removeProduct(String catalogNumber){
+         products.remove(catalogNumber);
+     }
+ 
++    public boolean productExist(String catalogNumber){
++        return getProduct(catalogNumber) != null;
++    }
++    public void setSuppliersCatalogNumber(String catalogNumber, String newSuppliersCatalogNumber){
++        getProduct(catalogNumber).setSuppliersCatalogNumber(newSuppliersCatalogNumber);
++    }
++
++    public void setPrice(String catalogNumber, double price){
++        getProduct(catalogNumber).setPrice(price);
++    }
++
++    public void setNumberOfUnits(String catalogNumber, int numberOfUnits){
++        getProduct(catalogNumber).setNumberOfUnits(numberOfUnits);
++    }
+     public BillOfQuantities getBillOfQuantities(){
+         return billOfQuantities;
+     }
+@@ -66,6 +80,14 @@
+         return billOfQuantities;
+     }
+ 
++    public String getSuppliersCatalogNumber(String catalogNumber){
++        return products.get(catalogNumber).getSuppliersCatalogNumber();
++    }
++
++    public int getNumberOfUnits(String catalogNumber){
++        return products.get(catalogNumber).getNumberOfUnits();
++    }
++
+     public void setBillOfQuantities(BillOfQuantities billOfQuantities) {
+         this.billOfQuantities = billOfQuantities;
+     }
+@@ -75,7 +97,7 @@
+         for (Product product : products.values())
+             productsString += "\n\t\t\t" + product.toString();
+ 
+-        return "AGREEMENT:\n\t\t" + productsString + "\n\t\t" + deliveryAgreement.toString() + "\n\t\t" + (billOfQuantities == null ? "" : billOfQuantities.toString());
++        return "AGREEMENT:\n\t\t" + productsString + "\n\t\t" + deliveryAgreement.toString() + "\n\t\t";
+     }
+ 
+ }
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"ArtifactsWorkspaceSettings\">\r\n    <artifacts-to-build>\r\n      <artifact name=\"code:jar\" />\r\n    </artifacts-to-build>\r\n  </component>\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"e454f93c-4ee8-4f4b-9a14-eaaf36aa303c\" name=\"Changes\" comment=\"commit\">\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/misc.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/misc.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/Backend/BusinessLayer/InventoryModule/DiscountController.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/Backend/BusinessLayer/InventoryModule/DiscountController.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/StoreProductDiscountDataMapper.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/StoreProductDiscountDataMapper.java\" afterDir=\"false\" />\r\n    </list>\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"FileTemplateManagerImpl\">\r\n    <option name=\"RECENT_TEMPLATES\">\r\n      <list>\r\n        <option value=\"TypeScript File\" />\r\n        <option value=\"JUnit5 Test Class\" />\r\n        <option value=\"JUnit4 Test Class\" />\r\n        <option value=\"Class\" />\r\n      </list>\r\n    </option>\r\n  </component>\r\n  <component name=\"Git.Merge.Settings\">\r\n    <option name=\"BRANCH\" value=\"origin/Suppliers_Inventory_Or\" />\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"RECENT_BRANCH_BY_REPOSITORY\">\r\n      <map>\r\n        <entry key=\"$PROJECT_DIR$/..\" value=\"Suppliers_Inventory_208671990_207161605_324988880_325294429\" />\r\n      </map>\r\n    </option>\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$/..\" />\r\n  </component>\r\n  <component name=\"GitSEFilterConfiguration\">\r\n    <file-type-list>\r\n      <filtered-out-file-type name=\"LOCAL_BRANCH\" />\r\n      <filtered-out-file-type name=\"REMOTE_BRANCH\" />\r\n      <filtered-out-file-type name=\"TAG\" />\r\n      <filtered-out-file-type name=\"COMMIT_BY_MESSAGE\" />\r\n    </file-type-list>\r\n  </component>\r\n  <component name=\"HighlightingSettingsPerFile\">\r\n    <setting file=\"file://$PROJECT_DIR$/src/Backend/ServiceLayer/InventoryModule/CategoriesService.java\" root0=\"FORCE_HIGHLIGHTING\" />\r\n  </component>\r\n  <component name=\"MarkdownSettingsMigration\">\r\n    <option name=\"stateVersion\" value=\"1\" />\r\n  </component>\r\n  <component name=\"ProjectId\" id=\"2Ns1AY5qJ2vweTUuXVxQYWQnhZR\" />\r\n  <component name=\"ProjectLevelVcsManager\" settingsEditedManually=\"true\" />\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\">{\r\n  &quot;keyToString&quot;: {\r\n    &quot;last_opened_file_path&quot;: &quot;C:/Users/yossi/OneDrive/שולחן העבודה/ניתוצ/Assignment2 - Copy/dev/sqlite-jdbc-3.41.2.1.jar&quot;,\r\n    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,\r\n    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,\r\n    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;\r\n  }\r\n}</component>\r\n  <component name=\"RecentsManager\">\r\n    <key name=\"CopyFile.RECENT_KEYS\">\r\n      <recent name=\"C:\\Users\\yossi\\OneDrive\\שולחן העבודה\\ניתוצ\\Assignment1\\Assignment1\\dev\\PresentationLayer\" />\r\n    </key>\r\n    <key name=\"CreateTestDialog.Recents.Supers\">\r\n      <recent name=\"\" />\r\n    </key>\r\n    <key name=\"MoveFile.RECENT_KEYS\">\r\n      <recent name=\"C:\\Users\\yossi\\OneDrive\\שולחן העבודה\\ניתוצ\\Assignment2\\Assignment2\\dev\" />\r\n      <recent name=\"C:\\Users\\yossi\\OneDrive\\שולחן העבודה\\ניתוצ\\Assignment1\\Assignment1\\dev\\src\" />\r\n    </key>\r\n    <key name=\"MoveClassesOrPackagesDialog.RECENTS_KEY\">\r\n      <recent name=\"Backend.BusinessLayer\" />\r\n      <recent name=\"Backend.DataAccessLayer.dalUtils\" />\r\n    </key>\r\n    <key name=\"CreateTestDialog.RecentsKey\">\r\n      <recent name=\"Backend.BusinessLayer\" />\r\n    </key>\r\n    <key name=\"CopyClassDialog.RECENTS_KEY\">\r\n      <recent name=\"PresentationLayer\" />\r\n    </key>\r\n  </component>\r\n  <component name=\"RunManager\" selected=\"Application.Main\">\r\n    <configuration name=\"Main (1)\" type=\"Application\" factoryName=\"Application\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <option name=\"MAIN_CLASS_NAME\" value=\"Fronend.PresentationLayer.InventoryModule.Main\" />\r\n      <module name=\"code\" />\r\n      <extension name=\"coverage\">\r\n        <pattern>\r\n          <option name=\"PATTERN\" value=\"Fronend.PresentationLayer.InventoryModule.*\" />\r\n          <option name=\"ENABLED\" value=\"true\" />\r\n        </pattern>\r\n      </extension>\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <configuration name=\"Main\" type=\"Application\" factoryName=\"Application\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <option name=\"MAIN_CLASS_NAME\" value=\"Fronend.PresentationLayer.SuppliersModule.Main\" />\r\n      <module name=\"dev\" />\r\n      <extension name=\"coverage\">\r\n        <pattern>\r\n          <option name=\"PATTERN\" value=\"Fronend.PresentationLayer.SuppliersModule.*\" />\r\n          <option name=\"ENABLED\" value=\"true\" />\r\n        </pattern>\r\n      </extension>\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <configuration name=\"BillOfQuantitiesTest\" type=\"JUnit\" factoryName=\"JUnit\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <module name=\"code\" />\r\n      <extension name=\"coverage\">\r\n        <pattern>\r\n          <option name=\"PATTERN\" value=\"Backend.BusinessLayer.BusinessLayerUsage.*\" />\r\n          <option name=\"ENABLED\" value=\"true\" />\r\n        </pattern>\r\n      </extension>\r\n      <option name=\"PACKAGE_NAME\" value=\"Backend.BusinessLayer\" />\r\n      <option name=\"MAIN_CLASS_NAME\" value=\"Backend.BusinessLayer.BillOfQuantitiesTest\" />\r\n      <option name=\"TEST_OBJECT\" value=\"class\" />\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <configuration name=\"BillOfQuantitiesTest.removeDiscountOnAmountOfProducts\" type=\"JUnit\" factoryName=\"JUnit\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <module name=\"code\" />\r\n      <extension name=\"coverage\">\r\n        <pattern>\r\n          <option name=\"PATTERN\" value=\"Backend.BusinessLayer.BusinessLayerUsage.*\" />\r\n          <option name=\"ENABLED\" value=\"true\" />\r\n        </pattern>\r\n      </extension>\r\n      <option name=\"PACKAGE_NAME\" value=\"Backend.BusinessLayer\" />\r\n      <option name=\"MAIN_CLASS_NAME\" value=\"Backend.BusinessLayer.BillOfQuantitiesTest\" />\r\n      <option name=\"METHOD_NAME\" value=\"removeDiscountOnAmountOfProducts\" />\r\n      <option name=\"TEST_OBJECT\" value=\"method\" />\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <configuration name=\"BillOfQuantitiesTest.setOrderOfDiscounts\" type=\"JUnit\" factoryName=\"JUnit\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <module name=\"code\" />\r\n      <extension name=\"coverage\">\r\n        <pattern>\r\n          <option name=\"PATTERN\" value=\"Backend.BusinessLayer.BusinessLayerUsage.*\" />\r\n          <option name=\"ENABLED\" value=\"true\" />\r\n        </pattern>\r\n      </extension>\r\n      <option name=\"PACKAGE_NAME\" value=\"Backend.BusinessLayer\" />\r\n      <option name=\"MAIN_CLASS_NAME\" value=\"Backend.BusinessLayer.BillOfQuantitiesTest\" />\r\n      <option name=\"METHOD_NAME\" value=\"setOrderOfDiscounts\" />\r\n      <option name=\"TEST_OBJECT\" value=\"method\" />\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <recent_temporary>\r\n      <list>\r\n        <item itemvalue=\"JUnit.BillOfQuantitiesTest.setOrderOfDiscounts\" />\r\n        <item itemvalue=\"JUnit.BillOfQuantitiesTest.removeDiscountOnAmountOfProducts\" />\r\n        <item itemvalue=\"JUnit.BillOfQuantitiesTest\" />\r\n        <item itemvalue=\"Application.Main (1)\" />\r\n        <item itemvalue=\"Application.Main\" />\r\n      </list>\r\n    </recent_temporary>\r\n  </component>\r\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"e454f93c-4ee8-4f4b-9a14-eaaf36aa303c\" name=\"Changes\" comment=\"\" />\r\n      <created>1680437835640</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1680437835640</updated>\r\n      <workItem from=\"1680437836657\" duration=\"39000\" />\r\n      <workItem from=\"1680438006576\" duration=\"12448000\" />\r\n      <workItem from=\"1680468003859\" duration=\"62000\" />\r\n      <workItem from=\"1680511359414\" duration=\"167000\" />\r\n      <workItem from=\"1680511529805\" duration=\"12696000\" />\r\n      <workItem from=\"1681150003845\" duration=\"544000\" />\r\n      <workItem from=\"1681150568098\" duration=\"2870000\" />\r\n      <workItem from=\"1682020177721\" duration=\"51433000\" />\r\n      <workItem from=\"1683488131151\" duration=\"9878000\" />\r\n      <workItem from=\"1683644904745\" duration=\"1332000\" />\r\n    </task>\r\n    <task id=\"LOCAL-00001\" summary=\"done with order functionality - moving to the ability to print the order etc\">\r\n      <created>1680693870968</created>\r\n      <option name=\"number\" value=\"00001\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00001\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1680693870968</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00002\" summary=\"commit to move to another functionality\">\r\n      <created>1680811222544</created>\r\n      <option name=\"number\" value=\"00002\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00002\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1680811222544</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00003\" summary=\"added products that can be ordered only by dividing to several suppliers functionality and started ui\">\r\n      <created>1680880637709</created>\r\n      <option name=\"number\" value=\"00003\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00003\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1680880637709</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00004\" summary=\"finish ui and tests\">\r\n      <created>1681121958493</created>\r\n      <option name=\"number\" value=\"00004\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00004\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1681121958493</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00005\" summary=\"order packages\">\r\n      <created>1681128879409</created>\r\n      <option name=\"number\" value=\"00005\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00005\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1681128879409</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00006\" summary=\"order packages\">\r\n      <created>1681128893853</created>\r\n      <option name=\"number\" value=\"00006\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00006\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1681128893853</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00007\" summary=\"order packages\">\r\n      <created>1681129952179</created>\r\n      <option name=\"number\" value=\"00007\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00007\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1681129952179</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00008\" summary=\"jdk 17\">\r\n      <created>1681151928695</created>\r\n      <option name=\"number\" value=\"00008\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00008\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1681151928695</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00009\" summary=\"commit before dal\">\r\n      <created>1683124351701</created>\r\n      <option name=\"number\" value=\"00009\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00009\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1683124351701</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00010\" summary=\"commit\">\r\n      <created>1683646018146</created>\r\n      <option name=\"number\" value=\"00010\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00010\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1683646018146</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00011\" summary=\"commit\">\r\n      <created>1683646037405</created>\r\n      <option name=\"number\" value=\"00011\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00011\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1683646037405</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00012\" summary=\"adding branch to order\">\r\n      <created>1683821503391</created>\r\n      <option name=\"number\" value=\"00012\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00012\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1683821503391</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00013\" summary=\"adding branch to order\">\r\n      <created>1683825021730</created>\r\n      <option name=\"number\" value=\"00013\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00013\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1683825021730</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00014\" summary=\"commit\">\r\n      <created>1683842591985</created>\r\n      <option name=\"number\" value=\"00014\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00014\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1683842591985</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00015\" summary=\"commit\">\r\n      <created>1684091161779</created>\r\n      <option name=\"number\" value=\"00015\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00015\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1684091161779</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00016\" summary=\"ProductsDataMapper added resultSet.next()\">\r\n      <created>1684099834858</created>\r\n      <option name=\"number\" value=\"00016\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00016\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1684099834858</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00017\" summary=\"commit\">\r\n      <created>1684138535480</created>\r\n      <option name=\"number\" value=\"00017\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00017\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1684138535480</updated>\r\n    </task>\r\n    <option name=\"localTasksCounter\" value=\"18\" />\r\n    <servers />\r\n  </component>\r\n  <component name=\"TypeScriptGeneratedFilesManager\">\r\n    <option name=\"version\" value=\"3\" />\r\n  </component>\r\n  <component name=\"Vcs.Log.Tabs.Properties\">\r\n    <option name=\"RECENT_FILTERS\">\r\n      <map>\r\n        <entry key=\"User\">\r\n          <value>\r\n            <list>\r\n              <RecentGroup>\r\n                <option name=\"FILTER_VALUES\">\r\n                  <option value=\"*\" />\r\n                </option>\r\n              </RecentGroup>\r\n            </list>\r\n          </value>\r\n        </entry>\r\n      </map>\r\n    </option>\r\n    <option name=\"TAB_STATES\">\r\n      <map>\r\n        <entry key=\"MAIN\">\r\n          <value>\r\n            <State />\r\n          </value>\r\n        </entry>\r\n      </map>\r\n    </option>\r\n  </component>\r\n  <component name=\"VcsManagerConfiguration\">\r\n    <ignored-roots>\r\n      <path value=\"$PROJECT_DIR$\" />\r\n    </ignored-roots>\r\n    <MESSAGE value=\"done with order functionality - moving to the ability to print the order etc\" />\r\n    <MESSAGE value=\"commit to move to another functionality\" />\r\n    <MESSAGE value=\"added products that can be ordered only by dividing to several suppliers functionality and started ui\" />\r\n    <MESSAGE value=\"finish ui and tests\" />\r\n    <MESSAGE value=\"order packages\" />\r\n    <MESSAGE value=\"jdk 17\" />\r\n    <MESSAGE value=\"commit before dal\" />\r\n    <MESSAGE value=\"adding branch to order\" />\r\n    <MESSAGE value=\"ProductsDataMapper added resultSet.next()\" />\r\n    <MESSAGE value=\"commit\" />\r\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"commit\" />\r\n  </component>\r\n  <component name=\"XDebuggerManager\">\r\n    <breakpoint-manager>\r\n      <breakpoints>\r\n        <line-breakpoint enabled=\"true\" type=\"java-line\">\r\n          <url>file://$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/UI.java</url>\r\n          <line>777</line>\r\n          <option name=\"timeStamp\" value=\"10\" />\r\n        </line-breakpoint>\r\n        <line-breakpoint enabled=\"true\" type=\"java-line\">\r\n          <url>file://$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/OrderHistoryDataMappers/OrderHistoryDataMapper.java</url>\r\n          <line>25</line>\r\n          <option name=\"timeStamp\" value=\"14\" />\r\n        </line-breakpoint>\r\n      </breakpoints>\r\n    </breakpoint-manager>\r\n    <pin-to-top-manager>\r\n      <pinned-members>\r\n        <PinnedItemInfo parentTag=\"Backend.BusinessLayer.SupplierController\" memberName=\"suppliers\" />\r\n      </pinned-members>\r\n    </pin-to-top-manager>\r\n  </component>\r\n  <component name=\"XSLT-Support.FileAssociations.UIState\">\r\n    <expand />\r\n    <select />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision 4d39d804fb66f47a3f28196a3341e5c90a3053e1)
++++ b/.idea/workspace.xml	(date 1684151906700)
+@@ -9,11 +9,9 @@
+     <option name="autoReloadType" value="SELECTIVE" />
+   </component>
+   <component name="ChangeListManager">
+-    <list default="true" id="e454f93c-4ee8-4f4b-9a14-eaaf36aa303c" name="Changes" comment="commit">
+-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/InventoryModule/DiscountController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/BusinessLayer/InventoryModule/DiscountController.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/StoreProductDiscountDataMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/StoreProductDiscountDataMapper.java" afterDir="false" />
++    <list default="true" id="e454f93c-4ee8-4f4b-9a14-eaaf36aa303c" name="Changes" comment="delete data from sqlite">
++      <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/SuppliersModule/BillOfQuantities.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/BusinessLayer/SuppliersModule/BillOfQuantities.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/BillOfQuantitiesDataMappers/DiscountOnAmountDataMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/BillOfQuantitiesDataMappers/DiscountOnAmountDataMapper.java" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+@@ -36,10 +34,11 @@
+   <component name="Git.Settings">
+     <option name="RECENT_BRANCH_BY_REPOSITORY">
+       <map>
+-        <entry key="$PROJECT_DIR$/.." value="Suppliers_Inventory_208671990_207161605_324988880_325294429" />
++        <entry key="$PROJECT_DIR$/.." value="master" />
+       </map>
+     </option>
+     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
++    <option name="RESET_MODE" value="HARD" />
+   </component>
+   <component name="GitSEFilterConfiguration">
+     <file-type-list>
+@@ -167,11 +166,11 @@
+     </configuration>
+     <recent_temporary>
+       <list>
++        <item itemvalue="Application.Main" />
+         <item itemvalue="JUnit.BillOfQuantitiesTest.setOrderOfDiscounts" />
+         <item itemvalue="JUnit.BillOfQuantitiesTest.removeDiscountOnAmountOfProducts" />
+         <item itemvalue="JUnit.BillOfQuantitiesTest" />
+         <item itemvalue="Application.Main (1)" />
+-        <item itemvalue="Application.Main" />
+       </list>
+     </recent_temporary>
+   </component>
+@@ -313,13 +312,29 @@
+       <option name="project" value="LOCAL" />
+       <updated>1684138535480</updated>
+     </task>
+-    <option name="localTasksCounter" value="18" />
++    <task id="LOCAL-00018" summary="delete data from sqlite">
++      <created>1684149606189</created>
++      <option name="number" value="00018" />
++      <option name="presentableId" value="LOCAL-00018" />
++      <option name="project" value="LOCAL" />
++      <updated>1684149606189</updated>
++    </task>
++    <option name="localTasksCounter" value="19" />
+     <servers />
+   </component>
+   <component name="TypeScriptGeneratedFilesManager">
+     <option name="version" value="3" />
+   </component>
+   <component name="Vcs.Log.Tabs.Properties">
++    <option name="TAB_STATES">
++      <map>
++        <entry key="MAIN">
++          <value>
++            <State />
++          </value>
++        </entry>
++      </map>
++    </option>
+     <option name="RECENT_FILTERS">
+       <map>
+         <entry key="User">
+@@ -335,15 +350,6 @@
+         </entry>
+       </map>
+     </option>
+-    <option name="TAB_STATES">
+-      <map>
+-        <entry key="MAIN">
+-          <value>
+-            <State />
+-          </value>
+-        </entry>
+-      </map>
+-    </option>
+   </component>
+   <component name="VcsManagerConfiguration">
+     <ignored-roots>
+@@ -359,7 +365,8 @@
+     <MESSAGE value="adding branch to order" />
+     <MESSAGE value="ProductsDataMapper added resultSet.next()" />
+     <MESSAGE value="commit" />
+-    <option name="LAST_COMMIT_MESSAGE" value="commit" />
++    <MESSAGE value="delete data from sqlite" />
++    <option name="LAST_COMMIT_MESSAGE" value="delete data from sqlite" />
+   </component>
+   <component name="XDebuggerManager">
+     <breakpoint-manager>
+@@ -368,11 +375,6 @@
+           <url>file://$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/UI.java</url>
+           <line>777</line>
+           <option name="timeStamp" value="10" />
+-        </line-breakpoint>
+-        <line-breakpoint enabled="true" type="java-line">
+-          <url>file://$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/OrderHistoryDataMappers/OrderHistoryDataMapper.java</url>
+-          <line>25</line>
+-          <option name="timeStamp" value="14" />
+         </line-breakpoint>
+       </breakpoints>
+     </breakpoint-manager>
+Index: src/Backend/DataAccessLayer/SuppliersModule/BillOfQuantitiesDataMappers/DiscountOnAmountDataMapper.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package Backend.DataAccessLayer.SuppliersModule.BillOfQuantitiesDataMappers;\r\n\r\nimport Backend.BusinessLayer.SuppliersModule.Discounts.CashDiscount;\r\nimport Backend.BusinessLayer.SuppliersModule.Discounts.Discount;\r\nimport Backend.BusinessLayer.SuppliersModule.Discounts.PercentageDiscount;\r\nimport Backend.BusinessLayer.SuppliersModule.Pair;\r\nimport Backend.DataAccessLayer.dalUtils.AbstractDataMapper;\r\nimport Backend.DataAccessLayer.dalUtils.OfflineResultSet;\r\n\r\nimport java.sql.SQLException;\r\n\r\npublic class DiscountOnAmountDataMapper  extends AbstractDataMapper {\r\n    public DiscountOnAmountDataMapper(String tableName, String columns) {\r\n        super(\"discount_on_amount\", new String[] {\"bn_number\", \"amount_to_reach\", \"percentage\", \"cash\"});\r\n    }\r\n\r\n    public void insert(String bnNumber, int amountToReach, Discount discount) throws SQLException {\r\n        double percentage = -1,cash = -1;\r\n        if(discount instanceof PercentageDiscount)\r\n            percentage = ((PercentageDiscount) discount).getPercentage();\r\n        else\r\n            cash = ((CashDiscount)discount).getAmountOfDiscount();\r\n        String columnsString = String.join(\", \", columns);\r\n        sqlExecutor.executeWrite(String.format(\"INSERT INTO %s (%s) VALUES('%s', %d, %f, %f)\",tableName, columnsString, bnNumber,\r\n                amountToReach, percentage, cash));\r\n    }\r\n\r\n    public void delete(String bnNumber) throws SQLException {\r\n        sqlExecutor.executeWrite(String.format(\"DELETE FROM %s WHERE bn_number = '%s'\", tableName, bnNumber));\r\n    }\r\n\r\n    public void updateAmountToReach(String bnNumber, double amountToReach) throws SQLException {\r\n        sqlExecutor.executeWrite(String.format(\"UPDATE %s SET amount_to_reach = %d WHERE bn_number = '%s'\", tableName, amountToReach, bnNumber));\r\n    }\r\n\r\n    public void updateDiscount(String bnNumber, Discount discount) throws SQLException {\r\n        double percentage = -1,cash = -1;\r\n        if(discount instanceof PercentageDiscount)\r\n            percentage = ((PercentageDiscount) discount).getPercentage();\r\n        else\r\n            cash = ((CashDiscount)discount).getAmountOfDiscount();\r\n        sqlExecutor.executeWrite(String.format(\"UPDATE %s SET cash = %f, percentage = %f  WHERE bn_number = '%s'\", tableName, cash, percentage, bnNumber));\r\n    }\r\n\r\n    public Pair<Integer, Discount> find(String bnNumber) throws SQLException {\r\n        String columnsString = String.join(\", \", columns);\r\n        OfflineResultSet resultSet = sqlExecutor.executeRead(String.format(\"SELECT %s FROM %s WHERE bn_number = '%s'\", columnsString, tableName, bnNumber));\r\n        if(resultSet.next()) {\r\n            Discount discount = null;\r\n            if (resultSet.getDouble(\"percentage\") != -1)\r\n                discount = new PercentageDiscount(resultSet.getDouble(\"percentage\"));\r\n            else\r\n                discount = new CashDiscount(resultSet.getDouble(\"cash\"));\r\n            return new Pair<>(resultSet.getInt(\"amount_to_reach\"), discount);\r\n        }\r\n        return null;\r\n    }\r\n\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/Backend/DataAccessLayer/SuppliersModule/BillOfQuantitiesDataMappers/DiscountOnAmountDataMapper.java b/src/Backend/DataAccessLayer/SuppliersModule/BillOfQuantitiesDataMappers/DiscountOnAmountDataMapper.java
+--- a/src/Backend/DataAccessLayer/SuppliersModule/BillOfQuantitiesDataMappers/DiscountOnAmountDataMapper.java	(revision 4d39d804fb66f47a3f28196a3341e5c90a3053e1)
++++ b/src/Backend/DataAccessLayer/SuppliersModule/BillOfQuantitiesDataMappers/DiscountOnAmountDataMapper.java	(date 1684151906703)
+@@ -10,8 +10,8 @@
+ import java.sql.SQLException;
+ 
+ public class DiscountOnAmountDataMapper  extends AbstractDataMapper {
+-    public DiscountOnAmountDataMapper(String tableName, String columns) {
+-        super("discount_on_amount", new String[] {"bn_number", "amount_to_reach", "percentage", "cash"});
++    public DiscountOnAmountDataMapper() {
++        super("discounts_on_amount", new String[] {"bn_number", "amount_to_reach", "percentage", "cash"});
+     }
+ 
+     public void insert(String bnNumber, int amountToReach, Discount discount) throws SQLException {
+Index: .idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"ProjectRootManager\" version=\"2\" languageLevel=\"JDK_18\" default=\"true\" project-jdk-name=\"18 (2)\" project-jdk-type=\"JavaSDK\">\r\n    <output url=\"file://$PROJECT_DIR$/out\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/misc.xml b/.idea/misc.xml
+--- a/.idea/misc.xml	(revision 4d39d804fb66f47a3f28196a3341e5c90a3053e1)
++++ b/.idea/misc.xml	(date 1684151906699)
+@@ -1,6 +1,6 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
+-  <component name="ProjectRootManager" version="2" languageLevel="JDK_18" default="true" project-jdk-name="18 (2)" project-jdk-type="JavaSDK">
++  <component name="ProjectRootManager" version="2" languageLevel="JDK_17" default="true" project-jdk-name="18 (2)" project-jdk-type="JavaSDK">
+     <output url="file://$PROJECT_DIR$/out" />
+   </component>
+ </project>
+\ No newline at end of file
+Index: dev.iml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<module type=\"JAVA_MODULE\" version=\"4\">\r\n  <component name=\"NewModuleRootManager\" inherit-compiler-output=\"true\">\r\n    <exclude-output />\r\n    <content url=\"file://$MODULE_DIR$\">\r\n      <sourceFolder url=\"file://$MODULE_DIR$/Test\" isTestSource=\"true\" />\r\n      <sourceFolder url=\"file://$MODULE_DIR$/src\" isTestSource=\"false\" />\r\n    </content>\r\n    <orderEntry type=\"inheritedJdk\" />\r\n    <orderEntry type=\"sourceFolder\" forTests=\"false\" />\r\n    <orderEntry type=\"module-library\" scope=\"TEST\">\r\n      <library name=\"JUnit4\">\r\n        <CLASSES>\r\n          <root url=\"jar://$MAVEN_REPOSITORY$/junit/junit/4.13.1/junit-4.13.1.jar!/\" />\r\n          <root url=\"jar://$MAVEN_REPOSITORY$/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar!/\" />\r\n        </CLASSES>\r\n        <JAVADOC />\r\n        <SOURCES />\r\n      </library>\r\n    </orderEntry>\r\n    <orderEntry type=\"module-library\" scope=\"TEST\">\r\n      <library name=\"JUnit5.8.1\">\r\n        <CLASSES>\r\n          <root url=\"jar://$MAVEN_REPOSITORY$/org/junit/jupiter/junit-jupiter/5.8.1/junit-jupiter-5.8.1.jar!/\" />\r\n          <root url=\"jar://$MAVEN_REPOSITORY$/org/junit/jupiter/junit-jupiter-api/5.8.1/junit-jupiter-api-5.8.1.jar!/\" />\r\n          <root url=\"jar://$MAVEN_REPOSITORY$/org/opentest4j/opentest4j/1.2.0/opentest4j-1.2.0.jar!/\" />\r\n          <root url=\"jar://$MAVEN_REPOSITORY$/org/junit/platform/junit-platform-commons/1.8.1/junit-platform-commons-1.8.1.jar!/\" />\r\n          <root url=\"jar://$MAVEN_REPOSITORY$/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar!/\" />\r\n          <root url=\"jar://$MAVEN_REPOSITORY$/org/junit/jupiter/junit-jupiter-params/5.8.1/junit-jupiter-params-5.8.1.jar!/\" />\r\n          <root url=\"jar://$MAVEN_REPOSITORY$/org/junit/jupiter/junit-jupiter-engine/5.8.1/junit-jupiter-engine-5.8.1.jar!/\" />\r\n          <root url=\"jar://$MAVEN_REPOSITORY$/org/junit/platform/junit-platform-engine/1.8.1/junit-platform-engine-1.8.1.jar!/\" />\r\n        </CLASSES>\r\n        <JAVADOC />\r\n        <SOURCES />\r\n      </library>\r\n    </orderEntry>\r\n    <orderEntry type=\"module-library\">\r\n      <library>\r\n        <CLASSES>\r\n          <root url=\"jar://$MODULE_DIR$/gson-2.10.1.jar!/\" />\r\n        </CLASSES>\r\n        <JAVADOC />\r\n        <SOURCES />\r\n      </library>\r\n    </orderEntry>\r\n    <orderEntry type=\"module-library\">\r\n      <library>\r\n        <CLASSES>\r\n          <root url=\"jar://$MODULE_DIR$/sqlite-jdbc-3.41.2.1.jar!/\" />\r\n        </CLASSES>\r\n        <JAVADOC />\r\n        <SOURCES />\r\n      </library>\r\n    </orderEntry>\r\n  </component>\r\n</module>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/dev.iml b/dev.iml
+--- a/dev.iml	(revision 4d39d804fb66f47a3f28196a3341e5c90a3053e1)
++++ b/dev.iml	(date 1684151906701)
+@@ -6,7 +6,7 @@
+       <sourceFolder url="file://$MODULE_DIR$/Test" isTestSource="true" />
+       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
+     </content>
+-    <orderEntry type="inheritedJdk" />
++    <orderEntry type="jdk" jdkName="19" jdkType="JavaSDK" />
+     <orderEntry type="sourceFolder" forTests="false" />
+     <orderEntry type="module-library" scope="TEST">
+       <library name="JUnit4">
+Index: src/Backend/BusinessLayer/SuppliersModule/BillOfQuantities.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package Backend.BusinessLayer.SuppliersModule;\r\n\r\nimport Backend.BusinessLayer.SuppliersModule.Discounts.Discount;\r\n\r\nimport java.util.*;\r\nimport java.util.function.Function;\r\n\r\npublic class BillOfQuantities {\r\n    /***\r\n     * maps between product's id to its set of discounts by amount ordered\r\n     */\r\n    private Map<String, Map<Integer, Discount>> productsDiscounts;\r\n    /***\r\n     * discount to be applied on the total order after discount on amount - T is the price before and R is the price after\r\n     */\r\n    private Function<Double, Double> discountOnTotalOrder;\r\n    /***\r\n     * discount to be applied on the total order after per-product discounts - T is the price before and R is the price after\r\n     */\r\n    private Function<Integer, Function<Double, Double>> discountOnAmountOfProducts;\r\n    /***\r\n     * for \"toString\" purpose\r\n     */\r\n    private int amountToReachForDiscount;\r\n    private double priceToReachForDiscount;\r\n    private Discount discountOnAmount;\r\n    private Discount discountOnTotal;\r\n    /**\r\n     * indicates the order of the discounts - true if amount-discount before total-payment-discount, false otherwise\r\n     */\r\n    private boolean amountBeforeTotal;\r\n    public BillOfQuantities(){\r\n        productsDiscounts = new TreeMap<>();\r\n    }\r\n    public void setOrderOfDiscounts(boolean amountBeforeTotal){\r\n        this.amountBeforeTotal = amountBeforeTotal;\r\n    }\r\n    public void setDiscountOnTotalOrder(double priceToActivateDiscount, Discount discount){\r\n        priceToReachForDiscount = priceToActivateDiscount;\r\n        discountOnTotal = discount;\r\n        discountOnTotalOrder = (Double price) -> {\r\n            if (price >= priceToActivateDiscount)\r\n                return discount.applyDiscount(price);\r\n            return price;\r\n        };\r\n    }\r\n    public void removeDiscountOnTotalOrder(){\r\n        discountOnTotalOrder = null;\r\n    }\r\n\r\n    public void addProductDiscount(String catalogNumber, int amount, Discount discount){\r\n        if(discount == null)\r\n            throw new RuntimeException(\"discount can't be null\");\r\n        if(productsDiscounts.get(catalogNumber) == null)\r\n            productsDiscounts.put(catalogNumber, new HashMap<>());\r\n        productsDiscounts.get(catalogNumber).put(amount, discount);\r\n    }\r\n\r\n    public void removeProductDiscount(String catalogNumber, int amount){\r\n        if(productsDiscounts.get(catalogNumber) != null)\r\n            productsDiscounts.get(catalogNumber).remove(amount);\r\n    }\r\n\r\n    public void removeProductDiscount(String catalogNumber){\r\n        productsDiscounts.remove(catalogNumber);\r\n    }\r\n\r\n    public void setProductsDiscounts(Map<String, Map<Integer, Discount>> productsDiscounts) {\r\n        this.productsDiscounts = productsDiscounts;\r\n    }\r\n\r\n    public double getProductPriceAfterDiscount(String catalogNumber, int amount, double price){\r\n        if(!productsDiscounts.containsKey(catalogNumber))\r\n            return price;\r\n        Discount discount = null;\r\n        for(int amountCheck : productsDiscounts.get(catalogNumber).keySet())\r\n            if(amountCheck <= amount)\r\n                discount = productsDiscounts.get(catalogNumber).get(amountCheck);\r\n        if(discount != null)\r\n            return discount.applyDiscount(price);\r\n        return price;\r\n    }\r\n\r\n    public double getPriceAfterDiscounts(int amount, double priceBefore){\r\n        double price = priceBefore;\r\n        if(amountBeforeTotal){\r\n            if(discountOnAmountOfProducts != null)\r\n                price = discountOnAmountOfProducts.apply(amount).apply(price);\r\n            if(discountOnTotalOrder != null)\r\n                price = discountOnTotalOrder.apply(price);\r\n        }\r\n        else{\r\n            if(discountOnTotalOrder != null)\r\n                price = discountOnTotalOrder.apply(price);\r\n            if(discountOnAmountOfProducts != null)\r\n                price = discountOnAmountOfProducts.apply(amount).apply(price);\r\n        }\r\n        return price;\r\n    }\r\n\r\n    public void setDiscountOnAmountOfProducts(int amountOfProductsForDiscount, Discount discount){\r\n        amountToReachForDiscount = amountOfProductsForDiscount;\r\n        discountOnAmount = discount;\r\n        discountOnAmountOfProducts = (Integer amountOfProducts) ->{\r\n            if(amountOfProducts >= amountOfProductsForDiscount)\r\n                return (Double priceBefore) -> discount.applyDiscount(priceBefore);\r\n            return (Double priceBefore) -> priceBefore;\r\n        };\r\n    }\r\n\r\n    public void removeDiscountOnAmountOfProducts(){\r\n        discountOnAmountOfProducts = null;\r\n    }\r\n\r\n    public String toString(){\r\n        String productsDiscountString = \"PRODUCTS DISCOUNT:\";\r\n        int counter = 1;\r\n        for (Map.Entry<String, Map<Integer, Discount>> productDiscount: productsDiscounts.entrySet()){\r\n            productsDiscountString += \"\\n\\t\\t\\t\\t\" + counter++ + \". Product id: \" + productDiscount.getKey() + \"\\n\\t\\t\\t\\tDiscounts: \";\r\n            for(Map.Entry<Integer, Discount> discount : productDiscount.getValue().entrySet())\r\n                productsDiscountString += \"\\n\\t\\t\\t\\t\\t\" + \"Amount to reach: \" +discount.getKey() + \" Discount: \" + discount.getValue().toString();\r\n        }\r\n        String discountTotalStr = \"\";\r\n        if(discountOnTotal != null)\r\n            discountTotalStr = \"DISCOUNT ON TOTAL ORDER:\\n\\t\\t\\t\\torder price to reach: \" + priceToReachForDiscount + \" \" + discountOnTotal.toString();\r\n        String discountAmountStr = \"\";\r\n        if(discountOnAmount != null)\r\n            discountAmountStr = \"DISCOUNT ON AMOUNT OF PRODUCTS:\\n\\t\\t\\t\\tNumber of products to reach: \" + amountToReachForDiscount + \" \" + discountOnAmount.toString();\r\n\r\n        String res = \"BILL OF QUANTITIES:\\n\\t\\t\\t\" + productsDiscountString + \"\\n\\t\\t\\t\" + discountTotalStr + \"\\n\\t\\t\\t\" + discountAmountStr;\r\n        return res;\r\n    }\r\n\r\n    public boolean getAmountBeforeTotal() {\r\n        return amountBeforeTotal;\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/Backend/BusinessLayer/SuppliersModule/BillOfQuantities.java b/src/Backend/BusinessLayer/SuppliersModule/BillOfQuantities.java
+--- a/src/Backend/BusinessLayer/SuppliersModule/BillOfQuantities.java	(revision 4d39d804fb66f47a3f28196a3341e5c90a3053e1)
++++ b/src/Backend/BusinessLayer/SuppliersModule/BillOfQuantities.java	(date 1684151906702)
+@@ -32,6 +32,9 @@
+     public BillOfQuantities(){
+         productsDiscounts = new TreeMap<>();
+     }
++    public BillOfQuantities(Map<String, Map<Integer, Discount>> productsDiscounts){
++        this.productsDiscounts = productsDiscounts;
++    }
+     public void setOrderOfDiscounts(boolean amountBeforeTotal){
+         this.amountBeforeTotal = amountBeforeTotal;
+     }

@@ -916,9 +916,6 @@ public class UI {
             System.out.println("invalid input");
         }
     }
-    public void loadData(){
-        System.out.println(gson.fromJson(supplierService.loadData(), Response.class).getMsg());
-    }
 
 
 

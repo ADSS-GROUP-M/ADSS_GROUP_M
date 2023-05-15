@@ -50,8 +50,7 @@ public class ReportTest {
         subCategoriesList.add("cheese");
         subCategoriesList.add("yogurt");
         subCategoriesList.add("milk");
-        Optional<List<String>> subCategories = Optional.of(subCategoriesList);
-        categoryController.createCategory(branch, subCategories, "Dairy products");
+        categoryController.createCategory(branch, subCategoriesList, "Dairy products");
     }
 
 

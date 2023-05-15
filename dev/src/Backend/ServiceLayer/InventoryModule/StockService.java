@@ -12,6 +12,7 @@ public class StockService {
     ProductController productController;
     DiscountController discountController;
     CategoryController categoryController;
+    public final String ALERT = "\n Alert! Product catalog number: %s is going to be out of stock soon!%This product has been automatically ordered.%n";
 
     public StockService() {
         productController = ProductController.ProductController();
@@ -28,25 +29,13 @@ public class StockService {
         }
     }
 
-//    public Response addProductItem(String serial_number, String catalog_number, String supplier, String branch, String location, LocalDateTime expirationDate) {
-//        try {
-//            String isMin = "";
-//            productController.createProductItem(serial_number, catalog_number, branch, supplier, location, expirationDate);
-//            if(productController.isProductLack(branch,catalog_number))
-//                isMin = String.format("\n !!! Notice product %s is less than the minimum",catalog_number);
-//            return new Response<>("Product added successfully" + isMin);
-//        } catch (Exception e) {
-//            return Response.createErrorResponse("Error updating product type: " + e.getMessage());
-//        }
-//    }
-
     public Response addProductItem(List<String> serialNumbers, String catalog_number, String supplier, double supplierPrice, double supplierDiscount,String branch, String location, LocalDateTime expirationDate, String periodicSupplier) {
         try {
-            String isMin = "";
+            String alert = "";
             productController.createProductItem(serialNumbers, catalog_number, Branch.valueOf(branch), supplier, supplierPrice, supplierDiscount, location, expirationDate,periodicSupplier);
-            if(productController.isProductLack(Branch.valueOf(branch),catalog_number))
-                isMin = String.format("\n !!! Notice product %s is less than the minimum",catalog_number);
-            return new Response<>("Product added successfully" + isMin);
+//            if(productController.isProductLack(Branch.valueOf(branch),catalog_number))
+//                alert = String.format(ALERT,catalog_number);
+            return new Response<>("Product added successfully" + alert);
         } catch (Exception e) {
             return Response.createErrorResponse("Error updating product type: " + e.getMessage());
         }
@@ -55,7 +44,7 @@ public class StockService {
     public Response updateProduct(String name, String catalog_number, String manufacturer, double store_price, int newMinAmount, String branchString) {
         try {
             Branch branch = Branch.valueOf(branchString);
-            String isMin = "";
+            String alert = "";
             if (name != null) {
                 productController.updateProduct(branch, name, catalog_number, null, -1,   -1);
                 return new Response<>("Product type updated successfully");
@@ -68,9 +57,9 @@ public class StockService {
             }else if (newMinAmount != -1) {
                 productController.updateProduct(branch, null, catalog_number, null, -1, newMinAmount);
                 if(productController.isProductLack(branch,catalog_number)){
-                    isMin = String.format("\n !!! Notice product %s is less than the minimum",catalog_number);
+                    alert = String.format(ALERT,catalog_number);
                 }
-                return new Response<>("Product type updated successfully" + isMin);
+                return new Response<>("Product type updated successfully" + alert);
             } else {
                 return Response.createErrorResponse("Invalid input parameters");
             }
@@ -81,20 +70,20 @@ public class StockService {
 
     public Response updateProduct(int is_defective, String catalog_number, String serial_num, int is_sold, String supplier, double supplier_price, double supplier_discount,int sold_price, String location, String branchString) {
         try {
-            String isMin = "";
+            String alert = "";
             Branch branch = Branch.valueOf(branchString);
             if (is_defective != -1) {
                 productController.updateProductItem(branch, is_defective, serial_num,  catalog_number,-1, null,-1,-1, -1, null);
                 if(productController.isProductLack(branch,catalog_number)){
-                    isMin = String.format("\n !!! Notice product %s is less than the minimum !!!",catalog_number);
+                    alert = String.format(ALERT,catalog_number);
                 }
-                return new Response<>("Product type updated successfully" + isMin);
+                return new Response<>("Product type updated successfully" + alert);
             } else if (is_sold != -1) {
                 productController.updateProductItem(branch, -1, serial_num,  catalog_number, is_sold, null,-1,-1, -1,  null);
                 if(productController.isProductLack(branch,catalog_number)) {
-                    isMin = String.format("\n !!! Notice product %s is less than the minimum !!!", catalog_number);
+                    alert = String.format(ALERT, catalog_number);
                 }
-                return new Response<>("Product type updated successfully" + isMin);
+                return new Response<>("Product type updated successfully" + alert);
             } else if (supplier != null) {
                 productController.updateProductItem(branch, -1, serial_num,  catalog_number,-1, supplier,-1,-1, -1, null);
                 return new Response<>("Product type updated successfully");

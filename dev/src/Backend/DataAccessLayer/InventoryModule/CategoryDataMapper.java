@@ -1,6 +1,8 @@
 package Backend.DataAccessLayer.InventoryModule;
 import Backend.BusinessLayer.BusinessLayerUsage.Branch;
 import Backend.BusinessLayer.InventoryModule.Category;
+import Backend.BusinessLayer.InventoryModule.Product;
+import Backend.BusinessLayer.InventoryModule.ProductController;
 import Backend.BusinessLayer.InventoryModule.ProductItem;
 import Backend.DataAccessLayer.dalUtils.AbstractDataMapper;
 import Backend.DataAccessLayer.dalUtils.OfflineResultSet;
@@ -32,7 +34,7 @@ public class CategoryDataMapper extends AbstractDataMapper {
     }
 
     public void delete(String category_name) throws SQLException {
-        sqlExecutor.executeWrite(String.format("DROP FROM %s WHERE category_name = %s", tableName, category_name));
+        sqlExecutor.executeWrite(String.format("DELETE FROM %s WHERE category_name = '%s'", tableName, category_name));
     }
 
     public Map<String, Category> initializedCache() throws SQLException {
@@ -46,9 +48,34 @@ public class CategoryDataMapper extends AbstractDataMapper {
         return cachedCategory;
     }
 
+    public void initProductsWithCategory(Map<String, Category>cached_categories){
+        try{
+            Collection<Map<String,Product>> mapProductCollection = ProductManagerMapper.getInstance().getCachedProducts().values();
+            Iterator<Map<String,Product>> iteratorProduct = mapProductCollection.iterator();
+            OfflineResultSet resultSet = sqlExecutor.executeRead(String.format("SELECT %s , %s FROM %s", "catalog_number","category", "products"));
+            while (resultSet.next()) {
+                while (iteratorProduct.hasNext()) {
+                    Map<String, Product> productMap =iteratorProduct.next();
+                    for (Product product : productMap.values()) {
+                        if (product.getCatalogNumber().equals(resultSet.getString("catalog_number")))
+                            cached_categories.get(resultSet.getString("category")).addProductToCategory(product);
+                    }
+                }
+            }
+        }
+        catch (SQLException e){throw new RuntimeException(e.getMessage());}
+
+    }
+
     public boolean isExists(String category_name) throws SQLException {
         OfflineResultSet resultSet = sqlExecutor.executeRead(String.format("SELECT COUNT(*) as count FROM %s WHERE category_name = '%s'", tableName, category_name));
-        return resultSet.getInt("count") > 0;
+        if (resultSet.next()) {
+            Integer count = resultSet.getInt("count");
+            return count > 0;
+        }
+        else {
+            return false;
+        }
     }
 
 }

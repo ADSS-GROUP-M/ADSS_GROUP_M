@@ -159,7 +159,6 @@ public class ProductController {
     }
 
     public void updateProduct(Branch branch, String newName, String catalog_number, String newManufacturer, double newStorePrice, int newMinAmount ){
-        CategoryController categoryController = CategoryController.CategoryController();
         if(checkIfProductExist(branch,catalog_number)){
             Product product = products.get(branch).get(catalog_number);
             if(newName != null){

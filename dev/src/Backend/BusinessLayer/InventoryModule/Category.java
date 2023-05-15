@@ -2,10 +2,7 @@ package Backend.BusinessLayer.InventoryModule;
 
 import Backend.BusinessLayer.BusinessLayerUsage.Branch;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Category {
     private String categoryName;
@@ -54,11 +51,19 @@ public class Category {
         return productsRelatedList;
     }
 
+//            for(Product productRelated: productsRelated){
+//        if(productRelated.getBranch() == product.getBranch() && productRelated.getCatalogNumber() == product.getCatalogNumber())
+//            productsRelated.remove(product);
+//    }
     public void removeProduct(Product product){
-        for(Product productRelated: productsRelated){
-            if(productRelated.getBranch() == product.getBranch() && productRelated.getCatalogNumber() == product.getCatalogNumber())
-                productsRelated.remove(product);
+        Iterator<Product> iterator = productsRelated.iterator();
+        while (iterator.hasNext()) {
+            Product productRelated = iterator.next();
+            if (productRelated.getBranch() == product.getBranch() && productRelated.getCatalogNumber() == product.getCatalogNumber()) {
+                iterator.remove();
+            }
         }
+
     }
 
     public boolean isSubcategory(String subcategoryName){

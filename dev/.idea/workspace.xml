@@ -78,7 +78,7 @@
       <recent name="PresentationLayer" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.InventoryMain">
+  <component name="RunManager" selected="JUnit.ProductTest.getProductItemFromList">
     <configuration name="InventoryMain" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="Fronend.PresentationLayer.InventoryModule.Main" />
       <module name="dev" />
@@ -133,19 +133,36 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="ProductTest.getProductItemFromList" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="dev" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="Backend.BusinessLayer.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="Backend.BusinessLayer" />
+      <option name="MAIN_CLASS_NAME" value="Backend.BusinessLayer.ProductTest" />
+      <option name="METHOD_NAME" value="getProductItemFromList" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <list>
       <item itemvalue="Application.InventoryMain" />
+      <item itemvalue="JUnit.ProductTest.getProductItemFromList" />
       <item itemvalue="JUnit.BillOfQuantitiesTest" />
       <item itemvalue="JUnit.BillOfQuantitiesTest.removeDiscountOnAmountOfProducts" />
       <item itemvalue="JUnit.BillOfQuantitiesTest.setOrderOfDiscounts" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.ProductTest.getProductItemFromList" />
         <item itemvalue="JUnit.BillOfQuantitiesTest.setOrderOfDiscounts" />
         <item itemvalue="JUnit.BillOfQuantitiesTest.removeDiscountOnAmountOfProducts" />
         <item itemvalue="JUnit.BillOfQuantitiesTest" />
         <item itemvalue="JUnit.BillOfQuantitiesTest.setOrderOfDiscounts" />
-        <item itemvalue="JUnit.BillOfQuantitiesTest.removeDiscountOnAmountOfProducts" />
       </list>
     </recent_temporary>
   </component>
@@ -280,22 +297,20 @@
       <option name="project" value="LOCAL" />
       <updated>1684099834858</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="commit">
+      <created>1684189403440</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1684189403440</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
-    <option name="TAB_STATES">
-      <map>
-        <entry key="MAIN">
-          <value>
-            <State />
-          </value>
-        </entry>
-      </map>
-    </option>
     <option name="RECENT_FILTERS">
       <map>
         <entry key="User">
@@ -307,6 +322,15 @@
                 </option>
               </RecentGroup>
             </list>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
           </value>
         </entry>
       </map>
@@ -324,9 +348,9 @@
     <MESSAGE value="jdk 18" />
     <MESSAGE value="commit before dal" />
     <MESSAGE value="adding branch to order" />
-    <MESSAGE value="commit" />
     <MESSAGE value="ProductsDataMapper added resultSet.next()" />
-    <option name="LAST_COMMIT_MESSAGE" value="ProductsDataMapper added resultSet.next()" />
+    <MESSAGE value="commit" />
+    <option name="LAST_COMMIT_MESSAGE" value="commit" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

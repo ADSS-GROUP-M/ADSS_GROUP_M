@@ -112,7 +112,6 @@ public class CategoryController {
             throw new RuntimeException("Category does not exist");
     }
 
-    //TODO
     public List <Product> getCategoryProducts(Branch branch, String categoryName){
         if(checkIfCategoryExist(categoryName))
             return categories.get(categoryName).getProductsRelated(branch);

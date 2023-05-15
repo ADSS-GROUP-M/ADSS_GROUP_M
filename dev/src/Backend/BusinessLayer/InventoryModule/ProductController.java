@@ -192,7 +192,6 @@ public class ProductController {
             String manufacture = product.getManufacturer();
             double supplierPrice = productItem.getSupplierPrice();
             double supplierDiscount = productItem.getSupplierDiscount();
-            // TODO : verify that working
             double storePrice = DCController.calcSoldPrice(branch,catalog_number,product.getOriginalStorePrice());
             Category category = product.getCategory();
             List<Category> subCategory = product.getSubCategory();

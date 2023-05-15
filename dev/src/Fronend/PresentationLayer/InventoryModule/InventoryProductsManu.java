@@ -94,7 +94,6 @@ public class InventoryProductsManu extends MainMenu {
             case 1 -> stockService.updateProduct(new_val, catalog_num, null, -1, -1, branch);
             case 2 -> stockService.updateProduct(null, catalog_num, new_val, -1,-1, branch);
             case 3 -> stockService.updateProduct(null, catalog_num, null, Integer.parseInt(new_val),-1,branch);
-            //TODO add min option to edit
             case 4 -> super.Menu();
             case 5 -> System.exit(0);
             default -> System.out.println("\nInvalid command");

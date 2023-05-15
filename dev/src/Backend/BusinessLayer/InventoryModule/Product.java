@@ -31,7 +31,6 @@ public class Product {
         // Map<productID, product>
         this.productItems = new HashMap<String, ProductItem>();
         this.branch = branch;
-        // TODO : calc amount store and warehouse
     }
 
     public ProductItem getProduct(String serial_number){

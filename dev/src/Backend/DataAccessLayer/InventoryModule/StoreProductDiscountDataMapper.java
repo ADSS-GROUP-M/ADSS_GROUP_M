@@ -32,7 +32,7 @@ public class StoreProductDiscountDataMapper extends AbstractDataMapper {
                     tableName, columnsString, catalog_number, start_date, end_date, discount, branch));
         }
         catch (SQLException e){
-            //TODO: Handle the exception appropriately
+            throw new RuntimeException(e.getMessage());
         }
     }
 

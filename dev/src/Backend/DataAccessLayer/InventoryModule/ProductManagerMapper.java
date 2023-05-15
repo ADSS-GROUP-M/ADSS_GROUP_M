@@ -60,7 +60,7 @@ public class ProductManagerMapper {
                 }
             }
         } catch (SQLException e) {
-            //TODO: Handle the exception appropriately
+            throw new RuntimeException(e.getMessage());
         }
     }
 

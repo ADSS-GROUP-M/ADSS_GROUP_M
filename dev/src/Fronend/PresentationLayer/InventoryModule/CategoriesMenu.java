@@ -5,6 +5,7 @@ import Backend.BusinessLayer.BusinessLayerUsage.Branch;
 import Backend.ServiceLayer.InventoryModule.Response;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,22 +37,31 @@ public class CategoriesMenu extends MainMenu {
         in.nextLine();
         System.out.println("Please enter new category's name");
         String category_name = in.nextLine();
-        String subcategory = "";
-        List<String> subcategories = new ArrayList<String>();
-        while (subcategory != "null"){
-            System.out.println("enter subcategory, if you done choose 'null' ");
-            subcategory = in.nextLine();
-            if(subcategory != "null")
-                subcategories.add(subcategory);
+        System.out.println("Please enter new subcategory's name as list [Dairy products,Bath products,Cleaning products]");
+        String subcategories_name = in.nextLine();
+        List<String> subcategories;
+        if (subcategories_name.isEmpty()) {
+            subcategories = new ArrayList<>(); // Creating an empty ArrayList
+        } else {
+            subcategories = Arrays.asList(subcategories_name.split(","));
         }
-        System.out.println(categoriesService.createCategory(Branch.valueOf(branch), Optional.of(subcategories), category_name).getReturnValue());
+        Response response = categoriesService.createCategory(Branch.valueOf(branch), subcategories, category_name);
+        if(response.errorOccurred())
+            System.out.println(response.getErrorMessage());
+        else
+            System.out.println(response.getReturnValue());
     }
+
 
     private void removeCategory() {
         in.nextLine();
         System.out.println("category name:");
         String category_name = in.nextLine();
-        System.out.println(categoriesService.removeCategory(Branch.valueOf(branch), category_name).getReturnValue());
+        Response response = categoriesService.removeCategory(Branch.valueOf(branch), category_name);
+        if(response.errorOccurred())
+            System.out.println(response.getErrorMessage());
+        else
+            System.out.println(response.getReturnValue());
     }
 
     private void addProductToCategory(){
@@ -61,7 +71,7 @@ public class CategoriesMenu extends MainMenu {
         System.out.println("catalog number: (string)");
         String catalog_number = in.nextLine();
         Response response = categoriesService.addProductToCategory(Branch.valueOf(branch), catalog_number, category_name);
-        if (response.errorOccurred())
+        if(response.errorOccurred())
             System.out.println(response.getErrorMessage());
         else
             System.out.println(response.getReturnValue());
@@ -73,7 +83,11 @@ public class CategoriesMenu extends MainMenu {
         String category_name = in.nextLine();
         System.out.println("catalog number: (string)");
         String catalog_number = in.nextLine();
-        System.out.println(categoriesService.removeProductFromCategory(Branch.valueOf(branch), category_name,catalog_number).getReturnValue());
+        Response response = categoriesService.removeProductFromCategory(Branch.valueOf(branch), category_name,catalog_number);
+        if(response.errorOccurred())
+            System.out.println(response.getErrorMessage());
+        else
+            System.out.println(response.getReturnValue());
     }
 //    private void addSubcategory() {
 //        in.nextLine();

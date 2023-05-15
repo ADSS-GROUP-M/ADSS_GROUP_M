@@ -80,6 +80,11 @@ public class ProductManagerMapper {
                 productPairBranchDataMapper.insert(branch, catalog_number, originalStorePrice, product.getNotificationMin());
                 cachedProducts.computeIfAbsent(product.getBranch(), k -> new HashMap<>())
                         .put(product.getCatalogNumber(), product);
+            } else {
+                Product product = new Product(catalog_number, name, manufacture, originalStorePrice, Branch.valueOf(branch));
+                productPairBranchDataMapper.insert(branch, catalog_number, originalStorePrice, product.getNotificationMin());
+                cachedProducts.computeIfAbsent(product.getBranch(), k -> new HashMap<>())
+                        .put(product.getCatalogNumber(), product);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e.getMessage());

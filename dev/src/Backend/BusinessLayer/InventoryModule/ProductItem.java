@@ -100,4 +100,11 @@ public class ProductItem {
     public String getLocation(){return this.location;}
     public String getCatalog_number() {return this.catalog_number;}
     public Branch getBranch() {return this.branch;}
+    public void setIsSold(int is_sold){
+        isSold = is_sold == 1;
+    }
+    public void setSoldDate(LocalDateTime sold_date) {
+        soldDate = sold_date;
+    }
+
 }

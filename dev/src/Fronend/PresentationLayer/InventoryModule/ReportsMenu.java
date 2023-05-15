@@ -4,6 +4,7 @@ import Backend.BusinessLayer.BusinessLayerUsage.Branch;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class ReportsMenu extends MainMenu {
     public void run(String branch) {
@@ -29,10 +30,10 @@ public class ReportsMenu extends MainMenu {
         in.nextLine();
         List<String> categories = new ArrayList<String>();
         String category_name = "";
-        while (category_name != "null") {
+        while (!Objects.equals(category_name, "null")) {
             System.out.println("Please enter category's name , if you done choose 'null'");
             category_name = in.nextLine();
-            if (category_name != "null")
+            if (!Objects.equals(category_name, "null"))
                 categories.add(category_name);
         }
         System.out.println(categoriesService.getCategoryReport(category_name, categories).getReturnValue());

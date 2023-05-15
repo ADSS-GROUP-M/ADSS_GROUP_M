@@ -8,11 +8,10 @@ import java.util.List;
 
 public class ProductPairBranchDataMapper extends AbstractDataMapper {
     public static ProductPairBranchDataMapper instance = null;
-    private List<ProductPairBranchDAO> cachedProductsPairBranch; //Map<Branch, Map<catalog_number, Product>
+    private List<ProductPairBranchDAO> cachedProductsPairBranch = new ArrayList<>(); //Map<Branch, Map<catalog_number, Product>
 
     private ProductPairBranchDataMapper() {
         super("product_pair_branch", new String[]{"branch_name", "product_catalog_number", "original_store_price", "notification_min"});
-        List<ProductPairBranchDAO> cachedProductsPairBranch = new ArrayList<>();
     }
 
     public static ProductPairBranchDataMapper getInstance(){

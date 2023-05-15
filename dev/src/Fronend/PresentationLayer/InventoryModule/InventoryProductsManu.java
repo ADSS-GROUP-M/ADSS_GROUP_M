@@ -36,16 +36,15 @@ public class InventoryProductsManu extends MainMenu {
     private void createNewProduct() {
         System.out.println("Enter the following product details:");
         System.out.println("Catalog Number: (number)");
+        in.nextLine(); // Consume the remaining newline character
         String catalog_num = in.nextLine();
-        in.nextLine();
         System.out.println("Name: (string)");
         String name = in.nextLine();
         System.out.println("Manufacturer: (string)");
         String manufacturer = in.nextLine();
-//        System.out.println("Supplier Price: (double)");
-//        double supplier_price = in.nextDouble();
         System.out.println("Store Price: (double)");
         double store_price = in.nextDouble();
+        in.nextLine(); // Consume the remaining newline character
         System.out.println(stockService.addProduct(catalog_num, name, manufacturer, store_price, branch).getReturnValue());
     }
 

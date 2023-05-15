@@ -83,7 +83,7 @@ public class ReportTest {
     //Test 3 - get defective product report
     @org.junit.Test
     public void getDefectiveProductReport() {
-        productController.updateProductItem(branch,1,"3",catalog_number,-1,null,-1,null);
+        productController.updateProductItem(branch,1,"3",catalog_number,-1,null,-1,-1,-1,null);
         List<Record> records = productController.getDefectiveProducts(branch);
         for (Record record: records){
             System.out.println("Defective repost: " + record.toString());
@@ -94,7 +94,7 @@ public class ReportTest {
     //Test 4 - get defective product report with category
     @org.junit.Test
     public void getDefectiveProductReportWithCategory() {
-        productController.updateProductItem(branch,1,"3",catalog_number,-1,null,-1,null);
+        productController.updateProductItem(branch,1,"3",catalog_number,-1,null,-1,-1,-1,null);
 
         List<Record> records = productController.getDefectiveProducts(branch);
         for (Record record: records){

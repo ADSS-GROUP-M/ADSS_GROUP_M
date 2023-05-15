@@ -2,6 +2,7 @@ package Backend.BusinessLayer.InventoryModule;
 
 import Backend.BusinessLayer.BusinessLayerUsage.Branch;
 import Backend.DataAccessLayer.InventoryModule.CategoryManagerMapper;
+import Backend.DataAccessLayer.InventoryModule.ProductManagerMapper;
 
 import java.util.*;
 
@@ -11,9 +12,10 @@ public class CategoryController {
     //create the controller as Singleton
     private static CategoryController categoryController = null;
     private CategoryManagerMapper categoryManagerMapper;
-
+    private ProductManagerMapper productManagerMapper;
     private CategoryController() {
         categoryManagerMapper = CategoryManagerMapper.getInstance();
+        productManagerMapper = ProductManagerMapper.getInstance();
         this.categories = categoryManagerMapper.getCached_categories();
     }
 
@@ -23,10 +25,6 @@ public class CategoryController {
         return categoryController;
     }
 
-//    public void checkIfBranchExist(Branch branch){
-//        if(!categories.containsKey(branch))
-//            categories.put(branch,new HashMap<String,Category>());
-//    }
     public Boolean checkIfCategoryExist(String categoryName){
             return categories.containsKey(categoryName);
     }
@@ -50,6 +48,9 @@ public class CategoryController {
         if(checkIfCategoryExist(categoryName)){
             if(!categories.get(categoryName).isRelatedProductEmpty()){
                 // verify in each category that the category does not contain the remove category
+                Collection<Category> categoriesCollection = categories.get(categoryName).getSubcategories().values();
+                List<Category> subcategories = new ArrayList<>(categoriesCollection);
+                categoryManagerMapper.removeCategory(categoryName,subcategories);
                 for(Category category: categories.values())
                     category.removeSubCategory(categoryName);
                 categories.remove(categoryName);
@@ -65,6 +66,7 @@ public class CategoryController {
     public void addProductToCategory(Branch branch, String catalog_number, String categoryName){
         if(checkIfCategoryExist(categoryName)){
             if(!categories.get(categoryName).isProductIDRelated(catalog_number, branch)) {
+                productManagerMapper.addCategoryToProduct(catalog_number,categoryName);
                 ProductController pc = ProductController.ProductController();
                 categories.get(categoryName).addProductToCategory(pc.getProduct(branch, catalog_number));
             }
@@ -76,6 +78,7 @@ public class CategoryController {
 
     public void removeProductFromCategory(Branch branch, String catalog_number, String categoryName){
         if(checkIfCategoryExist(categoryName)){
+            productManagerMapper.removeCategoryFromProduct(catalog_number);
             ProductController pc = ProductController.ProductController();
             categories.get(categoryName).removeProduct(pc.getProduct(branch,catalog_number));
         }

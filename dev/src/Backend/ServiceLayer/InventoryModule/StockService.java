@@ -79,30 +79,36 @@ public class StockService {
         }
     }
 
-    public Response updateProduct(int is_defective, String catalog_number, String serial_num, int is_sold, String supplier, int sold_price, String location, String branchString) {
+    public Response updateProduct(int is_defective, String catalog_number, String serial_num, int is_sold, String supplier, double supplier_price, double supplier_discount,int sold_price, String location, String branchString) {
         try {
             String isMin = "";
             Branch branch = Branch.valueOf(branchString);
             if (is_defective != -1) {
-                productController.updateProductItem(branch, is_defective, serial_num,  catalog_number,-1, null, -1, null);
+                productController.updateProductItem(branch, is_defective, serial_num,  catalog_number,-1, null,-1,-1, -1, null);
                 if(productController.isProductLack(branch,catalog_number)){
                     isMin = String.format("\n !!! Notice product %s is less than the minimum !!!",catalog_number);
                 }
                 return new Response<>("Product type updated successfully" + isMin);
             } else if (is_sold != -1) {
-                productController.updateProductItem(branch, -1, serial_num,  catalog_number, is_sold, null, -1,  null);
+                productController.updateProductItem(branch, -1, serial_num,  catalog_number, is_sold, null,-1,-1, -1,  null);
                 if(productController.isProductLack(branch,catalog_number)) {
                     isMin = String.format("\n !!! Notice product %s is less than the minimum !!!", catalog_number);
                 }
                 return new Response<>("Product type updated successfully" + isMin);
             } else if (supplier != null) {
-                productController.updateProductItem(branch, -1, serial_num,  catalog_number,-1, supplier, -1, null);
+                productController.updateProductItem(branch, -1, serial_num,  catalog_number,-1, supplier,-1,-1, -1, null);
+                return new Response<>("Product type updated successfully");
+            }else if (supplier_price != -1) {
+                productController.updateProductItem(branch, -1, serial_num,  catalog_number,-1, null, supplier_price,-1,-1, null);
+                return new Response<>("Product type updated successfully");
+            }else if (supplier_discount != -1) {
+                productController.updateProductItem(branch, -1, serial_num,  catalog_number,-1, null,-1,supplier_discount, -1, null);
                 return new Response<>("Product type updated successfully");
             } else if (sold_price != -1) {
-                productController.updateProductItem(branch, -1, serial_num, catalog_number, -1, null, sold_price, null);
+                productController.updateProductItem(branch, -1, serial_num, catalog_number, -1, null,-1,-1, sold_price, null);
                 return new Response<>("Product type updated successfully");
             } else if (location != null) {
-                productController.updateProductItem(branch, -1, catalog_number, serial_num, -1, null, -1,  location);
+                productController.updateProductItem(branch, -1, catalog_number, serial_num, -1, null,-1,-1, -1,  location);
                 return new Response<>("Product type updated successfully");
 
             } else {

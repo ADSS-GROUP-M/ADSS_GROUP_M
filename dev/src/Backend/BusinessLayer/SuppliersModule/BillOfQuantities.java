@@ -32,6 +32,9 @@ public class BillOfQuantities {
     public BillOfQuantities(){
         productsDiscounts = new TreeMap<>();
     }
+    public BillOfQuantities(Map<String, Map<Integer, Discount>> productsDiscounts){
+        this.productsDiscounts = productsDiscounts;
+    }
     public void setOrderOfDiscounts(boolean amountBeforeTotal){
         this.amountBeforeTotal = amountBeforeTotal;
     }

@@ -30,6 +30,16 @@ public class OrderService {
         }
 
     }
+    public String orderDueToShortage(Map<String, Integer> order, Branch branch){
+        try {
+            orderController.orderDueToShortage(order, branch);
+            return gson.toJson(new Response<>("order ordered!", false));
+        }
+        catch (Exception exception) {
+            return gson.toJson(new Response<Map<String, Pair<Map<Integer, Integer>, Double>>>(exception.getMessage(), true));
+        }
+
+    }
 
     public String getOrderHistory(String bnNumber){
         try {

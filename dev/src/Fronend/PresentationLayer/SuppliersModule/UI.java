@@ -793,28 +793,29 @@ public class UI {
         }
     }
 
-//    public void order(){
-//
-//        try {
-//            Map<String, Integer> order = new HashMap<>();
-//            try {
-//                while (true) {
-//                    System.out.println("enter product id to purchase or exit to submit");
-//                    String input = sc.nextLine();
-//                    if (input.equals("exit"))
-//                        break;
-//                    String catalogNumber = input;
-//                    System.out.println("enter amount to order");
-//                    int amount = Integer.parseInt(sc.nextLine());
-//                    order.put(catalogNumber, amount);
-//                }
-//            }
-//            catch (Exception e){
-//                System.out.println("invalid input");
-//            }
-//            Type orderResponse = new TypeToken<Response< Map<String, Pair<Map<Integer, Integer>, Double>>>>(){}.getType();
-////                Response<Map<String, Pair<Map<Integer, Integer>, Double>>> finalOrderResponse =
-////                        gson.fromJson(orderService.order(order), orderResponse);
+    public void order(){
+
+        try {
+            Map<String, Integer> order = new HashMap<>();
+            try {
+                while (true) {
+                    System.out.println("enter product id to purchase or exit to submit");
+                    String input = sc.nextLine();
+                    if (input.equals("exit"))
+                        break;
+                    String catalogNumber = input;
+                    System.out.println("enter amount to order");
+                    int amount = Integer.parseInt(sc.nextLine());
+                    order.put(catalogNumber, amount);
+                }
+            }
+            catch (Exception e){
+                System.out.println("invalid input");
+            }
+            Type orderResponse = new TypeToken<Response< Map<String, Pair<Map<Integer, Integer>, Double>>>>(){}.getType();
+//                Response<Map<String, Pair<Map<Integer, Integer>, Double>>> finalOrderResponse =
+//                        gson.fromJson(orderService.order(order), orderResponse);
+            System.out.println(gson.fromJson(orderService.orderDueToShortage(order, Branch.branch1), Response.class).getMsg());
 //            Response<Map<String, Pair<Map<Integer, Integer>, Double>>> finalOrderResponse =
 //                    gson.fromJson(orderService.order(order, Branch.branch1), orderResponse);
 //            if(finalOrderResponse.getReturnValue() == null)
@@ -837,13 +838,13 @@ public class UI {
 //            }
 //            orderString += "\n\tFINAL PRICE: " + finalPrice;
 //            System.out.println(orderString);
-//        }
-//        catch (Exception e){
-//            System.out.println(e.getMessage());
-//        }
-//
-//
-//    }
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+
+
+    }
 
     public void addPeriodicOrder(){
         try {

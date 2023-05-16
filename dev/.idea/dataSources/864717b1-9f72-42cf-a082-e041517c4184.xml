@@ -1732,13 +1732,15 @@ field</ColNames>
     </foreign-key>
     <index id="585" parent="514" name="sqlite_autoindex_orders_history_1">
       <ColNames>bn_number
-order_id</ColNames>
+order_id
+catalog_number</ColNames>
       <NameSurrogate>1</NameSurrogate>
       <Unique>1</Unique>
     </index>
     <key id="586" parent="514">
       <ColNames>bn_number
-order_id</ColNames>
+order_id
+catalog_number</ColNames>
       <Primary>1</Primary>
       <UnderlyingIndexName>sqlite_autoindex_orders_history_1</UnderlyingIndexName>
     </key>

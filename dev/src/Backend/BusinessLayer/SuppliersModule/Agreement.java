@@ -85,7 +85,9 @@ public class Agreement {
     }
 
     public int getNumberOfUnits(String catalogNumber){
-        return products.get(catalogNumber).getNumberOfUnits();
+        if(products.containsKey(catalogNumber))
+            return products.get(catalogNumber).getNumberOfUnits();
+        return -1;
     }
 
     public void setBillOfQuantities(BillOfQuantities billOfQuantities) {

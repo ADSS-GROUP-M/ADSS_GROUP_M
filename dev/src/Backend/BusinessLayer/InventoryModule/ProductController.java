@@ -66,24 +66,27 @@ public class ProductController {
 
     //check if the amount of product in more than the minimum
     public boolean isProductLack(Branch branch,String catalog_number) throws SQLException {
-        boolean isProductLack = products.get(branch).get(catalog_number).isProductLack();
-        if(isProductLack) {
-            // if there is no waiting order, create new supplier order.
-            if (!orders.containsKey(branch) ||!orders.get(branch).contains(catalog_number)) {
-                int inventory_amount = productController.getMinNotification(branch, catalog_number);
-                OrderController orderController = OrderController.getInstance();
-                HashMap<String, Integer> order = new HashMap<>();
-                order.put(catalog_number, inventory_amount);
-                orderController.order(order, branch);
-                if(!order.containsKey(branch)){
-                    List<String> ordersList = new ArrayList<>();
-                    orders.put(branch,ordersList);
+        try {
+            boolean isProductLack = products.get(branch).get(catalog_number).isProductLack();
+            if (isProductLack) {
+                // if there is no waiting order, create new supplier order.
+                if (!orders.containsKey(branch) || !orders.get(branch).contains(catalog_number)) {
+                    int inventory_amount = productController.getMinNotification(branch, catalog_number);
+                    OrderController orderController = OrderController.getInstance();
+                    HashMap<String, Integer> order = new HashMap<>();
+                    order.put(catalog_number, inventory_amount);
+                    orderController.orderDueToShortage(order, branch);
+                    if (!order.containsKey(branch)) {
+                        List<String> ordersList = new ArrayList<>();
+                        orders.put(branch, ordersList);
+                    }
+                    orders.get(branch).add(catalog_number);
                 }
-                orders.get(branch).add(catalog_number);
-            }
 
+            }
+            return isProductLack;
         }
-        return isProductLack;
+        catch (Exception e){throw new RuntimeException(e.getMessage());}
     }
 
 

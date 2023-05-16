@@ -66,7 +66,7 @@ public class Product {
         }
         return defectiveList;
     }
-    //TODO : verify we want to return all products (maybe not defective and sold)
+
     public Map<String,List<ProductItem>> getAllProductItems(Map<String,List<ProductItem>> allProducts){
         List<ProductItem> currentProducts = new ArrayList<ProductItem>();
         for(ProductItem product: productItems.values()){
@@ -84,7 +84,7 @@ public class Product {
         return false;
     }
 
-    //TODO: get supplier info from orderController and calc minNotification val
+
     public int productDemandAmount(){
         int calc = 0;
         LocalDateTime current = LocalDateTime.now();

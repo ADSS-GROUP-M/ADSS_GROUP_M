@@ -1,5 +1,7 @@
 package Fronend.PresentationLayer.InventoryModule;
 
+import Backend.ServiceLayer.InventoryModule.Response;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -46,7 +48,13 @@ public class InventoryProductsManu extends MainMenu {
         System.out.println("Store Price: (double)");
         double store_price = in.nextDouble();
         in.nextLine(); // Consume the remaining newline character
-        System.out.println(stockService.addProduct(catalog_num, name, manufacturer, store_price, branch).getReturnValue());
+//        System.out.println(stockService.addProduct(catalog_num, name, manufacturer, store_price, branch).getReturnValue());
+        Response response = stockService.addProduct(catalog_num, name, manufacturer, store_price, branch);
+        if(response.errorOccurred())
+            System.out.println(response.getErrorMessage());
+        else
+            System.out.println(response.getReturnValue());
+
     }
 
     private void createNewItem() {
@@ -73,7 +81,12 @@ public class InventoryProductsManu extends MainMenu {
         LocalDateTime expirationDate = date.atStartOfDay();
         System.out.println("Is is periodic supplier? y/n");
         String periodicSupplier = in.nextLine();
-        System.out.println(stockService.addProductItem(serialNumbers, catalog_num, supplier, supplier_price, supplier_discount_price, branch, location, expirationDate,periodicSupplier).getReturnValue());
+//        System.out.println(stockService.addProductItem(serialNumbers, catalog_num, supplier, supplier_price, supplier_discount_price, branch, location, expirationDate,periodicSupplier).getReturnValue());
+        Response response = stockService.addProductItem(serialNumbers, catalog_num, supplier, supplier_price, supplier_discount_price, branch, location, expirationDate,periodicSupplier);
+        if(response.errorOccurred())
+            System.out.println(response.getErrorMessage());
+        else
+            System.out.println(response.getReturnValue());
     }
 
     private void updateProduct() {
@@ -139,6 +152,11 @@ public class InventoryProductsManu extends MainMenu {
         String catalog_num = in.nextLine();
         System.out.println("what is the product's serial num? (int)");
         String serial_num = in.nextLine();
-        System.out.println(stockService.getProductDetails(catalog_num, serial_num, branch).getReturnValue().toString());
+//        System.out.println(stockService.getProductDetails(catalog_num, serial_num, branch).getReturnValue().toString());
+        Response response =stockService.getProductDetails(catalog_num, serial_num, branch);
+        if(response.errorOccurred())
+            System.out.println(response.getErrorMessage());
+        else
+            System.out.println(response.getReturnValue());
     }
 }

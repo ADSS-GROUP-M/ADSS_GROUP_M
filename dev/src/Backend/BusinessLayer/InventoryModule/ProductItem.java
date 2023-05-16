@@ -56,7 +56,7 @@ public class ProductItem {
     public boolean isSold(){
         if (this.isSold == null)
             return false;
-        return true;
+        return isSold;
     }
 
     public LocalDateTime getSoldDate(){

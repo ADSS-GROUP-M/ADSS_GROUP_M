@@ -50,22 +50,23 @@ public class CategoryDataMapper extends AbstractDataMapper {
 
     public void initProductsWithCategory(Map<String, Category>cached_categories){
         try{
-            Collection<Map<String,Product>> mapProductCollection = ProductManagerMapper.getInstance().getCachedProducts().values();
-            Iterator<Map<String,Product>> iteratorProduct = mapProductCollection.iterator();
+            Map<Branch, Map<String, Product>> cachedProducts = ProductManagerMapper.getInstance().getCachedProducts();
             OfflineResultSet resultSet = sqlExecutor.executeRead(String.format("SELECT %s , %s FROM %s", "catalog_number","category", "products"));
             while (resultSet.next()) {
-                while (iteratorProduct.hasNext()) {
-                    Map<String, Product> productMap =iteratorProduct.next();
+                for(Map<String, Product> productMap : cachedProducts.values()){
                     for (Product product : productMap.values()) {
-                        if (product.getCatalogNumber().equals(resultSet.getString("catalog_number")))
-                            if(cached_categories.get(resultSet.getString("category")) != null)
-                            cached_categories.get(resultSet.getString("category")).addProductToCategory(product);
+                        if (product.getCatalogNumber().equals(resultSet.getString("catalog_number"))){
+                            if (cached_categories.get(resultSet.getString("category")) != null){
+                                cached_categories.get(resultSet.getString("category")).addProductToCategory(product);
+                            }
+                        }
                     }
                 }
             }
         }
-        catch (SQLException e){throw new RuntimeException(e.getMessage());}
-
+        catch (SQLException e){
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
     public boolean isExists(String category_name) throws SQLException {

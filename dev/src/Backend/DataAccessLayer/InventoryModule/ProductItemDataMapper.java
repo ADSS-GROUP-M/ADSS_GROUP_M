@@ -88,10 +88,9 @@ public class ProductItemDataMapper extends AbstractDataMapper {
                 if(resultSet.getString("sold_date") != null)
                     item.setSoldDate(LocalDateTime.parse(resultSet.getString("sold_date"), DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")));
             }
-            cachedItems.put(catalog_num, new ArrayList<>());
+            cachedItems.computeIfAbsent(catalog_num, k -> new ArrayList<>());
             // add the item to the existing list in the map
-            List<ProductItem> productList = cachedItems.get(catalog_num);
-            productList.add(item);
+            cachedItems.get(catalog_num).add(item);
         }
         return cachedItems;
     }

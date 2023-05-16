@@ -108,7 +108,7 @@ public class Product {
     public int getStoreAmount(){
         int amount =0;
         for(ProductItem productItem: productItems.values()){
-            if(productItem.getLocation() == "store")
+            if(productItem.getLocation().equals("store"))
                 amount++;
         }
         return amount;
@@ -116,7 +116,7 @@ public class Product {
     public int getWarehouseAmount(){
         int amount =0;
         for(ProductItem productItem: productItems.values()){
-            if(productItem.getLocation() == "warehouse")
+            if(productItem.getLocation().equals("warehouse"))
                 amount++;
         }
         return amount;

@@ -49,13 +49,14 @@ public class ProductItemTest {
     // Test 2
     @org.junit.Test
     public void getSoldDate() {
-        Assert.assertNull("sold price should init as null",item.getSoldDate());
+//        productController.updateProductItem(branch,-1,serial_number,catalog_number,);
+        Assert.assertNull("sold price should init as null",productController.getProduct(branch,catalog_number).getProduct(serial_number).getSoldDate());
     }
 
     // Test 3
     @org.junit.Test
     public void getSoldDateUpdated() {
-        item.setSoldPrice(50);
-        Assert.assertNotNull("sold date shouldn't be null",item.getSoldDate());
+        productController.updateProductItem(branch,-1,serial_number,catalog_number,1,null,-1,-1,50,null);
+        Assert.assertNotNull("sold date shouldn't be null",productController.getProduct(branch,catalog_number).getProduct(serial_number).getSoldDate());
     }
 }

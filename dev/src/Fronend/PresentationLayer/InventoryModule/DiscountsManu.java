@@ -28,7 +28,7 @@ public class DiscountsManu extends MainMenu {
 
     private void productDiscount() {
         //the dates are supposed to be: "2016-03-04 11:30"
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
         System.out.println("product catalog number:(number)");
         in.nextLine();
         String catalog_num = in.nextLine();
@@ -44,7 +44,7 @@ public class DiscountsManu extends MainMenu {
 
     private void categoryDiscount() {
         //the dates are supposed to be: "2016-03-04 11:30"
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
         System.out.println("category name:(number)");
         in.nextLine();
         String name = in.nextLine();

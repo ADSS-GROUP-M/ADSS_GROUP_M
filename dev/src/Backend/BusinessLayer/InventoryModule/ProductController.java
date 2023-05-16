@@ -3,6 +3,7 @@ package Backend.BusinessLayer.InventoryModule;
 
 import Backend.BusinessLayer.BusinessLayerUsage.Branch;
 import Backend.BusinessLayer.SuppliersModule.OrderController;
+import Backend.BusinessLayer.SuppliersModule.PeriodicOrderController;
 import Backend.DataAccessLayer.InventoryModule.ProductDAO;
 import Backend.DataAccessLayer.InventoryModule.ProductManagerMapper;
 import Backend.DataAccessLayer.SuppliersModule.ProductsDataMapper;
@@ -68,14 +69,19 @@ public class ProductController {
         boolean isProductLack = products.get(branch).get(catalog_number).isProductLack();
         if(isProductLack) {
             // if there is no waiting order, create new supplier order.
-            if(!orders.get(branch).contains(catalog_number)) {
-                int inventory_amount = productController.getMinNotification(branch,catalog_number);
+            if (!orders.containsKey(branch) ||!orders.get(branch).contains(catalog_number)) {
+                int inventory_amount = productController.getMinNotification(branch, catalog_number);
                 OrderController orderController = OrderController.getInstance();
-                HashMap<String,Integer> order = new HashMap<>();
-                order.put(catalog_number,inventory_amount);
+                HashMap<String, Integer> order = new HashMap<>();
+                order.put(catalog_number, inventory_amount);
                 orderController.order(order, branch);
+                if(!order.containsKey(branch)){
+                    List<String> ordersList = new ArrayList<>();
+                    orders.put(branch,ordersList);
+                }
                 orders.get(branch).add(catalog_number);
             }
+
         }
         return isProductLack;
     }
@@ -130,12 +136,17 @@ public class ProductController {
                 productItem.reportAsDefective();
             }
             if(isSold != -1){
-                double sold_price = DCController.calcSoldPrice(branch,catalog_number,product.getOriginalStorePrice());
-                productManagerMapper.updateProductItem(catalog_number,branch.name(),serial_number,-1,null,null,-1,-1,sold_price,null,null);
-                productItem.reportAsSold(sold_price);
-                OrderController orderController = OrderController.getInstance();
-                updateMinAmount(branch,catalog_number,orderController.getDaysForOrder(catalog_number,branch));
-                productManagerMapper.updateProduct(catalog_number,branch.name(),null,null,-1,product.getNotificationMin());
+                try {
+                    double sold_price = DCController.calcSoldPrice(branch,catalog_number,product.getOriginalStorePrice());
+                    productManagerMapper.updateProductItem(catalog_number,branch.name(),serial_number,-1,null,null,-1,-1,sold_price,null,null);
+                    productItem.reportAsSold(sold_price);
+                    PeriodicOrderController periodicOrderController = PeriodicOrderController.getInstance();
+                    updateMinAmount(branch,catalog_number,periodicOrderController.getDaysForOrder(catalog_number,branch));
+                    productManagerMapper.updateProduct(catalog_number,branch.name(),null,null,-1,product.getNotificationMin());
+                }
+                catch (SQLException e){
+                    throw new RuntimeException(e.getMessage());
+                }
             }
             if(newSupplier != null){
                 productManagerMapper.updateProductItem(catalog_number,branch.name(),serial_number,-1,null,newSupplier,-1,-1,-1,null,null);
@@ -162,12 +173,20 @@ public class ProductController {
         if(checkIfProductExist(branch,catalog_number)){
             Product product = products.get(branch).get(catalog_number);
             if(newName != null){
-                productManagerMapper.updateProduct(catalog_number,branch.name(),newName,product.getManufacturer(),product.getOriginalStorePrice(),-1);
+                productManagerMapper.updateProduct(catalog_number,branch.name(),newName,null,-1,-1);
                 product.setName(newName);
             }
-            if(newManufacturer != null){product.setManufacturer(newManufacturer);}
-            if(newStorePrice != -1){product.setOriginalStorePrice(newStorePrice);}
-            if(newMinAmount != -1){product.setNotificationMin(newMinAmount);}
+            if(newManufacturer != null){
+                productManagerMapper.updateProduct(catalog_number,branch.name(),null,newManufacturer,-1,-1);
+                product.setManufacturer(newManufacturer);}
+            if(newStorePrice != -1){
+                productManagerMapper.updateProduct(catalog_number,branch.name(),null,null,newStorePrice,-1);
+                product.setOriginalStorePrice(newStorePrice);
+            }
+            if(newMinAmount != -1){
+                productManagerMapper.updateProduct(catalog_number,branch.name(),null,null,-1,newMinAmount);
+                product.setNotificationMin(newMinAmount);
+            }
         }
         else
             throw new RuntimeException(String.format("Product does not exist with the catalog_number : %s",catalog_number));

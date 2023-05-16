@@ -8,7 +8,6 @@ import Backend.DataAccessLayer.SuppliersModule.OrderHistoryDataMappers.OrderHist
 import Backend.DataAccessLayer.dalUtils.DalException;
 
 import java.sql.SQLException;
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -337,7 +336,7 @@ public class OrderController {
                     throw new RuntimeException(e);
                 }
             }).collect(Collectors.toList());
-            Map<String, Integer> suppliersToQuantity = mapSupplierQuantitiesByTime(catalogNumber, quantity, suppliersSupplyThisProduct);
+            Map<String, Integer> suppliersToQuantity = order.keySet().size() == 1 ? divideProductBetweenSuppliers(catalogNumber, quantity, suppliersSupplyThisProduct, true) : divideProductBetweenSuppliers(catalogNumber, quantity, suppliersSupplyThisProduct, false);
             for(Map.Entry<String, Integer> supplierToQuantity : suppliersToQuantity.entrySet()){
                 String bnNumber = supplierToQuantity.getKey();
                 int quantityOfSupplier = supplierToQuantity.getValue();
@@ -354,13 +353,14 @@ public class OrderController {
 
     /***
      * divide the quantity requested of product between the supplier - by priority of time,
-     * @param catalogNumber
-     * @param quantity
-     * @param suppliersToUse
-     * @return
+     * @param catalogNumber the catalog number of the product ordered
+     * @param quantity the quantity of the product to order
+     * @param suppliersToUse the suppliers that supplies this product
+     * @param oneProductOrder true iff the whole order is of one product - needs to conclude total order discounts
+     * @return map between suppliers and the quantities of the product they will supply
      * @throws SQLException
      */
-    private Map<String, Integer> mapSupplierQuantitiesByTime(String catalogNumber, int quantity, List<Supplier> suppliersToUse) throws SQLException, DalException {
+    private Map<String, Integer> divideProductBetweenSuppliers(String catalogNumber, int quantity, List<Supplier> suppliersToUse, boolean oneProductOrder) throws SQLException, DalException {
         if(quantity <= 0)
             return new HashMap<>();
 
@@ -374,8 +374,14 @@ public class OrderController {
             boolean supplierCheaper = false;
             double supplierProductPrice = agreementController.getProduct(supplier.getBnNumber(), catalogNumber).getPrice();
             double shortestProductPrice = agreementController.getProduct(supplierShortest.getBnNumber(), catalogNumber).getPrice();
-            if(quantityCanSupplyShortest >= quantity && quantityCanSupplySupplier >= quantity)
-                    supplierCheaper = billOfQuantitiesController.getProductPriceAfterDiscount(supplier.getBnNumber(), catalogNumber, quantity, supplierProductPrice * quantity) < billOfQuantitiesController.getProductPriceAfterDiscount(supplierShortest.getBnNumber(), catalogNumber, quantity, shortestProductPrice * quantity);
+            if(quantityCanSupplyShortest >= quantity && quantityCanSupplySupplier >= quantity) {
+                double supplierProductPriceAfterDiscount = billOfQuantitiesController.getProductPriceAfterDiscount(supplier.getBnNumber(), catalogNumber, quantity, supplierProductPrice * quantity);
+                double shortestProductPriceAfterDiscount = billOfQuantitiesController.getProductPriceAfterDiscount(supplierShortest.getBnNumber(), catalogNumber, quantity, shortestProductPrice * quantity);
+                if(oneProductOrder)
+                    supplierCheaper = billOfQuantitiesController.getPriceAfterDiscounts(supplier.getBnNumber(), quantity, supplierProductPriceAfterDiscount) < billOfQuantitiesController.getPriceAfterDiscounts(supplierShortest.getBnNumber(), quantity, shortestProductPriceAfterDiscount);
+                else
+                    supplierCheaper = supplierProductPriceAfterDiscount < shortestProductPriceAfterDiscount;
+            }
             boolean supplierByPriorityOfTime = getDay(supplier.getBnNumber()) < getDay(supplierShortest.getBnNumber());
             boolean supplierByPriorityOfAmount = daysEquals && shortestSupplyLessThanNeeded && supplierCanSupplyMore;
             boolean supplierByPriorityOfPrice = daysEquals && quantityCanSupplySupplier == quantityCanSupplyShortest && supplierCheaper;
@@ -385,7 +391,7 @@ public class OrderController {
         int quantityCanSupply = agreementController.getNumberOfUnits(supplierShortest.getBnNumber(), catalogNumber);
 
         suppliersToUse.remove(supplierShortest);
-        Map<String, Integer> supplierToQuantity = mapSupplierQuantitiesByTime(catalogNumber, quantity - quantityCanSupply, suppliersToUse);
+        Map<String, Integer> supplierToQuantity = divideProductBetweenSuppliers(catalogNumber, quantity - quantityCanSupply, suppliersToUse, oneProductOrder);
         if(quantityCanSupply >= quantity)
             supplierToQuantity.put(supplierShortest.getBnNumber(), quantity);
         else

@@ -10,9 +10,11 @@ public class PeriodicOrderController {
     private static PeriodicOrderController instance;
 
     private PeriodicOrderDataMapper periodicOrderDataMapper;
+    private AgreementController agreementController;
 
     private PeriodicOrderController(){
         periodicOrderDataMapper = new PeriodicOrderDataMapper();
+        agreementController = AgreementController.getInstance();
     }
 
     public static PeriodicOrderController getInstance(){
@@ -23,7 +25,13 @@ public class PeriodicOrderController {
     public PeriodicOrder getPeriodicOrder(int orderId) throws SQLException {
         return periodicOrderDataMapper.getPeriodicOrder(orderId);
     }
-    public void addPeriodicOrder(String bnNumber, Map<String, Integer> products, int day, Branch branch) throws SQLException {
+    public void addPeriodicOrder(String bnNumber, Map<String, Integer> products, int day, Branch branch) throws Exception {
+        for(Map.Entry<String, Integer> productOrder : products.entrySet()){
+            String catalogNumber = productOrder.getKey();
+            int quantity = productOrder.getValue();
+            if(agreementController.getProduct(bnNumber, catalogNumber).getNumberOfUnits() < quantity)
+                throw new Exception("supplier - " + bnNumber + "can't supply more than - " + agreementController.getProduct(bnNumber, catalogNumber).getNumberOfUnits() + " units of product - " + catalogNumber);
+        }
         periodicOrderDataMapper.insert(bnNumber, new Order(products), day, branch);
     }
 

@@ -9,12 +9,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e454f93c-4ee8-4f4b-9a14-eaaf36aa303c" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test/Backend/BusinessLayer/IntegrationTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/Backend/BusinessLayer/IntegrationTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/InventoryModule/Product.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/BusinessLayer/InventoryModule/Product.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/super_lee.sqlite" beforeDir="false" afterPath="$PROJECT_DIR$/super_lee.sqlite" afterDir="false" />
+    <list default="true" id="e454f93c-4ee8-4f4b-9a14-eaaf36aa303c" name="Changes" comment="order due to shortage - add one product order possibility">
+      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/UI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/UI.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,7 +28,7 @@
     </option>
   </component>
   <component name="Git.Merge.Settings">
-    <option name="BRANCH" value="origin/Suppliers_Inventory_208671990_207161605_324988880_325294429" />
+    <option name="BRANCH" value="origin/Suppliers_Inventory_Or" />
   </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
@@ -62,11 +58,14 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">
-    <property name="project.structure.last.edited" value="Modules" />
-    <property name="project.structure.proportion" value="0.15" />
-    <property name="project.structure.side.proportion" value="0.15977012" />
-  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Git.Branch.Popup.ShowAllRemotes": "true",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2"
+  }
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\yossi\OneDrive\שולחן העבודה\ניתוצ\Assignment1\Assignment1\dev\PresentationLayer" />
@@ -89,7 +88,7 @@
       <recent name="PresentationLayer" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.ReportTest.getShortageReport">
+  <component name="RunManager" selected="Application.Main">
     <configuration name="InventoryMain" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="Fronend.PresentationLayer.InventoryModule.Main" />
       <module name="dev" />
@@ -97,101 +96,92 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="IntegrationTest.calcMinAccordingToSupplierInf" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Fronend.PresentationLayer.Main" />
       <module name="dev" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="Backend.BusinessLayer.*" />
+          <option name="PATTERN" value="Fronend.PresentationLayer.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="BillOfQuantitiesTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="code" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="Backend.BusinessLayer.BusinessLayerUsage.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="Backend.BusinessLayer" />
-      <option name="MAIN_CLASS_NAME" value="Backend.BusinessLayer.IntegrationTest" />
-      <option name="METHOD_NAME" value="calcMinAccordingToSupplierInf" />
+      <option name="MAIN_CLASS_NAME" value="Backend.BusinessLayer.BillOfQuantitiesTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="BillOfQuantitiesTest.removeDiscountOnAmountOfProducts" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="code" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="Backend.BusinessLayer.BusinessLayerUsage.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="Backend.BusinessLayer" />
+      <option name="MAIN_CLASS_NAME" value="Backend.BusinessLayer.BillOfQuantitiesTest" />
+      <option name="METHOD_NAME" value="removeDiscountOnAmountOfProducts" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="IntegrationTest.sendAutomaticOrder" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="dev" />
+    <configuration name="BillOfQuantitiesTest.setOrderOfDiscounts" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="code" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="Backend.BusinessLayer.*" />
+          <option name="PATTERN" value="Backend.BusinessLayer.BusinessLayerUsage.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="Backend.BusinessLayer" />
-      <option name="MAIN_CLASS_NAME" value="Backend.BusinessLayer.IntegrationTest" />
-      <option name="METHOD_NAME" value="sendAutomaticOrder" />
+      <option name="MAIN_CLASS_NAME" value="Backend.BusinessLayer.BillOfQuantitiesTest" />
+      <option name="METHOD_NAME" value="setOrderOfDiscounts" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="ReportTest.getCategoryReport" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration default="true" type="JetRunConfigurationType">
       <module name="dev" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="Backend.BusinessLayer.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="Backend.BusinessLayer" />
-      <option name="MAIN_CLASS_NAME" value="Backend.BusinessLayer.ReportTest" />
-      <option name="METHOD_NAME" value="getCategoryReport" />
-      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="ReportTest.getDefectiveProductReport" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
       <module name="dev" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="Backend.BusinessLayer.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="Backend.BusinessLayer" />
-      <option name="MAIN_CLASS_NAME" value="Backend.BusinessLayer.ReportTest" />
-      <option name="METHOD_NAME" value="getDefectiveProductReport" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="ReportTest.getShortageReport" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="dev" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="Backend.BusinessLayer.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="Backend.BusinessLayer" />
-      <option name="MAIN_CLASS_NAME" value="Backend.BusinessLayer.ReportTest" />
-      <option name="METHOD_NAME" value="getShortageReport" />
-      <option name="TEST_OBJECT" value="method" />
+      <option name="filePath" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <list>
       <item itemvalue="Application.InventoryMain" />
-      <item itemvalue="JUnit.ReportTest.getCategoryReport" />
-      <item itemvalue="JUnit.ReportTest.getDefectiveProductReport" />
-      <item itemvalue="JUnit.ReportTest.getShortageReport" />
-      <item itemvalue="JUnit.IntegrationTest.sendAutomaticOrder" />
-      <item itemvalue="JUnit.IntegrationTest.calcMinAccordingToSupplierInf" />
+      <item itemvalue="Application.Main" />
+      <item itemvalue="JUnit.BillOfQuantitiesTest" />
+      <item itemvalue="JUnit.BillOfQuantitiesTest.removeDiscountOnAmountOfProducts" />
+      <item itemvalue="JUnit.BillOfQuantitiesTest.setOrderOfDiscounts" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.ReportTest.getShortageReport" />
-        <item itemvalue="JUnit.ReportTest.getCategoryReport" />
-        <item itemvalue="JUnit.IntegrationTest.sendAutomaticOrder" />
-        <item itemvalue="JUnit.ReportTest.getDefectiveProductReport" />
-        <item itemvalue="JUnit.IntegrationTest.calcMinAccordingToSupplierInf" />
+        <item itemvalue="Application.Main" />
+        <item itemvalue="JUnit.BillOfQuantitiesTest.setOrderOfDiscounts" />
+        <item itemvalue="JUnit.BillOfQuantitiesTest.removeDiscountOnAmountOfProducts" />
+        <item itemvalue="JUnit.BillOfQuantitiesTest" />
       </list>
     </recent_temporary>
   </component>
@@ -347,13 +337,36 @@
       <option name="project" value="LOCAL" />
       <updated>1684194583123</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="order due to shortage">
+      <created>1684224691717</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1684224691717</updated>
+    </task>
+    <task id="LOCAL-00021" summary="order due to shortage - add one product order possibility">
+      <created>1684243065917</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1684243065917</updated>
+    </task>
+    <option name="localTasksCounter" value="22" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
     <option name="RECENT_FILTERS">
       <map>
         <entry key="User">
@@ -365,15 +378,6 @@
                 </option>
               </RecentGroup>
             </list>
-          </value>
-        </entry>
-      </map>
-    </option>
-    <option name="TAB_STATES">
-      <map>
-        <entry key="MAIN">
-          <value>
-            <State />
           </value>
         </entry>
       </map>
@@ -395,7 +399,9 @@
     <MESSAGE value="ProductsDataMapper added resultSet.next()" />
     <MESSAGE value="order flow" />
     <MESSAGE value="adding data" />
-    <option name="LAST_COMMIT_MESSAGE" value="adding data" />
+    <MESSAGE value="order due to shortage" />
+    <MESSAGE value="order due to shortage - add one product order possibility" />
+    <option name="LAST_COMMIT_MESSAGE" value="order due to shortage - add one product order possibility" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -407,7 +413,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/Backend/BusinessLayer/InventoryModule/ProductController.java</url>
-          <line>114</line>
+          <line>120</line>
           <option name="timeStamp" value="17" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
@@ -417,22 +423,22 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/ProductManagerMapper.java</url>
-          <line>96</line>
+          <line>98</line>
           <option name="timeStamp" value="38" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/ProductItemDataMapper.java</url>
-          <line>28</line>
+          <line>30</line>
           <option name="timeStamp" value="42" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/Backend/BusinessLayer/InventoryModule/ProductController.java</url>
-          <line>164</line>
+          <line>175</line>
           <option name="timeStamp" value="45" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/ProductManagerMapper.java</url>
-          <line>134</line>
+          <line>137</line>
           <option name="timeStamp" value="51" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
@@ -442,13 +448,18 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/Backend/BusinessLayer/InventoryModule/ProductController.java</url>
-          <line>125</line>
+          <line>131</line>
           <option name="timeStamp" value="53" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/Backend/BusinessLayer/InventoryModule/ProductController.java</url>
-          <line>140</line>
+          <line>151</line>
           <option name="timeStamp" value="58" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/ProductItemDataMapper.java</url>
+          <line>99</line>
+          <option name="timeStamp" value="59" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/Fronend/PresentationLayer/InventoryModule/DiscountsManu.java</url>
@@ -459,26 +470,6 @@
           <url>file://$PROJECT_DIR$/src/Backend/ServiceLayer/InventoryModule/StockService.java</url>
           <line>139</line>
           <option name="timeStamp" value="65" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/Test/Backend/BusinessLayer/ReportTest.java</url>
-          <line>108</line>
-          <option name="timeStamp" value="95" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/Test/Backend/BusinessLayer/IntegrationTest.java</url>
-          <line>47</line>
-          <option name="timeStamp" value="145" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/Test/Backend/BusinessLayer/ReportTest.java</url>
-          <line>76</line>
-          <option name="timeStamp" value="147" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/Test/Backend/BusinessLayer/ReportTest.java</url>
-          <line>95</line>
-          <option name="timeStamp" value="148" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

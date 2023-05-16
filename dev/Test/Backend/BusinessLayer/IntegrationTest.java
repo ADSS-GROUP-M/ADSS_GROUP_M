@@ -45,20 +45,17 @@ public class IntegrationTest {
         productController = ProductController.ProductController();
         orderController = OrderController.getInstance();
         periodicOrderController = PeriodicOrderController.getInstance();
-        supplierService = new SupplierService();
-        //create new product
-        productController.createProduct(catalog_number,branch,catalog_name,manufacturer,storePrice);
-        List<String> serial_numbers = new ArrayList<>();
-        serial_numbers.add("0");
-        serial_numbers.add("1");
-        serial_numbers.add("2");
-        serial_numbers.add("3");
-        productController.createProductItem(serial_numbers,catalog_number,branch,supplierId,supplierPrice,supplierDiscount, location,expireDate, "y");
+//        supplierService = new SupplierService();
+//        //create new product
+//        productController.createProduct(catalog_number,branch,catalog_name,manufacturer,storePrice);
+//        List<String> serial_numbers = new ArrayList<>();
+//        serial_numbers.add("0");
+//        serial_numbers.add("1");
+//        serial_numbers.add("2");
+//        serial_numbers.add("3");
+//        productController.createProductItem(serial_numbers,catalog_number,branch,supplierId,supplierPrice,supplierDiscount, location,expireDate, "y");
 
     }
-
-    @After
-    public void after(){}
 
     /**
      * Test1: product contain less than the min expected amount --> should send automatic order
@@ -67,6 +64,7 @@ public class IntegrationTest {
     public void sendAutomaticOrder(){
         productController.updateProduct(branch,null,catalog_number,null,-1,5);
         try {
+            productController.isProductLack(branch,catalog_number);
             List<Order> orders = orderController.getOrderHistory("123");
             Assert.assertFalse("pass",orders.isEmpty());
         }
@@ -92,17 +90,17 @@ public class IntegrationTest {
      */
     @org.junit.Test
     public void calcMinAccordingToSupplierInf(){
+        int daysForOrder = 0;
         try {
-            int daysForOrder = periodicOrderController.getDaysForOrder(catalog_number,branch);
+            daysForOrder = periodicOrderController.getDaysForOrder(catalog_number,branch);
         }
         catch (Exception e){
             Assert.assertNotNull("failed",null);
         }
-
         productController.updateProduct(branch,null,catalog_number,null,-1,5);
         productController.updateProductItem(branch,-1,"0",catalog_number,1,null,-1,-1,-1,null);
-        // TODO: compere between the min value before and now
-        // Assert.assertTrue();
+        Product product =productController.getProduct(branch,catalog_number);
+        Assert.assertEquals("Min notification did not update as needed",product.getNotificationMin(),daysForOrder*product.productDemandAmount()+1);
     }
 
 }

@@ -85,7 +85,7 @@ public class Product {
     }
 
     //TODO: get supplier info from orderController and calc minNotification val
-    private int productDemandAmount(){
+    public int productDemandAmount(){
         int calc = 0;
         LocalDateTime current = LocalDateTime.now();
         LocalDateTime lastWeek = current.minusDays(1);

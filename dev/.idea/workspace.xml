@@ -10,11 +10,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e454f93c-4ee8-4f4b-9a14-eaaf36aa303c" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test/Backend/BusinessLayer/ReportTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/Backend/BusinessLayer/ReportTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/ProductManagerMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/ProductManagerMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/ProductPairBranchDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/ProductPairBranchDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/ProductPairBranchDataMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/ProductPairBranchDataMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/Backend/BusinessLayer/IntegrationTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/Backend/BusinessLayer/IntegrationTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/InventoryModule/Product.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/BusinessLayer/InventoryModule/Product.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/super_lee.sqlite" beforeDir="false" afterPath="$PROJECT_DIR$/super_lee.sqlite" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -33,7 +32,7 @@
     </option>
   </component>
   <component name="Git.Merge.Settings">
-    <option name="BRANCH" value="origin/Suppliers_Inventory_Or" />
+    <option name="BRANCH" value="origin/Suppliers_Inventory_208671990_207161605_324988880_325294429" />
   </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
@@ -90,7 +89,7 @@
       <recent name="PresentationLayer" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.IntegrationTest.calcMinAccordingToSupplierInf">
+  <component name="RunManager" selected="JUnit.ReportTest.getShortageReport">
     <configuration name="InventoryMain" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="Fronend.PresentationLayer.InventoryModule.Main" />
       <module name="dev" />
@@ -130,7 +129,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="ProductItemTest.getSoldDate" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="ReportTest.getCategoryReport" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="dev" />
       <extension name="coverage">
         <pattern>
@@ -139,14 +138,14 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="Backend.BusinessLayer" />
-      <option name="MAIN_CLASS_NAME" value="Backend.BusinessLayer.ProductItemTest" />
-      <option name="METHOD_NAME" value="getSoldDate" />
+      <option name="MAIN_CLASS_NAME" value="Backend.BusinessLayer.ReportTest" />
+      <option name="METHOD_NAME" value="getCategoryReport" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="ProductItemTest.getSoldDateUpdated" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="ReportTest.getDefectiveProductReport" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="dev" />
       <extension name="coverage">
         <pattern>
@@ -155,14 +154,14 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="Backend.BusinessLayer" />
-      <option name="MAIN_CLASS_NAME" value="Backend.BusinessLayer.ProductItemTest" />
-      <option name="METHOD_NAME" value="getSoldDateUpdated" />
+      <option name="MAIN_CLASS_NAME" value="Backend.BusinessLayer.ReportTest" />
+      <option name="METHOD_NAME" value="getDefectiveProductReport" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="ProductItemTest.testDefectiveItem" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="ReportTest.getShortageReport" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="dev" />
       <extension name="coverage">
         <pattern>
@@ -171,41 +170,28 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="Backend.BusinessLayer" />
-      <option name="MAIN_CLASS_NAME" value="Backend.BusinessLayer.ProductItemTest" />
-      <option name="METHOD_NAME" value="testDefectiveItem" />
+      <option name="MAIN_CLASS_NAME" value="Backend.BusinessLayer.ReportTest" />
+      <option name="METHOD_NAME" value="getShortageReport" />
       <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="JetRunConfigurationType">
-      <module name="dev" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
-      <module name="dev" />
-      <option name="filePath" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <list>
       <item itemvalue="Application.InventoryMain" />
-      <item itemvalue="JUnit.ProductItemTest.testDefectiveItem" />
-      <item itemvalue="JUnit.ProductItemTest.getSoldDate" />
-      <item itemvalue="JUnit.ProductItemTest.getSoldDateUpdated" />
+      <item itemvalue="JUnit.ReportTest.getCategoryReport" />
+      <item itemvalue="JUnit.ReportTest.getDefectiveProductReport" />
+      <item itemvalue="JUnit.ReportTest.getShortageReport" />
       <item itemvalue="JUnit.IntegrationTest.sendAutomaticOrder" />
       <item itemvalue="JUnit.IntegrationTest.calcMinAccordingToSupplierInf" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.IntegrationTest.calcMinAccordingToSupplierInf" />
+        <item itemvalue="JUnit.ReportTest.getShortageReport" />
+        <item itemvalue="JUnit.ReportTest.getCategoryReport" />
         <item itemvalue="JUnit.IntegrationTest.sendAutomaticOrder" />
-        <item itemvalue="JUnit.ProductItemTest.getSoldDateUpdated" />
-        <item itemvalue="JUnit.ProductItemTest.getSoldDate" />
-        <item itemvalue="JUnit.ProductItemTest.testDefectiveItem" />
+        <item itemvalue="JUnit.ReportTest.getDefectiveProductReport" />
+        <item itemvalue="JUnit.IntegrationTest.calcMinAccordingToSupplierInf" />
       </list>
     </recent_temporary>
   </component>
@@ -368,15 +354,6 @@
     <option name="version" value="3" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
-    <option name="TAB_STATES">
-      <map>
-        <entry key="MAIN">
-          <value>
-            <State />
-          </value>
-        </entry>
-      </map>
-    </option>
     <option name="RECENT_FILTERS">
       <map>
         <entry key="User">
@@ -388,6 +365,15 @@
                 </option>
               </RecentGroup>
             </list>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
           </value>
         </entry>
       </map>
@@ -479,10 +465,26 @@
           <line>108</line>
           <option name="timeStamp" value="95" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/Test/Backend/BusinessLayer/IntegrationTest.java</url>
+          <line>47</line>
+          <option name="timeStamp" value="145" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/Test/Backend/BusinessLayer/ReportTest.java</url>
+          <line>76</line>
+          <option name="timeStamp" value="147" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/Test/Backend/BusinessLayer/ReportTest.java</url>
+          <line>95</line>
+          <option name="timeStamp" value="148" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
     <pin-to-top-manager>
       <pinned-members>
+        <PinnedItemInfo parentTag="java.util.HashMap$Node" memberName="value" />
         <PinnedItemInfo parentTag="Backend.DataAccessLayer.InventoryModule.CategoryManagerMapper" memberName="categoryHierarchyDataMapper" />
         <PinnedItemInfo parentTag="Backend.BusinessLayer.SupplierController" memberName="suppliers" />
       </pinned-members>

@@ -30,7 +30,7 @@ public class ReportTest {
         put(1, testResult1);
         put(2, testResult11);
     }};
-    private final String testResult1 = "Record{catalog_number=0x123, name='productTest', branch='branch1', category=, manufacturer=tnuva, store_price=5.0, warehouse_amount='0, store_amount='1, total_amount='1'}";
+    private final String testResult1 = "Record{catalog_number=0x123, name='productTest', branch='branch1', category=, manufacturer=tnuva, store_price=5.0, warehouse_amount='0, store_amount='5, total_amount='5'}";
     private final String testResult11 = "Record{catalog_number=24, name='milk2', branch='branch1', category=, manufacturer=tnuva, store_price=10.0, warehouse_amount='0, store_amount='0, total_amount='0'}";
 
     private final Map<Integer, String> testResults2 = new HashMap<>() {{

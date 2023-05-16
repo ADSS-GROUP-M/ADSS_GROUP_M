@@ -22,7 +22,7 @@ public class ProductPairBranchDataMapper extends AbstractDataMapper {
             return instance;
         }    }
 
-    public void insert(String branch_name, String product_catalog_number, double original_store_price, double notification_min) throws SQLException {
+    public void insert(String branch_name, String product_catalog_number, double original_store_price, int notification_min) throws SQLException {
         if(!isExists(product_catalog_number, branch_name)){
             try {
                 String columnsString = String.join(", ", columns);

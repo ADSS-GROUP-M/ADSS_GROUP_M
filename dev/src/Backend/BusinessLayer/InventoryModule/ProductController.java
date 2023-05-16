@@ -212,8 +212,8 @@ public class ProductController {
             double supplierPrice = productItem.getSupplierPrice();
             double supplierDiscount = productItem.getSupplierDiscount();
             double storePrice = DCController.calcSoldPrice(branch,catalog_number,product.getOriginalStorePrice());
-            Category category = product.getCategory();
-            List<Category> subCategory = product.getSubCategory();
+//            Category category = product.getCategory();
+//            List<Category> subCategory = product.getSubCategory();
             String location = productItem.getLocation();
             //create Record
             Record record = new Record(catalog_number,serial_number,name,branch.name(),manufacture,supplierPrice,supplierDiscount,storePrice, location);
@@ -259,7 +259,7 @@ public class ProductController {
                     double supplierPrice = productItem.getSupplierPrice();
                     double supplierDiscount = productItem.getSupplierDiscount();
                     double storePrice = product.getOriginalStorePrice();
-                    Category category = product.getCategory();
+//                    Category category = product.getCategory();
                     String location = productItem.getLocation();
                     //create Record
                     Record record = new Record(productCatalogNumber,serial_number,name,branch.name(),manufacture,supplierPrice,storePrice,supplierDiscount, location);

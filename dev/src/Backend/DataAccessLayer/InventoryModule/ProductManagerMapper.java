@@ -35,6 +35,7 @@ public class ProductManagerMapper {
                     if (dao.getCatalog_number().equals(pair.catalog_number)) {
                         product = new Product(dao.getCatalog_number(), dao.getName(), dao.getManufacture(),
                                 pair.original_store_price, Branch.valueOf(pair.branch_name));
+                        product.setNotificationMin(pair.notification_min);
                         break;
                     }
                 }

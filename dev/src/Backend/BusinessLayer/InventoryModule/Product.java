@@ -13,7 +13,7 @@ public class Product {
     private  String name;
     private String manufacturer;
     private double originalStorePrice;
-    private Category category;
+//    private Category category;
     private List<Category> subCategory;
     //default value -1
     private int notificationMin;
@@ -25,7 +25,7 @@ public class Product {
         this.name = name;
         this.manufacturer = manufacturer;
         this.originalStorePrice = originalStorePrice;
-        this.category = null;
+//        this.category = null;
         this.subCategory = new ArrayList<Category>();
         this.notificationMin = 5;
         // Map<productID, product>
@@ -125,7 +125,7 @@ public class Product {
     public double getOriginalStorePrice(){return this.originalStorePrice;}
     public String getName(){return this.name;}
     public String getManufacturer(){return this.manufacturer;}
-    public Category getCategory(){return this.category;}
+//    public Category getCategory(){return this.category;}
     public String getCatalogNum() {return this.catalog_number;}
     public List<Category> getSubCategory(){return this.subCategory;}
     public Branch getBranch() {return this.branch;}

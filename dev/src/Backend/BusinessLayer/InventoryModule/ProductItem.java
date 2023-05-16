@@ -88,7 +88,7 @@ public class ProductItem {
     public void setSupplierPrice(double newPrice){this.supplierPrice = newPrice;}
     public void setSupplierID(String newSupplierID){this.supplierID = newSupplierID;}
     public void setSoldPrice(double newSoldPrice){
-        if(!isSold)
+        if(!isSold && newSoldPrice != 0)
             reportAsSold(newSoldPrice);
         else
             this.soldPrice = newSoldPrice;

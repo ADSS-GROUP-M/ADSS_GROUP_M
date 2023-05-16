@@ -7,6 +7,7 @@ import Backend.DataAccessLayer.SuppliersModule.ProductsDataMapper;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -81,10 +82,12 @@ public class ProductManagerMapper {
                 cachedProducts.computeIfAbsent(product.getBranch(), k -> new HashMap<>())
                         .put(product.getCatalogNumber(), product);
             } else {
-                Product product = new Product(catalog_number, name, manufacture, originalStorePrice, Branch.valueOf(branch));
-                productPairBranchDataMapper.insert(branch, catalog_number, originalStorePrice, product.getNotificationMin());
-                cachedProducts.computeIfAbsent(product.getBranch(), k -> new HashMap<>())
-                        .put(product.getCatalogNumber(), product);
+                if(!isExistsBranchProduct(catalog_number,branch)) {
+                    Product product = new Product(catalog_number, name, manufacture, originalStorePrice, Branch.valueOf(branch));
+                    productPairBranchDataMapper.insert(branch, catalog_number, originalStorePrice, product.getNotificationMin());
+                    cachedProducts.computeIfAbsent(product.getBranch(), k -> new HashMap<>())
+                            .put(product.getCatalogNumber(), product);
+                }
             }
         } catch (SQLException e) {
             throw new RuntimeException(e.getMessage());
@@ -121,7 +124,8 @@ public class ProductManagerMapper {
         try {
             if(isProductExists(catalog_number)){
                 productsDataMapper.update(catalog_number, name, manufacture,null);
-                productPairBranchDataMapper.update(branch, catalog_number, originalStorePrice,newMinAmount);
+                if(isExistsBranchProduct(catalog_number,branch))
+                    productPairBranchDataMapper.update(branch, catalog_number, originalStorePrice,newMinAmount);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e.getMessage());
@@ -186,6 +190,13 @@ public class ProductManagerMapper {
 
     public Map<String, List<ProductItem>> getCachedItems() {
         return this.cachedItems;
+    }
+
+    public boolean isExistsBranchProduct(String catalogNumber, String branchName){
+        if(cachedProducts.containsKey(Branch.valueOf(branchName)))
+            if(cachedProducts.get(Branch.valueOf(branchName)).containsKey(catalogNumber))
+                return true;
+        return false;
     }
 
 }

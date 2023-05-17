@@ -67,8 +67,8 @@ class BillOfQuantitiesTest {
     @Test
     void setProductsDiscounts() {
         Map<String, Map<Integer, Discount>> productsDiscount = new HashMap<>(){{put("0", new HashMap<>());
-            get(0).put(10, new CashDiscount(10)); get(0).put(15, new PercentageDiscount(10));
-            put("1", new HashMap<>()); get(1).put(10, new PercentageDiscount(20));}};
+            get("0").put(10, new CashDiscount(10)); get("0").put(15, new PercentageDiscount(10));
+            put("1", new HashMap<>()); get("1").put(10, new PercentageDiscount(20));}};
         billOfQuantities.setProductsDiscounts(productsDiscount);
         assertEquals(900, billOfQuantities.getProductPriceAfterDiscount("0", 100, 1000), "price should be 900");
         assertEquals(800, billOfQuantities.getProductPriceAfterDiscount("1", 100, 1000), "price should be 800");

@@ -5,7 +5,7 @@ import java.sql.*;
 public class SQLExecutorProductionImpl implements SQLExecutor {
 
     private static final String DEFAULT_DB_NAME = "SuperLiDB.db";
-    private static final String URL_PREFIX = "jdbc:sqlite:";
+    private static final String URL_PREFIX = "jdbc:sqlite::resources:";
     private final String URL;
 
     /**

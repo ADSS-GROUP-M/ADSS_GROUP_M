@@ -56,6 +56,7 @@ public class ReportTest {
     public void setUp() {
         productController = ProductController.ProductController();
         categoryController = CategoryController.CategoryController();
+        productController.updateProduct(branch,null,catalog_number,null,-1,6);
         //create new product
 //        productController.createProduct(catalog_number,branch,catalog_name,manufacturer,storePrice);
 //        List<String> serial_numbers = new ArrayList<>();

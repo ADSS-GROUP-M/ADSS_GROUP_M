@@ -42,6 +42,11 @@ public class ProductTest {
 //        productController.createProductItem(serial_numbers,catalog_number,branch,supplierId,supplierPrice,supplierDiscount, location,expireDate, "y");
     }
 
+    @After
+    public void after(){
+        productController.updateProduct(branch,null,catalog_number,null,-1,2);
+    }
+
 
 
     // Test 1
@@ -54,7 +59,7 @@ public class ProductTest {
     // Test 2
     @org.junit.Test
     public void updateMin() {
-        productController.updateProduct(branch,null,catalog_number,null,-1,4);
+        productController.updateProduct(branch,null,catalog_number,null,-1,6);
         try {
             Assert.assertTrue("update min notification failed",productController.isProductLack(branch,catalog_number));
         }

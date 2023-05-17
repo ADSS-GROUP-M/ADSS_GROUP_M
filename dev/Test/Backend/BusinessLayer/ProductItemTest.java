@@ -48,9 +48,9 @@ public class ProductItemTest {
 
     // Test 2
     @org.junit.Test
-    public void getSoldDate() {
+    public void isSold() {
 //        productController.updateProductItem(branch,-1,serial_number,catalog_number,);
-        Assert.assertNull("sold price should init as null",productController.getProduct(branch,catalog_number).getProduct(serial_number).getSoldDate());
+        Assert.assertFalse("sold price should init as null",productController.getProduct(branch,catalog_number).getProduct(serial_number).isSold());
     }
 
     // Test 3

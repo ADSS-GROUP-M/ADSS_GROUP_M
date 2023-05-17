@@ -29,16 +29,20 @@ public class ReportTest {
     private final Map<Integer, String> testResults1 = new HashMap<>() {{
         put(1, testResult1);
         put(2, testResult11);
+        put(3, testResult111);
     }};
     private final String testResult1 = "Record{catalog_number=0x123, name='productTest', branch='branch1', category=, manufacturer=tnuva, store_price=5.0, warehouse_amount='0, store_amount='5, total_amount='5'}";
     private final String testResult11 = "Record{catalog_number=24, name='milk2', branch='branch1', category=, manufacturer=tnuva, store_price=10.0, warehouse_amount='0, store_amount='0, total_amount='0'}";
+    private final String testResult111 = "Record{catalog_number=555, name='fish', branch='branch1', category=, manufacturer=ocean, store_price=2.0, warehouse_amount='0, store_amount='0, total_amount='0'}";
+
 
     private final Map<Integer, String> testResults2 = new HashMap<>() {{
         put(1, testResult2);
         put(2, testResult22);
     }};
-    private final String testResult2 = "Record{catalog_number=23, name='milk', branch='branch1', category=, manufacturer=tnuva, store_price=7.0, warehouse_amount='1, store_amount='2, total_amount='3'}";
+    private final String testResult2 = "Record{catalog_number=23, name='milk', branch='branch1', category=, manufacturer=tnuva, store_price=7.0, warehouse_amount='2, store_amount='2, total_amount='4'}";
     private final String testResult22 = "Record{catalog_number=24, name='milk2', branch='branch1', category=, manufacturer=tnuva, store_price=10.0, warehouse_amount='0, store_amount='0, total_amount='0'}";
+    private final String testResult222 = "Record{catalog_number=555, name='fish', branch='branch1', category=, manufacturer=ocean, store_price=2.0, warehouse_amount='0, store_amount='0, total_amount='0'}";
 
     private final Map<Integer, String> testResults3 = new HashMap<>() {{
         put(1, testResult3);

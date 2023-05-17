@@ -149,6 +149,7 @@ public class InventoryProductsManu extends MainMenu {
 
     private void getProductDetails() {
         System.out.println("what is the product's catalog num? (int)");
+        in.nextLine(); // Consume the remaining newline character
         String catalog_num = in.nextLine();
         System.out.println("what is the product's serial num? (int)");
         String serial_num = in.nextLine();

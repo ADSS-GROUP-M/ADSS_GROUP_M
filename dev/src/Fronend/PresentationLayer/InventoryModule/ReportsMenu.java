@@ -3,6 +3,7 @@ package Fronend.PresentationLayer.InventoryModule;
 import Backend.BusinessLayer.BusinessLayerUsage.Branch;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -28,20 +29,24 @@ public class ReportsMenu extends MainMenu {
 
     private void getProductPerCategory() {
         in.nextLine();
-        List<String> categories = new ArrayList<String>();
-        String category_name = "";
-        while (!Objects.equals(category_name, "null")) {
-            System.out.println("Please enter category's name , if you done choose 'null'");
-            category_name = in.nextLine();
-            if (!Objects.equals(category_name, "null"))
-                categories.add(category_name);
+        System.out.println("Please enter categories' name as list [Dairy products,Bath products,Cleaning products]");
+        String subcategories_name = in.nextLine();
+        List<String> subcategories;
+        if (subcategories_name.isEmpty()) {
+            subcategories = new ArrayList<>(); // Creating an empty ArrayList
+        } else {
+            subcategories = Arrays.asList(subcategories_name.split(","));
         }
-        System.out.println(categoriesService.getCategoryReport(category_name, categories).getReturnValue());
+        String output = "";
+        for (Backend.BusinessLayer.InventoryModule.Record r : (List<Backend.BusinessLayer.InventoryModule.Record>) categoriesService.getCategoryReport(branch, subcategories).getReturnValue()) {
+            output += r.toString() + "\n";
+        }
+        System.out.println(output);
     }
 
     private void inventoryRunningOutReport() {
         String output = "";
-        for (Record r: (List<Record>) stockService.getShortagesProducts(Branch.valueOf(branch)).getReturnValue()){
+        for (Backend.BusinessLayer.InventoryModule.Record r: (List<Backend.BusinessLayer.InventoryModule.Record>) stockService.getShortagesProducts(Branch.valueOf(branch)).getReturnValue()){
             output += r.toString() + "\n";
         }
         System.out.println(output);
@@ -49,7 +54,7 @@ public class ReportsMenu extends MainMenu {
 
     private void inventoryDefectiveReport() {
         String output = "";
-        for (Record r: (List<Record>) stockService.getDefectiveProducts(Branch.valueOf(branch)).getReturnValue()){
+        for (Backend.BusinessLayer.InventoryModule.Record r: (List<Backend.BusinessLayer.InventoryModule.Record>) stockService.getDefectiveProducts(Branch.valueOf(branch)).getReturnValue()){
             output += r.toString() + "\n";
         }
         System.out.println(output);

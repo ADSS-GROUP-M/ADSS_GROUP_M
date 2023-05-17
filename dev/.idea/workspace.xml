@@ -9,15 +9,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e454f93c-4ee8-4f4b-9a14-eaaf36aa303c" name="Changes" comment="test">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/dalUtils/SQLExecutorProductionImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/dalUtils/SQLExecutorProductionImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/ServiceLayer/InventoryModule/CategoriesService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/ServiceLayer/InventoryModule/CategoriesService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/InventoryModule/InventoryProductsManu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/InventoryModule/InventoryProductsManu.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/InventoryModule/ReportsMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/InventoryModule/ReportsMenu.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/super_lee.sqlite" beforeDir="false" afterPath="$PROJECT_DIR$/src/super_lee.sqlite" afterDir="false" />
-    </list>
+    <list default="true" id="e454f93c-4ee8-4f4b-9a14-eaaf36aa303c" name="Changes" comment="test" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -64,12 +56,13 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">
-    <property name="jdk.selected.JAVA_MODULE" value="openjdk-17" />
-    <property name="project.structure.last.edited" value="Modules" />
-    <property name="project.structure.proportion" value="0.15" />
-    <property name="project.structure.side.proportion" value="0.15977012" />
-  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2"
+  }
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\yossi\OneDrive\שולחן העבודה\ניתוצ\Assignment1\Assignment1\dev\PresentationLayer" />
@@ -174,25 +167,12 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="JetRunConfigurationType">
-      <module name="dev" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
-      <module name="dev" />
-      <option name="filePath" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <list>
       <item itemvalue="Application.InventoryMain" />
+      <item itemvalue="Application.Main" />
       <item itemvalue="JUnit.Backend.BusinessLayer in dev" />
       <item itemvalue="JUnit.ReportTest.getShortageReport" />
       <item itemvalue="JUnit.BillOfQuantitiesTest" />
-      <item itemvalue="Application.Main" />
       <item itemvalue="JUnit.ProductItemTest" />
     </list>
     <recent_temporary>
@@ -420,15 +400,6 @@
     <option name="version" value="3" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
-    <option name="TAB_STATES">
-      <map>
-        <entry key="MAIN">
-          <value>
-            <State />
-          </value>
-        </entry>
-      </map>
-    </option>
     <option name="RECENT_FILTERS">
       <map>
         <entry key="User">
@@ -440,6 +411,15 @@
                 </option>
               </RecentGroup>
             </list>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
           </value>
         </entry>
       </map>

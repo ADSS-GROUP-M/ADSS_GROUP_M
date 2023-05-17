@@ -1,10 +1,15 @@
 package dataAccessLayer.dalAbstracts;
 
 import dataAccessLayer.dalUtils.Cache;
+import dataAccessLayer.dalUtils.CreateTableQueryBuilder;
+import dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnType;
+import dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnModifier;
 import dataAccessLayer.dalUtils.OfflineResultSet;
 import exceptions.DalException;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public abstract class DAO<T> {
@@ -17,7 +22,7 @@ public abstract class DAO<T> {
 
     protected final Cache<T> cache;
 
-    protected DAO(SQLExecutor cursor ,String tableName,String[] types, String[] primaryKeys, String ... allColumns) throws DalException {
+    protected DAO(SQLExecutor cursor ,String tableName,String[] types, String[] primaryKeys, String ... allColumns) {
         this.cursor = cursor;
         this.TABLE_NAME = tableName;
         this.PRIMARY_KEYS = primaryKeys;
@@ -30,28 +35,26 @@ public abstract class DAO<T> {
      * Initialize the table if it doesn't exist
      */
     protected void initTable() throws DalException{
-        StringBuilder query = new StringBuilder();
+        CreateTableQueryBuilder queryBuilder = new CreateTableQueryBuilder(TABLE_NAME);
 
-        query.append(String.format("CREATE TABLE IF NOT EXISTS %s (\n", TABLE_NAME));
-
+        // columns
         for (int i = 0; i < ALL_COLUMNS.length; i++) {
-            query.append(String.format("\"%s\" %s NOT NULL,\n", ALL_COLUMNS[i], TYPES[i]));
-        }
+            ArrayList<ColumnModifier> modifiers = new ArrayList<>();
 
-        query.append("PRIMARY KEY(");
-        for(int i = 0; i < PRIMARY_KEYS.length; i++) {
-            query.append(String.format("\"%s\"",PRIMARY_KEYS[i]));
-            if (i != PRIMARY_KEYS.length-1) {
-                query.append(",");
-            } else {
-                query.append(")\n");
+            // basic modifiers
+            modifiers.add(ColumnModifier.NOT_NULL);
+
+            // primary key
+            if(Arrays.asList(PRIMARY_KEYS).contains(ALL_COLUMNS[i])) {
+                modifiers.add(ColumnModifier.PRIMARY_KEY);
             }
+
+            queryBuilder.addColumn(ALL_COLUMNS[i], ColumnType.valueOf(TYPES[i]), modifiers.toArray(new ColumnModifier[0]));
         }
 
-        query.append(");");
-
+        String query = queryBuilder.buildQuery();
         try {
-            cursor.executeWrite(query.toString());
+            cursor.executeWrite(query);
         } catch (SQLException e) {
             throw new DalException("Failed to initialize table "+TABLE_NAME, e);
         }

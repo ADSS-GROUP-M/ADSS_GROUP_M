@@ -178,8 +178,7 @@ public class UI {
                 getPeriodicOrdersDetails();
                 break;
             case 34:
-                order();
-                break;
+                return false;
         }
         return true;
     }

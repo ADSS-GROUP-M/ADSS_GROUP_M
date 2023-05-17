@@ -57,7 +57,7 @@ public class PeriodicOrderController {
     }
 
     public int getDaysForOrder(String catalogNumber, Branch branch) throws SQLException {
-        int minDay = periodicOrderDataMapper.findDay(catalogNumber, Branch.branch4);
+        int minDay = periodicOrderDataMapper.findDay(catalogNumber, branch);
         return minDay == 7 ? -1 : minDay;
     }
 

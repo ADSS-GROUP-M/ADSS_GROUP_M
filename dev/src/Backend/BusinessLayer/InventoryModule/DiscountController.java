@@ -44,7 +44,6 @@ public class DiscountController {
             discountManagerMapper.createDiscount(catalog_number, branch.name(), startDate, endDate, discount);
     }
 
-    //TODO: need to edit
     public void createCategoryDiscount(String categoryName, Branch branch, double discount, LocalDateTime startDate, LocalDateTime endDate){
             CategoryController categoryController = CategoryController.CategoryController();
             if (categoryController.checkIfCategoryExist(categoryName)) {

@@ -26,7 +26,7 @@ public class ProductPairBranchDataMapper extends AbstractDataMapper {
         if(!isExists(product_catalog_number, branch_name)){
             try {
                 String columnsString = String.join(", ", columns);
-            sqlExecutor.executeWrite(String.format("INSERT INTO %s (%s) VALUES('%s', '%s', %f, %f)",
+            sqlExecutor.executeWrite(String.format("INSERT INTO %s (%s) VALUES('%s', '%s', %f, %s)",
                     tableName, columnsString, branch_name, product_catalog_number, original_store_price, notification_min));
             ProductPairBranchDAO productPairBranchDAO = new ProductPairBranchDAO(branch_name, product_catalog_number, original_store_price, notification_min);
             cachedProductsPairBranch.add(productPairBranchDAO);

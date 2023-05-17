@@ -25,7 +25,7 @@ public class StockService {
             productController.createProduct(catalog_number, Branch.valueOf(branch), name, manufacturer, store_price);
             return new Response<>("Product added successfully");
         } catch (Exception e) {
-            return Response.createErrorResponse("Error updating product type: " + e.getMessage());
+            return Response.createErrorResponse("Error adding product type: " + e.getMessage());
         }
     }
 

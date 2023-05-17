@@ -1,8 +1,11 @@
 package dataAccessLayer.dalAbstracts;
 
+import dataAccessLayer.dalUtils.CreateTableQueryBuilder;
 import exceptions.DalException;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * @param <T> The child Type
@@ -31,66 +34,35 @@ public abstract class ManyToManyDAO<T> extends DAO<T>{
      * Initialize the table if it doesn't exist
      */
     protected void initTable() throws DalException{
-        StringBuilder query = new StringBuilder();
+        CreateTableQueryBuilder queryBuilder = new CreateTableQueryBuilder(TABLE_NAME);
 
-        query.append(String.format("CREATE TABLE IF NOT EXISTS %s (\n", TABLE_NAME));
-
+        // columns
         for (int i = 0; i < ALL_COLUMNS.length; i++) {
-            query.append(String.format("\"%s\" %s NOT NULL,\n", ALL_COLUMNS[i], TYPES[i]));
-        }
+            ArrayList<CreateTableQueryBuilder.ColumnModifier> modifiers = new ArrayList<>();
 
-        query.append("PRIMARY KEY(");
-        for(int i = 0; i < PRIMARY_KEYS.length; i++) {
-            query.append(String.format("\"%s\"",PRIMARY_KEYS[i]));
-            if (i != PRIMARY_KEYS.length-1) {
-                query.append(",");
-            } else {
-                query.append("),\n");
+            // basic modifiers
+            modifiers.add(CreateTableQueryBuilder.ColumnModifier.NOT_NULL);
+
+            // primary key
+            if(Arrays.asList(PRIMARY_KEYS).contains(ALL_COLUMNS[i])) {
+                modifiers.add(CreateTableQueryBuilder.ColumnModifier.PRIMARY_KEY);
             }
+
+            queryBuilder.addColumn(ALL_COLUMNS[i],
+                    CreateTableQueryBuilder.ColumnType.valueOf(TYPES[i]),
+                    modifiers.toArray(new CreateTableQueryBuilder.ColumnModifier[0]));
         }
 
+        // foreign keys
         for(int i = 0; i < FOREIGN_KEYS.length ; i++){
-            query.append(String.format("CONSTRAINT FK_%s FOREIGN KEY(%s) REFERENCES \"%s\"(%s)",
-                    PARENT_TABLE_NAME[i],
-                    generateForeignKeys(i),
-                    PARENT_TABLE_NAME[i],
-                    generateReferences(i)
-            ));
-            if(i != FOREIGN_KEYS.length-1){
-                query.append(",\n");
-            } else {
-                query.append("\n");
-            }
+            queryBuilder.addForeignKey( PARENT_TABLE_NAME[i],FOREIGN_KEYS[i], REFERENCES[i]);
         }
 
-        query.append(");");
-
+        String query = queryBuilder.buildQuery();
         try {
-            cursor.executeWrite(query.toString());
+            cursor.executeWrite(query);
         } catch (SQLException e) {
             throw new DalException("Failed to initialize table "+TABLE_NAME, e);
         }
-    }
-
-    private String generateForeignKeys(int i) {
-        StringBuilder foreignKeys = new StringBuilder();
-        for (int j = 0; j < FOREIGN_KEYS[i].length; j++) {
-            foreignKeys.append(String.format("\"%s\"", FOREIGN_KEYS[i][j]));
-            if (j != FOREIGN_KEYS[i].length - 1) {
-                foreignKeys.append(",");
-            }
-        }
-        return foreignKeys.toString();
-    }
-
-    private String generateReferences(int i) {
-        StringBuilder references = new StringBuilder();
-        for (int j = 0; j < REFERENCES[i].length; j++) {
-            references.append(String.format("\"%s\"", REFERENCES[i][j]));
-            if (j != REFERENCES[i].length - 1) {
-                references.append(",");
-            }
-        }
-        return references.toString();
     }
 }

@@ -1,7 +1,6 @@
 package dataAccessLayer.employeeModule;
 
 import businessLayer.employeeModule.Branch;
-
 import dataAccessLayer.dalAbstracts.DAO;
 import dataAccessLayer.dalAbstracts.SQLExecutor;
 import dataAccessLayer.dalUtils.CreateTableQueryBuilder;
@@ -14,7 +13,8 @@ import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
-import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.*;
+import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnModifier;
+import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnType;
 
 
 public class BranchesDAO extends DAO<Branch> {

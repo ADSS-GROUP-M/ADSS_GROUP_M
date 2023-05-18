@@ -1,10 +1,7 @@
 package serviceLayer.transportModule;
 
-import businessLayer.employeeModule.Authorization;
 import businessLayer.employeeModule.Branch;
-import businessLayer.employeeModule.Controllers.UserController;
 import businessLayer.employeeModule.Role;
-import businessLayer.employeeModule.Shift;
 import businessLayer.transportModule.SitesController;
 import dataAccessLayer.DalFactory;
 import exceptions.TransportException;
@@ -12,19 +9,19 @@ import objects.transportObjects.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import presentationLayer.DataGenerator;
 import serviceLayer.ServiceFactory;
 import serviceLayer.employeeModule.Objects.SShiftType;
 import serviceLayer.employeeModule.Services.EmployeesService;
 import serviceLayer.employeeModule.Services.UserService;
 import utils.ErrorCollection;
-import utils.JsonUtils;
 import utils.Response;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 
 import static dataAccessLayer.DalFactory.TESTING_DB_NAME;
 import static org.junit.jupiter.api.Assertions.*;

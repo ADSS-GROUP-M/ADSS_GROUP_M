@@ -9,9 +9,12 @@ import objects.transportObjects.DeliveryRoute;
 
 import java.sql.SQLException;
 import java.time.LocalTime;
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 
-import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.*;
+import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnModifier;
+import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnType;
 
 public class DeliveryRoutesDAO extends DAO<DeliveryRoute> {
 

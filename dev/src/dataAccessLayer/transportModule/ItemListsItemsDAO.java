@@ -1,7 +1,6 @@
 package dataAccessLayer.transportModule;
 
 import dataAccessLayer.dalAbstracts.DAO;
-
 import dataAccessLayer.dalAbstracts.SQLExecutor;
 import dataAccessLayer.dalUtils.CreateTableQueryBuilder;
 import dataAccessLayer.dalUtils.OfflineResultSet;
@@ -14,7 +13,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.*;
+import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnModifier;
+import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnType;
 
 public class ItemListsItemsDAO extends DAO<ItemList> {
     public static final String[] primaryKey = {"id", "loading_type", "item_name"};

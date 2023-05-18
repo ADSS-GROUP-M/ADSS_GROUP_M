@@ -2,7 +2,6 @@ package dataAccessLayer.employeeModule;
 
 import businessLayer.employeeModule.Employee;
 import businessLayer.employeeModule.Role;
-
 import dataAccessLayer.dalAbstracts.DAO;
 import dataAccessLayer.dalAbstracts.SQLExecutor;
 import dataAccessLayer.dalUtils.CreateTableQueryBuilder;
@@ -16,7 +15,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.*;
+import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnModifier;
+import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnType;
 
 public class EmployeeRolesDAO extends DAO<Pair<String,Role>> {
 

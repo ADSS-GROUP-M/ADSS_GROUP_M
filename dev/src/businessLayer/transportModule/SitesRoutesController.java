@@ -8,7 +8,6 @@ import exceptions.TransportException;
 import javafx.util.Pair;
 import objects.transportObjects.Site;
 
-import java.io.IOException;
 import java.util.*;
 
 public class SitesRoutesController {

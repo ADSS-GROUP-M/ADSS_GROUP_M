@@ -11,7 +11,8 @@ import objects.transportObjects.ItemList;
 import java.sql.SQLException;
 import java.util.List;
 
-import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.*;
+import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnModifier;
+import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnType;
 
 public class ItemListsDAO extends DAO<ItemList> implements CounterDAO {
     public static final String primaryKey = "id";

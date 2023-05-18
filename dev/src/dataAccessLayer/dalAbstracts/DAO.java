@@ -2,8 +2,8 @@ package dataAccessLayer.dalAbstracts;
 
 import dataAccessLayer.dalUtils.Cache;
 import dataAccessLayer.dalUtils.CreateTableQueryBuilder;
-import dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnType;
 import dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnModifier;
+import dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnType;
 import dataAccessLayer.dalUtils.OfflineResultSet;
 import exceptions.DalException;
 

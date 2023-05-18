@@ -1,7 +1,6 @@
 package businessLayer.employeeModule.Controllers;
 
 import businessLayer.employeeModule.Authorization;
-import businessLayer.employeeModule.Employee;
 import businessLayer.employeeModule.User;
 import dataAccessLayer.employeeModule.UserDAO;
 import exceptions.DalException;

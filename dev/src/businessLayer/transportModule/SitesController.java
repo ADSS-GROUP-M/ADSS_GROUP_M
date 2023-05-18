@@ -1,14 +1,12 @@
 package businessLayer.transportModule;
 
 import businessLayer.transportModule.bingApi.Point;
-import dataAccessLayer.dalAssociationClasses.transportModule.SiteRoute;
 import dataAccessLayer.transportModule.SitesDAO;
 import exceptions.DalException;
 import exceptions.TransportException;
 import objects.transportObjects.Site;
 import serviceLayer.employeeModule.Services.EmployeesService;
 
-import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 

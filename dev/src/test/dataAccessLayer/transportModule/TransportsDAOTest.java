@@ -2,27 +2,24 @@ package dataAccessLayer.transportModule;
 
 import businessLayer.employeeModule.Employee;
 import businessLayer.employeeModule.Role;
-import businessLayer.transportModule.*;
 import dataAccessLayer.DalFactory;
-import dataAccessLayer.dalAssociationClasses.transportModule.SiteRoute;
 import dataAccessLayer.employeeModule.EmployeeDAO;
 import exceptions.DalException;
-import objects.transportObjects.*;
+import objects.transportObjects.Driver;
+import objects.transportObjects.Transport;
+import objects.transportObjects.Truck;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import static dataAccessLayer.DalFactory.TESTING_DB_NAME;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
 
 class TransportsDAOTest {
 

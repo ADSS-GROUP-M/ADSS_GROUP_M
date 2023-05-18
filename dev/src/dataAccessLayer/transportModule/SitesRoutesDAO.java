@@ -1,7 +1,6 @@
 package dataAccessLayer.transportModule;
 
 import dataAccessLayer.dalAbstracts.DAO;
-
 import dataAccessLayer.dalAbstracts.SQLExecutor;
 import dataAccessLayer.dalAssociationClasses.transportModule.SiteRoute;
 import dataAccessLayer.dalUtils.CreateTableQueryBuilder;
@@ -12,7 +11,8 @@ import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
-import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.*;
+import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnModifier;
+import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnType;
 
 public class SitesRoutesDAO extends DAO<SiteRoute> {
     public static final String[] primaryKey = {"source", "destination"};

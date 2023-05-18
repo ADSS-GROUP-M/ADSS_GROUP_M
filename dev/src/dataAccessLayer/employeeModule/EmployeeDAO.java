@@ -14,7 +14,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.*;
+import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnModifier;
+import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnType;
 
 public class EmployeeDAO extends DAO<Employee> {
 

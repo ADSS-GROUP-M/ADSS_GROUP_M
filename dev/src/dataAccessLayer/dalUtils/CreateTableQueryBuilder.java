@@ -1,8 +1,8 @@
 package dataAccessLayer.dalUtils;
 
-import org.sqlite.SQLiteDataSource;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Objects;
 
 public class CreateTableQueryBuilder {
     private final String tableName;

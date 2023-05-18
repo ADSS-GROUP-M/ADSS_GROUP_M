@@ -2,7 +2,7 @@ package dataAccessLayer.transportModule;
 
 import businessLayer.employeeModule.Employee;
 import businessLayer.employeeModule.Role;
-import businessLayer.transportModule.*;
+import businessLayer.transportModule.TransportsController;
 import dataAccessLayer.DalFactory;
 import dataAccessLayer.dalAbstracts.SQLExecutor;
 import dataAccessLayer.dalAssociationClasses.transportModule.SiteRoute;
@@ -24,7 +24,6 @@ import java.util.List;
 
 import static dataAccessLayer.DalFactory.TESTING_DB_NAME;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
 
 class DeliveryRoutesDAOTest {
 

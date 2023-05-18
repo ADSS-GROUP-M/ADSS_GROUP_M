@@ -1,6 +1,6 @@
 package dataAccessLayer.inventoryModule;
 
-import dataAccessLayer.dalUtils.AbstractDataMapper;
+import dataAccessLayer.dalAbstracts.AbstractDataMapper;
 
 public class BranchDataMapper extends AbstractDataMapper {
     public BranchDataMapper() {

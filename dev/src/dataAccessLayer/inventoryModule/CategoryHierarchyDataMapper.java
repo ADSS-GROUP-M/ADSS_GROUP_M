@@ -1,7 +1,7 @@
 package dataAccessLayer.inventoryModule;
 
 import businessLayer.inventoryModule.Category;
-import dataAccessLayer.dalUtils.AbstractDataMapper;
+import dataAccessLayer.dalAbstracts.AbstractDataMapper;
 import dataAccessLayer.dalUtils.OfflineResultSet;
 
 import java.sql.SQLException;

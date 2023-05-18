@@ -6,7 +6,7 @@ import java.sql.*;
 
 public class SQLExecutorTestingImpl implements SQLExecutor {
 
-    private static final String DEFAULT_DB_NAME = ":memory:";
+    private static final String DEFAULT_DB_NAME = "TestingDB.db";
     private static final String URL_PREFIX = "jdbc:sqlite:";
     private final String URL;
     private Connection connection;

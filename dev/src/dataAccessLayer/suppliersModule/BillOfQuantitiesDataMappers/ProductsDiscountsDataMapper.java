@@ -3,7 +3,7 @@ package dataAccessLayer.suppliersModule.BillOfQuantitiesDataMappers;
 import businessLayer.suppliersModule.Discounts.CashDiscount;
 import businessLayer.suppliersModule.Discounts.Discount;
 import businessLayer.suppliersModule.Discounts.PercentageDiscount;
-import dataAccessLayer.dalUtils.AbstractDataMapper;
+import dataAccessLayer.dalAbstracts.AbstractDataMapper;
 import dataAccessLayer.dalUtils.OfflineResultSet;
 
 import java.sql.SQLException;

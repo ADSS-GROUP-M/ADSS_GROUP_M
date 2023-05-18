@@ -3,7 +3,7 @@ package dataAccessLayer.suppliersModule;
 import businessLayer.businessLayerUsage.Branch;
 import businessLayer.suppliersModule.Order;
 import businessLayer.suppliersModule.PeriodicOrder;
-import dataAccessLayer.dalUtils.AbstractDataMapper;
+import dataAccessLayer.dalAbstracts.AbstractDataMapper;
 import dataAccessLayer.dalUtils.OfflineResultSet;
 
 import java.sql.SQLException;

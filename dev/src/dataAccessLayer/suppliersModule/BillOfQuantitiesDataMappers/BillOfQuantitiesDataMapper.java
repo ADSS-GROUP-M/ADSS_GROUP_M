@@ -3,7 +3,7 @@ package dataAccessLayer.suppliersModule.BillOfQuantitiesDataMappers;
 import businessLayer.suppliersModule.BillOfQuantities;
 import businessLayer.suppliersModule.Discounts.Discount;
 import businessLayer.suppliersModule.Pair;
-import dataAccessLayer.dalUtils.DalException;
+import exceptions.DalException;
 
 import java.sql.SQLException;
 import java.util.HashMap;

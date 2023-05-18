@@ -4,7 +4,7 @@ import businessLayer.businessLayerUsage.Branch;
 import businessLayer.suppliersModule.DeliveryAgreements.DeliveryAgreement;
 import businessLayer.suppliersModule.DeliveryAgreements.DeliveryByInvitation;
 import businessLayer.suppliersModule.DeliveryAgreements.DeliveryFixedDays;
-import dataAccessLayer.dalUtils.DalException;
+import exceptions.DalException;
 import dataAccessLayer.suppliersModule.OrderHistoryDataMappers.OrderHistoryDataMapper;
 
 import java.sql.SQLException;

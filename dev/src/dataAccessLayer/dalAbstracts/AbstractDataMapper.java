@@ -1,4 +1,6 @@
-package dataAccessLayer.dalUtils;
+package dataAccessLayer.dalAbstracts;
+
+import dataAccessLayer.dalUtils.SQLExecutorProductionImpl;
 
 public abstract class AbstractDataMapper{
     protected String tableName;

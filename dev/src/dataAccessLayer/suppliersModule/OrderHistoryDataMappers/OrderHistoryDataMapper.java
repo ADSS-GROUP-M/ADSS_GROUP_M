@@ -1,7 +1,7 @@
 package dataAccessLayer.suppliersModule.OrderHistoryDataMappers;
 
 import businessLayer.suppliersModule.Order;
-import dataAccessLayer.dalUtils.AbstractDataMapper;
+import dataAccessLayer.dalAbstracts.AbstractDataMapper;
 import dataAccessLayer.dalUtils.OfflineResultSet;
 
 import java.sql.SQLException;

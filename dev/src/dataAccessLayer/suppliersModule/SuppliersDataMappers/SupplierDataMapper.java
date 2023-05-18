@@ -3,8 +3,8 @@ package dataAccessLayer.suppliersModule.SuppliersDataMappers;
 import businessLayer.suppliersModule.BankAccount;
 import businessLayer.suppliersModule.Pair;
 import businessLayer.suppliersModule.Supplier;
-import dataAccessLayer.dalUtils.AbstractDataMapper;
-import dataAccessLayer.dalUtils.DalException;
+import dataAccessLayer.dalAbstracts.AbstractDataMapper;
+import exceptions.DalException;
 import dataAccessLayer.dalUtils.OfflineResultSet;
 
 import java.sql.SQLException;

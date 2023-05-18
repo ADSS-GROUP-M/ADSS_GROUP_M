@@ -1,6 +1,6 @@
 package businessLayer.suppliersModule;
 
-import dataAccessLayer.dalUtils.DalException;
+import exceptions.DalException;
 import dataAccessLayer.suppliersModule.SuppliersDataMappers.SupplierDataMapper;
 
 import java.sql.SQLException;

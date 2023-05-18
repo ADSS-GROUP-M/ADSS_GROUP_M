@@ -8,51 +8,24 @@ import dataAccessLayer.dalUtils.OfflineResultSet;
 import exceptions.DalException;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public abstract class DAO<T> {
 
     protected final SQLExecutor cursor;
     protected final String TABLE_NAME;
-    protected final String[] ALL_COLUMNS;
-    protected final String[] PRIMARY_KEYS;
-    protected final String[] TYPES;
     protected final Cache<T> cache;
     protected CreateTableQueryBuilder createTableQueryBuilder;
 
-
-    protected DAO(SQLExecutor cursor ,String tableName,String[] types, String[] primaryKeys, String ... allColumns) {
+    protected DAO(SQLExecutor cursor, String tableName) throws DalException {
         this.cursor = cursor;
         this.TABLE_NAME = tableName;
-        this.PRIMARY_KEYS = primaryKeys;
-        this.ALL_COLUMNS = allColumns;
-        this.TYPES = types;
         this.cache = new Cache<>();
-        this.createTableQueryBuilder = new CreateTableQueryBuilder(tableName);
+        initTable();
     }
 
-    /**
-     * Initialize the table if it doesn't exist
-     */
     protected void initTable() throws DalException{
-
-        // columns
-        for (int i = 0; i < ALL_COLUMNS.length; i++) {
-            ArrayList<ColumnModifier> modifiers = new ArrayList<>();
-
-            // basic modifiers
-            modifiers.add(ColumnModifier.NOT_NULL);
-
-            // primary key
-            if(Arrays.asList(PRIMARY_KEYS).contains(ALL_COLUMNS[i])) {
-                modifiers.add(ColumnModifier.PRIMARY_KEY);
-            }
-
-            createTableQueryBuilder.addColumn(ALL_COLUMNS[i], ColumnType.valueOf(TYPES[i]), modifiers.toArray(new ColumnModifier[0]));
-        }
-
+        initializeCreateTableQueryBuilder();
         String query = createTableQueryBuilder.buildQuery();
         try {
             cursor.executeWrite(query);
@@ -60,6 +33,14 @@ public abstract class DAO<T> {
             throw new DalException("Failed to initialize table "+TABLE_NAME, e);
         }
     }
+
+    /**
+     * Used to insert data into {@link DAO#createTableQueryBuilder}. <br/>
+     * in order to add columns and foreign keys to the table use:<br/><br/>
+     * {@link CreateTableQueryBuilder#addColumn(String, ColumnType, ColumnModifier...)} <br/><br/>
+     * {@link CreateTableQueryBuilder#addCompositeForeignKey(String, String[], String[])}
+     */
+    protected abstract void initializeCreateTableQueryBuilder();
 
     /**
      * @param object getLookUpObject(identifier) of the object to select
@@ -104,7 +85,7 @@ public abstract class DAO<T> {
         String query = String.format("DELETE FROM %s", TABLE_NAME);
         try {
             cursor.executeWrite(query);
-            cache.clear();
+            clearCache();
         } catch (SQLException e) {
             e.printStackTrace();
         }

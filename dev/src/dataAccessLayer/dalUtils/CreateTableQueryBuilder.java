@@ -53,11 +53,21 @@ public class CreateTableQueryBuilder {
     }
 
     /**
-     * @param columnNames the column name in the current table
-     * @param referenceColumns the column name in the parent table
+     * This method adds a composite foreign key
+     * @param columnNames the columns' names in the current table
+     * @param referenceColumns the columns' names in the parent table
      */
-    public void addForeignKey(String parentTableName, String[] columnNames, String[] referenceColumns){
+    public void addCompositeForeignKey(String parentTableName, String[] columnNames, String[] referenceColumns){
         foreignKeys.add(new ForeignKey(parentTableName, columnNames, referenceColumns));
+    }
+
+    /**
+     * This method adds a non-composite foreign key
+     * @param columnName the column name in the current table
+     * @param referenceColumn the column name in the parent table
+     */
+    public void addForeignKey(String parentTableName, String columnName, String referenceColumn){
+        foreignKeys.add(new ForeignKey(parentTableName, new String[]{columnName}, new String[]{referenceColumn}));
     }
 
     public String buildQuery(){

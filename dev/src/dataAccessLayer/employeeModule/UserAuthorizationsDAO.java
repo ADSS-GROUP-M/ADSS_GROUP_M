@@ -3,7 +3,7 @@ package dataAccessLayer.employeeModule;
 
 import businessLayer.employeeModule.Authorization;
 import businessLayer.employeeModule.User;
-import dataAccessLayer.dalAbstracts.ManyToManyDAO;
+
 import dataAccessLayer.dalAbstracts.SQLExecutor;
 import dataAccessLayer.dalUtils.OfflineResultSet;
 import exceptions.DalException;

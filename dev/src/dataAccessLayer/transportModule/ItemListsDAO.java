@@ -3,6 +3,7 @@ package dataAccessLayer.transportModule;
 import dataAccessLayer.dalAbstracts.CounterDAO;
 import dataAccessLayer.dalAbstracts.DAO;
 import dataAccessLayer.dalAbstracts.SQLExecutor;
+import dataAccessLayer.dalUtils.CreateTableQueryBuilder;
 import dataAccessLayer.dalUtils.OfflineResultSet;
 import exceptions.DalException;
 import objects.transportObjects.ItemList;
@@ -10,24 +11,18 @@ import objects.transportObjects.ItemList;
 import java.sql.SQLException;
 import java.util.List;
 
-public class ItemListsDAO extends DAO<ItemList> implements CounterDAO {
+import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.*;
 
-    public static final String[] types = {"INTEGER"};
-    public static final String[] primary_keys = {"id"};
+public class ItemListsDAO extends DAO<ItemList> implements CounterDAO {
+    public static final String primaryKey = "id";
     public static final String tableName = "item_lists";
     private final ItemListsItemsDAO itemListsItemsDAO;
     private final ItemListIdCounterDAO itemListIdCounterDAO;
 
     public ItemListsDAO(SQLExecutor cursor, ItemListsItemsDAO itemListsItemsDAO, ItemListIdCounterDAO itemListIdCounterDAO) throws DalException {
-        super(cursor,
-				tableName,
-                types,
-                primary_keys,
-                "id"
-        );
+        super(cursor, tableName);
         this.itemListsItemsDAO = itemListsItemsDAO;
         this.itemListIdCounterDAO = itemListIdCounterDAO;
-        initTable();
     }
 
     @Override
@@ -40,6 +35,17 @@ public class ItemListsDAO extends DAO<ItemList> implements CounterDAO {
         } catch (SQLException e) {
             throw new DalException("Failed to initialize item lists table", e);
         }
+    }
+
+    /**
+     * Used to insert data into {@link DAO#createTableQueryBuilder}. <br/>
+     * in order to add columns and foreign keys to the table use:<br/><br/>
+     * {@link CreateTableQueryBuilder#addColumn(String, ColumnType, ColumnModifier...)} <br/><br/>
+     * {@link CreateTableQueryBuilder#addCompositeForeignKey(String, String[], String[])}
+     */
+    @Override
+    protected void initializeCreateTableQueryBuilder() {
+        createTableQueryBuilder.addColumn("id", ColumnType.INTEGER, ColumnModifier.PRIMARY_KEY);
     }
 
     /**

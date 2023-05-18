@@ -1,7 +1,9 @@
 package dataAccessLayer.transportModule;
 
-import dataAccessLayer.dalAbstracts.ManyToManyDAO;
+import dataAccessLayer.dalAbstracts.DAO;
+
 import dataAccessLayer.dalAbstracts.SQLExecutor;
+import dataAccessLayer.dalUtils.CreateTableQueryBuilder;
 import dataAccessLayer.dalUtils.OfflineResultSet;
 import exceptions.DalException;
 import objects.transportObjects.ItemList;
@@ -12,13 +14,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class ItemListsItemsDAO extends ManyToManyDAO<ItemList> {
+import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.*;
 
-    private static final String[] parent_table_names = {"item_lists"};
-    private static final String[] primary_keys = {"id", "loading_type", "item_name"};
-    private static final String[][] foreign_keys = {{"id"}};
-    private static final String[][] references = {{"Id"}};
+public class ItemListsItemsDAO extends DAO<ItemList> {
+    public static final String[] primaryKey = {"id", "loading_type", "item_name"};
     public static final String tableName = "item_lists_items";
+    private static final String PARENT_TABLE_NAME = ItemListsDAO.tableName;
 
     private enum LoadingType {
         loading,
@@ -28,18 +29,22 @@ public class ItemListsItemsDAO extends ManyToManyDAO<ItemList> {
     public static final String[] types = new String[]{"INTEGER", "TEXT", "TEXT", "INTEGER"};
 
     public ItemListsItemsDAO(SQLExecutor cursor) throws DalException {
-        super(cursor,
-				tableName,
-                parent_table_names,
-                types,
-                primary_keys,
-                foreign_keys,
-                references,
-                "id",
-                "loading_type",
-                "item_name",
-                "amount");
-        initTable();
+        super(cursor, tableName);
+    }
+
+    /**
+     * Used to insert data into {@link DAO#createTableQueryBuilder}. <br/>
+     * in order to add columns and foreign keys to the table use:<br/><br/>
+     * {@link CreateTableQueryBuilder#addColumn(String, ColumnType, ColumnModifier...)} <br/><br/>
+     * {@link CreateTableQueryBuilder#addCompositeForeignKey(String, String[], String[])}
+     */
+    @Override
+    protected void initializeCreateTableQueryBuilder() {
+        createTableQueryBuilder.addColumn("id", ColumnType.INTEGER, ColumnModifier.PRIMARY_KEY);
+        createTableQueryBuilder.addColumn("loading_type", ColumnType.TEXT, ColumnModifier.PRIMARY_KEY);
+        createTableQueryBuilder.addColumn("item_name", ColumnType.TEXT, ColumnModifier.PRIMARY_KEY);
+        createTableQueryBuilder.addColumn("amount", ColumnType.INTEGER);
+        createTableQueryBuilder.addForeignKey(ItemListsDAO.tableName,"id",ItemListsDAO.primaryKey);
     }
 
     /**
@@ -70,7 +75,7 @@ public class ItemListsItemsDAO extends ManyToManyDAO<ItemList> {
     public List<ItemList> selectAll() throws DalException {
         OfflineResultSet resultSet;
 
-        String idsQuery = String.format("SELECT id FROM %s where id != -1;", PARENT_TABLE_NAME[0]);
+        String idsQuery = String.format("SELECT id FROM %s where id != -1;", PARENT_TABLE_NAME);
         try{
             resultSet = cursor.executeRead(idsQuery);
         } catch(SQLException e){

@@ -1,7 +1,9 @@
 package dataAccessLayer.employeeModule;
 
-import dataAccessLayer.dalAbstracts.ManyToManyDAO;
+
+import dataAccessLayer.dalAbstracts.DAO;
 import dataAccessLayer.dalAbstracts.SQLExecutor;
+import dataAccessLayer.dalUtils.CreateTableQueryBuilder;
 import dataAccessLayer.dalUtils.OfflineResultSet;
 import exceptions.DalException;
 import javafx.util.Pair;
@@ -11,7 +13,9 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-public class BranchEmployeesDAO extends ManyToManyDAO<Pair<String,String>> {
+import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.*;
+
+public class BranchEmployeesDAO extends DAO<Pair<String,String>> {
     private static final String[] types = new String[]{"TEXT", "TEXT"};
     private static final String[] parent_table_names = {"branches","employees"};
     private static final String[] primary_keys = {"name","employee_id"};
@@ -30,6 +34,21 @@ public class BranchEmployeesDAO extends ManyToManyDAO<Pair<String,String>> {
                 "name",
                 "employee_id");
         initTable();
+    }
+
+    /**
+     * Used to insert data into {@link DAO#createTableQueryBuilder}. <br/>
+     * in order to add columns and foreign keys to the table use:<br/><br/>
+     * {@link CreateTableQueryBuilder#addColumn(String, ColumnType, ColumnModifier...)} <br/><br/>
+     * {@link CreateTableQueryBuilder#addCompositeForeignKey(String, String[], String[])}
+     */
+    @Override
+    protected void initializeCreateTableQueryBuilder() {
+        createTableQueryBuilder.addColumn("name", ColumnType.TEXT);
+        createTableQueryBuilder.addColumn("employee_id", ColumnType.TEXT);
+        createTableQueryBuilder.addForeignKey(BranchesDAO.tableName, "name" , BranchesDAO.primaryKey);
+        createTableQueryBuilder.addForeignKey(EmployeeDAO.tableName, "employee_id",  EmployeeDAO.primaryKey);
+
     }
 
     /**

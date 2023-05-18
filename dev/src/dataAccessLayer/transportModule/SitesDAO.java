@@ -26,18 +26,20 @@ public class SitesDAO extends DAO<Site> {
      * Used to insert data into {@link DAO#createTableQueryBuilder}. <br/>
      * in order to add columns and foreign keys to the table use:<br/><br/>
      * {@link CreateTableQueryBuilder#addColumn(String, ColumnType, ColumnModifier...)} <br/><br/>
-     * {@link CreateTableQueryBuilder#addCompositeForeignKey(String, String[], String[])}
+     * {@link CreateTableQueryBuilder#addForeignKey(String, String, String)}<br/><br/>
+     * {@link CreateTableQueryBuilder#addCompositeForeignKey(String[], String, String[])}
      */
     @Override
     protected void initializeCreateTableQueryBuilder() {
-        createTableQueryBuilder.addColumn("name", ColumnType.TEXT, ColumnModifier.NOT_NULL, ColumnModifier.PRIMARY_KEY);
-        createTableQueryBuilder.addColumn("address", ColumnType.TEXT, ColumnModifier.NOT_NULL, ColumnModifier.UNIQUE);
-        createTableQueryBuilder.addColumn("transport_zone", ColumnType.TEXT, ColumnModifier.NOT_NULL);
-        createTableQueryBuilder.addColumn("contact_name", ColumnType.TEXT, ColumnModifier.NOT_NULL);
-        createTableQueryBuilder.addColumn("contact_phone", ColumnType.TEXT, ColumnModifier.NOT_NULL);
-        createTableQueryBuilder.addColumn("site_type", ColumnType.TEXT, ColumnModifier.NOT_NULL);
-        createTableQueryBuilder.addColumn("latitude", ColumnType.REAL, ColumnModifier.NOT_NULL);
-        createTableQueryBuilder.addColumn("longitude", ColumnType.REAL, ColumnModifier.NOT_NULL);
+        createTableQueryBuilder
+                .addColumn("name", ColumnType.TEXT, ColumnModifier.NOT_NULL, ColumnModifier.PRIMARY_KEY)
+                .addColumn("address", ColumnType.TEXT, ColumnModifier.NOT_NULL, ColumnModifier.UNIQUE)
+                .addColumn("transport_zone", ColumnType.TEXT, ColumnModifier.NOT_NULL)
+                .addColumn("contact_name", ColumnType.TEXT, ColumnModifier.NOT_NULL)
+                .addColumn("contact_phone", ColumnType.TEXT, ColumnModifier.NOT_NULL)
+                .addColumn("site_type", ColumnType.TEXT, ColumnModifier.NOT_NULL)
+                .addColumn("latitude", ColumnType.REAL, ColumnModifier.NOT_NULL)
+                .addColumn("longitude", ColumnType.REAL, ColumnModifier.NOT_NULL);
     }
 
     /**

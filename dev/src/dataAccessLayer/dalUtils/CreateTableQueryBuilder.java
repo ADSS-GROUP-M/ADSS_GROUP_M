@@ -1,5 +1,7 @@
 package dataAccessLayer.dalUtils;
 
+import org.sqlite.SQLiteDataSource;
+
 import java.util.*;
 
 public class CreateTableQueryBuilder {
@@ -37,7 +39,7 @@ public class CreateTableQueryBuilder {
         query = new StringBuilder();
     }
 
-    public void addColumn(String columnName, ColumnType type, ColumnModifier ... modifiers ){
+    public CreateTableQueryBuilder addColumn(String columnName, ColumnType type, ColumnModifier ... modifiers ){
 
         boolean isPrimaryKey = Arrays.asList(modifiers).contains(ColumnModifier.PRIMARY_KEY);
         if(isPrimaryKey){
@@ -50,24 +52,29 @@ public class CreateTableQueryBuilder {
                 .toArray(ColumnModifier[]::new);
 
         table_columns.add(new Column(columnName, type, modifiers));
+        return this;
     }
 
     /**
      * This method adds a composite foreign key
-     * @param columnNames the columns' names in the current table
+     *
+     * @param columnNames      the columns' names in the current table
      * @param referenceColumns the columns' names in the parent table
      */
-    public void addCompositeForeignKey(String parentTableName, String[] columnNames, String[] referenceColumns){
+    public CreateTableQueryBuilder addCompositeForeignKey(String[] columnNames, String parentTableName, String[] referenceColumns){
         foreignKeys.add(new ForeignKey(parentTableName, columnNames, referenceColumns));
+        return this;
     }
 
     /**
      * This method adds a non-composite foreign key
-     * @param columnName the column name in the current table
+     *
+     * @param columnName      the column name in the current table
      * @param referenceColumn the column name in the parent table
      */
-    public void addForeignKey(String parentTableName, String columnName, String referenceColumn){
+    public CreateTableQueryBuilder addForeignKey(String columnName, String parentTableName, String referenceColumn){
         foreignKeys.add(new ForeignKey(parentTableName, new String[]{columnName}, new String[]{referenceColumn}));
+        return this;
     }
 
     public String buildQuery(){
@@ -111,8 +118,10 @@ public class CreateTableQueryBuilder {
     }
 
     private void buildPrimaryKeys() {
-        query.append(String.format("PRIMARY KEY(%s),\n",
-                columnsArrayToString(primaryKeys.toArray(new String[0]))));
+        if(primaryKeys.isEmpty() == false){
+            query.append(String.format("PRIMARY KEY(%s),\n",
+                    columnsArrayToString(primaryKeys.toArray(new String[0]))));
+        }
     }
 
     private String columnsArrayToString(String[] columns) {

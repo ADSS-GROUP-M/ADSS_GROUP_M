@@ -3,7 +3,9 @@ package dataAccessLayer.employeeModule;
 import businessLayer.employeeModule.Employee;
 import businessLayer.employeeModule.Role;
 
+import dataAccessLayer.dalAbstracts.DAO;
 import dataAccessLayer.dalAbstracts.SQLExecutor;
+import dataAccessLayer.dalUtils.CreateTableQueryBuilder;
 import dataAccessLayer.dalUtils.OfflineResultSet;
 import exceptions.DalException;
 import javafx.util.Pair;
@@ -14,13 +16,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-public class EmployeeRolesDAO extends ManyToManyDAO<Pair<String,Role>> {
+import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.*;
 
-    private static final String[] types = new String[]{"TEXT", "TEXT"};
-    private static final String[] parent_table_names = {"employees"};
-    private static final String[] primary_keys = {Columns.employee_id.name(), Columns.role.name()};
-    private static final String[][] foreign_keys = {{Columns.employee_id.name()}};
-    private static final String[][] references = {{"id"}};
+public class EmployeeRolesDAO extends DAO<Pair<String,Role>> {
+
+    public static final String[] primaryKey = {Columns.employee_id.name(), Columns.role.name()};
     public static final String tableName = "employee_roles";
 
     private enum Columns {
@@ -29,16 +29,7 @@ public class EmployeeRolesDAO extends ManyToManyDAO<Pair<String,Role>> {
     }
 
     public EmployeeRolesDAO(SQLExecutor cursor) throws DalException {
-        super(cursor,
-                tableName,
-                parent_table_names,
-                types,
-                primary_keys,
-                foreign_keys,
-                references,
-                Columns.employee_id.name(),
-                Columns.role.name());
-        initTable();
+        super(cursor, tableName);
     }
 
     /**
@@ -71,6 +62,21 @@ public class EmployeeRolesDAO extends ManyToManyDAO<Pair<String,Role>> {
      */
     public Set<Role> selectAll(Employee employee) throws DalException {
         return selectAllByEmployeeId(employee.getId());
+    }
+
+    /**
+     * Used to insert data into {@link DAO#createTableQueryBuilder}. <br/>
+     * in order to add columns and foreign keys to the table use:<br/><br/>
+     * {@link CreateTableQueryBuilder#addColumn(String, ColumnType, ColumnModifier...)} <br/><br/>
+     * {@link CreateTableQueryBuilder#addForeignKey(String, String, String)}<br/><br/>
+     * {@link CreateTableQueryBuilder#addCompositeForeignKey(String[], String, String[])}
+     */
+    @Override
+    protected void initializeCreateTableQueryBuilder() {
+        createTableQueryBuilder
+                .addColumn(Columns.employee_id.name(), ColumnType.TEXT, ColumnModifier.PRIMARY_KEY)
+                .addColumn(Columns.role.name(), ColumnType.TEXT, ColumnModifier.PRIMARY_KEY)
+                .addForeignKey(Columns.employee_id.name(), EmployeeDAO.tableName, EmployeeDAO.primaryKey);
     }
 
     /**

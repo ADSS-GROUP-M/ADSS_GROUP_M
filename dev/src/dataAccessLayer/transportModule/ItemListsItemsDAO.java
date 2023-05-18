@@ -26,8 +26,6 @@ public class ItemListsItemsDAO extends DAO<ItemList> {
         unloading
     }
 
-    public static final String[] types = new String[]{"INTEGER", "TEXT", "TEXT", "INTEGER"};
-
     public ItemListsItemsDAO(SQLExecutor cursor) throws DalException {
         super(cursor, tableName);
     }
@@ -36,15 +34,17 @@ public class ItemListsItemsDAO extends DAO<ItemList> {
      * Used to insert data into {@link DAO#createTableQueryBuilder}. <br/>
      * in order to add columns and foreign keys to the table use:<br/><br/>
      * {@link CreateTableQueryBuilder#addColumn(String, ColumnType, ColumnModifier...)} <br/><br/>
-     * {@link CreateTableQueryBuilder#addCompositeForeignKey(String, String[], String[])}
+     * {@link CreateTableQueryBuilder#addForeignKey(String, String, String)}<br/><br/>
+     * {@link CreateTableQueryBuilder#addCompositeForeignKey(String[], String, String[])}
      */
     @Override
     protected void initializeCreateTableQueryBuilder() {
-        createTableQueryBuilder.addColumn("id", ColumnType.INTEGER, ColumnModifier.PRIMARY_KEY);
-        createTableQueryBuilder.addColumn("loading_type", ColumnType.TEXT, ColumnModifier.PRIMARY_KEY);
-        createTableQueryBuilder.addColumn("item_name", ColumnType.TEXT, ColumnModifier.PRIMARY_KEY);
-        createTableQueryBuilder.addColumn("amount", ColumnType.INTEGER);
-        createTableQueryBuilder.addForeignKey(ItemListsDAO.tableName,"id",ItemListsDAO.primaryKey);
+        createTableQueryBuilder
+                .addColumn("id", ColumnType.INTEGER, ColumnModifier.PRIMARY_KEY)
+                .addColumn("loading_type", ColumnType.TEXT, ColumnModifier.PRIMARY_KEY)
+                .addColumn("item_name", ColumnType.TEXT, ColumnModifier.PRIMARY_KEY)
+                .addColumn("amount", ColumnType.INTEGER)
+                .addForeignKey("id", ItemListsDAO.tableName, ItemListsDAO.primaryKey);
     }
 
     /**

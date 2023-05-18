@@ -10,9 +10,6 @@ public class TransportIdCounterDAO extends CounterDAOBase {
     private static final String COLUMN_NAME = "counter";
 
     public TransportIdCounterDAO(SQLExecutor cursor) throws DalException {
-        super(cursor,
-                tableName,
-                COLUMN_NAME);
-        initTable();
+        super(cursor, tableName, COLUMN_NAME);
     }
 }

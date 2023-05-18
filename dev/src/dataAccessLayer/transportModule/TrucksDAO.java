@@ -26,15 +26,17 @@ public class TrucksDAO extends DAO<Truck> {
      * Used to insert data into {@link DAO#createTableQueryBuilder}. <br/>
      * in order to add columns and foreign keys to the table use:<br/><br/>
      * {@link CreateTableQueryBuilder#addColumn(String, ColumnType, ColumnModifier...)} <br/><br/>
-     * {@link CreateTableQueryBuilder#addCompositeForeignKey(String, String[], String[])}
+     * {@link CreateTableQueryBuilder#addForeignKey(String, String, String)}<br/><br/>
+     * {@link CreateTableQueryBuilder#addCompositeForeignKey(String[], String, String[])}
      */
     @Override
     protected void initializeCreateTableQueryBuilder() {
-        createTableQueryBuilder.addColumn("id", ColumnType.TEXT, ColumnModifier.PRIMARY_KEY);
-        createTableQueryBuilder.addColumn("model", ColumnType.TEXT, ColumnModifier.NOT_NULL);
-        createTableQueryBuilder.addColumn("base_weight", ColumnType.INTEGER, ColumnModifier.NOT_NULL);
-        createTableQueryBuilder.addColumn("max_weight", ColumnType.INTEGER, ColumnModifier.NOT_NULL);
-        createTableQueryBuilder.addColumn("cooling_capacity", ColumnType.TEXT, ColumnModifier.NOT_NULL);
+        createTableQueryBuilder
+                .addColumn("id", ColumnType.TEXT, ColumnModifier.PRIMARY_KEY)
+                .addColumn("model", ColumnType.TEXT, ColumnModifier.NOT_NULL)
+                .addColumn("base_weight", ColumnType.INTEGER, ColumnModifier.NOT_NULL)
+                .addColumn("max_weight", ColumnType.INTEGER, ColumnModifier.NOT_NULL)
+                .addColumn("cooling_capacity", ColumnType.TEXT, ColumnModifier.NOT_NULL);
     }
 
     /**

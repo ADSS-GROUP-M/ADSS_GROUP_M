@@ -16,39 +16,27 @@ import java.util.List;
 import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.*;
 
 public class BranchEmployeesDAO extends DAO<Pair<String,String>> {
-    private static final String[] types = new String[]{"TEXT", "TEXT"};
-    private static final String[] parent_table_names = {"branches","employees"};
-    private static final String[] primary_keys = {"name","employee_id"};
-    private static final String[][] foreign_keys = {{"name"},{"employee_id"}};
-    private static final String[][] references = {{"name"},{"id"}};
+
+    public static final String[] primaryKey = {"name","employee_id"};
     public static final String tableName = "branch_employees";
 
     public BranchEmployeesDAO(SQLExecutor cursor) throws DalException {
-        super(cursor,
-                tableName,
-                parent_table_names,
-                types,
-                primary_keys,
-                foreign_keys,
-                references,
-                "name",
-                "employee_id");
-        initTable();
+        super(cursor, tableName);
     }
 
     /**
      * Used to insert data into {@link DAO#createTableQueryBuilder}. <br/>
      * in order to add columns and foreign keys to the table use:<br/><br/>
      * {@link CreateTableQueryBuilder#addColumn(String, ColumnType, ColumnModifier...)} <br/><br/>
-     * {@link CreateTableQueryBuilder#addCompositeForeignKey(String, String[], String[])}
+     * {@link CreateTableQueryBuilder#addCompositeForeignKey(String[], String, String[])}
      */
     @Override
     protected void initializeCreateTableQueryBuilder() {
-        createTableQueryBuilder.addColumn("name", ColumnType.TEXT);
-        createTableQueryBuilder.addColumn("employee_id", ColumnType.TEXT);
-        createTableQueryBuilder.addForeignKey(BranchesDAO.tableName, "name" , BranchesDAO.primaryKey);
-        createTableQueryBuilder.addForeignKey(EmployeeDAO.tableName, "employee_id",  EmployeeDAO.primaryKey);
-
+        createTableQueryBuilder
+                .addColumn("name", ColumnType.TEXT, ColumnModifier.PRIMARY_KEY)
+                .addColumn("employee_id", ColumnType.TEXT, ColumnModifier.PRIMARY_KEY)
+                .addForeignKey("name", BranchesDAO.tableName, BranchesDAO.primaryKey)
+                .addForeignKey("employee_id", EmployeeDAO.tableName, EmployeeDAO.primaryKey);
     }
 
     /**

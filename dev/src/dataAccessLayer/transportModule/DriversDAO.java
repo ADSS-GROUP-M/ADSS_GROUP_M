@@ -28,13 +28,15 @@ public class DriversDAO extends DAO<Driver> {
      * Used to insert data into {@link DAO#createTableQueryBuilder}. <br/>
      * in order to add columns and foreign keys to the table use:<br/><br/>
      * {@link CreateTableQueryBuilder#addColumn(String, ColumnType, ColumnModifier...)} <br/><br/>
-     * {@link CreateTableQueryBuilder#addCompositeForeignKey(String, String[], String[])}
+     * {@link CreateTableQueryBuilder#addForeignKey(String, String, String)}<br/><br/>
+     * {@link CreateTableQueryBuilder#addCompositeForeignKey(String[], String, String[])}
      */
     @Override
     protected void initializeCreateTableQueryBuilder() {
-        createTableQueryBuilder.addColumn("id", ColumnType.TEXT, ColumnModifier.PRIMARY_KEY);
-        createTableQueryBuilder.addColumn("license_type", ColumnType.TEXT, ColumnModifier.NOT_NULL);
-        createTableQueryBuilder.addForeignKey(EmployeeDAO.tableName, "id", EmployeeDAO.primaryKey);
+        createTableQueryBuilder
+                .addColumn("id", ColumnType.TEXT, ColumnModifier.PRIMARY_KEY)
+                .addColumn("license_type", ColumnType.TEXT, ColumnModifier.NOT_NULL)
+                .addForeignKey("id", EmployeeDAO.tableName, EmployeeDAO.primaryKey);
     }
 
     /**
@@ -80,7 +82,7 @@ public class DriversDAO extends DAO<Driver> {
                     SELECT %s.id,%s.name,license_type FROM %s
                     INNER JOIN %s ON %s.id = %s.id;
                         """,
-            TABLE_NAME,PARENT_TABLE_NAME[0], TABLE_NAME, PARENT_TABLE_NAME[0], TABLE_NAME, PARENT_TABLE_NAME[0]);
+            TABLE_NAME,PARENT_TABLE_NAME, TABLE_NAME, PARENT_TABLE_NAME, TABLE_NAME, PARENT_TABLE_NAME);
         OfflineResultSet resultSet;
         try {
             resultSet = cursor.executeRead(query);

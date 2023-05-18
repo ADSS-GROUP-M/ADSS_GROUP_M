@@ -27,18 +27,20 @@ public class DeliveryRoutesDAO extends DAO<DeliveryRoute> {
      * Used to insert data into {@link DAO#createTableQueryBuilder}. <br/>
      * in order to add columns and foreign keys to the table use:<br/><br/>
      * {@link CreateTableQueryBuilder#addColumn(String, ColumnType, ColumnModifier...)} <br/><br/>
-     * {@link CreateTableQueryBuilder#addCompositeForeignKey(String, String[], String[])}
+     * {@link CreateTableQueryBuilder#addForeignKey(String, String, String)}<br/><br/>
+     * {@link CreateTableQueryBuilder#addCompositeForeignKey(String[], String, String[])}
      */
     @Override
     protected void initializeCreateTableQueryBuilder() {
-        createTableQueryBuilder.addColumn("transport_id", ColumnType.INTEGER, ColumnModifier.PRIMARY_KEY);
-        createTableQueryBuilder.addColumn("destination_index", ColumnType.INTEGER, ColumnModifier.NOT_NULL, ColumnModifier.PRIMARY_KEY);
-        createTableQueryBuilder.addColumn("destination_name", ColumnType.TEXT, ColumnModifier.NOT_NULL);
-        createTableQueryBuilder.addColumn("item_list_id", ColumnType.INTEGER, ColumnModifier.NOT_NULL);
-        createTableQueryBuilder.addColumn("expected_arrival_time", ColumnType.TEXT, ColumnModifier.NOT_NULL);
-        createTableQueryBuilder.addForeignKey(TransportsDAO.tableName, "transport_id", TransportsDAO.primaryKey);
-        createTableQueryBuilder.addForeignKey(SitesDAO.tableName, "destination_name", SitesDAO.primaryKey);
-        createTableQueryBuilder.addForeignKey(ItemListsDAO.tableName, "item_list_id", ItemListsDAO.primaryKey);
+        createTableQueryBuilder
+                .addColumn("transport_id", ColumnType.INTEGER, ColumnModifier.PRIMARY_KEY)
+                .addColumn("destination_index", ColumnType.INTEGER, ColumnModifier.NOT_NULL, ColumnModifier.PRIMARY_KEY)
+                .addColumn("destination_name", ColumnType.TEXT, ColumnModifier.NOT_NULL)
+                .addColumn("item_list_id", ColumnType.INTEGER, ColumnModifier.NOT_NULL)
+                .addColumn("expected_arrival_time", ColumnType.TEXT, ColumnModifier.NOT_NULL)
+                .addForeignKey("transport_id", TransportsDAO.tableName, TransportsDAO.primaryKey)
+                .addForeignKey("destination_name", SitesDAO.tableName, SitesDAO.primaryKey)
+                .addForeignKey("item_list_id", ItemListsDAO.tableName, ItemListsDAO.primaryKey);
     }
 
     /**

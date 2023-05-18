@@ -30,17 +30,19 @@ public class TransportsDAO extends DAO<Transport> implements CounterDAO {
      * Used to insert data into {@link DAO#createTableQueryBuilder}. <br/>
      * in order to add columns and foreign keys to the table use:<br/><br/>
      * {@link CreateTableQueryBuilder#addColumn(String, ColumnType, ColumnModifier...)} <br/><br/>
-     * {@link CreateTableQueryBuilder#addCompositeForeignKey(String, String[], String[])}
+     * {@link CreateTableQueryBuilder#addForeignKey(String, String, String)}<br/><br/>
+     * {@link CreateTableQueryBuilder#addCompositeForeignKey(String[], String, String[])}
      */
     @Override
     protected void initializeCreateTableQueryBuilder() {
-        createTableQueryBuilder.addColumn("id", ColumnType.INTEGER, ColumnModifier.PRIMARY_KEY);
-        createTableQueryBuilder.addColumn("driver_id", ColumnType.TEXT, ColumnModifier.NOT_NULL);
-        createTableQueryBuilder.addColumn("truck_id", ColumnType.TEXT, ColumnModifier.NOT_NULL);
-        createTableQueryBuilder.addColumn("departure_time", ColumnType.TEXT, ColumnModifier.NOT_NULL);
-        createTableQueryBuilder.addColumn("weight", ColumnType.INTEGER, ColumnModifier.NOT_NULL);
-        createTableQueryBuilder.addForeignKey(DriversDAO.tableName, "driver_id", DriversDAO.primaryKey);
-        createTableQueryBuilder.addForeignKey(TrucksDAO.tableName, "truck_id", TrucksDAO.primaryKey);
+        createTableQueryBuilder
+                .addColumn("id", ColumnType.INTEGER, ColumnModifier.PRIMARY_KEY)
+                .addColumn("driver_id", ColumnType.TEXT, ColumnModifier.NOT_NULL)
+                .addColumn("truck_id", ColumnType.TEXT, ColumnModifier.NOT_NULL)
+                .addColumn("departure_time", ColumnType.TEXT, ColumnModifier.NOT_NULL)
+                .addColumn("weight", ColumnType.INTEGER, ColumnModifier.NOT_NULL)
+                .addForeignKey("driver_id", DriversDAO.tableName, DriversDAO.primaryKey)
+                .addForeignKey("truck_id", TrucksDAO.tableName, TrucksDAO.primaryKey);
     }
 
     /**

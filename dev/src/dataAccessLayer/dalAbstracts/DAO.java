@@ -21,6 +21,7 @@ public abstract class DAO<T> {
         this.cursor = cursor;
         this.TABLE_NAME = tableName;
         this.cache = new Cache<>();
+        this.createTableQueryBuilder = new CreateTableQueryBuilder(tableName);
         initTable();
     }
 
@@ -38,7 +39,8 @@ public abstract class DAO<T> {
      * Used to insert data into {@link DAO#createTableQueryBuilder}. <br/>
      * in order to add columns and foreign keys to the table use:<br/><br/>
      * {@link CreateTableQueryBuilder#addColumn(String, ColumnType, ColumnModifier...)} <br/><br/>
-     * {@link CreateTableQueryBuilder#addCompositeForeignKey(String, String[], String[])}
+     * {@link CreateTableQueryBuilder#addForeignKey(String, String, String)}<br/><br/>
+     * {@link CreateTableQueryBuilder#addCompositeForeignKey(String[], String, String[])}
      */
     protected abstract void initializeCreateTableQueryBuilder();
 

@@ -4,6 +4,7 @@ import businessLayer.employeeModule.Employee;
 import businessLayer.employeeModule.Role;
 import dataAccessLayer.dalAbstracts.DAO;
 import dataAccessLayer.dalAbstracts.SQLExecutor;
+import dataAccessLayer.dalUtils.CreateTableQueryBuilder;
 import dataAccessLayer.dalUtils.OfflineResultSet;
 import exceptions.DalException;
 
@@ -13,34 +14,44 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.*;
+
 public class EmployeeDAO extends DAO<Employee> {
 
-    private static final String[] types = new String[]{"TEXT", "TEXT", "TEXT", "REAL", "REAL", "REAL", "TEXT", "TEXT", "TEXT"};
+    private static final String[] ALL_COLUMNS = {"id", "name", "bank_details", "hourly_salary_rate", "monthly_hours", "salary_bonus", "employment_date", "employment_conditions", "details"};
+
     public static final String primaryKey = "id";
     public static final String tableName = "employees";
     private final EmployeeRolesDAO employeeRolesDAO;
 
     public EmployeeDAO(SQLExecutor cursor, EmployeeRolesDAO employeeRolesDAO) throws DalException{
-        super(cursor,
-                tableName,
-                types,
-                primaryKey,
-                "id",
-                "name",
-                "bank_details",
-                "hourly_salary_rate",
-                "monthly_hours",
-                "salary_bonus",
-                "employment_date",
-                "employment_conditions",
-                "details"
-        );
-        initTable();
+        super(cursor, tableName);
         this.employeeRolesDAO = employeeRolesDAO;
     }
 
     public Employee select(String id) throws DalException {
         return select(Employee.getLookupObject(id));
+    }
+
+    /**
+     * Used to insert data into {@link DAO#createTableQueryBuilder}. <br/>
+     * in order to add columns and foreign keys to the table use:<br/><br/>
+     * {@link CreateTableQueryBuilder#addColumn(String, ColumnType, ColumnModifier...)} <br/><br/>
+     * {@link CreateTableQueryBuilder#addForeignKey(String, String, String)}<br/><br/>
+     * {@link CreateTableQueryBuilder#addCompositeForeignKey(String[], String, String[])}
+     */
+    @Override
+    protected void initializeCreateTableQueryBuilder() {
+        createTableQueryBuilder
+                .addColumn("id", ColumnType.TEXT, ColumnModifier.PRIMARY_KEY)
+                .addColumn("name", ColumnType.TEXT, ColumnModifier.NOT_NULL)
+                .addColumn("bank_details", ColumnType.TEXT, ColumnModifier.NOT_NULL)
+                .addColumn("hourly_salary_rate", ColumnType.REAL, ColumnModifier.NOT_NULL)
+                .addColumn("monthly_hours", ColumnType.REAL, ColumnModifier.NOT_NULL)
+                .addColumn("salary_bonus", ColumnType.REAL, ColumnModifier.NOT_NULL)
+                .addColumn("employment_date", ColumnType.TEXT, ColumnModifier.NOT_NULL)
+                .addColumn("employment_conditions", ColumnType.TEXT, ColumnModifier.NOT_NULL)
+                .addColumn("details", ColumnType.TEXT, ColumnModifier.NOT_NULL);
     }
 
     /**
@@ -53,7 +64,7 @@ public class EmployeeDAO extends DAO<Employee> {
         if (cache.contains(object)) {
             return cache.get(object);
         }
-        String query = String.format("SELECT * FROM %s WHERE %s = '%s'", TABLE_NAME, PRIMARY_KEYS[0], object.getId());
+        String query = String.format("SELECT * FROM %s WHERE %s = '%s'", TABLE_NAME, primaryKey, object.getId());
         OfflineResultSet resultSet;
         try {
             resultSet = cursor.executeRead(query);
@@ -132,7 +143,7 @@ public class EmployeeDAO extends DAO<Employee> {
                     ALL_COLUMNS[6], emp.getEmploymentDate().toString(),
                     ALL_COLUMNS[7], emp.getEmploymentConditions(),
                     ALL_COLUMNS[8], emp.getDetails(),
-                    PRIMARY_KEYS[0], emp.getId());
+                    primaryKey, emp.getId());
             if (cursor.executeWrite(queryString) == 0)
                 throw new DalException("No employee with id " + emp.getId() + " was found");
             cache.put(emp);
@@ -151,7 +162,7 @@ public class EmployeeDAO extends DAO<Employee> {
         Object[] keys = {emp.getId()};
         this.employeeRolesDAO.delete(emp);
 
-        String query = String.format("DELETE FROM %s WHERE %s = '%s';", TABLE_NAME, PRIMARY_KEYS[0], emp.getId());
+        String query = String.format("DELETE FROM %s WHERE %s = '%s';", TABLE_NAME, primaryKey, emp.getId());
         try {
             if (cursor.executeWrite(query) == 0)
                 throw new DalException("No employee with id " + emp.getId() + " was found");

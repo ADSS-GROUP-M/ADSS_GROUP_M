@@ -26,16 +26,18 @@ public class SitesRoutesDAO extends DAO<SiteRoute> {
      * Used to insert data into {@link DAO#createTableQueryBuilder}. <br/>
      * in order to add columns and foreign keys to the table use:<br/><br/>
      * {@link CreateTableQueryBuilder#addColumn(String, ColumnType, ColumnModifier...)} <br/><br/>
-     * {@link CreateTableQueryBuilder#addCompositeForeignKey(String, String[], String[])}
+     * {@link CreateTableQueryBuilder#addForeignKey(String, String, String)}<br/><br/>
+     * {@link CreateTableQueryBuilder#addCompositeForeignKey(String[], String, String[])}
      */
     @Override
     protected void initializeCreateTableQueryBuilder() {
-        createTableQueryBuilder.addColumn("source", ColumnType.TEXT, ColumnModifier.PRIMARY_KEY);
-        createTableQueryBuilder.addColumn("destination", ColumnType.TEXT, ColumnModifier.PRIMARY_KEY);
-        createTableQueryBuilder.addColumn("distance", ColumnType.REAL, ColumnModifier.NOT_NULL);
-        createTableQueryBuilder.addColumn("duration", ColumnType.REAL, ColumnModifier.NOT_NULL);
-        createTableQueryBuilder.addForeignKey(SitesDAO.tableName, "source", "address");
-        createTableQueryBuilder.addForeignKey(SitesDAO.tableName, "destination", "address");
+        createTableQueryBuilder
+                .addColumn("source", ColumnType.TEXT, ColumnModifier.PRIMARY_KEY)
+                .addColumn("destination", ColumnType.TEXT, ColumnModifier.PRIMARY_KEY)
+                .addColumn("distance", ColumnType.REAL, ColumnModifier.NOT_NULL)
+                .addColumn("duration", ColumnType.REAL, ColumnModifier.NOT_NULL)
+                .addForeignKey("source", SitesDAO.tableName, "address")
+                .addForeignKey("destination", SitesDAO.tableName, "address");
     }
 
     /**

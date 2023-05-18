@@ -23,11 +23,8 @@ public class ItemListsDAO extends DAO<ItemList> implements CounterDAO {
         super(cursor, tableName);
         this.itemListsItemsDAO = itemListsItemsDAO;
         this.itemListIdCounterDAO = itemListIdCounterDAO;
-    }
 
-    @Override
-    protected void initTable() throws DalException{
-        super.initTable();
+        // need to add -1 to the table if it doesn't exist
         try {
             if(exists(ItemList.getLookupObject(-1)) == false){
                 cursor.executeWrite("INSERT INTO %s (id) VALUES (-1);".formatted(TABLE_NAME));
@@ -41,7 +38,8 @@ public class ItemListsDAO extends DAO<ItemList> implements CounterDAO {
      * Used to insert data into {@link DAO#createTableQueryBuilder}. <br/>
      * in order to add columns and foreign keys to the table use:<br/><br/>
      * {@link CreateTableQueryBuilder#addColumn(String, ColumnType, ColumnModifier...)} <br/><br/>
-     * {@link CreateTableQueryBuilder#addCompositeForeignKey(String, String[], String[])}
+     * {@link CreateTableQueryBuilder#addForeignKey(String, String, String)}<br/><br/>
+     * {@link CreateTableQueryBuilder#addCompositeForeignKey(String[], String, String[])}
      */
     @Override
     protected void initializeCreateTableQueryBuilder() {

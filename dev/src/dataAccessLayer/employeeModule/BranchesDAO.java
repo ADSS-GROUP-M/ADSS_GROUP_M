@@ -19,7 +19,7 @@ import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.*;
 
 public class BranchesDAO extends DAO<Branch> {
 
-    public static final String primaryKeys = "name";
+    public static final String primaryKey = "name";
     public static final String tableName = "branches";
 
     private final BranchEmployeesDAO branchEmployeesDAO;
@@ -41,17 +41,19 @@ public class BranchesDAO extends DAO<Branch> {
     /**
      * Used to insert data into {@link DAO#createTableQueryBuilder}. <br/>
      * in order to add columns and foreign keys to the table use:<br/><br/>
-     * {@link CreateTableQueryBuilder#addColumn(String, ColumnType, ColumnModifier...)} <br/><br/>
-     * {@link CreateTableQueryBuilder#addCompositeForeignKey(String, String[], String[])}
+     * {@link CreateTableQueryBuilder#addColumn(String, ColumnType, ColumnModifier...)}<br/><br/>
+     * {@link CreateTableQueryBuilder#addForeignKey(String, String, String)}<br/><br/>
+     * {@link CreateTableQueryBuilder#addCompositeForeignKey(String[], String, String[])}
      */
     @Override
     protected void initializeCreateTableQueryBuilder() {
-        createTableQueryBuilder.addColumn("name", ColumnType.TEXT, ColumnModifier.PRIMARY_KEY);
-        createTableQueryBuilder.addColumn("morning_shift_start", ColumnType.TEXT, ColumnModifier.NOT_NULL);
-        createTableQueryBuilder.addColumn("morning_shift_end", ColumnType.TEXT, ColumnModifier.NOT_NULL);
-        createTableQueryBuilder.addColumn("evening_shift_start", ColumnType.TEXT, ColumnModifier.NOT_NULL);
-        createTableQueryBuilder.addColumn("evening_shift_end", ColumnType.TEXT, ColumnModifier.NOT_NULL);
-        createTableQueryBuilder.addForeignKey(SitesDAO.tableName, "name", SitesDAO.primaryKey);
+        createTableQueryBuilder
+                .addColumn("name", ColumnType.TEXT, ColumnModifier.PRIMARY_KEY)
+                .addColumn("morning_shift_start", ColumnType.TEXT, ColumnModifier.NOT_NULL)
+                .addColumn("morning_shift_end", ColumnType.TEXT, ColumnModifier.NOT_NULL)
+                .addColumn("evening_shift_start", ColumnType.TEXT, ColumnModifier.NOT_NULL)
+                .addColumn("evening_shift_end", ColumnType.TEXT, ColumnModifier.NOT_NULL)
+                .addForeignKey("name", SitesDAO.tableName, SitesDAO.primaryKey);
     }
 
     /**

@@ -2,6 +2,7 @@ package dataAccessLayer.transportModule;
 
 import dataAccessLayer.dalAbstracts.DAO;
 import dataAccessLayer.dalAbstracts.SQLExecutor;
+import dataAccessLayer.dalUtils.CreateTableQueryBuilder;
 import dataAccessLayer.dalUtils.OfflineResultSet;
 import exceptions.DalException;
 import objects.transportObjects.Site;
@@ -9,6 +10,8 @@ import objects.transportObjects.Site;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
+
+import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.*;
 
 public class SitesDAO extends DAO<Site> {
 
@@ -34,19 +37,17 @@ public class SitesDAO extends DAO<Site> {
 
     @Override
     protected void initTable() throws DalException {
-        String query = """
-                CREATE TABLE IF NOT EXISTS "sites" (
-                	"name"	TEXT NOT NULL,
-                	"address"	TEXT NOT NULL UNIQUE,
-                	"transport_zone"	TEXT NOT NULL,
-                	"contact_name"	TEXT NOT NULL,
-                	"contact_phone"	TEXT NOT NULL,
-                	"site_type"	TEXT NOT NULL,
-                	"latitude"	REAL NOT NULL,
-                	"longitude"	REAL NOT NULL,
-                	PRIMARY KEY("name")
-                )
-                """;
+
+        createTableQueryBuilder.addColumn("name", ColumnType.TEXT, ColumnModifier.NOT_NULL, ColumnModifier.PRIMARY_KEY);
+        createTableQueryBuilder.addColumn("address", ColumnType.TEXT, ColumnModifier.NOT_NULL, ColumnModifier.UNIQUE);
+        createTableQueryBuilder.addColumn("transport_zone", ColumnType.TEXT, ColumnModifier.NOT_NULL);
+        createTableQueryBuilder.addColumn("contact_name", ColumnType.TEXT, ColumnModifier.NOT_NULL);
+        createTableQueryBuilder.addColumn("contact_phone", ColumnType.TEXT, ColumnModifier.NOT_NULL);
+        createTableQueryBuilder.addColumn("site_type", ColumnType.TEXT, ColumnModifier.NOT_NULL);
+        createTableQueryBuilder.addColumn("latitude", ColumnType.REAL, ColumnModifier.NOT_NULL);
+        createTableQueryBuilder.addColumn("longitude", ColumnType.REAL, ColumnModifier.NOT_NULL);
+
+        String query = createTableQueryBuilder.buildQuery();
         try {
             cursor.executeWrite(query);
         } catch (SQLException e) {

@@ -34,7 +34,6 @@ public abstract class ManyToManyDAO<T> extends DAO<T>{
      * Initialize the table if it doesn't exist
      */
     protected void initTable() throws DalException{
-        CreateTableQueryBuilder queryBuilder = new CreateTableQueryBuilder(TABLE_NAME);
 
         // columns
         for (int i = 0; i < ALL_COLUMNS.length; i++) {
@@ -48,17 +47,17 @@ public abstract class ManyToManyDAO<T> extends DAO<T>{
                 modifiers.add(CreateTableQueryBuilder.ColumnModifier.PRIMARY_KEY);
             }
 
-            queryBuilder.addColumn(ALL_COLUMNS[i],
+            createTableQueryBuilder.addColumn(ALL_COLUMNS[i],
                     CreateTableQueryBuilder.ColumnType.valueOf(TYPES[i]),
                     modifiers.toArray(new CreateTableQueryBuilder.ColumnModifier[0]));
         }
 
         // foreign keys
         for(int i = 0; i < FOREIGN_KEYS.length ; i++){
-            queryBuilder.addForeignKey( PARENT_TABLE_NAME[i],FOREIGN_KEYS[i], REFERENCES[i]);
+            createTableQueryBuilder.addForeignKey( PARENT_TABLE_NAME[i],FOREIGN_KEYS[i], REFERENCES[i]);
         }
 
-        String query = queryBuilder.buildQuery();
+        String query = createTableQueryBuilder.buildQuery();
         try {
             cursor.executeWrite(query);
         } catch (SQLException e) {

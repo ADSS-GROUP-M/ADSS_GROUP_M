@@ -19,8 +19,9 @@ public abstract class DAO<T> {
     protected final String[] ALL_COLUMNS;
     protected final String[] PRIMARY_KEYS;
     protected final String[] TYPES;
-
     protected final Cache<T> cache;
+    protected CreateTableQueryBuilder createTableQueryBuilder;
+
 
     protected DAO(SQLExecutor cursor ,String tableName,String[] types, String[] primaryKeys, String ... allColumns) {
         this.cursor = cursor;
@@ -29,13 +30,13 @@ public abstract class DAO<T> {
         this.ALL_COLUMNS = allColumns;
         this.TYPES = types;
         this.cache = new Cache<>();
+        this.createTableQueryBuilder = new CreateTableQueryBuilder(tableName);
     }
 
     /**
      * Initialize the table if it doesn't exist
      */
     protected void initTable() throws DalException{
-        CreateTableQueryBuilder queryBuilder = new CreateTableQueryBuilder(TABLE_NAME);
 
         // columns
         for (int i = 0; i < ALL_COLUMNS.length; i++) {
@@ -49,10 +50,10 @@ public abstract class DAO<T> {
                 modifiers.add(ColumnModifier.PRIMARY_KEY);
             }
 
-            queryBuilder.addColumn(ALL_COLUMNS[i], ColumnType.valueOf(TYPES[i]), modifiers.toArray(new ColumnModifier[0]));
+            createTableQueryBuilder.addColumn(ALL_COLUMNS[i], ColumnType.valueOf(TYPES[i]), modifiers.toArray(new ColumnModifier[0]));
         }
 
-        String query = queryBuilder.buildQuery();
+        String query = createTableQueryBuilder.buildQuery();
         try {
             cursor.executeWrite(query);
         } catch (SQLException e) {

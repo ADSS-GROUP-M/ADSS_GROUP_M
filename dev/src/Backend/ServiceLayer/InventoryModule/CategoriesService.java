@@ -58,8 +58,7 @@ public class CategoriesService {
 
     public Response getCategoryReport(String branch, List<String> categories){
         try {
-            categoryController.getProductsPerCategory(categories, Branch.valueOf(branch));
-            return new Response<>("Succeed");
+            return new Response<>(categoryController.getProductsPerCategory(categories, Branch.valueOf(branch)));
         } catch (Exception e) {
             return Response.createErrorResponse("Error " + e.getMessage());
         }

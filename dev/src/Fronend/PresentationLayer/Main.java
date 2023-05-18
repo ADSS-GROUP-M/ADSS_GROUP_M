@@ -9,10 +9,10 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        System.out.println("HI!\nwhat menu would you like?\n\t1. Suppliers\n\t2. Inventory");
-        int choice = Integer.parseInt(sc.nextLine());
         boolean run = true;
         while (run) {
+            System.out.println("HI!\nwhat menu would you like?\n\t1. Suppliers\n\t2. Inventory");
+            int choice = Integer.parseInt(sc.nextLine());
             if (choice == 1) {
                 new SupplierMain().run();
             } else if (choice == 2) {

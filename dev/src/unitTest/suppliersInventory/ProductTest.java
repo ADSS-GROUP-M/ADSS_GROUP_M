@@ -1,0 +1,80 @@
+package suppliersInventory;
+
+import businessLayer.businessLayerUsage.Branch;
+import businessLayer.inventoryModule.Product;
+import businessLayer.inventoryModule.ProductController;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class ProductTest {
+    private static String catalog_number = "23";
+    private static String catalog_name = "productTest";
+    private static String manufacturer = "tnuva";
+    private static double storePrice = 5.0;
+    private static Branch branch = Branch.branch1;
+
+    private static List<String> serialNumbers = new ArrayList<>();
+
+    private static String serial_number = "0444";
+    private static String supplierId = "123";
+    private static double supplierPrice = 7.0;
+    private static double supplierDiscount = 6.3;
+    private static String location = "store";
+    private static LocalDateTime expireDate = LocalDateTime.now().plusDays(7);
+
+    private Product product;
+
+    private ProductController productController = ProductController.ProductController();
+
+
+    @BeforeEach
+    public void setUp() {
+        //create new product
+//        productController.createProduct(catalog_number,branch,catalog_name,manufacturer,storePrice);
+        List<String> serial_numbers = new ArrayList<>();
+        serial_numbers.add(serial_number);
+//        productController.createProductItem(serial_numbers,catalog_number,branch,supplierId,supplierPrice,supplierDiscount, location,expireDate, "y");
+    }
+
+    @AfterEach
+    public void after(){
+        productController.updateProduct(branch,null,catalog_number,null,-1,2);
+    }
+
+
+
+    // Test 1
+    @Test
+    public void getProductItemFromList() {
+        product = productController.getProduct(branch,catalog_number);
+        assertEquals("get item from product list failed",product.getProduct(serial_number).getSerial_number(),serial_number);
+    }
+
+    // Test 2
+    @Test
+    public void updateMin() {
+        productController.updateProduct(branch,null,catalog_number,null,-1,6);
+        try {
+            assertTrue(productController.isProductLack(branch,catalog_number), "update min notification failed");
+        }
+        catch (Exception e){
+            fail(e.getMessage());
+        }
+    }
+
+    // Test 3
+    @Test
+    public void productDefective() {
+        productController.updateProductItem(branch,1,serial_number,catalog_number,-1,null,-1,-1,-1,null);
+//        product.reportAsDefective(serial_number);
+        assertTrue(productController.getProduct(branch,catalog_number).getProduct(serial_number).isDefective(), "update defective item failed");
+    }
+
+}

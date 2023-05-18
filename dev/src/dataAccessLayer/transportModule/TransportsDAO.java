@@ -1,8 +1,9 @@
 package dataAccessLayer.transportModule;
 
 import dataAccessLayer.dalAbstracts.CounterDAO;
-import dataAccessLayer.dalAbstracts.ManyToManyDAO;
+import dataAccessLayer.dalAbstracts.DAO;
 import dataAccessLayer.dalAbstracts.SQLExecutor;
+import dataAccessLayer.dalUtils.CreateTableQueryBuilder;
 import dataAccessLayer.dalUtils.OfflineResultSet;
 import exceptions.DalException;
 import objects.transportObjects.Transport;
@@ -10,35 +11,36 @@ import objects.transportObjects.Transport;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.ListIterator;
 
-public class TransportsDAO extends ManyToManyDAO<Transport> implements CounterDAO {
+import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.*;
 
-    private static final String[] types = {"INTEGER", "TEXT", "TEXT", "TEXT", "INTEGER"};
-    private static final String[] parent_tables = {"truck_drivers", "trucks"};
-    private static final String[] primary_keys = {"id"};
-    private static final String[][] foreign_keys = {{"driver_id"}, {"truck_id"}};
-    private static final String[][] references = {{"id"}, {"id"}};
-    private static final String tableName = "transports";
+public class TransportsDAO extends DAO<Transport> implements CounterDAO {
+
+    public static final String primaryKey = "id";
+    public static final String tableName = "transports";
 
     private final TransportIdCounterDAO counterDAO;
 
     public TransportsDAO(SQLExecutor cursor, TransportIdCounterDAO counterDAO) throws DalException{
-        super(cursor,
-				tableName,
-                parent_tables,
-                types,
-                primary_keys,
-                foreign_keys,
-                references,
-                "id",
-                "driver_id",
-                "truck_id",
-                "departure_time",
-                "weight"
-        );
+        super(cursor, tableName);
         this.counterDAO = counterDAO;
-        initTable();
+    }
+
+    /**
+     * Used to insert data into {@link DAO#createTableQueryBuilder}. <br/>
+     * in order to add columns and foreign keys to the table use:<br/><br/>
+     * {@link CreateTableQueryBuilder#addColumn(String, ColumnType, ColumnModifier...)} <br/><br/>
+     * {@link CreateTableQueryBuilder#addCompositeForeignKey(String, String[], String[])}
+     */
+    @Override
+    protected void initializeCreateTableQueryBuilder() {
+        createTableQueryBuilder.addColumn("id", ColumnType.INTEGER, ColumnModifier.PRIMARY_KEY);
+        createTableQueryBuilder.addColumn("driver_id", ColumnType.TEXT, ColumnModifier.NOT_NULL);
+        createTableQueryBuilder.addColumn("truck_id", ColumnType.TEXT, ColumnModifier.NOT_NULL);
+        createTableQueryBuilder.addColumn("departure_time", ColumnType.TEXT, ColumnModifier.NOT_NULL);
+        createTableQueryBuilder.addColumn("weight", ColumnType.INTEGER, ColumnModifier.NOT_NULL);
+        createTableQueryBuilder.addForeignKey(DriversDAO.tableName, "driver_id", DriversDAO.primaryKey);
+        createTableQueryBuilder.addForeignKey(TrucksDAO.tableName, "truck_id", TrucksDAO.primaryKey);
     }
 
     /**

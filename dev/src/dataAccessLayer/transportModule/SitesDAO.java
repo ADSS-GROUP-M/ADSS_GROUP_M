@@ -15,29 +15,21 @@ import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.*;
 
 public class SitesDAO extends DAO<Site> {
 
-    private static final String[] types = new String[]{"TEXT","TEXT", "TEXT", "TEXT", "TEXT", "TEXT", "REAL", "REAL"};
-    private static final String[] primary_keys = {"name"};
     public static final String tableName = "sites";
+    public static final String primaryKey = "name";
 
     public SitesDAO(SQLExecutor cursor) throws DalException {
-        super(cursor,
-				tableName,
-                types,
-                primary_keys,
-                "name",
-                "address",
-                "transport_zone",
-                "contact_name",
-                "contact_phone",
-                "site_type",
-                "latitude",
-                "longitude");
-        initTable();
+        super(cursor, tableName);
     }
 
+    /**
+     * Used to insert data into {@link DAO#createTableQueryBuilder}. <br/>
+     * in order to add columns and foreign keys to the table use:<br/><br/>
+     * {@link CreateTableQueryBuilder#addColumn(String, ColumnType, ColumnModifier...)} <br/><br/>
+     * {@link CreateTableQueryBuilder#addCompositeForeignKey(String, String[], String[])}
+     */
     @Override
-    protected void initTable() throws DalException {
-
+    protected void initializeCreateTableQueryBuilder() {
         createTableQueryBuilder.addColumn("name", ColumnType.TEXT, ColumnModifier.NOT_NULL, ColumnModifier.PRIMARY_KEY);
         createTableQueryBuilder.addColumn("address", ColumnType.TEXT, ColumnModifier.NOT_NULL, ColumnModifier.UNIQUE);
         createTableQueryBuilder.addColumn("transport_zone", ColumnType.TEXT, ColumnModifier.NOT_NULL);
@@ -46,13 +38,6 @@ public class SitesDAO extends DAO<Site> {
         createTableQueryBuilder.addColumn("site_type", ColumnType.TEXT, ColumnModifier.NOT_NULL);
         createTableQueryBuilder.addColumn("latitude", ColumnType.REAL, ColumnModifier.NOT_NULL);
         createTableQueryBuilder.addColumn("longitude", ColumnType.REAL, ColumnModifier.NOT_NULL);
-
-        String query = createTableQueryBuilder.buildQuery();
-        try {
-            cursor.executeWrite(query);
-        } catch (SQLException e) {
-            throw new DalException("Failed to create sites table", e);
-        }
     }
 
     /**

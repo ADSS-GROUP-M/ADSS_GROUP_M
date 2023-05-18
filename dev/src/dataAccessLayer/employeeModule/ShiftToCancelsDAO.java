@@ -1,7 +1,7 @@
 package dataAccessLayer.employeeModule;
 
 import businessLayer.employeeModule.Shift;
-import dataAccessLayer.dalAbstracts.ManyToManyDAO;
+
 import dataAccessLayer.dalAbstracts.SQLExecutor;
 import dataAccessLayer.dalAssociationClasses.employeeModule.ShiftCancel;
 import dataAccessLayer.dalUtils.OfflineResultSet;

@@ -1,43 +1,45 @@
 package dataAccessLayer.transportModule;
 
-import dataAccessLayer.dalAbstracts.ManyToManyDAO;
+import dataAccessLayer.dalAbstracts.DAO;
 import dataAccessLayer.dalAbstracts.SQLExecutor;
+import dataAccessLayer.dalUtils.CreateTableQueryBuilder;
 import dataAccessLayer.dalUtils.OfflineResultSet;
 import exceptions.DalException;
 import objects.transportObjects.DeliveryRoute;
-import objects.transportObjects.Transport;
 
 import java.sql.SQLException;
 import java.time.LocalTime;
 import java.util.*;
 
-public class DeliveryRoutesDAO extends ManyToManyDAO<DeliveryRoute> {
+import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.*;
 
-    private static final String[] types = {"INTEGER", "INTEGER" , "TEXT", "INTEGER", "TEXT"};
-    private static final String[] parent_tables = {"transports", "sites", "item_lists"};
-    private static final String[] primary_keys = {"transport_id", "destination_index"};
-    private static final String[][] foreign_keys = {{"transport_id"}, {"destination_name"}, {"item_list_id"}};
-    private static final String[][] references = {{"id"}, {"name"}, {"id"}};
-    public static final String tableName = "delivery_routes";
+public class DeliveryRoutesDAO extends DAO<DeliveryRoute> {
+
+    private static final String tableName = "delivery_routes";
 
     public DeliveryRoutesDAO(SQLExecutor cursor) throws DalException{
-        super(cursor,
-				tableName,
-                parent_tables,
-                types,
-                primary_keys,
-                foreign_keys,
-                references,
-                "transport_id",
-                "destination_index",
-                "destination_name",
-                "item_list_id",
-                "expected_arrival_time"
-        );
-        initTable();
+        super(cursor, tableName);
     }
 
     //TODO: ADD CACHING
+
+    /**
+     * Used to insert data into {@link DAO#createTableQueryBuilder}. <br/>
+     * in order to add columns and foreign keys to the table use:<br/><br/>
+     * {@link CreateTableQueryBuilder#addColumn(String, ColumnType, ColumnModifier...)} <br/><br/>
+     * {@link CreateTableQueryBuilder#addCompositeForeignKey(String, String[], String[])}
+     */
+    @Override
+    protected void initializeCreateTableQueryBuilder() {
+        createTableQueryBuilder.addColumn("transport_id", ColumnType.INTEGER, ColumnModifier.PRIMARY_KEY);
+        createTableQueryBuilder.addColumn("destination_index", ColumnType.INTEGER, ColumnModifier.NOT_NULL, ColumnModifier.PRIMARY_KEY);
+        createTableQueryBuilder.addColumn("destination_name", ColumnType.TEXT, ColumnModifier.NOT_NULL);
+        createTableQueryBuilder.addColumn("item_list_id", ColumnType.INTEGER, ColumnModifier.NOT_NULL);
+        createTableQueryBuilder.addColumn("expected_arrival_time", ColumnType.TEXT, ColumnModifier.NOT_NULL);
+        createTableQueryBuilder.addForeignKey(TransportsDAO.tableName, "transport_id", TransportsDAO.primaryKey);
+        createTableQueryBuilder.addForeignKey(SitesDAO.tableName, "destination_name", SitesDAO.primaryKey);
+        createTableQueryBuilder.addForeignKey(ItemListsDAO.tableName, "item_list_id", ItemListsDAO.primaryKey);
+    }
 
     /**
      * @param object getLookUpObject(identifier) of the object to select

@@ -16,15 +16,15 @@ import java.util.Set;
 public class EmployeeDAO extends DAO<Employee> {
 
     private static final String[] types = new String[]{"TEXT", "TEXT", "TEXT", "REAL", "REAL", "REAL", "TEXT", "TEXT", "TEXT"};
-    private static final String[] primary_keys = {"id"};
-    private static final String tableName = "employees";
+    public static final String primaryKey = "id";
+    public static final String tableName = "employees";
     private final EmployeeRolesDAO employeeRolesDAO;
 
     public EmployeeDAO(SQLExecutor cursor, EmployeeRolesDAO employeeRolesDAO) throws DalException{
         super(cursor,
                 tableName,
                 types,
-                primary_keys,
+                primaryKey,
                 "id",
                 "name",
                 "bank_details",

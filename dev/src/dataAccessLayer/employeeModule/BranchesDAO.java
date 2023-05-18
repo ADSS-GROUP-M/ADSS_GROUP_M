@@ -1,9 +1,12 @@
 package dataAccessLayer.employeeModule;
 
 import businessLayer.employeeModule.Branch;
-import dataAccessLayer.dalAbstracts.ManyToManyDAO;
+
+import dataAccessLayer.dalAbstracts.DAO;
 import dataAccessLayer.dalAbstracts.SQLExecutor;
+import dataAccessLayer.dalUtils.CreateTableQueryBuilder;
 import dataAccessLayer.dalUtils.OfflineResultSet;
+import dataAccessLayer.transportModule.SitesDAO;
 import exceptions.DalException;
 import javafx.util.Pair;
 
@@ -11,33 +14,18 @@ import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
+import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.*;
 
 
-public class BranchesDAO extends ManyToManyDAO<Branch> {
+public class BranchesDAO extends DAO<Branch> {
 
-    private static final String[] types = new String[]{"TEXT", "TEXT", "TEXT", "TEXT", "TEXT"};
-    private static final String[] parent_table_names = {"sites"};
-    private static final String[] primary_keys = {"name"};
-    private static final String[][] foreign_keys = {{"name"}};
-    private static final String[][] references = {{"name"}};
+    public static final String primaryKeys = "name";
     public static final String tableName = "branches";
 
     private final BranchEmployeesDAO branchEmployeesDAO;
 
     public BranchesDAO(SQLExecutor cursor, BranchEmployeesDAO branchEmployeesDAO) throws DalException {
-        super(cursor,
-                tableName,
-                parent_table_names,
-                types,
-                primary_keys,
-                foreign_keys,
-                references,
-                "name",
-                "morning_shift_start",
-                "morning_shift_end",
-                "evening_shift_start",
-                "evening_shift_end");
-        initTable();
+        super(cursor, tableName);
         this.branchEmployeesDAO = branchEmployeesDAO;
     }
 
@@ -48,6 +36,22 @@ public class BranchesDAO extends ManyToManyDAO<Branch> {
      */
     public Branch select(String branchAddress) throws DalException {
         return select(Branch.getLookupObject(branchAddress));
+    }
+
+    /**
+     * Used to insert data into {@link DAO#createTableQueryBuilder}. <br/>
+     * in order to add columns and foreign keys to the table use:<br/><br/>
+     * {@link CreateTableQueryBuilder#addColumn(String, ColumnType, ColumnModifier...)} <br/><br/>
+     * {@link CreateTableQueryBuilder#addCompositeForeignKey(String, String[], String[])}
+     */
+    @Override
+    protected void initializeCreateTableQueryBuilder() {
+        createTableQueryBuilder.addColumn("name", ColumnType.TEXT, ColumnModifier.PRIMARY_KEY);
+        createTableQueryBuilder.addColumn("morning_shift_start", ColumnType.TEXT, ColumnModifier.NOT_NULL);
+        createTableQueryBuilder.addColumn("morning_shift_end", ColumnType.TEXT, ColumnModifier.NOT_NULL);
+        createTableQueryBuilder.addColumn("evening_shift_start", ColumnType.TEXT, ColumnModifier.NOT_NULL);
+        createTableQueryBuilder.addColumn("evening_shift_end", ColumnType.TEXT, ColumnModifier.NOT_NULL);
+        createTableQueryBuilder.addForeignKey(SitesDAO.tableName, "name", SitesDAO.primaryKey);
     }
 
     /**

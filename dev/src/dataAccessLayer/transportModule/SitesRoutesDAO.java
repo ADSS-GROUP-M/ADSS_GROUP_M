@@ -1,8 +1,10 @@
 package dataAccessLayer.transportModule;
 
-import dataAccessLayer.dalAbstracts.ManyToManyDAO;
+import dataAccessLayer.dalAbstracts.DAO;
+
 import dataAccessLayer.dalAbstracts.SQLExecutor;
 import dataAccessLayer.dalAssociationClasses.transportModule.SiteRoute;
+import dataAccessLayer.dalUtils.CreateTableQueryBuilder;
 import dataAccessLayer.dalUtils.OfflineResultSet;
 import exceptions.DalException;
 
@@ -10,29 +12,30 @@ import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
-public class SitesRoutesDAO extends ManyToManyDAO<SiteRoute> {
+import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.*;
 
-    private static final String[] types = {"TEXT", "TEXT" , "REAL", "REAL"};
-    private static final String[] parent_tables = {"sites", "sites"};
-    private static final String[] primary_keys = {"source", "destination"};
-    private static final String[][] foreign_keys = {{"source"}, {"destination"}};
-    private static final String[][] references = {{"address"}, {"address"}};
+public class SitesRoutesDAO extends DAO<SiteRoute> {
+    public static final String[] primaryKey = {"source", "destination"};
     public static final String tableName = "sites_routes";
 
     public SitesRoutesDAO(SQLExecutor cursor) throws DalException{
-        super(cursor,
-                tableName,
-                parent_tables,
-                types,
-                primary_keys,
-                foreign_keys,
-                references,
-                "source",
-                "destination",
-                "distance",
-                "duration"
-        );
-        initTable();
+        super(cursor, tableName);
+    }
+
+    /**
+     * Used to insert data into {@link DAO#createTableQueryBuilder}. <br/>
+     * in order to add columns and foreign keys to the table use:<br/><br/>
+     * {@link CreateTableQueryBuilder#addColumn(String, ColumnType, ColumnModifier...)} <br/><br/>
+     * {@link CreateTableQueryBuilder#addCompositeForeignKey(String, String[], String[])}
+     */
+    @Override
+    protected void initializeCreateTableQueryBuilder() {
+        createTableQueryBuilder.addColumn("source", ColumnType.TEXT, ColumnModifier.PRIMARY_KEY);
+        createTableQueryBuilder.addColumn("destination", ColumnType.TEXT, ColumnModifier.PRIMARY_KEY);
+        createTableQueryBuilder.addColumn("distance", ColumnType.REAL, ColumnModifier.NOT_NULL);
+        createTableQueryBuilder.addColumn("duration", ColumnType.REAL, ColumnModifier.NOT_NULL);
+        createTableQueryBuilder.addForeignKey(SitesDAO.tableName, "source", "address");
+        createTableQueryBuilder.addForeignKey(SitesDAO.tableName, "destination", "address");
     }
 
     /**

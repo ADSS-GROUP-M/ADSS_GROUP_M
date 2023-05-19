@@ -1,7 +1,7 @@
 package dataAccessLayer.employeeModule;
 
 
-import dataAccessLayer.dalAbstracts.DAO;
+import dataAccessLayer.dalAbstracts.DAOBase;
 import dataAccessLayer.dalAbstracts.SQLExecutor;
 import dataAccessLayer.dalUtils.CreateTableQueryBuilder;
 import dataAccessLayer.dalUtils.OfflineResultSet;
@@ -16,7 +16,7 @@ import java.util.List;
 import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnModifier;
 import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnType;
 
-public class BranchEmployeesDAO extends DAO<Pair<String,String>> {
+public class BranchEmployeesDAO extends DAOBase<Pair<String,String>> {
 
     public static final String[] primaryKey = {"name","employee_id"};
     public static final String tableName = "branch_employees";
@@ -26,7 +26,7 @@ public class BranchEmployeesDAO extends DAO<Pair<String,String>> {
     }
 
     /**
-     * Used to insert data into {@link DAO#createTableQueryBuilder}. <br/>
+     * Used to insert data into {@link DAOBase#createTableQueryBuilder}. <br/>
      * in order to add columns and foreign keys to the table use:<br/><br/>
      * {@link CreateTableQueryBuilder#addColumn(String, ColumnType, ColumnModifier...)} <br/><br/>
      * {@link CreateTableQueryBuilder#addCompositeForeignKey(String[], String, String[])}

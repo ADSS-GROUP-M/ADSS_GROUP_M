@@ -21,12 +21,14 @@ public class DalFactory {
     private BranchesDAO branchesDAO;
     private BranchEmployeesDAO branchEmployeesDAO;
     private DriversDAO driversDAO;
-    private TransportsDAO transportsDAO;
     private SitesRoutesDAO sitesRoutesDAO;
-    private DeliveryRoutesDAO deliveryRoutesDAO;
     private ItemListsItemsDAO itemListsItemsDAO;
     private final SQLExecutor cursor;
+    private TransportsDAO transportsDAO;
 
+    private DeliveryRoutesDAO deliveryRoutesDAO;
+
+    private TransportsMetaDataDAO transportsMetaDataDAO;
     public DalFactory() throws DalException {
         cursor = new SQLExecutorProductionImpl();
         buildInstances(cursor);
@@ -46,7 +48,6 @@ public class DalFactory {
         itemListsItemsDAO = new ItemListsItemsDAO(cursor);
         trucksDAO = new TrucksDAO(cursor);
         driversDAO = new DriversDAO(cursor);
-        deliveryRoutesDAO = new DeliveryRoutesDAO(cursor);
 
         //============== dependencies ============== |
         /*(1)*/ userAuthorizationsDAO = new UserAuthorizationsDAO(cursor);
@@ -78,8 +79,18 @@ public class DalFactory {
 
         //============== dependencies ============== |
         /*(1)*/ TransportIdCounterDAO transportIdCounterDAO = new TransportIdCounterDAO(cursor);
-        /*(2)*/ transportsDAO = new TransportsDAO(cursor, transportIdCounterDAO);
+        /*(2)*/ transportsMetaDataDAO = new TransportsMetaDataDAO(cursor, transportIdCounterDAO);
+        /*(2)*/ deliveryRoutesDAO = new DeliveryRoutesDAO(cursor);
+        /*(3)*/ transportsDAO = new TransportsDAO(transportsMetaDataDAO, deliveryRoutesDAO);
         //========================================== |
+    }
+
+    public DeliveryRoutesDAO deliveryRoutesDAO() {
+        return deliveryRoutesDAO;
+    }
+
+    public TransportsMetaDataDAO transportsMetaDataDAO() {
+        return transportsMetaDataDAO;
     }
 
     public EmployeeDAO employeeDAO() {
@@ -122,10 +133,6 @@ public class DalFactory {
         return branchEmployeesDAO;
     }
 
-    public TransportsDAO transportsDAO() {
-        return transportsDAO;
-    }
-
     public SitesRoutesDAO sitesRoutesDAO() {
         return sitesRoutesDAO;
     }
@@ -134,12 +141,12 @@ public class DalFactory {
         return itemListsItemsDAO;
     }
 
-    public SQLExecutor cursor() {
-        return cursor;
+    public TransportsDAO transportsDAO() {
+        return transportsDAO;
     }
 
-    public DeliveryRoutesDAO deliveryRoutesDAO() {
-        return deliveryRoutesDAO;
+    public SQLExecutor cursor() {
+        return cursor;
     }
 
     public static void clearTestDB(){
@@ -152,7 +159,6 @@ public class DalFactory {
             factory.shiftDAO().clearTable();
             factory.userDAO().clearTable();
 
-            factory.deliveryRoutesDAO().clearTable();
             factory.transportsDAO().clearTable();
 
             factory.trucksDAO().clearTable();

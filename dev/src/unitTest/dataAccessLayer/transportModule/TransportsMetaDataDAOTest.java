@@ -3,10 +3,10 @@ package dataAccessLayer.transportModule;
 import businessLayer.employeeModule.Employee;
 import businessLayer.employeeModule.Role;
 import dataAccessLayer.DalFactory;
+import dataAccessLayer.dalAssociationClasses.transportModule.TransportMetaData;
 import dataAccessLayer.employeeModule.EmployeeDAO;
 import exceptions.DalException;
 import objects.transportObjects.Driver;
-import objects.transportObjects.Transport;
 import objects.transportObjects.Truck;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,17 +14,16 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
 import static dataAccessLayer.DalFactory.TESTING_DB_NAME;
 import static org.junit.jupiter.api.Assertions.*;
 
-class TransportsDAOTest {
+class TransportsMetaDataDAOTest {
 
-    private TransportsDAO transportsDAO;
-    private Transport transport;
+    private TransportsMetaDataDAO transportsMetaDataDAO;
+    private TransportMetaData transport;
     private Driver driver;
     private Truck truck;
 
@@ -42,9 +41,7 @@ class TransportsDAOTest {
         employee.addRole(Role.GeneralWorker);
         driver = new Driver(employee.getId(),employee.getName(), Driver.LicenseType.C3);
 
-        transport = new Transport(1,
-                new LinkedList<>(),
-                new HashMap<>(),
+        transport = new TransportMetaData(1,
                 driver.id(),
                 truck.id(),
                 LocalDateTime.of(2023, 2, 2, 12, 0),
@@ -56,7 +53,7 @@ class TransportsDAOTest {
             TrucksDAO trucksDAO = factory.trucksDAO();
             EmployeeDAO employeeDAO = factory.employeeDAO();
             DriversDAO driversDAO = factory.driversDAO();
-            transportsDAO = factory.transportsDAO();
+            transportsMetaDataDAO = factory.transportsMetaDataDAO();
 
             trucksDAO.insert(truck);
             employeeDAO.insert(employee);
@@ -74,9 +71,9 @@ class TransportsDAOTest {
     @Test
     void insert_and_select_success() {
         try {
-            transportsDAO.insert(transport);
-            transportsDAO.clearCache();
-            Transport selected = transportsDAO.select(transport);
+            transportsMetaDataDAO.insert(transport);
+            transportsMetaDataDAO.clearCache();
+            TransportMetaData selected = transportsMetaDataDAO.select(transport);
             assertDeepEquals(transport, selected);
         } catch (DalException e) {
             fail(e.getMessage(),e.getCause());
@@ -87,30 +84,28 @@ class TransportsDAOTest {
     void selectAll() {
 
         //set up
-        LinkedList<Transport> transports = new LinkedList<>();
+        LinkedList<TransportMetaData> transports = new LinkedList<>();
         List.of(1,2,3,4,5).forEach(
             i -> {
                 try {
-                    Transport toAdd = new Transport(i,
-                            new LinkedList<>(),
-                            new HashMap<>(),
+                    TransportMetaData toAdd = new TransportMetaData(i,
                             driver.id(),
                             truck.id(),
                             LocalDateTime.of(2020, 1, 1, 1, 1+i),
                             15000+i
                     );
                     transports.add(toAdd);
-                    transportsDAO.insert(toAdd);
+                    transportsMetaDataDAO.insert(toAdd);
                 } catch (DalException e) {
                     fail(e.getMessage(),e.getCause());
                 }
             }
         );
-        transportsDAO.clearCache();
+        transportsMetaDataDAO.clearCache();
 
         //test
         try {
-            List<Transport> selected = transportsDAO.selectAll();
+            List<TransportMetaData> selected = transportsMetaDataDAO.selectAll();
             assertEquals(transports.size(), selected.size());
             transports.forEach(
                     transport ->{
@@ -126,8 +121,8 @@ class TransportsDAOTest {
     void select_from_cache() {
         try {
             //set up
-            transportsDAO.insert(transport);
-            Transport selected = transportsDAO.select(transport);
+            transportsMetaDataDAO.insert(transport);
+            TransportMetaData selected = transportsMetaDataDAO.select(transport);
             assertDeepEquals(transport, selected);
         } catch (DalException e) {
             fail(e.getMessage(),e.getCause());
@@ -136,13 +131,13 @@ class TransportsDAOTest {
 
     @Test
     void select_does_not_exist(){
-        assertThrows(DalException.class, () -> transportsDAO.select(transport));
+        assertThrows(DalException.class, () -> transportsMetaDataDAO.select(transport));
     }
 
     @Test
     void select_all_does_not_exist(){
         try {
-            assertEquals(0, transportsDAO.selectAll().size());
+            assertEquals(0, transportsMetaDataDAO.selectAll().size());
         } catch (DalException e) {
             throw new RuntimeException(e);
         }
@@ -153,21 +148,19 @@ class TransportsDAOTest {
     void update() {
         try {
             //set up
-            Transport updatedTransport = new Transport(transport.id(),
-                    new LinkedList<>(),
-                    new HashMap<>(),
+            TransportMetaData updatedTransport = new TransportMetaData(transport.transportId(),
                     driver.id(),
                     truck.id(),
                     LocalDateTime.of(1997, 2, 2, 2, 2),
                     10000
             );
-            transportsDAO.insert(transport);
-            transportsDAO.clearCache();
+            transportsMetaDataDAO.insert(transport);
+            transportsMetaDataDAO.clearCache();
 
             //test
-            transportsDAO.update(updatedTransport);
-            transportsDAO.clearCache();
-            Transport selected = transportsDAO.select(Transport.getLookupObject(transport.id()));
+            transportsMetaDataDAO.update(updatedTransport);
+            transportsMetaDataDAO.clearCache();
+            TransportMetaData selected = transportsMetaDataDAO.select(TransportMetaData.getLookupObject(transport.transportId()));
             assertDeepEquals(updatedTransport, selected);
         } catch (DalException e) {
             fail(e.getMessage(),e.getCause());
@@ -176,21 +169,21 @@ class TransportsDAOTest {
 
     @Test
     void update_does_not_exist() {
-        assertThrows(DalException.class, () -> transportsDAO.update(transport));
+        assertThrows(DalException.class, () -> transportsMetaDataDAO.update(transport));
     }
 
     @Test
     void delete() {
         try {
             //set up
-            transportsDAO.insert(transport);
-            transportsDAO.clearCache();
-            assertDoesNotThrow(() -> transportsDAO.select(Transport.getLookupObject(transport.id())));
-            transportsDAO.clearCache();
+            transportsMetaDataDAO.insert(transport);
+            transportsMetaDataDAO.clearCache();
+            assertDoesNotThrow(() -> transportsMetaDataDAO.select(TransportMetaData.getLookupObject(transport.transportId())));
+            transportsMetaDataDAO.clearCache();
 
             //test
-            transportsDAO.delete(transport);
-            assertThrows(DalException.class, () -> transportsDAO.select(Transport.getLookupObject(transport.id())));
+            transportsMetaDataDAO.delete(transport);
+            assertThrows(DalException.class, () -> transportsMetaDataDAO.select(TransportMetaData.getLookupObject(transport.transportId())));
         } catch (DalException e) {
             fail(e.getMessage(),e.getCause());
         }
@@ -198,18 +191,18 @@ class TransportsDAOTest {
 
     @Test
     void delete_does_not_exist() {
-        assertThrows(DalException.class, () -> transportsDAO.delete(transport));
+        assertThrows(DalException.class, () -> transportsMetaDataDAO.delete(transport));
     }
 
     @Test
     void exists_not_in_cache(){
         try {
             //set up
-            transportsDAO.insert(transport);
-            transportsDAO.clearCache();
+            transportsMetaDataDAO.insert(transport);
+            transportsMetaDataDAO.clearCache();
 
             //test
-            assertTrue(transportsDAO.exists(transport));
+            assertTrue(transportsMetaDataDAO.exists(transport));
         } catch (DalException e) {
             fail(e.getMessage(),e.getCause());
         }
@@ -219,10 +212,10 @@ class TransportsDAOTest {
     void exists_in_cache(){
         try {
             //set up
-            transportsDAO.insert(transport);
+            transportsMetaDataDAO.insert(transport);
 
             //test
-            assertTrue(transportsDAO.exists(transport));
+            assertTrue(transportsMetaDataDAO.exists(transport));
         } catch (DalException e) {
             fail(e.getMessage(),e.getCause());
         }
@@ -232,7 +225,7 @@ class TransportsDAOTest {
     @Test
     void exists_does_not_exist(){
         try {
-            assertFalse(transportsDAO.exists(transport));
+            assertFalse(transportsMetaDataDAO.exists(transport));
         } catch (DalException e) {
             throw new RuntimeException(e);
         }
@@ -241,7 +234,7 @@ class TransportsDAOTest {
     @Test
     void getCounter(){
         try {
-            assertEquals(1, transportsDAO.selectCounter());
+            assertEquals(1, transportsMetaDataDAO.selectCounter());
         } catch (DalException e) {
             throw new RuntimeException(e);
         }
@@ -250,10 +243,10 @@ class TransportsDAOTest {
     @Test
     void incrementCounter(){
         try {
-            transportsDAO.incrementCounter();
-            assertEquals(2, transportsDAO.selectCounter());
-            transportsDAO.incrementCounter();
-            assertEquals(3, transportsDAO.selectCounter());
+            transportsMetaDataDAO.incrementCounter();
+            assertEquals(2, transportsMetaDataDAO.selectCounter());
+            transportsMetaDataDAO.incrementCounter();
+            assertEquals(3, transportsMetaDataDAO.selectCounter());
         } catch (DalException e) {
             throw new RuntimeException(e);
         }
@@ -261,10 +254,10 @@ class TransportsDAOTest {
     @Test
     void resetCounter(){
         try {
-            transportsDAO.incrementCounter();
-            transportsDAO.incrementCounter();
-            transportsDAO.resetCounter();
-            assertEquals(1, transportsDAO.selectCounter());
+            transportsMetaDataDAO.incrementCounter();
+            transportsMetaDataDAO.incrementCounter();
+            transportsMetaDataDAO.resetCounter();
+            assertEquals(1, transportsMetaDataDAO.selectCounter());
         } catch (DalException e) {
             throw new RuntimeException(e);
         }
@@ -273,24 +266,19 @@ class TransportsDAOTest {
     @Test
     void insert_counter(){
         try{
-            transportsDAO.insertCounter(5);
-            assertEquals(5, transportsDAO.selectCounter());
+            transportsMetaDataDAO.insertCounter(5);
+            assertEquals(5, transportsMetaDataDAO.selectCounter());
         } catch (DalException e) {
             throw new RuntimeException(e);
         }
     }
 
 
-    private void assertDeepEquals(Transport transport1, Transport transport2) {
-        assertEquals(transport1.id(), transport2.id());
+    private void assertDeepEquals(TransportMetaData transport1, TransportMetaData transport2) {
+        assertEquals(transport1.transportId(), transport2.transportId());
         assertEquals(transport1.driverId(), transport2.driverId());
         assertEquals(transport1.truckId(), transport2.truckId());
         assertEquals(transport1.departureTime(), transport2.departureTime());
         assertEquals(transport1.weight(), transport2.weight());
-
-        // currently not checking for equality of the following fields:
-//        assertEquals(transport1.route(), transport2.route());
-//        assertEquals(transport1.itemLists(), transport2.itemLists());
-//        assertEquals(transport1.deliveryRoute().estimatedArrivalTimes(), transport2.deliveryRoute().estimatedArrivalTimes());
     }
 }

@@ -1,6 +1,7 @@
 package objects.transportObjects;
 
 import com.google.gson.reflect.TypeToken;
+import dataAccessLayer.dalAssociationClasses.transportModule.TransportMetaData;
 import utils.JsonUtils;
 
 import java.lang.reflect.Type;
@@ -35,7 +36,7 @@ public record Transport (
     public Transport(List<String> destinations,Map<String,Integer> itemLists , String driverId, String truckId, LocalDateTime departureTime, int weight){
         this(
                 -1,
-                new DeliveryRoute(-1, destinations, itemLists),
+                new DeliveryRoute(destinations, itemLists),
                 driverId,
                 truckId,
                 departureTime,
@@ -73,6 +74,17 @@ public record Transport (
                 selectedTransport.truckId,
                 selectedTransport.departureTime,
                 selectedTransport.weight
+        );
+    }
+
+    public Transport(TransportMetaData metaData, DeliveryRoute route) {
+        this(
+                metaData.transportId(),
+                route,
+                metaData.driverId(),
+                metaData.truckId(),
+                metaData.departureTime(),
+                metaData.weight()
         );
     }
 

@@ -3,7 +3,7 @@ package dataAccessLayer.employeeModule;
 
 import businessLayer.employeeModule.Authorization;
 import businessLayer.employeeModule.User;
-import dataAccessLayer.dalAbstracts.DAO;
+import dataAccessLayer.dalAbstracts.DAOBase;
 import dataAccessLayer.dalAbstracts.SQLExecutor;
 import dataAccessLayer.dalUtils.CreateTableQueryBuilder;
 import dataAccessLayer.dalUtils.OfflineResultSet;
@@ -19,7 +19,7 @@ import java.util.Set;
 import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnModifier;
 import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnType;
 
-public class UserAuthorizationsDAO extends DAO<Pair<String,Authorization>> {
+public class UserAuthorizationsDAO extends DAOBase<Pair<String,Authorization>> {
 
 //    private static final String[] types = new String[]{"TEXT", "TEXT"};
 //    private static final String[] parent_table_names = {"users"};
@@ -38,7 +38,7 @@ public class UserAuthorizationsDAO extends DAO<Pair<String,Authorization>> {
     }
 
     /**
-     * Used to insert data into {@link DAO#createTableQueryBuilder}. <br/>
+     * Used to insert data into {@link DAOBase#createTableQueryBuilder}. <br/>
      * in order to add columns and foreign keys to the table use:<br/><br/>
      * {@link CreateTableQueryBuilder#addColumn(String, ColumnType, ColumnModifier...)} <br/><br/>
      * {@link CreateTableQueryBuilder#addForeignKey(String, String, String)}<br/><br/>

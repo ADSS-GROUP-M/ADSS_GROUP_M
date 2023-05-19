@@ -2,6 +2,7 @@ package businessLayer.transportModule;
 
 import dataAccessLayer.transportModule.DeliveryRoutesDAO;
 import dataAccessLayer.transportModule.TransportsDAO;
+import dataAccessLayer.transportModule.TransportsMetaDataDAO;
 import exceptions.DalException;
 import exceptions.TransportException;
 import javafx.util.Pair;
@@ -80,7 +81,6 @@ class TransportsControllerTest {
                     sitesController,
                     itemListsController,
                     sitesRoutesController,
-                    deliveryRoutesDAO,
                     transportsDAO);
         } catch (TransportException e) {
             fail(e.getMessage(),e.getCause());

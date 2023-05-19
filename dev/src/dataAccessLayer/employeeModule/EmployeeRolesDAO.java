@@ -2,7 +2,7 @@ package dataAccessLayer.employeeModule;
 
 import businessLayer.employeeModule.Employee;
 import businessLayer.employeeModule.Role;
-import dataAccessLayer.dalAbstracts.DAO;
+import dataAccessLayer.dalAbstracts.DAOBase;
 import dataAccessLayer.dalAbstracts.SQLExecutor;
 import dataAccessLayer.dalUtils.CreateTableQueryBuilder;
 import dataAccessLayer.dalUtils.OfflineResultSet;
@@ -18,7 +18,7 @@ import java.util.Set;
 import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnModifier;
 import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnType;
 
-public class EmployeeRolesDAO extends DAO<Pair<String,Role>> {
+public class EmployeeRolesDAO extends DAOBase<Pair<String,Role>> {
 
     public static final String[] primaryKey = {Columns.employee_id.name(), Columns.role.name()};
     public static final String tableName = "employee_roles";
@@ -65,7 +65,7 @@ public class EmployeeRolesDAO extends DAO<Pair<String,Role>> {
     }
 
     /**
-     * Used to insert data into {@link DAO#createTableQueryBuilder}. <br/>
+     * Used to insert data into {@link DAOBase#createTableQueryBuilder}. <br/>
      * in order to add columns and foreign keys to the table use:<br/><br/>
      * {@link CreateTableQueryBuilder#addColumn(String, ColumnType, ColumnModifier...)} <br/><br/>
      * {@link CreateTableQueryBuilder#addForeignKey(String, String, String)}<br/><br/>

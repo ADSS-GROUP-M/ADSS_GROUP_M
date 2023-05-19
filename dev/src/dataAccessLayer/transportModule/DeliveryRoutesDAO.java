@@ -1,6 +1,6 @@
 package dataAccessLayer.transportModule;
 
-import dataAccessLayer.dalAbstracts.DAO;
+import dataAccessLayer.dalAbstracts.DAOBase;
 import dataAccessLayer.dalAbstracts.SQLExecutor;
 import dataAccessLayer.dalUtils.CreateTableQueryBuilder;
 import dataAccessLayer.dalUtils.OfflineResultSet;
@@ -16,7 +16,7 @@ import java.util.List;
 import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnModifier;
 import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnType;
 
-public class DeliveryRoutesDAO extends DAO<DeliveryRoute> {
+public class DeliveryRoutesDAO extends DAOBase<DeliveryRoute> {
 
     private static final String tableName = "delivery_routes";
 
@@ -27,7 +27,7 @@ public class DeliveryRoutesDAO extends DAO<DeliveryRoute> {
     //TODO: ADD CACHING
 
     /**
-     * Used to insert data into {@link DAO#createTableQueryBuilder}. <br/>
+     * Used to insert data into {@link DAOBase#createTableQueryBuilder}. <br/>
      * in order to add columns and foreign keys to the table use:<br/><br/>
      * {@link CreateTableQueryBuilder#addColumn(String, ColumnType, ColumnModifier...)} <br/><br/>
      * {@link CreateTableQueryBuilder#addForeignKey(String, String, String)}<br/><br/>
@@ -41,7 +41,7 @@ public class DeliveryRoutesDAO extends DAO<DeliveryRoute> {
                 .addColumn("destination_name", ColumnType.TEXT, ColumnModifier.NOT_NULL)
                 .addColumn("item_list_id", ColumnType.INTEGER, ColumnModifier.NOT_NULL)
                 .addColumn("expected_arrival_time", ColumnType.TEXT, ColumnModifier.NOT_NULL)
-                .addForeignKey("transport_id", TransportsDAO.tableName, TransportsDAO.primaryKey)
+                .addForeignKey("transport_id", TransportsMetaDataDAO.tableName, TransportsMetaDataDAO.primaryKey)
                 .addForeignKey("destination_name", SitesDAO.tableName, SitesDAO.primaryKey)
                 .addForeignKey("item_list_id", ItemListsDAO.tableName, ItemListsDAO.primaryKey);
     }

@@ -24,10 +24,9 @@ public class DeliveryRoute {
 
 
     /**
-     * this constructor sets the id to be -1
+     * this constructor sets the transport_id to be -1
      */
-    public DeliveryRoute(
-                         List<String> route,
+    public DeliveryRoute(List<String> route,
                          Map<String, Integer> destinations_itemListIds){
         this(-1,route,destinations_itemListIds,null);
     }

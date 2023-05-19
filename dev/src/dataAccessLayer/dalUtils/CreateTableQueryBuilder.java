@@ -9,6 +9,7 @@ public class CreateTableQueryBuilder {
     private final ArrayList<Column> table_columns;
     private final ArrayList<String> primaryKeys;
     private final ArrayList<ForeignKey> foreignKeys;
+    private final ArrayList<String> checks;
     private final StringBuilder query;
 
     public enum ColumnType{
@@ -31,15 +32,46 @@ public class CreateTableQueryBuilder {
         }
     }
 
+    public enum ON_DELETE{
+        CASCADE,
+        SET_NULL,
+        SET_DEFAULT,
+        RESTRICT,
+        NO_ACTION;
+
+        @Override
+        public String toString() {
+            return "ON DELETE "+super.toString().replace("_"," ");
+        }
+    }
+
+    public enum ON_UPDATE{
+        CASCADE,
+        SET_NULL,
+        SET_DEFAULT,
+        RESTRICT,
+        NO_ACTION;
+
+        @Override
+        public String toString() {
+            return "ON UPDATE "+super.toString().replace("_"," ");
+        }
+    }
+
     public CreateTableQueryBuilder(String tableName){
         this.tableName = tableName;
         table_columns = new ArrayList<>();
         primaryKeys = new ArrayList<>();
         foreignKeys = new ArrayList<>();
+        checks = new ArrayList<>();
         query = new StringBuilder();
     }
 
-    public CreateTableQueryBuilder addColumn(String columnName, ColumnType type, ColumnModifier ... modifiers ){
+    public CreateTableQueryBuilder addColumn(String columnName, ColumnType type, ColumnModifier ... modifiers) {
+        return addColumn(columnName, type, null, modifiers);
+    }
+
+    public CreateTableQueryBuilder addColumn(String columnName, ColumnType type, String _default, ColumnModifier ... modifiers){
 
         boolean isPrimaryKey = Arrays.asList(modifiers).contains(ColumnModifier.PRIMARY_KEY);
         if(isPrimaryKey){
@@ -51,7 +83,7 @@ public class CreateTableQueryBuilder {
                 .filter(modifier -> modifier != ColumnModifier.PRIMARY_KEY)
                 .toArray(ColumnModifier[]::new);
 
-        table_columns.add(new Column(columnName, type, modifiers));
+        table_columns.add(new Column(columnName, type, _default, modifiers));
         return this;
     }
 
@@ -59,10 +91,63 @@ public class CreateTableQueryBuilder {
      * This method adds a composite foreign key
      *
      * @param columnNames      the columns' names in the current table
+     * @param parentTableName the name of the parent table
      * @param referenceColumns the columns' names in the parent table
      */
-    public CreateTableQueryBuilder addCompositeForeignKey(String[] columnNames, String parentTableName, String[] referenceColumns){
-        foreignKeys.add(new ForeignKey(parentTableName, columnNames, referenceColumns));
+    public CreateTableQueryBuilder addCompositeForeignKey(String[] columnNames, String parentTableName, String[] referenceColumns) {
+        foreignKeys.add(new ForeignKey(parentTableName, columnNames, referenceColumns, null, null));
+        return this;
+    }
+
+
+    /**
+     * This method adds a composite foreign key
+     *
+     * @param columnNames      the columns' names in the current table
+     * @param parentTableName  the name of the parent table
+     * @param referenceColumns the columns' names in the parent table
+     * @param onUpdate         the action to be taken when the parent column is updated
+     */
+    public CreateTableQueryBuilder addCompositeForeignKey(String[] columnNames, String parentTableName, String[] referenceColumns,  ON_UPDATE onUpdate) {
+        return addCompositeForeignKey(columnNames, parentTableName, referenceColumns, null, onUpdate);
+    }
+
+    /**
+     * This method adds a composite foreign key
+     *
+     * @param columnNames      the columns' names in the current table
+     * @param parentTableName  the name of the parent table
+     * @param referenceColumns the columns' names in the parent table
+     * @param onDelete         the action to be taken when the parent column is deleted
+     */
+    public CreateTableQueryBuilder addCompositeForeignKey(String[] columnNames, String parentTableName, String[] referenceColumns, ON_DELETE onDelete) {
+        return addCompositeForeignKey(columnNames, parentTableName, referenceColumns, onDelete, null);
+    }
+
+    /**
+     * This method adds a composite foreign key
+     *
+     * @param columnNames      the columns' names in the current table
+     * @param parentTableName the name of the parent table
+     * @param referenceColumns the columns' names in the parent table
+     * @param onDelete       the action to be taken when the parent column is deleted
+     * @param onUpdate       the action to be taken when the parent column is updated
+     */
+    public CreateTableQueryBuilder addCompositeForeignKey(String[] columnNames, String parentTableName, String[] referenceColumns, ON_UPDATE onUpdate, ON_DELETE onDelete){
+        return addCompositeForeignKey(columnNames, parentTableName, referenceColumns, onDelete, onUpdate);
+    }
+
+    /**
+     * This method adds a composite foreign key
+     *
+     * @param columnNames      the columns' names in the current table
+     * @param parentTableName the name of the parent table
+     * @param referenceColumns the columns' names in the parent table
+     * @param onDelete       the action to be taken when the parent column is deleted
+     * @param onUpdate       the action to be taken when the parent column is updated                      
+     */
+    public CreateTableQueryBuilder addCompositeForeignKey(String[] columnNames, String parentTableName, String[] referenceColumns, ON_DELETE onDelete, ON_UPDATE onUpdate){
+        foreignKeys.add(new ForeignKey(parentTableName, columnNames, referenceColumns, onDelete, onUpdate));
         return this;
     }
 
@@ -70,10 +155,70 @@ public class CreateTableQueryBuilder {
      * This method adds a non-composite foreign key
      *
      * @param columnName      the column name in the current table
+     * @param parentTableName the name of the parent table
+     * @param referenceColumn the column name in the parent table
+     * @param onUpdate       the action to be taken when the parent column is updated
+     */
+    public CreateTableQueryBuilder addForeignKey(String columnName, String parentTableName, String referenceColumn,  ON_UPDATE onUpdate) {
+        return addForeignKey(columnName, parentTableName, referenceColumn, null, onUpdate);
+    }
+
+    /**
+     * This method adds a non-composite foreign key
+     *
+     * @param columnName      the column name in the current table
+     * @param parentTableName the name of the parent table
+     * @param referenceColumn the column name in the parent table
+     * @param onDelete      the action to be taken when the parent column is deleted
+     */
+    public CreateTableQueryBuilder addForeignKey(String columnName, String parentTableName, String referenceColumn, ON_DELETE onDelete) {
+        return addForeignKey(columnName, parentTableName, referenceColumn, onDelete, null);
+    }
+
+    /**
+     * This method adds a non-composite foreign key
+     *
+     * @param columnName      the column name in the current table
+     * @param parentTableName the name of the parent table
      * @param referenceColumn the column name in the parent table
      */
-    public CreateTableQueryBuilder addForeignKey(String columnName, String parentTableName, String referenceColumn){
-        foreignKeys.add(new ForeignKey(parentTableName, new String[]{columnName}, new String[]{referenceColumn}));
+    public CreateTableQueryBuilder addForeignKey(String columnName, String parentTableName, String referenceColumn) {
+        foreignKeys.add(new ForeignKey(parentTableName, new String[]{columnName}, new String[]{referenceColumn}, null,null));
+        return this;
+    }
+
+    /**
+     * This method adds a non-composite foreign key
+     *
+     * @param columnName      the column name in the current table
+     * @param parentTableName the name of the parent table
+     * @param referenceColumn the column name in the parent table
+     * @param onUpdate      the action to be taken when the parent column is deleted
+     * @param onDelete       the action to be taken when the parent column is updated
+     */
+    public CreateTableQueryBuilder addForeignKey(String columnName, String parentTableName, String referenceColumn, ON_UPDATE onUpdate, ON_DELETE onDelete){
+        return addForeignKey(columnName, parentTableName, referenceColumn, onDelete, onUpdate);
+    }
+
+    /**
+     * This method adds a non-composite foreign key
+     *
+     * @param columnName      the column name in the current table
+     * @param parentTableName the name of the parent table
+     * @param referenceColumn the column name in the parent table
+     * @param onUpdate      the action to be taken when the parent column is deleted
+     * @param onDelete       the action to be taken when the parent column is updated
+     */
+    public CreateTableQueryBuilder addForeignKey(String columnName, String parentTableName, String referenceColumn, ON_DELETE onDelete, ON_UPDATE onUpdate){
+        foreignKeys.add(new ForeignKey(parentTableName, new String[]{columnName}, new String[]{referenceColumn}, onDelete, onUpdate));
+        return this;
+    }
+
+    /**
+     * @param check predicate
+     */
+    public CreateTableQueryBuilder addCheck(String check){
+        checks.add(check);
         return this;
     }
 
@@ -82,6 +227,7 @@ public class CreateTableQueryBuilder {
         buildAllColumns();
         buildPrimaryKeys();
         buildForeignKeys();
+        buildChecks();
         query.delete(query.length() - 2, query.length() - 1); // remove the last comma
         query.append(");");
         return query.toString();
@@ -93,17 +239,27 @@ public class CreateTableQueryBuilder {
             for (ColumnModifier modifier : column.modifiers) {
                 query.append(String.format(" %s", modifier));
             }
+            if(column._default != null && column._default.isEmpty() == false){
+                query.append(String.format(" DEFAULT %s", column._default));
+            }
             query.append(",\n");
         }
     }
 
     private void buildForeignKeys() {
         for(ForeignKey fk : foreignKeys){
-            query.append(String.format("CONSTRAINT FK_%s FOREIGN KEY(%s) REFERENCES \"%s\"(%s),\n",
+            query.append(String.format("CONSTRAINT FK_%s FOREIGN KEY (%s) REFERENCES \"%s\"(%s)",
                     generateForeignKeyName(fk),
                     columnsArrayToString(fk.columns),
                     fk.parentTableName,
                     columnsArrayToString(fk.references)));
+            if(fk.onDelete != null){
+                query.append(" ").append(fk.onDelete);
+            }
+            if(fk.onUpdate != null){
+                query.append(" ").append(fk.onUpdate);
+            }
+            query.append(",\n");
         }
     }
 
@@ -112,7 +268,7 @@ public class CreateTableQueryBuilder {
         name.append(fk.parentTableName);
         for (String columnName : fk.columns) {
             name.append("_");
-            name.append(table_columns.indexOf(new Column(columnName)));
+            name.append(table_columns.indexOf(new Column(columnName))+1);
         }
         return name.toString();
     }
@@ -121,6 +277,13 @@ public class CreateTableQueryBuilder {
         if(primaryKeys.isEmpty() == false){
             query.append(String.format("PRIMARY KEY(%s),\n",
                     columnsArrayToString(primaryKeys.toArray(new String[0]))));
+        }
+    }
+
+    private void buildChecks() {
+        int i = 1;
+        for(String check : checks){
+            query.append(String.format("CONSTRAINT CHK_%d CHECK (%s),\n",i++, check));
         }
     }
 
@@ -135,10 +298,10 @@ public class CreateTableQueryBuilder {
         return columnsString.toString();
     }
 
-    private record Column (String name, ColumnType type, ColumnModifier[] modifiers){
+    private record Column (String name, ColumnType type, String _default, ColumnModifier[] modifiers){
 
         public Column(String name) {
-            this(name, ColumnType.TEXT, new ColumnModifier[]{});
+            this(name, null,null, null);
         }
 
         @Override
@@ -155,7 +318,7 @@ public class CreateTableQueryBuilder {
         }
     }
 
-    private record ForeignKey(String parentTableName, String[] columns, String[] references){
+    private record ForeignKey(String parentTableName, String[] columns, String[] references, ON_DELETE onDelete, ON_UPDATE onUpdate){
 
         @Override
         public boolean equals(Object o) {

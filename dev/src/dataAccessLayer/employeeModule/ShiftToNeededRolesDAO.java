@@ -2,7 +2,7 @@ package dataAccessLayer.employeeModule;
 
 import businessLayer.employeeModule.Role;
 import businessLayer.employeeModule.Shift;
-import dataAccessLayer.dalAbstracts.DAO;
+import dataAccessLayer.dalAbstracts.DAOBase;
 import dataAccessLayer.dalAbstracts.SQLExecutor;
 import dataAccessLayer.dalAssociationClasses.employeeModule.ShiftNeededRole;
 import dataAccessLayer.dalUtils.CreateTableQueryBuilder;
@@ -19,7 +19,7 @@ import java.util.Map;
 import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnModifier;
 import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnType;
 
-public class ShiftToNeededRolesDAO extends DAO<ShiftNeededRole> {
+public class ShiftToNeededRolesDAO extends DAOBase<ShiftNeededRole> {
 
     public static final String[] primaryKey = {Columns.branch.name(), Columns.shift_date.name(), Columns.shift_type.name(), Columns.role.name()};
     public static final String tableName = "shift_roles";
@@ -39,7 +39,7 @@ public class ShiftToNeededRolesDAO extends DAO<ShiftNeededRole> {
     }
 
     /**
-     * Used to insert data into {@link DAO#createTableQueryBuilder}. <br/>
+     * Used to insert data into {@link DAOBase#createTableQueryBuilder}. <br/>
      * in order to add columns and foreign keys to the table use:<br/><br/>
      * {@link CreateTableQueryBuilder#addColumn(String, ColumnType, ColumnModifier...)} <br/><br/>
      * {@link CreateTableQueryBuilder#addForeignKey(String, String, String)}<br/><br/>

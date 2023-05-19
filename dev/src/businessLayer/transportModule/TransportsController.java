@@ -1,7 +1,6 @@
 package businessLayer.transportModule;
 
 import com.google.gson.reflect.TypeToken;
-import dataAccessLayer.transportModule.DeliveryRoutesDAO;
 import dataAccessLayer.transportModule.TransportsDAO;
 import exceptions.DalException;
 import exceptions.TransportException;
@@ -30,7 +29,6 @@ public class TransportsController {
     private final SitesController sc;
     private final ItemListsController ilc;
     private EmployeesService es;
-    private final DeliveryRoutesDAO drDao;
     private final TransportsDAO dao;
     private final SitesRoutesController src;
     private int idCounter;
@@ -40,14 +38,12 @@ public class TransportsController {
                                 SitesController sc,
                                 ItemListsController ic,
                                 SitesRoutesController src,
-                                DeliveryRoutesDAO drDao,
                                 TransportsDAO dao) throws TransportException{
         this.sc = sc;
         this.ilc = ic;
         this.tc = tc;
         this.dc = dc;
         this.src = src;
-        this.drDao = drDao;
         this.dao = dao;
         try {
             idCounter = dao.selectCounter();
@@ -77,7 +73,6 @@ public class TransportsController {
         Transport toAdd = new Transport(idCounter,routeWithNewId,transport); // update transport with new id and route
         try {
             dao.insert(toAdd);
-            drDao.insert(toAdd.deliveryRoute());
             dao.incrementCounter();
             idCounter++;
         } catch (DalException e) {
@@ -99,9 +94,7 @@ public class TransportsController {
         }
 
         try {
-            Transport selectedTransport = dao.select(Transport.getLookupObject(id)); // get transport without route
-            DeliveryRoute selectedRoute = drDao.select(DeliveryRoute.getLookupObject(selectedTransport.id())); // initialize route
-            return new Transport(selectedRoute, selectedTransport); // add route to transport
+            return dao.select(Transport.getLookupObject(id));
         } catch (DalException e) {
             throw new TransportException(e.getMessage(),e);
         }
@@ -119,7 +112,6 @@ public class TransportsController {
         }
 
         try {
-            drDao.delete(DeliveryRoute.getLookupObject(id));
             dao.delete(Transport.getLookupObject(id));
         } catch (DalException e) {
             throw new TransportException(e.getMessage(),e);
@@ -144,11 +136,6 @@ public class TransportsController {
 
         try {
             dao.update(newTransport);
-
-            DeliveryRoute oldRoute = drDao.select(DeliveryRoute.getLookupObject(newTransport.id()));
-            if(oldRoute.deepEquals(newTransport.deliveryRoute()) == false){
-                drDao.update(newTransport.deliveryRoute());
-            }
         } catch (DalException e) {
             throw new TransportException(e.getMessage(),e);
         }
@@ -162,13 +149,7 @@ public class TransportsController {
      */
     public List<Transport> getAllTransports() throws TransportException{
         try {
-            List<Transport> selected = dao.selectAll();
-            List<Transport> output = new LinkedList<>();
-            for(Transport transport : selected){
-                DeliveryRoute route = drDao.select(DeliveryRoute.getLookupObject(transport.id()));
-                output.add(new Transport(route, transport));
-            }
-            return output;
+            return dao.selectAll();
         } catch (DalException e) {
             throw new TransportException(e.getMessage(),e);
         }

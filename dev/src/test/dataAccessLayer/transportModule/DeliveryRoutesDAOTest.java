@@ -6,6 +6,7 @@ import businessLayer.transportModule.TransportsController;
 import dataAccessLayer.DalFactory;
 import dataAccessLayer.dalAbstracts.SQLExecutor;
 import dataAccessLayer.dalAssociationClasses.transportModule.SiteRoute;
+import dataAccessLayer.dalAssociationClasses.transportModule.TransportMetaData;
 import dataAccessLayer.dalUtils.OfflineResultSet;
 import dataAccessLayer.employeeModule.EmployeeDAO;
 import exceptions.DalException;
@@ -19,7 +20,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 
 import static dataAccessLayer.DalFactory.TESTING_DB_NAME;
@@ -36,8 +36,8 @@ class DeliveryRoutesDAOTest {
     private ItemList itemList;
     private SiteRoute route1;
     private SiteRoute route2;
-    private Transport transport;
-    private TransportsDAO transportsDAO;
+    private TransportMetaData transport;
+    private TransportsMetaDataDAO transportsMetaDataDAO;
     private Employee employee;
     private HashMap<String, LocalTime> arrivalTimes;
     private SitesDAO sitesDAO;
@@ -85,9 +85,7 @@ class DeliveryRoutesDAOTest {
             route1 = new SiteRoute(source.address(), dest1.address(), 10,10);
             route2 = new SiteRoute(dest1.address(), dest2.address(), 10,10);
 
-            transport = new Transport(1,
-                    new LinkedList<>(),
-                    new HashMap<>(),
+            transport = new TransportMetaData(1,
                     driver.id(),
                     truck.id(),
                     LocalDateTime.of(2023, 2, 2, 12, 0),
@@ -108,7 +106,7 @@ class DeliveryRoutesDAOTest {
             }};
 
             deliveryRoute = new DeliveryRoute(
-                    transport.id(),
+                    transport.transportId(),
                     route,
                     itemLists,
                     arrivalTimes
@@ -120,7 +118,7 @@ class DeliveryRoutesDAOTest {
             employeeDAO = factory.employeeDAO();
             driversDAO = factory.driversDAO();
             itemListsDAO = factory.itemListsDAO();
-            transportsDAO = factory.transportsDAO();
+            transportsMetaDataDAO = factory.transportsMetaDataDAO();
             routesDAO = factory.sitesRoutesDAO();
             dao = factory.deliveryRoutesDAO();
 
@@ -133,7 +131,7 @@ class DeliveryRoutesDAOTest {
             employeeDAO.insert(employee);
             driversDAO.insert(driver);
             itemListsDAO.insert(itemList);
-            transportsDAO.insert(transport);
+            transportsMetaDataDAO.insert(transport);
         } catch (DalException e) {
             fail(e.getMessage(),e.getCause());
         }
@@ -149,7 +147,7 @@ class DeliveryRoutesDAOTest {
         try {
 
             dao.insert(deliveryRoute);
-            DeliveryRoute selected = dao.select(DeliveryRoute.getLookupObject(transport.id()));
+            DeliveryRoute selected = dao.select(DeliveryRoute.getLookupObject(transport.transportId()));
             assertDeepEquals(deliveryRoute, selected);
 
         } catch (DalException e) {
@@ -181,7 +179,7 @@ class DeliveryRoutesDAOTest {
             //test
             dao.update(deliveryRoute);
             dao.clearCache();
-            DeliveryRoute selected = dao.select(DeliveryRoute.getLookupObject(transport.id()));
+            DeliveryRoute selected = dao.select(DeliveryRoute.getLookupObject(transport.transportId()));
             assertDeepEquals(deliveryRoute, selected);
         } catch (DalException e) {
             fail(e.getMessage(),e.getCause());
@@ -234,7 +232,7 @@ class DeliveryRoutesDAOTest {
             dao.insert(deliveryRoute);
 
             //test
-            String query = String.format("SELECT * FROM delivery_routes WHERE transport_id = %d; ",transport.id());
+            String query = String.format("SELECT * FROM delivery_routes WHERE transport_id = %d; ",transport.transportId());
             OfflineResultSet resultSet = cursor.executeRead(query);
             DeliveryRoute selected = dao.getObjectFromResultSet(resultSet);
             assertDeepEquals(deliveryRoute, selected);

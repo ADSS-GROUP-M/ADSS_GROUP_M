@@ -1,6 +1,6 @@
 package dataAccessLayer.transportModule;
 
-import dataAccessLayer.dalAbstracts.DAO;
+import dataAccessLayer.dalAbstracts.DAOBase;
 import dataAccessLayer.dalAbstracts.SQLExecutor;
 import dataAccessLayer.dalUtils.CreateTableQueryBuilder;
 import dataAccessLayer.dalUtils.OfflineResultSet;
@@ -16,7 +16,7 @@ import java.util.Map;
 import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnModifier;
 import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnType;
 
-public class ItemListsItemsDAO extends DAO<ItemList> {
+public class ItemListsItemsDAO extends DAOBase<ItemList> {
     public static final String[] primaryKey = {"id", "loading_type", "item_name"};
     public static final String tableName = "item_lists_items";
     private static final String PARENT_TABLE_NAME = ItemListsDAO.tableName;
@@ -31,7 +31,7 @@ public class ItemListsItemsDAO extends DAO<ItemList> {
     }
 
     /**
-     * Used to insert data into {@link DAO#createTableQueryBuilder}. <br/>
+     * Used to insert data into {@link DAOBase#createTableQueryBuilder}. <br/>
      * in order to add columns and foreign keys to the table use:<br/><br/>
      * {@link CreateTableQueryBuilder#addColumn(String, ColumnType, ColumnModifier...)} <br/><br/>
      * {@link CreateTableQueryBuilder#addForeignKey(String, String, String)}<br/><br/>

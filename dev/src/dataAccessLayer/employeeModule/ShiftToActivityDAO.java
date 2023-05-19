@@ -1,7 +1,7 @@
 package dataAccessLayer.employeeModule;
 
 import businessLayer.employeeModule.Shift;
-import dataAccessLayer.dalAbstracts.DAO;
+import dataAccessLayer.dalAbstracts.DAOBase;
 import dataAccessLayer.dalAbstracts.SQLExecutor;
 import dataAccessLayer.dalAssociationClasses.employeeModule.ShiftActivity;
 import dataAccessLayer.dalUtils.CreateTableQueryBuilder;
@@ -17,7 +17,7 @@ import java.util.List;
 import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnModifier;
 import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnType;
 
-public class ShiftToActivityDAO extends DAO<ShiftActivity> {
+public class ShiftToActivityDAO extends DAOBase<ShiftActivity> {
 
     public static final String[] primaryKey = {Columns.branch.name(), Columns.shift_date.name(), Columns.shift_type.name(), Columns.activity.name()};
     public static final String tableName = "shift_activities";
@@ -36,7 +36,7 @@ public class ShiftToActivityDAO extends DAO<ShiftActivity> {
     }
 
     /**
-     * Used to insert data into {@link DAO#createTableQueryBuilder}. <br/>
+     * Used to insert data into {@link DAOBase#createTableQueryBuilder}. <br/>
      * in order to add columns and foreign keys to the table use:<br/><br/>
      * {@link CreateTableQueryBuilder#addColumn(String, ColumnType, ColumnModifier...)} <br/><br/>
      * {@link CreateTableQueryBuilder#addForeignKey(String, String, String)}<br/><br/>

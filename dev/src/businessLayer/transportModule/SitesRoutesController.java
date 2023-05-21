@@ -104,8 +104,8 @@ public class SitesRoutesController {
 
         Map<Pair<String,String>, Pair<Double,Double>> routes = new HashMap<>(otherSites.size()*4){{
             for(Site other : otherSites) {  // initialize keys with null to avoid need for synchronization
-                put(new Pair<>(site.name(), other.name()), null);
-                put(new Pair<>(other.name(), site.name()), null);
+                put(new Pair<>(site.address(), other.address()), null);
+                put(new Pair<>(other.address(), site.address()), null);
             }
             put(new Pair<>(site.address(),site.address()),new Pair<>(0.0,0.0));
         }};;

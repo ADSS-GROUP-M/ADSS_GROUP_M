@@ -64,6 +64,8 @@ public class DataGenerator {
 
     public static String generateData(String dbName) {
         try {
+            long startTime = System.currentTimeMillis();
+
             DalFactory.clearDB(dbName);
             ServiceFactory factory = new ServiceFactory(dbName);
             us = factory.userService();
@@ -111,10 +113,11 @@ public class DataGenerator {
             initializeShiftDay(morningDrivers, eveningDrivers, SHIFT_DATE);
             assignStorekeepers(SHIFT_DATE);
             generateTransports(factory.transportsService());
+
+            return "\nGenerated data successfully (%s ms).".formatted(System.currentTimeMillis()-startTime);
         } catch (TransportException e) {
             return "\n" + e.getMessage() + "\n";
         }
-        return "\nGenerated data successfully.";
     }
 
     public static void generateTrucks(ResourceManagementService rms) throws TransportException {

@@ -24,7 +24,7 @@ public class SitesRoutesController {
     public SitesRoutesController(BingAPI bingAPI, SitesRoutesDAO dao) {
         this.bingAPI = bingAPI;
         this.dao = dao;
-        executor = Executors.newFixedThreadPool(4);
+        executor = Executors.newFixedThreadPool(10);
     }
 
     public Point getCoordinates(Site site) throws TransportException {

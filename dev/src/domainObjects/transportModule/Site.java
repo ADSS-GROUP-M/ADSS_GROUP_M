@@ -1,4 +1,4 @@
-package objects.transportObjects;
+package domainObjects.transportModule;
 
 import com.google.gson.reflect.TypeToken;
 import utils.JsonUtils;
@@ -71,7 +71,7 @@ public record Site (String name, String address, String transportZone, String ph
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Site site = (Site) o;
-        return Objects.equals(name, site.name);
+        return this.name.equalsIgnoreCase(site.name);
     }
 
     @Override

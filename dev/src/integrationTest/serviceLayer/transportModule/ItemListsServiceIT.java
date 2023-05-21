@@ -1,7 +1,7 @@
 package serviceLayer.transportModule;
 
 import dataAccessLayer.DalFactory;
-import objects.transportObjects.ItemList;
+import domainObjects.transportModule.ItemList;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

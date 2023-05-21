@@ -1,6 +1,6 @@
 package presentationLayer.transportModule;
 
-import objects.transportObjects.Driver;
+import domainObjects.transportModule.Driver;
 import serviceLayer.transportModule.ResourceManagementService;
 import utils.JsonUtils;
 import utils.Response;

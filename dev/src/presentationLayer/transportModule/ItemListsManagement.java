@@ -1,6 +1,6 @@
 package presentationLayer.transportModule;
 
-import objects.transportObjects.ItemList;
+import domainObjects.transportModule.ItemList;
 import serviceLayer.transportModule.ItemListsService;
 import utils.JsonUtils;
 import utils.Response;

@@ -5,12 +5,16 @@ import businessLayer.employeeModule.Role;
 import businessLayer.transportModule.TransportsController;
 import dataAccessLayer.DalFactory;
 import dataAccessLayer.dalAbstracts.SQLExecutor;
+import dataAccessLayer.dalAssociationClasses.transportModule.DeliveryRoute;
 import dataAccessLayer.dalAssociationClasses.transportModule.SiteRoute;
 import dataAccessLayer.dalAssociationClasses.transportModule.TransportMetaData;
 import dataAccessLayer.dalUtils.OfflineResultSet;
 import dataAccessLayer.employeeModule.EmployeeDAO;
+import domainObjects.transportModule.Driver;
+import domainObjects.transportModule.ItemList;
+import domainObjects.transportModule.Site;
+import domainObjects.transportModule.Truck;
 import exceptions.DalException;
-import objects.transportObjects.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -171,10 +175,18 @@ class DeliveryRoutesDAOTest {
     void update() {
         try{
             //set up
-            dao.insert(deliveryRoute);
-            deliveryRoute.overrideArrivalTime(source.name(),LocalTime.of(13,0));
-            deliveryRoute.overrideArrivalTime(dest1.name(),LocalTime.of(14,0));
-            deliveryRoute.overrideArrivalTime(dest2.name(),LocalTime.of(15,0));
+            DeliveryRoute updated = new DeliveryRoute(
+                    deliveryRoute.transportId(),
+                    deliveryRoute.route(),
+                    deliveryRoute.itemLists(),
+                    new HashMap<>(){{
+                        put(source.name(),LocalTime.of(13,0));
+                        put(dest1.name(),LocalTime.of(14,0));
+                        put(dest2.name(),LocalTime.of(15,0));
+                    }}
+            );
+
+            dao.insert(updated);
 
             //test
             dao.update(deliveryRoute);

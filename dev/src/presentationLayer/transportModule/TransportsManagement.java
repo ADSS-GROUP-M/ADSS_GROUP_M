@@ -1,9 +1,8 @@
 package presentationLayer.transportModule;
 
-import objects.transportObjects.DeliveryRoute;
-import objects.transportObjects.Driver;
-import objects.transportObjects.Site;
-import objects.transportObjects.Transport;
+import domainObjects.transportModule.Driver;
+import domainObjects.transportModule.Site;
+import domainObjects.transportModule.Transport;
 import serviceLayer.employeeModule.Services.EmployeesService;
 import serviceLayer.transportModule.TransportsService;
 import utils.JsonUtils;
@@ -211,7 +210,9 @@ public class TransportsManagement {
                             oldtransport.truckId(),
                             driver.id(),
                             oldtransport.departureTime(),
-                            oldtransport.weight()
+                            oldtransport.weight(),
+                            oldtransport.estimatedArrivalTimes(),
+                            oldtransport.arrivalTimesManualOverride()
                     );
                 }
                 case 2 -> {
@@ -224,7 +225,9 @@ public class TransportsManagement {
                             truckId,
                             oldtransport.driverId(),
                             oldtransport.departureTime(),
-                            oldtransport.weight()
+                            oldtransport.weight(),
+                            oldtransport.estimatedArrivalTimes(),
+                            oldtransport.arrivalTimesManualOverride()
                     );
                 }
                 case 3 ->{
@@ -240,7 +243,9 @@ public class TransportsManagement {
                             oldtransport.truckId(),
                             oldtransport.driverId(),
                             oldtransport.departureTime(),
-                            oldtransport.weight()
+                            oldtransport.weight(),
+                            oldtransport.estimatedArrivalTimes(),
+                            oldtransport.arrivalTimesManualOverride()
                     );
                 }
                 case 4 -> {
@@ -252,18 +257,23 @@ public class TransportsManagement {
                             oldtransport.truckId(),
                             oldtransport.driverId(),
                             oldtransport.departureTime(),
-                            truckWeight
+                            truckWeight,
+                            oldtransport.estimatedArrivalTimes(),
+                            oldtransport.arrivalTimesManualOverride()
                     );
                 }
                 case 5 -> {
                     overrideArrivalTimes(oldtransport);
                     updateTransportHelperMethod(
                             oldtransport.id(),
-                            oldtransport.deliveryRoute(),
+                            oldtransport.route(),
+                            oldtransport.itemLists(),
                             oldtransport.truckId(),
                             oldtransport.driverId(),
                             oldtransport.departureTime(),
-                            oldtransport.weight()
+                            oldtransport.weight(),
+                            oldtransport.estimatedArrivalTimes(),
+                            oldtransport.arrivalTimesManualOverride()
                     );
                 }
                 case 6 -> {
@@ -293,7 +303,7 @@ public class TransportsManagement {
             arrivalTimes.put(destination, arrivalTime);
         }
         for(var pair : arrivalTimes.entrySet()) {
-            oldtransport.deliveryRoute().overrideArrivalTime(pair.getKey(), pair.getValue());
+            oldtransport.overrideArrivalTime(pair.getKey(), pair.getValue());
         }
     }
 
@@ -357,7 +367,7 @@ public class TransportsManagement {
         System.out.println("Route: ");
         for(String address : transport.route()){
             Site destination = uiData.sites().get(address);
-            LocalTime arrivalTime = transport.deliveryRoute().getEstimatedTimeOfArrival(address);
+            LocalTime arrivalTime = transport.getEstimatedTimeOfArrival(address);
             String time = String.format("[%02d:%02d] ", arrivalTime.getHour(), arrivalTime.getMinute());
             Integer itemListId = transport.itemLists().get(address);
             String itemListIdStr = itemListId == -1 ? "" : " (items list id: "+ itemListId +")";
@@ -366,44 +376,24 @@ public class TransportsManagement {
     }
 
     private void updateTransportHelperMethod(int id,
-                                             DeliveryRoute deliveryRoute,
-                                             String truckId,
-                                             String driverId,
-                                             LocalDateTime departureDateTime,
-                                             int weight) {
-        Transport newTransport = new Transport(
-                id,
-                deliveryRoute,
-                driverId,
-                truckId,
-                departureDateTime,
-                weight
-        );
-
-        String json = newTransport.toJson();
-        String responseJson = ts.updateTransport(json);
-        Response response = JsonUtils.deserialize(responseJson, Response.class);
-        if(response.success()){
-            Transport _transport = Transport.fromJson(response.data());
-            uiData.transports().put(id, _transport);
-        }
-        System.out.println("\n"+response.message());
-    }
-
-    private void updateTransportHelperMethod(int id,
                                              List<String> destinations,
                                              Map<String, Integer> itemLists,
                                              String truckId,
                                              String driverId,
                                              LocalDateTime departureDateTime,
-                                             int weight) {
+                                             int weight,
+                                             Map<String, LocalTime> arrivalTimes,
+                                             boolean overrideArrivalTimes) {
         Transport newTransport = new Transport(
                 id,
-                new DeliveryRoute(id,destinations, itemLists),
+                destinations,
+                itemLists,
                 driverId,
                 truckId,
                 departureDateTime,
-                weight
+                weight,
+                arrivalTimes,
+                overrideArrivalTimes
         );
 
         String json = newTransport.toJson();

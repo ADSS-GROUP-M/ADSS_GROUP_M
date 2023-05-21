@@ -1,9 +1,9 @@
 package businessLayer.transportModule;
 
 import dataAccessLayer.transportModule.TrucksDAO;
+import domainObjects.transportModule.Truck;
 import exceptions.DalException;
 import exceptions.TransportException;
-import objects.transportObjects.Truck;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

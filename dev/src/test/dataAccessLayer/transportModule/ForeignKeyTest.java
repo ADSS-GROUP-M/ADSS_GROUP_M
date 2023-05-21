@@ -1,8 +1,8 @@
 package dataAccessLayer.transportModule;
 
 import dataAccessLayer.DalFactory;
+import domainObjects.transportModule.ItemList;
 import exceptions.DalException;
-import objects.transportObjects.ItemList;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

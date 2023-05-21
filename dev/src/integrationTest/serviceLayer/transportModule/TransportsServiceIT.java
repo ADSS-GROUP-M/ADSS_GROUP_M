@@ -4,8 +4,8 @@ import businessLayer.employeeModule.Branch;
 import businessLayer.employeeModule.Role;
 import businessLayer.transportModule.SitesController;
 import dataAccessLayer.DalFactory;
+import domainObjects.transportModule.*;
 import exceptions.TransportException;
-import objects.transportObjects.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -122,9 +122,9 @@ class TransportsServiceIT {
         Transport returned = Transport.fromJson(response.data());
         assertEquals(TRANSPORT_ID, returned.id());
         assertDeepEquals(transport, returned);
-        assertDoesNotThrow(() -> returned.deliveryRoute().getEstimatedTimeOfArrival(source.name()));
-        assertDoesNotThrow(() -> returned.deliveryRoute().getEstimatedTimeOfArrival(dest1.name()));
-        assertDoesNotThrow(() -> returned.deliveryRoute().getEstimatedTimeOfArrival(dest2.name()));
+        assertDoesNotThrow(() -> returned.getEstimatedTimeOfArrival(source.name()));
+        assertDoesNotThrow(() -> returned.getEstimatedTimeOfArrival(dest1.name()));
+        assertDoesNotThrow(() -> returned.getEstimatedTimeOfArrival(dest2.name()));
     }
 
     @Test
@@ -158,8 +158,8 @@ class TransportsServiceIT {
         Response response = assertSuccessValue(ts.updateTransport(updated.toJson()), true);
         Transport returned = Transport.fromJson(response.data());
         assertDeepEquals(updated, returned);
-        assertDoesNotThrow(() -> returned.deliveryRoute().getEstimatedTimeOfArrival(source.name()));
-        assertDoesNotThrow(() -> returned.deliveryRoute().getEstimatedTimeOfArrival(dest1.name()));
+        assertDoesNotThrow(() -> returned.getEstimatedTimeOfArrival(source.name()));
+        assertDoesNotThrow(() -> returned.getEstimatedTimeOfArrival(dest1.name()));
     }
 
     @Test
@@ -193,9 +193,9 @@ class TransportsServiceIT {
         Response response = assertSuccessValue(ts.getTransport(Transport.getLookupObject(transport.id()).toJson()), true);
         Transport returned = Transport.fromJson(response.data());
         assertDeepEquals(transport, returned);
-        assertDoesNotThrow(() -> returned.deliveryRoute().getEstimatedTimeOfArrival(source.name()));
-        assertDoesNotThrow(() -> returned.deliveryRoute().getEstimatedTimeOfArrival(dest1.name()));
-        assertDoesNotThrow(() -> returned.deliveryRoute().getEstimatedTimeOfArrival(dest2.name()));
+        assertDoesNotThrow(() -> returned.getEstimatedTimeOfArrival(source.name()));
+        assertDoesNotThrow(() -> returned.getEstimatedTimeOfArrival(dest1.name()));
+        assertDoesNotThrow(() -> returned.getEstimatedTimeOfArrival(dest2.name()));
     }
 
     @Test
@@ -214,9 +214,9 @@ class TransportsServiceIT {
         List<Transport> returned = Transport.listFromJson(response.data());
         assertEquals(1, returned.size());
         assertDeepEquals(transport, returned.get(0));
-        assertDoesNotThrow(() -> returned.get(0).deliveryRoute().getEstimatedTimeOfArrival(source.name()));
-        assertDoesNotThrow(() -> returned.get(0).deliveryRoute().getEstimatedTimeOfArrival(dest1.name()));
-        assertDoesNotThrow(() -> returned.get(0).deliveryRoute().getEstimatedTimeOfArrival(dest2.name()));
+        assertDoesNotThrow(() -> returned.get(0).getEstimatedTimeOfArrival(source.name()));
+        assertDoesNotThrow(() -> returned.get(0).getEstimatedTimeOfArrival(dest1.name()));
+        assertDoesNotThrow(() -> returned.get(0).getEstimatedTimeOfArrival(dest2.name()));
     }
 
     @Test

@@ -1,4 +1,4 @@
-package objects.transportObjects;
+package domainObjects.transportModule;
 
 import com.google.gson.reflect.TypeToken;
 import utils.JsonUtils;
@@ -39,7 +39,7 @@ public record Driver (String id, String name, LicenseType licenseType){
             return false;
         }
         Driver driver = (Driver) o;
-        return id == driver.id;
+        return id.equalsIgnoreCase(driver.id);
     }
 
     @Override

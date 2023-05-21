@@ -5,8 +5,8 @@ import dataAccessLayer.dalAbstracts.SQLExecutor;
 import dataAccessLayer.dalUtils.CreateTableQueryBuilder;
 import dataAccessLayer.dalUtils.OfflineResultSet;
 import dataAccessLayer.employeeModule.EmployeeDAO;
+import domainObjects.transportModule.Driver;
 import exceptions.DalException;
-import objects.transportObjects.Driver;
 
 import java.sql.SQLException;
 import java.util.LinkedList;

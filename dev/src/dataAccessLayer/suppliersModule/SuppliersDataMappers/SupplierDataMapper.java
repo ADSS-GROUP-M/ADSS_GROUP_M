@@ -4,8 +4,8 @@ import businessLayer.suppliersModule.BankAccount;
 import businessLayer.suppliersModule.Pair;
 import businessLayer.suppliersModule.Supplier;
 import dataAccessLayer.dalAbstracts.AbstractDataMapper;
-import exceptions.DalException;
 import dataAccessLayer.dalUtils.OfflineResultSet;
+import exceptions.DalException;
 
 import java.sql.SQLException;
 import java.util.HashMap;

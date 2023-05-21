@@ -1,4 +1,4 @@
-package objects.transportObjects;
+package domainObjects.transportModule;
 
 import com.google.gson.reflect.TypeToken;
 import utils.JsonUtils;
@@ -31,10 +31,6 @@ public record ItemList (int id, HashMap<String, Integer> load,HashMap<String, In
             load,
             unload
         );
-    }
-
-    public ItemList newId(int id){
-        return new ItemList(id,this);
     }
 
     public static ItemList getLookupObject(int id){

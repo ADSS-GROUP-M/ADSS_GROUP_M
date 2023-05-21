@@ -2,11 +2,10 @@ package dataAccessLayer.transportModule;
 
 import dataAccessLayer.dalAbstracts.CounterDAO;
 import dataAccessLayer.dalAbstracts.DAO;
-import dataAccessLayer.dalAbstracts.DAOBase;
+import dataAccessLayer.dalAssociationClasses.transportModule.DeliveryRoute;
 import dataAccessLayer.dalAssociationClasses.transportModule.TransportMetaData;
+import domainObjects.transportModule.Transport;
 import exceptions.DalException;
-import objects.transportObjects.DeliveryRoute;
-import objects.transportObjects.Transport;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -81,8 +80,14 @@ public class TransportsDAO implements DAO<Transport>,CounterDAO {
                 object.departureTime(),
                 object.weight()
         );
+        DeliveryRoute deliveryRoute =  new DeliveryRoute(
+                object.id(),
+                object.route(),
+                object.itemLists(),
+                object.estimatedArrivalTimes()
+        );
         metaDataDAO.insert(metaData);
-        deliveryRoutesDAO.insert(object.deliveryRoute());
+        deliveryRoutesDAO.insert(deliveryRoute);
     }
 
     /**
@@ -100,7 +105,11 @@ public class TransportsDAO implements DAO<Transport>,CounterDAO {
         );
         metaDataDAO.update(metaData);
 
-        DeliveryRoute newDeliveryRoute = object.deliveryRoute();
+        DeliveryRoute newDeliveryRoute = new DeliveryRoute(
+                object.id(),
+                object.route(),
+                object.itemLists(),
+                object.estimatedArrivalTimes());
         DeliveryRoute oldDeliveryRoute =  deliveryRoutesDAO.select(DeliveryRoute.getLookupObject(object.id()));
 
         if(oldDeliveryRoute.deepEquals(newDeliveryRoute) == false){

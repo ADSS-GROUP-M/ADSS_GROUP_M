@@ -3,10 +3,10 @@ package businessLayer.transportModule;
 import businessLayer.transportModule.bingApi.*;
 import dataAccessLayer.dalAssociationClasses.transportModule.SiteRoute;
 import dataAccessLayer.transportModule.SitesRoutesDAO;
+import domainObjects.transportModule.Site;
 import exceptions.DalException;
 import exceptions.TransportException;
 import javafx.util.Pair;
-import objects.transportObjects.Site;
 
 import java.util.*;
 

@@ -5,8 +5,8 @@ import businessLayer.suppliersModule.DeliveryAgreements.DeliveryAgreement;
 import businessLayer.suppliersModule.DeliveryAgreements.DeliveryByInvitation;
 import businessLayer.suppliersModule.DeliveryAgreements.DeliveryFixedDays;
 import businessLayer.suppliersModule.Product;
-import exceptions.DalException;
 import dataAccessLayer.suppliersModule.ProductsDataMapper;
+import exceptions.DalException;
 
 import java.sql.SQLException;
 import java.util.HashMap;

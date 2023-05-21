@@ -2,10 +2,13 @@ package businessLayer.transportModule;
 
 import com.google.gson.reflect.TypeToken;
 import dataAccessLayer.transportModule.TransportsDAO;
+import domainObjects.transportModule.Driver;
+import domainObjects.transportModule.Site;
+import domainObjects.transportModule.Transport;
+import domainObjects.transportModule.Truck;
 import exceptions.DalException;
 import exceptions.TransportException;
 import javafx.util.Pair;
-import objects.transportObjects.*;
 import serviceLayer.employeeModule.Services.EmployeesService;
 import utils.ErrorCollection;
 import utils.JsonUtils;
@@ -69,8 +72,11 @@ public class TransportsController {
         }
         validateTransport(transport);
         initializeEstimatedArrivalTimes(transport);
-        DeliveryRoute routeWithNewId = new DeliveryRoute(idCounter, transport.deliveryRoute()); // create route with new id
-        Transport toAdd = new Transport(idCounter,routeWithNewId,transport); // update transport with new id and route
+//        DeliveryRoute routeWithNewId = new DeliveryRoute(idCounter, // create route with new id
+//                                                    transport.route(),
+//                                                    transport.itemLists(),
+//                                                    transport.estimatedArrivalTimes());
+        Transport toAdd = new Transport(idCounter,transport); // update transport with new id
         try {
             dao.insert(toAdd);
             dao.incrementCounter();
@@ -130,7 +136,7 @@ public class TransportsController {
         }
 
         validateTransport(newTransport);
-        if(newTransport.deliveryRoute().manuallyOverrideEstimatedArrivalTimes() == false){
+        if(newTransport.arrivalTimesManualOverride() == false){
             initializeEstimatedArrivalTimes(newTransport);
         }
 
@@ -290,7 +296,7 @@ public class TransportsController {
             estimatedArrivalTimes.put(next, time);
             curr = next;
         }
-        transport.deliveryRoute().initializeArrivalTimes(estimatedArrivalTimes);
+        transport.initializeArrivalTimes(estimatedArrivalTimes);
     }
 
     private static LocalTime addTravelTime(LocalTime time, String curr, String next, Map<Pair<String,String>,Double> durations){

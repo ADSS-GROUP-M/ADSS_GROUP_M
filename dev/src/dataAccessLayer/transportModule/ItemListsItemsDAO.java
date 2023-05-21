@@ -4,8 +4,8 @@ import dataAccessLayer.dalAbstracts.DAOBase;
 import dataAccessLayer.dalAbstracts.SQLExecutor;
 import dataAccessLayer.dalUtils.CreateTableQueryBuilder;
 import dataAccessLayer.dalUtils.OfflineResultSet;
+import domainObjects.transportModule.ItemList;
 import exceptions.DalException;
-import objects.transportObjects.ItemList;
 
 import java.sql.SQLException;
 import java.util.HashMap;

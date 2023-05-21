@@ -2,10 +2,10 @@ package dataAccessLayer.transportModule;
 
 import dataAccessLayer.dalAbstracts.DAOBase;
 import dataAccessLayer.dalAbstracts.SQLExecutor;
+import dataAccessLayer.dalAssociationClasses.transportModule.DeliveryRoute;
 import dataAccessLayer.dalUtils.CreateTableQueryBuilder;
 import dataAccessLayer.dalUtils.OfflineResultSet;
 import exceptions.DalException;
-import objects.transportObjects.DeliveryRoute;
 
 import java.sql.SQLException;
 import java.time.LocalTime;
@@ -199,7 +199,7 @@ public class DeliveryRoutesDAO extends DAOBase<DeliveryRoute> {
                     i++,
                     destination,
                     object.itemLists().get(destination),
-                    object.getEstimatedTimeOfArrival(destination).toString()));
+                    object.estimatedArrivalTimes().get(destination).toString()));
         }
         return queryBuilder.toString();
     }

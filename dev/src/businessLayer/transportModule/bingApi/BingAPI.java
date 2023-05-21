@@ -11,7 +11,7 @@ import java.util.Scanner;
 
 public class BingAPI {
     
-    private static final String key = "ApCimQpMhBbPbxxutJUbXvOeQZ7zrJh-ryeMWVyI7a0iyZ_aDIJdxqSUlED1D7l-";
+    private static final String key = "Alv1bQ1OpO-O1g6u2Xkmf0Jyt1uCtictpcJTHkNFPJivTur46kQ4AbCjK7k1GLvs";
 
     public LocationByQueryResponse locationByQuery(String address) throws TransportException {
 

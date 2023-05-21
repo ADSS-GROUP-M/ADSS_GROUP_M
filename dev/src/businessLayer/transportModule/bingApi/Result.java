@@ -1,10 +1,3 @@
 package businessLayer.transportModule.bingApi;
 
-public record Result(
-        int destinationIndex,
-        int originIndex,
-        int totalWalkDuration,
-        double travelDistance,
-        double travelDuration
-) {
-}
+public record Result(int destinationIndex, int originIndex, double travelDistance, double travelDuration) {}

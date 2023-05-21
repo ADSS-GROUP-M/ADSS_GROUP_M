@@ -13,9 +13,6 @@ public class BingAPI {
     
     private static final String key = "ApCimQpMhBbPbxxutJUbXvOeQZ7zrJh-ryeMWVyI7a0iyZ_aDIJdxqSUlED1D7l-";
 
-    public BingAPI() {
-    }
-
     public LocationByQueryResponse locationByQuery(String address) throws TransportException {
 
         String urlPrefix = "http://dev.virtualearth.net/REST/v1/Locations?q=";

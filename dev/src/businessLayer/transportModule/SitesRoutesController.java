@@ -9,16 +9,22 @@ import exceptions.TransportException;
 import javafx.util.Pair;
 
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.ThreadPoolExecutor;
 
 public class SitesRoutesController {
 
     private final BingAPI bingAPI;
-
     private final SitesRoutesDAO dao;
+    private final ExecutorService executor;
+
 
     public SitesRoutesController(BingAPI bingAPI, SitesRoutesDAO dao) {
         this.bingAPI = bingAPI;
         this.dao = dao;
+        executor = Executors.newFixedThreadPool(4);
     }
 
     public Point getCoordinates(Site site) throws TransportException {
@@ -26,9 +32,45 @@ public class SitesRoutesController {
         queryResponse = bingAPI.locationByQuery(site.address());
         LocationResource[] locationResources = queryResponse.resourceSets()[0].resources();
         if (locationResources.length != 1) {
+
+            //TODO: handle this case properly
+
             throw new TransportException("Could not find site or found multiple sites");
         }
         return locationResources[0].point();
+    }
+
+    public Map<Site,Point> getCoordinates(List<Site> sites) throws TransportException {
+
+        Map<Site,Point> points = new HashMap<>(sites.size()*2){{
+            for(Site site : sites) {
+                put(site, null); // initialize keys to avoid need for synchronization
+            }
+        }};
+
+        List<Future<?>> futures = new LinkedList<>();
+        final TransportException[] exception = {null};
+        for(Site site : sites) {
+            futures.add(executor.submit(() -> {
+                try {
+                    points.put(site, getCoordinates(site));
+                } catch (TransportException e) {
+                    exception[0] = e;
+                }
+            }));
+        }
+
+        while(! futures.stream().allMatch(Future::isDone)) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException ignored) {}
+        }
+
+        if(exception[0] != null) {
+            throw exception[0];
+        }
+
+        return points;
     }
 
     public void addRoutes(Site site , List<Site> otherSites) throws TransportException {
@@ -60,26 +102,49 @@ public class SitesRoutesController {
      */
     public Map<Pair<String,String>, Pair<Double,Double>> getTravelData(Site site, List<Site> otherSites) throws TransportException {
 
-        Map<Pair<String,String>, Pair<Double,Double>> routes = new HashMap<>();
+        Map<Pair<String,String>, Pair<Double,Double>> routes = new HashMap<>(otherSites.size()*4){{
+            for(Site other : otherSites) {  // initialize keys with null to avoid need for synchronization
+                put(new Pair<>(site.name(), other.name()), null);
+                put(new Pair<>(other.name(), site.name()), null);
+            }
+            put(new Pair<>(site.address(),site.address()),new Pair<>(0.0,0.0));
+        }};;
 
         Point newSitePoint = new Point(site.address(), new double[]{site.latitude(),site.longitude()});
 
-        for(Site other : otherSites){
-            Point otherSitePoint = new Point(other.address(), new double[]{other.latitude(),other.longitude()});
+        List<Future<?>> futures = new LinkedList<>();
+        final TransportException[] exception = {null};
 
-            DistanceMatrixResponse response;
-            response = bingAPI.distanceMatrix(List.of(newSitePoint,otherSitePoint));
-            Result[] results = Arrays.stream(response.resourceSets()[0].resources()[0].results())
-                    .filter(result -> result.originIndex() != result.destinationIndex())
-                    .toArray(Result[]::new);
+        for(Site other : otherSites) {
+            futures.add(executor.submit(() -> {
+                try {
+                    Point otherSitePoint = new Point(other.address(), new double[]{other.latitude(), other.longitude()});
 
-            routes.put(new Pair<>(site.address(),other.address()),
-                    new Pair<>(results[0].travelDistance(),results[0].travelDuration()));
-            routes.put(new Pair<>(other.address(),site.address()),
-                    new Pair<>(results[1].travelDistance(),results[1].travelDuration()));
+                    DistanceMatrixResponse response;
+                    response = bingAPI.distanceMatrix(List.of(newSitePoint, otherSitePoint));
+                    Result[] results = Arrays.stream(response.resourceSets()[0].resources()[0].results())
+                            .filter(result -> result.originIndex() != result.destinationIndex())
+                            .toArray(Result[]::new);
+
+                    routes.put(new Pair<>(site.address(), other.address()),
+                            new Pair<>(results[0].travelDistance(), results[0].travelDuration()));
+                    routes.put(new Pair<>(other.address(), site.address()),
+                            new Pair<>(results[1].travelDistance(), results[1].travelDuration()));
+
+                } catch (TransportException e) {
+                    exception[0] = e;
+                }
+            }));
         }
 
-        routes.put(new Pair<>(site.address(),site.address()),new Pair<>(0.0,0.0));
+        while(!futures.stream().allMatch(Future::isDone)){
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException ignored) {}
+        }
+        if(exception[0] != null){
+            throw exception[0];
+        }
         return routes;
     }
 

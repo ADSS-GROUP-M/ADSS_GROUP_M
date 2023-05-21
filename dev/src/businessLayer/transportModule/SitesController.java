@@ -5,10 +5,12 @@ import dataAccessLayer.transportModule.SitesDAO;
 import domainObjects.transportModule.Site;
 import exceptions.DalException;
 import exceptions.TransportException;
+import presentationLayer.DataGenerator;
 import serviceLayer.employeeModule.Services.EmployeesService;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import static serviceLayer.employeeModule.Services.UserService.TRANSPORT_MANAGER_USERNAME;
 
@@ -160,26 +162,28 @@ public class SitesController {
      */
     public void addAllSitesFirstTimeSystemLoad(List<Site> sites) throws TransportException {
 
-        // get latitude and longitude
+        // get latitude and longitude for each site
+        Map<Site,Point> coordinates = sitesRoutesController.getCoordinates(sites);
 
-        List<Site> _sites = new LinkedList<>();
-        for(Site site : sites){
-            Point p = sitesRoutesController.getCoordinates(site);
-            Site _site = new Site(site, p.latitude(), p.longitude());
-            _sites.add(_site);
+        List<Site> sitesWithCoordinates = new LinkedList<>();
+        for(var entry : coordinates.entrySet()){
             try {
-                dao.insert(_site);
+                Site siteWithCoordinates = new Site(entry.getKey(), entry.getValue().latitude(), entry.getValue().longitude());
+                sitesWithCoordinates.add(siteWithCoordinates);
+                dao.insert(siteWithCoordinates);
             } catch (DalException e) {
                 throw new TransportException(e.getMessage(),e);
             }
         }
 
-        sitesRoutesController.addAllRouteObjectsFirstTimeLoad(_sites);
-
-        for(Site site : _sites){
+        for(Site site : sitesWithCoordinates){
             if(site.siteType() == Site.SiteType.BRANCH){
                 employeesService.createBranch(TRANSPORT_MANAGER_USERNAME,site.name());
             }
         }
+        DataGenerator.releaseMainThread(); // release the main thread to continue generating data
+
+        // get route information for between all sites
+        sitesRoutesController.addAllRouteObjectsFirstTimeLoad(sitesWithCoordinates);
     }
 }

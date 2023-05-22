@@ -5,6 +5,9 @@ import serviceLayer.transportModule.ResourceManagementService;
 import utils.JsonUtils;
 import utils.Response;
 
+import java.util.Collection;
+import java.util.Comparator;
+
 public class SitesManagement {
 
     private final UiData uiData;
@@ -14,9 +17,7 @@ public class SitesManagement {
         this.uiData = transportAppData;
         this.rms = rms;
     }
-
-
-
+    
     void manageSites() {
         while(true){
             System.out.println("=========================================");
@@ -42,15 +43,6 @@ public class SitesManagement {
     }
 
     private void createSite() {
-
-
-        //TODO:
-        // =============================================================================================== |
-        // ==================================== | READ ME |=============================================== |
-        //  need to update the code here to retrieve the new latitude and longitude fields in Site object  |
-        // =============================================================================================== |
-        // =============================================================================================== |
-
         System.out.println("=========================================");
         System.out.println("Enter site details:");
         String name = uiData.readLine("Name: ");
@@ -223,7 +215,8 @@ public class SitesManagement {
     private void viewAllSites() {
         System.out.println("=========================================");
         System.out.println("All sites:");
-        for(Site site : uiData.sites().values()) {
+        Collection<Site> _sites = uiData.sites().values().stream().sorted(new SitesComparator()).toList();
+        for(Site site : _sites) {
             printSiteDetails(site);
             System.out.println("-----------------------------------------");
         }
@@ -238,6 +231,17 @@ public class SitesManagement {
         System.out.println("Phone number:   " + site.phoneNumber());
         System.out.println("Contact name:   " + site.contactName());
         System.out.println("Site type:      " + site.siteType());
+    }
+
+    public static class SitesComparator implements Comparator<Site> {
+        @Override
+        public int compare(Site o1, Site o2) {
+            if(o1.siteType().equals(o2.siteType())){
+                return o1.name().compareTo(o2.name());
+            } else {
+                return o1.siteType().compareTo(o2.siteType());
+            }
+        }
     }
 
 }

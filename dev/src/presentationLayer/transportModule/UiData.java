@@ -9,9 +9,10 @@ import utils.Response;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
-import java.util.HashMap;
-import java.util.InputMismatchException;
-import java.util.Scanner;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static presentationLayer.transportModule.SitesManagement.*;
 
 public class UiData {
 
@@ -37,23 +38,23 @@ public class UiData {
         transports = new HashMap<>();
     }
 
-    public HashMap<String, Driver> drivers() {
+    public Map<String, Driver> drivers() {
         return drivers;
     }
 
-    public HashMap<String, Truck> trucks() {
+    public Map<String, Truck> trucks() {
         return trucks;
     }
 
-    public HashMap<String, Site> sites() {
+    public Map<String, Site> sites() {
         return sites;
     }
 
-    public HashMap<Integer, ItemList> itemLists() {
+    public Map<Integer, ItemList> itemLists() {
         return itemLists;
     }
 
-    public HashMap<Integer, Transport> transports() {
+    public Map<Integer, Transport> transports() {
         return transports;
     }
 
@@ -158,12 +159,13 @@ public class UiData {
     Site pickSite(boolean allowDone) {
         int i = 1;
         Site[] siteArray = new Site[sites.size()];
-        for(Site site : sites.values()){
-            System.out.println();
+        Collection<Site> _sites = sites.values().stream().sorted(new SitesComparator()).toList();
+        for(Site site : _sites){
             System.out.print(i+".");
             System.out.println("  name:           "+site.name());
             System.out.println("    Transport zone: "+site.transportZone());
             System.out.println("    site type:      "+site.siteType());
+            System.out.println("-----------------------------------------");
             siteArray[i-1] = site;
             i++;
         }
@@ -194,6 +196,7 @@ public class UiData {
             System.out.print(i + ".");
             System.out.println(" name:         " + driver.name());
             System.out.println("   license type: " + driver.licenseType());
+            System.out.println("-----------------------------------------");
         }
         if(allowDone) {
             System.out.println(i+". Done");
@@ -219,6 +222,7 @@ public class UiData {
             System.out.println("   model:            "+truck.model());
             System.out.println("   max weight:       "+truck.maxWeight());
             System.out.println("   cooling capacity: "+truck.coolingCapacity());
+            System.out.println("-----------------------------------------");
             truckArray[i-1] = truck;
             i++;
         }
@@ -270,4 +274,5 @@ public class UiData {
         }
         return arrivalTime;
     }
+
 }

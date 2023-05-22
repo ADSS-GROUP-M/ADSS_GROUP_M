@@ -28,8 +28,8 @@ public record Site (String name, String address, String transportZone, String ph
 
     public enum SiteType{
         BRANCH,
-        LOGISTICAL_CENTER,
-        SUPPLIER;
+        SUPPLIER,
+        LOGISTICAL_CENTER
     }
     public Site(String name, String address, String transportZone, String phoneNumber, String contactName, SiteType siteType) {
         this(name, address, transportZone, phoneNumber, contactName, siteType, 0.0,0.0);

@@ -48,23 +48,20 @@ public class SitesRoutesController {
             }
         }};
 
-        List<Future<?>> futures = new LinkedList<>();
         final TransportException[] exception = {null};
+
+        List<Runnable> tasks = new LinkedList<>();
         for(Site site : sites) {
-            futures.add(executor.submit(() -> {
+            tasks.add(() -> {
                 try {
                     points.put(site, getCoordinates(site));
                 } catch (TransportException e) {
                     exception[0] = e;
                 }
-            }));
+            });
         }
 
-        while(! futures.stream().allMatch(Future::isDone)) {
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException ignored) {}
-        }
+        executeInParallel(tasks);
 
         if(exception[0] != null) {
             throw exception[0];
@@ -109,14 +106,13 @@ public class SitesRoutesController {
             }
             put(new Pair<>(site.address(),site.address()),new Pair<>(0.0,0.0));
         }};;
-
         Point newSitePoint = new Point(site.address(), new double[]{site.latitude(),site.longitude()});
 
-        List<Future<?>> futures = new LinkedList<>();
         final TransportException[] exception = {null};
 
+        List<Runnable> tasks = new LinkedList<>();
         for(Site other : otherSites) {
-            futures.add(executor.submit(() -> {
+            tasks.add(() -> {
                 try {
                     Point otherSitePoint = new Point(other.address(), new double[]{other.latitude(), other.longitude()});
 
@@ -134,14 +130,11 @@ public class SitesRoutesController {
                 } catch (TransportException e) {
                     exception[0] = e;
                 }
-            }));
+            });
         }
 
-        while(!futures.stream().allMatch(Future::isDone)){
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException ignored) {}
-        }
+        executeInParallel(tasks);
+
         if(exception[0] != null){
             throw exception[0];
         }
@@ -210,5 +203,20 @@ public class SitesRoutesController {
             curr = next;
         }
         return distances;
+    }
+
+    private void executeInParallel(List<Runnable> tasks){
+
+        List<Future<?>> futures = new LinkedList<>();
+
+        for(Runnable task : tasks) {
+            futures.add(executor.submit(task));
+        }
+
+        while(! futures.stream().allMatch(Future::isDone)) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException ignored) {}
+        }
     }
 }

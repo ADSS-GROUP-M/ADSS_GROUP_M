@@ -74,7 +74,7 @@ class TransportsServiceIT {
             add(dest2);
         }};
         try {
-            sc.addAllSitesFirstTimeSystemLoad(sites);
+            sc.addAllSitesFirstTimeSystemLoad(sites,true);
         } catch (TransportException e) {
             fail(e.getMessage(),e);
         }

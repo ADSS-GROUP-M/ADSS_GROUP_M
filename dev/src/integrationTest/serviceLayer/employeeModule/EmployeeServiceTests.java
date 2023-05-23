@@ -140,7 +140,7 @@ public class EmployeeServiceTests {
         }};
 
         try {
-            sc.addAllSitesFirstTimeSystemLoad(sites);
+            sc.addAllSitesFirstTimeSystemLoad(sites,false);
         } catch (TransportException e) {
             fail(e.getMessage(),e.getCause());
         }

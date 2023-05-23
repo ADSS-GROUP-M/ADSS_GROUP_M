@@ -159,31 +159,52 @@ public class SitesController {
     /**
      * this method is used only for the first time the system is loaded.
      * this method assumes that there are no sites in the system.
+     * @apiNote this method does NOT fetch the distances and travel times and from the bing api.
+     * @param sites
      */
     public void addAllSitesFirstTimeSystemLoad(List<Site> sites) throws TransportException {
+        addAllSitesFirstTimeSystemLoad(sites, ()->{}, false);
+    }
 
-        // get latitude and longitude for each site
-        Map<Site,Point> coordinates = sitesRoutesController.getCoordinates(sites);
+    /**
+     * this method is used only for the first time the system is loaded.
+     * this method assumes that there are no sites in the system.
+     */
+    public void addAllSitesFirstTimeSystemLoad(List<Site> sites, Runnable callback, boolean getDistances) throws TransportException {
 
-        List<Site> sitesWithCoordinates = new LinkedList<>();
-        for(var entry : coordinates.entrySet()){
+        // generate basic data needed for the system to work
+        for(Site site : sites){
             try {
-                Site siteWithCoordinates = new Site(entry.getKey(), entry.getValue().latitude(), entry.getValue().longitude());
-                sitesWithCoordinates.add(siteWithCoordinates);
-                dao.insert(siteWithCoordinates);
+                dao.insert(site);
             } catch (DalException e) {
                 throw new TransportException(e.getMessage(),e);
             }
-        }
-
-        for(Site site : sitesWithCoordinates){
             if(site.siteType() == Site.SiteType.BRANCH){
                 employeesService.createBranch(TRANSPORT_MANAGER_USERNAME,site.name());
             }
         }
-        DataGenerator.releaseMainThread(); // release the main thread to continue generating data
 
-        // get route information for between all sites
-        sitesRoutesController.addAllRouteObjectsFirstTimeLoad(sitesWithCoordinates);
+        callback.run(); // release the main thread to continue generating data
+
+        // asynchronously generate the rest of the data for the sites
+        if(getDistances){
+
+            // get latitude and longitude for each site
+            Map<Site,Point> coordinates = sitesRoutesController.getCoordinates(sites);
+
+            List<Site> sitesWithCoordinates = new LinkedList<>();
+            for(var entry : coordinates.entrySet()){
+                try {
+                    Site siteWithCoordinates = new Site(entry.getKey(), entry.getValue().latitude(), entry.getValue().longitude());
+                    sitesWithCoordinates.add(siteWithCoordinates);
+                    dao.update(siteWithCoordinates);
+                } catch (DalException e) {
+                    throw new TransportException(e.getMessage(),e);
+                }
+            }
+
+            // get route information for between all sites
+            sitesRoutesController.addAllRouteObjectsFirstTimeLoad(sitesWithCoordinates);
+        }
     }
 }

@@ -3,6 +3,7 @@ package businessLayer.inventoryModule;
 import businessLayer.businessLayerUsage.Branch;
 import dataAccessLayer.inventoryModule.CategoryManagerMapper;
 import dataAccessLayer.inventoryModule.ProductManagerMapper;
+import exceptions.DalException;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -18,8 +19,14 @@ public class CategoryController {
     private ProductManagerMapper productManagerMapper;
 
     private CategoryController() {
-        categoryManagerMapper = CategoryManagerMapper.getInstance();
-        productManagerMapper = ProductManagerMapper.getInstance();
+        try {
+            categoryManagerMapper = CategoryManagerMapper.getInstance();
+            productManagerMapper = ProductManagerMapper.getInstance();
+        } catch (DalException e) {
+
+            //TODO: handle exception
+            throw new RuntimeException(e);
+        }
         this.categories = categoryManagerMapper.getCached_categories();
     }
 

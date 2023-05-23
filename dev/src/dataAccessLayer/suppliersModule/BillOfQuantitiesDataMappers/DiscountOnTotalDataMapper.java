@@ -5,13 +5,18 @@ import businessLayer.suppliersModule.Discounts.Discount;
 import businessLayer.suppliersModule.Discounts.PercentageDiscount;
 import businessLayer.suppliersModule.Pair;
 import dataAccessLayer.dalAbstracts.AbstractDataMapper;
+import dataAccessLayer.dalAbstracts.SQLExecutor;
+import dataAccessLayer.dalUtils.CreateTableQueryBuilder;
 import dataAccessLayer.dalUtils.OfflineResultSet;
+import exceptions.DalException;
 
 import java.sql.SQLException;
 
+import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.*;
+
 public class DiscountOnTotalDataMapper  extends AbstractDataMapper {
-    public DiscountOnTotalDataMapper() {
-        super("discounts_on_total", new String[] {"bn_number", "price_to_reach", "percentage", "cash"});
+    public DiscountOnTotalDataMapper(SQLExecutor sqlExecutor) throws DalException {
+        super(sqlExecutor, "discounts_on_total", new String[] {"bn_number", "price_to_reach", "percentage", "cash"});
     }
 
     public void insert(String bnNumber, double priceToReach, Discount discount) throws SQLException {
@@ -54,5 +59,22 @@ public class DiscountOnTotalDataMapper  extends AbstractDataMapper {
             return new Pair<>(resultSet.getDouble("price_to_reach"), discount);
         }
         return null;
+    }
+
+    /**
+     * Used to insert data into {@link AbstractDataMapper#createTableQueryBuilder}. <br/>
+     * in order to add columns and foreign keys to the table use:<br/><br/>
+     * {@link CreateTableQueryBuilder#addColumn(String, ColumnType, ColumnModifier...)} <br/><br/>
+     * {@link CreateTableQueryBuilder#addForeignKey(String, String, String)}<br/><br/>
+     * {@link CreateTableQueryBuilder#addCompositeForeignKey(String[], String, String[])}
+     */
+    @Override
+    protected void initializeCreateTableQueryBuilder() throws DalException {
+        createTableQueryBuilder
+                .addColumn("bn_number", ColumnType.TEXT)
+                .addColumn("price_to_reach", ColumnType.REAL)
+                .addColumn("percentage", ColumnType.REAL)
+                .addColumn("cash", ColumnType.REAL)
+                .addForeignKey("bn_number", "suppliers","bn_number", ON_UPDATE.CASCADE, ON_DELETE.CASCADE);
     }
 }

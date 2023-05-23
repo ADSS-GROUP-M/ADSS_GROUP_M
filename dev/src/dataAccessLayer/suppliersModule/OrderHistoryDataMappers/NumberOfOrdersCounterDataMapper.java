@@ -1,17 +1,23 @@
 package dataAccessLayer.suppliersModule.OrderHistoryDataMappers;
 
 import dataAccessLayer.dalAbstracts.AbstractDataMapper;
+import dataAccessLayer.dalAbstracts.SQLExecutor;
+import dataAccessLayer.dalUtils.CreateTableQueryBuilder;
 import dataAccessLayer.dalUtils.OfflineResultSet;
+import exceptions.DalException;
 
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
+import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnModifier;
+import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnType;
+
 public class NumberOfOrdersCounterDataMapper extends AbstractDataMapper {
     private Map<String, Integer> suppliersCounters;
 
-    public NumberOfOrdersCounterDataMapper(){
-        super("number_of_order_counter", new String[]{"bn_number", "order_number_counter"});
+    public NumberOfOrdersCounterDataMapper(SQLExecutor sqlExecutor) throws DalException {
+        super(sqlExecutor, "number_of_order_counter", new String[]{"bn_number", "order_number_counter"});
         suppliersCounters = new HashMap<>();
     }
 
@@ -55,5 +61,20 @@ public class NumberOfOrdersCounterDataMapper extends AbstractDataMapper {
         int orderId = getOrderNumber(bnNumber);
         update(bnNumber, orderId + 1);
         return orderId;
+    }
+
+    /**
+     * Used to insert data into {@link AbstractDataMapper#createTableQueryBuilder}. <br/>
+     * in order to add columns and foreign keys to the table use:<br/><br/>
+     * {@link CreateTableQueryBuilder#addColumn(String, ColumnType, ColumnModifier...)} <br/><br/>
+     * {@link CreateTableQueryBuilder#addForeignKey(String, String, String)}<br/><br/>
+     * {@link CreateTableQueryBuilder#addCompositeForeignKey(String[], String, String[])}
+     */
+    @Override
+    protected void initializeCreateTableQueryBuilder() throws DalException {
+        createTableQueryBuilder
+                .addColumn("bn_number", ColumnType.TEXT, ColumnModifier.PRIMARY_KEY)
+                .addColumn("order_number_counter", ColumnType.INTEGER)
+                .addForeignKey("bn_number", "suppliers", "bn_number");
     }
 }

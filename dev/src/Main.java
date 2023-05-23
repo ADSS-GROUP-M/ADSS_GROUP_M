@@ -2,8 +2,6 @@ import org.junit.jupiter.api.Test;
 import presentationLayer.DataGenerator;
 import presentationLayer.employeeModule.View.MenuManager;
 
-import javax.xml.crypto.Data;
-
 @SuppressWarnings("NewClassNamingConvention")
 public class Main {
 

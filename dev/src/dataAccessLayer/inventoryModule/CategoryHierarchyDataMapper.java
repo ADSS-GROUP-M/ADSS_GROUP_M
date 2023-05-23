@@ -2,20 +2,26 @@ package dataAccessLayer.inventoryModule;
 
 import businessLayer.inventoryModule.Category;
 import dataAccessLayer.dalAbstracts.AbstractDataMapper;
+import dataAccessLayer.dalAbstracts.SQLExecutor;
+import dataAccessLayer.dalUtils.CreateTableQueryBuilder;
 import dataAccessLayer.dalUtils.OfflineResultSet;
+import exceptions.DalException;
 
 import java.sql.SQLException;
 import java.util.Collections;
 import java.util.Map;
 
+import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnModifier;
+import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnType;
+
 public class CategoryHierarchyDataMapper extends AbstractDataMapper {
     private static CategoryHierarchyDataMapper instance = null;
 
-    private CategoryHierarchyDataMapper() {
-        super("category_hierarchy", new String[]{"category", "sub_category"});
+    private CategoryHierarchyDataMapper(SQLExecutor sqlExecutor) throws DalException {
+        super(sqlExecutor, "category_hierarchy", new String[]{"category", "sub_category"});
     }
 
-    public static CategoryHierarchyDataMapper getInstance(){
+    public static CategoryHierarchyDataMapper getInstance() throws DalException {
         if (instance == null) {
             return new CategoryHierarchyDataMapper();
         } else {
@@ -59,4 +65,19 @@ public class CategoryHierarchyDataMapper extends AbstractDataMapper {
         }
     }
 
+    /**
+     * Used to insert data into {@link AbstractDataMapper#createTableQueryBuilder}. <br/>
+     * in order to add columns and foreign keys to the table use:<br/><br/>
+     * {@link CreateTableQueryBuilder#addColumn(String, ColumnType, ColumnModifier...)} <br/><br/>
+     * {@link CreateTableQueryBuilder#addForeignKey(String, String, String)}<br/><br/>
+     * {@link CreateTableQueryBuilder#addCompositeForeignKey(String[], String, String[])}
+     */
+    @Override
+    protected void initializeCreateTableQueryBuilder() throws DalException {
+        createTableQueryBuilder
+                .addColumn("category", ColumnType.TEXT, ColumnModifier.PRIMARY_KEY)
+                .addColumn("sub_category", ColumnType.TEXT, ColumnModifier.PRIMARY_KEY)
+                .addForeignKey("category", "category", "category_name")
+                .addForeignKey("sub_category", "category", "category_name");
+    }
 }

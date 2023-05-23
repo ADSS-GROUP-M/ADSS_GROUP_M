@@ -4,18 +4,23 @@ import businessLayer.suppliersModule.Discounts.CashDiscount;
 import businessLayer.suppliersModule.Discounts.Discount;
 import businessLayer.suppliersModule.Discounts.PercentageDiscount;
 import dataAccessLayer.dalAbstracts.AbstractDataMapper;
+import dataAccessLayer.dalAbstracts.SQLExecutor;
+import dataAccessLayer.dalUtils.CreateTableQueryBuilder;
 import dataAccessLayer.dalUtils.OfflineResultSet;
+import exceptions.DalException;
 
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
+import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.*;
+
 public class ProductsDiscountsDataMapper extends AbstractDataMapper {
     /**
      * maps between supplier's bn number - to map between product's catalog number - to its map of discounts
      */
-    public ProductsDiscountsDataMapper() {
-        super("products_discounts", new String[]{"bn_number","catalog_number", "amount", "percentage", "cash"});
+    public ProductsDiscountsDataMapper(SQLExecutor sqlExecutor) throws DalException {
+        super(sqlExecutor, "products_discounts", new String[]{"bn_number","catalog_number", "amount", "percentage", "cash"});
     }
 
     public void insert(String bnNumber, String catalogNumber, int amount, Discount discount) throws SQLException {
@@ -57,5 +62,24 @@ public class ProductsDiscountsDataMapper extends AbstractDataMapper {
                 suppliersProductDiscounts.get(catalogNumber).put(amount, new PercentageDiscount(resultSet.getDouble("percentage")));
         }
         return suppliersProductDiscounts;
+    }
+
+    /**
+     * Used to insert data into {@link AbstractDataMapper#createTableQueryBuilder}. <br/>
+     * in order to add columns and foreign keys to the table use:<br/><br/>
+     * {@link CreateTableQueryBuilder#addColumn(String, ColumnType, ColumnModifier...)} <br/><br/>
+     * {@link CreateTableQueryBuilder#addForeignKey(String, String, String)}<br/><br/>
+     * {@link CreateTableQueryBuilder#addCompositeForeignKey(String[], String, String[])}
+     */
+    @Override
+    protected void initializeCreateTableQueryBuilder() throws DalException {
+        createTableQueryBuilder
+                .addColumn("bn_number", ColumnType.TEXT, ColumnModifier.PRIMARY_KEY)
+                .addColumn("catalog_number", ColumnType.TEXT, ColumnModifier.PRIMARY_KEY)
+                .addColumn("amount", ColumnType.INTEGER, ColumnModifier.PRIMARY_KEY)
+                .addColumn("percentage", ColumnType.REAL)
+                .addColumn("cash", ColumnType.REAL)
+                .addForeignKey("catalog_number", "products","catalog_number", ON_UPDATE.CASCADE, ON_DELETE.CASCADE)
+                .addForeignKey("bn_number", "suppliers","bn_number", ON_UPDATE.CASCADE, ON_DELETE.CASCADE);
     }
 }

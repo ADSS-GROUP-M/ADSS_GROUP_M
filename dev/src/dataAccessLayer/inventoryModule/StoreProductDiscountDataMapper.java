@@ -3,7 +3,10 @@ package dataAccessLayer.inventoryModule;
 import businessLayer.businessLayerUsage.Branch;
 import businessLayer.inventoryModule.ProductStoreDiscount;
 import dataAccessLayer.dalAbstracts.AbstractDataMapper;
+import dataAccessLayer.dalAbstracts.SQLExecutor;
+import dataAccessLayer.dalUtils.CreateTableQueryBuilder;
 import dataAccessLayer.dalUtils.OfflineResultSet;
+import exceptions.DalException;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
@@ -12,14 +15,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnModifier;
+import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnType;
+
 public class StoreProductDiscountDataMapper extends AbstractDataMapper {
 
     private static StoreProductDiscountDataMapper instance = null;
-    public StoreProductDiscountDataMapper() {
-        super("store_product_discount", new String[]{"catalog_number", "start_date", "end_date", "discount","branch"});
+    public StoreProductDiscountDataMapper(SQLExecutor sqlExecutor) throws DalException {
+        super(sqlExecutor, "store_product_discount", new String[]{"catalog_number", "start_date", "end_date", "discount","branch"});
     }
 
-    public static StoreProductDiscountDataMapper getInstance(){
+    public static StoreProductDiscountDataMapper getInstance() throws DalException {
         if(instance == null){
             return new StoreProductDiscountDataMapper();
         } else {
@@ -73,4 +79,21 @@ public class StoreProductDiscountDataMapper extends AbstractDataMapper {
     }
 
 
+    /**
+     * Used to insert data into {@link AbstractDataMapper#createTableQueryBuilder}. <br/>
+     * in order to add columns and foreign keys to the table use:<br/><br/>
+     * {@link CreateTableQueryBuilder#addColumn(String, ColumnType, ColumnModifier...)} <br/><br/>
+     * {@link CreateTableQueryBuilder#addForeignKey(String, String, String)}<br/><br/>
+     * {@link CreateTableQueryBuilder#addCompositeForeignKey(String[], String, String[])}
+     */
+    @Override
+    protected void initializeCreateTableQueryBuilder() throws DalException {
+        createTableQueryBuilder
+                .addColumn("catalog_number", ColumnType.TEXT, ColumnModifier.PRIMARY_KEY)
+                .addColumn("start_date", ColumnType.TEXT, ColumnModifier.PRIMARY_KEY)
+                .addColumn("end_date", ColumnType.INTEGER, ColumnModifier.PRIMARY_KEY)
+                .addColumn("discount", ColumnType.REAL, ColumnModifier.PRIMARY_KEY)
+                .addColumn("branch", ColumnType.TEXT, ColumnModifier.PRIMARY_KEY)
+                .addForeignKey("catalog_number", "products", "catalog_number");
+    }
 }

@@ -1,0 +1,159 @@
+--CREATE TABLE IF NOT EXISTS "delivery_agreement" (
+--"bn_number" TEXT,
+--"have_transport" INTEGER CHECK("have_transport" >= 0 & "have_transport" <= 1),
+--"by_invitation" INTEGER CHECK("by_invitation" >= 0 & "by_invitation" <= 1),
+--"days" TEXT,
+--FOREIGN KEY("bn_number") REFERENCES "suppliers"("bn_number") on update cascade on delete cascade
+--);
+--CREATE TABLE IF NOT EXISTS "orders_history" (
+--"bn_number" TEXT,
+--"order_id" INTEGER,
+--"catalog_number" TEXT,
+--"quantity" INTEGER,
+--PRIMARY KEY("bn_number","order_id"),
+--FOREIGN KEY("bn_number") REFERENCES "suppliers"("bn_number") on update cascade on delete cascade,
+--FOREIGN KEY("catalog_number") REFERENCES "products"("catalog_number") on update cascade on delete no action
+--);
+--CREATE TABLE IF NOT EXISTS "products" (
+--"catalog_number" TEXT,
+--"name" TEXT,
+--"manufacture" TEXT,
+--"category" TEXT,
+--PRIMARY KEY("catalog_number"),
+--FOREIGN KEY("category") REFERENCES "category"("category_name")
+--);
+--CREATE TABLE IF NOT EXISTS "branch" (
+--"branch_name" TEXT,
+--PRIMARY KEY("branch_name")
+--);
+--CREATE TABLE IF NOT EXISTS "category" (
+--"category_name" TEXT,
+--PRIMARY KEY("category_name")
+--);
+--CREATE TABLE IF NOT EXISTS "category_Hierarchy" (
+--"category" TEXT,
+--"sub_category" TEXT,
+--PRIMARY KEY("category","sub_category"),
+--FOREIGN KEY("category") REFERENCES "category"("category_name"),
+--FOREIGN KEY("sub_category") REFERENCES "category"("category_name")
+--);
+--CREATE TABLE IF NOT EXISTS "contacts_info" (
+--"bn_number" TEXT,
+--"name" TEXT,
+--"phone_number" TEXT,
+--"email" TEXT,
+--CONSTRAINT "tab_pk" PRIMARY KEY("bn_number","email"),
+--FOREIGN KEY("bn_number") REFERENCES "suppliers"("bn_number") on update cascade on delete cascade
+--);
+--CREATE TABLE IF NOT EXISTS "order_of_discounts" (
+--"bn_number" TEXT,
+--"amount_before_total" INTEGER,
+--CONSTRAINT "order_of_discounts_pk" PRIMARY KEY("bn_number"),
+--CONSTRAINT "order_of_discounts_suppliers_null_fk" FOREIGN KEY("bn_number") REFERENCES "suppliers"("bn_number"),
+--CONSTRAINT "check_name" CHECK("amount_before_total" = 0 OR "amount_before_total" = 1)
+--);
+--CREATE TABLE IF NOT EXISTS "number_of_order_counter" (
+--"bn_number" TEXT NOT NULL,
+--"order_number_counter" INTEGER,
+--CONSTRAINT "number_of_order_counter_pk" PRIMARY KEY("bn_number"),
+--CONSTRAINT "number_of_order_counter_suppliers_null_fk" FOREIGN KEY("bn_number") REFERENCES "suppliers"("bn_number")
+--);
+--CREATE TABLE IF NOT EXISTS "fields" (
+--"bn_number" TEXT,
+--"field" TEXT,
+--CONSTRAINT "tab_pk" PRIMARY KEY("bn_number","field"),
+--FOREIGN KEY("bn_number") REFERENCES "suppliers"("bn_number") on update cascade on delete cascade
+--);
+--CREATE TABLE IF NOT EXISTS "suppliers" (
+--"name" TEXT,
+--"bn_number" TEXT,
+--"bank" TEXT,
+--"branch" TEXT,
+--"account_number" TEXT,
+--"payment_method" TEXT,
+--PRIMARY KEY("bn_number")
+--);
+--CREATE TABLE IF NOT EXISTS "suppliers_products" (
+--"bn_number" TEXT,
+--"catalog_number" TEXT,
+--"suppliers_catalog_number" TEXT,
+--"quantity" INTEGER,
+--"price" REAL,
+--PRIMARY KEY("bn_number","catalog_number"),
+--FOREIGN KEY("catalog_number") REFERENCES "products"("catalog_number") on update cascade on delete cascade,
+--FOREIGN KEY("bn_number") REFERENCES "suppliers"("bn_number") on update cascade on delete cascade
+--);
+--CREATE TABLE IF NOT EXISTS "products_discounts" (
+--"bn_number" TEXT,
+--"catalog_number" TEXT,
+--"amount" INTEGER,
+--"percentage" REAL,
+--"cash" REAL,
+--PRIMARY KEY("bn_number","catalog_number","amount"),
+--FOREIGN KEY("catalog_number") REFERENCES "products" on update cascade on delete cascade,
+--FOREIGN KEY("bn_number") REFERENCES "suppliers" on update cascade on delete cascade
+);
+--CREATE TABLE IF NOT EXISTS "discounts_on_total" (
+--"bn_number" TEXT,
+--"price_to_reach" REAL,
+--"percentage" REAL,
+--"cash" REAL,
+--FOREIGN KEY("bn_number") REFERENCES "suppliers" on update cascade on delete cascade
+--);
+--CREATE TABLE IF NOT EXISTS "discounts_on_amount" (
+--"bn_number" TEXT,
+--"amount_to_reach" INTEGER,
+--"percentage" REAL,
+--"cash" REAL,
+--PRIMARY KEY("bn_number"),
+--FOREIGN KEY("bn_number") REFERENCES "suppliers" on update cascade on delete cascade
+--);
+--CREATE TABLE IF NOT EXISTS "periodic_order_details" (
+--"order_id" INTEGER,
+--"bn_number" TEXT,
+--"day" INTEGER,
+--"branch" TEXT,
+--CONSTRAINT "periodic_order_day_pk" PRIMARY KEY("order_id"),
+--FOREIGN KEY("bn_number") REFERENCES "suppliers"("bn_number")
+--);
+--CREATE TABLE IF NOT EXISTS "periodic_order" (
+--"order_id" INTEGER,
+--"catalog_number" TEXT,
+--"quantity" INTEGER NOT NULL,
+--PRIMARY KEY("order_id","catalog_number"),
+--FOREIGN KEY("order_id") REFERENCES "periodic_order_details"("order_id"),
+--FOREIGN KEY("catalog_number") REFERENCES "products"
+--);
+--CREATE TABLE IF NOT EXISTS "product_pair_branch" (
+--"branch_name" TEXT,
+--"product_catalog_num" TEXT,
+--"original_store_price" REAL,
+--"notification_min" NUMERIC,
+--PRIMARY KEY("branch_name","product_catalog_num"),
+--FOREIGN KEY("product_catalog_num") REFERENCES "products"("catalog_number")
+--);
+--CREATE TABLE IF NOT EXISTS "store_product_discount" (
+--"catalog_number" TEXT,
+--"start_date" TEXT,
+--"end_date" INTEGER,
+--"discount" REAL,
+--"branch" TEXT,
+--PRIMARY KEY("catalog_number","start_date","end_date","discount","branch"),
+--FOREIGN KEY("catalog_number") REFERENCES "products"("catalog_number")
+--);
+--CREATE TABLE IF NOT EXISTS "product_items" (
+--"serial_number" TEXT,
+--"is_defective" INTEGER DEFAULT 0,
+--"defection_date" TEXT,
+--"supplier_id" TEXT,
+--"supplier_price" REAL,
+--"supplier_discount" REAL,
+--"sold_price" REAL DEFAULT -1,
+--"expiration_date" TEXT,
+--"location" TEXT,
+--"catalog_number" TEXT,
+--"branch" TEXT,
+--"is_sold" INTEGER DEFAULT -1,
+--"sold_date" TEXT,
+--PRIMARY KEY("serial_number","catalog_number","branch")
+--);

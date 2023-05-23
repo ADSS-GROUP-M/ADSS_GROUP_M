@@ -15,7 +15,13 @@ public class SupplierController {
 
     private static SupplierController supplierController;
     private SupplierController(){
-        supplierDataMapper = new SupplierDataMapper();
+        try {
+            supplierDataMapper = new SupplierDataMapper();
+        } catch (DalException e) {
+
+            //TODO: handle exception
+            throw new RuntimeException(e);
+        }
     }
     public static SupplierController getInstance(){
         if(supplierController == null)

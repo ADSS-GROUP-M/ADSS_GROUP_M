@@ -5,13 +5,18 @@ import businessLayer.suppliersModule.Discounts.Discount;
 import businessLayer.suppliersModule.Discounts.PercentageDiscount;
 import businessLayer.suppliersModule.Pair;
 import dataAccessLayer.dalAbstracts.AbstractDataMapper;
+import dataAccessLayer.dalAbstracts.SQLExecutor;
+import dataAccessLayer.dalUtils.CreateTableQueryBuilder;
 import dataAccessLayer.dalUtils.OfflineResultSet;
+import exceptions.DalException;
 
 import java.sql.SQLException;
 
+import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.*;
+
 public class DiscountOnAmountDataMapper  extends AbstractDataMapper {
-    public DiscountOnAmountDataMapper() {
-        super("discounts_on_amount", new String[] {"bn_number", "amount_to_reach", "percentage", "cash"});
+    public DiscountOnAmountDataMapper(SQLExecutor sqlExecutor) throws DalException {
+        super(sqlExecutor, "discounts_on_amount", new String[] {"bn_number", "amount_to_reach", "percentage", "cash"});
     }
 
     public void insert(String bnNumber, int amountToReach, Discount discount) throws SQLException {
@@ -57,4 +62,20 @@ public class DiscountOnAmountDataMapper  extends AbstractDataMapper {
     }
 
 
+    /**
+     * Used to insert data into {@link AbstractDataMapper#createTableQueryBuilder}. <br/>
+     * in order to add columns and foreign keys to the table use:<br/><br/>
+     * {@link CreateTableQueryBuilder#addColumn(String, ColumnType, ColumnModifier...)} <br/><br/>
+     * {@link CreateTableQueryBuilder#addForeignKey(String, String, String)}<br/><br/>
+     * {@link CreateTableQueryBuilder#addCompositeForeignKey(String[], String, String[])}
+     */
+    @Override
+    protected void initializeCreateTableQueryBuilder() throws DalException {
+        createTableQueryBuilder
+                .addColumn("bn_number", ColumnType.TEXT,ColumnModifier.PRIMARY_KEY)
+                .addColumn("amount_to_reach", ColumnType.INTEGER)
+                .addColumn("percentage", ColumnType.REAL)
+                .addColumn("cash", ColumnType.REAL)
+                .addForeignKey("bn_number", "suppliers","bn_number", ON_UPDATE.CASCADE, ON_DELETE.CASCADE);
+    }
 }

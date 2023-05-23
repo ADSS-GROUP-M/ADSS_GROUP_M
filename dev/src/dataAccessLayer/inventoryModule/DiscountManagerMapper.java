@@ -2,6 +2,7 @@ package dataAccessLayer.inventoryModule;
 
 import businessLayer.businessLayerUsage.Branch;
 import businessLayer.inventoryModule.ProductStoreDiscount;
+import exceptions.DalException;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
@@ -16,7 +17,7 @@ public class DiscountManagerMapper {
     public static DiscountManagerMapper instance = null;
     Map<Branch, Map<String, List<ProductStoreDiscount>>> cached_discounts;
 
-    private DiscountManagerMapper(){
+    private DiscountManagerMapper() throws DalException {
         storeProductDiscountDataMapper = StoreProductDiscountDataMapper.getInstance();
         try {
             cached_discounts = storeProductDiscountDataMapper.initializeCache();
@@ -24,7 +25,7 @@ public class DiscountManagerMapper {
             throw new RuntimeException(e.getMessage());
         }
     }
-    public static DiscountManagerMapper getInstance(){
+    public static DiscountManagerMapper getInstance() throws DalException {
         if (instance == null) {
             return new DiscountManagerMapper();
         } else {

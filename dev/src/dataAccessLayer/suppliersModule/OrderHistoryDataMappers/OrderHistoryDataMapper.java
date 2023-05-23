@@ -2,16 +2,21 @@ package dataAccessLayer.suppliersModule.OrderHistoryDataMappers;
 
 import businessLayer.suppliersModule.Order;
 import dataAccessLayer.dalAbstracts.AbstractDataMapper;
+import dataAccessLayer.dalAbstracts.SQLExecutor;
+import dataAccessLayer.dalUtils.CreateTableQueryBuilder;
 import dataAccessLayer.dalUtils.OfflineResultSet;
+import exceptions.DalException;
 
 import java.sql.SQLException;
 import java.util.*;
 
+import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.*;
+
 public class OrderHistoryDataMapper extends AbstractDataMapper {
     private NumberOfOrdersCounterDataMapper numberOfOrdersCounterDataMapper;
     private Map<String, List<Order>> suppliersOrderHistory;
-    public OrderHistoryDataMapper() {
-        super("orders_history", new String[]{"bn_number", "order_id", "catalog_number", "quantity"});
+    public OrderHistoryDataMapper(SQLExecutor sqlExecutor) throws DalException {
+        super(sqlExecutor, "orders_history", new String[]{"bn_number", "order_id", "catalog_number", "quantity"});
         numberOfOrdersCounterDataMapper = new NumberOfOrdersCounterDataMapper();
         suppliersOrderHistory = new HashMap<>();
     }
@@ -69,5 +74,25 @@ public class OrderHistoryDataMapper extends AbstractDataMapper {
         List<Order> orderHistory = findAll(bnNumber, numberOfOrders);
         suppliersOrderHistory.put(bnNumber, orderHistory);
         return new LinkedList<>(orderHistory);
+    }
+
+    /**
+     * Used to insert data into {@link AbstractDataMapper#createTableQueryBuilder}. <br/>
+     * in order to add columns and foreign keys to the table use:<br/><br/>
+     * {@link CreateTableQueryBuilder#addColumn(String, ColumnType, ColumnModifier...)} <br/><br/>
+     * {@link CreateTableQueryBuilder#addForeignKey(String, String, String)}<br/><br/>
+     * {@link CreateTableQueryBuilder#addCompositeForeignKey(String[], String, String[])}
+     */
+    @Override
+    protected void initializeCreateTableQueryBuilder() throws DalException {
+        createTableQueryBuilder
+                .addColumn("bn_number", ColumnType.TEXT, ColumnModifier.PRIMARY_KEY)
+                .addColumn("order_id", ColumnType.INTEGER, ColumnModifier.PRIMARY_KEY)
+                .addColumn("catalog_number", ColumnType.TEXT)
+                .addColumn("quantity", ColumnType.INTEGER)
+                .addForeignKey("bn_number", "suppliers", "bn_number",
+                        ON_UPDATE.CASCADE, ON_DELETE.CASCADE)
+                .addForeignKey("catalog_number", "products", "catalog_number",
+                        ON_UPDATE.CASCADE, ON_DELETE.NO_ACTION);
     }
 }

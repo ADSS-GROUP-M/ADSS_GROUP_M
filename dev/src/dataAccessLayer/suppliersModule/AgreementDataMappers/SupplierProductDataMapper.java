@@ -2,15 +2,20 @@ package dataAccessLayer.suppliersModule.AgreementDataMappers;
 
 import businessLayer.suppliersModule.Product;
 import dataAccessLayer.dalAbstracts.AbstractDataMapper;
+import dataAccessLayer.dalAbstracts.SQLExecutor;
+import dataAccessLayer.dalUtils.CreateTableQueryBuilder;
 import dataAccessLayer.dalUtils.OfflineResultSet;
+import exceptions.DalException;
 
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
+import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.*;
+
 public class SupplierProductDataMapper extends AbstractDataMapper {
-    public SupplierProductDataMapper() {
-        super("suppliers_products", new String[]{"bn_number", "catalog_number", "suppliers_catalog_number", "quantity", "price"});
+    public SupplierProductDataMapper(SQLExecutor sqlExecutor) throws DalException {
+        super(sqlExecutor, "suppliers_products", new String[]{"bn_number", "catalog_number", "suppliers_catalog_number", "quantity", "price"});
     }
 
     public void insert(String bnNumber, String catalogNumber, String suppliersCatalogNumber, int quantity, double price) throws SQLException {
@@ -52,5 +57,24 @@ public class SupplierProductDataMapper extends AbstractDataMapper {
 
     public void updatePrice(String bnNumber, String catalogNumber, double price) throws SQLException {
         sqlExecutor.executeWrite(String.format("UPDATE %s SET price = %f WHERE bn_number = '%s' and catalog_number = '%s'", tableName, price, catalogNumber, bnNumber));
+    }
+
+    /**
+     * Used to insert data into {@link AbstractDataMapper#createTableQueryBuilder}. <br/>
+     * in order to add columns and foreign keys to the table use:<br/><br/>
+     * {@link CreateTableQueryBuilder#addColumn(String, ColumnType, ColumnModifier...)} <br/><br/>
+     * {@link CreateTableQueryBuilder#addForeignKey(String, String, String)}<br/><br/>
+     * {@link CreateTableQueryBuilder#addCompositeForeignKey(String[], String, String[])}
+     */
+    @Override
+    protected void initializeCreateTableQueryBuilder() throws DalException {
+        createTableQueryBuilder
+                .addColumn("bn_number", ColumnType.TEXT,ColumnModifier.PRIMARY_KEY)
+                .addColumn("catalog_number", ColumnType.TEXT,ColumnModifier.PRIMARY_KEY)
+                .addColumn("suppliers_catalog_number", ColumnType.TEXT)
+                .addColumn("quantity", ColumnType.INTEGER)
+                .addColumn("price", ColumnType.REAL)
+                .addForeignKey("catalog_number", "products","catalog_number", ON_UPDATE.CASCADE, ON_DELETE.CASCADE)
+                .addForeignKey("bn_number", "suppliers","bn_number", ON_UPDATE.CASCADE, ON_DELETE.CASCADE);
     }
 }

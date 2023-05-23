@@ -5,6 +5,7 @@ import businessLayer.suppliersModule.DeliveryAgreements.DeliveryAgreement;
 import businessLayer.suppliersModule.DeliveryAgreements.DeliveryByInvitation;
 import businessLayer.suppliersModule.DeliveryAgreements.DeliveryFixedDays;
 import businessLayer.suppliersModule.Product;
+import dataAccessLayer.dalAbstracts.SQLExecutor;
 import dataAccessLayer.suppliersModule.ProductsDataMapper;
 import exceptions.DalException;
 
@@ -20,7 +21,7 @@ public class AgreementDataMapper {
     private ProductsDataMapper productsDataMapper;
     private Map<String, Agreement> suppliersAgreement;
 
-    public AgreementDataMapper(){
+    public AgreementDataMapper(SQLExecutor sqlExecutor) throws DalException {
         supplierProductDataMapper = new SupplierProductDataMapper();
         deliveryAgreementDataMapper = new DeliveryAgreementDataMapper();
         productsDataMapper = ProductsDataMapper.getInstance();

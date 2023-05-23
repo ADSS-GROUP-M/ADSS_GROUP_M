@@ -17,10 +17,16 @@ public class BillOfQuantitiesDataMapper {
     private Map<String, BillOfQuantities> suppliersBillOfQuantities;
 
     public BillOfQuantitiesDataMapper(){
-        productsDiscountsDataMapper = new ProductsDiscountsDataMapper();
-        discountOnAmountDataMapper = new DiscountOnAmountDataMapper();
-        discountOnTotalDataMapper = new DiscountOnTotalDataMapper();
-        orderOfDiscountsDataMapper = new OrderOfDiscountsDataMapper();
+        try {
+            productsDiscountsDataMapper = new ProductsDiscountsDataMapper();
+            discountOnAmountDataMapper = new DiscountOnAmountDataMapper();
+            discountOnTotalDataMapper = new DiscountOnTotalDataMapper();
+            orderOfDiscountsDataMapper = new OrderOfDiscountsDataMapper();
+        } catch (DalException e) {
+
+            //TODO: handle exception
+            throw new RuntimeException(e);
+        }
         suppliersBillOfQuantities = new HashMap<>();
     }
 

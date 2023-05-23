@@ -2,6 +2,7 @@ package businessLayer.suppliersModule;
 
 import businessLayer.businessLayerUsage.Branch;
 import dataAccessLayer.suppliersModule.PeriodicOrderDataMapper;
+import exceptions.DalException;
 
 import java.sql.SQLException;
 import java.util.Map;
@@ -13,7 +14,13 @@ public class PeriodicOrderController {
     private AgreementController agreementController;
 
     private PeriodicOrderController(){
-        periodicOrderDataMapper = new PeriodicOrderDataMapper();
+        try {
+            periodicOrderDataMapper = new PeriodicOrderDataMapper();
+        } catch (DalException e) {
+
+            //TODO: handle exception
+            throw new RuntimeException(e);
+        }
         agreementController = AgreementController.getInstance();
     }
 

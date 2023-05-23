@@ -3,21 +3,27 @@ package dataAccessLayer.inventoryModule;
 import businessLayer.businessLayerUsage.Branch;
 import businessLayer.inventoryModule.ProductItem;
 import dataAccessLayer.dalAbstracts.AbstractDataMapper;
+import dataAccessLayer.dalAbstracts.SQLExecutor;
+import dataAccessLayer.dalUtils.CreateTableQueryBuilder;
 import dataAccessLayer.dalUtils.OfflineResultSet;
+import exceptions.DalException;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnModifier;
+import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnType;
+
 public class ProductItemDataMapper extends AbstractDataMapper {
     private static ProductItemDataMapper instance = null;
 
-    private ProductItemDataMapper() {
-        super("product_items", new String[]{"serial_number", "is_defective", "defection_date", "supplier_id", "supplier_price", "supplier_discount", "sold_price", "expiration_date", "location", "catalog_number", "branch", "is_sold", "sold_date"});
+    private ProductItemDataMapper(SQLExecutor sqlExecutor) throws DalException {
+        super(sqlExecutor, "product_items", new String[]{"serial_number", "is_defective", "defection_date", "supplier_id", "supplier_price", "supplier_discount", "sold_price", "expiration_date", "location", "catalog_number", "branch", "is_sold", "sold_date"});
     }
 
-    public static ProductItemDataMapper getInstance() {
+    public static ProductItemDataMapper getInstance() throws DalException {
         if (instance == null)
             instance = new ProductItemDataMapper();
         return instance;
@@ -100,4 +106,28 @@ public class ProductItemDataMapper extends AbstractDataMapper {
             return resultSet.getInt("count") > 0;
         return false;    }
 
+    /**
+     * Used to insert data into {@link AbstractDataMapper#createTableQueryBuilder}. <br/>
+     * in order to add columns and foreign keys to the table use:<br/><br/>
+     * {@link CreateTableQueryBuilder#addColumn(String, ColumnType, ColumnModifier...)} <br/><br/>
+     * {@link CreateTableQueryBuilder#addForeignKey(String, String, String)}<br/><br/>
+     * {@link CreateTableQueryBuilder#addCompositeForeignKey(String[], String, String[])}
+     */
+    @Override
+    protected void initializeCreateTableQueryBuilder() throws DalException {
+        createTableQueryBuilder
+                .addColumn("serial_number", ColumnType.TEXT, ColumnModifier.PRIMARY_KEY)
+                .addColumn("is_defective", ColumnType.INTEGER, "0")
+                .addColumn("defection_date", ColumnType.TEXT)
+                .addColumn("supplier_id", ColumnType.TEXT)
+                .addColumn("supplier_price", ColumnType.REAL)
+                .addColumn("supplier_discount", ColumnType.REAL)
+                .addColumn("sold_price", ColumnType.REAL, "-1")
+                .addColumn("expiration_date", ColumnType.TEXT)
+                .addColumn("location", ColumnType.TEXT)
+                .addColumn("catalog_number", ColumnType.TEXT,ColumnModifier.PRIMARY_KEY)
+                .addColumn("branch", ColumnType.TEXT,ColumnModifier.PRIMARY_KEY)
+                .addColumn("is_sold", ColumnType.INTEGER, "-1")
+                .addColumn("sold_date", ColumnType.TEXT);
+    }
 }

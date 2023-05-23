@@ -71,7 +71,7 @@ public class CreateTableQueryBuilder {
         return addColumn(columnName, type, null, modifiers);
     }
 
-    public CreateTableQueryBuilder addColumn(String columnName, ColumnType type, String _default, ColumnModifier ... modifiers){
+    public CreateTableQueryBuilder addColumn(String columnName, ColumnType type, String defaultValue, ColumnModifier ... modifiers){
 
         boolean isPrimaryKey = Arrays.asList(modifiers).contains(ColumnModifier.PRIMARY_KEY);
         if(isPrimaryKey){
@@ -83,7 +83,7 @@ public class CreateTableQueryBuilder {
                 .filter(modifier -> modifier != ColumnModifier.PRIMARY_KEY)
                 .toArray(ColumnModifier[]::new);
 
-        table_columns.add(new Column(columnName, type, _default, modifiers));
+        table_columns.add(new Column(columnName, type, defaultValue, modifiers));
         return this;
     }
 
@@ -239,8 +239,8 @@ public class CreateTableQueryBuilder {
             for (ColumnModifier modifier : column.modifiers) {
                 query.append(String.format(" %s", modifier));
             }
-            if(column._default != null && column._default.isEmpty() == false){
-                query.append(String.format(" DEFAULT %s", column._default));
+            if(column.defaultValue != null && column.defaultValue.isEmpty() == false){
+                query.append(String.format(" DEFAULT %s", column.defaultValue));
             }
             query.append(",\n");
         }
@@ -298,7 +298,7 @@ public class CreateTableQueryBuilder {
         return columnsString.toString();
     }
 
-    private record Column (String name, ColumnType type, String _default, ColumnModifier[] modifiers){
+    private record Column (String name, ColumnType type, String defaultValue, ColumnModifier[] modifiers){
 
         public Column(String name) {
             this(name, null,null, null);

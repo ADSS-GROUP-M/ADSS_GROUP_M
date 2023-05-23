@@ -4,22 +4,28 @@ import businessLayer.businessLayerUsage.Branch;
 import businessLayer.inventoryModule.Category;
 import businessLayer.inventoryModule.Product;
 import dataAccessLayer.dalAbstracts.AbstractDataMapper;
+import dataAccessLayer.dalAbstracts.SQLExecutor;
+import dataAccessLayer.dalUtils.CreateTableQueryBuilder;
 import dataAccessLayer.dalUtils.OfflineResultSet;
+import exceptions.DalException;
 
 import java.sql.SQLException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnModifier;
+import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnType;
+
 public class CategoryDataMapper extends AbstractDataMapper {
     private static CategoryDataMapper instance = null;
     private Map<String, Category> cachedCategories;
 
-    private CategoryDataMapper() {
-        super("category", new String[]{"category_name"});
+    private CategoryDataMapper(SQLExecutor sqlExecutor) throws DalException {
+        super(sqlExecutor, "category", new String[]{"category_name"});
     }
 
-    public static CategoryDataMapper getInstance(){
+    public static CategoryDataMapper getInstance() throws DalException {
         if(instance == null){
             return new CategoryDataMapper();
         } else {
@@ -48,7 +54,7 @@ public class CategoryDataMapper extends AbstractDataMapper {
         return cachedCategory;
     }
 
-    public void initProductsWithCategory(Map<String, Category>cached_categories){
+    public void initProductsWithCategory(Map<String, Category>cached_categories) throws DalException {
         try{
             Map<Branch, Map<String, Product>> cachedProducts = ProductManagerMapper.getInstance().getCachedProducts();
             OfflineResultSet resultSet = sqlExecutor.executeRead(String.format("SELECT %s , %s FROM %s", "catalog_number","category", "products"));
@@ -80,5 +86,16 @@ public class CategoryDataMapper extends AbstractDataMapper {
         }
     }
 
+    /**
+     * Used to insert data into {@link AbstractDataMapper#createTableQueryBuilder}. <br/>
+     * in order to add columns and foreign keys to the table use:<br/><br/>
+     * {@link CreateTableQueryBuilder#addColumn(String, ColumnType, ColumnModifier...)} <br/><br/>
+     * {@link CreateTableQueryBuilder#addForeignKey(String, String, String)}<br/><br/>
+     * {@link CreateTableQueryBuilder#addCompositeForeignKey(String[], String, String[])}
+     */
+    @Override
+    protected void initializeCreateTableQueryBuilder() throws DalException {
+        createTableQueryBuilder.addColumn("category_name", ColumnType.TEXT, ColumnModifier.PRIMARY_KEY);
+    }
 }
 

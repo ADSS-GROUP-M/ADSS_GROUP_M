@@ -1,5 +1,6 @@
 package dataAccessLayer.inventoryModule;
 import businessLayer.inventoryModule.Category;
+import exceptions.DalException;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -12,7 +13,7 @@ public class CategoryManagerMapper{
     public static CategoryManagerMapper instance = null;
     Map<String, Category> cached_categories;
 
-    private CategoryManagerMapper(){
+    private CategoryManagerMapper() throws DalException {
         categoryDataMapper = CategoryDataMapper.getInstance();
         categoryHierarchyDataMapper = CategoryHierarchyDataMapper.getInstance();
         try{
@@ -24,7 +25,7 @@ public class CategoryManagerMapper{
             categoryDataMapper.initProductsWithCategory(cached_categories);
     }
 
-    public static CategoryManagerMapper getInstance(){
+    public static CategoryManagerMapper getInstance() throws DalException {
         if (instance == null) {
             return new CategoryManagerMapper();
         } else {

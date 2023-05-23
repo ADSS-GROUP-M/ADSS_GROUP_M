@@ -2,6 +2,7 @@ package businessLayer.inventoryModule;
 
 import businessLayer.businessLayerUsage.Branch;
 import dataAccessLayer.inventoryModule.DiscountManagerMapper;
+import exceptions.DalException;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -17,7 +18,13 @@ public class DiscountController {
     private static DiscountController discountController = null;
     private DiscountManagerMapper discountManagerMapper;
     private DiscountController() {
-        discountManagerMapper = DiscountManagerMapper.getInstance();
+        try {
+            discountManagerMapper = DiscountManagerMapper.getInstance();
+        } catch (DalException e) {
+
+            //TODO: handle exception
+            throw new RuntimeException(e);
+        }
         this.storeDiscounts = discountManagerMapper.getCached_discounts();
     }
 

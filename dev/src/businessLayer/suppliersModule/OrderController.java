@@ -28,7 +28,13 @@ public class OrderController {
         this.supplierController = SupplierController.getInstance();
         this.agreementController = AgreementController.getInstance();
         billOfQuantitiesController = BillOfQuantitiesController.getInstance();
-        orderHistoryDataMapper = new OrderHistoryDataMapper();
+        try {
+            orderHistoryDataMapper = new OrderHistoryDataMapper();
+        } catch (DalException e) {
+
+            //TODO: handle exception
+            throw new RuntimeException(e);
+        }
 
         suppliersOrderHistory = new HashMap<>();
     }

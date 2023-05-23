@@ -1,23 +1,29 @@
 package dataAccessLayer.suppliersModule;
 
 import dataAccessLayer.dalAbstracts.AbstractDataMapper;
+import dataAccessLayer.dalAbstracts.SQLExecutor;
+import dataAccessLayer.dalUtils.CreateTableQueryBuilder;
 import dataAccessLayer.dalUtils.OfflineResultSet;
 import dataAccessLayer.inventoryModule.ProductDAO;
+import exceptions.DalException;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnModifier;
+import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnType;
+
 public class ProductsDataMapper  extends AbstractDataMapper {
 //    private List<ProductDAO> cachedProducts;
     private static ProductsDataMapper instance = null;
 
-    private ProductsDataMapper() {
-        super("products", new String[]{"catalog_number", "name", "manufacture", "category"});
+    private ProductsDataMapper(SQLExecutor sqlExecutor) throws DalException {
+        super(sqlExecutor, "products", new String[]{"catalog_number", "name", "manufacture", "category"});
 //        cachedProducts = new ArrayList<>();
     }
 
-    public static ProductsDataMapper getInstance() {
+    public static ProductsDataMapper getInstance() throws DalException {
         if (instance == null)
             instance = new ProductsDataMapper();
         return instance;
@@ -77,6 +83,23 @@ public class ProductsDataMapper  extends AbstractDataMapper {
         if(resultSet.next())
             return resultSet.getInt("count") > 0;
         return false;
+    }
+
+    /**
+     * Used to insert data into {@link AbstractDataMapper#createTableQueryBuilder}. <br/>
+     * in order to add columns and foreign keys to the table use:<br/><br/>
+     * {@link CreateTableQueryBuilder#addColumn(String, ColumnType, ColumnModifier...)} <br/><br/>
+     * {@link CreateTableQueryBuilder#addForeignKey(String, String, String)}<br/><br/>
+     * {@link CreateTableQueryBuilder#addCompositeForeignKey(String[], String, String[])}
+     */
+    @Override
+    protected void initializeCreateTableQueryBuilder() throws DalException {
+        createTableQueryBuilder
+                .addColumn("catalog_number", ColumnType.TEXT, ColumnModifier.PRIMARY_KEY)
+                .addColumn("name", ColumnType.TEXT)
+                .addColumn("manufacture", ColumnType.TEXT)
+                .addColumn("category", ColumnType.TEXT)
+                .addForeignKey("category", "category", "category_name");
     }
 
 

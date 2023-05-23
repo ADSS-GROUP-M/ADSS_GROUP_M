@@ -12,7 +12,13 @@ public class AgreementController {
     private static AgreementController instance;
     private AgreementDataMapper agreementDataMapper;
     private AgreementController(){
-        agreementDataMapper = new AgreementDataMapper();
+        try {
+            agreementDataMapper = new AgreementDataMapper();
+        } catch (DalException e) {
+
+            //TODO: handle exception
+            throw new RuntimeException(e);
+        }
     }
 
     public static AgreementController getInstance(){

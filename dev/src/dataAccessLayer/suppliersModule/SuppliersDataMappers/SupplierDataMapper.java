@@ -4,6 +4,8 @@ import businessLayer.suppliersModule.BankAccount;
 import businessLayer.suppliersModule.Pair;
 import businessLayer.suppliersModule.Supplier;
 import dataAccessLayer.dalAbstracts.AbstractDataMapper;
+import dataAccessLayer.dalAbstracts.SQLExecutor;
+import dataAccessLayer.dalUtils.CreateTableQueryBuilder;
 import dataAccessLayer.dalUtils.OfflineResultSet;
 import exceptions.DalException;
 
@@ -13,13 +15,16 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnModifier;
+import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnType;
+
 public class SupplierDataMapper extends AbstractDataMapper {
     private Map<String, Supplier> suppliers;
     private ContactsInfoDataMapper contactsInfoDataMapper;
     private FieldsDataMapper fieldsDataMapper;
 
-    public SupplierDataMapper() {
-        super("suppliers", new String[]{"bn_number", "name", "bank", "branch", "account_number", "payment_method"});
+    public SupplierDataMapper(SQLExecutor sqlExecutor) throws DalException {
+        super(sqlExecutor, "suppliers", new String[]{"bn_number", "name", "bank", "branch", "account_number", "payment_method"});
         suppliers = new HashMap<>();
         contactsInfoDataMapper = new ContactsInfoDataMapper();
         fieldsDataMapper = new FieldsDataMapper();
@@ -123,5 +128,23 @@ public class SupplierDataMapper extends AbstractDataMapper {
         fieldsDataMapper.delete(bnNumber);
         contactsInfoDataMapper.delete(bnNumber);
         suppliers.remove(bnNumber);
+    }
+
+    /**
+     * Used to insert data into {@link AbstractDataMapper#createTableQueryBuilder}. <br/>
+     * in order to add columns and foreign keys to the table use:<br/><br/>
+     * {@link CreateTableQueryBuilder#addColumn(String, ColumnType, ColumnModifier...)} <br/><br/>
+     * {@link CreateTableQueryBuilder#addForeignKey(String, String, String)}<br/><br/>
+     * {@link CreateTableQueryBuilder#addCompositeForeignKey(String[], String, String[])}
+     */
+    @Override
+    protected void initializeCreateTableQueryBuilder() throws DalException {
+        createTableQueryBuilder
+                .addColumn("name", ColumnType.TEXT)
+                .addColumn("bn_number", ColumnType.TEXT, ColumnModifier.PRIMARY_KEY)
+                .addColumn("bank", ColumnType.TEXT)
+                .addColumn("branch", ColumnType.TEXT)
+                .addColumn("account_number", ColumnType.TEXT)
+                .addColumn("payment_method", ColumnType.TEXT);
     }
 }

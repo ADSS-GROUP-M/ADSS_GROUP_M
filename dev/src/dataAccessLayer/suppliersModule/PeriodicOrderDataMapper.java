@@ -4,17 +4,23 @@ import businessLayer.businessLayerUsage.Branch;
 import businessLayer.suppliersModule.Order;
 import businessLayer.suppliersModule.PeriodicOrder;
 import dataAccessLayer.dalAbstracts.AbstractDataMapper;
+import dataAccessLayer.dalAbstracts.SQLExecutor;
+import dataAccessLayer.dalUtils.CreateTableQueryBuilder;
 import dataAccessLayer.dalUtils.OfflineResultSet;
+import exceptions.DalException;
 
 import java.sql.SQLException;
 import java.util.*;
+
+import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnModifier;
+import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnType;
 
 public class PeriodicOrderDataMapper extends AbstractDataMapper {
     private PeriodicOrderDetailsDataMapper periodicOrderDetailsDataMapper;
     private Map<Integer, PeriodicOrder> periodicOrders;
 
-    public PeriodicOrderDataMapper(){
-        super("periodic_order", new String[] {"order_id", "catalog_number", "quantity"});
+    public PeriodicOrderDataMapper(SQLExecutor sqlExecutor) throws DalException {
+        super(sqlExecutor, "periodic_order", new String[] {"order_id", "catalog_number", "quantity"});
         periodicOrderDetailsDataMapper = new PeriodicOrderDetailsDataMapper();
         periodicOrders = new HashMap<>();
     }
@@ -122,4 +128,20 @@ public class PeriodicOrderDataMapper extends AbstractDataMapper {
         return (dayChosen + 7) - dayNow;
     }
 
+    /**
+     * Used to insert data into {@link AbstractDataMapper#createTableQueryBuilder}. <br/>
+     * in order to add columns and foreign keys to the table use:<br/><br/>
+     * {@link CreateTableQueryBuilder#addColumn(String, ColumnType, ColumnModifier...)} <br/><br/>
+     * {@link CreateTableQueryBuilder#addForeignKey(String, String, String)}<br/><br/>
+     * {@link CreateTableQueryBuilder#addCompositeForeignKey(String[], String, String[])}
+     */
+    @Override
+    protected void initializeCreateTableQueryBuilder() throws DalException {
+        createTableQueryBuilder
+                .addColumn("order_id", ColumnType.INTEGER,ColumnModifier.PRIMARY_KEY)
+                .addColumn("catalog_number", ColumnType.TEXT, ColumnModifier.PRIMARY_KEY)
+                .addColumn("quantity", ColumnType.INTEGER, ColumnModifier.NOT_NULL)
+                .addForeignKey("order_id", "periodic_order_details", "order_id")
+                .addForeignKey("catalog_number", "products", "catalog_number");
+    }
 }

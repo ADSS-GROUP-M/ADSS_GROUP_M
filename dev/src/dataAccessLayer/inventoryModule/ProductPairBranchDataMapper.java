@@ -1,21 +1,27 @@
 package dataAccessLayer.inventoryModule;
 
 import dataAccessLayer.dalAbstracts.AbstractDataMapper;
+import dataAccessLayer.dalAbstracts.SQLExecutor;
+import dataAccessLayer.dalUtils.CreateTableQueryBuilder;
 import dataAccessLayer.dalUtils.OfflineResultSet;
+import exceptions.DalException;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnModifier;
+import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnType;
+
 public class ProductPairBranchDataMapper extends AbstractDataMapper {
     public static ProductPairBranchDataMapper instance = null;
     private List<ProductPairBranchDAO> cachedProductsPairBranch = new ArrayList<>(); //Map<Branch, Map<catalog_number, Product>
 
-    private ProductPairBranchDataMapper() {
-        super("product_pair_branch", new String[]{"branch_name", "product_catalog_num", "original_store_price", "notification_min"});
+    private ProductPairBranchDataMapper(SQLExecutor sqlExecutor) throws DalException {
+        super(sqlExecutor, "product_pair_branch", new String[]{"branch_name", "product_catalog_num", "original_store_price", "notification_min"});
     }
 
-    public static ProductPairBranchDataMapper getInstance(){
+    public static ProductPairBranchDataMapper getInstance() throws DalException {
         if (instance == null) {
             return new ProductPairBranchDataMapper();
         } else {
@@ -79,4 +85,20 @@ public class ProductPairBranchDataMapper extends AbstractDataMapper {
     }
 
 
+    /**
+     * Used to insert data into {@link AbstractDataMapper#createTableQueryBuilder}. <br/>
+     * in order to add columns and foreign keys to the table use:<br/><br/>
+     * {@link CreateTableQueryBuilder#addColumn(String, ColumnType, ColumnModifier...)} <br/><br/>
+     * {@link CreateTableQueryBuilder#addForeignKey(String, String, String)}<br/><br/>
+     * {@link CreateTableQueryBuilder#addCompositeForeignKey(String[], String, String[])}
+     */
+    @Override
+    protected void initializeCreateTableQueryBuilder() throws DalException {
+        createTableQueryBuilder
+                .addColumn("branch_name", ColumnType.TEXT,ColumnModifier.PRIMARY_KEY)
+                .addColumn("product_catalog_num", ColumnType.TEXT, ColumnModifier.PRIMARY_KEY)
+                .addColumn("original_store_price", ColumnType.REAL)
+                .addColumn("notification_min", ColumnType.NUMERIC)
+                .addForeignKey("product_catalog_num", "products", "catalog_number");
+    }
 }

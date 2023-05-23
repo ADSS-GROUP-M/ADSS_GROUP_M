@@ -4,6 +4,7 @@ import businessLayer.businessLayerUsage.Branch;
 import businessLayer.inventoryModule.Product;
 import businessLayer.inventoryModule.ProductItem;
 import dataAccessLayer.suppliersModule.ProductsDataMapper;
+import exceptions.DalException;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
@@ -20,7 +21,7 @@ public class ProductManagerMapper {
     private final ProductPairBranchDataMapper productPairBranchDataMapper;
     private static ProductManagerMapper instance = null;
 
-    private ProductManagerMapper(){
+    private ProductManagerMapper() throws DalException {
         productsDataMapper = ProductsDataMapper.getInstance();
         productItemDataMapper = ProductItemDataMapper.getInstance();
         productPairBranchDataMapper = ProductPairBranchDataMapper.getInstance();
@@ -65,7 +66,7 @@ public class ProductManagerMapper {
         }
     }
 
-    public static ProductManagerMapper getInstance(){
+    public static ProductManagerMapper getInstance() throws DalException {
         if(instance == null){
             return new ProductManagerMapper();
         } else {

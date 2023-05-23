@@ -10,9 +10,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
 import java.util.*;
-import java.util.stream.Collectors;
 
-import static presentationLayer.transportModule.SitesManagement.*;
+import static presentationLayer.transportModule.SitesManagement.SitesComparator;
 
 public class UiData {
 

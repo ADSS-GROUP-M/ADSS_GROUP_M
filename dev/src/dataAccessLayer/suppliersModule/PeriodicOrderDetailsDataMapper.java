@@ -2,15 +2,21 @@ package dataAccessLayer.suppliersModule;
 
 import businessLayer.businessLayerUsage.Branch;
 import dataAccessLayer.dalAbstracts.AbstractDataMapper;
+import dataAccessLayer.dalAbstracts.SQLExecutor;
+import dataAccessLayer.dalUtils.CreateTableQueryBuilder;
 import dataAccessLayer.dalUtils.OfflineResultSet;
+import exceptions.DalException;
 
 import java.sql.SQLException;
+
+import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnModifier;
+import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnType;
 
 public class PeriodicOrderDetailsDataMapper extends AbstractDataMapper {
 
 
-    public PeriodicOrderDetailsDataMapper(){
-        super("periodic_order_details", new String[]{"order_id", "bn_number", "day", "branch"});
+    public PeriodicOrderDetailsDataMapper(SQLExecutor sqlExecutor) throws DalException {
+        super(sqlExecutor, "periodic_order_details", new String[]{"order_id", "bn_number", "day", "branch"});
     }
 
     public void insert(int orderId, String bnNumber ,int day, Branch branch) throws SQLException {
@@ -43,4 +49,20 @@ public class PeriodicOrderDetailsDataMapper extends AbstractDataMapper {
                 day, orderId));
     }
 
+    /**
+     * Used to insert data into {@link AbstractDataMapper#createTableQueryBuilder}. <br/>
+     * in order to add columns and foreign keys to the table use:<br/><br/>
+     * {@link CreateTableQueryBuilder#addColumn(String, ColumnType, ColumnModifier...)} <br/><br/>
+     * {@link CreateTableQueryBuilder#addForeignKey(String, String, String)}<br/><br/>
+     * {@link CreateTableQueryBuilder#addCompositeForeignKey(String[], String, String[])}
+     */
+    @Override
+    protected void initializeCreateTableQueryBuilder() throws DalException {
+        createTableQueryBuilder
+                .addColumn("order_id", ColumnType.INTEGER, ColumnModifier.PRIMARY_KEY)
+                .addColumn("bn_number", ColumnType.TEXT)
+                .addColumn("day", ColumnType.INTEGER)
+                .addColumn("branch", ColumnType.TEXT)
+                .addForeignKey("bn_number", "suppliers", "bn_number");
+    }
 }

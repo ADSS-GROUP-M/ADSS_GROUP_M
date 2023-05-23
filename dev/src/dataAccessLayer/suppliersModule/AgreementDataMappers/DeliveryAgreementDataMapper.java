@@ -4,15 +4,20 @@ import businessLayer.suppliersModule.DeliveryAgreements.DeliveryAgreement;
 import businessLayer.suppliersModule.DeliveryAgreements.DeliveryByInvitation;
 import businessLayer.suppliersModule.DeliveryAgreements.DeliveryFixedDays;
 import dataAccessLayer.dalAbstracts.AbstractDataMapper;
+import dataAccessLayer.dalAbstracts.SQLExecutor;
+import dataAccessLayer.dalUtils.CreateTableQueryBuilder;
 import dataAccessLayer.dalUtils.OfflineResultSet;
+import exceptions.DalException;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.*;
+
 public class DeliveryAgreementDataMapper  extends AbstractDataMapper {
-    public DeliveryAgreementDataMapper() {
-        super("delivery_agreement", new String[] {"bn_number", "have_transport", "by_invitation", "days"});
+    public DeliveryAgreementDataMapper(SQLExecutor sqlExecutor) throws DalException {
+        super(sqlExecutor, "delivery_agreement", new String[] {"bn_number", "have_transport", "by_invitation", "days"});
     }
 
     public void insert(String bnNumber, boolean haveTransport, boolean byInvitation, String days) throws SQLException {
@@ -52,5 +57,25 @@ public class DeliveryAgreementDataMapper  extends AbstractDataMapper {
 
     public void delete(String bnNumber) throws SQLException {
         sqlExecutor.executeWrite(String.format("DELETE FROM %s WHERE bn_number = '%s'", tableName, bnNumber));
+    }
+
+    /**
+     * Used to insert data into {@link AbstractDataMapper#createTableQueryBuilder}. <br/>
+     * in order to add columns and foreign keys to the table use:<br/><br/>
+     * {@link CreateTableQueryBuilder#addColumn(String, ColumnType, ColumnModifier...)} <br/><br/>
+     * {@link CreateTableQueryBuilder#addForeignKey(String, String, String)}<br/><br/>
+     * {@link CreateTableQueryBuilder#addCompositeForeignKey(String[], String, String[])}
+     */
+    @Override
+    protected void initializeCreateTableQueryBuilder() throws DalException {
+        createTableQueryBuilder
+                .addColumn("bn_number", ColumnType.TEXT)
+                .addColumn("have_transport", ColumnType.INTEGER)
+                .addColumn("by_invitation", ColumnType.INTEGER)
+                .addColumn("days", ColumnType.TEXT)
+                .addCheck("have_transport >= 0 AND have_transport <= 1")
+                .addCheck("by_invitation >= 0 AND by_invitation <= 1")
+                .addForeignKey("bn_number", "suppliers", "bn_number",
+                        ON_UPDATE.CASCADE, ON_DELETE.CASCADE);
     }
 }

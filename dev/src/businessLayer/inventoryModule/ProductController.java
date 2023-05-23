@@ -5,6 +5,7 @@ import businessLayer.businessLayerUsage.Branch;
 import businessLayer.suppliersModule.OrderController;
 import businessLayer.suppliersModule.PeriodicOrderController;
 import dataAccessLayer.inventoryModule.ProductManagerMapper;
+import exceptions.DalException;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
@@ -23,7 +24,13 @@ public class ProductController {
     //create the controller as Singleton
     private static ProductController productController = null;
     private ProductController() {
-        productManagerMapper = ProductManagerMapper.getInstance();
+        try {
+            productManagerMapper = ProductManagerMapper.getInstance();
+        } catch (DalException e) {
+
+            //TODO: handle exception
+            throw new RuntimeException(e);
+        }
         products = productManagerMapper.getCachedProducts();
         this.orders = new HashMap<Branch, List<String>>();
         this.DCController = DiscountController.DiscountController();

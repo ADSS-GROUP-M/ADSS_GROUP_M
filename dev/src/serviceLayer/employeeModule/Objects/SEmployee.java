@@ -8,13 +8,13 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class SEmployee {
-    private String fullName;
-    private String id;
-    private LocalDate employmentDate;
-    private String employmentConditions;
-    private Set<String> roles;
-    private String details;
-    private double expectedSalary;
+    private final String fullName;
+    private final String id;
+    private final LocalDate employmentDate;
+    private final String employmentConditions;
+    private final Set<String> roles;
+    private final String details;
+    private final double expectedSalary;
 
     public SEmployee(Employee employee) {
         this.fullName = employee.getName();

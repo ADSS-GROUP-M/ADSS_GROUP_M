@@ -11,11 +11,11 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class SShift {
-    private LocalDate shiftDate;
-    private SShiftType shiftType;
-    private Map<String, List<SEmployee>> shiftRequests;
-    private Map<String, List<SEmployee>> shiftWorkers;
-    private boolean isApproved;
+    private final LocalDate shiftDate;
+    private final SShiftType shiftType;
+    private final Map<String, List<SEmployee>> shiftRequests;
+    private final Map<String, List<SEmployee>> shiftWorkers;
+    private final boolean isApproved;
 
     public SShift(Shift shift) {
         this.shiftDate = shift.getShiftDate();

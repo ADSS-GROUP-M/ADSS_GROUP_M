@@ -8,10 +8,10 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class EmployeeMenuVM {
-    private BackendController backendController;
+    private final BackendController backendController;
 
-    public EmployeeMenuVM() {
-        backendController = BackendController.getInstance();
+    public EmployeeMenuVM(BackendController backendController) {
+        this.backendController = backendController;
     }
 
     public String requestShift(String branchId, String shiftType, LocalDate shiftDate, String role) {

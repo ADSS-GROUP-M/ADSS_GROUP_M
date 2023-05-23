@@ -8,10 +8,11 @@ import java.time.LocalTime;
 import java.util.List;
 
 public class HRManagerMenuVM {
-    private BackendController backendController;
+    private final BackendController backendController;
 
-    public HRManagerMenuVM() {
-        backendController = BackendController.getInstance();
+    public HRManagerMenuVM(BackendController backendController) {
+
+        this.backendController = backendController;
     }
 
     public String recruitEmployee(String branchId, String fullName, String id, String bankDetails, double hourlyRate, LocalDate employmentDate, String employmentConditions, String details) {

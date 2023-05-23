@@ -159,18 +159,16 @@ public class SitesController {
     /**
      * this method is used only for the first time the system is loaded.
      * this method assumes that there are no sites in the system.
-     * @apiNote this method does NOT fetch the distances and travel times and from the bing api.
-     * @param sites
      */
-    public void addAllSitesFirstTimeSystemLoad(List<Site> sites) throws TransportException {
-        addAllSitesFirstTimeSystemLoad(sites, ()->{}, false);
+    public void addAllSitesFirstTimeSystemLoad(List<Site> sites,  boolean fetchTravelTimes) throws TransportException {
+        addAllSitesFirstTimeSystemLoad(sites, ()->{}, fetchTravelTimes);
     }
 
     /**
      * this method is used only for the first time the system is loaded.
      * this method assumes that there are no sites in the system.
      */
-    public void addAllSitesFirstTimeSystemLoad(List<Site> sites, Runnable callback, boolean getDistances) throws TransportException {
+    public void addAllSitesFirstTimeSystemLoad(List<Site> sites, Runnable callback, boolean fetchTravelTimes) throws TransportException {
 
         // generate basic data needed for the system to work
         for(Site site : sites){
@@ -184,10 +182,10 @@ public class SitesController {
             }
         }
 
-        callback.run(); // release the main thread to continue generating data
+        callback.run();
 
         // asynchronously generate the rest of the data for the sites
-        if(getDistances){
+        if(fetchTravelTimes){
 
             // get latitude and longitude for each site
             Map<Site,Point> coordinates = sitesRoutesController.getCoordinates(sites);

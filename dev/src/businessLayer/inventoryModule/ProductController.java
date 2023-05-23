@@ -5,7 +5,6 @@ import businessLayer.businessLayerUsage.Branch;
 import businessLayer.suppliersModule.OrderController;
 import businessLayer.suppliersModule.PeriodicOrderController;
 import dataAccessLayer.inventoryModule.ProductManagerMapper;
-import exceptions.DalException;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
@@ -16,30 +15,20 @@ import java.util.Map;
 
 public class ProductController {
 
-    Map<Branch, Map<String, Product>> products; // <branch, <catalog_number, Product>
-    Map<Branch, List<String>> orders; // <branch, <catalog_number>
-    DiscountController DCController;
-    ProductManagerMapper productManagerMapper;
+    private final Map<Branch, Map<String, Product>> products; // <branch, <catalog_number, Product>
+    private final Map<Branch, List<String>> orders; // <branch, <catalog_number>
+    private final DiscountController DCController;
+    private final ProductManagerMapper productManagerMapper;
+    private final OrderController orderController;
+    private final PeriodicOrderController periodicOrderController;
 
-    //create the controller as Singleton
-    private static ProductController productController = null;
-    private ProductController() {
-        try {
-            productManagerMapper = ProductManagerMapper.getInstance();
-        } catch (DalException e) {
-
-            //TODO: handle exception
-            throw new RuntimeException(e);
-        }
-        products = productManagerMapper.getCachedProducts();
+    public ProductController(DiscountController dcController, ProductManagerMapper productManagerMapper, OrderController orderController, PeriodicOrderController periodicOrderController) {
+        DCController = dcController;
+        this.productManagerMapper = productManagerMapper;
+        this.orderController = orderController;
+        this.periodicOrderController = periodicOrderController;
+        products = this.productManagerMapper.getCachedProducts();
         this.orders = new HashMap<Branch, List<String>>();
-        this.DCController = DiscountController.DiscountController();
-    }
-
-    public static ProductController ProductController(){
-        if(productController == null)
-            productController = new ProductController();
-        return productController;
     }
 
     private Boolean checkIfProductExist(Branch branch, String catalog_number){
@@ -65,19 +54,18 @@ public class ProductController {
             return true;
         }
         else{
-            throw new RuntimeException("brunch does not exist, please create product in order to continue");
+            throw new RuntimeException("branch does not exist, please create product in order to continue");
         }
     }
 
     //check if the amount of product in more than the minimum
-    public boolean isProductLack(Branch branch,String catalog_number) throws SQLException {
+    public boolean isProductLack(Branch branch,String catalog_number) {
         try {
             boolean isProductLack = products.get(branch).get(catalog_number).isProductLack();
             if (isProductLack) {
                 // if there is no waiting order, create new supplier order.
                 if (!orders.containsKey(branch) || !orders.get(branch).contains(catalog_number)) {
-                    int inventory_amount = productController.getMinNotification(branch, catalog_number);
-                    OrderController orderController = OrderController.getInstance();
+                    int inventory_amount = getMinNotification(branch, catalog_number);
                     HashMap<String, Integer> order = new HashMap<>();
                     order.put(catalog_number, inventory_amount);
                     orderController.orderDueToShortage(order, branch);
@@ -148,8 +136,7 @@ public class ProductController {
                     double sold_price = DCController.calcSoldPrice(branch,catalog_number,product.getOriginalStorePrice());
                     productManagerMapper.updateProductItem(catalog_number,branch.name(),serial_number,-1,null,null,-1,-1,sold_price,null,null);
                     productItem.reportAsSold(sold_price);
-                    PeriodicOrderController periodicOrderController = PeriodicOrderController.getInstance();
-                    updateMinAmount(branch,catalog_number,periodicOrderController.getDaysForOrder(catalog_number,branch));
+                    updateMinAmount(branch,catalog_number, periodicOrderController.getDaysForOrder(catalog_number,branch));
                     productManagerMapper.updateProduct(catalog_number,branch.name(),null,null,-1,product.getNotificationMin());
                 }
                 catch (SQLException e){

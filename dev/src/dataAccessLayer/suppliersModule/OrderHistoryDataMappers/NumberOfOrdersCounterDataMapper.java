@@ -14,7 +14,7 @@ import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnModifier;
 import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnType;
 
 public class NumberOfOrdersCounterDataMapper extends AbstractDataMapper {
-    private Map<String, Integer> suppliersCounters;
+    private final Map<String, Integer> suppliersCounters;
 
     public NumberOfOrdersCounterDataMapper(SQLExecutor sqlExecutor) throws DalException {
         super(sqlExecutor, "number_of_order_counter", new String[]{"bn_number", "order_number_counter"});
@@ -71,7 +71,7 @@ public class NumberOfOrdersCounterDataMapper extends AbstractDataMapper {
      * {@link CreateTableQueryBuilder#addCompositeForeignKey(String[], String, String[])}
      */
     @Override
-    protected void initializeCreateTableQueryBuilder() throws DalException {
+    protected void initializeCreateTableQueryBuilder() {
         createTableQueryBuilder
                 .addColumn("bn_number", ColumnType.TEXT, ColumnModifier.PRIMARY_KEY)
                 .addColumn("order_number_counter", ColumnType.INTEGER)

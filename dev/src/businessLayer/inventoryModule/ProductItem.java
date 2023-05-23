@@ -4,7 +4,7 @@ import businessLayer.businessLayerUsage.Branch;
 import java.time.LocalDateTime;
 
 public class ProductItem {
-    private String serial_number;
+    private final String serial_number;
     private productPair<Boolean, LocalDateTime> isDefective;
     private Boolean isSold;
     private LocalDateTime soldDate;
@@ -14,11 +14,11 @@ public class ProductItem {
     //default value -1
     private double soldPrice;
     private String location;
-    private LocalDateTime expirationDate;
-    private Branch branch;
-    private String catalog_number;
+    private final LocalDateTime expirationDate;
+    private final Branch branch;
+    private final String catalog_number;
 
-    protected class productPair<F, S> {
+    protected static class productPair<F, S> {
         private final F first;
         private final S second;
 

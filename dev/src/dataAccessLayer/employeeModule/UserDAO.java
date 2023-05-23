@@ -160,7 +160,7 @@ public class UserDAO extends DAOBase<User> {
     }
 
     @Override
-    public boolean exists(User object) throws DalException {
+    public boolean exists(User object) {
         try {
             select(object);
             return true;

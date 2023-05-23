@@ -15,35 +15,26 @@ import java.util.stream.Collectors;
 
 
 public class OrderController {
-    private static OrderController instance;
-    private SupplierController supplierController;
-    private AgreementController agreementController;
-    private BillOfQuantitiesController billOfQuantitiesController;
-    private OrderHistoryDataMapper orderHistoryDataMapper;
+    
+    private final SupplierController supplierController;
+    private final AgreementController agreementController;
+    private final BillOfQuantitiesController billOfQuantitiesController;
+    private final OrderHistoryDataMapper orderHistoryDataMapper;
     /**
      * maps between supplier bn number to a pair of <number of orders - counter, List - of his order history>
      */
-    private Map<String, Pair<Integer, List<Order>>> suppliersOrderHistory;
-    private OrderController(){
-        this.supplierController = SupplierController.getInstance();
-        this.agreementController = AgreementController.getInstance();
-        billOfQuantitiesController = BillOfQuantitiesController.getInstance();
-        try {
-            orderHistoryDataMapper = new OrderHistoryDataMapper();
-        } catch (DalException e) {
-
-            //TODO: handle exception
-            throw new RuntimeException(e);
-        }
-
+    private final Map<String, Pair<Integer, List<Order>>> suppliersOrderHistory;
+    public OrderController(SupplierController supplierController,
+                            AgreementController agreementController,
+                            BillOfQuantitiesController billOfQuantitiesController,
+                            OrderHistoryDataMapper orderHistoryDataMapper){
+        this.supplierController = supplierController;
+        this.agreementController = agreementController;
+        this.billOfQuantitiesController = billOfQuantitiesController;
+        this.orderHistoryDataMapper = orderHistoryDataMapper;
         suppliersOrderHistory = new HashMap<>();
     }
 
-    public static OrderController getInstance(){
-        if(instance == null)
-            instance = new OrderController();
-        return instance;
-    }
     /***
      *
      * @param order maps between productId to the amount to be ordered

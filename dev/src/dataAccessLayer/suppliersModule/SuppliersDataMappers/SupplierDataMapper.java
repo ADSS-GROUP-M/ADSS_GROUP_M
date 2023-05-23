@@ -19,15 +19,15 @@ import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnModifier;
 import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnType;
 
 public class SupplierDataMapper extends AbstractDataMapper {
-    private Map<String, Supplier> suppliers;
-    private ContactsInfoDataMapper contactsInfoDataMapper;
-    private FieldsDataMapper fieldsDataMapper;
+    private final Map<String, Supplier> suppliers;
+    private final ContactsInfoDataMapper contactsInfoDataMapper;
+    private final FieldsDataMapper fieldsDataMapper;
 
-    public SupplierDataMapper(SQLExecutor sqlExecutor) throws DalException {
+    public SupplierDataMapper(SQLExecutor sqlExecutor, ContactsInfoDataMapper contactsInfoDataMapper, FieldsDataMapper fieldsDataMapper) throws DalException {
         super(sqlExecutor, "suppliers", new String[]{"bn_number", "name", "bank", "branch", "account_number", "payment_method"});
+        this.contactsInfoDataMapper = contactsInfoDataMapper;
+        this.fieldsDataMapper = fieldsDataMapper;
         suppliers = new HashMap<>();
-        contactsInfoDataMapper = new ContactsInfoDataMapper();
-        fieldsDataMapper = new FieldsDataMapper();
     }
 
     public Supplier getSupplier(String bnNumber) throws SQLException, DalException {
@@ -138,7 +138,7 @@ public class SupplierDataMapper extends AbstractDataMapper {
      * {@link CreateTableQueryBuilder#addCompositeForeignKey(String[], String, String[])}
      */
     @Override
-    protected void initializeCreateTableQueryBuilder() throws DalException {
+    protected void initializeCreateTableQueryBuilder() {
         createTableQueryBuilder
                 .addColumn("name", ColumnType.TEXT)
                 .addColumn("bn_number", ColumnType.TEXT, ColumnModifier.PRIMARY_KEY)

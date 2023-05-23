@@ -19,20 +19,12 @@ import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnModifier;
 import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnType;
 
 public class StoreProductDiscountDataMapper extends AbstractDataMapper {
-
-    private static StoreProductDiscountDataMapper instance = null;
+    
     public StoreProductDiscountDataMapper(SQLExecutor sqlExecutor) throws DalException {
         super(sqlExecutor, "store_product_discount", new String[]{"catalog_number", "start_date", "end_date", "discount","branch"});
     }
 
-    public static StoreProductDiscountDataMapper getInstance() throws DalException {
-        if(instance == null){
-            return new StoreProductDiscountDataMapper();
-        } else {
-            return instance;
-        }
-    }
-    public void insert(String catalog_number, String start_date, String end_date, double discount, String branch) throws SQLException {
+    public void insert(String catalog_number, String start_date, String end_date, double discount, String branch) {
         try {
             if(!isExists(catalog_number, start_date, end_date, discount, branch)){
                 String columnsString = String.join(", ", columns);
@@ -87,7 +79,7 @@ public class StoreProductDiscountDataMapper extends AbstractDataMapper {
      * {@link CreateTableQueryBuilder#addCompositeForeignKey(String[], String, String[])}
      */
     @Override
-    protected void initializeCreateTableQueryBuilder() throws DalException {
+    protected void initializeCreateTableQueryBuilder() {
         createTableQueryBuilder
                 .addColumn("catalog_number", ColumnType.TEXT, ColumnModifier.PRIMARY_KEY)
                 .addColumn("start_date", ColumnType.TEXT, ColumnModifier.PRIMARY_KEY)

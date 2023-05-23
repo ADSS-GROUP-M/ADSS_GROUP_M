@@ -57,7 +57,7 @@ public class PeriodicOrderDetailsDataMapper extends AbstractDataMapper {
      * {@link CreateTableQueryBuilder#addCompositeForeignKey(String[], String, String[])}
      */
     @Override
-    protected void initializeCreateTableQueryBuilder() throws DalException {
+    protected void initializeCreateTableQueryBuilder() {
         createTableQueryBuilder
                 .addColumn("order_id", ColumnType.INTEGER, ColumnModifier.PRIMARY_KEY)
                 .addColumn("bn_number", ColumnType.TEXT)

@@ -1,5 +1,6 @@
 package presentationLayer.inventoryModule;
 
+import serviceLayer.ServiceFactory;
 import serviceLayer.inventoryModule.CategoriesService;
 import serviceLayer.inventoryModule.StockService;
 
@@ -13,8 +14,10 @@ public class MainMenu {
 
     public MainMenu(){
         in = new Scanner(System.in);
-        stockService = new StockService();
-        categoriesService = new CategoriesService();
+
+        ServiceFactory factory = new ServiceFactory();
+        stockService = factory.stockService();
+        categoriesService = factory.categoriesService();
     }
 
     public void run(){

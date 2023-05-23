@@ -9,15 +9,15 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class StockService {
-    ProductController productController;
-    DiscountController discountController;
-    CategoryController categoryController;
+    private final ProductController productController;
+    private final DiscountController discountController;
+    private final CategoryController categoryController;
     public final String ALERT = "\n Alert! Product catalog number: %s is going to be out of stock soon!%This product has been automatically ordered.%n";
 
-    public StockService() {
-        productController = ProductController.ProductController();
-        categoryController = CategoryController.CategoryController();
-        discountController = DiscountController.DiscountController();
+    public StockService(ProductController productController, DiscountController discountController, CategoryController categoryController) {
+        this.productController = productController;
+        this.discountController = discountController;
+        this.categoryController = categoryController;
     }
 
     public Response addProduct(String catalog_number, String name, String manufacturer, double store_price, String branch) {

@@ -9,22 +9,10 @@ import java.util.List;
 import java.util.Map;
 
 public class AgreementController {
-    private static AgreementController instance;
-    private AgreementDataMapper agreementDataMapper;
-    private AgreementController(){
-        try {
-            agreementDataMapper = new AgreementDataMapper();
-        } catch (DalException e) {
-
-            //TODO: handle exception
-            throw new RuntimeException(e);
-        }
-    }
-
-    public static AgreementController getInstance(){
-        if(instance == null)
-            instance = new AgreementController();
-        return instance;
+    
+    private final AgreementDataMapper agreementDataMapper;
+    public AgreementController(AgreementDataMapper agreementDataMapper){
+        this.agreementDataMapper = agreementDataMapper;
     }
 
     public void addAgreement(String bnNumber, List<Product> productsList, DeliveryAgreement deliveryAgreement) throws SQLException {

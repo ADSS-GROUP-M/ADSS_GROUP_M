@@ -8,17 +8,11 @@ import java.sql.SQLException;
 import java.util.Map;
 
 public class BillOfQuantitiesController {
-    private static BillOfQuantitiesController instance;
-    private BillOfQuantitiesDataMapper billOfQuantitiesDataMapper;
+    
+    private final BillOfQuantitiesDataMapper billOfQuantitiesDataMapper;
 
-    public static BillOfQuantitiesController getInstance(){
-        if(instance == null)
-            instance = new BillOfQuantitiesController();
-        return instance;
-    }
-
-    private BillOfQuantitiesController(){
-        billOfQuantitiesDataMapper = new BillOfQuantitiesDataMapper();
+    public BillOfQuantitiesController(BillOfQuantitiesDataMapper billOfQuantitiesDataMapper){
+        this.billOfQuantitiesDataMapper = billOfQuantitiesDataMapper;
     }
 
     public boolean billOfQuantitiesExist(String bnNumber) throws SQLException, DalException {

@@ -22,8 +22,8 @@ public class BackendController {
     public static final Type STRING_LIST_TYPE = new TypeToken<List<String>>(){}.getType();
     private static final Type LIST_SSHIFT_ARRAY_TYPE = new TypeToken<List<SShift[]>>(){}.getType();
 
-    private static BackendController instance;
-    private static ServiceFactory serviceFactory;
+    
+    private final ServiceFactory serviceFactory;
     private final UserService userService;
     private final EmployeesService employeesService;
     private String loggedUsername;
@@ -48,18 +48,6 @@ public class BackendController {
         // Data Initialization - Use these lines after deleting the database, if you want to initalize the employees & transport module data
         //userService.createData();
         //employeesService.createData();
-    }
-
-    public static BackendController getInstance() {
-        if (instance == null || serviceFactory == null)
-            instance = new BackendController();
-        return instance;
-    }
-
-    public static BackendController getInstance(ServiceFactory factory) {
-        if (instance == null || serviceFactory == null)
-            instance = new BackendController(factory);
-        return instance;
     }
 
     public boolean isLoggedIn() {

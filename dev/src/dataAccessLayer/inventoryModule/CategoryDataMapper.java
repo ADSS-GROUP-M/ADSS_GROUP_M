@@ -18,19 +18,13 @@ import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnModifier;
 import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnType;
 
 public class CategoryDataMapper extends AbstractDataMapper {
-    private static CategoryDataMapper instance = null;
+
     private Map<String, Category> cachedCategories;
+    private final ProductManagerMapper productManagerMapper;
 
-    private CategoryDataMapper(SQLExecutor sqlExecutor) throws DalException {
+    public CategoryDataMapper(SQLExecutor sqlExecutor, ProductManagerMapper productManagerMapper) throws DalException {
         super(sqlExecutor, "category", new String[]{"category_name"});
-    }
-
-    public static CategoryDataMapper getInstance() throws DalException {
-        if(instance == null){
-            return new CategoryDataMapper();
-        } else {
-            return instance;
-        }
+        this.productManagerMapper = productManagerMapper;
     }
 
     public void insert(String category_name) throws SQLException {
@@ -54,9 +48,9 @@ public class CategoryDataMapper extends AbstractDataMapper {
         return cachedCategory;
     }
 
-    public void initProductsWithCategory(Map<String, Category>cached_categories) throws DalException {
+    public void initProductsWithCategory(Map<String, Category>cached_categories) {
         try{
-            Map<Branch, Map<String, Product>> cachedProducts = ProductManagerMapper.getInstance().getCachedProducts();
+            Map<Branch, Map<String, Product>> cachedProducts = productManagerMapper.getCachedProducts();
             OfflineResultSet resultSet = sqlExecutor.executeRead(String.format("SELECT %s , %s FROM %s", "catalog_number","category", "products"));
             while (resultSet.next()) {
                 for(Map<String, Product> productMap : cachedProducts.values()){
@@ -94,7 +88,7 @@ public class CategoryDataMapper extends AbstractDataMapper {
      * {@link CreateTableQueryBuilder#addCompositeForeignKey(String[], String, String[])}
      */
     @Override
-    protected void initializeCreateTableQueryBuilder() throws DalException {
+    protected void initializeCreateTableQueryBuilder() {
         createTableQueryBuilder.addColumn("category_name", ColumnType.TEXT, ColumnModifier.PRIMARY_KEY);
     }
 }

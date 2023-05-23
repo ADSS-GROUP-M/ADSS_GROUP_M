@@ -1,7 +1,7 @@
 package presentationLayer.suppliersModule.Discounts;
 
 public class PercentageDiscount extends Discount {
-    private double percentage;
+    private final double percentage;
     public PercentageDiscount(double percentage){
         this.percentage = percentage;
     }

@@ -6,14 +6,14 @@ import serviceLayer.ServiceFactory;
 import java.util.List;
 
 public class LoginMenuVM {
-    private BackendController backendController;
+    private final BackendController backendController;
 
     public LoginMenuVM() {
-        backendController = BackendController.getInstance();
+        backendController = new BackendController();
     }
 
     public LoginMenuVM(ServiceFactory factory) {
-        backendController = BackendController.getInstance(factory);
+        backendController = new BackendController(factory);
     }
 
     public String login(String username, String password) {

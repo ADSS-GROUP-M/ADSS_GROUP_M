@@ -4,6 +4,19 @@ import dataAccessLayer.dalAbstracts.SQLExecutor;
 import dataAccessLayer.dalUtils.SQLExecutorProductionImpl;
 import dataAccessLayer.dalUtils.SQLExecutorTestingImpl;
 import dataAccessLayer.employeeModule.*;
+import dataAccessLayer.inventoryModule.*;
+import dataAccessLayer.suppliersModule.AgreementDataMappers.AgreementDataMapper;
+import dataAccessLayer.suppliersModule.AgreementDataMappers.DeliveryAgreementDataMapper;
+import dataAccessLayer.suppliersModule.AgreementDataMappers.SupplierProductDataMapper;
+import dataAccessLayer.suppliersModule.BillOfQuantitiesDataMappers.*;
+import dataAccessLayer.suppliersModule.OrderHistoryDataMappers.NumberOfOrdersCounterDataMapper;
+import dataAccessLayer.suppliersModule.OrderHistoryDataMappers.OrderHistoryDataMapper;
+import dataAccessLayer.suppliersModule.PeriodicOrderDataMapper;
+import dataAccessLayer.suppliersModule.PeriodicOrderDetailsDataMapper;
+import dataAccessLayer.suppliersModule.ProductsDataMapper;
+import dataAccessLayer.suppliersModule.SuppliersDataMappers.ContactsInfoDataMapper;
+import dataAccessLayer.suppliersModule.SuppliersDataMappers.FieldsDataMapper;
+import dataAccessLayer.suppliersModule.SuppliersDataMappers.SupplierDataMapper;
 import dataAccessLayer.transportModule.*;
 import exceptions.DalException;
 
@@ -25,10 +38,17 @@ public class DalFactory {
     private ItemListsItemsDAO itemListsItemsDAO;
     private final SQLExecutor cursor;
     private TransportsDAO transportsDAO;
-
     private DeliveryRoutesDAO deliveryRoutesDAO;
-
     private TransportsMetaDataDAO transportsMetaDataDAO;
+    private SupplierDataMapper supplierDataMapper;
+    private OrderHistoryDataMapper orderHistoryDataMapper;
+    private AgreementDataMapper agreementDataMapper;
+    private BillOfQuantitiesDataMapper billOfQuantitiesDataMapper;
+    private PeriodicOrderDataMapper periodicOrderDataMapper;
+    private ProductManagerMapper productManagerMapper;
+    private DiscountManagerMapper discountManagerMapper;
+    private CategoryManagerMapper categoryManagerMapper;
+
     public DalFactory() throws DalException {
         cursor = new SQLExecutorProductionImpl();
         buildInstances(cursor);
@@ -45,16 +65,85 @@ public class DalFactory {
 
     private void buildInstances(SQLExecutor cursor) throws DalException {
 
-        itemListsItemsDAO = new ItemListsItemsDAO(cursor);
-        trucksDAO = new TrucksDAO(cursor);
-        driversDAO = new DriversDAO(cursor);
+        /*
+          | ********************************** READ ME ************************************************ |
+                        <<   The order of the dependencies blocks is important!   >>
+                   <<   The order is determined by the dependencies between the tables  >>
+          | ******************************************************************************************* |
+        */
 
-        //============== dependencies ============== |
+        //TODO: Fix the dependencies order
+
+        //============== dependencies (-) ============== |
+        /*(1)*/ CategoryHierarchyDataMapper categoryHierarchyDataMapper = new CategoryHierarchyDataMapper(cursor);
+        /*(1)*/ ProductsDataMapper productsDataMapper = new ProductsDataMapper(cursor);
+        /*(1)*/ ProductItemDataMapper productItemDataMapper = new ProductItemDataMapper(cursor);
+        /*(1)*/ ProductPairBranchDataMapper productPairBranchDataMapper = new ProductPairBranchDataMapper(cursor);
+        /*(2)*/ productManagerMapper = new ProductManagerMapper(
+                    productsDataMapper,
+                    productItemDataMapper,
+                    productPairBranchDataMapper);
+        /*(3)*/ CategoryDataMapper categoryDataMapper = new CategoryDataMapper(cursor,productManagerMapper);
+        /*(4)*/ categoryManagerMapper = new CategoryManagerMapper(
+                    categoryDataMapper,
+                    categoryHierarchyDataMapper);
+        //============================================== |
+
+        //============== dependencies (-) ============== |
+        /*(1)*/ StoreProductDiscountDataMapper storeProductDiscountDataMapper = new StoreProductDiscountDataMapper(cursor);
+        /*(2)*/ discountManagerMapper = new DiscountManagerMapper(storeProductDiscountDataMapper);
+        //============================================== |
+
+        //============== dependencies (-) ============== |
+        /*(1)*/ ContactsInfoDataMapper contactsInfoDataMapper = new ContactsInfoDataMapper(cursor);
+        /*(1)*/ FieldsDataMapper fieldsDataMapper = new FieldsDataMapper(cursor);
+        /*(2)*/ supplierDataMapper = new SupplierDataMapper(
+                    cursor,
+                    contactsInfoDataMapper,
+                    fieldsDataMapper);
+        // ============================================= |
+
+        // ============== dependencies (-) ============== |
+        /*(1)*/ ProductsDiscountsDataMapper productsDiscountsDataMapper = new ProductsDiscountsDataMapper(cursor);
+        /*(1)*/ DiscountOnTotalDataMapper discountOnTotalDataMapper = new DiscountOnTotalDataMapper(cursor);
+        /*(1)*/ DiscountOnAmountDataMapper discountOnAmountDataMapper = new DiscountOnAmountDataMapper(cursor);
+        /*(1)*/ OrderOfDiscountsDataMapper orderOfDiscountsDataMapper = new OrderOfDiscountsDataMapper(cursor);
+        /*(2)*/ billOfQuantitiesDataMapper = new BillOfQuantitiesDataMapper(
+                    productsDiscountsDataMapper,
+                    discountOnTotalDataMapper,
+                    discountOnAmountDataMapper,
+                    orderOfDiscountsDataMapper);
+        //============================================== |
+
+        //============== dependencies (-) ============== |
+        /*(1)*/ NumberOfOrdersCounterDataMapper numberOfOrdersCounterDataMapper = new NumberOfOrdersCounterDataMapper(cursor);
+        /*(2)*/ orderHistoryDataMapper = new OrderHistoryDataMapper(cursor, numberOfOrdersCounterDataMapper);
+        //============================================== |
+
+        //============== dependencies (-) ============== |
+        /*(1)*/ DeliveryAgreementDataMapper deliveryAgreementDataMapper = new DeliveryAgreementDataMapper(cursor);
+        /*(1)*/ SupplierProductDataMapper supplierProductDataMapper = new SupplierProductDataMapper(cursor);
+        /*(2)*/ agreementDataMapper = new AgreementDataMapper(
+                    supplierProductDataMapper,
+                    deliveryAgreementDataMapper,
+                    productsDataMapper);
+        //============================================== |
+
+        //============== dependencies (-) ============== |
+        /*(1)*/ PeriodicOrderDetailsDataMapper periodicOrderDetailsDataMapper = new PeriodicOrderDetailsDataMapper(cursor);
+        /*(2)*/ periodicOrderDataMapper = new PeriodicOrderDataMapper(
+                cursor,
+                periodicOrderDetailsDataMapper);
+        //============================================== |
+
+        //TODO: the order of the dependencies from this point onward is in the correct order, don't need to change it
+
+        //============== dependencies (1) ============== |
         /*(1)*/ userAuthorizationsDAO = new UserAuthorizationsDAO(cursor);
         /*(2)*/ userDAO = new UserDAO(cursor,userAuthorizationsDAO);
         //========================================== |
 
-        //============== dependencies ============== |
+        //============== dependencies (2) ============== |
         /*(1)*/ ShiftToActivityDAO shiftToActivityDAO = new ShiftToActivityDAO(cursor);
         /*(1)*/ ShiftToCancelsDAO shiftToCancelsDAO = new ShiftToCancelsDAO(cursor);
         /*(1)*/ ShiftToNeededRolesDAO shiftToNeededRolesDAO = new ShiftToNeededRolesDAO(cursor);
@@ -62,27 +151,35 @@ public class DalFactory {
         /*(2)*/ employeeDAO = new EmployeeDAO(cursor,employeeRolesDAO);
         /*(3)*/ ShiftToWorkersDAO shiftToWorkersDAO = new ShiftToWorkersDAO(cursor,employeeDAO);
         /*(3)*/ ShiftToRequestsDAO shiftToRequestsDAO = new ShiftToRequestsDAO(cursor,employeeDAO);
-        /*(4)*/ shiftDAO = new ShiftDAO(cursor, shiftToNeededRolesDAO, shiftToRequestsDAO, shiftToWorkersDAO, shiftToCancelsDAO, shiftToActivityDAO);
-        //========================================== |
+        /*(4)*/ shiftDAO = new ShiftDAO(cursor,
+                    shiftToNeededRolesDAO,
+                    shiftToRequestsDAO,
+                    shiftToWorkersDAO,
+                    shiftToCancelsDAO,
+                    shiftToActivityDAO);
+        //============================================= |
 
-        //============== dependencies ============== |
+        //============== dependencies (3) ============== |
         /*(1)*/ ItemListIdCounterDAO itemListIdCounterDAO = new ItemListIdCounterDAO(cursor);
+        /*(1)*/ itemListsItemsDAO = new ItemListsItemsDAO(cursor);
         /*(2)*/ itemListsDAO = new ItemListsDAO(cursor, itemListsItemsDAO, itemListIdCounterDAO);
-        //========================================== |
+        //============================================== |
 
-        //============== dependencies ============== |
+        //============== dependencies (4) ============== |
         /*(1)*/ sitesDAO = new SitesDAO(cursor);
         /*(2)*/ sitesRoutesDAO = new SitesRoutesDAO(cursor);
-        /*(2)*/ branchEmployeesDAO = new BranchEmployeesDAO(cursor);
-        /*(3)*/ branchesDAO = new BranchesDAO(cursor,branchEmployeesDAO);
-        //========================================== |
+        /*(3)*/ branchEmployeesDAO = new BranchEmployeesDAO(cursor);
+        /*(4)*/ branchesDAO = new BranchesDAO(cursor,branchEmployeesDAO);
+        //============================================== |
 
-        //============== dependencies ============== |
+        //============== dependencies (5) ============== |
+        /*(1)*/ trucksDAO = new TrucksDAO(cursor);
+        /*(1)*/ driversDAO = new DriversDAO(cursor);
         /*(1)*/ TransportIdCounterDAO transportIdCounterDAO = new TransportIdCounterDAO(cursor);
         /*(2)*/ transportsMetaDataDAO = new TransportsMetaDataDAO(cursor, transportIdCounterDAO);
-        /*(2)*/ deliveryRoutesDAO = new DeliveryRoutesDAO(cursor);
-        /*(3)*/ transportsDAO = new TransportsDAO(transportsMetaDataDAO, deliveryRoutesDAO);
-        //========================================== |
+        /*(3)*/ deliveryRoutesDAO = new DeliveryRoutesDAO(cursor);
+        /*(4)*/ transportsDAO = new TransportsDAO(transportsMetaDataDAO, deliveryRoutesDAO);
+        //============================================== |
     }
 
     public DeliveryRoutesDAO deliveryRoutesDAO() {
@@ -175,5 +272,37 @@ public class DalFactory {
         } catch (DalException e) {
             e.printStackTrace();
         }
+    }
+
+    public SupplierDataMapper supplierDataMapper() {
+        return supplierDataMapper;
+    }
+
+    public OrderHistoryDataMapper orderHistoryDataMapper() {
+        return orderHistoryDataMapper;
+    }
+
+    public AgreementDataMapper agreementDataMapper() {
+        return agreementDataMapper;
+    }
+
+    public BillOfQuantitiesDataMapper billOfQuantitiesDataMapper() {
+        return billOfQuantitiesDataMapper;
+    }
+
+    public PeriodicOrderDataMapper periodicOrderDataMapper() {
+        return periodicOrderDataMapper;
+    }
+
+    public ProductManagerMapper productManagerMapper() {
+        return productManagerMapper;
+    }
+
+    public DiscountManagerMapper discountManagerMapper() {
+        return discountManagerMapper;
+    }
+
+    public CategoryManagerMapper categoryManagerMapper() {
+        return categoryManagerMapper;
     }
 }

@@ -3,13 +3,13 @@ package businessLayer.suppliersModule;
 import businessLayer.businessLayerUsage.Branch;
 
 public class PeriodicOrder {
-    private String bnNumber;
-    private Order order;
+    private final String bnNumber;
+    private final Order order;
     /**
      * day of the week, of the order
      */
-    private int day;
-    private Branch branch;
+    private final int day;
+    private final Branch branch;
 
     public PeriodicOrder(String bnNumber, Order order, int day, Branch branch){
         this.bnNumber = bnNumber;

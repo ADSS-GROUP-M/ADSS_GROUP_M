@@ -1,6 +1,5 @@
 package dataAccessLayer.inventoryModule;
 import businessLayer.inventoryModule.Category;
-import exceptions.DalException;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -8,29 +7,20 @@ import java.util.Map;
 
 
 public class CategoryManagerMapper{
-    CategoryDataMapper categoryDataMapper;
-    CategoryHierarchyDataMapper categoryHierarchyDataMapper;
-    public static CategoryManagerMapper instance = null;
-    Map<String, Category> cached_categories;
+    private final CategoryDataMapper categoryDataMapper;
+    private final CategoryHierarchyDataMapper categoryHierarchyDataMapper;
+    private final Map<String, Category> cached_categories;
 
-    private CategoryManagerMapper() throws DalException {
-        categoryDataMapper = CategoryDataMapper.getInstance();
-        categoryHierarchyDataMapper = CategoryHierarchyDataMapper.getInstance();
+    public CategoryManagerMapper(CategoryDataMapper categoryDataMapper, CategoryHierarchyDataMapper categoryHierarchyDataMapper){
+        this.categoryDataMapper = categoryDataMapper;
+        this.categoryHierarchyDataMapper = categoryHierarchyDataMapper;
         try{
-            cached_categories = categoryHierarchyDataMapper.initializedCache(categoryDataMapper.initializedCache());
+            cached_categories = this.categoryHierarchyDataMapper.initializedCache(this.categoryDataMapper.initializedCache());
         } catch (SQLException e) {
             throw new RuntimeException(e.getMessage());
         }
         if(cached_categories != null && !cached_categories.isEmpty())
-            categoryDataMapper.initProductsWithCategory(cached_categories);
-    }
-
-    public static CategoryManagerMapper getInstance() throws DalException {
-        if (instance == null) {
-            return new CategoryManagerMapper();
-        } else {
-            return instance;
-        }
+            this.categoryDataMapper.initProductsWithCategory(cached_categories);
     }
 
     public void createCategory(String category_name, List<Category> sub_category) {

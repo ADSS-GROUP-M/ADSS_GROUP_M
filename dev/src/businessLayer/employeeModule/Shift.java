@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 public class Shift {
-    private String branchId;
+    private final String branchId;
     private LocalDate shiftDate;
     private ShiftType shiftType;
     private boolean isApproved; // approved by HR manager

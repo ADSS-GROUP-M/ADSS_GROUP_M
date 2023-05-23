@@ -2,33 +2,20 @@ package businessLayer.suppliersModule;
 
 import businessLayer.businessLayerUsage.Branch;
 import dataAccessLayer.suppliersModule.PeriodicOrderDataMapper;
-import exceptions.DalException;
 
 import java.sql.SQLException;
 import java.util.Map;
 
 public class PeriodicOrderController {
-    private static PeriodicOrderController instance;
 
-    private PeriodicOrderDataMapper periodicOrderDataMapper;
-    private AgreementController agreementController;
+    private final PeriodicOrderDataMapper periodicOrderDataMapper;
+    private final AgreementController agreementController;
 
-    private PeriodicOrderController(){
-        try {
-            periodicOrderDataMapper = new PeriodicOrderDataMapper();
-        } catch (DalException e) {
-
-            //TODO: handle exception
-            throw new RuntimeException(e);
-        }
-        agreementController = AgreementController.getInstance();
+    public PeriodicOrderController(PeriodicOrderDataMapper periodicOrderDataMapper, AgreementController agreementController){
+        this.periodicOrderDataMapper = periodicOrderDataMapper;
+        this.agreementController = agreementController;
     }
 
-    public static PeriodicOrderController getInstance(){
-        if(instance == null)
-            instance = new PeriodicOrderController();
-        return instance;
-    }
     public PeriodicOrder getPeriodicOrder(int orderId) throws SQLException {
         return periodicOrderDataMapper.getPeriodicOrder(orderId);
     }

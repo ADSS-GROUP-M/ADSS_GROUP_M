@@ -241,7 +241,7 @@ public class EmployeeRolesDAO extends DAOBase<Pair<String,Role>> {
     }
 
     @Override
-    public boolean exists(Pair<String,Role> object) throws DalException {
+    public boolean exists(Pair<String,Role> object) {
         try {
             select(object); // Throws a DAL exception if the given role object doesn't exist in the system.
             return true;

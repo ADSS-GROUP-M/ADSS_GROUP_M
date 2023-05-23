@@ -16,12 +16,12 @@ import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnModifier;
 import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnType;
 
 public class PeriodicOrderDataMapper extends AbstractDataMapper {
-    private PeriodicOrderDetailsDataMapper periodicOrderDetailsDataMapper;
-    private Map<Integer, PeriodicOrder> periodicOrders;
+    private final PeriodicOrderDetailsDataMapper periodicOrderDetailsDataMapper;
+    private final Map<Integer, PeriodicOrder> periodicOrders;
 
-    public PeriodicOrderDataMapper(SQLExecutor sqlExecutor) throws DalException {
+    public PeriodicOrderDataMapper(SQLExecutor sqlExecutor, PeriodicOrderDetailsDataMapper periodicOrderDetailsDataMapper) throws DalException {
         super(sqlExecutor, "periodic_order", new String[] {"order_id", "catalog_number", "quantity"});
-        periodicOrderDetailsDataMapper = new PeriodicOrderDetailsDataMapper();
+        this.periodicOrderDetailsDataMapper = periodicOrderDetailsDataMapper;
         periodicOrders = new HashMap<>();
     }
 
@@ -107,7 +107,7 @@ public class PeriodicOrderDataMapper extends AbstractDataMapper {
         return getDay(days);
     }
 
-    private int getDay(List<Integer> days) throws SQLException {
+    private int getDay(List<Integer> days) {
         int dayNow = Calendar.DAY_OF_WEEK;
         if(days.contains(dayNow))
             return 0;
@@ -136,7 +136,7 @@ public class PeriodicOrderDataMapper extends AbstractDataMapper {
      * {@link CreateTableQueryBuilder#addCompositeForeignKey(String[], String, String[])}
      */
     @Override
-    protected void initializeCreateTableQueryBuilder() throws DalException {
+    protected void initializeCreateTableQueryBuilder() {
         createTableQueryBuilder
                 .addColumn("order_id", ColumnType.INTEGER,ColumnModifier.PRIMARY_KEY)
                 .addColumn("catalog_number", ColumnType.TEXT, ColumnModifier.PRIMARY_KEY)

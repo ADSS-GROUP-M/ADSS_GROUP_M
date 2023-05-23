@@ -10,23 +10,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class BillOfQuantitiesDataMapper {
-    private ProductsDiscountsDataMapper productsDiscountsDataMapper;
-    private DiscountOnTotalDataMapper discountOnTotalDataMapper;
-    private DiscountOnAmountDataMapper discountOnAmountDataMapper;
-    private OrderOfDiscountsDataMapper orderOfDiscountsDataMapper;
-    private Map<String, BillOfQuantities> suppliersBillOfQuantities;
+    private final ProductsDiscountsDataMapper productsDiscountsDataMapper;
+    private final DiscountOnTotalDataMapper discountOnTotalDataMapper;
+    private final DiscountOnAmountDataMapper discountOnAmountDataMapper;
+    private final OrderOfDiscountsDataMapper orderOfDiscountsDataMapper;
+    private final Map<String, BillOfQuantities> suppliersBillOfQuantities;
 
-    public BillOfQuantitiesDataMapper(){
-        try {
-            productsDiscountsDataMapper = new ProductsDiscountsDataMapper();
-            discountOnAmountDataMapper = new DiscountOnAmountDataMapper();
-            discountOnTotalDataMapper = new DiscountOnTotalDataMapper();
-            orderOfDiscountsDataMapper = new OrderOfDiscountsDataMapper();
-        } catch (DalException e) {
-
-            //TODO: handle exception
-            throw new RuntimeException(e);
-        }
+    public BillOfQuantitiesDataMapper(ProductsDiscountsDataMapper productsDiscountsDataMapper,
+                                      DiscountOnTotalDataMapper discountOnTotalDataMapper,
+                                      DiscountOnAmountDataMapper discountOnAmountDataMapper,
+                                      OrderOfDiscountsDataMapper orderOfDiscountsDataMapper){
+        this.productsDiscountsDataMapper = productsDiscountsDataMapper;
+        this.discountOnTotalDataMapper = discountOnTotalDataMapper;
+        this.discountOnAmountDataMapper = discountOnAmountDataMapper;
+        this.orderOfDiscountsDataMapper = orderOfDiscountsDataMapper;
         suppliersBillOfQuantities = new HashMap<>();
     }
 
@@ -65,7 +62,7 @@ public class BillOfQuantitiesDataMapper {
         return suppliersBillOfQuantities.get(bnNumber);
     }
 
-    public void setOrderOfDiscounts(String bnNumber, boolean amountBeforeTotal) throws SQLException, DalException {
+    public void setOrderOfDiscounts(String bnNumber, boolean amountBeforeTotal) throws SQLException {
         orderOfDiscountsDataMapper.delete(bnNumber);
         orderOfDiscountsDataMapper.insert(bnNumber, amountBeforeTotal);
     }
@@ -75,7 +72,7 @@ public class BillOfQuantitiesDataMapper {
         discountOnTotalDataMapper.insert(bnNumber, priceToActivateDiscount, discount);
     }
 
-    public void removeDiscountOnTotalOrder(String bnNumber) throws SQLException, DalException {
+    public void removeDiscountOnTotalOrder(String bnNumber) throws SQLException {
         discountOnTotalDataMapper.delete(bnNumber);
     }
 
@@ -83,11 +80,11 @@ public class BillOfQuantitiesDataMapper {
         productsDiscountsDataMapper.insert(bnNumber, catalogNumber, amount, discount);
     }
 
-    public void removeProductDiscount(String bnNumber, String catalogNumber, int amount) throws SQLException, DalException {
+    public void removeProductDiscount(String bnNumber, String catalogNumber, int amount) throws SQLException {
         productsDiscountsDataMapper.delete(bnNumber, catalogNumber, amount);
     }
 
-    public void removeProductDiscount(String bnNumber, String catalogNumber) throws SQLException, DalException {
+    public void removeProductDiscount(String bnNumber, String catalogNumber) throws SQLException {
         productsDiscountsDataMapper.delete(bnNumber, catalogNumber);
     }
     public void setProductsDiscounts(String bnNumber, Map<String, Map<Integer, Discount>> productsDiscounts) throws SQLException {
@@ -107,7 +104,7 @@ public class BillOfQuantitiesDataMapper {
         discountOnAmountDataMapper.insert(bnNumber, amountOfProductsForDiscount, discount);
     }
 
-    public void removeDiscountOnAmountOfProducts(String bnNumber) throws SQLException, DalException {
+    public void removeDiscountOnAmountOfProducts(String bnNumber) throws SQLException {
         discountOnAmountDataMapper.delete(bnNumber);
     }
 

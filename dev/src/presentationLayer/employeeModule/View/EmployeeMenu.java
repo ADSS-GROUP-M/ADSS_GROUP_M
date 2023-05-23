@@ -1,5 +1,6 @@
 package presentationLayer.employeeModule.View;
 
+import presentationLayer.employeeModule.Model.BackendController;
 import presentationLayer.employeeModule.ViewModel.EmployeeMenuVM;
 import utils.DateUtils;
 
@@ -8,11 +9,11 @@ import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
 public class EmployeeMenu implements Menu {
-    private EmployeeMenuVM employeeMenuVM;
-    private Scanner scanner;
+    private final EmployeeMenuVM employeeMenuVM;
+    private final Scanner scanner;
 
-    public EmployeeMenu() {
-        this.employeeMenuVM = new EmployeeMenuVM();
+    public EmployeeMenu(BackendController backendController) {
+        this.employeeMenuVM = new EmployeeMenuVM(backendController);
         this.scanner = new Scanner(System.in);
         System.out.println("Welcome to the Employee Menu.");
     }

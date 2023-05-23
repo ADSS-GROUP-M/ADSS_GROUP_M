@@ -21,9 +21,9 @@ import java.util.Map;
 public class EmployeesController {
     //private Map<String, Branch> branches; //BranchID to branch
     //private Map<Branch,Map<String, Employee>> employees; // branch to <employeeID to Employee>
-    private BranchesDAO branchesDAO;
-    private EmployeeDAO employeeDAO;
-    private ShiftsController shiftsController;
+    private final BranchesDAO branchesDAO;
+    private final EmployeeDAO employeeDAO;
+    private final ShiftsController shiftsController;
 
     public EmployeesController(ShiftsController shiftsController, BranchesDAO branchesDAO, EmployeeDAO employeeDAO){
         this.shiftsController = shiftsController;

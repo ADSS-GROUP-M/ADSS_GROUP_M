@@ -1,8 +1,11 @@
 package suppliersInventory;
 
+import businessLayer.BusinessFactory;
 import businessLayer.businessLayerUsage.Branch;
 import businessLayer.inventoryModule.Product;
 import businessLayer.inventoryModule.ProductController;
+import dataAccessLayer.DalFactory;
+import exceptions.TransportException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,16 +34,22 @@ public class ProductTest {
 
     private Product product;
 
-    private ProductController productController = ProductController.ProductController();
+    private ProductController productController;
 
 
     @BeforeEach
     public void setUp() {
-        //create new product
+        try {
+            BusinessFactory factory = new BusinessFactory(DalFactory.TESTING_DB_NAME);
+            productController = factory.productController();
+            //create new product
 //        productController.createProduct(catalog_number,branch,catalog_name,manufacturer,storePrice);
-        List<String> serial_numbers = new ArrayList<>();
-        serial_numbers.add(serial_number);
+            List<String> serial_numbers = new ArrayList<>();
+            serial_numbers.add(serial_number);
 //        productController.createProductItem(serial_numbers,catalog_number,branch,supplierId,supplierPrice,supplierDiscount, location,expireDate, "y");
+        } catch (TransportException e) {
+            fail(e);
+        }
     }
 
     @AfterEach

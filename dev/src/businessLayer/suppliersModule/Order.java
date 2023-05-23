@@ -7,7 +7,7 @@ public class Order {
     /***
      * maps between productId and amount ordered
      */
-    private Map<String, Integer> products;
+    private final Map<String, Integer> products;
 
     public Order(Map<String, Integer> products){
         this.products = products;

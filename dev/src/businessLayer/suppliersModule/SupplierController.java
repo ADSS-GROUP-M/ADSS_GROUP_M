@@ -11,22 +11,10 @@ public class SupplierController {
     /***
      * maps between supplier's bn number to the supplier
      */
-    private SupplierDataMapper supplierDataMapper;
+    private final SupplierDataMapper supplierDataMapper;
 
-    private static SupplierController supplierController;
-    private SupplierController(){
-        try {
-            supplierDataMapper = new SupplierDataMapper();
-        } catch (DalException e) {
-
-            //TODO: handle exception
-            throw new RuntimeException(e);
-        }
-    }
-    public static SupplierController getInstance(){
-        if(supplierController == null)
-            supplierController = new SupplierController();
-        return supplierController;
+    public SupplierController(SupplierDataMapper supplierDataMapper){
+        this.supplierDataMapper = supplierDataMapper;
     }
 
     public void addSupplier(String name, String bnNumber, BankAccount bankAccount, String paymentMethod,

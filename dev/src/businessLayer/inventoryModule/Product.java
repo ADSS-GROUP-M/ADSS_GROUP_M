@@ -9,16 +9,16 @@ import java.util.List;
 import java.util.Map;
 
 public class Product {
-    private  String catalog_number;
+    private final String catalog_number;
     private  String name;
     private String manufacturer;
     private double originalStorePrice;
 //    private Category category;
-    private List<Category> subCategory;
+    private final List<Category> subCategory;
     //default value -1
     private int notificationMin;
-    private Map<String, ProductItem> productItems;
-    private Branch branch;
+    private final Map<String, ProductItem> productItems;
+    private final Branch branch;
 
     public Product(String catalog_number, String name, String manufacturer, double originalStorePrice, Branch branch){
         this.catalog_number = catalog_number;

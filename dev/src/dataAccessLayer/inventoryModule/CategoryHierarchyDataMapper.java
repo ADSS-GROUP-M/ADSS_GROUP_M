@@ -15,18 +15,10 @@ import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnModifier;
 import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnType;
 
 public class CategoryHierarchyDataMapper extends AbstractDataMapper {
-    private static CategoryHierarchyDataMapper instance = null;
 
-    private CategoryHierarchyDataMapper(SQLExecutor sqlExecutor) throws DalException {
+
+    public CategoryHierarchyDataMapper(SQLExecutor sqlExecutor) throws DalException {
         super(sqlExecutor, "category_hierarchy", new String[]{"category", "sub_category"});
-    }
-
-    public static CategoryHierarchyDataMapper getInstance() throws DalException {
-        if (instance == null) {
-            return new CategoryHierarchyDataMapper();
-        } else {
-            return instance;
-        }
     }
 
     public void insert(String category_name, String sub_category) throws SQLException {
@@ -73,7 +65,7 @@ public class CategoryHierarchyDataMapper extends AbstractDataMapper {
      * {@link CreateTableQueryBuilder#addCompositeForeignKey(String[], String, String[])}
      */
     @Override
-    protected void initializeCreateTableQueryBuilder() throws DalException {
+    protected void initializeCreateTableQueryBuilder() {
         createTableQueryBuilder
                 .addColumn("category", ColumnType.TEXT, ColumnModifier.PRIMARY_KEY)
                 .addColumn("sub_category", ColumnType.TEXT, ColumnModifier.PRIMARY_KEY)

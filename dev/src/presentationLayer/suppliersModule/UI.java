@@ -12,25 +12,28 @@ import businessLayer.suppliersModule.Pair;
 import businessLayer.suppliersModule.Product;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import serviceLayer.ServiceFactory;
 import serviceLayer.suppliersModule.*;
 
 import java.lang.reflect.Type;
+import java.security.Provider;
 import java.util.*;
 
 public class UI {
-    private OrderService orderService;
-    private SupplierService supplierService;
-    private AgreementService agreementService;
-    private BillOfQuantitiesService billOfQuantitiesService;
-    private PeriodicOrderService periodicOrderService;
-    private Scanner sc;
-    private Gson gson;
+    private final OrderService orderService;
+    private final SupplierService supplierService;
+    private final AgreementService agreementService;
+    private final BillOfQuantitiesService billOfQuantitiesService;
+    private final PeriodicOrderService periodicOrderService;
+    private final Scanner sc;
+    private final Gson gson;
     public UI(){
-        orderService = new OrderService();
-        supplierService = new SupplierService();
-        agreementService = new AgreementService();
-        billOfQuantitiesService = new BillOfQuantitiesService();
-        periodicOrderService = new PeriodicOrderService();
+        ServiceFactory factory = new ServiceFactory();
+        orderService = factory.orderService();
+        supplierService = factory.supplierService();
+        agreementService = factory.agreementService();
+        billOfQuantitiesService = factory.billOfQuantitiesService();
+        periodicOrderService = factory.periodicOrderService();
         sc = new Scanner(System.in);
         gson = new Gson();
     }
@@ -77,108 +80,43 @@ public class UI {
         printMethods();
 
         int choice = Integer.parseInt(sc.nextLine());
-        switch (choice){
-            case 1:
-                addSupplier();
-                break;
-            case 2:
-                removeSupplier();
-                break;
-            case 3:
-                setSupplierName();
-                break;
-            case 4:
-                setSupplierBnNumber();
-                break;
-            case 5:
-                setSupplierBankAccount();
-                break;
-            case 6:
-                setSupplierPaymentMethod();
-                break;
-            case 7:
-                addContactInfo();
-                break;
-            case 8:
-                removeContactInfo();
-                break;
-            case 9:
-                setContactsEmail();
-                break;
-            case 10:
-                setContactsPhoneNumber();
-                break;
-            case 11:
-                setDeliveryAgreement();
-                break;
-            case 12:
-                setProductSuppliersCatalogNumber();
-                break;
-            case 13:
-                setProductPrice();
-                break;
-            case 14:
-                setProductAmount();
-                break;
-            case 15:
-                addProduct();
-                break;
-            case 16:
-                setProductDiscount();
-                break;
-            case 17:
-                removeProductDiscount();
-                break;
-            case 18:
-                removeProductDiscounts();
-                break;
-            case 19:
-                removeDiscountOnTotalOrder();
-                break;
-            case 20:
-                setDiscountOnTotalOrder();
-                break;
-            case 21:
-                setOrderOfDiscounts();
-                break;
-            case 22:
-                setProductsDiscounts();
-                break;
-            case 23:
-                setDiscountOnAmountOfProducts();
-                break;
-            case 24:
-                removeDiscountOnAmountOfProducts();
-                break;
-            case 25:
-                getOrderHistory();
-                break;
-            case 26:
-                addField();
-                break;
-            case 27:
-                removeField();
-                break;
-            case 28:
-                getCatalogNumber();
-                break;
-            case 29:
-                getDeliveryAgreement();
-                break;
-            case 30:
-                removeProduct();
-                break;
-            case 31:
-                getSupplierDetails();
-                break;
-            case 32:
-                addPeriodicOrder();
-                break;
-            case 33:
-                getPeriodicOrdersDetails();
-                break;
-            case 34:
+        switch (choice) {
+            case 1 -> addSupplier();
+            case 2 -> removeSupplier();
+            case 3 -> setSupplierName();
+            case 4 -> setSupplierBnNumber();
+            case 5 -> setSupplierBankAccount();
+            case 6 -> setSupplierPaymentMethod();
+            case 7 -> addContactInfo();
+            case 8 -> removeContactInfo();
+            case 9 -> setContactsEmail();
+            case 10 -> setContactsPhoneNumber();
+            case 11 -> setDeliveryAgreement();
+            case 12 -> setProductSuppliersCatalogNumber();
+            case 13 -> setProductPrice();
+            case 14 -> setProductAmount();
+            case 15 -> addProduct();
+            case 16 -> setProductDiscount();
+            case 17 -> removeProductDiscount();
+            case 18 -> removeProductDiscounts();
+            case 19 -> removeDiscountOnTotalOrder();
+            case 20 -> setDiscountOnTotalOrder();
+            case 21 -> setOrderOfDiscounts();
+            case 22 -> setProductsDiscounts();
+            case 23 -> setDiscountOnAmountOfProducts();
+            case 24 -> removeDiscountOnAmountOfProducts();
+            case 25 -> getOrderHistory();
+            case 26 -> addField();
+            case 27 -> removeField();
+            case 28 -> getCatalogNumber();
+            case 29 -> getDeliveryAgreement();
+            case 30 -> removeProduct();
+            case 31 -> getSupplierDetails();
+            case 32 -> addPeriodicOrder();
+            case 33 -> getPeriodicOrdersDetails();
+            case 34 -> {
                 return false;
+            }
         }
         return true;
     }
@@ -327,18 +265,12 @@ public class UI {
             String bnNumber = sc.nextLine();
             System.out.println("select payment method:\n1. net\n2. net 30 EOM\n3. net 60 EOM");
             int choice = Integer.parseInt(sc.nextLine());
-            String paymentMethod = null;
-            switch (choice){
-                case 1:
-                    paymentMethod = "net";
-                    break;
-                case 2:
-                    paymentMethod = "net 30 EOM";
-                    break;
-                case 3:
-                    paymentMethod = "net 60 EOM";
-                    break;
-            }
+            String paymentMethod = switch (choice) {
+                case 1 -> "net";
+                case 2 -> "net 30 EOM";
+                case 3 -> "net 60 EOM";
+                default -> null;
+            };
             System.out.println(gson.fromJson(supplierService.setSupplierPaymentMethod(bnNumber, paymentMethod), presentationLayer.suppliersModule.Response.class).getMsg());
         }
         catch (Exception e){
@@ -872,36 +804,18 @@ public class UI {
             System.out.println("enter branch to order to");
             System.out.println("1. branch1\n2. branch2\n3. branch3\n4. branch4\n5. branch5\n6. branch6\n7. branch7\n8. branch8\n9. branch9");
             int choice = Integer.parseInt(sc.nextLine());
-            Branch branch = Branch.branch1;
-            switch (choice) {
-                case 1:
-                    branch = Branch.branch1;
-                    break;
-                case 2:
-                    branch = Branch.branch2;
-                    break;
-                case 3:
-                    branch = Branch.branch3;
-                    break;
-                case 4:
-                    branch = Branch.branch4;
-                    break;
-                case 5:
-                    branch = Branch.branch5;
-                    break;
-                case 6:
-                    branch = Branch.branch6;
-                    break;
-                case 7:
-                    branch = Branch.branch7;
-                    break;
-                case 8:
-                    branch = Branch.branch8;
-                    break;
-                case 9:
-                    branch = Branch.branch9;
-                    break;
-            }
+            Branch branch = switch (choice) {
+                case 1 -> Branch.branch1;
+                case 2 -> Branch.branch2;
+                case 3 -> Branch.branch3;
+                case 4 -> Branch.branch4;
+                case 5 -> Branch.branch5;
+                case 6 -> Branch.branch6;
+                case 7 -> Branch.branch7;
+                case 8 -> Branch.branch8;
+                case 9 -> Branch.branch9;
+                default -> Branch.branch1;
+            };
             System.out.println(gson.fromJson(periodicOrderService.addPeriodicOrder(bnNumber, order, day, branch), presentationLayer.suppliersModule.Response.class).getMsg());
         }
         catch (Exception e){

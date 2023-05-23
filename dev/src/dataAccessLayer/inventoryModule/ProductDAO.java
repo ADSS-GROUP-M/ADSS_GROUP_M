@@ -1,8 +1,8 @@
 package dataAccessLayer.inventoryModule;
 
 public class ProductDAO {
-    private String catalog_number;
-    private String name;
+    private final String catalog_number;
+    private final String name;
     private String manufacture;
     private String category;
 

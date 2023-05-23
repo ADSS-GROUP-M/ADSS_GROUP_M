@@ -4,8 +4,8 @@ import java.util.*;
 
 public class User {// This class represents a user in the system and manages its authorization
 
-    private String username;
-    private String password;
+    private final String username;
+    private final String password;
     private boolean loggedIn;
     private Set<Authorization> authorizations;
 

@@ -5,7 +5,6 @@ import businessLayer.suppliersModule.DeliveryAgreements.DeliveryAgreement;
 import businessLayer.suppliersModule.DeliveryAgreements.DeliveryByInvitation;
 import businessLayer.suppliersModule.DeliveryAgreements.DeliveryFixedDays;
 import businessLayer.suppliersModule.Product;
-import dataAccessLayer.dalAbstracts.SQLExecutor;
 import dataAccessLayer.suppliersModule.ProductsDataMapper;
 import exceptions.DalException;
 
@@ -16,15 +15,17 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class AgreementDataMapper {
-    private SupplierProductDataMapper supplierProductDataMapper;
-    private DeliveryAgreementDataMapper deliveryAgreementDataMapper;
-    private ProductsDataMapper productsDataMapper;
-    private Map<String, Agreement> suppliersAgreement;
+    private final SupplierProductDataMapper supplierProductDataMapper;
+    private final DeliveryAgreementDataMapper deliveryAgreementDataMapper;
+    private final ProductsDataMapper productsDataMapper;
+    private final Map<String, Agreement> suppliersAgreement;
 
-    public AgreementDataMapper(SQLExecutor sqlExecutor) throws DalException {
-        supplierProductDataMapper = new SupplierProductDataMapper();
-        deliveryAgreementDataMapper = new DeliveryAgreementDataMapper();
-        productsDataMapper = ProductsDataMapper.getInstance();
+    public AgreementDataMapper(SupplierProductDataMapper supplierProductDataMapper,
+                               DeliveryAgreementDataMapper deliveryAgreementDataMapper,
+                               ProductsDataMapper productsDataMapper) {
+        this.supplierProductDataMapper = supplierProductDataMapper;
+        this.deliveryAgreementDataMapper = deliveryAgreementDataMapper;
+        this.productsDataMapper = productsDataMapper;
         suppliersAgreement = new HashMap<>();
     }
 

@@ -1,7 +1,7 @@
 package businessLayer.suppliersModule.Discounts;
 
 public class PercentageDiscount extends Discount {
-    private double percentage;
+    private final double percentage;
     public PercentageDiscount(double percentage){
         if(percentage > 100 | percentage < 0)
             throw new RuntimeException("percentage is invalid");

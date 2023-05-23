@@ -62,7 +62,7 @@ public class DataGenerator {
     private Site logistical1;
     private final Object lock = new Object();
     private int tries;
-    private long startTime = System.currentTimeMillis();
+    private final long startTime = System.currentTimeMillis();
 
     public String generateData(String dbName) {
         try {

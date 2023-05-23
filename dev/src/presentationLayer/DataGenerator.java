@@ -252,7 +252,7 @@ public class DataGenerator {
             add(supplier5);
             add(logistical1);
         }};
-        controller.addAllSitesFirstTimeSystemLoad(sites, callback, true);
+        controller.addAllSitesFirstTimeSystemLoad(sites, true, callback);
     }
 
     public void initializeBranches(List<Driver> drivers) {

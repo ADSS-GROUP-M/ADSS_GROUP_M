@@ -5,7 +5,6 @@ import dataAccessLayer.transportModule.SitesDAO;
 import domainObjects.transportModule.Site;
 import exceptions.DalException;
 import exceptions.TransportException;
-import presentationLayer.DataGenerator;
 import serviceLayer.employeeModule.Services.EmployeesService;
 
 import java.util.LinkedList;
@@ -161,14 +160,14 @@ public class SitesController {
      * this method assumes that there are no sites in the system.
      */
     public void addAllSitesFirstTimeSystemLoad(List<Site> sites,  boolean fetchTravelTimes) throws TransportException {
-        addAllSitesFirstTimeSystemLoad(sites, ()->{}, fetchTravelTimes);
+        addAllSitesFirstTimeSystemLoad(sites, fetchTravelTimes, ()->{});
     }
 
     /**
      * this method is used only for the first time the system is loaded.
      * this method assumes that there are no sites in the system.
      */
-    public void addAllSitesFirstTimeSystemLoad(List<Site> sites, Runnable callback, boolean fetchTravelTimes) throws TransportException {
+    public void addAllSitesFirstTimeSystemLoad(List<Site> sites, boolean fetchTravelTimes, Runnable callback) throws TransportException {
 
         // generate basic data needed for the system to work
         for(Site site : sites){

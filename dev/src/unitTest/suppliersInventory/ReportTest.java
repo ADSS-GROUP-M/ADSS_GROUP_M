@@ -1,9 +1,12 @@
 package suppliersInventory;
 
+import businessLayer.BusinessFactory;
 import businessLayer.businessLayerUsage.Branch;
 import businessLayer.inventoryModule.CategoryController;
 import businessLayer.inventoryModule.ProductController;
 import businessLayer.inventoryModule.Record;
+import dataAccessLayer.DalFactory;
+import exceptions.TransportException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -14,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class ReportTest {
     private static String catalog_number = "0x123";
@@ -60,10 +64,15 @@ public class ReportTest {
 
     @BeforeEach
     public void setUp() {
-        productController = ProductController.ProductController();
-        categoryController = CategoryController.CategoryController();
-        productController.updateProduct(branch,null,catalog_number,null,-1,6);
-        //create new product
+        BusinessFactory factory = null;
+        try {
+            factory = new BusinessFactory(DalFactory.TESTING_DB_NAME);
+            productController = factory.productController();
+            categoryController = factory.categoryController();
+//        productController = ProductController.ProductController();
+//        categoryController = CategoryController.CategoryController();
+            productController.updateProduct(branch,null,catalog_number,null,-1,6);
+            //create new product
 //        productController.createProduct(catalog_number,branch,catalog_name,manufacturer,storePrice);
 //        List<String> serial_numbers = new ArrayList<>();
 //        serial_numbers.add("0");
@@ -78,6 +87,9 @@ public class ReportTest {
 //        subCategoriesList.add("yogurt");
 //        subCategoriesList.add("milk");
 //        categoryController.createCategory(branch, subCategoriesList, "Dairy products");
+        } catch (TransportException e) {
+            fail(e);
+        }
     }
 
 

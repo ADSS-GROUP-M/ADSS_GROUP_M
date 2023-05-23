@@ -9,13 +9,15 @@ import java.util.List;
 import java.util.Map;
 
 public class SupplierService {
-    private SupplierController supplierController;
-    private AgreementController agreementController;
-    private Gson gson;
+    private final SupplierController supplierController;
+    private final AgreementController agreementController;
+    private final BillOfQuantitiesController billOfQuantitiesController;
+    private final Gson gson;
 
-    public SupplierService(){
-        supplierController = SupplierController.getInstance();
-        agreementController = AgreementController.getInstance();
+    public SupplierService(SupplierController supplierController, AgreementController agreementController, BillOfQuantitiesController billOfQuantitiesController){
+        this.supplierController = supplierController;
+        this.agreementController = agreementController;
+        this.billOfQuantitiesController = billOfQuantitiesController;
         gson = new Gson();
     }
 
@@ -146,7 +148,7 @@ public class SupplierService {
 
     public String getSupplierDetails(String bnNumber){
         try {
-            return gson.toJson(new Response<String>(supplierController.getSupplier(bnNumber).toString() + agreementController.toString(bnNumber) + BillOfQuantitiesController.getInstance().toString(bnNumber), false));
+            return gson.toJson(new Response<String>(supplierController.getSupplier(bnNumber).toString() + agreementController.toString(bnNumber) + billOfQuantitiesController.toString(bnNumber), false));
         }
         catch (Exception e){
             return gson.toJson(new Response<>(e.getMessage(), true));

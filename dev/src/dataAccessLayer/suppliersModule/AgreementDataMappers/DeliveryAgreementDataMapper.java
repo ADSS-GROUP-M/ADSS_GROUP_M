@@ -67,7 +67,7 @@ public class DeliveryAgreementDataMapper  extends AbstractDataMapper {
      * {@link CreateTableQueryBuilder#addCompositeForeignKey(String[], String, String[])}
      */
     @Override
-    protected void initializeCreateTableQueryBuilder() throws DalException {
+    protected void initializeCreateTableQueryBuilder() {
         createTableQueryBuilder
                 .addColumn("bn_number", ColumnType.TEXT)
                 .addColumn("have_transport", ColumnType.INTEGER)

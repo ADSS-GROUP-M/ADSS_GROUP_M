@@ -14,22 +14,24 @@ import java.util.List;
 import java.util.Map;
 
 public class ProductManagerMapper {
-    private Map<Branch, Map<String, Product>> cachedProducts; //Map<Branch, Map<catalog_number, Product>
-    private Map<String, List<ProductItem>> cachedItems;
+    private final Map<Branch, Map<String, Product>> cachedProducts; //Map<Branch, Map<catalog_number, Product>
+    private final Map<String, List<ProductItem>> cachedItems;
     private final ProductsDataMapper productsDataMapper;
     private final ProductItemDataMapper productItemDataMapper;
     private final ProductPairBranchDataMapper productPairBranchDataMapper;
-    private static ProductManagerMapper instance = null;
 
-    private ProductManagerMapper() throws DalException {
-        productsDataMapper = ProductsDataMapper.getInstance();
-        productItemDataMapper = ProductItemDataMapper.getInstance();
-        productPairBranchDataMapper = ProductPairBranchDataMapper.getInstance();
+
+    public ProductManagerMapper(ProductsDataMapper productsDataMapper,
+                                 ProductItemDataMapper productItemDataMapper,
+                                 ProductPairBranchDataMapper productPairBranchDataMapper) {
+        this.productsDataMapper = productsDataMapper;
+        this.productItemDataMapper = productItemDataMapper;
+        this.productPairBranchDataMapper = productPairBranchDataMapper;
         try {
-            cachedItems = productItemDataMapper.initializeCache();
+            cachedItems = this.productItemDataMapper.initializeCache();
             cachedProducts = new HashMap<>();
-            List<ProductPairBranchDAO> cachedProductsPairBranch = productPairBranchDataMapper.initializeCache();
-            for (ProductDAO dao : productsDataMapper.initializeCache()) {
+            List<ProductPairBranchDAO> cachedProductsPairBranch = this.productPairBranchDataMapper.initializeCache();
+            for (ProductDAO dao : this.productsDataMapper.initializeCache()) {
                 Product product = null;
                 for (ProductPairBranchDAO pair : cachedProductsPairBranch) {
                     if (dao.getCatalog_number().equals(pair.catalog_number)) {
@@ -66,32 +68,20 @@ public class ProductManagerMapper {
         }
     }
 
-    public static ProductManagerMapper getInstance() throws DalException {
-        if(instance == null){
-            return new ProductManagerMapper();
-        } else {
-            return instance;
-        }
-    }
-
     public void createProduct(String catalog_number, String branch, String name, String manufacture, double originalStorePrice){
-        try {
-            if(!isProductExists(catalog_number)){
+        if(!isProductExists(catalog_number)){
+            Product product = new Product(catalog_number, name, manufacture, originalStorePrice, Branch.valueOf(branch));
+            productsDataMapper.insert(catalog_number, name, manufacture);
+            productPairBranchDataMapper.insert(branch, catalog_number, originalStorePrice, product.getNotificationMin());
+            cachedProducts.computeIfAbsent(product.getBranch(), k -> new HashMap<>())
+                    .put(product.getCatalogNumber(), product);
+        } else {
+            if(!isExistsBranchProduct(catalog_number,branch)) {
                 Product product = new Product(catalog_number, name, manufacture, originalStorePrice, Branch.valueOf(branch));
-                productsDataMapper.insert(catalog_number, name, manufacture);
                 productPairBranchDataMapper.insert(branch, catalog_number, originalStorePrice, product.getNotificationMin());
                 cachedProducts.computeIfAbsent(product.getBranch(), k -> new HashMap<>())
                         .put(product.getCatalogNumber(), product);
-            } else {
-                if(!isExistsBranchProduct(catalog_number,branch)) {
-                    Product product = new Product(catalog_number, name, manufacture, originalStorePrice, Branch.valueOf(branch));
-                    productPairBranchDataMapper.insert(branch, catalog_number, originalStorePrice, product.getNotificationMin());
-                    cachedProducts.computeIfAbsent(product.getBranch(), k -> new HashMap<>())
-                            .put(product.getCatalogNumber(), product);
-                }
             }
-        } catch (SQLException e) {
-            throw new RuntimeException(e.getMessage());
         }
     }
 

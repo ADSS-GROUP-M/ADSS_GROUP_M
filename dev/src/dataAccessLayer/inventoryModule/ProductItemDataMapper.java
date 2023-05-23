@@ -17,16 +17,9 @@ import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnModifier;
 import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnType;
 
 public class ProductItemDataMapper extends AbstractDataMapper {
-    private static ProductItemDataMapper instance = null;
 
-    private ProductItemDataMapper(SQLExecutor sqlExecutor) throws DalException {
+    public ProductItemDataMapper(SQLExecutor sqlExecutor) throws DalException {
         super(sqlExecutor, "product_items", new String[]{"serial_number", "is_defective", "defection_date", "supplier_id", "supplier_price", "supplier_discount", "sold_price", "expiration_date", "location", "catalog_number", "branch", "is_sold", "sold_date"});
-    }
-
-    public static ProductItemDataMapper getInstance() throws DalException {
-        if (instance == null)
-            instance = new ProductItemDataMapper();
-        return instance;
     }
 
     public void insert(String serial_number, int is_defective, String defection_date, String supplier_id, double supplier_price, double supplier_discount, double sold_price, LocalDateTime expiration_date, String location, String catalog_number, String branch) throws SQLException {
@@ -114,7 +107,7 @@ public class ProductItemDataMapper extends AbstractDataMapper {
      * {@link CreateTableQueryBuilder#addCompositeForeignKey(String[], String, String[])}
      */
     @Override
-    protected void initializeCreateTableQueryBuilder() throws DalException {
+    protected void initializeCreateTableQueryBuilder() {
         createTableQueryBuilder
                 .addColumn("serial_number", ColumnType.TEXT, ColumnModifier.PRIMARY_KEY)
                 .addColumn("is_defective", ColumnType.INTEGER, "0")

@@ -5,13 +5,13 @@ import businessLayer.businessLayerUsage.Branch;
 import java.util.*;
 
 public class Category {
-    private String categoryName;
+    private final String categoryName;
     // map<catalog_number, Product obj>
-    private List<Product> productsRelated;
+    private final List<Product> productsRelated;
 
 
     //map<category_name, Category obj>
-    private Map<String, Category> subCategories;
+    private final Map<String, Category> subCategories;
 
 
     public Category(String nameCategory, List<Category> subcategories){

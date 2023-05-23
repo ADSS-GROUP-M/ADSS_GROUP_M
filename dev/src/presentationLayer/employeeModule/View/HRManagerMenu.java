@@ -1,5 +1,6 @@
 package presentationLayer.employeeModule.View;
 
+import presentationLayer.employeeModule.Model.BackendController;
 import presentationLayer.employeeModule.ViewModel.HRManagerMenuVM;
 import utils.DateUtils;
 
@@ -10,11 +11,11 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 public class HRManagerMenu implements Menu {
-    private HRManagerMenuVM hrManagerMenuVM;
-    private Scanner scanner;
+    private final HRManagerMenuVM hrManagerMenuVM;
+    private final Scanner scanner;
 
-    public HRManagerMenu() {
-        hrManagerMenuVM = new HRManagerMenuVM();
+    public HRManagerMenu(BackendController backendController) {
+        hrManagerMenuVM = new HRManagerMenuVM(backendController);
         scanner = new Scanner(System.in);
         System.out.println("Welcome to the HR Manager Menu.");
     }
@@ -280,7 +281,7 @@ public class HRManagerMenu implements Menu {
             System.out.println("4. Optional Details");
             String detailsInput = scanner.nextLine();
             switch (detailsInput) {
-                case "1": // Salary
+                case "1" -> { // Salary
                     String hourlyRateString = "", salaryBonusString = "";
                     try {
                         System.out.println("Please enter the updated employee's hourly rate:");
@@ -291,26 +292,25 @@ public class HRManagerMenu implements Menu {
                         double salaryBonus = Double.parseDouble(salaryBonusString);
                         output = hrManagerMenuVM.updateEmployeeSalary(employeeId, hourlySalaryRate, salaryBonus);
                     } catch (NumberFormatException e) {
-                        output = "Invalid input, expected only decimal numbers, but received: " + hourlyRateString + " " + salaryBonusString +  " try again.";
+                        output = "Invalid input, expected only decimal numbers, but received: " + hourlyRateString + " " + salaryBonusString + " try again.";
                     }
-                    break;
-                case "2": // Bank Details
+                }
+                case "2" -> { // Bank Details
                     System.out.println("Please enter the updated employee's bank details:");
                     String bankDetails = scanner.nextLine();
                     output = hrManagerMenuVM.updateEmployeeBankDetails(employeeId, bankDetails);
-                    break;
-                case "3": // Employment Conditions
+                }
+                case "3" -> { // Employment Conditions
                     System.out.println("Please enter the updated employee's employment conditions:");
                     String employmentConditions = scanner.nextLine();
                     output = hrManagerMenuVM.updateEmployeeEmploymentConditions(employeeId, employmentConditions);
-                    break;
-                case "4": // Optional Details
+                }
+                case "4" -> { // Optional Details
                     System.out.println("Please enter the updated employee's optional details:");
                     String details = scanner.nextLine();
                     output = hrManagerMenuVM.updateEmployeeDetails(employeeId, details);
-                    break;
-                default:
-                    output = "Invalid input, expected a number between 1 and 4, try again.";
+                }
+                default -> output = "Invalid input, expected a number between 1 and 4, try again.";
             }
         }
         else if (command[0].equals("authorize") && command.length == 1) {

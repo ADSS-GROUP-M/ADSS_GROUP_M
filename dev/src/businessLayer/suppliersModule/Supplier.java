@@ -8,12 +8,12 @@ public class Supplier {
     private String name;
     private String bnNumber;
     private BankAccount bankAccount;
-    private List<String> fields;
+    private final List<String> fields;
     private String paymentMethod;
     /***
      * maps between the email of the contact person and his contact info - name, phone number
      */
-    private Map<String,Pair<String, String>> contactsInfo;
+    private final Map<String,Pair<String, String>> contactsInfo;
 
     /***
      * all the orders that have been ordered from the supplier

@@ -14,7 +14,7 @@ public class Agreement {
     /***
      * products on the agreement - maps between product's id to the product and its amount
      */
-    private Map<String, Product> products;
+    private final Map<String, Product> products;
     private BillOfQuantities billOfQuantities;
     private DeliveryAgreement deliveryAgreement;
 

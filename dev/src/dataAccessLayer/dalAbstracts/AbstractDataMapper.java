@@ -5,7 +5,7 @@ import exceptions.DalException;
 
 import java.sql.SQLException;
 
-public abstract class AbstractDataMapper{
+public abstract class AbstractDataMapper {
     protected final String tableName;
     protected final String[] columns;
     protected final SQLExecutor sqlExecutor;
@@ -36,7 +36,7 @@ public abstract class AbstractDataMapper{
      * {@link CreateTableQueryBuilder#addForeignKey(String, String, String)}<br/><br/>
      * {@link CreateTableQueryBuilder#addCompositeForeignKey(String[], String, String[])}
      */
-    protected abstract void initializeCreateTableQueryBuilder() throws DalException;
+    protected abstract void initializeCreateTableQueryBuilder();
 
     public String getTableName(){
         return tableName;

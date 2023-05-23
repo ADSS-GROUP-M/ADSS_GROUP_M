@@ -189,7 +189,7 @@ public class BranchEmployeesDAO extends DAOBase<Pair<String,String>> {
     }
 
     @Override
-    public boolean exists(Pair<String,String> object) throws DalException {
+    public boolean exists(Pair<String,String> object) {
         try {
             select(object); // Throws a DAL exception if the given object doesn't exist in the system.
             return true;

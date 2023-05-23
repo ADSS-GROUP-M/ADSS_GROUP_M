@@ -1,11 +1,14 @@
 package suppliersInventory;
 
+import businessLayer.BusinessFactory;
 import businessLayer.businessLayerUsage.Branch;
 import businessLayer.inventoryModule.Product;
 import businessLayer.inventoryModule.ProductController;
 import businessLayer.suppliersModule.Order;
 import businessLayer.suppliersModule.OrderController;
 import businessLayer.suppliersModule.PeriodicOrderController;
+import dataAccessLayer.DalFactory;
+import exceptions.TransportException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -46,12 +49,22 @@ public class IntegrationTest {
 
     @BeforeEach
     public void setUp() {
-        productController = ProductController.ProductController();
-        orderController = OrderController.getInstance();
-        periodicOrderController = PeriodicOrderController.getInstance();
-        List<String> serial_number = new ArrayList<>();
-        serial_number.add("000");
-        productController.createProductItem(serial_number,catalog_number2,branch,"2",5.30,0.1, "warehouse",expireDate,"y" );
+        try {
+            BusinessFactory factory = new BusinessFactory(DalFactory.TESTING_DB_NAME);
+            productController = factory.productController();
+            orderController = factory.orderController();
+            periodicOrderController = factory.periodicOrderController();
+
+//
+//            productController = ProductController.ProductController();
+//            orderController = OrderController.getInstance();
+//            periodicOrderController = PeriodicOrderController.getInstance();
+            List<String> serial_number = new ArrayList<>();
+            serial_number.add("000");
+            productController.createProductItem(serial_number,catalog_number2,branch,"2",5.30,0.1, "warehouse",expireDate,"y" );
+        } catch (TransportException e) {
+            fail(e);
+        }
 
     }
     @AfterEach

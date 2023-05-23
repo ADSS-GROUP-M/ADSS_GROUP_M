@@ -14,21 +14,13 @@ import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnModifier;
 import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnType;
 
 public class ProductPairBranchDataMapper extends AbstractDataMapper {
-    public static ProductPairBranchDataMapper instance = null;
-    private List<ProductPairBranchDAO> cachedProductsPairBranch = new ArrayList<>(); //Map<Branch, Map<catalog_number, Product>
+    private final List<ProductPairBranchDAO> cachedProductsPairBranch = new ArrayList<>(); //Map<Branch, Map<catalog_number, Product>
 
-    private ProductPairBranchDataMapper(SQLExecutor sqlExecutor) throws DalException {
+    public ProductPairBranchDataMapper(SQLExecutor sqlExecutor) throws DalException {
         super(sqlExecutor, "product_pair_branch", new String[]{"branch_name", "product_catalog_num", "original_store_price", "notification_min"});
     }
 
-    public static ProductPairBranchDataMapper getInstance() throws DalException {
-        if (instance == null) {
-            return new ProductPairBranchDataMapper();
-        } else {
-            return instance;
-        }    }
-
-    public void insert(String branch_name, String product_catalog_number, double original_store_price, int notification_min) throws SQLException {
+    public void insert(String branch_name, String product_catalog_number, double original_store_price, int notification_min) {
         if(!isExists(product_catalog_number, branch_name)){
             try {
                 String columnsString = String.join(", ", columns);
@@ -93,7 +85,7 @@ public class ProductPairBranchDataMapper extends AbstractDataMapper {
      * {@link CreateTableQueryBuilder#addCompositeForeignKey(String[], String, String[])}
      */
     @Override
-    protected void initializeCreateTableQueryBuilder() throws DalException {
+    protected void initializeCreateTableQueryBuilder() {
         createTableQueryBuilder
                 .addColumn("branch_name", ColumnType.TEXT,ColumnModifier.PRIMARY_KEY)
                 .addColumn("product_catalog_num", ColumnType.TEXT, ColumnModifier.PRIMARY_KEY)

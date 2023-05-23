@@ -3,7 +3,6 @@ package businessLayer.inventoryModule;
 import businessLayer.businessLayerUsage.Branch;
 import dataAccessLayer.inventoryModule.CategoryManagerMapper;
 import dataAccessLayer.inventoryModule.ProductManagerMapper;
-import exceptions.DalException;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -11,29 +10,18 @@ import java.util.List;
 import java.util.Map;
 
 public class CategoryController {
+    private final ProductController pc;
+    private final DiscountController discountController;
     public Map<String,Category> categories; // Map<name, Category>
+    private final CategoryManagerMapper categoryManagerMapper;
+    private final ProductManagerMapper productManagerMapper;
 
-    //create the controller as Singleton
-    private static CategoryController categoryController = null;
-    private CategoryManagerMapper categoryManagerMapper;
-    private ProductManagerMapper productManagerMapper;
-
-    private CategoryController() {
-        try {
-            categoryManagerMapper = CategoryManagerMapper.getInstance();
-            productManagerMapper = ProductManagerMapper.getInstance();
-        } catch (DalException e) {
-
-            //TODO: handle exception
-            throw new RuntimeException(e);
-        }
-        this.categories = categoryManagerMapper.getCached_categories();
-    }
-
-    public static CategoryController CategoryController(){
-        if(categoryController == null)
-            categoryController = new CategoryController();
-        return categoryController;
+    public CategoryController(ProductController pc, DiscountController discountController, CategoryManagerMapper categoryManagerMapper, ProductManagerMapper productManagerMapper) {
+        this.pc = pc;
+        this.discountController = discountController;
+        this.categoryManagerMapper = categoryManagerMapper;
+        this.productManagerMapper = productManagerMapper;
+        this.categories = this.categoryManagerMapper.getCached_categories();
     }
 
     public Boolean checkIfCategoryExist(String categoryName){
@@ -94,7 +82,6 @@ public class CategoryController {
         if(checkIfCategoryExist(categoryName)){
             if(!categories.get(categoryName).isProductIDRelated(catalog_number, branch)) {
                 productManagerMapper.addCategoryToProduct(catalog_number,categoryName);
-                ProductController pc = ProductController.ProductController();
                 categories.get(categoryName).addProductToCategory(pc.getProduct(branch, catalog_number));
             }
         }
@@ -106,7 +93,6 @@ public class CategoryController {
     public void removeProductFromCategory(Branch branch, String catalog_number, String categoryName){
         if(checkIfCategoryExist(categoryName)){
             productManagerMapper.removeCategoryFromProduct(catalog_number);
-            ProductController pc = ProductController.ProductController();
             categories.get(categoryName).removeProduct(pc.getProduct(branch,catalog_number));
         }
         else{
@@ -134,7 +120,6 @@ public class CategoryController {
             String catalog_number = product.getCatalogNumber();
             String name = product.getName();
             String manufacture = product.getManufacturer();
-            DiscountController discountController = DiscountController.DiscountController();
             double storePrice = discountController.calcSoldPrice(branch,catalog_number,product.getOriginalStorePrice());
             int warehouseAmount = product.getWarehouseAmount();
             int storeAmount = product.getStoreAmount();

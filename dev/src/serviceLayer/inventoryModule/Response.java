@@ -1,8 +1,8 @@
 package serviceLayer.inventoryModule;
 
 public class Response<T> {
-    private T returnValue;
-    private String errorMessage;
+    private final T returnValue;
+    private final String errorMessage;
 
     public Response() {
         this.returnValue = null;

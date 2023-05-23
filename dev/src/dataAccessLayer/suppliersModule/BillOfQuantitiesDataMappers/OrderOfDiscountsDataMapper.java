@@ -44,7 +44,7 @@ public class OrderOfDiscountsDataMapper extends AbstractDataMapper {
      * {@link CreateTableQueryBuilder#addCompositeForeignKey(String[], String, String[])}
      */
     @Override
-    protected void initializeCreateTableQueryBuilder() throws DalException {
+    protected void initializeCreateTableQueryBuilder() {
         createTableQueryBuilder
                 .addColumn("bn_number", ColumnType.TEXT,ColumnModifier.PRIMARY_KEY)
                 .addColumn("amount_before_total", ColumnType.INTEGER)

@@ -69,7 +69,7 @@ public class DiscountOnTotalDataMapper  extends AbstractDataMapper {
      * {@link CreateTableQueryBuilder#addCompositeForeignKey(String[], String, String[])}
      */
     @Override
-    protected void initializeCreateTableQueryBuilder() throws DalException {
+    protected void initializeCreateTableQueryBuilder() {
         createTableQueryBuilder
                 .addColumn("bn_number", ColumnType.TEXT)
                 .addColumn("price_to_reach", ColumnType.REAL)

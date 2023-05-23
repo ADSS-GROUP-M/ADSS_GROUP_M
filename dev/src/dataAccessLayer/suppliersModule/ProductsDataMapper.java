@@ -16,20 +16,14 @@ import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnType;
 
 public class ProductsDataMapper  extends AbstractDataMapper {
 //    private List<ProductDAO> cachedProducts;
-    private static ProductsDataMapper instance = null;
 
-    private ProductsDataMapper(SQLExecutor sqlExecutor) throws DalException {
+
+    public ProductsDataMapper(SQLExecutor sqlExecutor) throws DalException {
         super(sqlExecutor, "products", new String[]{"catalog_number", "name", "manufacture", "category"});
 //        cachedProducts = new ArrayList<>();
     }
 
-    public static ProductsDataMapper getInstance() throws DalException {
-        if (instance == null)
-            instance = new ProductsDataMapper();
-        return instance;
-    }
-
-    public void insert(String catalog_number, String name, String manufacture) throws SQLException {
+    public void insert(String catalog_number, String name, String manufacture) {
         try {
             if (!isExists(catalog_number)) {
                 String columnsString = String.join(", ", columns);
@@ -93,7 +87,7 @@ public class ProductsDataMapper  extends AbstractDataMapper {
      * {@link CreateTableQueryBuilder#addCompositeForeignKey(String[], String, String[])}
      */
     @Override
-    protected void initializeCreateTableQueryBuilder() throws DalException {
+    protected void initializeCreateTableQueryBuilder() {
         createTableQueryBuilder
                 .addColumn("catalog_number", ColumnType.TEXT, ColumnModifier.PRIMARY_KEY)
                 .addColumn("name", ColumnType.TEXT)

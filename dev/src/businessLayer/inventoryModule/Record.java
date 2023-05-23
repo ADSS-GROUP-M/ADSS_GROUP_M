@@ -1,14 +1,14 @@
 package businessLayer.inventoryModule;
 
 public class Record {
-    private String catalog_number;
+    private final String catalog_number;
     private String serial_number;
-    private String name;
-    private String branch;
-    private String manufacturer;
+    private final String name;
+    private final String branch;
+    private final String manufacturer;
     private double supplier_price;
     private double supplier_discount;
-    private double store_price; // Product.soldPrice != -1 ? Product.soldPrice : ProductType.originalStorePrice
+    private final double store_price; // Product.soldPrice != -1 ? Product.soldPrice : ProductType.originalStorePrice
     private Category category;
     private String location;
     private int warehouse_amount;

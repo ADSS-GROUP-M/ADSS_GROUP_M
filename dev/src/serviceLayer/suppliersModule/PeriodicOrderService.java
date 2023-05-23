@@ -7,11 +7,11 @@ import com.google.gson.Gson;
 import java.util.Map;
 
 public class PeriodicOrderService {
-    private PeriodicOrderController periodicOrderController;
-    private Gson gson;
+    private final PeriodicOrderController periodicOrderController;
+    private final Gson gson;
 
-    public PeriodicOrderService() {
-        this.periodicOrderController =  PeriodicOrderController.getInstance();
+    public PeriodicOrderService(PeriodicOrderController periodicOrderController) {
+        this.periodicOrderController = periodicOrderController;
         gson = new Gson();
     }
 

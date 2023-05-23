@@ -4,14 +4,13 @@ public class Product {
     /***
      * unique catalogNumber in the system
      */
-    private String catalogNumber;
+    private final String catalogNumber;
     /***
      * the catalog number in the supplier's system
      */
     private String suppliersCatalogNumber;
     private double price;
     private int numberOfUnits;
-
 
     public Product(String catalogNumber, String suppliersCatalogNumber, double price, int numberOfUnits){
         this.suppliersCatalogNumber = suppliersCatalogNumber;

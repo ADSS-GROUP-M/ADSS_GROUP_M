@@ -173,7 +173,7 @@ public class EmployeeDAO extends DAOBase<Employee> {
     }
 
     @Override
-    public boolean exists(Employee object) throws DalException {
+    public boolean exists(Employee object) {
         try {
             select(object);
             return true;

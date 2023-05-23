@@ -2,7 +2,6 @@ package businessLayer.inventoryModule;
 
 import businessLayer.businessLayerUsage.Branch;
 import dataAccessLayer.inventoryModule.DiscountManagerMapper;
-import exceptions.DalException;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -11,27 +10,18 @@ import java.util.Map;
 
 public class DiscountController {
 
+    private CategoryController categoryController;
     //Map<branch,Map<catalog_number, List<ProductStoreDiscount>>>
     public Map<Branch, Map<String,List<ProductStoreDiscount>>> storeDiscounts;
+    private final DiscountManagerMapper discountManagerMapper;
 
-    //create the controller as Singleton
-    private static DiscountController discountController = null;
-    private DiscountManagerMapper discountManagerMapper;
-    private DiscountController() {
-        try {
-            discountManagerMapper = DiscountManagerMapper.getInstance();
-        } catch (DalException e) {
-
-            //TODO: handle exception
-            throw new RuntimeException(e);
-        }
-        this.storeDiscounts = discountManagerMapper.getCached_discounts();
+    public DiscountController(DiscountManagerMapper discountManagerMapper) {
+        this.discountManagerMapper = discountManagerMapper;
+        this.storeDiscounts = this.discountManagerMapper.getCached_discounts();
     }
 
-    public static DiscountController DiscountController(){
-        if(discountController == null)
-            discountController = new DiscountController();
-        return discountController;
+    public void injectDependencies(CategoryController categoryController){
+        this.categoryController = categoryController;
     }
 
     private Boolean checkIfBranchExist(Branch branch){
@@ -49,8 +39,7 @@ public class DiscountController {
     }
 
     public void createCategoryDiscount(String categoryName, Branch branch, double discount, LocalDateTime startDate, LocalDateTime endDate){
-            CategoryController categoryController = CategoryController.CategoryController();
-            if (categoryController.checkIfCategoryExist(categoryName)) {
+        if (categoryController.checkIfCategoryExist(categoryName)) {
                 List<Product> relatedProducts = categoryController.getCategoryProducts(branch, categoryName);
                 for (Product product : relatedProducts) {
                     discountManagerMapper.createDiscount(product.getCatalogNumber(), branch.name(), startDate, endDate, discount);

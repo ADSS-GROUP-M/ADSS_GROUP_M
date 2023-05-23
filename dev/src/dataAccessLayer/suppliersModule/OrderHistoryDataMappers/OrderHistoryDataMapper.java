@@ -13,11 +13,11 @@ import java.util.*;
 import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.*;
 
 public class OrderHistoryDataMapper extends AbstractDataMapper {
-    private NumberOfOrdersCounterDataMapper numberOfOrdersCounterDataMapper;
-    private Map<String, List<Order>> suppliersOrderHistory;
-    public OrderHistoryDataMapper(SQLExecutor sqlExecutor) throws DalException {
+    private final NumberOfOrdersCounterDataMapper numberOfOrdersCounterDataMapper;
+    private final Map<String, List<Order>> suppliersOrderHistory;
+    public OrderHistoryDataMapper(SQLExecutor sqlExecutor, NumberOfOrdersCounterDataMapper numberOfOrdersCounterDataMapper) throws DalException {
         super(sqlExecutor, "orders_history", new String[]{"bn_number", "order_id", "catalog_number", "quantity"});
-        numberOfOrdersCounterDataMapper = new NumberOfOrdersCounterDataMapper();
+        this.numberOfOrdersCounterDataMapper = numberOfOrdersCounterDataMapper;
         suppliersOrderHistory = new HashMap<>();
     }
     private void insert(String bnNumber, String catalog_number, int quantity, int orderId) throws SQLException {
@@ -84,7 +84,7 @@ public class OrderHistoryDataMapper extends AbstractDataMapper {
      * {@link CreateTableQueryBuilder#addCompositeForeignKey(String[], String, String[])}
      */
     @Override
-    protected void initializeCreateTableQueryBuilder() throws DalException {
+    protected void initializeCreateTableQueryBuilder() {
         createTableQueryBuilder
                 .addColumn("bn_number", ColumnType.TEXT, ColumnModifier.PRIMARY_KEY)
                 .addColumn("order_id", ColumnType.INTEGER, ColumnModifier.PRIMARY_KEY)

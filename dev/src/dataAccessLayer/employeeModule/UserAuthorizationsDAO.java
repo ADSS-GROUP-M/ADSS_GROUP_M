@@ -247,7 +247,7 @@ public class UserAuthorizationsDAO extends DAOBase<Pair<String,Authorization>> {
     }
 
     @Override
-    public boolean exists(Pair<String,Authorization> object) throws DalException {
+    public boolean exists(Pair<String,Authorization> object) {
         try {
             select(object); // Throws a DAL exception if the given authorization object doesn't exist in the system.
             return true;

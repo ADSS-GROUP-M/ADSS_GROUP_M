@@ -18,7 +18,7 @@ import java.util.stream.Stream;
 import static java.time.temporal.TemporalAdjusters.next;
 
 public class ShiftsController {
-    private ShiftDAO shiftDAO;
+    private final ShiftDAO shiftDAO;
 
     public ShiftsController(ShiftDAO shiftDAO) {
         this.shiftDAO = shiftDAO;

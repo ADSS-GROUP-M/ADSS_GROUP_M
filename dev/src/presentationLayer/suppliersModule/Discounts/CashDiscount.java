@@ -1,7 +1,7 @@
 package presentationLayer.suppliersModule.Discounts;
 
 public class CashDiscount extends Discount {
-    private double amountOfDiscount;
+    private final double amountOfDiscount;
     public CashDiscount(double amountOfDiscount){
         this.amountOfDiscount = amountOfDiscount;
     }

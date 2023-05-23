@@ -7,13 +7,13 @@ import com.google.gson.Gson;
 import java.util.List;
 
 public class AgreementService {
-    private AgreementController agreementController;
-    private BillOfQuantitiesController billOfQuantitiesController;
-    private Gson gson;
+    private final AgreementController agreementController;
+    private final BillOfQuantitiesController billOfQuantitiesController;
+    private final Gson gson;
 
-    public AgreementService(){
-        this.agreementController = AgreementController.getInstance();
-        billOfQuantitiesController = BillOfQuantitiesController.getInstance();
+    public AgreementService(AgreementController agreementController, BillOfQuantitiesController billOfQuantitiesController){
+        this.agreementController = agreementController;
+        this.billOfQuantitiesController = billOfQuantitiesController;
         gson = new Gson();
     }
 

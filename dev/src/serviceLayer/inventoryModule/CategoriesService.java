@@ -8,14 +8,14 @@ import businessLayer.inventoryModule.ProductController;
 import java.util.List;
 
 public class CategoriesService {
-    ProductController productController;
-    DiscountController discountController;
-    CategoryController categoryController;
+    private final ProductController productController;
+    private final DiscountController discountController;
+    private final CategoryController categoryController;
 
-    public CategoriesService() {
-        productController = ProductController.ProductController();
-        categoryController = CategoryController.CategoryController();
-        discountController = DiscountController.DiscountController();
+    public CategoriesService(ProductController productController, DiscountController discountController, CategoryController categoryController) {
+        this.productController = productController;
+        this.discountController = discountController;
+        this.categoryController = categoryController;
     }
 
     public Response createCategory(Branch branch, List<String> subcategories, String name) {

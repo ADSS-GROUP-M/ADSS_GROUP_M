@@ -10,10 +10,10 @@ import java.util.List;
 import java.util.Map;
 
 public class OrderService {
-    private OrderController orderController;
-    private Gson gson;
-    public OrderService(){
-        orderController = OrderController.getInstance();
+    private final OrderController orderController;
+    private final Gson gson;
+    public OrderService(OrderController orderController){
+        this.orderController = orderController;
         gson = new Gson();
     }
 

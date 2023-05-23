@@ -6,11 +6,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class ProductStoreDiscount {
-    private String catalog_number;
-    private Branch branch;
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
-    private double discount;
+    private final String catalog_number;
+    private final Branch branch;
+    private final LocalDateTime startDate;
+    private final LocalDateTime endDate;
+    private final double discount;
 
     public ProductStoreDiscount(String catalog_number, Branch branch, LocalDateTime startDate, LocalDateTime endDate, double discount){
         this.catalog_number= catalog_number;

@@ -1,8 +1,11 @@
 package suppliersInventory;
 
+import businessLayer.BusinessFactory;
 import businessLayer.businessLayerUsage.Branch;
 import businessLayer.inventoryModule.ProductController;
 import businessLayer.inventoryModule.ProductItem;
+import dataAccessLayer.DalFactory;
+import exceptions.TransportException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -10,8 +13,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class ProductItemTest {
     private static String catalog_number = "0x123";
@@ -28,17 +30,22 @@ public class ProductItemTest {
 
     private ProductItem item;
 
-    private ProductController productController = ProductController.ProductController();
+    private ProductController productController;
 
 
     @BeforeEach
     public void setUp() {
-        //create new product item
-        productController.createProduct(catalog_number,branch,catalog_name,manufacturer,storePrice);
-        List<String> serial_numbers = new ArrayList<>();
-        serial_numbers.add(serial_number);
-        productController.createProductItem(serial_numbers,catalog_number,branch,supplierId,supplierPrice,supplierDiscount, location,expireDate, "y");
-
+        try {
+            BusinessFactory factory = new BusinessFactory(DalFactory.TESTING_DB_NAME);
+            productController = factory.productController();
+            //create new product item
+            productController.createProduct(catalog_number,branch,catalog_name,manufacturer,storePrice);
+            List<String> serial_numbers = new ArrayList<>();
+            serial_numbers.add(serial_number);
+            productController.createProductItem(serial_numbers,catalog_number,branch,supplierId,supplierPrice,supplierDiscount, location,expireDate, "y");
+        } catch (TransportException e) {
+            fail(e);
+        }
     }
 
     // Test 1

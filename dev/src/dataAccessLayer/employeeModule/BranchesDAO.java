@@ -156,7 +156,6 @@ public class BranchesDAO extends DAOBase<Branch> {
     }
 
     /**
-     * @param object
      * @throws DalException if an error occurred while trying to delete the object
      */
     @Override
@@ -215,6 +214,6 @@ public class BranchesDAO extends DAOBase<Branch> {
     }
 
     public void insertEmployee(String branchId, String employeeId) throws DalException {
-        branchEmployeesDAO.insert(new Pair(branchId, employeeId));
+        branchEmployeesDAO.insert(new Pair<>(branchId, employeeId));
     }
 }

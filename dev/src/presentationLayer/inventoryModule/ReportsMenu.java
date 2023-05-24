@@ -36,25 +36,25 @@ public class ReportsMenu extends MainMenu {
         } else {
             subcategories = Arrays.asList(subcategories_name.split(","));
         }
-        String output = "";
-        for (businessLayer.inventoryModule.Record r : (List<businessLayer.inventoryModule.Record>) categoriesService.getCategoryReport(branch, subcategories).getReturnValue()) {
-            output += r.toString() + "\n";
+        StringBuilder output = new StringBuilder();
+        for (businessLayer.inventoryModule.Record r : categoriesService.getCategoryReport(branch, subcategories).getReturnValue()) {
+            output.append(r.toString()).append("\n");
         }
         System.out.println(output);
     }
 
     private void inventoryRunningOutReport() {
-        String output = "";
-        for (businessLayer.inventoryModule.Record r: (List<businessLayer.inventoryModule.Record>) stockService.getShortagesProducts(Branch.valueOf(branch)).getReturnValue()){
-            output += r.toString() + "\n";
+        StringBuilder output = new StringBuilder();
+        for (businessLayer.inventoryModule.Record r: stockService.getShortagesProducts(Branch.valueOf(branch)).getReturnValue()){
+            output.append(r.toString()).append("\n");
         }
         System.out.println(output);
     }
 
     private void inventoryDefectiveReport() {
-        String output = "";
-        for (businessLayer.inventoryModule.Record r: (List<businessLayer.inventoryModule.Record>) stockService.getDefectiveProducts(Branch.valueOf(branch)).getReturnValue()){
-            output += r.toString() + "\n";
+        StringBuilder output = new StringBuilder();
+        for (businessLayer.inventoryModule.Record r: stockService.getDefectiveProducts(Branch.valueOf(branch)).getReturnValue()){
+            output.append(r.toString()).append("\n");
         }
         System.out.println(output);
     }

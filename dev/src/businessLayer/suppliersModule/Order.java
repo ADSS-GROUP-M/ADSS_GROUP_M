@@ -33,9 +33,9 @@ public class Order {
     }
 
     public String toString(){
-        String res = "";
+        StringBuilder res = new StringBuilder();
         for(Map.Entry<String, Integer> order : products.entrySet())
-            res = res + "catalog number: " + order.getKey() + " , quantity: " + order.getValue() + "\n";
-        return res;
+            res.append("catalog number: ").append(order.getKey()).append(" , quantity: ").append(order.getValue()).append("\n");
+        return res.toString();
     }
 }

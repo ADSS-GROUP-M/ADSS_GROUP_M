@@ -242,38 +242,6 @@ public class DalFactory {
         return transportsDAO;
     }
 
-    public SQLExecutor cursor() {
-        return cursor;
-    }
-
-    public static void clearTestDB(){
-        clearDB(TESTING_DB_NAME);
-    }
-
-    public static void clearDB(String dbName){
-        try {
-            DalFactory factory = new DalFactory(dbName);
-            factory.shiftDAO().clearTable();
-            factory.userDAO().clearTable();
-
-            factory.transportsDAO().clearTable();
-
-            factory.trucksDAO().clearTable();
-            factory.itemListsDAO().clearTable();
-
-            factory.branchEmployeesDAO().clearTable();
-            factory.branchesDAO().clearTable();
-            factory.sitesRoutesDAO().clearTable();
-            factory.sitesDAO().clearTable();
-
-            factory.driversDAO().clearTable();
-            factory.employeeDAO().clearTable();
-
-        } catch (DalException e) {
-            e.printStackTrace();
-        }
-    }
-
     public SupplierDataMapper supplierDataMapper() {
         return supplierDataMapper;
     }
@@ -304,5 +272,37 @@ public class DalFactory {
 
     public CategoryManagerMapper categoryManagerMapper() {
         return categoryManagerMapper;
+    }
+
+    public SQLExecutor cursor() {
+        return cursor;
+    }
+
+    public static void clearTestDB(){
+        clearDB(TESTING_DB_NAME);
+    }
+
+    public static void clearDB(String dbName){
+        try {
+            DalFactory factory = new DalFactory(dbName);
+            factory.shiftDAO().clearTable();
+            factory.userDAO().clearTable();
+
+            factory.transportsDAO().clearTable();
+
+            factory.trucksDAO().clearTable();
+            factory.itemListsDAO().clearTable();
+
+            factory.branchEmployeesDAO().clearTable();
+            factory.branchesDAO().clearTable();
+            factory.sitesRoutesDAO().clearTable();
+            factory.sitesDAO().clearTable();
+
+            factory.driversDAO().clearTable();
+            factory.employeeDAO().clearTable();
+
+        } catch (DalException e) {
+            e.printStackTrace();
+        }
     }
 }

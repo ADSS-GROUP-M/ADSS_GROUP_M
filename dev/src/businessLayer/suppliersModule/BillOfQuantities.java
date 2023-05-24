@@ -118,19 +118,19 @@ public class BillOfQuantities {
     }
 
     public String toString(){
-        String productsDiscountString = "PRODUCTS DISCOUNT:";
+        StringBuilder productsDiscountString = new StringBuilder("PRODUCTS DISCOUNT:");
         int counter = 1;
         for (Map.Entry<String, Map<Integer, Discount>> productDiscount: productsDiscounts.entrySet()){
-            productsDiscountString += "\n\t\t\t\t" + counter++ + ". Product id: " + productDiscount.getKey() + "\n\t\t\t\tDiscounts: ";
+            productsDiscountString.append("\n\t\t\t\t").append(counter++).append(". Product id: ").append(productDiscount.getKey()).append("\n\t\t\t\tDiscounts: ");
             for(Map.Entry<Integer, Discount> discount : productDiscount.getValue().entrySet())
-                productsDiscountString += "\n\t\t\t\t\t" + "Amount to reach: " +discount.getKey() + " Discount: " + discount.getValue().toString();
+                productsDiscountString.append("\n\t\t\t\t\t" + "Amount to reach: ").append(discount.getKey()).append(" Discount: ").append(discount.getValue().toString());
         }
         String discountTotalStr = "";
         if(discountOnTotal != null)
-            discountTotalStr = "DISCOUNT ON TOTAL ORDER:\n\t\t\t\torder price to reach: " + priceToReachForDiscount + " " + discountOnTotal.toString();
+            discountTotalStr = "DISCOUNT ON TOTAL ORDER:\n\t\t\t\torder price to reach: " + priceToReachForDiscount + " " + discountOnTotal;
         String discountAmountStr = "";
         if(discountOnAmount != null)
-            discountAmountStr = "DISCOUNT ON AMOUNT OF PRODUCTS:\n\t\t\t\tNumber of products to reach: " + amountToReachForDiscount + " " + discountOnAmount.toString();
+            discountAmountStr = "DISCOUNT ON AMOUNT OF PRODUCTS:\n\t\t\t\tNumber of products to reach: " + amountToReachForDiscount + " " + discountOnAmount;
 
         String res = "BILL OF QUANTITIES:\n\t\t\t" + productsDiscountString + "\n\t\t\t" + discountTotalStr + "\n\t\t\t" + discountAmountStr;
         return res;

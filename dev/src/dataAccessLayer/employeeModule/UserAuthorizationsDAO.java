@@ -30,7 +30,7 @@ public class UserAuthorizationsDAO extends DAOBase<Pair<String,Authorization>> {
 
     private enum Columns {
         username,
-        authorization;
+        authorization
     }
 
     public UserAuthorizationsDAO(SQLExecutor cursor) throws DalException {

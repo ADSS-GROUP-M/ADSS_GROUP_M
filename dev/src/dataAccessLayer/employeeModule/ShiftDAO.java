@@ -33,7 +33,7 @@ public class ShiftDAO extends DAOBase<Shift> {
         branch,
         shift_date,
         shift_type,
-        is_approved;
+        is_approved
     }
 
     public ShiftDAO(SQLExecutor cursor, ShiftToNeededRolesDAO shiftToNeededRolesDAO, ShiftToRequestsDAO shiftToRequestsDAO,

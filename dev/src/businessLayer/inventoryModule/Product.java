@@ -68,10 +68,7 @@ public class Product {
     }
 
     public Map<String,List<ProductItem>> getAllProductItems(Map<String,List<ProductItem>> allProducts){
-        List<ProductItem> currentProducts = new ArrayList<ProductItem>();
-        for(ProductItem product: productItems.values()){
-            currentProducts.add(product);
-        }
+        List<ProductItem> currentProducts = new ArrayList<>(productItems.values());
         allProducts.put(catalog_number, currentProducts);
         return allProducts;
     }

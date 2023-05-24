@@ -25,7 +25,7 @@ public class EmployeeRolesDAO extends DAOBase<Pair<String,Role>> {
 
     private enum Columns {
         employee_id,
-        role;
+        role
     }
 
     public EmployeeRolesDAO(SQLExecutor cursor) throws DalException {

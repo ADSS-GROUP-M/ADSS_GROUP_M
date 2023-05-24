@@ -6,10 +6,9 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoField;
 import java.util.Calendar;
-import java.util.List;
 
 public class DateUtils {
-    public static final String DATE_PATTERN = "d/M/yyyy";
+    public static final String DATE_PATTERN = "dd/MM/yyyy";
     public static final DateTimeFormatter DateFormat = DateTimeFormatter.ofPattern(DATE_PATTERN);
 
     public static LocalDate[] getWeekDates(LocalDate d){
@@ -36,19 +35,12 @@ public class DateUtils {
         try {
             parse(dateInput);
             return true;
-        } catch (Exception ignore) {
+        } catch (DateTimeParseException e) {
             return false;
         }
     }
     public static LocalDate[] getConsequtiveDates(LocalDate from, LocalDate until){
-        List<LocalDate> x = from.datesUntil(until).toList();
-        LocalDate[] dates = new LocalDate[x.size()];
-        int i = 0;
-        for(Object date : x ){
-            dates[i] = ((LocalDate)date);
-            i++;
-        }
-        return dates;
+        return from.datesUntil(until).toArray(LocalDate[]::new);
     }
 
     public static int getWeekNumber(LocalDate date) {
@@ -58,5 +50,4 @@ public class DateUtils {
     public static LocalDate parse(String dateInput) throws DateTimeParseException {
         return LocalDate.parse(dateInput,DateFormat);
     }
-
 }

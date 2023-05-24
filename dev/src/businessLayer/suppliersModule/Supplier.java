@@ -86,12 +86,12 @@ public class Supplier {
 
 
     public String toString(){
-        String contactsInfo = "CONTACTS INFORMATION:";
+        StringBuilder contactsInfo = new StringBuilder("CONTACTS INFORMATION:");
         for(Map.Entry<String, Pair<String, String>> contact : this.contactsInfo.entrySet())
-            contactsInfo = contactsInfo + "\n\t\tName: " + contact.getValue().getFirst() + " Email: " + contact.getKey() + " Phone number: " + contact.getValue().getSecond();
-        String fields = "FIELDS:";
+            contactsInfo.append("\n\t\tName: ").append(contact.getValue().getFirst()).append(" Email: ").append(contact.getKey()).append(" Phone number: ").append(contact.getValue().getSecond());
+        StringBuilder fields = new StringBuilder("FIELDS:");
         for (String field : this.fields)
-            fields = fields + "\n\t\t" + field;
+            fields.append("\n\t\t").append(field);
         String bankAccount = "BANK ACCOUNT:\n\t\t" + this.bankAccount.toString();
 
         String res = "SUPPLIER:\n\tNAME: " + name +"\n\tBN NUMBER: " + bnNumber + "\n\t" + bankAccount + "\n\t" + fields

@@ -125,7 +125,7 @@ public class OrderController {
                 return 0;
             };
 
-            List<Supplier> sortedSupplierList = suppliersCanSupply.keySet().stream().sorted(supplierComparator).collect(Collectors.toList());
+            List<Supplier> sortedSupplierList = suppliersCanSupply.keySet().stream().sorted(supplierComparator).toList();
 
             //order
             int amountLeft = notOneSupplierProductsOrder.get(productId);
@@ -191,7 +191,7 @@ public class OrderController {
         Map<Supplier, List<String>> suppliersCanSupply = mapSuppliersToProducts(order, alreadySupplied, suppliersToUse);
         Supplier maxCanBeOrderedSupplier = suppliersCanSupply.keySet().stream().reduce(suppliersToUse.get(0) ,(acc, s) ->
                 suppliersCanSupply.get(acc).size() > suppliersCanSupply.get(s).size() ? acc : s);
-        List<Supplier> suppliers = suppliersCanSupply.keySet().stream().filter((s) -> suppliersCanSupply.get(s).size() == suppliersCanSupply.get(maxCanBeOrderedSupplier).size()).collect(Collectors.toList());
+        List<Supplier> suppliers = suppliersCanSupply.keySet().stream().filter((s) -> suppliersCanSupply.get(s).size() == suppliersCanSupply.get(maxCanBeOrderedSupplier).size()).toList();
         //find cheapest supplier
         Supplier cheapest = suppliers.get(0);
         double cheapestPrice = 0;
@@ -203,8 +203,7 @@ public class OrderController {
         }
         //remove max supplier's products from the order
         List<String> maxProductsCanBeSupplied = suppliersCanSupply.get(cheapest);
-        for(String catalogNumber: maxProductsCanBeSupplied)
-            alreadySupplied.add(catalogNumber);
+        alreadySupplied.addAll(maxProductsCanBeSupplied);
         suppliersToUse.remove(cheapest);
         Map<Supplier, List<String>> res = divideOrder(order, alreadySupplied, suppliersToUse);
         res.put(cheapest, maxProductsCanBeSupplied);

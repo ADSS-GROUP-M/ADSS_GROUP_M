@@ -4,7 +4,6 @@ import businessLayer.businessLayerUsage.Branch;
 import businessLayer.inventoryModule.Product;
 import businessLayer.inventoryModule.ProductItem;
 import dataAccessLayer.suppliersModule.ProductsDataMapper;
-import exceptions.DalException;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;

@@ -104,7 +104,7 @@ public class SitesRoutesController {
                 put(new Pair<>(other.address(), site.address()), null);
             }
             put(new Pair<>(site.address(),site.address()),new Pair<>(0.0,0.0));
-        }};;
+        }};
         Point newSitePoint = new Point(site.address(), new double[]{site.latitude(),site.longitude()});
 
         final TransportException[] exception = {null};

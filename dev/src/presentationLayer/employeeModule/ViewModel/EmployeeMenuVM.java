@@ -38,18 +38,18 @@ public class EmployeeMenuVM {
         try {
             List<SShift[]> shifts = backendController.getNextWeekShifts(branchId);
             // Return week schedule for Employee
-            String result = "";
+            StringBuilder result = new StringBuilder();
             boolean found = false;
             for(SShift[] dayShifts : shifts) {
                 for (SShift shift : dayShifts)
                     if (shift != null) {
-                        result += shift.workersString() + "\n";
+                        result.append(shift.workersString()).append("\n");
                         found = true;
                     }
             }
             if (!found)
-                result = "There aren't any approved shifts in the next week in branch " + branchId + ".";
-            return result;
+                result = new StringBuilder("There aren't any approved shifts in the next week in branch " + branchId + ".");
+            return result.toString();
         } catch (Exception e) {
             return "Error: " + e.getMessage();
         }
@@ -59,18 +59,18 @@ public class EmployeeMenuVM {
         try {
             List<SShift[]> shifts = backendController.getWeekShifts(branchId, weekStart);
             // Return week schedule for Employee
-            String result = "";
+            StringBuilder result = new StringBuilder();
             boolean found = false;
             for(SShift[] dayShifts : shifts) {
                 for (SShift shift : dayShifts)
                     if (shift != null) {
-                        result += shift.workersString() + "\n";
+                        result.append(shift.workersString()).append("\n");
                         found = true;
                     }
             }
             if (!found)
-                result = "There aren't any approved shifts in the specified week in branch " + branchId + ".";
-            return result;
+                result = new StringBuilder("There aren't any approved shifts in the specified week in branch " + branchId + ".");
+            return result.toString();
         } catch (Exception e) {
             return "Error: " + e.getMessage();
         }
@@ -80,18 +80,18 @@ public class EmployeeMenuVM {
         try {
             List<SShift[]> shifts = backendController.getMyShifts();
             // Return all shifts for Employee
-            String result = "";
+            StringBuilder result = new StringBuilder();
             boolean found = false;
             for(SShift[] dayShifts : shifts) {
                 for (SShift shift : dayShifts)
                     if (shift != null && shift.isApproved()) {
-                        result += shift.workersString() + "\n";
+                        result.append(shift.workersString()).append("\n");
                         found = true;
                     }
             }
             if (!found)
-                result = "There aren't any approved shifts planned for you.";
-            return result;
+                result = new StringBuilder("There aren't any approved shifts planned for you.");
+            return result.toString();
         } catch (Exception e) {
             return "Error: " + e.getMessage();
         }

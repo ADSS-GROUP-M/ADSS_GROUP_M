@@ -84,7 +84,7 @@ public class Branch {
             return false;
         }
         Branch branch = (Branch) o;
-        return name == branch.name;
+        return name.equals(branch.name);
     }
 
     @Override

@@ -14,9 +14,9 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import serviceLayer.ServiceFactory;
 import serviceLayer.suppliersModule.*;
+import utils.JsonUtils;
 
 import java.lang.reflect.Type;
-import java.security.Provider;
 import java.util.*;
 
 public class UI {
@@ -533,8 +533,10 @@ public class UI {
         try {
             System.out.println("enter bn number of the supplier");
             String bnNumber = sc.nextLine();
-            System.out.println("enter the order:\n\t1. apply amount discount before total-order-price discount\n\t" +
-                    "2. apply total-order-price discount before amount discount");
+            System.out.println("""
+                    enter the order:
+                    \t1. apply amount discount before total-order-price discount
+                    \t2. apply total-order-price discount before amount discount""");
             int choice = Integer.parseInt(sc.nextLine());
             if(choice == 1)
                 System.out.println(gson.fromJson(billOfQuantitiesService.setOrderOfDiscounts(bnNumber, true), presentationLayer.suppliersModule.Response.class).getMsg());
@@ -634,14 +636,15 @@ public class UI {
         try {
             System.out.println("enter bn number of the supplier");
             String bnNumber = sc.nextLine();
-            Type responseOfList = new TypeToken<presentationLayer.suppliersModule.Response<List<Order>>>(){}.getType();
-            List<Order> orders = ((presentationLayer.suppliersModule.Response<List<Order>>)gson.fromJson(orderService.getOrderHistory(bnNumber), responseOfList)).getReturnValue();
+            Type responseOfList = new TypeToken<Response<List<Order>>>(){}.getType();
+            String json = orderService.getOrderHistory(bnNumber);
+            List<Order> orders = JsonUtils.<Response<List<Order>>>deserialize(json, responseOfList).getReturnValue();
             if(orders == null)
                 System.out.println("no orders have been ordered from this supplier");
             else {
-                String res = "ORDER HISTORY:";
+                StringBuilder res = new StringBuilder("ORDER HISTORY:");
                 for (Order order : orders)
-                    res += "\n\t" + order.toString();
+                    res.append("\n\t").append(order.toString());
                 System.out.println(res);
             }
         }

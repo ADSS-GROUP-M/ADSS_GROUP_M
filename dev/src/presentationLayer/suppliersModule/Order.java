@@ -27,9 +27,9 @@ public class Order {
 
     @Override
     public String toString() {
-        String res = "ORDER:";
+        StringBuilder res = new StringBuilder("ORDER:");
         for(Map.Entry<Integer, Integer> product : products.entrySet())
-            res += "\n\t\tproduct: " + product.getKey() + " amount: " + product.getValue();
-        return res;
+            res.append("\n\t\tproduct: ").append(product.getKey()).append(" amount: ").append(product.getValue());
+        return res.toString();
     }
 }

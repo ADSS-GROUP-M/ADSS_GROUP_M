@@ -93,7 +93,7 @@ public class ProductController {
 //                products.get(branch).get(catalog_number).addProductItem(serial_number, supplierID, supplierPrice, supplierDiscount, location, expirationDate);
             }
             //remove supplier order document from critical orders
-            if(periodicSupplier == "n" && orders.get(branch).contains(catalog_number))
+            if(periodicSupplier.equals("n") && orders.get(branch).contains(catalog_number))
                 orders.get(branch).remove(catalog_number);
         }
         else{

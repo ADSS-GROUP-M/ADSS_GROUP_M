@@ -52,30 +52,30 @@ public class SShift {
     }
 
     public String workersString() {
-        String result = shiftDate.toString() + " " + shiftType.toString() + ":\n";
+        StringBuilder result = new StringBuilder(shiftDate.toString() + " " + shiftType.toString() + ":\n");
         if (!isApproved)
             return result + "Not approved yet.";
         for(Map.Entry<String, List<SEmployee>> roleWorkers : shiftWorkers.entrySet())
-            result += roleWorkers.getKey() + ": " + roleWorkers.getValue().stream().map(SEmployee::getId).collect(Collectors.joining(",")) + "\n";
-        return result;
+            result.append(roleWorkers.getKey()).append(": ").append(roleWorkers.getValue().stream().map(SEmployee::getId).collect(Collectors.joining(","))).append("\n");
+        return result.toString();
     }
 
     public String requestsString() {
-        String result = shiftDate.toString() + " " + shiftType.toString() + ":\n";
+        StringBuilder result = new StringBuilder(shiftDate.toString() + " " + shiftType.toString() + ":\n");
         for(Map.Entry<String, List<SEmployee>> roleRequests : shiftRequests.entrySet())
-            result += roleRequests.getKey() + ": " + roleRequests.getValue().stream().map(SEmployee::getId).collect(Collectors.joining(",")) + "\n";
-        return result;
+            result.append(roleRequests.getKey()).append(": ").append(roleRequests.getValue().stream().map(SEmployee::getId).collect(Collectors.joining(","))).append("\n");
+        return result.toString();
     }
 
     public String toString() {
-        String result = shiftDate.toString() + " " + shiftType.toString() + ":\n";
-        result += "Requests:\n";
+        StringBuilder result = new StringBuilder(shiftDate.toString() + " " + shiftType.toString() + ":\n");
+        result.append("Requests:\n");
         for(Map.Entry<String, List<SEmployee>> roleRequests : shiftRequests.entrySet())
-            result += roleRequests.getKey() + ": " + roleRequests.getValue().stream().map(SEmployee::getId).collect(Collectors.joining(",")) + "\n";
-        result += "Workers:\n";
+            result.append(roleRequests.getKey()).append(": ").append(roleRequests.getValue().stream().map(SEmployee::getId).collect(Collectors.joining(","))).append("\n");
+        result.append("Workers:\n");
         for(Map.Entry<String, List<SEmployee>> roleWorkers : shiftWorkers.entrySet())
-            result += roleWorkers.getKey() + ": " + roleWorkers.getValue().stream().map(SEmployee::getId).collect(Collectors.joining(",")) + "\n";
-        result += "isApproved: " + isApproved + "\n";
-        return result;
+            result.append(roleWorkers.getKey()).append(": ").append(roleWorkers.getValue().stream().map(SEmployee::getId).collect(Collectors.joining(","))).append("\n");
+        result.append("isApproved: ").append(isApproved).append("\n");
+        return result.toString();
     }
 }

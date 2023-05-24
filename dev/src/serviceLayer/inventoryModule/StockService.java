@@ -4,6 +4,7 @@ import businessLayer.businessLayerUsage.Branch;
 import businessLayer.inventoryModule.CategoryController;
 import businessLayer.inventoryModule.DiscountController;
 import businessLayer.inventoryModule.ProductController;
+import businessLayer.inventoryModule.Record;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -110,14 +111,14 @@ public class StockService {
 
 
 
-    public Response getDefectiveProducts(Branch branch) {
+    public Response<List<Record>> getDefectiveProducts(Branch branch) {
         try {
             return new Response<>(productController.getDefectiveProducts(branch));
         } catch (Exception e) {
             return Response.createErrorResponse("Error creating category: " + e.getMessage());
         }
     }
-    public Response getShortagesProducts(Branch branch) {
+    public Response<List<Record>> getShortagesProducts(Branch branch) {
         try {
             return new Response<>(productController.getInventoryShortages(branch));
         } catch (Exception e) {
@@ -126,7 +127,7 @@ public class StockService {
     }
 
 
-    public Response updateDiscountPerCategory(String name, Branch branch, double discount, LocalDateTime startDate, LocalDateTime endDate) {
+    public Response<String> updateDiscountPerCategory(String name, Branch branch, double discount, LocalDateTime startDate, LocalDateTime endDate) {
         try {
             discountController.createCategoryDiscount(name, branch, discount, startDate, endDate);
             return new Response<>("discount added successfully");
@@ -135,7 +136,7 @@ public class StockService {
         }
     }
 
-    public Response updateDiscountPerProduct(String catalog_number, Branch branch, double discount, LocalDateTime startDate, LocalDateTime endDate) {
+    public Response<String> updateDiscountPerProduct(String catalog_number, Branch branch, double discount, LocalDateTime startDate, LocalDateTime endDate) {
         try {
             discountController.createStoreDiscount(catalog_number, branch, discount, startDate, endDate);
             return new Response<>("discount added successfully");
@@ -144,7 +145,7 @@ public class StockService {
         }
     }
 
-    public Response getProductDetails(String catalog_num, String serial_num, String branch) {
+    public Response<Record> getProductDetails(String catalog_num, String serial_num, String branch) {
         try {
             return new Response<>(productController.getProductDetails(Branch.valueOf(branch), catalog_num, serial_num));
         } catch (Exception e) {

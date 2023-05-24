@@ -21,7 +21,7 @@ public class Shift {
 
     public enum ShiftType {
         Morning,
-        Evening;
+        Evening
     }
 
     public Shift(String branchId, LocalDate shiftDate, ShiftType shiftType) {
@@ -49,19 +49,19 @@ public class Shift {
         return duplicateEmployees.isEmpty();
     }
     private String getLegalityProblems() {
-        String result = "";
+        StringBuilder result = new StringBuilder();
         for(Role role : neededRoles.keySet()){
             if (!shiftWorkers.containsKey(role)) {
-                result += "There are 0/" + neededRoles.get(role) + " employees in the role " + role + "\n";
+                result.append("There are 0/").append(neededRoles.get(role)).append(" employees in the role ").append(role).append("\n");
             }
             else if (shiftWorkers.get(role).size() < neededRoles.get(role)) {
-                result += "There are only " + shiftWorkers.get(role).size() + " / " + neededRoles.get(role) + " employees in the role " + role + "\n";
+                result.append("There are only ").append(shiftWorkers.get(role).size()).append(" / ").append(neededRoles.get(role)).append(" employees in the role ").append(role).append("\n");
             }
         }
         for(Employee employee : getDuplicateEmployees()) {
-            result += "The employee " + employee.getId() + " is assigned to multiple roles in this shift.\n";
+            result.append("The employee ").append(employee.getId()).append(" is assigned to multiple roles in this shift.\n");
         }
-        return result;
+        return result.toString();
     }
     private List<Employee> getDuplicateEmployees() {
         Set<Employee> employees = new HashSet<>();

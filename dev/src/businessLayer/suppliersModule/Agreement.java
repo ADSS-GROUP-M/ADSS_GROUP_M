@@ -15,7 +15,6 @@ public class Agreement {
      * products on the agreement - maps between product's id to the product and its amount
      */
     private final Map<String, Product> products;
-    private BillOfQuantities billOfQuantities;
     private DeliveryAgreement deliveryAgreement;
 
     public Agreement(List<Product> productsList, DeliveryAgreement deliveryAgreement){
@@ -23,11 +22,6 @@ public class Agreement {
         for (Product p : productsList)
             products.put(p.getCatalogNumber(), p);
         this.deliveryAgreement = deliveryAgreement;
-    }
-
-    public Agreement(List<Product> productsList, DeliveryAgreement deliveryAgreement, BillOfQuantities billOfQuantities){
-        this(productsList, deliveryAgreement);
-        this.billOfQuantities = billOfQuantities;
     }
 
     public Map<String, Product> getProducts() {
@@ -71,14 +65,6 @@ public class Agreement {
     public void setNumberOfUnits(String catalogNumber, int numberOfUnits){
         getProduct(catalogNumber).setNumberOfUnits(numberOfUnits);
     }
-    public BillOfQuantities getBillOfQuantities(){
-        return billOfQuantities;
-    }
-    public BillOfQuantities BillOfQuantities(){
-        if(billOfQuantities == null)
-            billOfQuantities = new BillOfQuantities();
-        return billOfQuantities;
-    }
 
     public String getSuppliersCatalogNumber(String catalogNumber){
         return products.get(catalogNumber).getSuppliersCatalogNumber();
@@ -90,14 +76,10 @@ public class Agreement {
         return -1;
     }
 
-    public void setBillOfQuantities(BillOfQuantities billOfQuantities) {
-        this.billOfQuantities = billOfQuantities;
-    }
-
     public String toString(){
-        String productsString = "PRODUCTS DETAILS:";
+        StringBuilder productsString = new StringBuilder("PRODUCTS DETAILS:");
         for (Product product : products.values())
-            productsString += "\n\t\t\t" + product.toString();
+            productsString.append("\n\t\t\t").append(product.toString());
 
         return "AGREEMENT:\n\t\t" + productsString + "\n\t\t" + deliveryAgreement.toString() + "\n\t\t";
     }

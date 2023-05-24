@@ -32,7 +32,7 @@ public class Category {
 
     public Boolean isProductIDRelated(String catalog_number, Branch branch){
         for(Product product: productsRelated){
-            if(product.getBranch() == branch && product.getCatalogNumber() == catalog_number)
+            if(product.getBranch() == branch && product.getCatalogNumber().equals(catalog_number))
                 return true;
         }
         return false;
@@ -59,7 +59,7 @@ public class Category {
         Iterator<Product> iterator = productsRelated.iterator();
         while (iterator.hasNext()) {
             Product productRelated = iterator.next();
-            if (productRelated.getBranch() == product.getBranch() && productRelated.getCatalogNumber() == product.getCatalogNumber()) {
+            if (productRelated.getBranch() == product.getBranch() && productRelated.getCatalogNumber().equals(product.getCatalogNumber())) {
                 iterator.remove();
             }
         }
@@ -87,12 +87,12 @@ public class Category {
         if(subCategories.isEmpty())
             return "there is no subCategory";
         else{
-            String ans = "[ ";
+            StringBuilder ans = new StringBuilder("[ ");
             for(Category subcategory: subCategories.values()){
-                ans = ans + subcategory.getCategoryName() + " ,";
+                ans.append(subcategory.getCategoryName()).append(" ,");
             }
-            ans = ans.substring(0,ans.length()-1) + " ]";
-            return ans;
+            ans = new StringBuilder(ans.substring(0, ans.length() - 1) + " ]");
+            return ans.toString();
         }
     }
     @Override

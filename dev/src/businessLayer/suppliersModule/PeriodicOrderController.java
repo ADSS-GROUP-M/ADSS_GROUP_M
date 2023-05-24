@@ -44,10 +44,10 @@ public class PeriodicOrderController {
      */
     public String getDetails() throws SQLException {
         Map<Integer, PeriodicOrder> periodicOrders = periodicOrderDataMapper.getAllPeriodicOrders();
-        String res = "";
+        StringBuilder res = new StringBuilder();
         for(Map.Entry<Integer, PeriodicOrder> periodicOrder : periodicOrders.entrySet())
-            res += "\n\nPERIODIC ORDER:\n" + periodicOrder.getValue().toString(periodicOrder.getKey());
-        return res;
+            res.append("\n\nPERIODIC ORDER:\n").append(periodicOrder.getValue().toString(periodicOrder.getKey()));
+        return res.toString();
     }
 
     public int getDaysForOrder(String catalogNumber, Branch branch) throws SQLException {

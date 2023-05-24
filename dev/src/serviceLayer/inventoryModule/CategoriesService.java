@@ -4,6 +4,7 @@ import businessLayer.businessLayerUsage.Branch;
 import businessLayer.inventoryModule.CategoryController;
 import businessLayer.inventoryModule.DiscountController;
 import businessLayer.inventoryModule.ProductController;
+import businessLayer.inventoryModule.Record;
 
 import java.util.List;
 
@@ -55,7 +56,7 @@ public class CategoriesService {
         }
     }
 
-    public Response getCategoryReport(String branch, List<String> categories){
+    public Response<List<Record>> getCategoryReport(String branch, List<String> categories){
         try {
             return new Response<>(categoryController.getProductsPerCategory(categories, Branch.valueOf(branch)));
         } catch (Exception e) {

@@ -3,37 +3,36 @@ package serviceLayer.suppliersModule;
 import businessLayer.suppliersModule.AgreementController;
 import businessLayer.suppliersModule.BillOfQuantitiesController;
 import com.google.gson.Gson;
+import utils.Response;
 
 import java.util.List;
 
 public class AgreementService {
     private final AgreementController agreementController;
     private final BillOfQuantitiesController billOfQuantitiesController;
-    private final Gson gson;
 
     public AgreementService(AgreementController agreementController, BillOfQuantitiesController billOfQuantitiesController){
         this.agreementController = agreementController;
         this.billOfQuantitiesController = billOfQuantitiesController;
-        gson = new Gson();
     }
 
     public String setFixedDeliveryAgreement(String bnNumber, boolean haveTransport, List<Integer> days){
         try {
             agreementController.setFixedDeliveryAgreement(bnNumber, haveTransport, days);
-            return gson.toJson(new Response<String>("delivery agreement is edited!", false));
+            return new Response("delivery agreement is edited!", true).toJson();
         }
         catch (Exception e){
-            return gson.toJson(new Response<>(e.getMessage(), true));
+            return Response.getErrorResponse(e).toJson();
         }
     }
 
     public String setByInvitationDeliveryAgreement(String bnNumber, boolean haveTransport, int numOfDays){
         try {
             agreementController.setByInvitationDeliveryAgreement(bnNumber, haveTransport, numOfDays);
-            return gson.toJson(new Response<String>("contact phone number is edited!", false));
+            return new Response("contact phone number is edited!", true).toJson();
         }
         catch (Exception e){
-            return gson.toJson(new Response<>(e.getMessage(), true));
+            return Response.getErrorResponse(e).toJson();
         }
     }
 
@@ -42,10 +41,10 @@ public class AgreementService {
             if(!agreementController.productExist(bnNumber, catalogNumber))
                 throw new RuntimeException("the supplier does not supply product - " + catalogNumber);
             agreementController.setSuppliersCatalogNumber(bnNumber, catalogNumber, newSuppliersCatalogNumber);
-            return gson.toJson(new Response<String>("product catalog number is edited!", false));
+            return new Response("product catalog number is edited!", true).toJson();
         }
         catch (Exception e){
-            return gson.toJson(new Response<>(e.getMessage(), true));
+            return Response.getErrorResponse(e).toJson();
         }
     }
 
@@ -54,10 +53,10 @@ public class AgreementService {
             if(!agreementController.productExist(bnNumber, catalogNumber))
                 throw new RuntimeException("the supplier does not supply product - " + catalogNumber);
             agreementController.setPrice(bnNumber, catalogNumber, price);
-            return gson.toJson(new Response<String>("product price is edited!", false));
+            return new Response("product price is edited!", true).toJson();
         }
         catch (Exception e){
-            return gson.toJson(new Response<>(e.getMessage(), true));
+            return Response.getErrorResponse(e).toJson();
         }
     }
 
@@ -66,38 +65,38 @@ public class AgreementService {
             if(!agreementController.productExist(bnNumber, catalogNumber))
                 throw new RuntimeException("the supplier does not supply product - " + catalogNumber);
             agreementController.setNumberOfUnits(bnNumber, catalogNumber, amount);
-            return gson.toJson(new Response<String>("product number of units is edited!", false));
+            return new Response("product number of units is edited!", true).toJson();
         }
         catch (Exception e){
-            return gson.toJson(new Response<>(e.getMessage(), true));
+            return Response.getErrorResponse(e).toJson();
         }
     }
 
     public String addProduct(String bnNumber, String catalogNumber, String supplierCatalogNumber, double price, int numberOfUnits){
         try {
             agreementController.addProduct(bnNumber, catalogNumber, supplierCatalogNumber, price, numberOfUnits);
-            return gson.toJson(new Response<String>("product is added!", false));
+            return new Response("product is added!", true).toJson();
         }
         catch (Exception e){
-            return gson.toJson(new Response<>(e.getMessage(), true));
+            return Response.getErrorResponse(e).toJson();
         }
     }
 
     public String getSuppliersCatalogNumber(String bnNumber, String catalogNumber){
         try {
-            return gson.toJson(new Response<String>(agreementController.getSuppliersCatalogNumber(bnNumber, catalogNumber)));
+            return new Response(true,agreementController.getSuppliersCatalogNumber(bnNumber, catalogNumber)).toJson();
         }
         catch (Exception e){
-            return gson.toJson(new Response<>(e.getMessage(), true));
+            return Response.getErrorResponse(e).toJson();
         }
     }
 
     public String getDeliveryAgreement(String bnNumber){
         try {
-            return gson.toJson(new Response<String>(agreementController.getDeliveryAgreement(bnNumber).toString2()));
+            return new Response(true,agreementController.getDeliveryAgreement(bnNumber).toString2()).toJson();
         }
         catch (Exception e){
-            return gson.toJson(new Response<>(e.getMessage(), true));
+            return Response.getErrorResponse(e).toJson();
         }
     }
 
@@ -107,20 +106,20 @@ public class AgreementService {
                 throw new RuntimeException("the supplier does not supply product - " + catalogNumber);
             agreementController.removeProduct(bnNumber, catalogNumber);
             billOfQuantitiesController.removeProductDiscount(bnNumber, catalogNumber);
-            return gson.toJson(new Response<String>("product was removed!", false));
+            return new Response("product was removed!", true).toJson();
         }
         catch (Exception e){
-            return gson.toJson(new Response<>(e.getMessage(), true));
+            return Response.getErrorResponse(e).toJson();
         }
     }
 
     public String removeAgreement(String bnNumber){
         try {
             agreementController.removeAgreement(bnNumber);
-            return gson.toJson(new Response<String>("agreement was removed!", false));
+            return new Response("agreement was removed!", true).toJson();
         }
         catch (Exception e){
-            return gson.toJson(new Response<>(e.getMessage(), true));
+            return Response.getErrorResponse(e).toJson();
         }
     }
 }

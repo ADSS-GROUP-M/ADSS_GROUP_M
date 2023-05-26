@@ -1,6 +1,6 @@
 package presentationLayer.inventoryModule;
 
-import serviceLayer.inventoryModule.Response;
+import utils.Response;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -47,12 +47,8 @@ public class InventoryProductsManu extends MainMenu {
         double store_price = in.nextDouble();
         in.nextLine(); // Consume the remaining newline character
 //        System.out.println(stockService.addProduct(catalog_num, name, manufacturer, store_price, branch).getReturnValue());
-        Response response = stockService.addProduct(catalog_num, name, manufacturer, store_price, branch);
-        if(response.errorOccurred())
-            System.out.println(response.getErrorMessage());
-        else
-            System.out.println(response.getReturnValue());
-
+        Response response = Response.fromJson(stockService.addProduct(catalog_num, name, manufacturer, store_price, branch));
+        System.out.println(response.message());
     }
 
     private void createNewItem() {
@@ -80,11 +76,8 @@ public class InventoryProductsManu extends MainMenu {
         System.out.println("Is is periodic supplier? y/n");
         String periodicSupplier = in.nextLine();
 //        System.out.println(stockService.addProductItem(serialNumbers, catalog_num, supplier, supplier_price, supplier_discount_price, branch, location, expirationDate,periodicSupplier).getReturnValue());
-        Response response = stockService.addProductItem(serialNumbers, catalog_num, supplier, supplier_price, supplier_discount_price, branch, location, expirationDate,periodicSupplier);
-        if(response.errorOccurred())
-            System.out.println(response.getErrorMessage());
-        else
-            System.out.println(response.getReturnValue());
+        Response response = Response.fromJson(stockService.addProductItem(serialNumbers, catalog_num, supplier, supplier_price, supplier_discount_price, branch, location, expirationDate,periodicSupplier));
+        System.out.println(response.message());
     }
 
     private void updateProduct() {
@@ -152,10 +145,7 @@ public class InventoryProductsManu extends MainMenu {
         System.out.println("what is the product's serial num? (int)");
         String serial_num = in.nextLine();
 //        System.out.println(stockService.getProductDetails(catalog_num, serial_num, branch).getReturnValue().toString());
-        Response response =stockService.getProductDetails(catalog_num, serial_num, branch);
-        if(response.errorOccurred())
-            System.out.println(response.getErrorMessage());
-        else
-            System.out.println(response.getReturnValue());
+        Response response = Response.fromJson(stockService.getProductDetails(catalog_num, serial_num, branch));
+        System.out.println(response.message());
     }
 }

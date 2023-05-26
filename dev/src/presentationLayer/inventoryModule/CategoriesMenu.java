@@ -2,7 +2,7 @@ package presentationLayer.inventoryModule;
 
 
 import businessLayer.businessLayerUsage.Branch;
-import serviceLayer.inventoryModule.Response;
+import utils.Response;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -44,11 +44,8 @@ public class CategoriesMenu extends MainMenu {
         } else {
             subcategories = Arrays.asList(subcategories_name.split(","));
         }
-        Response response = categoriesService.createCategory(Branch.valueOf(branch), subcategories, category_name);
-        if(response.errorOccurred())
-            System.out.println(response.getErrorMessage());
-        else
-            System.out.println(response.getReturnValue());
+        Response response = Response.fromJson(categoriesService.createCategory(Branch.valueOf(branch), subcategories, category_name));
+        System.out.println(response.message());
     }
 
 
@@ -56,11 +53,8 @@ public class CategoriesMenu extends MainMenu {
         in.nextLine();
         System.out.println("category name:");
         String category_name = in.nextLine();
-        Response response = categoriesService.removeCategory(Branch.valueOf(branch), category_name);
-        if(response.errorOccurred())
-            System.out.println(response.getErrorMessage());
-        else
-            System.out.println(response.getReturnValue());
+        Response response = Response.fromJson(categoriesService.removeCategory(Branch.valueOf(branch), category_name));
+        System.out.println(response.message());
     }
 
     private void addProductToCategory(){
@@ -69,11 +63,8 @@ public class CategoriesMenu extends MainMenu {
         String category_name = in.nextLine();
         System.out.println("catalog number: (string)");
         String catalog_number = in.nextLine();
-        Response response = categoriesService.addProductToCategory(Branch.valueOf(branch), catalog_number, category_name);
-        if(response.errorOccurred())
-            System.out.println(response.getErrorMessage());
-        else
-            System.out.println(response.getReturnValue());
+        Response response = Response.fromJson(categoriesService.addProductToCategory(Branch.valueOf(branch), catalog_number, category_name));
+        System.out.println(response.message());
     }
 
     private void removeProductFromCategory(){
@@ -82,11 +73,8 @@ public class CategoriesMenu extends MainMenu {
         String category_name = in.nextLine();
         System.out.println("catalog number: (string)");
         String catalog_number = in.nextLine();
-        Response response = categoriesService.removeProductFromCategory(Branch.valueOf(branch), category_name,catalog_number);
-        if(response.errorOccurred())
-            System.out.println(response.getErrorMessage());
-        else
-            System.out.println(response.getReturnValue());
+        Response response = Response.fromJson(categoriesService.removeProductFromCategory(Branch.valueOf(branch), category_name,catalog_number));
+        System.out.println(response.message());
     }
 //    private void addSubcategory() {
 //        in.nextLine();

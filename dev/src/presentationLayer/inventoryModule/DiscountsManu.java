@@ -1,7 +1,7 @@
 package presentationLayer.inventoryModule;
 
 import businessLayer.businessLayerUsage.Branch;
-import serviceLayer.inventoryModule.Response;
+import utils.Response;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -41,11 +41,8 @@ public class DiscountsManu extends MainMenu {
         System.out.println("end date:(\"2016-03-04 11:30\" - example)");
         String end_date = in.nextLine();
 //        System.out.println(stockService.updateDiscountPerProduct(catalog_num, Branch.valueOf(branch), discount, LocalDateTime.parse(start_date, formatter), LocalDateTime.parse(end_date, formatter)).getReturnValue());
-        Response response = stockService.updateDiscountPerProduct(catalog_num, Branch.valueOf(branch), discount, LocalDateTime.parse(start_date, formatter), LocalDateTime.parse(end_date, formatter));
-        if(response.errorOccurred())
-            System.out.println(response.getErrorMessage());
-        else
-            System.out.println(response.getReturnValue());
+        Response response = Response.fromJson(stockService.updateDiscountPerProduct(catalog_num, Branch.valueOf(branch), discount, LocalDateTime.parse(start_date, formatter), LocalDateTime.parse(end_date, formatter)));
+        System.out.println(response.message());
     }
 
     private void categoryDiscount() {
@@ -62,10 +59,7 @@ public class DiscountsManu extends MainMenu {
         System.out.println("end date:(\"2016-03-04 11:30\" - example)");
         String end_date = in.nextLine();
 //        System.out.println(stockService.updateDiscountPerCategory(name, Branch.valueOf(branch), discount, LocalDateTime.parse(start_date, formatter), LocalDateTime.parse(end_date, formatter)).getReturnValue());
-        Response response = stockService.updateDiscountPerCategory(name, Branch.valueOf(branch), discount, LocalDateTime.parse(start_date, formatter), LocalDateTime.parse(end_date, formatter));
-        if(response.errorOccurred())
-            System.out.println(response.getErrorMessage());
-        else
-            System.out.println(response.getReturnValue());
+        Response response = Response.fromJson(stockService.updateDiscountPerCategory(name, Branch.valueOf(branch), discount, LocalDateTime.parse(start_date, formatter), LocalDateTime.parse(end_date, formatter)));
+        System.out.println(response.message());
     }
 }

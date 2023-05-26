@@ -1,12 +1,20 @@
 package presentationLayer.inventoryModule;
 
 import businessLayer.businessLayerUsage.Branch;
+import com.google.gson.reflect.TypeToken;
+import utils.Response;
+import businessLayer.inventoryModule.Record;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class ReportsMenu extends MainMenu {
+
+    private static final Type LIST_RECORD = new TypeToken<List<Record>>() {
+    }.getType();
+
     public void run(String branch) {
         this.branch = branch;
         System.out.println("Please select an option:");
@@ -37,7 +45,9 @@ public class ReportsMenu extends MainMenu {
             subcategories = Arrays.asList(subcategories_name.split(","));
         }
         StringBuilder output = new StringBuilder();
-        for (businessLayer.inventoryModule.Record r : categoriesService.getCategoryReport(branch, subcategories).getReturnValue()) {
+
+        List<Record> records =  Response.fromJson(categoriesService.getCategoryReport(branch, subcategories)).data(LIST_RECORD);
+        for (Record r : records) {
             output.append(r.toString()).append("\n");
         }
         System.out.println(output);
@@ -45,7 +55,8 @@ public class ReportsMenu extends MainMenu {
 
     private void inventoryRunningOutReport() {
         StringBuilder output = new StringBuilder();
-        for (businessLayer.inventoryModule.Record r: stockService.getShortagesProducts(Branch.valueOf(branch)).getReturnValue()){
+        List<Record> records = Response.fromJson(stockService.getShortagesProducts(Branch.valueOf(branch))).data(LIST_RECORD);
+        for (Record r: records){
             output.append(r.toString()).append("\n");
         }
         System.out.println(output);
@@ -53,7 +64,8 @@ public class ReportsMenu extends MainMenu {
 
     private void inventoryDefectiveReport() {
         StringBuilder output = new StringBuilder();
-        for (businessLayer.inventoryModule.Record r: stockService.getDefectiveProducts(Branch.valueOf(branch)).getReturnValue()){
+        List<Record> records = Response.fromJson(stockService.getDefectiveProducts(Branch.valueOf(branch))).data(LIST_RECORD);
+        for (Record r: records){
             output.append(r.toString()).append("\n");
         }
         System.out.println(output);

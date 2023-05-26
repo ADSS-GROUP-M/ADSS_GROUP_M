@@ -3,44 +3,45 @@ package serviceLayer.suppliersModule;
 import businessLayer.businessLayerUsage.Branch;
 import businessLayer.suppliersModule.PeriodicOrderController;
 import com.google.gson.Gson;
+import utils.Response;
 
 import java.util.Map;
 
+import static utils.Response.getErrorResponse;
+
 public class PeriodicOrderService {
     private final PeriodicOrderController periodicOrderController;
-    private final Gson gson;
 
     public PeriodicOrderService(PeriodicOrderController periodicOrderController) {
         this.periodicOrderController = periodicOrderController;
-        gson = new Gson();
     }
 
     public String addPeriodicOrder(String bnNumber, Map<String, Integer> products, int day, Branch branch)  {
         try {
             periodicOrderController.addPeriodicOrder(bnNumber, products, day, branch);
-            return gson.toJson(new Response<String>("periodic order created!", false));
+            return new Response("periodic order created!", true).toJson();
         }
         catch (Exception e){
-            return gson.toJson(new Response<>(e.getMessage(), true));
+            return Response.getErrorResponse(e).toJson();
         }
     }
 
     public String setDay(int orderId, int day)  {
         try {
             periodicOrderController.setDay(orderId, day);
-            return gson.toJson(new Response<String>("day is set!", false));
+            return new Response("day is set!", true).toJson();
         }
         catch (Exception e){
-            return gson.toJson(new Response<>(e.getMessage(), true));
+            return Response.getErrorResponse(e).toJson();
         }
     }
 
     public String getDetails(int orderId)  {
         try {
-            return gson.toJson(new Response<String>(periodicOrderController.getDetails(orderId), false));
+            return new Response(periodicOrderController.getDetails(orderId), true).toJson();
         }
         catch (Exception e){
-            return gson.toJson(new Response<>(e.getMessage(), true));
+            return Response.getErrorResponse(e).toJson();
         }
     }
 
@@ -51,10 +52,10 @@ public class PeriodicOrderService {
      */
     public String getDetails()  {
         try {
-            return gson.toJson(new Response<String>(periodicOrderController.getDetails(), false));
+            return new Response(periodicOrderController.getDetails(), true).toJson();
         }
         catch (Exception e){
-            return gson.toJson(new Response<>(e.getMessage(), true));
+            return Response.getErrorResponse(e).toJson();
         }
     }
 }

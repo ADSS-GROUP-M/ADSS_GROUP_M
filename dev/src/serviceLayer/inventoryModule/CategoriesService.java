@@ -5,6 +5,7 @@ import businessLayer.inventoryModule.CategoryController;
 import businessLayer.inventoryModule.DiscountController;
 import businessLayer.inventoryModule.ProductController;
 import businessLayer.inventoryModule.Record;
+import utils.Response;
 
 import java.util.List;
 
@@ -19,48 +20,48 @@ public class CategoriesService {
         this.categoryController = categoryController;
     }
 
-    public Response createCategory(Branch branch, List<String> subcategories, String name) {
+    public String createCategory(Branch branch, List<String> subcategories, String name) {
         try {
             categoryController.createCategory(branch, subcategories, name);
-            return new Response<>("Category created successfully");
+            return new Response("Category created successfully",true).toJson();
         } catch (Exception e) {
-            return Response.createErrorResponse("Error creating catagory: " + e.getMessage());
+            return new Response("Error creating category: " + e.getMessage(),false).toJson();
         }
     }
 
 
-    public Response removeCategory(Branch branch, String name) {
+    public String removeCategory(Branch branch, String name) {
         try {
             categoryController.removeCategory(branch, name);
-            return new Response<>("Category removed successfully");
+            return new Response("Category removed successfully",true).toJson();
         } catch (Exception e) {
-            return Response.createErrorResponse("Error removing category: " + e.getMessage());
+            return new Response("Error removing category: " + e.getMessage(),false).toJson();
         }
     }
 
-    public Response addProductToCategory(Branch branch, String catalog_number, String name){
+    public String addProductToCategory(Branch branch, String catalog_number, String name){
         try {
             categoryController.addProductToCategory(branch, catalog_number, name);
-            return new Response<>(String.format("catalog number: %s added to category: %s successfully",catalog_number,name));
+            return new Response(String.format("catalog number: %s added to category: %s successfully",catalog_number,name),true).toJson();
         } catch (Exception e) {
-            return Response.createErrorResponse("Error removing category: " + e.getMessage());
+            return new Response("Error removing category: " + e.getMessage(),false).toJson();
         }
     }
 
-    public Response removeProductFromCategory(Branch branch, String catalog_number, String name){
+    public String removeProductFromCategory(Branch branch, String catalog_number, String name){
         try {
             categoryController.removeProductFromCategory(branch,catalog_number, name);
-            return new Response<>(String.format("catalog number: %s added to category: %s successfully",catalog_number,name));
+            return new Response(String.format("catalog number: %s added to category: %s successfully",catalog_number,name),true).toJson();
         } catch (Exception e) {
-            return Response.createErrorResponse("Error removing category: " + e.getMessage());
+            return new Response("Error removing category: " + e.getMessage(),false).toJson();
         }
     }
 
-    public Response<List<Record>> getCategoryReport(String branch, List<String> categories){
+    public String getCategoryReport(String branch, List<String> categories){
         try {
-            return new Response<>(categoryController.getProductsPerCategory(categories, Branch.valueOf(branch)));
+            return new Response(true,categoryController.getProductsPerCategory(categories, Branch.valueOf(branch))).toJson();
         } catch (Exception e) {
-            return Response.createErrorResponse("Error " + e.getMessage());
+            return new Response("Error " + e.getMessage(),false).toJson();
         }
     }
 

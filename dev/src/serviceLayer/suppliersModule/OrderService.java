@@ -5,46 +5,44 @@ import businessLayer.suppliersModule.Order;
 import businessLayer.suppliersModule.OrderController;
 import businessLayer.suppliersModule.Pair;
 import com.google.gson.Gson;
+import utils.Response;
 
 import java.util.List;
 import java.util.Map;
 
 public class OrderService {
     private final OrderController orderController;
-    private final Gson gson;
     public OrderService(OrderController orderController){
         this.orderController = orderController;
-        gson = new Gson();
     }
 
     public String order(Map<String, Integer> order, Branch branch){
         try {
             Map<String, Pair<Map<String, Integer>, Double>> fullOrder = orderController.order(order, branch);
-            Response<Map<String, Pair<Map<String, Integer>, Double>>> r = new Response<>(fullOrder);
-            return gson.toJson(r);
+            return new Response(true,fullOrder).toJson();
         }
-        catch (Exception exception) {
-            return gson.toJson(new Response<Map<String, Pair<Map<Integer, Integer>, Double>>>(exception.getMessage(), true));
+        catch (Exception e) {
+            return Response.getErrorResponse(e).toJson();
         }
 
     }
     public String orderDueToShortage(Map<String, Integer> order, Branch branch){
         try {
             orderController.orderDueToShortage(order, branch);
-            return gson.toJson(new Response<>("order ordered!", false));
+            return new Response("order ordered!", true).toJson();
         }
-        catch (Exception exception) {
-            return gson.toJson(new Response<Map<String, Pair<Map<Integer, Integer>, Double>>>(exception.getMessage(), true));
+        catch (Exception e) {
+            return Response.getErrorResponse(e).toJson();
         }
 
     }
 
     public String getOrderHistory(String bnNumber){
         try {
-            return gson.toJson(new Response<List<Order>>(orderController.getOrderHistory(bnNumber)));
+            return new Response(true,orderController.getOrderHistory(bnNumber)).toJson();
         }
         catch (Exception e){
-            return gson.toJson(new Response<>(e.getMessage(), true));
+            return Response.getErrorResponse(e).toJson();
         }
     }
 }

@@ -133,8 +133,9 @@ public class UserDAO extends DAOBase<User> {
                     TABLE_NAME,
                     Columns.password.name(), user.getPassword(),
                     Columns.username.name(), user.getUsername());
-            if (cursor.executeWrite(queryString) == 0)
+            if (cursor.executeWrite(queryString) == 0) {
                 throw new DalException("No user with username " + user.getUsername() + " was found");
+            }
             cache.put(user);
         } catch(SQLException e) {
             throw new DalException(e);
@@ -152,8 +153,9 @@ public class UserDAO extends DAOBase<User> {
 
         String query = String.format("DELETE FROM %s WHERE %s = '%s';", TABLE_NAME, Columns.username.name(), user.getUsername());
         try {
-            if (cursor.executeWrite(query) == 0)
+            if (cursor.executeWrite(query) == 0) {
                 throw new DalException("No user with username " + user.getUsername() + " was found");
+            }
         } catch (SQLException e) {
             throw new DalException("Failed to delete User", e);
         }

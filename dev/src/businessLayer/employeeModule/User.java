@@ -1,5 +1,7 @@
 package businessLayer.employeeModule;
 
+import exceptions.EmployeeException;
+
 import java.util.*;
 
 public class User {// This class represents a user in the system and manages its authorization
@@ -21,17 +23,20 @@ public class User {// This class represents a user in the system and manages its
         this.authorizations.add(auth);
     }
 
-    public boolean login(String password) throws Exception {
-        if (loggedIn)
-            throw new Exception("The user is already logged in to the system.");
-        if (checkPassword(password))
+    public boolean login(String password) throws EmployeeException {
+        if (loggedIn) {
+            throw new EmployeeException("The user is already logged in to the system.");
+        }
+        if (checkPassword(password)) {
             loggedIn = true;
+        }
         return loggedIn;
     }
 
     public void logout() {
-        if (!loggedIn)
+        if (!loggedIn) {
             throw new RuntimeException("The user is already logged out.");
+        }
         loggedIn = false;
     }
 

@@ -68,8 +68,12 @@ public record Site (String name, String address, String transportZone, String ph
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Site site = (Site) o;
         return this.name.equalsIgnoreCase(site.name);
     }

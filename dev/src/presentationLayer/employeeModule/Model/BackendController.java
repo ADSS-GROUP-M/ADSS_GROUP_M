@@ -56,58 +56,63 @@ public class BackendController {
 
     public String login(String username, String password) {
         Response response = Response.fromJson(userService.login(username, password));
-        if (response.success() == false)
+        if (response.success() == false) {
             return response.message();
-        else if (response.success()) {
+        } else if (response.success()) {
             loggedUsername = username;
             return "Login successful.";
         }
-        else
+        else {
             return "Login failed.";
+        }
     }
 
     public String logout() {
         Response response = Response.fromJson(userService.logout(loggedUsername));
-        if (response.success() == false)
+        if (response.success() == false) {
             return response.message();
-        else if (response.success()) {
+        } else if (response.success()) {
             loggedUsername = null;
             return "Logged out successfully.";
         }
-        else
+        else {
             return "Logout failed.";
+        }
     }
 
     public String recruitEmployee(String branchId, String fullName, String id, String bankDetails, double hourlyRate, LocalDate employmentDate, String employmentConditions, String details) {
         Response response = Response.fromJson(employeesService.recruitEmployee(loggedUsername, branchId, fullName, id, bankDetails, hourlyRate, employmentDate, employmentConditions, details));
-        if (response.success() == false)
+        if (response.success() == false) {
             return response.message();
-        else
+        } else {
             return null;
+        }
     }
 
     public String createUser(String username, String password) {
         Response response = Response.fromJson(userService.createUser(loggedUsername, username, password));
-        if (response.success() == false)
+        if (response.success() == false) {
             return response.message();
-        else if (response.success()) {
+        } else if (response.success()) {
             return "Created user successfully. Username: " + username + " Password: " + password + ".";
         }
-        else
+        else {
             return "An error has occurred while creating the user: " + response.message();
+        }
     }
 
     public String requestShift(String branchId, String shiftTime, LocalDate shiftDate, String role) {
         try {
             Response response = Response.fromJson(employeesService.requestShift(loggedUsername, branchId, shiftDate, SShiftType.valueOf(shiftTime), role));
-            if (response.success() == false)
+            if (response.success() == false) {
                 return response.message();
-            else {
+            } else {
                 boolean succeeded = response.success();
-                if (succeeded)
+                if (succeeded) {
                     return "Requested the shift registration successfully.";
-                else
+                } else {
                     return "Could not register to the shift.";
+                }
             }
         } catch (IllegalArgumentException e) {
             return "Invalid ShiftType value, expected `Morning` or `Evening`.";
@@ -118,23 +123,24 @@ public class BackendController {
 
     public List<String> getUserAuthorizations() {
         Response response = Response.fromJson(userService.getUserAuthorizations(loggedUsername));
-        if (response.success() == false)
+        if (response.success() == false) {
             return null;
-        else{
+        } else{
             return response.data(STRING_LIST_TYPE);
         }
     }
 
     public String createWeekShifts(String branchId, LocalDate weekStart) {
         Response response = Response.fromJson(employeesService.createWeekShifts(loggedUsername, branchId, weekStart));
-        if (response.success() == false)
+        if (response.success() == false) {
             return response.message();
-        else {
+        } else {
             boolean succeeded = response.success();
-            if (succeeded)
+            if (succeeded) {
                 return "Created week shifts successfully.";
-            else
+            } else {
                 return "Could not create the week shifts.";
+            }
         }
     }
 
@@ -146,14 +152,15 @@ public class BackendController {
     public String setShiftNeededAmount(String branchId, LocalDate shiftDate, String shiftType, String role, int amount) {
         try {
             Response response = Response.fromJson(employeesService.setShiftNeededAmount(loggedUsername, branchId, shiftDate, SShiftType.valueOf(shiftType), role, amount));
-            if (response.success() == false)
+            if (response.success() == false) {
                 return response.message();
-            else {
+            } else {
                 boolean succeeded = response.success();
-                if (succeeded)
+                if (succeeded) {
                     return "Updated the shift's needed amount of " + role + " successfully.";
-                else
+                } else {
                     return "Could not set the shift needed amounts.";
+                }
             }
         } catch (IllegalArgumentException e) {
             return "Invalid ShiftType was given, expected `Morning` or `Evening`.";
@@ -165,14 +172,15 @@ public class BackendController {
     public String setShiftEmployees(String branchId, LocalDate shiftDate, String shiftType, String role, List<String> employeeIds) {
         try {
             Response response = Response.fromJson(employeesService.setShiftEmployees(loggedUsername, branchId, shiftDate, SShiftType.valueOf(shiftType), role, employeeIds));
-            if (response.success() == false)
+            if (response.success() == false) {
                 return response.message();
-            else {
+            } else {
                 boolean succeeded = response.success();
-                if (succeeded)
+                if (succeeded) {
                     return "Updated the shift's employees in " + role + " successfully.";
-                else
+                } else {
                     return "Could not set the shift employees.";
+                }
             }
         } catch (IllegalArgumentException e) {
             return "Invalid ShiftType was given, expected `Morning` or `Evening`.";
@@ -183,9 +191,9 @@ public class BackendController {
 
     public List<SShift[]> getWeekShifts(String branchId, LocalDate weekStart) throws Exception {
         Response response = Response.fromJson(employeesService.getWeekShifts(loggedUsername, branchId, weekStart));
-        if (response.success() == false)
+        if (response.success() == false) {
             throw new Exception(response.message());
-        else {
+        } else {
             return response.data(LIST_SSHIFT_ARRAY_TYPE);
         }
     }
@@ -197,18 +205,18 @@ public class BackendController {
 
     public List<SShift[]> getMyShifts() throws Exception {
         Response response = Response.fromJson(employeesService.getEmployeeShifts(loggedUsername));
-        if (response.success() == false)
+        if (response.success() == false) {
             throw new Exception(response.message());
-        else {
+        } else {
             return response.data(LIST_SSHIFT_ARRAY_TYPE);
         }
     }
 
     public SEmployee getEmployee() throws Exception {
         Response response = Response.fromJson(employeesService.getEmployee(loggedUsername));
-        if (response.success() == false)
+        if (response.success() == false) {
             throw new Exception(response.message());
-        else{
+        } else{
             return response.data(SEmployee.class);
         }
     }
@@ -216,35 +224,39 @@ public class BackendController {
 
     public String certifyEmployee(String employeeId, String role) {
         Response response = Response.fromJson(employeesService.certifyEmployee(loggedUsername, employeeId, role));
-        if (response.success() == false)
+        if (response.success() == false) {
             return response.message();
-        else
+        } else {
             return "Certified employee successfully.";
+        }
     }
 
     public String certifyDriver(String employeeId, String driverLicense) {
         Response response = Response.fromJson(employeesService.certifyDriver(loggedUsername, employeeId, driverLicense));
-        if (response.success() == false)
+        if (response.success() == false) {
             return response.message();
-        else
+        } else {
             return "Certified employee successfully.";
+        }
     }
 
     public String uncertifyEmployee(String employeeId, String role) {
         Response response = Response.fromJson(employeesService.uncertifyEmployee(loggedUsername, employeeId, role));
-        if (response.success() == false)
+        if (response.success() == false) {
             return response.message();
-        else
+        } else {
             return "Uncertified employee successfully.";
+        }
     }
 
     public String approveShift(String branchId, LocalDate shiftDate, String shiftType) {
         try {
             Response response = Response.fromJson(employeesService.approveShift(loggedUsername, branchId, shiftDate, SShiftType.valueOf(shiftType)));
-            if (response.success() == false)
+            if (response.success() == false) {
                 return response.message();
-            else
+            } else {
                 return "Approved shift successfully.";
+            }
         } catch (IllegalArgumentException e) {
             return "Invalid ShiftType value, expected `Morning` or `Evening`.";
         }
@@ -252,19 +264,21 @@ public class BackendController {
 
     public String addEmployeeToBranch(String employeeId, String branchId) {
         Response response = Response.fromJson(employeesService.addEmployeeToBranch(loggedUsername, employeeId, branchId));
-        if (response.success() == false)
+        if (response.success() == false) {
             return response.message();
-        else
+        } else {
             return "Added employee to branch successfully.";
+        }
     }
 
     public String deleteShift(String branchId, LocalDate shiftDate, String shiftType) {
         try {
             Response response = Response.fromJson(employeesService.deleteShift(loggedUsername, branchId, shiftDate, SShiftType.valueOf(shiftType)));
-            if (response.success() == false)
+            if (response.success() == false) {
                 return response.message();
-            else
+            } else {
                 return "Deleted shift successfully.";
+            }
         } catch (IllegalArgumentException e) {
             return "Invalid ShiftType value, expected `Morning` or `Evening`.";
         }
@@ -272,67 +286,75 @@ public class BackendController {
 
     public String createBranch(String branchId) {
         Response response = Response.fromJson(employeesService.createBranch(loggedUsername, branchId));
-        if (response.success() == false)
+        if (response.success() == false) {
             return response.message();
-        else
+        } else {
             return "Created the branch successfully.";
+        }
     }
 
     public String updateBranchWorkingHours(String branchId, LocalTime morningStart, LocalTime morningEnd, LocalTime eveningStart, LocalTime eveningEnd) {
         Response response = Response.fromJson(employeesService.updateBranchWorkingHours(loggedUsername, branchId, morningStart, morningEnd, eveningStart, eveningEnd));
-        if (response.success() == false)
+        if (response.success() == false) {
             return response.message();
-        else
+        } else {
             return "Updated the branch's working hours successfully.";
+        }
     }
 
     public String updateEmployeeSalary(String employeeId, double hourlySalaryRate, double salaryBonus) {
         Response response = Response.fromJson(employeesService.updateEmployeeSalary(loggedUsername, employeeId, hourlySalaryRate, salaryBonus));
-        if (response.success() == false)
+        if (response.success() == false) {
             return response.message();
-        else
+        } else {
             return "Updated the employee's salary successfully.";
+        }
     }
 
     public String updateEmployeeBankDetails(String employeeId, String bankDetails) {
         Response response = Response.fromJson(employeesService.updateEmployeeBankDetails(loggedUsername, employeeId, bankDetails));
-        if (response.success() == false)
+        if (response.success() == false) {
             return response.message();
-        else
+        } else {
             return "Updated the employee's bank details successfully.";
+        }
     }
 
     public String updateEmployeeEmploymentConditions(String employeeId, String employmentConditions) {
         Response response = Response.fromJson(employeesService.updateEmployeeEmploymentConditions(loggedUsername, employeeId, employmentConditions));
-        if (response.success() == false)
+        if (response.success() == false) {
             return response.message();
-        else
+        } else {
             return "Updated the employee's employment conditions successfully.";
+        }
     }
 
     public String updateEmployeeDetails(String employeeId, String details) {
         Response response = Response.fromJson(employeesService.updateEmployeeDetails(loggedUsername, employeeId, details));
-        if (response.success() == false)
+        if (response.success() == false) {
             return response.message();
-        else
+        } else {
             return "Updated the employee's details successfully.";
+        }
     }
 
     public String authorizeUser(String username, String authorization) {
         Response response = Response.fromJson(userService.authorizeUser(loggedUsername, username, authorization));
-        if (response.success() == false)
+        if (response.success() == false) {
             return response.message();
-        else
+        } else {
             return "Authorized the user successfully.";
+        }
     }
 
     public String cancelShiftRequest(String branchId, LocalDate shiftDate, String shiftType, String role) {
         try {
             Response response = Response.fromJson(employeesService.cancelShiftRequest(loggedUsername, branchId, shiftDate, SShiftType.valueOf(shiftType), role));
-            if (response.success() == false)
+            if (response.success() == false) {
                 return response.message();
-            else
+            } else {
                 return "Cancelled the shift request successfully.";
+            }
         } catch (IllegalArgumentException e) {
             return "Invalid ShiftType value, expected `Morning` or `Evening`.";
         }
@@ -341,10 +363,11 @@ public class BackendController {
     public String reportShiftActivity(String branchId, LocalDate shiftDate, String shiftType, String activity) {
         try {
             Response response = Response.fromJson(employeesService.reportShiftActivity(loggedUsername, branchId, shiftDate, SShiftType.valueOf(shiftType), activity));
-            if (response.success() == false)
+            if (response.success() == false) {
                 return response.message();
-            else
+            } else {
                 return "Reported the shift activity successfully.";
+            }
         } catch (IllegalArgumentException e) {
             return "Invalid ShiftType value, expected `Morning` or `Evening`.";
         }
@@ -353,10 +376,11 @@ public class BackendController {
     public String applyCancelCard(String branchId, LocalDate shiftDate, String shiftType, String productId) {
         try {
             Response response = Response.fromJson(employeesService.applyCancelCard(loggedUsername, branchId, shiftDate, SShiftType.valueOf(shiftType), productId));
-            if (response.success() == false)
+            if (response.success() == false) {
                 return response.message();
-            else
+            } else {
                 return "Cancelled the product successfully.";
+            }
         } catch (IllegalArgumentException e) {
             return "Invalid ShiftType value, expected `Morning` or `Evening`.";
         }

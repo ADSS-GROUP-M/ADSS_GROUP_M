@@ -81,10 +81,11 @@ public class EmployeesService {
 
     public String recruitEmployee(String actorUsername, String branchId, String fullName, String employeeId, String bankDetails, double hourlyRate, LocalDate employmentDate, String employmentConditions, String details) {
         Response authResponse = Response.fromJson(userService.isAuthorized(actorUsername, Authorization.HRManager));
-        if (authResponse.success() == false)
+        if (authResponse.success() == false) {
             return new Response(authResponse.message(),false).toJson();
-        else if(authResponse.dataToBoolean() == false)
+        } else if(authResponse.dataToBoolean() == false) {
             return new Response("User isn't authorized to do this",false).toJson();
+        }
         try {
             employeesController.recruitEmployee(branchId, fullName, employeeId, bankDetails, hourlyRate, employmentDate, employmentConditions, details);
             return new Response(true).toJson();
@@ -95,10 +96,11 @@ public class EmployeesService {
 
     public String addEmployeeToBranch(String actorUsername, String employeeId, String branchId){
         Response authResponse = Response.fromJson(userService.isAuthorized(actorUsername, Authorization.HRManager));
-        if (authResponse.success() == false)
+        if (authResponse.success() == false) {
             return new Response(authResponse.message(),false).toJson();
-        else if(authResponse.dataToBoolean() == false)
+        } else if(authResponse.dataToBoolean() == false) {
             return new Response("User isn't authorized to do this",false).toJson();
+        }
         try {
             employeesController.addEmployeeToBranch(branchId, employeeId);
             return new Response(true).toJson();
@@ -109,10 +111,11 @@ public class EmployeesService {
 
     public String certifyEmployee(String actorUsername, String employeeId, String role) {
         Response authResponse = Response.fromJson(userService.isAuthorized(actorUsername, Authorization.HRManager));
-        if (authResponse.success() == false)
+        if (authResponse.success() == false) {
             return new Response(authResponse.message(),false).toJson();
-        else if(authResponse.dataToBoolean() == false)
+        } else if(authResponse.dataToBoolean() == false) {
             return new Response("User isn't authorized to do this",false).toJson();
+        }
         try {
             employeesController.certifyEmployee(employeeId, Role.valueOf(role));
             return new Response(true).toJson();
@@ -123,10 +126,11 @@ public class EmployeesService {
 
     public String certifyDriver(String actorUsername, String employeeId, String driverLicense) {
         Response authResponse = Response.fromJson(userService.isAuthorized(actorUsername, Authorization.HRManager));
-        if (authResponse.success() == false)
+        if (authResponse.success() == false) {
             return new Response(authResponse.message(),false).toJson();
-        else if(authResponse.dataToBoolean() == false)
+        } else if(authResponse.dataToBoolean() == false) {
             return new Response("User isn't authorized to do this",false).toJson();
+        }
         try {
             employeesController.certifyEmployee(employeeId, Role.Driver);
             Employee driver = employeesController.getEmployee(employeeId);
@@ -139,10 +143,11 @@ public class EmployeesService {
 
     public String uncertifyEmployee(String actorUsername, String employeeId, String role) {
         Response authResponse = Response.fromJson(userService.isAuthorized(actorUsername, Authorization.HRManager));
-        if (authResponse.success() == false)
+        if (authResponse.success() == false) {
             return new Response(authResponse.message(),false).toJson();
-        else if(authResponse.dataToBoolean() == false)
+        } else if(authResponse.dataToBoolean() == false) {
             return new Response("User isn't authorized to do this",false).toJson();
+        }
         try {
             employeesController.uncertifyEmployee(employeeId, Role.valueOf(role));
             return new Response(true).toJson();
@@ -173,10 +178,11 @@ public class EmployeesService {
 
     public String createWeekShifts(String actorUsername, String branchId, LocalDate weekStart) {
         Response authResponse = Response.fromJson(userService.isAuthorized(actorUsername, Authorization.HRManager));
-        if (authResponse.success() == false)
+        if (authResponse.success() == false) {
             return new Response(authResponse.message(),false).toJson();
-        else if(authResponse.dataToBoolean() == false)
+        } else if(authResponse.dataToBoolean() == false) {
             return new Response("User isn't authorized to do this",false).toJson();
+        }
         try {
             shiftsController.createWeekShifts(branchId, weekStart);
             return new Response(true).toJson();
@@ -187,10 +193,11 @@ public class EmployeesService {
 
     public String createShiftDay(String actorUsername, String branchId, LocalDate shiftDate) {
         Response authResponse = Response.fromJson(userService.isAuthorized(actorUsername, Authorization.HRManager));
-        if (authResponse.success() == false)
+        if (authResponse.success() == false) {
             return new Response(authResponse.message(),false).toJson();
-        else if(authResponse.dataToBoolean() == false)
+        } else if(authResponse.dataToBoolean() == false) {
             return new Response("User isn't authorized to do this",false).toJson();
+        }
         try {
             shiftsController.createShift(branchId, shiftDate,ShiftType.Morning);
             shiftsController.createShift(branchId, shiftDate,ShiftType.Evening);
@@ -202,10 +209,11 @@ public class EmployeesService {
 
     public String deleteShift(String actorUsername, String branchId, LocalDate shiftDate, SShiftType shiftType) {
         Response authResponse = Response.fromJson(userService.isAuthorized(actorUsername, Authorization.HRManager));
-        if (authResponse.success() == false)
+        if (authResponse.success() == false) {
             return new Response(authResponse.message(),false).toJson();
-        else if(authResponse.dataToBoolean() == false)
+        } else if(authResponse.dataToBoolean() == false) {
             return new Response("User isn't authorized to do this",false).toJson();
+        }
         try {
             shiftsController.deleteShift(branchId, shiftDate, ShiftType.valueOf(shiftType.toString()));
             return new Response(true).toJson();
@@ -216,10 +224,11 @@ public class EmployeesService {
 
     public String setShiftNeededAmount(String actorUsername, String branchId, LocalDate shiftDate, SShiftType shiftType, String role, int amount) {
         Response authResponse = Response.fromJson(userService.isAuthorized(actorUsername, Authorization.HRManager));
-        if (authResponse.success() == false)
+        if (authResponse.success() == false) {
             return new Response(authResponse.message(),false).toJson();
-        else if(authResponse.dataToBoolean() == false)
+        } else if(authResponse.dataToBoolean() == false) {
             return new Response("User isn't authorized to do this",false).toJson();
+        }
         try {
             shiftsController.setShiftNeededAmount(branchId, shiftDate, ShiftType.valueOf(shiftType.toString()), Role.valueOf(role), amount);
             return new Response(true).toJson();
@@ -235,11 +244,13 @@ public class EmployeesService {
             List<SShift[]> result = new ArrayList<>();
             for(Shift[] shifts : weekShifts) {
                 SShift[] serviceShifts = new SShift[shifts.length];
-                for (int i = 0; i < shifts.length; i++)
-                    if (shifts[i] == null)
+                for (int i = 0; i < shifts.length; i++) {
+                    if (shifts[i] == null) {
                         serviceShifts[i] = null;
-                    else
+                    } else {
                         serviceShifts[i] = new SShift(shifts[i]);
+                    }
+                }
                 result.add(serviceShifts);
             }
             return new Response(true,result).toJson();
@@ -250,10 +261,11 @@ public class EmployeesService {
 
     public String setShiftEmployees(String actorUsername, String branchId, LocalDate shiftDate, SShiftType shiftType, String role, List<String> employeeIds) {
         Response authResponse = Response.fromJson(userService.isAuthorized(actorUsername, Authorization.HRManager));
-        if (authResponse.success() == false)
+        if (authResponse.success() == false) {
             return new Response(authResponse.message(),false).toJson();
-        else if(authResponse.dataToBoolean() == false)
+        } else if(authResponse.dataToBoolean() == false) {
             return new Response("User isn't authorized to do this",false).toJson();
+        }
         try {
             List<Employee> employees = employeesController.getBranchEmployees(branchId, employeeIds);
             shiftsController.setShiftEmployees(branchId, shiftDate, ShiftType.valueOf(shiftType.toString()), Role.valueOf(role), employees);
@@ -266,10 +278,11 @@ public class EmployeesService {
     public String createBranch(String actorUsername, String branchId) {
         Response authResponse1 = Response.fromJson(userService.isAuthorized(actorUsername, Authorization.TransportManager));
         Response authResponse2 = Response.fromJson(userService.isAuthorized(actorUsername, Authorization.HRManager));
-        if (authResponse1.success() == false && authResponse2.success() == false)
+        if (authResponse1.success() == false && authResponse2.success() == false) {
             return new Response(authResponse1.message() + ", " + authResponse2.message(),false).toJson();
-        else if(authResponse1.dataToBoolean() == false && authResponse2.dataToBoolean() == false)
+        } else if(authResponse1.dataToBoolean() == false && authResponse2.dataToBoolean() == false) {
             return new Response("User isn't authorized to create branches",false).toJson();
+        }
         try {
             employeesController.createBranch(branchId);
             return new Response(true).toJson();
@@ -285,11 +298,13 @@ public class EmployeesService {
             List<SShift[]> result = new ArrayList<>();
             for(Shift[] shifts : employeeShifts) {
                 SShift[] serviceShifts = new SShift[shifts.length];
-                for (int i = 0; i < shifts.length; i++)
-                    if (shifts[i] == null)
+                for (int i = 0; i < shifts.length; i++) {
+                    if (shifts[i] == null) {
                         serviceShifts[i] = null;
-                    else
+                    } else {
                         serviceShifts[i] = new SShift(shifts[i]);
+                    }
+                }
                 result.add(serviceShifts);
             }
             return new Response(true,result).toJson();
@@ -309,10 +324,11 @@ public class EmployeesService {
 
     public String approveShift(String actorUsername, String branchId, LocalDate shiftDate, SShiftType shiftType) {
         Response authResponse = Response.fromJson(userService.isAuthorized(actorUsername, Authorization.HRManager));
-        if (authResponse.success() == false)
+        if (authResponse.success() == false) {
             return new Response(authResponse.message(),false).toJson();
-        else if(authResponse.dataToBoolean() == false)
+        } else if(authResponse.dataToBoolean() == false) {
             return new Response("User isn't authorized to do this",false).toJson();
+        }
         try {
             shiftsController.approveShift(branchId,shiftDate, ShiftType.valueOf(shiftType.toString()));
             return new Response(true).toJson();
@@ -323,10 +339,11 @@ public class EmployeesService {
 
     public String applyCancelCard(String actorUsername, String branchId, LocalDate shiftDate, SShiftType shiftType, String productId) {
         Response authResponse = Response.fromJson(userService.isAuthorized(actorUsername, Authorization.ShiftManager));
-        if (authResponse.success() == false)
+        if (authResponse.success() == false) {
             return new Response(authResponse.message(),false).toJson();
-        else if(authResponse.dataToBoolean() == false)
+        } else if(authResponse.dataToBoolean() == false) {
             return new Response("User isn't authorized to do this",false).toJson();
+        }
         try {
             shiftsController.applyCancelCard(branchId, shiftDate, ShiftType.valueOf(shiftType.toString()),actorUsername, productId);
             return new Response(true).toJson();
@@ -337,10 +354,11 @@ public class EmployeesService {
 
     public String updateEmployeeSalary(String actorUsername, String employeeId, double hourlySalaryRate, double salaryBonus) {
         Response authResponse = Response.fromJson(userService.isAuthorized(actorUsername, Authorization.HRManager));
-        if (authResponse.success() == false)
+        if (authResponse.success() == false) {
             return new Response(authResponse.message(),false).toJson();
-        else if(authResponse.dataToBoolean() == false)
+        } else if(authResponse.dataToBoolean() == false) {
             return new Response("User isn't authorized to do this",false).toJson();
+        }
         try {
             employeesController.updateEmployeeSalary(employeeId, hourlySalaryRate, salaryBonus);
             return new Response(true).toJson();
@@ -351,10 +369,11 @@ public class EmployeesService {
 
     public String updateEmployeeBankDetails(String actorUsername, String employeeId, String bankDetails){
         Response authResponse = Response.fromJson(userService.isAuthorized(actorUsername, Authorization.HRManager));
-        if (authResponse.success() == false)
+        if (authResponse.success() == false) {
             return new Response(authResponse.message(),false).toJson();
-        else if(authResponse.dataToBoolean() == false)
+        } else if(authResponse.dataToBoolean() == false) {
             return new Response("User isn't authorized to do this",false).toJson();
+        }
         try {
             employeesController.updateEmployeeBankDetails(employeeId, bankDetails);
             return new Response(true).toJson();
@@ -365,10 +384,11 @@ public class EmployeesService {
 
     public String updateEmployeeEmploymentConditions(String actorUsername, String employeeId, String employmentConditions){
         Response authResponse = Response.fromJson(userService.isAuthorized(actorUsername, Authorization.HRManager));
-        if (authResponse.success() == false)
+        if (authResponse.success() == false) {
             return new Response(authResponse.message(),false).toJson();
-        else if(authResponse.dataToBoolean() == false)
+        } else if(authResponse.dataToBoolean() == false) {
             return new Response("User isn't authorized to do this",false).toJson();
+        }
         try {
             employeesController.updateEmployeeEmploymentConditions(employeeId, employmentConditions);
             return new Response(true).toJson();
@@ -379,10 +399,11 @@ public class EmployeesService {
 
     public String updateEmployeeDetails(String actorUsername, String employeeId, String details){
         Response authResponse = Response.fromJson(userService.isAuthorized(actorUsername, Authorization.HRManager));
-        if (authResponse.success() == false)
+        if (authResponse.success() == false) {
             return new Response(authResponse.message(),false).toJson();
-        else if(authResponse.dataToBoolean() == false)
+        } else if(authResponse.dataToBoolean() == false) {
             return new Response("User isn't authorized to do this",false).toJson();
+        }
         try {
             employeesController.updateEmployeeDetails(employeeId, details);
             return new Response(true).toJson();
@@ -403,10 +424,11 @@ public class EmployeesService {
 
     public String updateBranchWorkingHours(String actorUsername , String branchId, LocalTime morningStart, LocalTime morningEnd, LocalTime eveningStart, LocalTime eveningEnd){
         Response authResponse = Response.fromJson(userService.isAuthorized(actorUsername, Authorization.HRManager));
-        if (authResponse.success() == false)
+        if (authResponse.success() == false) {
             return new Response(authResponse.message(),false).toJson();
-        else if(authResponse.dataToBoolean() == false)
+        } else if(authResponse.dataToBoolean() == false) {
             return new Response("User isn't authorized to do this",false).toJson();
+        }
         try {
             employeesController.updateBranchWorkingHours(branchId, morningStart, morningEnd, eveningStart, eveningEnd);
             return new Response(true).toJson();

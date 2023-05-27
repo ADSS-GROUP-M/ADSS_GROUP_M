@@ -41,8 +41,9 @@ public class Shift {
     }
     public boolean checkLegality() { // are all constraints of the shift are met?
         for(Role role : neededRoles.keySet()){
-            if (!shiftWorkers.containsKey(role) || shiftWorkers.get(role) == null || shiftWorkers.get(role).size() < neededRoles.get(role))
+            if (!shiftWorkers.containsKey(role) || shiftWorkers.get(role) == null || shiftWorkers.get(role).size() < neededRoles.get(role)) {
                 return false;
+            }
         }
         // Checks if any employee is signed to work in two different roles at the same shift. (According to the requirements, he should be able to request it, but it isn't legal as the final shift configuration)
         List<Employee> duplicateEmployees = getDuplicateEmployees();
@@ -68,19 +69,22 @@ public class Shift {
         Set<Employee> duplicateEmployees = new HashSet<>();
         for(List<Employee> roleWorkers : shiftWorkers.values()) {
             for (Employee employee : roleWorkers) {
-                if (employees.contains(employee))
+                if (employees.contains(employee)) {
                     duplicateEmployees.add(employee);
-                else
+                } else {
                     employees.add(employee);
+                }
             }
         }
         return duplicateEmployees.stream().toList();
     }
     public void approve() throws EmployeeException {
-        if (this.isApproved)
+        if (this.isApproved) {
             throw new EmployeeException("This shift is already approved.");
-        if (!this.checkLegality())
+        }
+        if (!this.checkLegality()) {
             throw new EmployeeException("Notice that the shift constraints are not met! \n" + getLegalityProblems());
+        }
         this.isApproved = true;
     }
 
@@ -105,23 +109,26 @@ public class Shift {
 
     public boolean isEmployeeWorking(Employee employee){
         for(List<Employee> employeesByRole : this.shiftWorkers.values()){
-            if(employeesByRole.contains(employee))
+            if(employeesByRole.contains(employee)) {
                 return true;
+            }
         }
         return false;
     }
 
     public boolean isEmployeeRequesting(Employee employee){
         for(List<Employee> employeesByRole : this.shiftRequests.values()){
-            if(employeesByRole.contains(employee))
+            if(employeesByRole.contains(employee)) {
                 return true;
+            }
         }
         return false;
     }
 
     public boolean isEmployeeRequestingForRole(Employee employee, Role role) {
-        if (!this.shiftRequests.containsKey(role))
+        if (!this.shiftRequests.containsKey(role)) {
             return false;
+        }
         return this.shiftRequests.get(role).contains(employee);
     }
 
@@ -130,8 +137,9 @@ public class Shift {
     //}
 
     public List<Employee> getRoleEmployees(Role role) {
-        if (!shiftWorkers.containsKey(role))
+        if (!shiftWorkers.containsKey(role)) {
             return new ArrayList<>();
+        }
         return this.shiftWorkers.get(role);
     }
 
@@ -140,10 +148,12 @@ public class Shift {
     }
 
     public void setNeededRole(Role role, Integer amount){
-        if(amount > 0)
+        if(amount > 0) {
             this.neededRoles.put(role, amount);
-        else if(amount == 0)// the lack of this condition caused bugs while checking legality when a role is set to amount=0
-            this.neededRoles.remove(role); 
+        } else if(amount == 0)// the lack of this condition caused bugs while checking legality when a role is set to amount=0
+        {
+            this.neededRoles.remove(role);
+        }
     }
 
     public Map<Role,Integer> getNeededRoles(){
@@ -151,28 +161,35 @@ public class Shift {
     }
 
     public void addShiftRequest(Role role, Employee employee) throws EmployeeException {
-        if (!this.neededRoles.containsKey(role))
+        if (!this.neededRoles.containsKey(role)) {
             throw new EmployeeException("Invalid shift request, the role " + role + " is not needed in the shift.");
-        if (!this.shiftRequests.containsKey(role))
+        }
+        if (!this.shiftRequests.containsKey(role)) {
             this.shiftRequests.put(role, new ArrayList<>());
+        }
         this.shiftRequests.get(role).add(employee);
     }
 
     public void removeShiftRequest(Role role, Employee employee) throws EmployeeException {
-        if (!this.shiftRequests.containsKey(role))
+        if (!this.shiftRequests.containsKey(role)) {
             throw new EmployeeException("Invalid shift cancellation request, the given role doesn't have any shift requests in this shift.");
-        if (!this.shiftRequests.get(role).contains(employee))
+        }
+        if (!this.shiftRequests.get(role).contains(employee)) {
             throw new EmployeeException("Invalid shift cancellation request, the given employee didn't have a request for this role in this shift.");
+        }
         this.shiftRequests.get(role).remove(employee);
     }
 
     public void addShiftWorker(Role role, Employee employee) throws EmployeeException {
-        if (!this.neededRoles.containsKey(role))
+        if (!this.neededRoles.containsKey(role)) {
             throw new EmployeeException("Invalid shift employee addition, the role " + role + " is not needed in the shift.");
-        if (!isEmployeeRequestingForRole(employee, role))
+        }
+        if (!isEmployeeRequestingForRole(employee, role)) {
             throw new EmployeeException("Invalid shift employee addition, the employee did not request for this shift in this role.");
-        if (!this.shiftWorkers.containsKey(role))
+        }
+        if (!this.shiftWorkers.containsKey(role)) {
             this.shiftWorkers.put(role, new ArrayList<>());
+        }
         this.shiftWorkers.get(role).add(employee);
     }
 
@@ -229,8 +246,9 @@ public class Shift {
     }
 
     public Employee getShiftManager(){
-        if (shiftWorkers.containsKey(Role.ShiftManager) && !shiftWorkers.get(Role.ShiftManager).isEmpty())
+        if (shiftWorkers.containsKey(Role.ShiftManager) && !shiftWorkers.get(Role.ShiftManager).isEmpty()) {
             return shiftWorkers.get(Role.ShiftManager).get(0);
+        }
         //for(Employee e: this.employees.keySet()){
         //    for(Role r : this.employees.get(e)){
         //        if(r == Role.ShiftManager){

@@ -24,31 +24,35 @@ public class ProductDiscountSupplier {
         return dateToValidate.isAfter(startDate) && dateToValidate.isBefore(endDate);
     }
     public double getDiscountPerDate(LocalDateTime dateToValidate, String catalog_number){
-        if(isDateInRange(dateToValidate) && catalog_number.equals(this.catalog_number))
+        if(isDateInRange(dateToValidate) && catalog_number.equals(this.catalog_number)) {
             return discount;
-        else
+        } else {
             return -1;
+        }
     }
     public double getDiscount(String catalog_number){
-        if(catalog_number.equals(this.catalog_number))
+        if(catalog_number.equals(this.catalog_number)) {
             return discount;
-        else
+        } else {
             return -1;
+        }
     }
 
     public Boolean isDateInRange(LocalDateTime startDate, LocalDateTime endDate){
         return isDateInRange(startDate) && isDateInRange(endDate);
     }
     public double getDiscountInRange(LocalDateTime startDate, LocalDateTime endDate){
-        if(isDateInRange(startDate) && isDateInRange(endDate))
+        if(isDateInRange(startDate) && isDateInRange(endDate)) {
             return discount;
-        else
+        } else {
             return -1;
+        }
     }
 
     public List<ProductDiscountSupplier> addDiscountSupplier(List<ProductDiscountSupplier> discountSuppliersList,LocalDateTime startDate, LocalDateTime endDate, String catalog_number){
-        if(isDateInRange(startDate,endDate) && catalog_number.equals(this.catalog_number))
+        if(isDateInRange(startDate,endDate) && catalog_number.equals(this.catalog_number)) {
             discountSuppliersList.add(this);
+        }
         return discountSuppliersList;
     }
 

@@ -6,6 +6,7 @@ import businessLayer.suppliersModule.DeliveryAgreements.DeliveryByInvitation;
 import businessLayer.suppliersModule.DeliveryAgreements.DeliveryFixedDays;
 import dataAccessLayer.suppliersModule.OrderHistoryDataMappers.OrderHistoryDataMapper;
 import exceptions.DalException;
+import exceptions.SupplierException;
 
 import java.sql.SQLException;
 import java.util.*;
@@ -40,7 +41,7 @@ public class OrderController {
      * @param order maps between productId to the amount to be ordered
      * @return map between supplier to the products he supplies from the order
      */
-    public Map<String, Pair<Map<String, Integer>, Double>> order(Map<String, Integer> order, Branch branch) throws SQLException {
+    public Map<String, Pair<Map<String, Integer>, Double>> order(Map<String, Integer> order, Branch branch) throws SupplierException {
         List<Supplier> suppliers = supplierController.getCopyOfSuppliers();
         Map<String, Map<Supplier, Integer>> cantBeOrderedByOneSupplier = findProductsWithoutSupplierToFullySupply(order, suppliers);
         Map<String, Integer> notOneSupplierOrder = new HashMap<>();
@@ -53,13 +54,15 @@ public class OrderController {
         Map<Supplier, Map<String, Integer>> finalOrder = new HashMap<>();
         for(Supplier supplier : fullProductPerSupplier.keySet()){
             Map<String, Integer> supplierOrder = new HashMap<>();
-            for(String catalogNumber : fullProductPerSupplier.get(supplier))
+            for(String catalogNumber : fullProductPerSupplier.get(supplier)) {
                 supplierOrder.put(catalogNumber, order.get(catalogNumber));
+            }
             finalOrder.put(supplier, supplierOrder);
         }
         for(Supplier supplier : notOneSupplierProductsOrder.keySet()){
-            if(!finalOrder.containsKey(supplier))
+            if(!finalOrder.containsKey(supplier)) {
                 finalOrder.put(supplier, new HashMap<>());
+            }
             for(String catalogNumber : notOneSupplierProductsOrder.get(supplier).keySet()){
                 int amountForSupplier = notOneSupplierProductsOrder.get(supplier).get(catalogNumber);
                 finalOrder.get(supplier).put(catalogNumber, amountForSupplier);
@@ -94,13 +97,15 @@ public class OrderController {
             Comparator<Supplier> supplierComparator = (s1, s2) ->
             {
                 if(orderOfFullyProducts.get(s1) == null){
-                    if(orderOfFullyProducts.get(s2) != null)
+                    if(orderOfFullyProducts.get(s2) != null) {
                         return 1;
+                    }
                     return 0;
                 }
                 if(orderOfFullyProducts.get(s2) == null){
-                    if(orderOfFullyProducts.get(s1) != null)
+                    if(orderOfFullyProducts.get(s1) != null) {
                         return -1;
+                    }
                     return 0;
                 }
                 //sort by the amount of products they are supplying
@@ -111,16 +116,20 @@ public class OrderController {
                     return 1;
                 }
                 //sort by the amount of not-full-amount-products they can supply
-                if(cantBeOrderedByOneSupplier.get(productId).get(s1) > cantBeOrderedByOneSupplier.get(productId).get(s2))
+                if(cantBeOrderedByOneSupplier.get(productId).get(s1) > cantBeOrderedByOneSupplier.get(productId).get(s2)) {
                     return -1;
-                if(cantBeOrderedByOneSupplier.get(productId).get(s1) < cantBeOrderedByOneSupplier.get(productId).get(s2))
+                }
+                if(cantBeOrderedByOneSupplier.get(productId).get(s1) < cantBeOrderedByOneSupplier.get(productId).get(s2)) {
                     return 1;
+                }
                 if(computePriceAfterDiscount(s1, new HashMap<>(){{put(productId, Math.min(notOneSupplierProductsOrder.get(productId), suppliersCanSupply.get(s1)));}})
-                > computePriceAfterDiscount(s2, new HashMap<>(){{put(productId, Math.min(notOneSupplierProductsOrder.get(productId), suppliersCanSupply.get(s2)));}}))
+                > computePriceAfterDiscount(s2, new HashMap<>(){{put(productId, Math.min(notOneSupplierProductsOrder.get(productId), suppliersCanSupply.get(s2)));}})) {
                     return 1;
+                }
                 if(computePriceAfterDiscount(s1, new HashMap<>(){{put(productId, Math.min(notOneSupplierProductsOrder.get(productId), suppliersCanSupply.get(s1)));}})
-                < computePriceAfterDiscount(s2, new HashMap<>(){{put(productId, Math.min(notOneSupplierProductsOrder.get(productId), suppliersCanSupply.get(s2)));}}))
+                < computePriceAfterDiscount(s2, new HashMap<>(){{put(productId, Math.min(notOneSupplierProductsOrder.get(productId), suppliersCanSupply.get(s2)));}})) {
                     return -1;
+                }
 
                 return 0;
             };
@@ -131,8 +140,9 @@ public class OrderController {
             int amountLeft = notOneSupplierProductsOrder.get(productId);
             for (Supplier supplier : sortedSupplierList){
                 if(amountLeft > 0) {
-                    if(order.get(supplier) == null)
+                    if(order.get(supplier) == null) {
                         order.put(supplier, new HashMap<>());
+                    }
                     int canSupply = Math.min(suppliersCanSupply.get(supplier), amountLeft);
                     order.get(supplier).put(productId, canSupply);
                     amountLeft -= canSupply;
@@ -149,7 +159,7 @@ public class OrderController {
      * @return map between product as described to map of suppliers who supply the product and how much they can supply
      * @throws RuntimeException iff there is a product in the order that cant be supplied fully
      */
-    private Map<String, Map<Supplier, Integer>> findProductsWithoutSupplierToFullySupply(Map<String, Integer> order, List<Supplier> suppliers){
+    private Map<String, Map<Supplier, Integer>> findProductsWithoutSupplierToFullySupply(Map<String, Integer> order, List<Supplier> suppliers) throws SupplierException {
         Map<String, Map<Supplier, Integer>> productToSuppliers = new HashMap<>();
         for(Map.Entry<String, Integer> productOrder : order.entrySet()){
             String catalogNumber = productOrder.getKey();
@@ -160,19 +170,22 @@ public class OrderController {
             for(Supplier supplier : suppliers){
                 try {
                     if(agreementController.productExist(supplier.getBnNumber(), catalogNumber)){
-                        if(agreementController.getNumberOfUnits(supplier.getBnNumber(), catalogNumber) >= amount)
+                        if(agreementController.getNumberOfUnits(supplier.getBnNumber(), catalogNumber) >= amount) {
                             found = true;
-                        else
+                        } else {
                             suppliersCanSupply.put(supplier, agreementController.getNumberOfUnits(supplier.getBnNumber(), catalogNumber));
+                        }
                         totalAmountCanBeOrdered += agreementController.getNumberOfUnits(supplier.getBnNumber(), catalogNumber);
                     }
                 }
                 catch (Exception ignored){}
             }
-            if(!found)
+            if(!found) {
                 productToSuppliers.put(catalogNumber, suppliersCanSupply);
-            if(totalAmountCanBeOrdered < amount)
-                throw new RuntimeException("order failed - product - " + catalogNumber + " cant be fully ordered");
+            }
+            if(totalAmountCanBeOrdered < amount) {
+                throw new SupplierException("order failed - product - " + catalogNumber + " cant be fully ordered");
+            }
         }
         return productToSuppliers;
     }
@@ -186,8 +199,9 @@ public class OrderController {
      */
 
     private Map<Supplier, List<String>> divideOrder(Map<String, Integer> order, List<String> alreadySupplied, List<Supplier> suppliersToUse){
-        if(suppliersToUse.size() == 0 | alreadySupplied.size() == order.size())
+        if(suppliersToUse.size() == 0 | alreadySupplied.size() == order.size()) {
             return new HashMap<>();
+        }
         Map<Supplier, List<String>> suppliersCanSupply = mapSuppliersToProducts(order, alreadySupplied, suppliersToUse);
         Supplier maxCanBeOrderedSupplier = suppliersCanSupply.keySet().stream().reduce(suppliersToUse.get(0) ,(acc, s) ->
                 suppliersCanSupply.get(acc).size() > suppliersCanSupply.get(s).size() ? acc : s);
@@ -198,8 +212,9 @@ public class OrderController {
         for(Supplier supplier : suppliers){
             cheapestPrice = computePriceAfterDiscount(cheapest, order, suppliersCanSupply.get(cheapest));
             double sPrice = computePriceAfterDiscount(supplier,order,suppliersCanSupply.get(supplier));
-            if(sPrice < cheapestPrice)
+            if(sPrice < cheapestPrice) {
                 cheapest = supplier;
+            }
         }
         //remove max supplier's products from the order
         List<String> maxProductsCanBeSupplied = suppliersCanSupply.get(cheapest);
@@ -226,8 +241,9 @@ public class OrderController {
             for(Map.Entry<String, Integer> productOrder : order.entrySet()){
                 String productId = productOrder.getKey();
                 int amount = productOrder.getValue();
-                if(!alreadySupplied.contains(productId) && suppliersProduct.get(productId) != null && suppliersProduct.get(productId).getNumberOfUnits() >= amount)
+                if(!alreadySupplied.contains(productId) && suppliersProduct.get(productId) != null && suppliersProduct.get(productId).getNumberOfUnits() >= amount) {
                     productsCanBeSupplied.add(productId);
+                }
             }
             suppliersCanSupply.put(supplier, productsCanBeSupplied);
         }
@@ -263,7 +279,7 @@ public class OrderController {
      * @param productsToSupply the products of the order the supplier can supply
      * @return the price of the products the supplier can supply after discounts
      * @throws SQLException
-     * @throws DalException
+     * @throws SupplierException
      */
 
     private double computePriceAfterDiscount(Supplier supplier, Map<String, Integer> order, List<String> productsToSupply){
@@ -288,7 +304,7 @@ public class OrderController {
         }
     }
 
-    private int getDay(String bnNumber) throws SQLException {
+    private int getDay(String bnNumber) throws SupplierException {
         int dayNow = Calendar.DAY_OF_WEEK;
         DeliveryAgreement deliveryAgreement = agreementController.getDeliveryAgreement(bnNumber);
         if(deliveryAgreement instanceof DeliveryByInvitation){
@@ -297,27 +313,32 @@ public class OrderController {
         }
         else {
             DeliveryFixedDays deliveryFixedDays = (DeliveryFixedDays) deliveryAgreement;
-            if(deliveryFixedDays.getDaysOfTheWeek().contains(dayNow))
+            if(deliveryFixedDays.getDaysOfTheWeek().contains(dayNow)) {
                 return 0;
+            }
             //try to look for day greater than now, but in this week
             int dayChosen = dayNow;
             int maxDay = 7;
-            for(int day : deliveryFixedDays.getDaysOfTheWeek())
+            for(int day : deliveryFixedDays.getDaysOfTheWeek()) {
                 if(day > dayNow && day < maxDay) {
                     dayChosen = day;
                     maxDay = day;
                 }
-            if(dayChosen != dayNow)
+            }
+            if(dayChosen != dayNow) {
                 return dayChosen - dayChosen;
+            }
             //try to look for day smaller than now, that in next week
-            for(int day : deliveryFixedDays.getDaysOfTheWeek())
-                if(day < dayChosen)
+            for(int day : deliveryFixedDays.getDaysOfTheWeek()) {
+                if(day < dayChosen) {
                     dayChosen = day;
+                }
+            }
             return (dayChosen + 7) - dayNow;
         }
     }
 
-    public void orderDueToShortage(Map<String, Integer> order, Branch branch) throws SQLException, DalException {
+    public void orderDueToShortage(Map<String, Integer> order, Branch branch) throws SupplierException {
         List<Supplier> suppliers = supplierController.getCopyOfSuppliers();
         allProductsCanBeSupplied(order, suppliers);
         Map<String, Map<String, Integer>> suppliersToProducts = new HashMap<>();
@@ -325,25 +346,26 @@ public class OrderController {
             String catalogNumber = product.getKey();
             int quantity = product.getValue();
             suppliers = supplierController.getCopyOfSuppliers();
-            List<Supplier> suppliersSupplyThisProduct = suppliers.stream().filter((Supplier s) -> {
-                try {
-                    return agreementController.productExist(s.getBnNumber(), catalogNumber);
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
+            List<Supplier> suppliersSupplyThisProduct = new LinkedList<>();
+            for(Supplier s : suppliers){
+                if(agreementController.productExist(s.getBnNumber(), catalogNumber)){
+                    suppliersSupplyThisProduct.add(s);
                 }
-            }).collect(Collectors.toList());
+            }
             Map<String, Integer> suppliersToQuantity = order.keySet().size() == 1 ? divideProductBetweenSuppliers(catalogNumber, quantity, suppliersSupplyThisProduct, true) : divideProductBetweenSuppliers(catalogNumber, quantity, suppliersSupplyThisProduct, false);
             for(Map.Entry<String, Integer> supplierToQuantity : suppliersToQuantity.entrySet()){
                 String bnNumber = supplierToQuantity.getKey();
                 int quantityOfSupplier = supplierToQuantity.getValue();
-                if(!suppliersToProducts.containsKey(bnNumber))
+                if(!suppliersToProducts.containsKey(bnNumber)) {
                     suppliersToProducts.put(bnNumber, new HashMap<>());
+                }
                 suppliersToProducts.get(bnNumber).put(catalogNumber, quantityOfSupplier);
             }
         }
         //ORDER FLOW - TRANSPORT, ADD TO ORDER HISTORY...
-        for(Map.Entry<String, Map<String, Integer>> supplierToProduct : suppliersToProducts.entrySet())
+        for(Map.Entry<String, Map<String, Integer>> supplierToProduct : suppliersToProducts.entrySet()) {
             addSuppliersOrder(supplierToProduct.getKey(), new Order(supplierToProduct.getValue()));
+        }
 
     }
 
@@ -356,9 +378,10 @@ public class OrderController {
      * @return map between suppliers and the quantities of the product they will supply
      * @throws SQLException
      */
-    private Map<String, Integer> divideProductBetweenSuppliers(String catalogNumber, int quantity, List<Supplier> suppliersToUse, boolean oneProductOrder) throws SQLException, DalException {
-        if(quantity <= 0)
+    private Map<String, Integer> divideProductBetweenSuppliers(String catalogNumber, int quantity, List<Supplier> suppliersToUse, boolean oneProductOrder) throws SupplierException {
+        if(quantity <= 0) {
             return new HashMap<>();
+        }
 
         Supplier supplierShortest = suppliersToUse.get(0);
         for(Supplier supplier : suppliersToUse){
@@ -373,37 +396,42 @@ public class OrderController {
             if(quantityCanSupplyShortest >= quantity && quantityCanSupplySupplier >= quantity) {
                 double supplierProductPriceAfterDiscount = billOfQuantitiesController.getProductPriceAfterDiscount(supplier.getBnNumber(), catalogNumber, quantity, supplierProductPrice * quantity);
                 double shortestProductPriceAfterDiscount = billOfQuantitiesController.getProductPriceAfterDiscount(supplierShortest.getBnNumber(), catalogNumber, quantity, shortestProductPrice * quantity);
-                if(oneProductOrder)
+                if(oneProductOrder) {
                     supplierCheaper = billOfQuantitiesController.getPriceAfterDiscounts(supplier.getBnNumber(), quantity, supplierProductPriceAfterDiscount) < billOfQuantitiesController.getPriceAfterDiscounts(supplierShortest.getBnNumber(), quantity, shortestProductPriceAfterDiscount);
-                else
+                } else {
                     supplierCheaper = supplierProductPriceAfterDiscount < shortestProductPriceAfterDiscount;
+                }
             }
             boolean supplierByPriorityOfTime = getDay(supplier.getBnNumber()) < getDay(supplierShortest.getBnNumber());
             boolean supplierByPriorityOfAmount = daysEquals && shortestSupplyLessThanNeeded && supplierCanSupplyMore;
             boolean supplierByPriorityOfPrice = daysEquals && quantityCanSupplySupplier == quantityCanSupplyShortest && supplierCheaper;
-            if(supplierByPriorityOfTime || supplierByPriorityOfAmount || supplierByPriorityOfPrice)
+            if(supplierByPriorityOfTime || supplierByPriorityOfAmount || supplierByPriorityOfPrice) {
                 supplierShortest = supplier;
+            }
         }
         int quantityCanSupply = agreementController.getNumberOfUnits(supplierShortest.getBnNumber(), catalogNumber);
 
         suppliersToUse.remove(supplierShortest);
         Map<String, Integer> supplierToQuantity = divideProductBetweenSuppliers(catalogNumber, quantity - quantityCanSupply, suppliersToUse, oneProductOrder);
-        if(quantityCanSupply >= quantity)
+        if(quantityCanSupply >= quantity) {
             supplierToQuantity.put(supplierShortest.getBnNumber(), quantity);
-        else
+        } else {
             supplierToQuantity.put(supplierShortest.getBnNumber(), quantityCanSupply);
+        }
         return supplierToQuantity;
     }
 
-    private Map<String, Integer> mapSuppliersToDay(String catalogNumber, List<Supplier> suppliersToUse) throws SQLException {
+    private Map<String, Integer> mapSuppliersToDay(String catalogNumber, List<Supplier> suppliersToUse) throws SupplierException {
         Map<String, Integer> supplierToDay = new HashMap<>();
-        for(Supplier supplier : suppliersToUse)
-            if(agreementController.productExist(supplier.getBnNumber(), catalogNumber))
+        for(Supplier supplier : suppliersToUse) {
+            if(agreementController.productExist(supplier.getBnNumber(), catalogNumber)) {
                 supplierToDay.put(supplier.getBnNumber(), getDay(supplier.getBnNumber()));
+            }
+        }
         return supplierToDay;
     }
 
-    private void allProductsCanBeSupplied(Map<String, Integer> order, List<Supplier> suppliers){
+    private void allProductsCanBeSupplied(Map<String, Integer> order, List<Supplier> suppliers) throws SupplierException {
         for(Map.Entry<String, Integer> productOrder : order.entrySet()){
             String catalogNumber = productOrder.getKey();
             int amount = productOrder.getValue();
@@ -411,13 +439,15 @@ public class OrderController {
             int totalAmountCanBeOrdered = 0;
             for(Supplier supplier : suppliers){
                 try {
-                    if(agreementController.productExist(supplier.getBnNumber(), catalogNumber))
+                    if(agreementController.productExist(supplier.getBnNumber(), catalogNumber)) {
                         totalAmountCanBeOrdered += agreementController.getNumberOfUnits(supplier.getBnNumber(), catalogNumber);
+                    }
                 }
                 catch (Exception ignored){}
             }
-            if(totalAmountCanBeOrdered < amount)
-                throw new RuntimeException("order failed - product - " + catalogNumber + " cant be fully ordered");
+            if(totalAmountCanBeOrdered < amount) {
+                throw new SupplierException("order failed - product - " + catalogNumber + " cant be fully ordered");
+            }
         }
     }
 
@@ -426,12 +456,20 @@ public class OrderController {
         return 0;
     }
 
-    public void addSuppliersOrder(String bnNumber, Order order) throws SQLException {
-        orderHistoryDataMapper.insert(bnNumber, order);
+    public void addSuppliersOrder(String bnNumber, Order order) throws SupplierException {
+        try {
+            orderHistoryDataMapper.insert(bnNumber, order);
+        } catch (DalException e) {
+            throw new SupplierException(e.getMessage(),e);
+        }
     }
 
-    public List<Order> getOrderHistory(String bnNumber) throws SQLException {
-        return orderHistoryDataMapper.getOrderHistory(bnNumber);
+    public List<Order> getOrderHistory(String bnNumber) throws SupplierException {
+        try {
+            return orderHistoryDataMapper.getOrderHistory(bnNumber);
+        } catch (DalException e) {
+            throw new SupplierException(e.getMessage(),e);
+        }
     }
 
 }

@@ -4,6 +4,7 @@ package serviceLayer.suppliersModule;
 import businessLayer.suppliersModule.*;
 import businessLayer.suppliersModule.DeliveryAgreements.DeliveryAgreement;
 import com.google.gson.Gson;
+import exceptions.SupplierException;
 import utils.Response;
 
 import java.util.List;
@@ -30,7 +31,7 @@ public class SupplierService {
             agreementController.addAgreement(bnNumber, productList, deliveryAgreement);
             return new Response("new Supplier Registered!", true).toJson();
         }
-        catch (Exception e){
+        catch (SupplierException e){
             return Response.getErrorResponse(e).toString();
         }
     }
@@ -40,7 +41,7 @@ public class SupplierService {
             supplierController.removeSupplier(bnNumber);
             return new  Response("supplier was removed", true).toJson();
         }
-        catch (Exception e){
+        catch (SupplierException e){
             return Response.getErrorResponse(e).toString();
         }
     }
@@ -50,7 +51,7 @@ public class SupplierService {
             supplierController.setName(bnNumber, name);
             return new  Response("supplier's name is set!", true).toJson();
         }
-        catch (Exception e){
+        catch (SupplierException e){
             return Response.getErrorResponse(e).toString();
         }
     }
@@ -60,7 +61,7 @@ public class SupplierService {
             supplierController.setBnNumber(bnNumber, newBnNumber);
             return new  Response("supplier's bn number is set!", true).toJson();
         }
-        catch (Exception e){
+        catch (SupplierException e){
             return Response.getErrorResponse(e).toString();
         }
     }
@@ -70,7 +71,7 @@ public class SupplierService {
             supplierController.setBankAccount(bnNumber, bank, branch, accountNumber);
             return new  Response("supplier's bank account is set!", true).toJson();
         }
-        catch (Exception e){
+        catch (SupplierException e){
             return Response.getErrorResponse(e).toString();
         }
     }
@@ -80,7 +81,7 @@ public class SupplierService {
             supplierController.setPaymentMethod(bnNumber, paymentMethod);
             return new  Response("supplier's payment method is set!", true).toJson();
         }
-        catch (Exception e){
+        catch (SupplierException e){
             return Response.getErrorResponse(e).toString();
         }
     }
@@ -90,7 +91,7 @@ public class SupplierService {
             supplierController.removeContactInfo(bnNumber, contactsEmail);
             return new  Response("contact " + contactsEmail + " removed!", true).toJson();
         }
-        catch (Exception e){
+        catch (SupplierException e){
             return Response.getErrorResponse(e).toString();
         }
     }
@@ -100,7 +101,7 @@ public class SupplierService {
             supplierController.addContactInfo(bnNumber, contactName, email, phoneNumber);
             return new  Response("contact info is added!", true).toJson();
         }
-        catch (Exception e){
+        catch (SupplierException e){
             return Response.getErrorResponse(e).toString();
         }
     }
@@ -110,7 +111,7 @@ public class SupplierService {
             supplierController.setContactsEmail(bnNumber, email, newEmail);
             return new  Response("contact email is edited!", true).toJson();
         }
-        catch (Exception e){
+        catch (SupplierException e){
             return Response.getErrorResponse(e).toString();
         }
     }
@@ -120,7 +121,7 @@ public class SupplierService {
             supplierController.setContactsPhoneNumber(bnNumber, email, phoneNumber);
             return new  Response("contact phone number is edited!", true).toJson();
         }
-        catch (Exception e){
+        catch (SupplierException e){
             return Response.getErrorResponse(e).toString();
         }
     }
@@ -132,7 +133,7 @@ public class SupplierService {
             supplierController.addField(bnNumber, field);
             return new  Response("field was added!", true).toJson();
         }
-        catch (Exception e){
+        catch (SupplierException e){
             return Response.getErrorResponse(e).toString();
         }
     }
@@ -142,7 +143,7 @@ public class SupplierService {
             supplierController.removeField(bnNumber, field);
             return new Response("field was removed!", true).toJson();
         }
-        catch (Exception e){
+        catch (SupplierException e){
             return Response.getErrorResponse(e).toString();
         }
     }
@@ -151,7 +152,7 @@ public class SupplierService {
         try {
             return new  Response(supplierController.getSupplier(bnNumber).toString() + agreementController.toString(bnNumber) + billOfQuantitiesController.toString(bnNumber), true).toJson();
         }
-        catch (Exception e){
+        catch (SupplierException e){
             return Response.getErrorResponse(e).toString();
         }
     }
@@ -160,7 +161,7 @@ public class SupplierService {
         try {
             return new  Response(supplierController.getName(bnNumber), true).toJson();
         }
-        catch (Exception e){
+        catch (SupplierException e){
             return Response.getErrorResponse(e).toString();
         }
     }
@@ -185,7 +186,7 @@ public class SupplierService {
 //            setDiscountOnTotalOrder("12345", 1500, new PercentageDiscount(20));
 //            return gson.toJson(new  Response("data is loaded!", false));
 //        }
-//        catch (Exception e){
+//        catch (SupplierException e){
 //            return gson.toJson(new  Response(e.getMessage(), true));
 //        }
         return null;

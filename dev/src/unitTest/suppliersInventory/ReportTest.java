@@ -6,6 +6,7 @@ import businessLayer.inventoryModule.CategoryController;
 import businessLayer.inventoryModule.ProductController;
 import businessLayer.inventoryModule.Record;
 import dataAccessLayer.DalFactory;
+import exceptions.InventoryException;
 import exceptions.TransportException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -87,7 +88,7 @@ public class ReportTest {
 //        subCategoriesList.add("yogurt");
 //        subCategoriesList.add("milk");
 //        categoryController.createCategory(branch, subCategoriesList, "Dairy products");
-        } catch (TransportException e) {
+        } catch (TransportException | InventoryException e) {
             fail(e);
         }
     }
@@ -97,7 +98,12 @@ public class ReportTest {
     @Test
     public void getShortageReport() {
 //        productController.updateProduct(branch,null,catalog_number,null,-1,6);
-        List<Record> records = productController.getInventoryShortages(branch);
+        List<Record> records = null;
+        try {
+            records = productController.getInventoryShortages(branch);
+        } catch (InventoryException e) {
+            fail(e);
+        }
         int index = 1;
         for (Record record: records){
             System.out.println("Shortage repost: " + record.toStringProduct());
@@ -127,7 +133,12 @@ public class ReportTest {
     public void getDefectiveProductReport() {
 //        productController.updateProductItem(branch,1,"3",catalog_number,-1,null,-1,-1,-1,null);
         int index = 1;
-        List<Record> records = productController.getDefectiveProducts(branch);
+        List<Record> records = null;
+        try {
+            records = productController.getDefectiveProducts(branch);
+        } catch (InventoryException e) {
+            fail(e);
+        }
         for (Record record: records){
             System.out.println("Defective repost: " + record.toString());
             assertEquals("Defective repost not as expected",record.toString(), testResults3.get(index));

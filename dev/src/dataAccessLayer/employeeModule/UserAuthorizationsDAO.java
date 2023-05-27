@@ -94,8 +94,9 @@ public class UserAuthorizationsDAO extends DAOBase<Pair<String,Authorization>> {
     @Deprecated
     @Override
     public Pair<String,Authorization> select(Pair<String,Authorization> object) throws DalException {
-        if(cache.contains(object))
+        if(cache.contains(object)) {
             return object;
+        }
 
         String query = String.format("SELECT * FROM %s WHERE %s = '%s' AND %s = '%s';",
                 TABLE_NAME,

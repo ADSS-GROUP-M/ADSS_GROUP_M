@@ -33,7 +33,7 @@ public class UserService {
         try {
             this.userController.login(username, password);
             return new Response(true).toJson();
-        } catch (Exception e) {
+        } catch (EmployeeException e) {
             return Response.getErrorResponse(e).toJson();
         }
     }
@@ -42,7 +42,7 @@ public class UserService {
         try {
             this.userController.logout(username);
             return new Response(true).toJson();
-        } catch (Exception e) {
+        } catch (EmployeeException e) {
             return Response.getErrorResponse(e).toJson();
         }
     }
@@ -51,7 +51,7 @@ public class UserService {
         try {
             User user = this.userController.getUser(username);
             return new Response(true,user).toJson();
-        } catch (Exception e) {
+        } catch (EmployeeException e) {
             return Response.getErrorResponse(e).toJson();
         }
     }
@@ -59,10 +59,12 @@ public class UserService {
     public String createUser(String actorUsername, String username, String password) {
         try {
             if(!userController.isAuthorized(actorUsername, Authorization.HRManager)) // Throws an exception if actor user is not found
-                throw new Exception("User " + actorUsername + " is not authorized to create users.");
+            {
+                return new Response("User " + actorUsername + " is not authorized to create users.",false).toJson();
+            }
             userController.createUser(username, password);
             return new Response(true).toJson();
-        } catch (Exception e) {
+        } catch (EmployeeException e) {
             return Response.getErrorResponse(e).toJson();
         }
     }
@@ -70,10 +72,12 @@ public class UserService {
     public String createManagerUser(String actorUsername, String username, String password) {
         try {
             if(!userController.isAuthorized(actorUsername, Authorization.HRManager)) // Throws an exception if actor user is not found
-                throw new Exception("User " + actorUsername + " is not authorized to create manager users.");
+            {
+                return new Response("User " + actorUsername + " is not authorized to create manager users.",false).toJson();
+            }
             userController.createManagerUser(username, password);
             return new Response(true).toJson();
-        } catch (Exception e) {
+        } catch (EmployeeException e) {
             return Response.getErrorResponse(e).toJson();
         }
     }
@@ -82,7 +86,7 @@ public class UserService {
         try {
             boolean result = userController.isAuthorized(username, Authorization.valueOf(authorization));
             return new Response(true,result).toJson();
-        } catch (Exception e) {
+        } catch (EmployeeException e) {
             return Response.getErrorResponse(e).toJson();
         }
     }
@@ -91,7 +95,7 @@ public class UserService {
         try {
             boolean result = userController.isAuthorized(username, authorization);
             return new Response(true,result).toJson();
-        } catch (Exception e) {
+        } catch (EmployeeException e) {
             return Response.getErrorResponse(e).toJson();
         }
     }
@@ -101,18 +105,20 @@ public class UserService {
             List<Authorization> authorizations = userController.getUserAuthorizations(username);
             List<String> result = authorizations.stream().map(Objects::toString).collect(Collectors.toList());
             return new Response(true,result).toJson();
-        } catch (Exception e) {
+        } catch (EmployeeException e) {
             return Response.getErrorResponse(e).toJson();
         }
     }
 
     public String authorizeUser(String actorUsername, String username, String authorization) {
         try {
-            if(!userController.isAuthorized(actorUsername, Authorization.HRManager)) // Throws an exception if actor user is not found
-                throw new Exception("User " + actorUsername + " is not authorized to authorize other users.");
+            if (!userController.isAuthorized(actorUsername, Authorization.HRManager)) // Throws an exception if actor user is not found
+            {
+                return new Response("User " + actorUsername + " is not authorized to authorize other users.", false).toJson();
+            }
             userController.authorizeUser(username, Authorization.valueOf(authorization));
             return new Response(true).toJson();
-        } catch (Exception e) {
+        } catch (EmployeeException e) {
             return Response.getErrorResponse(e).toJson();
         }
     }

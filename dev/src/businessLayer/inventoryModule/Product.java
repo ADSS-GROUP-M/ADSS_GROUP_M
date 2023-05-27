@@ -1,6 +1,7 @@
 package businessLayer.inventoryModule;
 
 import businessLayer.businessLayerUsage.Branch;
+import exceptions.InventoryException;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -13,7 +14,6 @@ public class Product {
     private  String name;
     private String manufacturer;
     private double originalStorePrice;
-//    private Category category;
     private final List<Category> subCategory;
     //default value -1
     private int notificationMin;
@@ -33,11 +33,12 @@ public class Product {
         this.branch = branch;
     }
 
-    public ProductItem getProduct(String serial_number){
-        if(productItems.containsKey(serial_number))
+    public ProductItem getProduct(String serial_number) throws InventoryException {
+        if(productItems.containsKey(serial_number)) {
             return productItems.get(serial_number);
-        else
-            throw new RuntimeException(String.format("Product does not exist with the ID : %s",serial_number));
+        } else {
+            throw new InventoryException(String.format("Product does not exist with the ID : %s",serial_number));
+        }
     }
     public void reportAsDefective(List<String> ItemsSerialNumber){
         for(String defectiveSerialNumber: ItemsSerialNumber){
@@ -61,8 +62,9 @@ public class Product {
     public List<ProductItem> getDefectiveProductItems(){
         List<ProductItem> defectiveList = new ArrayList<ProductItem>();
         for(ProductItem product: productItems.values()){
-            if(product.isDefective())
+            if(product.isDefective()) {
                 defectiveList.add(product);
+            }
         }
         return defectiveList;
     }
@@ -76,8 +78,9 @@ public class Product {
     public Map<String, ProductItem> getProductItems(){return this.productItems;}
 
     public Boolean isProductLack(){
-        if(getStoreAmount()+getWarehouseAmount() < notificationMin)
+        if(getStoreAmount()+getWarehouseAmount() < notificationMin) {
             return true;
+        }
         return false;
     }
 
@@ -88,8 +91,9 @@ public class Product {
         LocalDateTime lastWeek = current.minusDays(1);
         for(ProductItem productItem: productItems.values()){
             if(productItem.isSold()){
-                if(productItem.getSoldDate().isAfter(lastWeek))
+                if(productItem.getSoldDate().isAfter(lastWeek)) {
                     calc++;
+                }
             }
         }
         return calc;
@@ -105,16 +109,18 @@ public class Product {
     public int getStoreAmount(){
         int amount =0;
         for(ProductItem productItem: productItems.values()){
-            if(productItem.getLocation().equals("store"))
+            if(productItem.getLocation().equals("store")) {
                 amount++;
+            }
         }
         return amount;
     }
     public int getWarehouseAmount(){
         int amount =0;
         for(ProductItem productItem: productItems.values()){
-            if(productItem.getLocation().equals("warehouse"))
+            if(productItem.getLocation().equals("warehouse")) {
                 amount++;
+            }
         }
         return amount;
     }

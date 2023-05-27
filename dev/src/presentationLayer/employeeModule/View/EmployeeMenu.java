@@ -36,9 +36,9 @@ public class EmployeeMenu implements Menu {
         String input = scanner.nextLine();
         String[] command = input.split(" ", -1);
         String output;
-        if (command.length == 0)
+        if (command.length == 0) {
             output = "Invalid command, command cannot be empty.";
-        else if (command[0].equals("exit") && command.length == 1) {
+        } else if (command[0].equals("exit") && command.length == 1) {
             output = "Exiting CLI.";
             MenuManager.terminate();
         }
@@ -131,8 +131,9 @@ public class EmployeeMenu implements Menu {
                 output = "Invalid input, expected a date in the form " + DateUtils.DATE_PATTERN + ".";
             }
         }
-        else
+        else {
             output = "Invalid command was given, try again.";
+        }
         System.out.println(output);
         return this;
     }

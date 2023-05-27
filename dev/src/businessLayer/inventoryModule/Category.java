@@ -19,21 +19,24 @@ public class Category {
         this.subCategories = new HashMap<String, Category>();
         this.productsRelated = new ArrayList<Product>();
         if(!subcategories.isEmpty()){
-            for(Category category: subcategories)
+            for(Category category: subcategories) {
                 subCategories.put(category.getCategoryName(), category);
+            }
         }
     }
 
     public void addProductToCategory(Product product){
-        if(!isProductIDRelated(product.getCatalogNumber(),product.getBranch()))
+        if(!isProductIDRelated(product.getCatalogNumber(),product.getBranch())) {
             productsRelated.add(product);
+        }
     }
 
 
     public Boolean isProductIDRelated(String catalog_number, Branch branch){
         for(Product product: productsRelated){
-            if(product.getBranch() == branch && product.getCatalogNumber().equals(catalog_number))
+            if(product.getBranch() == branch && product.getCatalogNumber().equals(catalog_number)) {
                 return true;
+            }
         }
         return false;
     }
@@ -45,8 +48,9 @@ public class Category {
     public List<Product> getProductsRelated(Branch branch){
         List<Product> productsRelatedList = new ArrayList<Product>();
         for(Product product : productsRelated){
-            if(product.getBranch() == branch)
+            if(product.getBranch() == branch) {
                 productsRelatedList.add(product);
+            }
         }
         return productsRelatedList;
     }
@@ -72,21 +76,23 @@ public class Category {
 
     public Map<String, Category> getSubcategories(){return subCategories;}
     public void removeSubCategory(String subcategoryName){
-        if(isSubcategory(subcategoryName))
+        if(isSubcategory(subcategoryName)) {
             subCategories.remove(subcategoryName);
+        }
     }
 
     public void addSubcategories(List<Category> subcategories){
         if(!subcategories.isEmpty()){
-            for(Category category: subcategories)
+            for(Category category: subcategories) {
                 subCategories.put(category.getCategoryName(), category);
+            }
         }
     }
 
     private String  getSubCategoriesName(){
-        if(subCategories.isEmpty())
+        if(subCategories.isEmpty()) {
             return "there is no subCategory";
-        else{
+        } else{
             StringBuilder ans = new StringBuilder("[ ");
             for(Category subcategory: subCategories.values()){
                 ans.append(subcategory.getCategoryName()).append(" ,");

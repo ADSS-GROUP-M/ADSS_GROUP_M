@@ -5,6 +5,7 @@ import businessLayer.inventoryModule.CategoryController;
 import businessLayer.inventoryModule.DiscountController;
 import businessLayer.inventoryModule.ProductController;
 import businessLayer.inventoryModule.Record;
+import exceptions.InventoryException;
 import utils.Response;
 
 import java.time.LocalDateTime;
@@ -26,7 +27,7 @@ public class StockService {
         try {
             productController.createProduct(catalog_number, Branch.valueOf(branch), name, manufacturer, store_price);
             return new Response("Product added successfully",true).toJson();
-        } catch (Exception e) {
+        } catch (InventoryException e) {
             return new Response("Error adding product type: " + e.getMessage(),false).toJson();
         }
     }
@@ -38,7 +39,7 @@ public class StockService {
 //            if(productController.isProductLack(Branch.valueOf(branch),catalog_number))
 //                alert = String.format(ALERT,catalog_number);
             return new Response("Product added successfully" + alert,true).toJson();
-        } catch (Exception e) {
+        } catch (InventoryException e) {
             return new Response("Error updating product type: " + e.getMessage(),false).toJson();
         }
     }
@@ -65,7 +66,7 @@ public class StockService {
             } else {
                 return new Response("Invalid input parameters",false).toJson();
             }
-        } catch (Exception e) {
+        } catch (InventoryException e) {
             return new Response("Error updating product type: " + e.getMessage(),false).toJson();
         }
     }
@@ -105,7 +106,7 @@ public class StockService {
             } else {
                 return new Response("Invalid input parameters",false).toJson();
             }
-        } catch (Exception e) {
+        } catch (InventoryException e) {
             return new Response("Error updating product type: " + e.getMessage(),false).toJson();
         }
     }
@@ -115,14 +116,14 @@ public class StockService {
     public String getDefectiveProducts(Branch branch) {
         try {
             return new Response(true,productController.getDefectiveProducts(branch)).toJson();
-        } catch (Exception e) {
+        } catch (InventoryException e) {
             return new Response("Error creating category: " + e.getMessage(),false).toJson();
         }
     }
     public String getShortagesProducts(Branch branch) {
         try {
             return new Response(true,productController.getInventoryShortages(branch)).toJson();
-        } catch (Exception e) {
+        } catch (InventoryException e) {
             return new Response("Error creating category: " + e.getMessage(),false).toJson();
         }
     }
@@ -132,7 +133,7 @@ public class StockService {
         try {
             discountController.createCategoryDiscount(name, branch, discount, startDate, endDate);
             return new Response("discount added successfully",true).toJson();
-        } catch (Exception e) {
+        } catch (InventoryException e) {
             return new Response("Error updating discount: " + e.getMessage(),false).toJson();
         }
     }
@@ -141,7 +142,7 @@ public class StockService {
         try {
             discountController.createStoreDiscount(catalog_number, branch, discount, startDate, endDate);
             return new Response("discount added successfully",true).toJson();
-        } catch (Exception e) {
+        } catch (InventoryException e) {
             return new Response("Error updating discount: " + e.getMessage(),false).toJson();
         }
     }
@@ -149,7 +150,7 @@ public class StockService {
     public String getProductDetails(String catalog_num, String serial_num, String branch) {
         try {
             return new Response(true,productController.getProductDetails(Branch.valueOf(branch), catalog_num, serial_num)).toJson();
-        } catch (Exception e) {
+        } catch (InventoryException e) {
             return new Response("Error updating discount: " + e.getMessage(),false).toJson();
         }
     }

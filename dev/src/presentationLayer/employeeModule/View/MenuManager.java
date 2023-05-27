@@ -10,8 +10,9 @@ public class MenuManager {
     }
 
     public void run() {
-        while (!finished)
+        while (!finished) {
             menu = menu.run();
+        }
     }
 
     public static void terminate() {

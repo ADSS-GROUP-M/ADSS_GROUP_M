@@ -89,8 +89,9 @@ public class EmployeeRolesDAO extends DAOBase<Pair<String,Role>> {
     @Deprecated
     @Override
     public Pair<String,Role> select(Pair<String,Role> object) throws DalException {
-        if(cache.contains(object))
+        if(cache.contains(object)) {
             return object;
+        }
 
         String query = String.format("SELECT * FROM %s WHERE %s = '%s' AND %s = '%s';",
                 TABLE_NAME,

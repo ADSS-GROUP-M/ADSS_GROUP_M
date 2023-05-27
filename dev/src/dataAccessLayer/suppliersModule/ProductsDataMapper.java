@@ -23,7 +23,7 @@ public class ProductsDataMapper  extends AbstractDataMapper {
 //        cachedProducts = new ArrayList<>();
     }
 
-    public void insert(String catalog_number, String name, String manufacture) {
+    public void insert(String catalog_number, String name, String manufacture) throws DalException {
         try {
             if (!isExists(catalog_number)) {
                 String columnsString = String.join(", ", columns);
@@ -35,48 +35,68 @@ public class ProductsDataMapper  extends AbstractDataMapper {
             }
         }
         catch (SQLException e){
-            throw new RuntimeException(e.getMessage());
+            throw new DalException(e.getMessage(), e);
         }
     }
 
-    public void update(String catalog_number, String newName, String newManufacture,String category) throws SQLException {
-        if (isExists(catalog_number)){
-            if(newName != null)
-                sqlExecutor.executeWrite(String.format("UPDATE %s SET name = '%s' WHERE catalog_number = '%s'", tableName,newName,catalog_number));
-            if(newManufacture != null)
-                sqlExecutor.executeWrite(String.format("UPDATE %s SET manufacture = '%s' WHERE catalog_number = '%s'", tableName,newManufacture,catalog_number));
-            if(category != null)
-                sqlExecutor.executeWrite(String.format("UPDATE %s SET category = '%s' WHERE catalog_number = '%s'", tableName,category,catalog_number));
+    public void update(String catalog_number, String newName, String newManufacture,String category) throws DalException {
+        try{
+            if (isExists(catalog_number)){
+                if(newName != null) {
+                    sqlExecutor.executeWrite(String.format("UPDATE %s SET name = '%s' WHERE catalog_number = '%s'", tableName,newName,catalog_number));
+                }
+                if(newManufacture != null) {
+                    sqlExecutor.executeWrite(String.format("UPDATE %s SET manufacture = '%s' WHERE catalog_number = '%s'", tableName,newManufacture,catalog_number));
+                }
+                if(category != null) {
+                    sqlExecutor.executeWrite(String.format("UPDATE %s SET category = '%s' WHERE catalog_number = '%s'", tableName,category,catalog_number));
+                }
+            }
+        } catch(SQLException e){
+            throw new DalException(e.getMessage(), e);
         }
     }
 
-    public void delete(String catalog_number) throws SQLException {
-        if (isExists(catalog_number)) {
-            sqlExecutor.executeWrite(String.format("DROP FROM %s WHERE catalog_number = %s", tableName, catalog_number));
+    public void delete(String catalog_number) throws DalException {
+        try{
+            if (isExists(catalog_number)) {
+                sqlExecutor.executeWrite(String.format("DROP FROM %s WHERE catalog_number = %s", tableName, catalog_number));
 //            cachedProducts.removeIf(productDAO -> productDAO.getCatalog_number().equals(catalog_number));
+            }
+        } catch(SQLException e){
+            throw new DalException(e.getMessage(), e);
         }
     }
 
-    public List<ProductDAO> initializeCache() throws SQLException {
-        List<ProductDAO> cachedProducts = new ArrayList<>();
-        String columnsString = String.join(", ", columns);
-        OfflineResultSet resultSet = sqlExecutor.executeRead(String.format("SELECT %s FROM %s",
-                columnsString, tableName));
-        while (resultSet.next()) {
-            ProductDAO item = new ProductDAO(resultSet.getString("catalog_number"),
-                    resultSet.getString("name"));
-            item.setManufacture(resultSet.getString("manufacture"));
-            item.setCategory(resultSet.getString("category"));
-            cachedProducts.add(item);
+    public List<ProductDAO> initializeCache() throws DalException {
+        try {
+            List<ProductDAO> cachedProducts = new ArrayList<>();
+            String columnsString = String.join(", ", columns);
+            OfflineResultSet resultSet = sqlExecutor.executeRead(String.format("SELECT %s FROM %s",
+                    columnsString, tableName));
+            while (resultSet.next()) {
+                ProductDAO item = new ProductDAO(resultSet.getString("catalog_number"),
+                        resultSet.getString("name"));
+                item.setManufacture(resultSet.getString("manufacture"));
+                item.setCategory(resultSet.getString("category"));
+                cachedProducts.add(item);
+            }
+            return cachedProducts;
+        } catch (SQLException e) {
+            throw new DalException(e.getMessage(), e);
         }
-        return cachedProducts;
     }
 
-    public boolean isExists(String catalogNumber) throws SQLException {
-        OfflineResultSet resultSet = sqlExecutor.executeRead(String.format("SELECT COUNT(*) as count FROM %s WHERE catalog_number = '%s'", tableName, catalogNumber));
-        if(resultSet.next())
-            return resultSet.getInt("count") > 0;
-        return false;
+    public boolean isExists(String catalogNumber) throws DalException {
+        try {
+            OfflineResultSet resultSet = sqlExecutor.executeRead(String.format("SELECT COUNT(*) as count FROM %s WHERE catalog_number = '%s'", tableName, catalogNumber));
+            if(resultSet.next()) {
+                return resultSet.getInt("count") > 0;
+            }
+            return false;
+        } catch (SQLException e) {
+            throw new DalException(e.getMessage(), e);
+        }
     }
 
     /**

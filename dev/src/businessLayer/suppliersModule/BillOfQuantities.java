@@ -1,6 +1,7 @@
 package businessLayer.suppliersModule;
 
 import businessLayer.suppliersModule.Discounts.Discount;
+import exceptions.SupplierException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -44,8 +45,9 @@ public class BillOfQuantities {
         priceToReachForDiscount = priceToActivateDiscount;
         discountOnTotal = discount;
         discountOnTotalOrder = (Double price) -> {
-            if (price >= priceToActivateDiscount)
+            if (price >= priceToActivateDiscount) {
                 return discount.applyDiscount(price);
+            }
             return price;
         };
     }
@@ -53,17 +55,20 @@ public class BillOfQuantities {
         discountOnTotalOrder = null;
     }
 
-    public void addProductDiscount(String catalogNumber, int amount, Discount discount){
-        if(discount == null)
-            throw new RuntimeException("discount can't be null");
-        if(productsDiscounts.get(catalogNumber) == null)
+    public void addProductDiscount(String catalogNumber, int amount, Discount discount) throws SupplierException {
+        if(discount == null) {
+            throw new SupplierException("discount can't be null");
+        }
+        if(productsDiscounts.get(catalogNumber) == null) {
             productsDiscounts.put(catalogNumber, new HashMap<>());
+        }
         productsDiscounts.get(catalogNumber).put(amount, discount);
     }
 
     public void removeProductDiscount(String catalogNumber, int amount){
-        if(productsDiscounts.get(catalogNumber) != null)
+        if(productsDiscounts.get(catalogNumber) != null) {
             productsDiscounts.get(catalogNumber).remove(amount);
+        }
     }
 
     public void removeProductDiscount(String catalogNumber){
@@ -75,30 +80,38 @@ public class BillOfQuantities {
     }
 
     public double getProductPriceAfterDiscount(String catalogNumber, int amount, double price){
-        if(!productsDiscounts.containsKey(catalogNumber))
+        if(!productsDiscounts.containsKey(catalogNumber)) {
             return price;
+        }
         Discount discount = null;
-        for(int amountCheck : productsDiscounts.get(catalogNumber).keySet())
-            if(amountCheck <= amount)
+        for(int amountCheck : productsDiscounts.get(catalogNumber).keySet()) {
+            if(amountCheck <= amount) {
                 discount = productsDiscounts.get(catalogNumber).get(amountCheck);
-        if(discount != null)
+            }
+        }
+        if(discount != null) {
             return discount.applyDiscount(price);
+        }
         return price;
     }
 
     public double getPriceAfterDiscounts(int amount, double priceBefore){
         double price = priceBefore;
         if(amountBeforeTotal){
-            if(discountOnAmountOfProducts != null)
+            if(discountOnAmountOfProducts != null) {
                 price = discountOnAmountOfProducts.apply(amount).apply(price);
-            if(discountOnTotalOrder != null)
+            }
+            if(discountOnTotalOrder != null) {
                 price = discountOnTotalOrder.apply(price);
+            }
         }
         else{
-            if(discountOnTotalOrder != null)
+            if(discountOnTotalOrder != null) {
                 price = discountOnTotalOrder.apply(price);
-            if(discountOnAmountOfProducts != null)
+            }
+            if(discountOnAmountOfProducts != null) {
                 price = discountOnAmountOfProducts.apply(amount).apply(price);
+            }
         }
         return price;
     }
@@ -107,8 +120,9 @@ public class BillOfQuantities {
         amountToReachForDiscount = amountOfProductsForDiscount;
         discountOnAmount = discount;
         discountOnAmountOfProducts = (Integer amountOfProducts) ->{
-            if(amountOfProducts >= amountOfProductsForDiscount)
+            if(amountOfProducts >= amountOfProductsForDiscount) {
                 return (Double priceBefore) -> discount.applyDiscount(priceBefore);
+            }
             return (Double priceBefore) -> priceBefore;
         };
     }
@@ -122,15 +136,18 @@ public class BillOfQuantities {
         int counter = 1;
         for (Map.Entry<String, Map<Integer, Discount>> productDiscount: productsDiscounts.entrySet()){
             productsDiscountString.append("\n\t\t\t\t").append(counter++).append(". Product id: ").append(productDiscount.getKey()).append("\n\t\t\t\tDiscounts: ");
-            for(Map.Entry<Integer, Discount> discount : productDiscount.getValue().entrySet())
+            for(Map.Entry<Integer, Discount> discount : productDiscount.getValue().entrySet()) {
                 productsDiscountString.append("\n\t\t\t\t\t" + "Amount to reach: ").append(discount.getKey()).append(" Discount: ").append(discount.getValue().toString());
+            }
         }
         String discountTotalStr = "";
-        if(discountOnTotal != null)
+        if(discountOnTotal != null) {
             discountTotalStr = "DISCOUNT ON TOTAL ORDER:\n\t\t\t\torder price to reach: " + priceToReachForDiscount + " " + discountOnTotal;
+        }
         String discountAmountStr = "";
-        if(discountOnAmount != null)
+        if(discountOnAmount != null) {
             discountAmountStr = "DISCOUNT ON AMOUNT OF PRODUCTS:\n\t\t\t\tNumber of products to reach: " + amountToReachForDiscount + " " + discountOnAmount;
+        }
 
         String res = "BILL OF QUANTITIES:\n\t\t\t" + productsDiscountString + "\n\t\t\t" + discountTotalStr + "\n\t\t\t" + discountAmountStr;
         return res;

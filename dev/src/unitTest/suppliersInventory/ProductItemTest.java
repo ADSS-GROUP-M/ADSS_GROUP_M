@@ -5,6 +5,7 @@ import businessLayer.businessLayerUsage.Branch;
 import businessLayer.inventoryModule.ProductController;
 import businessLayer.inventoryModule.ProductItem;
 import dataAccessLayer.DalFactory;
+import exceptions.InventoryException;
 import exceptions.TransportException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -43,7 +44,7 @@ public class ProductItemTest {
             List<String> serial_numbers = new ArrayList<>();
             serial_numbers.add(serial_number);
             productController.createProductItem(serial_numbers,catalog_number,branch,supplierId,supplierPrice,supplierDiscount, location,expireDate, "y");
-        } catch (TransportException e) {
+        } catch (TransportException | InventoryException e) {
             fail(e);
         }
     }
@@ -51,21 +52,37 @@ public class ProductItemTest {
     // Test 1
     @Test
     public void testDefectiveItem() {
-        productController.updateProductItem(branch,1,serial_number,catalog_number,-1,null,-1,-1,-1,null);
-        assertNotNull(productController.getProduct(branch,catalog_number).getProduct(serial_number).isDefective(),"update defective Item failed");
+        try {
+            productController.updateProductItem(branch,1,serial_number,catalog_number,-1,null,-1,-1,-1,null);
+        } catch (InventoryException e) {
+            fail(e);
+        }
+        try {
+            assertNotNull(productController.getProduct(branch,catalog_number).getProduct(serial_number).isDefective(),"update defective Item failed");
+        } catch (InventoryException e) {
+            fail(e);
+        }
     }
 
     // Test 2
     @Test
     public void isSold() {
 //        productController.updateProductItem(branch,-1,serial_number,catalog_number,);
-        assertFalse(productController.getProduct(branch,catalog_number).getProduct(serial_number).isSold(), "sold price should init as null");
+        try {
+            assertFalse(productController.getProduct(branch,catalog_number).getProduct(serial_number).isSold(), "sold price should init as null");
+        } catch (InventoryException e) {
+            fail(e);
+        }
     }
 
     // Test 3
     @Test
     public void getSoldDateUpdated() {
-        productController.updateProductItem(branch,-1,serial_number,catalog_number,1,null,-1,-1,50,null);
-        assertNotNull(productController.getProduct(branch,catalog_number).getProduct(serial_number).getSoldDate(),"sold date shouldn't be null");
+        try {
+            productController.updateProductItem(branch,-1,serial_number,catalog_number,1,null,-1,-1,50,null);
+            assertNotNull(productController.getProduct(branch,catalog_number).getProduct(serial_number).getSoldDate(),"sold date shouldn't be null");
+        } catch (InventoryException e) {
+            fail(e);
+        }
     }
 }

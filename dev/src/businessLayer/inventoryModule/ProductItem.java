@@ -48,13 +48,16 @@ public class ProductItem {
         this.catalog_number = catalog_number;
     }
     public boolean isDefective(){
-        if(isDefective == null)
+        if(isDefective == null) {
             return false;
-        else return isDefective.getIsDefective();
+        } else {
+            return isDefective.getIsDefective();
+        }
     }
     public boolean isSold(){
-        if (this.isSold == null)
+        if (this.isSold == null) {
             return false;
+        }
         return isSold;
     }
 
@@ -81,16 +84,18 @@ public class ProductItem {
     public void setIntIsDefective(int newIsDefective, LocalDateTime defective_date) {
         if(newIsDefective == 0){
             isDefective = new productPair<Boolean, LocalDateTime>(false, defective_date);
-        } else
+        } else {
             isDefective = new productPair<Boolean, LocalDateTime>(true, defective_date);
+        }
     }
     public void setSupplierPrice(double newPrice){this.supplierPrice = newPrice;}
     public void setSupplierID(String newSupplierID){this.supplierID = newSupplierID;}
     public void setSoldPrice(double newSoldPrice){
-        if(!isSold && newSoldPrice != 0)
+        if(!isSold && newSoldPrice != 0) {
             reportAsSold(newSoldPrice);
-        else
+        } else {
             this.soldPrice = newSoldPrice;
+        }
     }
     public void setSupplierDiscount(double newDiscount) {this.supplierDiscount = newDiscount;}
     public double getSupplierPrice(){return this.supplierPrice;}

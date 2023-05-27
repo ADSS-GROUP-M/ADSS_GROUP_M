@@ -58,10 +58,11 @@ public class Record {
     }
 
     public String toStringProduct() {
-        if(category != null)
+        if(category != null) {
             stringCategory = category.toString();
-        else
+        } else {
             stringCategory = "";
+        }
         return "Record{" +
                 "catalog_number=" + catalog_number +
                 ", name='" + name + '\'' +

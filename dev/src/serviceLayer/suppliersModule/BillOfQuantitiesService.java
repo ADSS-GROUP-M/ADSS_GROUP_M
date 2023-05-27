@@ -4,6 +4,7 @@ import businessLayer.suppliersModule.AgreementController;
 import businessLayer.suppliersModule.BillOfQuantitiesController;
 import businessLayer.suppliersModule.Discounts.Discount;
 import com.google.gson.Gson;
+import exceptions.SupplierException;
 import utils.Response;
 
 import java.util.Map;
@@ -25,7 +26,7 @@ public class BillOfQuantitiesService {
             billOfQuantitiesController.addProductDiscount(bnNumber, catalogNumber, amount, discount);
             return new Response("product discount is edited!", true).toJson();
         }
-        catch (Exception e){
+        catch (SupplierException e){
             return Response.getErrorResponse(e).toJson();
         }
     }
@@ -42,7 +43,7 @@ public class BillOfQuantitiesService {
             }
             return new Response("product discount removed!", true).toJson();
         }
-        catch (Exception e){
+        catch (SupplierException e){
             return Response.getErrorResponse(e).toJson();
         }
     }
@@ -59,7 +60,7 @@ public class BillOfQuantitiesService {
             }
             return new Response("product discount removed!", true).toJson();
         }
-        catch (Exception e){
+        catch (SupplierException e){
             return Response.getErrorResponse(e).toJson();
         }
     }
@@ -74,7 +75,7 @@ public class BillOfQuantitiesService {
             }
             return new Response("product discount on total order removed!", true).toJson();
         }
-        catch (Exception e){
+        catch (SupplierException e){
             return Response.getErrorResponse(e).toJson();
         }
     }
@@ -84,7 +85,7 @@ public class BillOfQuantitiesService {
             billOfQuantitiesController.setDiscountOnTotalOrder(bnNumber, priceToActivateDiscount, discount);
             return new Response("product discount on total order is set!", true).toJson();
         }
-        catch (Exception e){
+        catch (SupplierException e){
             return Response.getErrorResponse(e).toJson();
         }
     }
@@ -94,7 +95,7 @@ public class BillOfQuantitiesService {
             billOfQuantitiesController.setOrderOfDiscounts(bnNumber, amountBeforeTotal);
             return new Response("order of discount id set!", true).toJson();
         }
-        catch (Exception e){
+        catch (SupplierException e){
             return Response.getErrorResponse(e).toJson();
         }
     }
@@ -104,7 +105,7 @@ public class BillOfQuantitiesService {
             billOfQuantitiesController.setProductsDiscounts(bnNumber, productsDiscounts);
             return new Response("product discounts are set!", true).toJson();
         }
-        catch (Exception e){
+        catch (SupplierException e){
             return Response.getErrorResponse(e).toJson();
         }
     }
@@ -114,7 +115,7 @@ public class BillOfQuantitiesService {
             billOfQuantitiesController.setDiscountOnAmountOfProducts(bnNumber, amountOfProductsForDiscount, discount);
             return new Response("product discount on amount of products is set!", true).toJson();
         }
-        catch (Exception e){
+        catch (SupplierException e){
             return Response.getErrorResponse(e).toJson();
         }
     }
@@ -128,7 +129,7 @@ public class BillOfQuantitiesService {
             }
             return new Response("product discount on amount of products is removed!", true).toJson();
         }
-        catch (Exception e){
+        catch (SupplierException e){
             return Response.getErrorResponse(e).toJson();
         }
     }
@@ -138,7 +139,7 @@ public class BillOfQuantitiesService {
             billOfQuantitiesController.removeBillOfQuantities(bnNumber);
             return new Response("BillOfQuantities is removed!", true).toJson();
         }
-        catch (Exception e){
+        catch (SupplierException e){
             return Response.getErrorResponse(e).toJson();
         }
     }

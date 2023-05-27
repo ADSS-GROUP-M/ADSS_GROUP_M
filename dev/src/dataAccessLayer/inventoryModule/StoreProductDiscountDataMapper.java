@@ -24,7 +24,7 @@ public class StoreProductDiscountDataMapper extends AbstractDataMapper {
         super(sqlExecutor, "store_product_discount", new String[]{"catalog_number", "start_date", "end_date", "discount","branch"});
     }
 
-    public void insert(String catalog_number, String start_date, String end_date, double discount, String branch) {
+    public void insert(String catalog_number, String start_date, String end_date, double discount, String branch) throws DalException {
         try {
             if(!isExists(catalog_number, start_date, end_date, discount, branch)){
                 String columnsString = String.join(", ", columns);
@@ -33,41 +33,50 @@ public class StoreProductDiscountDataMapper extends AbstractDataMapper {
             }
         }
         catch (SQLException e){
-            throw new RuntimeException(e.getMessage());
+            throw new DalException(e.getMessage(), e);
         }
     }
 
-    public Map<Branch, Map<String, List<ProductStoreDiscount>>> initializeCache() throws SQLException {
-        Map<Branch, Map<String,List<ProductStoreDiscount>>> cachedDiscount = new HashMap<Branch, Map<String,List<ProductStoreDiscount>>>();
-        String columnsString = String.join(", ", columns);
-        OfflineResultSet resultSet = sqlExecutor.executeRead(String.format("SELECT %s FROM %s", columnsString, tableName));
-        while (resultSet.next()) {
-            ProductStoreDiscount productStoreDiscount = new ProductStoreDiscount(resultSet.getString("catalog_number"),
-                    Branch.valueOf(resultSet.getString("branch")),
-                    LocalDateTime.parse(resultSet.getString("start_date")),
-                    LocalDateTime.parse(resultSet.getString("end_date")),
-                    resultSet.getDouble("discount"));
-            Branch branch = productStoreDiscount.getBranch();
-            String catalog_number = productStoreDiscount.getCatalog_number();
-            if(!cachedDiscount.containsKey(branch)) {
-                Map<String, List<ProductStoreDiscount>> mapProductDiscount = new HashMap<String, List<ProductStoreDiscount>>();
-                cachedDiscount.put(branch,mapProductDiscount);
+    public Map<Branch, Map<String, List<ProductStoreDiscount>>> initializeCache() throws DalException {
+        try {
+            Map<Branch, Map<String,List<ProductStoreDiscount>>> cachedDiscount = new HashMap<Branch, Map<String,List<ProductStoreDiscount>>>();
+            String columnsString = String.join(", ", columns);
+            OfflineResultSet resultSet = sqlExecutor.executeRead(String.format("SELECT %s FROM %s", columnsString, tableName));
+            while (resultSet.next()) {
+                ProductStoreDiscount productStoreDiscount = new ProductStoreDiscount(resultSet.getString("catalog_number"),
+                        Branch.valueOf(resultSet.getString("branch")),
+                        LocalDateTime.parse(resultSet.getString("start_date")),
+                        LocalDateTime.parse(resultSet.getString("end_date")),
+                        resultSet.getDouble("discount"));
+                Branch branch = productStoreDiscount.getBranch();
+                String catalog_number = productStoreDiscount.getCatalog_number();
+                if(!cachedDiscount.containsKey(branch)) {
+                    Map<String, List<ProductStoreDiscount>> mapProductDiscount = new HashMap<String, List<ProductStoreDiscount>>();
+                    cachedDiscount.put(branch,mapProductDiscount);
+                }
+                if(!cachedDiscount.get(branch).containsKey(catalog_number)){
+                    List<ProductStoreDiscount> listProductStoreDiscount = new ArrayList<ProductStoreDiscount>();
+                    cachedDiscount.get(branch).put(catalog_number,listProductStoreDiscount);
+                }
+                cachedDiscount.get(branch).get(catalog_number).add(productStoreDiscount);
             }
-            if(!cachedDiscount.get(branch).containsKey(catalog_number)){
-                List<ProductStoreDiscount> listProductStoreDiscount = new ArrayList<ProductStoreDiscount>();
-                cachedDiscount.get(branch).put(catalog_number,listProductStoreDiscount);
-            }
-            cachedDiscount.get(branch).get(catalog_number).add(productStoreDiscount);
+            return cachedDiscount;
+        } catch (SQLException e) {
+            throw new DalException(e.getMessage(), e);
         }
-        return cachedDiscount;
     }
 
-    public boolean isExists(String catalog_number, String start_date, String end_date, double discount, String branch) throws SQLException {
-        OfflineResultSet resultSet = sqlExecutor.executeRead(String.format("SELECT COUNT(*) as count FROM %s WHERE catalog_number = '%s' AND start_date = '%s' AND end_date = '%s' AND discount = %f AND branch = '%s'", tableName, catalog_number, start_date, end_date,
-        discount, branch));
-        if (resultSet.next())
-            return resultSet.getInt("count") > 0;
-        return false;
+    public boolean isExists(String catalog_number, String start_date, String end_date, double discount, String branch) throws DalException {
+        try {
+            OfflineResultSet resultSet = sqlExecutor.executeRead(String.format("SELECT COUNT(*) as count FROM %s WHERE catalog_number = '%s' AND start_date = '%s' AND end_date = '%s' AND discount = %f AND branch = '%s'", tableName, catalog_number, start_date, end_date,
+                    discount, branch));
+            if (resultSet.next()) {
+                return resultSet.getInt("count") > 0;
+            }
+            return false;
+        } catch (SQLException e) {
+            throw new DalException(e.getMessage(), e);
+        }
     }
 
 

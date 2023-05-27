@@ -145,8 +145,9 @@ public class EmployeeDAO extends DAOBase<Employee> {
                     ALL_COLUMNS[7], emp.getEmploymentConditions(),
                     ALL_COLUMNS[8], emp.getDetails(),
                     primaryKey, emp.getId());
-            if (cursor.executeWrite(queryString) == 0)
+            if (cursor.executeWrite(queryString) == 0) {
                 throw new DalException("No employee with id " + emp.getId() + " was found");
+            }
             cache.put(emp);
         } catch(SQLException e) {
             throw new DalException(e);
@@ -165,8 +166,9 @@ public class EmployeeDAO extends DAOBase<Employee> {
 
         String query = String.format("DELETE FROM %s WHERE %s = '%s';", TABLE_NAME, primaryKey, emp.getId());
         try {
-            if (cursor.executeWrite(query) == 0)
+            if (cursor.executeWrite(query) == 0) {
                 throw new DalException("No employee with id " + emp.getId() + " was found");
+            }
         } catch (SQLException e) {
             throw new DalException("Failed to delete Employee", e);
         }

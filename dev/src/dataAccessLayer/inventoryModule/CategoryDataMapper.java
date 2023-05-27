@@ -27,28 +27,40 @@ public class CategoryDataMapper extends AbstractDataMapper {
         this.productManagerMapper = productManagerMapper;
     }
 
-    public void insert(String category_name) throws SQLException {
+    public void insert(String category_name) throws DalException{
         String columnsString = String.join(", ", columns);
-        sqlExecutor.executeWrite(String.format("INSERT INTO %s (%s) VALUES('%s')",
-                tableName, columnsString, category_name));
-    }
-
-    public void delete(String category_name) throws SQLException {
-        sqlExecutor.executeWrite(String.format("DELETE FROM %s WHERE category_name = '%s'", tableName, category_name));
-    }
-
-    public Map<String, Category> initializedCache() throws SQLException {
-        Map<String, Category> cachedCategory = new HashMap<String, Category>();
-        String columnsString = String.join(", ", columns);
-        OfflineResultSet resultSet = sqlExecutor.executeRead(String.format("SELECT %s FROM %s", columnsString, tableName));
-        while (resultSet.next()) {
-            Category category = new Category(resultSet.getString("category_name"), Collections.emptyList());
-            cachedCategory.put(resultSet.getString("category_name"), category);
+        try {
+            sqlExecutor.executeWrite(String.format("INSERT INTO %s (%s) VALUES('%s')",
+                    tableName, columnsString, category_name));
+        } catch (SQLException e) {
+            throw new DalException(e.getMessage(), e);
         }
-        return cachedCategory;
     }
 
-    public void initProductsWithCategory(Map<String, Category>cached_categories) {
+    public void delete(String category_name) throws DalException{
+        try {
+            sqlExecutor.executeWrite(String.format("DELETE FROM %s WHERE category_name = '%s'", tableName, category_name));
+        } catch (SQLException e) {
+            throw new DalException(e.getMessage(), e);
+        }
+    }
+
+    public Map<String, Category> initializedCache() throws DalException{
+        try {
+            Map<String, Category> cachedCategory = new HashMap<String, Category>();
+            String columnsString = String.join(", ", columns);
+            OfflineResultSet resultSet = sqlExecutor.executeRead(String.format("SELECT %s FROM %s", columnsString, tableName));
+            while (resultSet.next()) {
+                Category category = new Category(resultSet.getString("category_name"), Collections.emptyList());
+                cachedCategory.put(resultSet.getString("category_name"), category);
+            }
+            return cachedCategory;
+        } catch (SQLException e) {
+            throw new DalException(e.getMessage(), e);
+        }
+    }
+
+    public void initProductsWithCategory(Map<String, Category>cached_categories) throws DalException {
         try{
             Map<Branch, Map<String, Product>> cachedProducts = productManagerMapper.getCachedProducts();
             OfflineResultSet resultSet = sqlExecutor.executeRead(String.format("SELECT %s , %s FROM %s", "catalog_number","category", "products"));
@@ -65,18 +77,22 @@ public class CategoryDataMapper extends AbstractDataMapper {
             }
         }
         catch (SQLException e){
-            throw new RuntimeException(e.getMessage());
+            throw new DalException(e.getMessage(), e);
         }
     }
 
-    public boolean isExists(String category_name) throws SQLException {
-        OfflineResultSet resultSet = sqlExecutor.executeRead(String.format("SELECT COUNT(*) as count FROM %s WHERE category_name = '%s'", tableName, category_name));
-        if (resultSet.next()) {
-            Integer count = resultSet.getInt("count");
-            return count > 0;
-        }
-        else {
-            return false;
+    public boolean isExists(String category_name) throws DalException{
+        try {
+            OfflineResultSet resultSet = sqlExecutor.executeRead(String.format("SELECT COUNT(*) as count FROM %s WHERE category_name = '%s'", tableName, category_name));
+            if (resultSet.next()) {
+                Integer count = resultSet.getInt("count");
+                return count > 0;
+            }
+            else {
+                return false;
+            }
+        } catch (SQLException e) {
+            throw new DalException(e.getMessage(), e);
         }
     }
 

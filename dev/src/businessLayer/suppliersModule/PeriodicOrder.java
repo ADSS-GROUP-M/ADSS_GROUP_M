@@ -42,11 +42,13 @@ public class PeriodicOrder {
     }
 
     public boolean equals(Object other){
-        if(!(other instanceof  PeriodicOrder))
+        if(!(other instanceof  PeriodicOrder)) {
             return false;
+        }
         PeriodicOrder otherPeriodicOrder = (PeriodicOrder) other;
-        if(bnNumber.equals(otherPeriodicOrder.getBnNumber()) && order.equals(otherPeriodicOrder.getOrder()) && day == otherPeriodicOrder.getDay() && branch.equals(otherPeriodicOrder.getBranch()))
+        if(bnNumber.equals(otherPeriodicOrder.getBnNumber()) && order.equals(otherPeriodicOrder.getOrder()) && day == otherPeriodicOrder.getDay() && branch.equals(otherPeriodicOrder.getBranch())) {
             return true;
+        }
         return false;
     }
 }

@@ -13,8 +13,9 @@ public class DeliveryFixedDays extends DeliveryAgreement{
     }
 
     public void addDay(int day){
-        if (!daysOfTheWeek.contains(day))
+        if (!daysOfTheWeek.contains(day)) {
             daysOfTheWeek.add(day);
+        }
     }
     public void removeDay(int day){
         daysOfTheWeek.remove(day);

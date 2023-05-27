@@ -19,8 +19,9 @@ public class Agreement {
 
     public Agreement(List<Product> productsList, DeliveryAgreement deliveryAgreement){
         products = new HashMap<>();
-        for (Product p : productsList)
+        for (Product p : productsList) {
             products.put(p.getCatalogNumber(), p);
+        }
         this.deliveryAgreement = deliveryAgreement;
     }
 
@@ -71,15 +72,17 @@ public class Agreement {
     }
 
     public int getNumberOfUnits(String catalogNumber){
-        if(products.containsKey(catalogNumber))
+        if(products.containsKey(catalogNumber)) {
             return products.get(catalogNumber).getNumberOfUnits();
+        }
         return -1;
     }
 
     public String toString(){
         StringBuilder productsString = new StringBuilder("PRODUCTS DETAILS:");
-        for (Product product : products.values())
+        for (Product product : products.values()) {
             productsString.append("\n\t\t\t").append(product.toString());
+        }
 
         return "AGREEMENT:\n\t\t" + productsString + "\n\t\t" + deliveryAgreement.toString() + "\n\t\t";
     }

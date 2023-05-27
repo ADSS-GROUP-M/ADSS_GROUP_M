@@ -58,8 +58,9 @@ public class Supplier {
     }
 
     public void addField(String field){
-        if(!fields.contains(field))
+        if(!fields.contains(field)) {
             fields.add(field);
+        }
     }
 
 
@@ -87,11 +88,13 @@ public class Supplier {
 
     public String toString(){
         StringBuilder contactsInfo = new StringBuilder("CONTACTS INFORMATION:");
-        for(Map.Entry<String, Pair<String, String>> contact : this.contactsInfo.entrySet())
+        for(Map.Entry<String, Pair<String, String>> contact : this.contactsInfo.entrySet()) {
             contactsInfo.append("\n\t\tName: ").append(contact.getValue().getFirst()).append(" Email: ").append(contact.getKey()).append(" Phone number: ").append(contact.getValue().getSecond());
+        }
         StringBuilder fields = new StringBuilder("FIELDS:");
-        for (String field : this.fields)
+        for (String field : this.fields) {
             fields.append("\n\t\t").append(field);
+        }
         String bankAccount = "BANK ACCOUNT:\n\t\t" + this.bankAccount.toString();
 
         String res = "SUPPLIER:\n\tNAME: " + name +"\n\tBN NUMBER: " + bnNumber + "\n\t" + bankAccount + "\n\t" + fields
@@ -100,11 +103,13 @@ public class Supplier {
     }
 
     public boolean equals(Object other){
-        if(!(other instanceof  Supplier))
+        if(!(other instanceof  Supplier)) {
             return false;
+        }
         Supplier otherSupplier = (Supplier) other;
-        if(bnNumber.equals(otherSupplier.bnNumber))
+        if(bnNumber.equals(otherSupplier.bnNumber)) {
             return true;
+        }
         return false;
     }
 }

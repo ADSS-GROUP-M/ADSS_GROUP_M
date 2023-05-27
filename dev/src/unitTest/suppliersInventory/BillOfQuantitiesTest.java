@@ -5,6 +5,7 @@ import businessLayer.suppliersModule.BillOfQuantities;
 import businessLayer.suppliersModule.Discounts.CashDiscount;
 import businessLayer.suppliersModule.Discounts.Discount;
 import businessLayer.suppliersModule.Discounts.PercentageDiscount;
+import exceptions.SupplierException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -12,6 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 class BillOfQuantitiesTest {
 
@@ -44,21 +46,33 @@ class BillOfQuantitiesTest {
 
     @Test
     void addProductDiscount() {
-        billOfQuantities.addProductDiscount("0", 10, new CashDiscount(15));
+        try {
+            billOfQuantities.addProductDiscount("0", 10, new CashDiscount(15));
+        } catch (SupplierException e) {
+            fail(e);
+        }
         assertEquals(1000, billOfQuantities.getProductPriceAfterDiscount("0", 100, 1015), "price should be 1000");
     }
 
     @Test
     void removeProductDiscount() {
-        billOfQuantities.addProductDiscount("0", 10, new CashDiscount(15));
+        try {
+            billOfQuantities.addProductDiscount("0", 10, new CashDiscount(15));
+        } catch (SupplierException e) {
+            fail(e);
+        }
         billOfQuantities.removeProductDiscount("0", 10);
         assertEquals(1000, billOfQuantities.getProductPriceAfterDiscount("0", 100, 1000), "price should be 1000");
     }
 
     @Test
     void testRemoveProductDiscount() {
-        billOfQuantities.addProductDiscount("0", 10, new CashDiscount(15));
-        billOfQuantities.addProductDiscount("0", 15, new CashDiscount(15));
+        try {
+            billOfQuantities.addProductDiscount("0", 10, new CashDiscount(15));
+            billOfQuantities.addProductDiscount("0", 15, new CashDiscount(15));
+        } catch (SupplierException e) {
+            fail(e);
+        }
         billOfQuantities.removeProductDiscount("0");
         assertEquals(1000, billOfQuantities.getProductPriceAfterDiscount("0", 100, 1000), "price should be 1000");
     }
@@ -76,13 +90,21 @@ class BillOfQuantitiesTest {
     @Test
     void getProductPriceAfterDiscount() {
         assertEquals(1000, billOfQuantities.getProductPriceAfterDiscount("0", 100, 1000), "price should be 1000");
-        billOfQuantities.addProductDiscount("0", 10, new CashDiscount(10));
+        try {
+            billOfQuantities.addProductDiscount("0", 10, new CashDiscount(10));
+        } catch (SupplierException e) {
+            fail(e);
+        }
         assertEquals(1000, billOfQuantities.getProductPriceAfterDiscount("0", 11, 1010), "price should be 1000");
     }
 
     @Test
     void getPriceAfterDiscounts() {
-        billOfQuantities.addProductDiscount("0", 10, new CashDiscount(10));
+        try {
+            billOfQuantities.addProductDiscount("0", 10, new CashDiscount(10));
+        } catch (SupplierException e) {
+            fail(e);
+        }
         billOfQuantities.setOrderOfDiscounts(true);
         billOfQuantities.setDiscountOnTotalOrder(1000, new PercentageDiscount(10));
         billOfQuantities.setDiscountOnAmountOfProducts(1000, new CashDiscount(200));

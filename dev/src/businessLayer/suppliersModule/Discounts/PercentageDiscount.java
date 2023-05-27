@@ -1,10 +1,13 @@
 package businessLayer.suppliersModule.Discounts;
 
+import exceptions.SupplierException;
+
 public class PercentageDiscount extends Discount {
     private final double percentage;
-    public PercentageDiscount(double percentage){
-        if(percentage > 100 | percentage < 0)
-            throw new RuntimeException("percentage is invalid");
+    public PercentageDiscount(double percentage) {
+        if(percentage > 100 | percentage < 0) {
+            throw new IllegalArgumentException("percentage is invalid");
+        }
         this.percentage = percentage;
     }
     @Override

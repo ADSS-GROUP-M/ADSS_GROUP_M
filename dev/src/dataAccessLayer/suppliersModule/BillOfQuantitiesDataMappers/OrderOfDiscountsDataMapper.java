@@ -16,24 +16,41 @@ public class OrderOfDiscountsDataMapper extends AbstractDataMapper {
         super(sqlExecutor, "order_of_discounts", new String[]{"bn_number", "amount_before_total"});
     }
 
-    public void insert(String bnNumber, boolean amountBeforeTotal) throws SQLException {
+    public void insert(String bnNumber, boolean amountBeforeTotal) throws DalException {
         String columnsString = String.join(", ", columns);
-        sqlExecutor.executeWrite(String.format("INSERT INTO %s (%s) VALUES('%s', %d)",tableName, columnsString, bnNumber,
-                amountBeforeTotal? 1 : 0));
+        try {
+            sqlExecutor.executeWrite(String.format("INSERT INTO %s (%s) VALUES('%s', %d)",tableName, columnsString, bnNumber,
+                    amountBeforeTotal? 1 : 0));
+        } catch (SQLException e) {
+            throw new DalException(e.getMessage(), e);
+        }
     }
-    public void update(String bnNumber, boolean amountBeforeTotal) throws SQLException {
-        sqlExecutor.executeWrite(String.format("UPDATE %s SET amount_before_total = %d WHERE bn_number = '%s'", tableName, amountBeforeTotal? 1: 0, bnNumber));
+    public void update(String bnNumber, boolean amountBeforeTotal) throws DalException {
+        try {
+            sqlExecutor.executeWrite(String.format("UPDATE %s SET amount_before_total = %d WHERE bn_number = '%s'", tableName, amountBeforeTotal? 1: 0, bnNumber));
+        } catch (SQLException e) {
+            throw new DalException(e.getMessage(), e);
+        }
     }
-    public Boolean find(String bnNumber) throws SQLException {
-        String columnsString = String.join(", ", columns);
-        OfflineResultSet resultSet = sqlExecutor.executeRead(String.format("SELECT %s FROM %s WHERE bn_number = '%s'", columnsString, tableName, bnNumber));
-        if(resultSet.next())
-            return resultSet.getInt("amount_before_total") == 1;
-        return null;
+    public Boolean find(String bnNumber) throws DalException {
+        try {
+            String columnsString = String.join(", ", columns);
+            OfflineResultSet resultSet = sqlExecutor.executeRead(String.format("SELECT %s FROM %s WHERE bn_number = '%s'", columnsString, tableName, bnNumber));
+            if(resultSet.next()) {
+                return resultSet.getInt("amount_before_total") == 1;
+            }
+            return null;
+        } catch (SQLException e) {
+            throw new DalException(e.getMessage(), e);
+        }
     }
 
-    public void delete(String bnNumber) throws SQLException {
-        sqlExecutor.executeWrite(String.format("DELETE FROM %s WHERE bn_number = '%s'", tableName, bnNumber));
+    public void delete(String bnNumber) throws DalException {
+        try {
+            sqlExecutor.executeWrite(String.format("DELETE FROM %s WHERE bn_number = '%s'", tableName, bnNumber));
+        } catch (SQLException e) {
+            throw new DalException(e.getMessage(), e);
+        }
     }
 
     /**

@@ -3,6 +3,8 @@ package businessLayer.inventoryModule;
 import businessLayer.businessLayerUsage.Branch;
 import dataAccessLayer.inventoryModule.CategoryManagerMapper;
 import dataAccessLayer.inventoryModule.ProductManagerMapper;
+import exceptions.DalException;
+import exceptions.InventoryException;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -28,7 +30,7 @@ public class CategoryController {
             return categories.containsKey(categoryName);
     }
 
-    public void createCategory(Branch branch,List<String> subcategoriesName, String categoryName){
+    public void createCategory(Branch branch,List<String> subcategoriesName, String categoryName) throws InventoryException {
         try {
             if (!checkIfCategoryExist(categoryName)) {
                 List<Category> subcategories = new ArrayList<Category>();
@@ -50,12 +52,12 @@ public class CategoryController {
 //                }
             }
         }
-        catch (Exception e){throw new RuntimeException(e.getMessage());
+        catch (DalException e){throw new InventoryException(e.getMessage());
         }
     }
 
-    public void removeCategory(Branch branch, String categoryName){
-        try {
+    public void removeCategory(Branch branch, String categoryName) throws InventoryException {
+        try{
             if (checkIfCategoryExist(categoryName)) {
                 if (categories.get(categoryName).isRelatedProductEmpty()) {
                     // verify in each category that the category does not contain the remove category
@@ -67,51 +69,61 @@ public class CategoryController {
                         category.removeSubCategory(categoryName);
                     }
                     categories.remove(categoryName);
-                } else
-                    throw new RuntimeException("Category related to other products, please update before remove");
+                } else {
+                    throw new InventoryException("Category related to other products, please update before remove");
+                }
             } else {
-                throw new RuntimeException("Category does not exist");
+                throw new InventoryException("Category does not exist");
             }
+        } catch (DalException e){
+            throw new InventoryException(e.getMessage());
         }
-        catch (Exception e){throw new RuntimeException(e.getMessage());
-        }
-
     }
 
-    public void addProductToCategory(Branch branch, String catalog_number, String categoryName){
-        if(checkIfCategoryExist(categoryName)){
-            if(!categories.get(categoryName).isProductIDRelated(catalog_number, branch)) {
-                productManagerMapper.addCategoryToProduct(catalog_number,categoryName);
-                categories.get(categoryName).addProductToCategory(pc.getProduct(branch, catalog_number));
+    public void addProductToCategory(Branch branch, String catalog_number, String categoryName) throws InventoryException {
+        try{
+            if(checkIfCategoryExist(categoryName)){
+                if(!categories.get(categoryName).isProductIDRelated(catalog_number, branch)) {
+                    productManagerMapper.addCategoryToProduct(catalog_number,categoryName);
+                    categories.get(categoryName).addProductToCategory(pc.getProduct(branch, catalog_number));
+                }
             }
-        }
-        else{
-            throw new RuntimeException("Category does not exist");
-        }
-    }
-
-    public void removeProductFromCategory(Branch branch, String catalog_number, String categoryName){
-        if(checkIfCategoryExist(categoryName)){
-            productManagerMapper.removeCategoryFromProduct(catalog_number);
-            categories.get(categoryName).removeProduct(pc.getProduct(branch,catalog_number));
-        }
-        else{
-            throw new RuntimeException("Category does not exist");
+            else{
+                throw new InventoryException("Category does not exist");
+            }
+        } catch (DalException e){
+            throw new InventoryException(e.getMessage());
         }
     }
 
-    public Category getCategory(String categoryName){
-        if(checkIfCategoryExist(categoryName))
+    public void removeProductFromCategory(Branch branch, String catalog_number, String categoryName) throws InventoryException {
+        try{
+            if(checkIfCategoryExist(categoryName)){
+                productManagerMapper.removeCategoryFromProduct(catalog_number);
+                categories.get(categoryName).removeProduct(pc.getProduct(branch,catalog_number));
+            }
+            else{
+                throw new InventoryException("Category does not exist");
+            }
+        } catch (DalException e){
+            throw new InventoryException(e.getMessage());
+        }
+    }
+
+    public Category getCategory(String categoryName) throws InventoryException {
+        if(checkIfCategoryExist(categoryName)) {
             return categories.get(categoryName);
-        else
-            throw new RuntimeException("Category does not exist");
+        } else {
+            throw new InventoryException("Category does not exist");
+        }
     }
 
-    public List <Product> getCategoryProducts(Branch branch, String categoryName){
-        if(checkIfCategoryExist(categoryName))
+    public List <Product> getCategoryProducts(Branch branch, String categoryName) throws InventoryException {
+        if(checkIfCategoryExist(categoryName)) {
             return categories.get(categoryName).getProductsRelated(branch);
-        else
-            throw new RuntimeException("Category does not exist");
+        } else {
+            throw new InventoryException("Category does not exist");
+        }
     }
 
 
@@ -136,8 +148,9 @@ public class CategoryController {
             Category category = categories.get(categoryName);
             productsCategoryRecords = getProductRecordPerCategory(category.getCategoryName(),branch,productsCategoryRecords);
             for(Category subcategory: category.getSubcategories().values()){
-                if(!categoriesName.contains(subcategory.getCategoryName()))
+                if(!categoriesName.contains(subcategory.getCategoryName())) {
                     productsCategoryRecords = getProductRecordPerCategory(subcategory.getCategoryName(),branch,productsCategoryRecords);
+                }
             }
         }
         return productsCategoryRecords;

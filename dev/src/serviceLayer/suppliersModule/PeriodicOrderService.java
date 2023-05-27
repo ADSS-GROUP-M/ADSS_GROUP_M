@@ -3,6 +3,7 @@ package serviceLayer.suppliersModule;
 import businessLayer.businessLayerUsage.Branch;
 import businessLayer.suppliersModule.PeriodicOrderController;
 import com.google.gson.Gson;
+import exceptions.SupplierException;
 import utils.Response;
 
 import java.util.Map;
@@ -21,7 +22,7 @@ public class PeriodicOrderService {
             periodicOrderController.addPeriodicOrder(bnNumber, products, day, branch);
             return new Response("periodic order created!", true).toJson();
         }
-        catch (Exception e){
+        catch (SupplierException e){
             return Response.getErrorResponse(e).toJson();
         }
     }
@@ -31,7 +32,7 @@ public class PeriodicOrderService {
             periodicOrderController.setDay(orderId, day);
             return new Response("day is set!", true).toJson();
         }
-        catch (Exception e){
+        catch (SupplierException e){
             return Response.getErrorResponse(e).toJson();
         }
     }
@@ -40,7 +41,7 @@ public class PeriodicOrderService {
         try {
             return new Response(periodicOrderController.getDetails(orderId), true).toJson();
         }
-        catch (Exception e){
+        catch (SupplierException e){
             return Response.getErrorResponse(e).toJson();
         }
     }
@@ -54,7 +55,7 @@ public class PeriodicOrderService {
         try {
             return new Response(periodicOrderController.getDetails(), true).toJson();
         }
-        catch (Exception e){
+        catch (SupplierException e){
             return Response.getErrorResponse(e).toJson();
         }
     }

@@ -8,6 +8,7 @@ import businessLayer.suppliersModule.Order;
 import businessLayer.suppliersModule.OrderController;
 import businessLayer.suppliersModule.PeriodicOrderController;
 import dataAccessLayer.DalFactory;
+import exceptions.InventoryException;
 import exceptions.TransportException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -62,14 +63,18 @@ public class IntegrationTest {
             List<String> serial_number = new ArrayList<>();
             serial_number.add("000");
             productController.createProductItem(serial_number,catalog_number2,branch,"2",5.30,0.1, "warehouse",expireDate,"y" );
-        } catch (TransportException e) {
+        } catch (TransportException | InventoryException e) {
             fail(e);
         }
 
     }
     @AfterEach
     public void after(){
-        productController.updateProduct(branch,null,catalog_number1,null,-1,6);
+        try {
+            productController.updateProduct(branch,null,catalog_number1,null,-1,6);
+        } catch (InventoryException e) {
+            fail(e);
+        }
     }
 
     /**
@@ -78,7 +83,11 @@ public class IntegrationTest {
      */
     @Test
     public void sendAutomaticOrder(){
-        productController.updateProduct(branch,null,catalog_number1,null,-1,10);
+        try {
+            productController.updateProduct(branch,null,catalog_number1,null,-1,10);
+        } catch (InventoryException e) {
+            fail(e);
+        }
         try {
             productController.isProductLack(branch,catalog_number1);
             List<Order> orders = orderController.getOrderHistory("123");
@@ -95,7 +104,11 @@ public class IntegrationTest {
      */
     @Test
     public void Test2(){
-        productController.updateProduct(branch,null,catalog_number3,null,-1,5);
+        try {
+            productController.updateProduct(branch,null,catalog_number3,null,-1,5);
+        } catch (InventoryException e) {
+            fail(e);
+        }
         try {
             productController.isProductLack(branch,catalog_number3);
             List<Order> orders = orderController.getOrderHistory("2");

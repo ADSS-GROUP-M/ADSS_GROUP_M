@@ -1,10 +1,13 @@
 package businessLayer.suppliersModule.Discounts;
 
+import exceptions.SupplierException;
+
 public class CashDiscount extends Discount {
     private final double amountOfDiscount;
     public CashDiscount(double amountOfDiscount){
-        if(amountOfDiscount < 0)
-            throw new RuntimeException("amount of cash cant be less than 0");
+        if(amountOfDiscount < 0) {
+            throw new IllegalArgumentException("amount of cash cant be less than 0");
+        }
         this.amountOfDiscount = amountOfDiscount;
     }
     @Override

@@ -5,6 +5,7 @@ import businessLayer.businessLayerUsage.Branch;
 import businessLayer.inventoryModule.Product;
 import businessLayer.inventoryModule.ProductController;
 import dataAccessLayer.DalFactory;
+import exceptions.InventoryException;
 import exceptions.TransportException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -54,7 +55,11 @@ public class ProductTest {
 
     @AfterEach
     public void after(){
-        productController.updateProduct(branch,null,catalog_number,null,-1,2);
+        try {
+            productController.updateProduct(branch,null,catalog_number,null,-1,2);
+        } catch (InventoryException e) {
+            fail(e);
+        }
     }
 
 
@@ -62,14 +67,22 @@ public class ProductTest {
     // Test 1
     @Test
     public void getProductItemFromList() {
-        product = productController.getProduct(branch,catalog_number);
-        assertEquals("get item from product list failed",product.getProduct(serial_number).getSerial_number(),serial_number);
+        try {
+            product = productController.getProduct(branch,catalog_number);
+            assertEquals("get item from product list failed",product.getProduct(serial_number).getSerial_number(),serial_number);
+        } catch (InventoryException e) {
+            fail(e);
+        }
     }
 
     // Test 2
     @Test
     public void updateMin() {
-        productController.updateProduct(branch,null,catalog_number,null,-1,6);
+        try {
+            productController.updateProduct(branch,null,catalog_number,null,-1,6);
+        } catch (InventoryException e) {
+            fail(e);
+        }
         try {
             assertTrue(productController.isProductLack(branch,catalog_number), "update min notification failed");
         }
@@ -81,9 +94,13 @@ public class ProductTest {
     // Test 3
     @Test
     public void productDefective() {
-        productController.updateProductItem(branch,1,serial_number,catalog_number,-1,null,-1,-1,-1,null);
+        try {
+            productController.updateProductItem(branch,1,serial_number,catalog_number,-1,null,-1,-1,-1,null);
 //        product.reportAsDefective(serial_number);
-        assertTrue(productController.getProduct(branch,catalog_number).getProduct(serial_number).isDefective(), "update defective item failed");
+            assertTrue(productController.getProduct(branch,catalog_number).getProduct(serial_number).isDefective(), "update defective item failed");
+        } catch (InventoryException e) {
+            fail(e);
+        }
     }
 
 }

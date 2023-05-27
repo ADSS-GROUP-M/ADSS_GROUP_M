@@ -5,6 +5,7 @@ import businessLayer.suppliersModule.Order;
 import businessLayer.suppliersModule.OrderController;
 import businessLayer.suppliersModule.Pair;
 import com.google.gson.Gson;
+import exceptions.SupplierException;
 import utils.Response;
 
 import java.util.List;
@@ -21,7 +22,7 @@ public class OrderService {
             Map<String, Pair<Map<String, Integer>, Double>> fullOrder = orderController.order(order, branch);
             return new Response(true,fullOrder).toJson();
         }
-        catch (Exception e) {
+        catch (SupplierException e) {
             return Response.getErrorResponse(e).toJson();
         }
 
@@ -31,7 +32,7 @@ public class OrderService {
             orderController.orderDueToShortage(order, branch);
             return new Response("order ordered!", true).toJson();
         }
-        catch (Exception e) {
+        catch (SupplierException e) {
             return Response.getErrorResponse(e).toJson();
         }
 
@@ -41,7 +42,7 @@ public class OrderService {
         try {
             return new Response(true,orderController.getOrderHistory(bnNumber)).toJson();
         }
-        catch (Exception e){
+        catch (SupplierException e){
             return Response.getErrorResponse(e).toJson();
         }
     }

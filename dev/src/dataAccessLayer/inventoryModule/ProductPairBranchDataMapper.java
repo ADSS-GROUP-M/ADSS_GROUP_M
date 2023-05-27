@@ -20,7 +20,7 @@ public class ProductPairBranchDataMapper extends AbstractDataMapper {
         super(sqlExecutor, "product_pair_branch", new String[]{"branch_name", "product_catalog_num", "original_store_price", "notification_min"});
     }
 
-    public void insert(String branch_name, String product_catalog_number, double original_store_price, int notification_min) {
+    public void insert(String branch_name, String product_catalog_number, double original_store_price, int notification_min) throws DalException {
         if(!isExists(product_catalog_number, branch_name)){
             try {
                 String columnsString = String.join(", ", columns);
@@ -29,23 +29,24 @@ public class ProductPairBranchDataMapper extends AbstractDataMapper {
             ProductPairBranchDAO productPairBranchDAO = new ProductPairBranchDAO(branch_name, product_catalog_number, original_store_price, notification_min);
             cachedProductsPairBranch.add(productPairBranchDAO);
             } catch (SQLException e) {
-                throw new RuntimeException(e.getMessage());
+                throw new DalException(e.getMessage(), e);
             }
         }
     }
 
-    public void update(String branch_name, String product_catalog_number, double original_store_price, int notification_min){
+    public void update(String branch_name, String product_catalog_number, double original_store_price, int notification_min) throws DalException {
         try {
             if (isExists(product_catalog_number, branch_name)) {
-                if (original_store_price != -1)
+                if (original_store_price != -1) {
                     sqlExecutor.executeWrite(String.format("UPDATE %s SET original_store_price = '%s' WHERE catalog_number = '%s' and branch = '%s'", tableName, original_store_price, product_catalog_number, branch_name));
+                }
                 if (notification_min != -1) {
                     sqlExecutor.executeWrite(String.format("UPDATE %s SET notification_min = '%s' WHERE catalog_number = '%s' and branch = '%s'", tableName, notification_min, product_catalog_number, branch_name));
                 }
             }
         }
         catch (SQLException e){
-            throw new RuntimeException(e.getMessage());
+            throw new DalException(e.getMessage(), e);
         }
 
     }
@@ -63,17 +64,21 @@ public class ProductPairBranchDataMapper extends AbstractDataMapper {
         return false;
     }
 
-    public List<ProductPairBranchDAO> initializeCache() throws SQLException {
-        List<ProductPairBranchDAO> cachedProducts = new ArrayList<>();
-        String columnsString = String.join(", ", columns);
-        OfflineResultSet resultSet = sqlExecutor.executeRead(String.format("SELECT %s FROM %s",
-                columnsString, tableName));
-        while (resultSet.next()) {
-            ProductPairBranchDAO item = new ProductPairBranchDAO(resultSet.getString("branch_name"),
-                    resultSet.getString("product_catalog_num"), resultSet.getDouble("original_store_price"), resultSet.getInt("notification_min"));
-            cachedProducts.add(item);
+    public List<ProductPairBranchDAO> initializeCache() throws DalException {
+        try {
+            List<ProductPairBranchDAO> cachedProducts = new ArrayList<>();
+            String columnsString = String.join(", ", columns);
+            OfflineResultSet resultSet = sqlExecutor.executeRead(String.format("SELECT %s FROM %s",
+                    columnsString, tableName));
+            while (resultSet.next()) {
+                ProductPairBranchDAO item = new ProductPairBranchDAO(resultSet.getString("branch_name"),
+                        resultSet.getString("product_catalog_num"), resultSet.getDouble("original_store_price"), resultSet.getInt("notification_min"));
+                cachedProducts.add(item);
+            }
+            return cachedProducts;
+        } catch (SQLException e) {
+            throw new DalException(e.getMessage(), e);
         }
-        return cachedProducts;
     }
 
 

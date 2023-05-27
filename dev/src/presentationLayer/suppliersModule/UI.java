@@ -137,8 +137,9 @@ public class UI {
             while (true) {
                 System.out.println("enter field or enter exit to submit list of fields");
                 String field = sc.nextLine();
-                if (field.equals("exit"))
+                if (field.equals("exit")) {
                     break;
+                }
                 fields.add(field);
             }
             System.out.println("enter supplier's contact's info");
@@ -146,8 +147,9 @@ public class UI {
             while (true) {
                 System.out.println("enter contact info:<name> <email> <phone number>. or enter exit to submit all contact's info");
                 String input = sc.nextLine();
-                if (input.equals("exit"))
+                if (input.equals("exit")) {
                     break;
+                }
                 String[] contactInfo = input.split(" ");
                 contactsInfo.put(contactInfo[1], new Pair<>(contactInfo[0], contactInfo[2]));
             }
@@ -156,8 +158,9 @@ public class UI {
             while (true) {
                 System.out.println("enter product:<catalog number> <supplier's catalog number> <price> <number of units>. or enter exit submit the products");
                 String input = sc.nextLine();
-                if (input.equals("exit"))
+                if (input.equals("exit")) {
                     break;
+                }
                 String[] product = input.split(" ");
                 try {
                     products.add(new Product(product[0], product[1], Double.parseDouble(product[2]), Integer.parseInt(product[3])));
@@ -176,8 +179,9 @@ public class UI {
                 while (true) {
                     System.out.println("enter day in the week (0 - sunday, 6 - saturday), or enter exit to submit");
                     input = sc.nextLine();
-                    if (input.equals("exit"))
+                    if (input.equals("exit")) {
                         break;
+                    }
                     try {
                         days.add(Integer.parseInt(input));
                     } catch (Exception e) {
@@ -347,8 +351,9 @@ public class UI {
                 while (true) {
                     System.out.println("enter day in the week (0 - sunday, 6 - saturday), or enter exit to submit");
                     input = sc.nextLine();
-                    if (input.equals("exit"))
+                    if (input.equals("exit")) {
                         break;
+                    }
                     try {
                         days.add(Integer.parseInt(input));
                     } catch (Exception e) {
@@ -538,12 +543,13 @@ public class UI {
                     \t1. apply amount discount before total-order-price discount
                     \t2. apply total-order-price discount before amount discount""");
             int choice = Integer.parseInt(sc.nextLine());
-            if(choice == 1)
-                System.out.println(gson.fromJson(billOfQuantitiesService.setOrderOfDiscounts(bnNumber, true), presentationLayer.suppliersModule.Response.class).getMsg());
-            else if(choice == 2)
-                System.out.println(gson.fromJson(billOfQuantitiesService.setOrderOfDiscounts(bnNumber, false), presentationLayer.suppliersModule.Response.class).getMsg());
-            else
+            if(choice == 1) {
+                System.out.println(gson.fromJson(billOfQuantitiesService.setOrderOfDiscounts(bnNumber, true), Response.class).getMsg());
+            } else if(choice == 2) {
+                System.out.println(gson.fromJson(billOfQuantitiesService.setOrderOfDiscounts(bnNumber, false), Response.class).getMsg());
+            } else {
                 throw new RuntimeException("invalid input");
+            }
         }
         catch (Exception e){
             System.out.println("invalid input");
@@ -558,18 +564,21 @@ public class UI {
             while (true){
                 System.out.println("enter product id to set discount or exit to submit");
                 String input = sc.nextLine();
-                if(input.equals("exit"))
+                if(input.equals("exit")) {
                     break;
+                }
                 String catalogNumber = (input);
                 productsDiscounts.put(catalogNumber, new HashMap<>());
                 while(true) {
                     System.out.println("enter the amount to purchase from this product to activate discount or exit to submit");
                     input = sc.nextLine();
-                    if(input.equals("exit"))
+                    if(input.equals("exit")) {
                         break;
+                    }
                     int amount = Integer.parseInt(input);
-                    if(amount < 0)
+                    if(amount < 0) {
                         throw new RuntimeException("amount can't be less than 0");
+                    }
                     System.out.println("enter the discount\n\t1.discount in percentage\n\t2.discount in cash");
                     int choice = Integer.parseInt(sc.nextLine());
                     Discount discount = null;
@@ -582,8 +591,9 @@ public class UI {
                         double cash = Double.parseDouble(sc.nextLine());
                         discount = new CashDiscount(cash);
                     }
-                    else
+                    else {
                         throw new RuntimeException("discount can't be null");
+                    }
                     productsDiscounts.get(catalogNumber).put(amount, discount);
                 }
             }
@@ -639,12 +649,13 @@ public class UI {
             Type responseOfList = new TypeToken<Response<List<Order>>>(){}.getType();
             String json = orderService.getOrderHistory(bnNumber);
             List<Order> orders = JsonUtils.<Response<List<Order>>>deserialize(json, responseOfList).getReturnValue();
-            if(orders == null)
+            if(orders == null) {
                 System.out.println("no orders have been ordered from this supplier");
-            else {
+            } else {
                 StringBuilder res = new StringBuilder("ORDER HISTORY:");
-                for (Order order : orders)
+                for (Order order : orders) {
                     res.append("\n\t").append(order.toString());
+                }
                 System.out.println(res);
             }
         }
@@ -736,8 +747,9 @@ public class UI {
                 while (true) {
                     System.out.println("enter product id to purchase or exit to submit");
                     String input = sc.nextLine();
-                    if (input.equals("exit"))
+                    if (input.equals("exit")) {
                         break;
+                    }
                     String catalogNumber = input;
                     System.out.println("enter amount to order");
                     int amount = Integer.parseInt(sc.nextLine());
@@ -792,8 +804,9 @@ public class UI {
                 while (true) {
                     System.out.println("enter product id to purchase or exit to submit");
                     String input = sc.nextLine();
-                    if (input.equals("exit"))
+                    if (input.equals("exit")) {
                         break;
+                    }
                     String catalogNumber = input;
                     System.out.println("enter amount to order");
                     int amount = Integer.parseInt(sc.nextLine());

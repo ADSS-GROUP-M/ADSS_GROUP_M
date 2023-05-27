@@ -28,21 +28,24 @@ public class ProductStoreDiscount {
         return isDateInRange(startDate) && isDateInRange(endDate);
     }
     public double getDiscount(LocalDateTime dateToValidate){
-        if(isDateInRange(dateToValidate))
+        if(isDateInRange(dateToValidate)) {
             return discount;
-        else
+        } else {
             return -1;
+        }
     }
     public double getDiscountInRange(LocalDateTime startDate, LocalDateTime endDate){
-        if(isDateInRange(startDate) && isDateInRange(endDate))
+        if(isDateInRange(startDate) && isDateInRange(endDate)) {
             return discount;
-        else
+        } else {
             return -1;
+        }
     }
 
     public List<ProductStoreDiscount> addDiscountStore(List<ProductStoreDiscount> discountSuppliersList, LocalDateTime startDate, LocalDateTime endDate){
-        if(isDateInRange(startDate,endDate))
+        if(isDateInRange(startDate,endDate)) {
             discountSuppliersList.add(this);
+        }
         return discountSuppliersList;
     }
 

@@ -41,14 +41,16 @@ public class EmployeeMenuVM {
             StringBuilder result = new StringBuilder();
             boolean found = false;
             for(SShift[] dayShifts : shifts) {
-                for (SShift shift : dayShifts)
+                for (SShift shift : dayShifts) {
                     if (shift != null) {
                         result.append(shift.workersString()).append("\n");
                         found = true;
                     }
+                }
             }
-            if (!found)
+            if (!found) {
                 result = new StringBuilder("There aren't any approved shifts in the next week in branch " + branchId + ".");
+            }
             return result.toString();
         } catch (Exception e) {
             return "Error: " + e.getMessage();
@@ -62,14 +64,16 @@ public class EmployeeMenuVM {
             StringBuilder result = new StringBuilder();
             boolean found = false;
             for(SShift[] dayShifts : shifts) {
-                for (SShift shift : dayShifts)
+                for (SShift shift : dayShifts) {
                     if (shift != null) {
                         result.append(shift.workersString()).append("\n");
                         found = true;
                     }
+                }
             }
-            if (!found)
+            if (!found) {
                 result = new StringBuilder("There aren't any approved shifts in the specified week in branch " + branchId + ".");
+            }
             return result.toString();
         } catch (Exception e) {
             return "Error: " + e.getMessage();
@@ -83,14 +87,16 @@ public class EmployeeMenuVM {
             StringBuilder result = new StringBuilder();
             boolean found = false;
             for(SShift[] dayShifts : shifts) {
-                for (SShift shift : dayShifts)
+                for (SShift shift : dayShifts) {
                     if (shift != null && shift.isApproved()) {
                         result.append(shift.workersString()).append("\n");
                         found = true;
                     }
+                }
             }
-            if (!found)
+            if (!found) {
                 result = new StringBuilder("There aren't any approved shifts planned for you.");
+            }
             return result.toString();
         } catch (Exception e) {
             return "Error: " + e.getMessage();

@@ -45,9 +45,9 @@ public class HRManagerMenu implements Menu {
         String input = scanner.nextLine();
         String[] command = input.split(" ", -1);
         String output;
-        if (command.length == 0)
+        if (command.length == 0) {
             output = "Invalid command, command cannot be empty.";
-        else if (command[0].equals("exit") && command.length == 1) {
+        } else if (command[0].equals("exit") && command.length == 1) {
             output = "Exiting CLI.";
             MenuManager.terminate();
         }
@@ -204,8 +204,9 @@ public class HRManagerMenu implements Menu {
                 String driverLicense = scanner.nextLine();
                 output = hrManagerMenuVM.certifyDriver(employeeId, driverLicense);
             }
-            else
+            else {
                 output = hrManagerMenuVM.certifyEmployee(employeeId, role);
+            }
         }
         else if (command[0].equals("uncertify") && command.length == 1) {
             // Parameters: <employee_id> <role>
@@ -321,8 +322,9 @@ public class HRManagerMenu implements Menu {
             String authorization = scanner.nextLine();
             output = hrManagerMenuVM.authorizeUser(username, authorization);
         }
-        else
+        else {
             output = "Invalid command was given, try again.";
+        }
         System.out.println(output);
         return this;
     }

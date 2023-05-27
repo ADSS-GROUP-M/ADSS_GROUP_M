@@ -21,25 +21,38 @@ public class NumberOfOrdersCounterDataMapper extends AbstractDataMapper {
         suppliersCounters = new HashMap<>();
     }
 
-    public void init(String bnNumber) throws SQLException {
+    public void init(String bnNumber) throws DalException {
         String columnsString = String.join(", ", columns);
-        sqlExecutor.executeWrite(String.format("INSERT INTO %s (%s) VALUES('%s', %d)",tableName, columnsString, bnNumber,
-                0));
-        suppliersCounters.put(bnNumber, 0);
+        try {
+            sqlExecutor.executeWrite(String.format("INSERT INTO %s (%s) VALUES('%s', %d)",tableName, columnsString, bnNumber,
+                    0));
+            suppliersCounters.put(bnNumber, 0);
+        } catch (SQLException e) {
+            throw new DalException(e.getMessage(), e);
+        }
     }
 
-    public void delete(String bnNumber) throws SQLException {
-        sqlExecutor.executeWrite(String.format("DELETE FROM %s WHERE bn_number = '%s'", tableName, bnNumber));
+    public void delete(String bnNumber) throws DalException {
+        try {
+            sqlExecutor.executeWrite(String.format("DELETE FROM %s WHERE bn_number = '%s'", tableName, bnNumber));
+        } catch (SQLException e) {
+            throw new DalException(e.getMessage(), e);
+        }
     }
 
-    public void update(String bnNumber, int numberOfOrders) throws SQLException {
-        sqlExecutor.executeWrite(String.format("UPDATE %s SET order_number_counter = %d WHERE bn_number = '%s'", tableName, numberOfOrders, bnNumber));
-        suppliersCounters.put(bnNumber, numberOfOrders);
+    public void update(String bnNumber, int numberOfOrders) throws DalException {
+        try {
+            sqlExecutor.executeWrite(String.format("UPDATE %s SET order_number_counter = %d WHERE bn_number = '%s'", tableName, numberOfOrders, bnNumber));
+            suppliersCounters.put(bnNumber, numberOfOrders);
+        } catch (SQLException e) {
+            throw new DalException(e.getMessage(), e);
+        }
     }
 
-    public Integer getOrderNumber(String bnNumber) throws SQLException {
-        if(suppliersCounters.containsKey(bnNumber))
+    public Integer getOrderNumber(String bnNumber) throws DalException {
+        if(suppliersCounters.containsKey(bnNumber)) {
             return suppliersCounters.get(bnNumber);
+        }
         Integer orderNumber = find(bnNumber);
         if(orderNumber == null) {
             init(bnNumber);
@@ -48,16 +61,21 @@ public class NumberOfOrdersCounterDataMapper extends AbstractDataMapper {
         return orderNumber;
     }
 
-    public Integer find(String bnNumber) throws SQLException {
-        String columnsString = String.join(", ", columns);
-        OfflineResultSet resultSet = sqlExecutor.executeRead(String.format("SELECT %s FROM %s WHERE bn_number = '%s'", columnsString,
-                tableName, bnNumber));
-        if(resultSet.next())
-            return resultSet.getInt("order_number_counter");
-        return null;
+    public Integer find(String bnNumber) throws DalException {
+        try {
+            String columnsString = String.join(", ", columns);
+            OfflineResultSet resultSet = sqlExecutor.executeRead(String.format("SELECT %s FROM %s WHERE bn_number = '%s'", columnsString,
+                    tableName, bnNumber));
+            if(resultSet.next()) {
+                return resultSet.getInt("order_number_counter");
+            }
+            return null;
+        } catch (SQLException e) {
+            throw new DalException(e.getMessage(), e);
+        }
     }
 
-    public int getAndIncrement(String bnNumber) throws SQLException {
+    public int getAndIncrement(String bnNumber) throws DalException {
         int orderId = getOrderNumber(bnNumber);
         update(bnNumber, orderId + 1);
         return orderId;

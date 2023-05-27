@@ -306,8 +306,12 @@ public class CreateTableQueryBuilder {
 
         @Override
         public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
             Column column = (Column) o;
             return Objects.equals(name, column.name);
         }
@@ -322,8 +326,12 @@ public class CreateTableQueryBuilder {
 
         @Override
         public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
             ForeignKey that = (ForeignKey) o;
             return Objects.equals(parentTableName, that.parentTableName)
                     && Arrays.equals(columns, that.columns)

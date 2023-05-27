@@ -170,4 +170,9 @@ public class ProductManagerMapper {
         return false;
     }
 
+    public void clearTable() {
+        productPairBranchDataMapper.clearTable();
+        productsDataMapper.clearTable();
+        productItemDataMapper.clearTable();
+    }
 }

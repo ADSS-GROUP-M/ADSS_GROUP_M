@@ -97,4 +97,10 @@ public class AgreementDataMapper {
         deliveryAgreementDataMapper.delete(bnNumber);
         supplierProductDataMapper.delete(bnNumber);
     }
+
+    public void clearTable(){
+        supplierProductDataMapper.clearTable();
+        deliveryAgreementDataMapper.clearTable();
+        productsDataMapper.clearTable();
+    }
 }

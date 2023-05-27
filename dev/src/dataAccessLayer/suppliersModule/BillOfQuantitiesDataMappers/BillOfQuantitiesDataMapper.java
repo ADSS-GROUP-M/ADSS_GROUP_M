@@ -92,6 +92,7 @@ public class BillOfQuantitiesDataMapper {
     public void removeProductDiscount(String bnNumber, String catalogNumber) throws DalException {
         productsDiscountsDataMapper.delete(bnNumber, catalogNumber);
     }
+
     public void setProductsDiscounts(String bnNumber, Map<String, Map<Integer, Discount>> productsDiscounts) throws DalException {
         productsDiscountsDataMapper.delete(bnNumber);
         for (Map.Entry<String, Map<Integer, Discount>> productDiscount : productsDiscounts.entrySet()){
@@ -104,7 +105,6 @@ public class BillOfQuantitiesDataMapper {
             }
         }
     }
-
     public void setDiscountOnAmountOfProducts(String bnNumber, int amountOfProductsForDiscount, Discount discount) throws DalException {
         discountOnAmountDataMapper.insert(bnNumber, amountOfProductsForDiscount, discount);
     }
@@ -122,5 +122,10 @@ public class BillOfQuantitiesDataMapper {
         suppliersBillOfQuantities.remove(bnNumber);
     }
 
-
+    public void clearTable(){
+        productsDiscountsDataMapper.clearTable();
+        discountOnTotalDataMapper.clearTable();
+        discountOnAmountDataMapper.clearTable();
+        orderOfDiscountsDataMapper.clearTable();
+    }
 }

@@ -32,4 +32,8 @@ public class DiscountManagerMapper {
     public Map<Branch, Map<String, List<ProductStoreDiscount>>> getCached_discounts() {
         return cached_discounts;
     }
+
+    public void clearTable() {
+        storeProductDiscountDataMapper.clearTable();
+    }
 }

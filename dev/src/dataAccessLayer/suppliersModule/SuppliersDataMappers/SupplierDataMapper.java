@@ -144,17 +144,17 @@ public class SupplierDataMapper extends AbstractDataMapper {
     public void removeContactInfo(String bnNumber, String contactsEmail) throws DalException {
         contactsInfoDataMapper.delete(bnNumber, contactsEmail);
     }
+
     public void addContactInfo(String bnNumber, String contactName, String email, String phoneNumber) throws DalException {
         contactsInfoDataMapper.insert(bnNumber, contactName, email, phoneNumber);
     }
-
     public void setContactsEmail(String bnNumber, String email, String newEmail) throws DalException {
         contactsInfoDataMapper.updateEmail(bnNumber, email, newEmail);
     }
+
     public void setContactsPhoneNumber(String bnNumber, String email, String phoneNumber) throws DalException {
         contactsInfoDataMapper.updatePhoneNumber(bnNumber, email, phoneNumber);
     }
-
     public void addField(String bnNumber, String field) throws DalException {
         fieldsDataMapper.insert(bnNumber, field);
     }
@@ -190,5 +190,13 @@ public class SupplierDataMapper extends AbstractDataMapper {
                 .addColumn("branch", ColumnType.TEXT)
                 .addColumn("account_number", ColumnType.TEXT)
                 .addColumn("payment_method", ColumnType.TEXT);
+    }
+
+    @Override
+    public void clearTable(){
+        suppliers.clear();
+        contactsInfoDataMapper.clearTable();
+        fieldsDataMapper.clearTable();
+        super.clearTable();
     }
 }

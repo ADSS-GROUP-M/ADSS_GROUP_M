@@ -41,4 +41,16 @@ public abstract class AbstractDataMapper {
     public String getTableName(){
         return tableName;
     }
+
+    /**
+     * used for testing
+     */
+    public void clearTable() {
+        String query = String.format("DELETE FROM %s", tableName);
+        try {
+            sqlExecutor.executeWrite(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

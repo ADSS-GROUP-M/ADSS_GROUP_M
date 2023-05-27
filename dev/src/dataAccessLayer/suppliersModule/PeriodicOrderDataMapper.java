@@ -176,4 +176,10 @@ public class PeriodicOrderDataMapper extends AbstractDataMapper {
                 .addForeignKey("order_id", "periodic_order_details", "order_id")
                 .addForeignKey("catalog_number", "products", "catalog_number");
     }
+
+    @Override
+    public void clearTable() {
+        periodicOrderDetailsDataMapper.clearTable();
+        super.clearTable();
+    }
 }

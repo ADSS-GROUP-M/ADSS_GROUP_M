@@ -15,11 +15,13 @@ import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.*;
 public class OrderHistoryDataMapper extends AbstractDataMapper {
     private final NumberOfOrdersCounterDataMapper numberOfOrdersCounterDataMapper;
     private final Map<String, List<Order>> suppliersOrderHistory;
+
     public OrderHistoryDataMapper(SQLExecutor sqlExecutor, NumberOfOrdersCounterDataMapper numberOfOrdersCounterDataMapper) throws DalException {
         super(sqlExecutor, "orders_history", new String[]{"bn_number", "order_id", "catalog_number", "quantity"});
         this.numberOfOrdersCounterDataMapper = numberOfOrdersCounterDataMapper;
         suppliersOrderHistory = new HashMap<>();
     }
+
     private void insert(String bnNumber, String catalog_number, int quantity, int orderId) throws DalException {
         String columnsString = String.join(", ", columns);
         try {
@@ -29,7 +31,6 @@ public class OrderHistoryDataMapper extends AbstractDataMapper {
             throw new DalException(e.getMessage(), e);
         }
     }
-
     public void insert(String bnNumber, Order order) throws DalException {
         int orderId = numberOfOrdersCounterDataMapper.getAndIncrement(bnNumber);
         if(orderId == 0) {
@@ -114,5 +115,11 @@ public class OrderHistoryDataMapper extends AbstractDataMapper {
                         ON_UPDATE.CASCADE, ON_DELETE.CASCADE)
                 .addForeignKey("catalog_number", "products", "catalog_number",
                         ON_UPDATE.CASCADE, ON_DELETE.NO_ACTION);
+    }
+
+    @Override
+    public void clearTable(){
+        super.clearTable();
+        suppliersOrderHistory.clear();
     }
 }

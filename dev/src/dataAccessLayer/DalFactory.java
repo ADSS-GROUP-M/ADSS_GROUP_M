@@ -48,6 +48,7 @@ public class DalFactory {
     private ProductManagerMapper productManagerMapper;
     private DiscountManagerMapper discountManagerMapper;
     private CategoryManagerMapper categoryManagerMapper;
+
     private BranchDataMapper branchDataMapper;
 
     public DalFactory() throws DalException {
@@ -172,6 +173,10 @@ public class DalFactory {
 
     }
 
+    public BranchDataMapper branchDataMapper() {
+        return branchDataMapper;
+    }
+
     public DeliveryRoutesDAO deliveryRoutesDAO() {
         return deliveryRoutesDAO;
     }
@@ -274,22 +279,45 @@ public class DalFactory {
 
     public static void clearDB(String dbName){
         try {
+
+            //note: the order of the calls is important because of the foreign key constraints
+
             DalFactory factory = new DalFactory(dbName);
-            factory.shiftDAO().clearTable();
-            factory.userDAO().clearTable();
 
-            factory.transportsDAO().clearTable();
+            //============== dependencies ================== |
+            /*(-)*/ factory.userDAO().clearTable();
 
-            factory.trucksDAO().clearTable();
-            factory.itemListsDAO().clearTable();
+            /*(1)*/ factory.shiftDAO().clearTable();
+            /*(1)*/ factory.transportsDAO().clearTable();
 
-            factory.branchEmployeesDAO().clearTable();
-            factory.branchesDAO().clearTable();
-            factory.sitesRoutesDAO().clearTable();
-            factory.sitesDAO().clearTable();
+            /*(2)*/ factory.trucksDAO().clearTable();
+            /*(2)*/ factory.driversDAO().clearTable();
+            /*(2)*/ factory.branchEmployeesDAO().clearTable();
+            /*(2)*/ factory.sitesRoutesDAO().clearTable();
 
-            factory.driversDAO().clearTable();
-            factory.employeeDAO().clearTable();
+            /*(3)*/ factory.branchesDAO().clearTable();
+            /*(3)*/ factory.itemListsDAO().clearTable();
+            /*(3)*/ factory.employeeDAO().clearTable();
+
+            /*(4)*/ factory.sitesDAO().clearTable();
+            //============================================== |
+
+            //============== dependencies ================== |
+            //TODO: Order these calls so that the foreign key constraints are not violated
+            // and that all the tables are cleared correctly.
+            // note: there are duplicate calls to clearTable() in the code below for some tables
+            // because of the dependencies between the data mappers.
+            // need to remove duplicate calls
+            /*(-)*/ factory.supplierDataMapper().clearTable();
+            /*(-)*/ factory.productManagerMapper().clearTable();
+            /*(-)*/ factory.agreementDataMapper().clearTable();
+            /*(-)*/ factory.billOfQuantitiesDataMapper().clearTable();
+            /*(-)*/ factory.orderHistoryDataMapper().clearTable();
+            /*(-)*/ factory.periodicOrderDataMapper().clearTable();
+            /*(-)*/ factory.discountManagerMapper().clearTable();
+            /*(-)*/ factory.categoryManagerMapper().clearTable();
+            /*(-)*/ factory.branchDataMapper().clearTable();
+            //============================================== |
 
         } catch (DalException e) {
             e.printStackTrace();

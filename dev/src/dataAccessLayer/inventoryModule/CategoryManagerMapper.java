@@ -56,4 +56,8 @@ public class CategoryManagerMapper{
     }
 
 
+    public void clearTable() {
+        categoryDataMapper.clearTable();
+        categoryHierarchyDataMapper.clearTable();
+    }
 }

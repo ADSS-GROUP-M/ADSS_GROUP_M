@@ -4,19 +4,6 @@ import dataAccessLayer.dalAbstracts.SQLExecutor;
 import dataAccessLayer.dalUtils.SQLExecutorProductionImpl;
 import dataAccessLayer.dalUtils.SQLExecutorTestingImpl;
 import dataAccessLayer.employeeModule.*;
-import dataAccessLayer.inventoryModule.*;
-import dataAccessLayer.suppliersModule.AgreementDataMappers.AgreementDataMapper;
-import dataAccessLayer.suppliersModule.AgreementDataMappers.DeliveryAgreementDataMapper;
-import dataAccessLayer.suppliersModule.AgreementDataMappers.SupplierProductDataMapper;
-import dataAccessLayer.suppliersModule.BillOfQuantitiesDataMappers.*;
-import dataAccessLayer.suppliersModule.OrderHistoryDataMappers.NumberOfOrdersCounterDataMapper;
-import dataAccessLayer.suppliersModule.OrderHistoryDataMappers.OrderHistoryDataMapper;
-import dataAccessLayer.suppliersModule.PeriodicOrderDataMapper;
-import dataAccessLayer.suppliersModule.PeriodicOrderDetailsDataMapper;
-import dataAccessLayer.suppliersModule.ProductsDataMapper;
-import dataAccessLayer.suppliersModule.SuppliersDataMappers.ContactsInfoDataMapper;
-import dataAccessLayer.suppliersModule.SuppliersDataMappers.FieldsDataMapper;
-import dataAccessLayer.suppliersModule.SuppliersDataMappers.SupplierDataMapper;
 import dataAccessLayer.transportModule.*;
 import exceptions.DalException;
 
@@ -40,15 +27,6 @@ public class DalFactory {
     private TransportsDAO transportsDAO;
     private DeliveryRoutesDAO deliveryRoutesDAO;
     private TransportsMetaDataDAO transportsMetaDataDAO;
-    private SupplierDataMapper supplierDataMapper;
-    private OrderHistoryDataMapper orderHistoryDataMapper;
-    private AgreementDataMapper agreementDataMapper;
-    private BillOfQuantitiesDataMapper billOfQuantitiesDataMapper;
-    private PeriodicOrderDataMapper periodicOrderDataMapper;
-    private ProductManagerMapper productManagerMapper;
-    private DiscountManagerMapper discountManagerMapper;
-    private CategoryManagerMapper categoryManagerMapper;
-    private BranchDataMapper branchDataMapper;
 
     public DalFactory() throws DalException {
         cursor = new SQLExecutorProductionImpl();
@@ -70,66 +48,6 @@ public class DalFactory {
         driversDAO = new DriversDAO(cursor);              // independent
         sitesDAO = new SitesDAO(cursor);                  // independent
         sitesRoutesDAO = new SitesRoutesDAO(cursor);      // independent
-        branchDataMapper = new BranchDataMapper(cursor);  // independent
-
-        //============== dependencies ================== |
-        /*(1)*/ ProductsDataMapper productsDataMapper = new ProductsDataMapper(cursor);
-        /*(1)*/ ProductItemDataMapper productItemDataMapper = new ProductItemDataMapper(cursor);
-        /*(1)*/ ProductPairBranchDataMapper productPairBranchDataMapper = new ProductPairBranchDataMapper(cursor);
-        /*(1)*/ DeliveryAgreementDataMapper deliveryAgreementDataMapper = new DeliveryAgreementDataMapper(cursor);
-        /*(1)*/ SupplierProductDataMapper supplierProductDataMapper = new SupplierProductDataMapper(cursor);
-        /*(2)*/ agreementDataMapper = new AgreementDataMapper(
-                supplierProductDataMapper,
-                deliveryAgreementDataMapper,
-                productsDataMapper);
-        /*(2)*/ productManagerMapper = new ProductManagerMapper(
-                    productsDataMapper,
-                    productItemDataMapper,
-                    productPairBranchDataMapper);
-        /*(3)*/ CategoryDataMapper categoryDataMapper = new CategoryDataMapper(cursor,productManagerMapper);
-        /*(3)*/ CategoryHierarchyDataMapper categoryHierarchyDataMapper = new CategoryHierarchyDataMapper(cursor);
-        /*(4)*/ categoryManagerMapper = new CategoryManagerMapper(
-                    categoryDataMapper,
-                    categoryHierarchyDataMapper);
-        //============================================== |
-
-        //============== dependencies ================== |
-        /*(1)*/ StoreProductDiscountDataMapper storeProductDiscountDataMapper = new StoreProductDiscountDataMapper(cursor);
-        /*(2)*/ discountManagerMapper = new DiscountManagerMapper(storeProductDiscountDataMapper);
-        //============================================== |
-
-        //============== dependencies ================== |
-        /*(1)*/ ContactsInfoDataMapper contactsInfoDataMapper = new ContactsInfoDataMapper(cursor);
-        /*(1)*/ FieldsDataMapper fieldsDataMapper = new FieldsDataMapper(cursor);
-        /*(2)*/ supplierDataMapper = new SupplierDataMapper(
-                    cursor,
-                    contactsInfoDataMapper,
-                    fieldsDataMapper);
-        // ============================================= |
-
-        //============== dependencies ================== |
-        /*(1)*/ ProductsDiscountsDataMapper productsDiscountsDataMapper = new ProductsDiscountsDataMapper(cursor);
-        /*(1)*/ DiscountOnTotalDataMapper discountOnTotalDataMapper = new DiscountOnTotalDataMapper(cursor);
-        /*(1)*/ DiscountOnAmountDataMapper discountOnAmountDataMapper = new DiscountOnAmountDataMapper(cursor);
-        /*(1)*/ OrderOfDiscountsDataMapper orderOfDiscountsDataMapper = new OrderOfDiscountsDataMapper(cursor);
-        /*(2)*/ billOfQuantitiesDataMapper = new BillOfQuantitiesDataMapper(
-                    productsDiscountsDataMapper,
-                    discountOnTotalDataMapper,
-                    discountOnAmountDataMapper,
-                    orderOfDiscountsDataMapper);
-        //============================================== |
-
-        //============== dependencies ================== |
-        /*(1)*/ NumberOfOrdersCounterDataMapper numberOfOrdersCounterDataMapper = new NumberOfOrdersCounterDataMapper(cursor);
-        /*(2)*/ orderHistoryDataMapper = new OrderHistoryDataMapper(cursor, numberOfOrdersCounterDataMapper);
-        //============================================== |
-
-        //============== dependencies ================== |
-        /*(1)*/ PeriodicOrderDetailsDataMapper periodicOrderDetailsDataMapper = new PeriodicOrderDetailsDataMapper(cursor);
-        /*(2)*/ periodicOrderDataMapper = new PeriodicOrderDataMapper(
-                cursor,
-                periodicOrderDetailsDataMapper);
-        //============================================== |
 
         //============== dependencies ================== |
         /*(1)*/ TransportIdCounterDAO transportIdCounterDAO = new TransportIdCounterDAO(cursor);
@@ -232,38 +150,6 @@ public class DalFactory {
         return transportsDAO;
     }
 
-    public SupplierDataMapper supplierDataMapper() {
-        return supplierDataMapper;
-    }
-
-    public OrderHistoryDataMapper orderHistoryDataMapper() {
-        return orderHistoryDataMapper;
-    }
-
-    public AgreementDataMapper agreementDataMapper() {
-        return agreementDataMapper;
-    }
-
-    public BillOfQuantitiesDataMapper billOfQuantitiesDataMapper() {
-        return billOfQuantitiesDataMapper;
-    }
-
-    public PeriodicOrderDataMapper periodicOrderDataMapper() {
-        return periodicOrderDataMapper;
-    }
-
-    public ProductManagerMapper productManagerMapper() {
-        return productManagerMapper;
-    }
-
-    public DiscountManagerMapper discountManagerMapper() {
-        return discountManagerMapper;
-    }
-
-    public CategoryManagerMapper categoryManagerMapper() {
-        return categoryManagerMapper;
-    }
-
     public SQLExecutor cursor() {
         return cursor;
     }
@@ -274,22 +160,28 @@ public class DalFactory {
 
     public static void clearDB(String dbName){
         try {
+
+            //note: the order of the calls is important because of the foreign key constraints
+
             DalFactory factory = new DalFactory(dbName);
-            factory.shiftDAO().clearTable();
-            factory.userDAO().clearTable();
 
-            factory.transportsDAO().clearTable();
+            //============== dependencies ================== |
+            /*(-)*/ factory.userDAO().clearTable();
 
-            factory.trucksDAO().clearTable();
-            factory.itemListsDAO().clearTable();
+            /*(1)*/ factory.shiftDAO().clearTable();
+            /*(1)*/ factory.transportsDAO().clearTable();
 
-            factory.branchEmployeesDAO().clearTable();
-            factory.branchesDAO().clearTable();
-            factory.sitesRoutesDAO().clearTable();
-            factory.sitesDAO().clearTable();
+            /*(2)*/ factory.trucksDAO().clearTable();
+            /*(2)*/ factory.driversDAO().clearTable();
+            /*(2)*/ factory.branchEmployeesDAO().clearTable();
+            /*(2)*/ factory.sitesRoutesDAO().clearTable();
 
-            factory.driversDAO().clearTable();
-            factory.employeeDAO().clearTable();
+            /*(3)*/ factory.branchesDAO().clearTable();
+            /*(3)*/ factory.itemListsDAO().clearTable();
+            /*(3)*/ factory.employeeDAO().clearTable();
+
+            /*(4)*/ factory.sitesDAO().clearTable();
+            //============================================== |
 
         } catch (DalException e) {
             e.printStackTrace();

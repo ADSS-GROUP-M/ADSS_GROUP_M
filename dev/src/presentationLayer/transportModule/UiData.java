@@ -1,6 +1,8 @@
 package presentationLayer.transportModule;
 
 import domainObjects.transportModule.*;
+import exceptions.ErrorOccurredException;
+import exceptions.TransportException;
 import serviceLayer.transportModule.ItemListsService;
 import serviceLayer.transportModule.ResourceManagementService;
 import serviceLayer.transportModule.TransportsService;
@@ -57,7 +59,7 @@ public class UiData {
         return transports;
     }
 
-    public void loadData(){
+    public void loadData() throws ErrorOccurredException {
         fetchDrivers();
         fetchTrucks();
         fetchSites();
@@ -65,44 +67,44 @@ public class UiData {
         fetchTransports();
     }
 
-    private void fetchTrucks() {
+    private void fetchTrucks() throws ErrorOccurredException {
         String json = rms.getAllTrucks();
-        Response response = Response.fromJson(json);
+        Response response = Response.fromJsonWithValidation(json);
 
         for(Truck truck : Truck.listFromJson(response.data())){
             trucks.put(truck.id(), truck);
         }
     }
 
-    private void fetchDrivers() {
+    private void fetchDrivers() throws ErrorOccurredException {
         String json = rms.getAllDrivers();
-        Response response = Response.fromJson(json);
+        Response response = Response.fromJsonWithValidation(json);
         for(Driver driver : Driver.listFromJson(response.data())){
             drivers.put(driver.id(), driver);
         }
     }
 
-    private void fetchSites() {
+    private void fetchSites() throws ErrorOccurredException {
         String json = rms.getAllSites();
-        Response response = Response.fromJson(json);
+        Response response = Response.fromJsonWithValidation(json);
 
         for(Site site : Site.listFromJson(response.data())){
             sites.put(site.name(), site);
         }
     }
 
-    private void fetchItemLists() {
+    private void fetchItemLists() throws ErrorOccurredException {
         String json = ils.getAllItemLists();
-        Response response = Response.fromJson(json);
+        Response response = Response.fromJsonWithValidation(json);
 
         for(ItemList list : ItemList.listFromJson(response.data())){
             itemLists.put(list.id(), list);
         }
     }
 
-    private void fetchTransports() {
+    private void fetchTransports() throws ErrorOccurredException {
         String json = ts.getAllTransports();
-        Response response = Response.fromJson(json);
+        Response response = Response.fromJsonWithValidation(json);
 
         for(Transport transport : Transport.listFromJson(response.data())){
             transports.put(transport.id(), transport);
@@ -273,5 +275,4 @@ public class UiData {
         }
         return arrivalTime;
     }
-
 }

@@ -1,6 +1,8 @@
 package presentationLayer.transportModule;
 
 
+import exceptions.ErrorOccurredException;
+import exceptions.TransportException;
 import presentationLayer.employeeModule.View.LoginMenu;
 import presentationLayer.employeeModule.View.Menu;
 import presentationLayer.employeeModule.View.MenuManager;
@@ -9,6 +11,7 @@ import serviceLayer.employeeModule.Services.EmployeesService;
 
 public class TransportUI implements Menu {
 
+    private static final String USERNAME = "transport";
     private final UiData uiData;
     private final TransportsManagement transportsManagement;
     private final ItemListsManagement itemListsManagement;
@@ -34,22 +37,26 @@ public class TransportUI implements Menu {
 
     @Override
     public Menu run() {
-        Thread loader = new Thread(uiData::loadData);
-        loader.start();
-        printCommands();
         try {
-            loader.join();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            uiData.loadData();
+        } catch (ErrorOccurredException e) {
+            System.out.printf("""
+                    
+                    Failed to load transport module data with the following error(s):
+                    %s
+                                
+                    Returning to main menu...%n
+                    """, e.getMessage());
+            return returnToMainMenu();
         }
+        printCommands();
         int option = uiData.readInt();
         switch (option) {
             case 1 -> transportsManagement.manageTransports();
             case 2 -> itemListsManagement.manageItemLists();
             case 3 -> manageResources();
             case 4 -> {
-
-                return  new LoginMenu(factory);
+                return returnToMainMenu();
             }
             case 5 -> {
                 MenuManager.terminate();
@@ -58,6 +65,11 @@ public class TransportUI implements Menu {
             default -> System.out.println("\nInvalid option!");
         }
         return this;
+    }
+
+    private LoginMenu returnToMainMenu() {
+        factory.userService().logout(USERNAME);
+        return new LoginMenu(factory);
     }
 
     @Override

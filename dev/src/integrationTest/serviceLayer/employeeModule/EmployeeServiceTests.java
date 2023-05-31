@@ -22,6 +22,7 @@ import utils.DateUtils;
 import utils.Response;
 
 import java.lang.reflect.Type;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
@@ -45,18 +46,18 @@ public class EmployeeServiceTests {
     private final LocalDate[] employmentDates = new LocalDate[30];
     private final String[] employmentConditions = new String[30];
     private final String[] details = new String[30];
+    private ServiceFactory factory;
 
     @BeforeEach
     public void setUp() throws Exception {
-        DalFactory.clearTestDB();
-        ServiceFactory serviceFactory = new ServiceFactory(TESTING_DB_NAME);
-        userService = serviceFactory.userService();
-        empService = serviceFactory.employeesService();
+        factory = new ServiceFactory(TESTING_DB_NAME);
+        userService = factory.userService();
+        empService = factory.employeesService();
 
         // Loads the HR Manager user: "admin123" "123", clears the data in each test
-        initUserData(userService, serviceFactory.businessFactory().userController());
+        initUserData(userService, factory.businessFactory().userController());
         // Loads the branches data
-        initBranchData(serviceFactory.businessFactory().sitesController());
+        initBranchData(factory.businessFactory().sitesController());
 
         admin = Response.fromJson(userService.getUser(adminUsername)).data(User.class);
         User[] users = new User[30];

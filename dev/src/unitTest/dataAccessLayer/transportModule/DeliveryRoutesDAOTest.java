@@ -56,8 +56,6 @@ class DeliveryRoutesDAOTest {
     @BeforeEach
     void setUp() {
         try {
-            DalFactory.clearTestDB();
-
             //sites set up
             source = new Site("source1", "source1 name", "zone1", "12345","kobi", Site.SiteType.SUPPLIER);
             dest1 = new Site("dest1", "dest1 name", "zone1", "12345","kobi", Site.SiteType.SUPPLIER);

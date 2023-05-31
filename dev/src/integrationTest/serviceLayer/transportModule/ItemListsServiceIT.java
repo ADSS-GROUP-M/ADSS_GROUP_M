@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import serviceLayer.ServiceFactory;
 import utils.Response;
 
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -19,13 +20,12 @@ class ItemListsServiceIT {
 
     private ItemList itemList;
     private ItemListsService ils;
+    private ServiceFactory factory;
 
     @BeforeEach
     void setUp() {
-
-        DalFactory.clearTestDB();
-
-        ils = new ServiceFactory(TESTING_DB_NAME).itemListsService();
+        factory = new ServiceFactory(TESTING_DB_NAME);
+        ils = factory.itemListsService();
 
         HashMap<String, Integer> load1 = new HashMap<>();
         load1.put("Shirts", 20);

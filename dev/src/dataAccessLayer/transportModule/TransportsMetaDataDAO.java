@@ -54,10 +54,6 @@ public class TransportsMetaDataDAO extends DAOBase<TransportMetaData> implements
     @Override
     public TransportMetaData select(TransportMetaData object) throws DalException {
 
-        if(cache.contains(object)) {
-            return cache.get(object);
-        }
-
         String query = String.format("SELECT * FROM %s WHERE id = %d;",
                 TABLE_NAME,
                 object.transportId()
@@ -69,9 +65,7 @@ public class TransportsMetaDataDAO extends DAOBase<TransportMetaData> implements
             throw new DalException("Failed to select transport", e);
         }
         if (resultSet.next()){
-            TransportMetaData selected = getObjectFromResultSet(resultSet);
-            cache.put(selected);
-            return selected;
+            return getObjectFromResultSet(resultSet);
         } else {
             throw new DalException("No transport with id " + object.transportId() + " was found");
         }
@@ -92,10 +86,8 @@ public class TransportsMetaDataDAO extends DAOBase<TransportMetaData> implements
             throw new DalException("Failed to select all transports", e);
         }
         while (resultSet.next()){
-            TransportMetaData selected = getObjectFromResultSet(resultSet);
-            TransportMetaDatas.add(selected);
+            TransportMetaDatas.add(getObjectFromResultSet(resultSet));
         }
-        cache.putAll(TransportMetaDatas);
         return TransportMetaDatas;
     }
 
@@ -105,6 +97,11 @@ public class TransportsMetaDataDAO extends DAOBase<TransportMetaData> implements
      */
     @Override
     public void insert(TransportMetaData object) throws DalException {
+
+        if(exists(object)){
+            throw new DalException("Transport with id " + object.transportId() + " already exists");
+        }
+
         String query = String.format("INSERT INTO %s VALUES (%d, '%s', '%s', '%s', %d);",
                 TABLE_NAME,
                 object.transportId(),
@@ -114,11 +111,7 @@ public class TransportsMetaDataDAO extends DAOBase<TransportMetaData> implements
                 object.weight()
         );
         try {
-            if(cursor.executeWrite(query) == 1){
-                cache.put(object);
-            } else {
-                throw new RuntimeException("Unexpected error while inserting transport");
-            }
+            cursor.executeWrite(query);
         } catch (SQLException e) {
             throw new DalException("Failed to insert transport",e);
         }
@@ -130,6 +123,11 @@ public class TransportsMetaDataDAO extends DAOBase<TransportMetaData> implements
      */
     @Override
     public void update(TransportMetaData object) throws DalException {
+
+        if(exists(object) == false){
+            throw new DalException("No transport with id " + object.transportId() + " was found");
+        }
+
         String query = String.format("UPDATE %s SET driver_id = '%s', truck_id = '%s', departure_time = '%s', weight = %d WHERE id = %d;",
                 TABLE_NAME,
                 object.driverId(),
@@ -139,11 +137,7 @@ public class TransportsMetaDataDAO extends DAOBase<TransportMetaData> implements
                 object.transportId()
         );
         try {
-            if(cursor.executeWrite(query) == 1){
-                cache.put(object);
-            } else {
-                throw new DalException("No transport with id " + object.transportId() + " was found");
-            }
+            cursor.executeWrite(query);
         } catch (SQLException e) {
             throw new DalException("Failed to update transport",e);
         }
@@ -154,16 +148,17 @@ public class TransportsMetaDataDAO extends DAOBase<TransportMetaData> implements
      */
     @Override
     public void delete(TransportMetaData object) throws DalException {
+
+        if(!exists(object)){
+            throw new DalException("No transport with id " + object.transportId() + " was found");
+        }
+
         String query = String.format("DELETE FROM %s WHERE id = %d;",
                 TABLE_NAME,
                 object.transportId()
         );
         try {
-            if(cursor.executeWrite(query) == 1){
-                cache.remove(object);
-            } else {
-                throw new DalException("No transport with id " + object.transportId() + " was found");
-            }
+            cursor.executeWrite(query);
         } catch (SQLException e) {
             throw new DalException("Failed to delete transport",e);
         }
@@ -171,10 +166,6 @@ public class TransportsMetaDataDAO extends DAOBase<TransportMetaData> implements
 
     @Override
     public boolean exists(TransportMetaData object) throws DalException {
-
-        if(cache.contains(object)) {
-            return true;
-        }
 
         String query = String.format("SELECT * FROM %s WHERE id = %d;",
                 TABLE_NAME,

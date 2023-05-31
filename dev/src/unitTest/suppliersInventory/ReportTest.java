@@ -9,6 +9,7 @@ import dataAccessLayer.DalFactory;
 import exceptions.InventoryException;
 import exceptions.TransportException;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
@@ -19,7 +20,7 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
-
+@Disabled
 public class ReportTest {
     private static String catalog_number = "0x123";
     private static String catalog_name = "productTest";

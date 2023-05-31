@@ -40,19 +40,7 @@ class SitesDAOTest {
 
     @AfterEach
     void tearDown() {
-        try {
-            dao.selectAll().forEach(site -> {
-                try {
-                    dao.delete(site);
-                } catch (DalException e) {
-                    fail(e.getMessage(),e.getCause());
-                }
-            });
-        } catch (DalException e) {
-            fail(e.getMessage(),e.getCause());
-        }
-        dao = null;
-        site = null;
+        DalFactory.clearTestDB();
     }
 
     @Test

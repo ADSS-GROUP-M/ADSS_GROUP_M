@@ -12,6 +12,6 @@ public class Main {
 
     @Test
     public void generate(){
-        new DataGenerator().generateData("SuperLiDB.db");
+        new DataGenerator().generateData();
     }
 }

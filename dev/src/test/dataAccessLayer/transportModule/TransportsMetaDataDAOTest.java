@@ -12,6 +12,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.LinkedList;
@@ -26,11 +27,10 @@ class TransportsMetaDataDAOTest {
     private TransportMetaData transport;
     private Driver driver;
     private Truck truck;
+    private DalFactory factory;
 
     @BeforeEach
     void setUp() {
-
-        DalFactory.clearTestDB();
 
         //truck set up
         truck = new Truck("1", "model1", 1000, 20000, Truck.CoolingCapacity.FROZEN);
@@ -49,7 +49,7 @@ class TransportsMetaDataDAOTest {
         );
 
         try {
-            DalFactory factory = new DalFactory(TESTING_DB_NAME);
+            factory = new DalFactory(TESTING_DB_NAME);
             TrucksDAO trucksDAO = factory.trucksDAO();
             EmployeeDAO employeeDAO = factory.employeeDAO();
             DriversDAO driversDAO = factory.driversDAO();

@@ -26,7 +26,6 @@ class ItemListsDAOTest {
 
     @BeforeEach
     void setUp() {
-        DalFactory.clearTestDB();
         HashMap<String, Integer> load = new HashMap<>(){{
             put("item1", 1);
             put("item2", 2);

@@ -13,6 +13,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -39,7 +40,6 @@ public class ShiftDAOTest {
 
     @BeforeEach
     public void setUp(){ // cleans empDAO, creates 3 employees in DB, sets up 2 of them as workers shift
-        DalFactory.clearTestDB();
         try{
             factory = new DalFactory(TESTING_DB_NAME);
             workers = new HashMap<>();

@@ -11,6 +11,7 @@ import serviceLayer.ServiceFactory;
 import serviceLayer.employeeModule.Services.UserService;
 import utils.Response;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import static dataAccessLayer.DalFactory.TESTING_DB_NAME;
@@ -22,15 +23,15 @@ public class UserTest {
     private String username = "admin123";
     private String correctPassword = "123";
     private String wrongPassword = "1234";
+    private ServiceFactory factory;
 
     @BeforeEach
     public void setUp() throws Exception {
-        DalFactory.clearTestDB();
-        ServiceFactory serviceFactory = new ServiceFactory(TESTING_DB_NAME);
-        userService = serviceFactory.userService();
+        factory = new ServiceFactory(TESTING_DB_NAME);
+        userService = factory.userService();
 
         // Loads the HR Manager user: "admin123" "123", clears the data in each test
-        initUserData(userService, serviceFactory.businessFactory().userController());
+        initUserData(userService, factory.businessFactory().userController());
 
         user = Response.fromJson(userService.getUser(username)).data(User.class);
     }

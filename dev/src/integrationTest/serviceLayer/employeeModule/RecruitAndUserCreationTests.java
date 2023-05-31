@@ -16,6 +16,7 @@ import serviceLayer.employeeModule.Services.EmployeesService;
 import serviceLayer.employeeModule.Services.UserService;
 import utils.Response;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
@@ -33,18 +34,18 @@ public class RecruitAndUserCreationTests {
     private String password = "123";
     private String username2 = "111";
     private String password2 = "1234";
+    private ServiceFactory factory;
 
     @BeforeEach
     public void setUp() throws Exception {
-        DalFactory.clearTestDB();
-        ServiceFactory serviceFactory = new ServiceFactory(TESTING_DB_NAME);
-        userService = serviceFactory.userService();
-        empService = serviceFactory.employeesService();
+        factory = new ServiceFactory(TESTING_DB_NAME);
+        userService = factory.userService();
+        empService = factory.employeesService();
 
         // Loads the HR Manager user: "admin123" "123", clears the data in each test
-        initUserData(userService, serviceFactory.businessFactory().userController());
+        initUserData(userService, factory.businessFactory().userController());
         // Loads the branches data
-        initBranchData(serviceFactory.businessFactory().sitesController());
+        initBranchData(factory.businessFactory().sitesController());
 
         admin = Response.fromJson(userService.getUser(adminUsername)).data(User.class);
         if(Response.fromJson(userService.getUser(username2)).success() == false)

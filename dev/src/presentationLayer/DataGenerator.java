@@ -15,6 +15,7 @@ import serviceLayer.transportModule.ResourceManagementService;
 import serviceLayer.transportModule.TransportsService;
 import utils.Response;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -64,10 +65,10 @@ public class DataGenerator {
     private int tries;
     private final long startTime = System.currentTimeMillis();
 
-    public String generateData(String dbName) {
+    public String generateData() {
         try {
-            DalFactory.clearDB(dbName);
-            ServiceFactory factory = new ServiceFactory(dbName);
+            DalFactory.clearDB(DalFactory.DEFAULT_DB_NAME);
+            ServiceFactory factory = new ServiceFactory();
             us = factory.userService();
             us.initializeManagers();
 
@@ -114,9 +115,6 @@ public class DataGenerator {
             drivers.addAll(eveningDrivers);
 
             initializeBranches(drivers);
-            initializeShiftDay(morningDrivers, eveningDrivers, SHIFT_DATE);
-            assignStorekeepers(SHIFT_DATE);
-            generateTransports(factory.transportsService());
 
             try {
                 sitesGenerator.join();
@@ -126,11 +124,23 @@ public class DataGenerator {
                 throw exception[0];
             }
 
+            try {
+                // beginTransaction() and commit() is an optimization
+                // to reduce the number of connections to the DB and improve performance (drastically)
+                factory.businessFactory().dalFactory().shiftEmployeeCursor().beginTransaction();
+                initializeShiftDay(morningDrivers, eveningDrivers, SHIFT_DATE);
+                assignStorekeepers(SHIFT_DATE);
+                factory.businessFactory().dalFactory().shiftEmployeeCursor().commit();
+            } catch (SQLException e) {
+                throw new TransportException(e.getMessage());
+            }
+            generateTransports(factory.transportsService());
+
             return "\nGenerated data successfully (%d ms).".formatted(System.currentTimeMillis()- startTime);
         } catch (TransportException e) {
             if(tries < 3) {
                 tries++;
-                return generateData(dbName);
+                return generateData();
             }
             return "\n" + e.getMessage() + "\n";
         }

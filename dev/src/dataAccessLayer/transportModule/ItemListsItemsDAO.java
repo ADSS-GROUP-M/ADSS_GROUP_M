@@ -107,15 +107,17 @@ public class ItemListsItemsDAO extends DAOBase<ItemList> {
     @Override
     public void insert(ItemList object) throws DalException {
 
+        if(exists(object)){
+            throw new DalException("Item list with id %d already exists".formatted(object.id()));
+        }
+
         StringBuilder query = new StringBuilder();
 
         query.append(insertMapToDBQuery(object.id(), LoadingType.loading, object.load()));
         query.append(insertMapToDBQuery(object.id(), LoadingType.unloading, object.unload()));
 
         try {
-            if(cursor.executeWrite(query.toString()) != query.toString().split("\n").length){
-                throw new RuntimeException("Unexpected error while inserting item list");
-            }
+            cursor.executeWrite(query.toString());
         } catch (SQLException e) {
             throw new DalException("Failed to insert item list", e);
         }
@@ -127,16 +129,18 @@ public class ItemListsItemsDAO extends DAOBase<ItemList> {
      */
     @Override
     public void update(ItemList object) throws DalException {
-        ItemList oldObject = select(object);
 
+        if(exists(object) == false){
+            throw new DalException("Item list with id %d does not exist".formatted(object.id()));
+        }
+
+        ItemList oldObject = select(object);
         StringBuilder query = new StringBuilder();
         query.append(updateFromMapsQuery(object.id(), oldObject.unload(), object.unload(), LoadingType.unloading));
         query.append(updateFromMapsQuery(object.id(), oldObject.load(), object.load(), LoadingType.loading));
 
         try {
-            if(cursor.executeWrite(query.toString()) == 0){
-                throw new DalException("No item list with id " + object.id() + " was found");
-            }
+            cursor.executeWrite(query.toString());
         } catch (SQLException e) {
             throw new DalException("Failed to update item list", e);
         }
@@ -147,11 +151,14 @@ public class ItemListsItemsDAO extends DAOBase<ItemList> {
      */
     @Override
     public void delete(ItemList object) throws DalException {
+
+        if(exists(object) == false){
+            throw new DalException("Item list with id %d does not exist".formatted(object.id()));
+        }
+
         String query = String.format("DELETE FROM %s WHERE id = '%s';", TABLE_NAME, object.id());
         try {
-            if(cursor.executeWrite(query) == 0){
-                throw new DalException("No item list with id " + object.id() + " was found");
-            }
+            cursor.executeWrite(query);
         } catch (SQLException e) {
             throw new DalException("Failed to delete item list", e);
         }

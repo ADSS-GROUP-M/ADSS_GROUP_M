@@ -16,6 +16,7 @@ import serviceLayer.employeeModule.Services.UserService;
 import utils.ErrorCollection;
 import utils.Response;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -45,16 +46,15 @@ class TransportsServiceIT {
     private static int ITEM_LIST_ID = 1;
     private static int TRANSPORT_ID = 1;
     private SitesController sc;
+    private ServiceFactory factory;
 
     @AfterEach
     void tearDown() {
         DalFactory.clearTestDB();
     }
 
-    @BeforeEach
-    void setUp() {
-        DalFactory.clearTestDB();
-        ServiceFactory factory = new ServiceFactory(TESTING_DB_NAME);
+    void setUp(boolean fetchSitesDataFromAPI) {
+        factory = new ServiceFactory(TESTING_DB_NAME);
         ts = factory.transportsService();
         ils = factory.itemListsService();
         rms = factory.resourceManagementService();
@@ -74,7 +74,7 @@ class TransportsServiceIT {
             add(dest2);
         }};
         try {
-            sc.addAllSitesFirstTimeSystemLoad(sites,true);
+            sc.addAllSitesFirstTimeSystemLoad(sites,fetchSitesDataFromAPI);
         } catch (TransportException e) {
             fail(e.getMessage(),e);
         }
@@ -118,6 +118,7 @@ class TransportsServiceIT {
 
     @Test
     void addTransport() {
+        setUp(true);
         Response response = assertSuccessValue(ts.addTransport(transport.toJson()), true);
         Transport returned = Transport.fromJson(response.data());
         assertEquals(TRANSPORT_ID, returned.id());
@@ -129,11 +130,13 @@ class TransportsServiceIT {
 
     @Test
     void addTransportPredefinedId(){
+        setUp(false);
         assertThrows(UnsupportedOperationException.class, () -> ts.addTransport(Transport.getLookupObject(5).toJson()));
     }
 
     @Test
     void updateTransport() {
+        setUp(true);
         // set up
         Response _r = assertSuccessValue(ts.addTransport(transport.toJson()), true);
         transport = Transport.fromJson(_r.data());
@@ -164,11 +167,13 @@ class TransportsServiceIT {
 
     @Test
     void updateTransportDoesNotExist(){
+        setUp(false);
         assertSuccessValue(ts.updateTransport(transport.toJson()), false);
     }
 
     @Test
     void removeTransport() {
+        setUp(true);
         // set up
         Response _r = assertSuccessValue(ts.addTransport(transport.toJson()), true);
         transport = Transport.fromJson(_r.data());
@@ -180,11 +185,13 @@ class TransportsServiceIT {
 
     @Test
     void removeTransportDoesNotExist(){
+        setUp(false);
         assertSuccessValue(ts.removeTransport(transport.toJson()), false);
     }
 
     @Test
     void getTransport() {
+        setUp(true);
         // set up
         Response _r = assertSuccessValue(ts.addTransport(transport.toJson()), true);
         transport = Transport.fromJson(_r.data());
@@ -200,11 +207,13 @@ class TransportsServiceIT {
 
     @Test
     void getTransportDoesNotExist(){
+        setUp(false);
         assertSuccessValue(ts.getTransport(Transport.getLookupObject(transport.id()).toJson()), false);
     }
 
     @Test
     void getAllTransports() {
+        setUp(true);
         // set up
         Response _r = assertSuccessValue(ts.addTransport(transport.toJson()), true);
         transport = Transport.fromJson(_r.data());
@@ -221,6 +230,7 @@ class TransportsServiceIT {
 
     @Test
     void createTransportWithTooMuchWeight(){
+        setUp(false);
         transport = new Transport(
                 new LinkedList<>() {{
                     add(source.name());
@@ -244,7 +254,7 @@ class TransportsServiceIT {
 
     @Test
     void createTransportWithBadLicense(){
-
+        setUp(false);
         driver = new Driver(
                 driver.id(),
                 driver.name(),
@@ -275,7 +285,7 @@ class TransportsServiceIT {
 
     @Test
     void createTransportWithBadLicenseAndTooMuchWeight(){
-
+        setUp(false);
         driver = new Driver(
                 driver.id(),
                 driver.name(),
@@ -307,7 +317,7 @@ class TransportsServiceIT {
 
     @Test
     void createTransportEverythingDoesNotExist(){
-
+        setUp(false);
         // generate some made up sites
         Site sourceBad = new Site("site1","address1","tz1","25125","awgawgaw", Site.SiteType.SUPPLIER);
         Site dest1Bad = new Site("site2","address2","tz1","25125","awgawgaw", Site.SiteType.BRANCH);
@@ -341,12 +351,11 @@ class TransportsServiceIT {
     }
 
     private void assertDeepEquals(Transport transport1, Transport transport2) {
-//        assertEquals(transport1.id(),transport2.id());
         assertEquals(transport1.route(),transport2.route());
         assertEquals(transport1.itemLists(),transport2.itemLists());
-//        assertEquals(transport1.deliveryRoute().estimatedArrivalTimes(),transport2.deliveryRoute().estimatedArrivalTimes());
         assertEquals(transport1.departureTime(),transport2.departureTime());
         assertEquals(transport1.driverId(),transport2.driverId());
+        assertEquals(transport1.truckId(),transport2.truckId());
         assertEquals(transport1.weight(),transport2.weight());
     }
 

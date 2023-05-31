@@ -81,22 +81,21 @@ public class ItemListsDAO extends DAOBase<ItemList> implements CounterDAO {
      */
     @Override
     public void insert(ItemList object) throws DalException {
+
+        if(exists(object)){
+            throw new DalException("Item list with id %d already exists".formatted(object.id()));
+        }
+
         String query = String.format("INSERT INTO %s (id) VALUES (%d);", TABLE_NAME, object.id());
         try {
-            if(cursor.executeWrite(query) == 1){
-                itemListsItemsDAO.insert(object);
-                cache.put(object);
-            } else {
-                throw new RuntimeException("Unexpected error while inserting item list");
-            }
+            cursor.beginTransaction();
+            cursor.executeWrite(query);
+            itemListsItemsDAO.insert(object);
+            cursor.commit();
         } catch (SQLException e) {
             throw new DalException("Failed to insert item list", e);
-        } catch (RuntimeException e) {
-            try{
-                itemListsItemsDAO.delete(object);
-            } catch (DalException ignored) {}
-            throw new RuntimeException("Unexpected error while inserting item list");
         }
+        cache.put(object);
     }
 
     /**
@@ -105,6 +104,11 @@ public class ItemListsDAO extends DAOBase<ItemList> implements CounterDAO {
      */
     @Override
     public void update(ItemList object) throws DalException {
+
+        if(exists(object) == false){
+            throw new DalException("Item list with id %d doesn't exist".formatted(object.id()));
+        }
+
         itemListsItemsDAO.update(object);
         cache.put(object);
     }
@@ -115,17 +119,21 @@ public class ItemListsDAO extends DAOBase<ItemList> implements CounterDAO {
      */
     @Override
     public void delete(ItemList object) throws DalException {
+
+        if(exists(object) == false){
+            throw new DalException("Item list with id %d doesn't exist".formatted(object.id()));
+        }
+
         String query = String.format("DELETE FROM %s WHERE id = %d;", TABLE_NAME, object.id());
-        try {
+        try{
+            cursor.beginTransaction();
             itemListsItemsDAO.delete(object);
-            if(cursor.executeWrite(query) == 1){
-                cache.remove(object);
-            } else {
-                throw new DalException("No item list with id " + object.id() + " was found");
-            }
+            cursor.executeWrite(query);
+            cursor.commit();
         } catch (SQLException e) {
             throw new DalException("Failed to delete item list", e);
         }
+        cache.remove(object);
     }
 
     @Override
@@ -136,16 +144,8 @@ public class ItemListsDAO extends DAOBase<ItemList> implements CounterDAO {
         }
 
         String query = String.format("SELECT * FROM %s WHERE id = %d;", TABLE_NAME, object.id());
-        OfflineResultSet resultSet;
         try {
-            resultSet = cursor.executeRead(query);
-            if(resultSet.next()) {
-                ItemList selected = getObjectFromResultSet(resultSet);
-                cache.put(selected);
-                return true;
-            } else {
-                return false;
-            }
+            return cursor.executeRead(query).isEmpty() == false;
         } catch (SQLException e) {
             throw new DalException("Failed to check if item list exists", e);
         }

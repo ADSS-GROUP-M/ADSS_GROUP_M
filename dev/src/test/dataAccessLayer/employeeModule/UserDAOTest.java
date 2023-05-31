@@ -26,7 +26,6 @@ class UserDAOTest {
 
     @BeforeEach
     void setUp() {
-        DalFactory.clearTestDB();
         user1 = new User("username1","password1");
         user2 = new User("username2","password2");
         user3 = new User("username3","password3");

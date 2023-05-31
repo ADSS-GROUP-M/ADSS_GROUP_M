@@ -24,8 +24,6 @@ public class DeliveryRoutesDAO extends DAOBase<DeliveryRoute> {
         super(cursor, tableName);
     }
 
-    //TODO: ADD CACHING
-
     /**
      * Used to insert data into {@link DAOBase#createTableQueryBuilder}. <br/>
      * in order to add columns and foreign keys to the table use:<br/><br/>
@@ -64,9 +62,7 @@ public class DeliveryRoutesDAO extends DAOBase<DeliveryRoute> {
             throw new DalException("Failed to select delivery route", e);
         }
         if(resultSet.isEmpty() == false) {
-            DeliveryRoute selected =  getObjectFromResultSet(resultSet);
-            cache.put(selected);
-            return selected;
+            return getObjectFromResultSet(resultSet);
         } else {
             throw new DalException("No delivery route with transport id " + object.transportId() + " was found");
         }
@@ -103,7 +99,6 @@ public class DeliveryRoutesDAO extends DAOBase<DeliveryRoute> {
                 deliveryRoutes.add(getObjectFromResultSet(resultSet));
             }
         }
-        cache.putAll(deliveryRoutes);
         return deliveryRoutes;
     }
 
@@ -115,10 +110,7 @@ public class DeliveryRoutesDAO extends DAOBase<DeliveryRoute> {
     public void insert(DeliveryRoute object) throws DalException {
         String query = buildInsertQuery(object);
         try {
-            if(cursor.executeWrite(query) != object.route().size()){
-                throw new RuntimeException("Unexpected error while trying to insert delivery route");
-            }
-            cache.put(object);
+            cursor.executeWrite(query);
         } catch (SQLException e) {
             throw new DalException("Failed to insert delivery route", e);
         }
@@ -138,9 +130,7 @@ public class DeliveryRoutesDAO extends DAOBase<DeliveryRoute> {
 
         String query = buildDeleteQuery(object) + buildInsertQuery(object);
         try {
-            if(cursor.executeWrite(query) == 0){
-                throw new DalException("Failed to update delivery route");
-            }
+            cursor.executeWrite(query);
         } catch (SQLException e) {
             throw new DalException("Failed to update delivery route", e);
         }
@@ -151,12 +141,15 @@ public class DeliveryRoutesDAO extends DAOBase<DeliveryRoute> {
      */
     @Override
     public void delete(DeliveryRoute object) throws DalException {
+
+        if(exists(object) == false){
+            throw new DalException("No delivery route with transport id "
+                    + object.transportId() + " was found");
+        }
+
         String query = buildDeleteQuery(object);
         try {
-            if(cursor.executeWrite(query) == 0){
-                throw new DalException("No delivery route with transport id "
-                        + object.transportId() + " was found");
-            }
+            cursor.executeWrite(query);
         } catch (SQLException e) {
             throw new DalException("Failed to delete related delivery routes", e);
         }
@@ -209,5 +202,4 @@ public class DeliveryRoutesDAO extends DAOBase<DeliveryRoute> {
                 TABLE_NAME,
                 object.transportId());
     }
-
-   }
+}

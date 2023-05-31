@@ -25,7 +25,6 @@ class TrucksDAOTest {
     @BeforeEach
     void setUp() {
         try {
-            DalFactory.clearTestDB();
             factory = new DalFactory(TESTING_DB_NAME);
             dao = factory.trucksDAO();
             truck = new Truck("1", "model1", 1000, 20000, Truck.CoolingCapacity.FROZEN);

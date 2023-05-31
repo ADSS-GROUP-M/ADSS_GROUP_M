@@ -15,6 +15,7 @@ import serviceLayer.ServiceFactory;
 import utils.ErrorCollection;
 import utils.Response;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -32,13 +33,13 @@ class ResourceManagementServiceIT {
     private EmployeeDAO empDao;
     private DalFactory dalFactory;
     private Employee employee;
+    private ServiceFactory factory;
 
     @BeforeEach
     void setUp() {
-
-        ServiceFactory sFactory = new ServiceFactory(TESTING_DB_NAME);
-        rms = sFactory.resourceManagementService();
-        dalFactory = sFactory.businessFactory().dalFactory();
+        factory = new ServiceFactory(TESTING_DB_NAME);
+        rms = factory.resourceManagementService();
+        dalFactory = factory.businessFactory().dalFactory();
         empDao = dalFactory.employeeDAO();
 
         employee = new Employee("name", "123456789", "Poalim", 50, LocalDate.of(1999, 10, 10), "conditions", "details");

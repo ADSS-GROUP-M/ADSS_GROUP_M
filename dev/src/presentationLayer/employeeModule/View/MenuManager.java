@@ -13,6 +13,7 @@ public class MenuManager {
         while (!finished) {
             menu = menu.run();
         }
+        System.exit(0);
     }
 
     public static void terminate() {

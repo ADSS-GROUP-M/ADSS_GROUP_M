@@ -2,10 +2,10 @@ package dataAccessLayer.dalUtils;
 
 import dataAccessLayer.dalAbstracts.SQLExecutor;
 import org.sqlite.SQLiteConfig;
+import utils.FileUtils;
 
 import java.sql.*;
 import java.util.Properties;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class SQLExecutorImpl implements SQLExecutor {
     private static final String URL_PREFIX = "jdbc:sqlite:";
@@ -17,7 +17,7 @@ public class SQLExecutorImpl implements SQLExecutor {
      * @param dbName the name of the database to connect to
      */
     public SQLExecutorImpl(String dbName) {
-        URL = URL_PREFIX + dbName;
+        URL = URL_PREFIX + FileUtils.getParentFolderPath() + dbName;
         properties = getProperties();
     }
 

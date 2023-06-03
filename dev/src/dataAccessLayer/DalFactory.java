@@ -1,5 +1,6 @@
 package dataAccessLayer;
 
+import businessLayer.transportModule.bingApi.BingAPI;
 import dataAccessLayer.dalAbstracts.SQLExecutor;
 import dataAccessLayer.dalUtils.SQLExecutorImpl;
 import dataAccessLayer.employeeModule.*;
@@ -23,7 +24,7 @@ public class DalFactory {
     private DriversDAO driversDAO;
     private SitesRoutesDAO sitesRoutesDAO;
     private ItemListsItemsDAO itemListsItemsDAO;
-    private SQLExecutor cursor;
+    private final SQLExecutor cursor;
     private TransportsDAO transportsDAO;
     private DeliveryRoutesDAO deliveryRoutesDAO;
     private TransportsMetaDataDAO transportsMetaDataDAO;

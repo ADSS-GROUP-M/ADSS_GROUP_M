@@ -6,6 +6,8 @@
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/integrationTest" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/unitTest" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/resources" type="java-resource" />
+      <excludeFolder url="file://$MODULE_DIR$/src/resources" />
     </content>
     <orderEntry type="jdk" jdkName="17" jdkType="JavaSDK" />
     <orderEntry type="sourceFolder" forTests="false" />

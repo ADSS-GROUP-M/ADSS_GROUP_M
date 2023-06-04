@@ -108,13 +108,36 @@ public class SitesDAO extends DAOBase<Site> {
                 object.latitude(),
                 object.longitude());
         try {
-            if(cursor.executeWrite(query) == 1){
-                cache.put(object);
-            } else {
-                throw new RuntimeException("Unexpected error while inserting site");
-            }
+            cursor.executeWrite(query);
+            cache.put(object);
         } catch (SQLException e) {
             throw new DalException("Failed to insert site", e);
+        }
+    }
+
+    public void insertAll(List<Site> sites) throws DalException {
+        try {
+            cursor.beginTransaction();
+            for (Site site : sites) {
+                String query = String.format("INSERT INTO %s VALUES ('%s','%s', '%s', '%s', '%s', '%s', %f, %f);",
+                        TABLE_NAME,
+                        site.name(),
+                        site.address(),
+                        site.transportZone(),
+                        site.contactName(),
+                        site.phoneNumber(),
+                        site.siteType().toString(),
+                        site.latitude(),
+                        site.longitude());
+                cursor.executeWrite(query);
+            }
+            cursor.commit();
+            cache.putAll(sites);
+        } catch (SQLException e) {
+            try {
+                cursor.rollback();
+            } catch (SQLException ignored) {}
+            throw new DalException("Failed to insertAll sites", e);
         }
     }
 
@@ -135,13 +158,39 @@ public class SitesDAO extends DAOBase<Site> {
                 object.longitude(),
                 object.name());
         try {
-            if(cursor.executeWrite(query) == 1){
-                cache.put(object);
-            } else {
+            if (cursor.executeWrite(query) != 1) {
                 throw new DalException("No site with name " + object.name() + " was found");
             }
         } catch (SQLException e) {
             throw new DalException("Failed to update site", e);
+        }
+    }
+
+    public void updateAll(List<Site> sites) throws DalException {
+        try {
+            cursor.beginTransaction();
+            for (Site site : sites) {
+                String query = String.format("UPDATE %s SET address = '%s', transport_zone = '%s', contact_name = '%s', contact_phone = '%s', site_type = '%s', latitude = %f, longitude = %f WHERE name = '%s';",
+                        TABLE_NAME,
+                        site.address(),
+                        site.transportZone(),
+                        site.contactName(),
+                        site.phoneNumber(),
+                        site.siteType(),
+                        site.latitude(),
+                        site.longitude(),
+                        site.name());
+                if (cursor.executeWrite(query) != 1) {
+                    throw new DalException("No site with name " + site.name() + " was found");
+                }
+            }
+            cursor.commit();
+            cache.putAll(sites);
+        } catch (SQLException e) {
+            try {
+                cursor.rollback();
+            } catch (SQLException ignored) {}
+            throw new DalException("Failed to updateAll sites", e);
         }
     }
 

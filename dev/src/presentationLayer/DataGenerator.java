@@ -61,7 +61,6 @@ public class DataGenerator {
     private Site supplier4;
     private Site supplier5;
     private Site logistical1;
-    private final Object lock = new Object();
     private int tries;
     private final long startTime = System.currentTimeMillis();
 
@@ -72,29 +71,7 @@ public class DataGenerator {
             us = factory.userService();
             us.initializeManagers();
 
-            final TransportException[] exception = {null};
-            Thread sitesGenerator = new Thread(() -> {
-                try {
-                    generateSites(factory.businessFactory().sitesController(), this::releaseMainThread);
-                } catch (TransportException e) {
-                    exception[0] = e;
-                    releaseMainThread();
-                }
-            });
-            sitesGenerator.start();
-
-            // Wait for the sitesGenerator thread to activate the callback and release the main thread.
-            // This is done because the siteGenerator thread has more async operations
-            // that do not interfere with the rest of the code here
-            try {
-                synchronized (lock) {
-                    lock.wait();
-                }
-            } catch (InterruptedException ignored) {}
-
-            if (exception[0] != null) {
-                throw exception[0];
-            }
+            generateSites(factory.businessFactory().sitesController());
 
             es = factory.employeesService();
             ItemListsService ils = factory.itemListsService();
@@ -113,16 +90,7 @@ public class DataGenerator {
             List<Driver> drivers = new ArrayList<>();
             drivers.addAll(morningDrivers);
             drivers.addAll(eveningDrivers);
-
             initializeBranches(drivers);
-
-            try {
-                sitesGenerator.join();
-            } catch (InterruptedException ignored) {}
-
-            if (exception[0] != null) {
-                throw exception[0];
-            }
 
             try {
                 // beginTransaction() and commit() is an optimization
@@ -228,7 +196,7 @@ public class DataGenerator {
         validateOperation(ils.addItemList(itemList5.toJson()));
     }
 
-    public void generateSites(SitesController controller, Runnable callback) throws TransportException {
+    public void generateSites(SitesController controller) throws TransportException {
         branch1 = new Site("branch1", "14441 s inglewood ave, hawthorne, ca 90250, united states", "zone1", "111-111-1111", "John Smith", Site.SiteType.BRANCH, 0, 0);
         branch2 = new Site("branch2", "19503 s normandie ave, torrance, ca 90501, united states", "zone1", "222-222-2222", "Jane Doe", Site.SiteType.BRANCH, 0, 0);
         branch3 = new Site("branch3", "22015 hawthorne blvd, torrance, ca 90503, united states", "zone1", "333-333-3333", "Bob Johnson", Site.SiteType.BRANCH, 0, 0);
@@ -262,7 +230,7 @@ public class DataGenerator {
             add(supplier5);
             add(logistical1);
         }};
-        controller.addAllSitesFirstTimeSystemLoad(sites, true, callback);
+        controller.addAllSitesFirstTimeSystemLoad(sites, true);
     }
 
     public void initializeBranches(List<Driver> drivers) {
@@ -421,12 +389,6 @@ public class DataGenerator {
         response = Response.fromJson(json);
         if (response.success() == false) {
             throw new TransportException(response.message());
-        }
-    }
-
-    public void releaseMainThread() {
-        synchronized (lock) {
-            lock.notifyAll();
         }
     }
 }

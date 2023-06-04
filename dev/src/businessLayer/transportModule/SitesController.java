@@ -159,49 +159,32 @@ public class SitesController {
      * this method is used only for the first time the system is loaded.
      * this method assumes that there are no sites in the system.
      */
-    public void addAllSitesFirstTimeSystemLoad(List<Site> sites,  boolean fetchTravelTimes) throws TransportException {
-        addAllSitesFirstTimeSystemLoad(sites, fetchTravelTimes, ()->{});
-    }
+    public void addAllSitesFirstTimeSystemLoad(List<Site> sites, boolean fetchTravelTimes) throws TransportException {
 
-    /**
-     * this method is used only for the first time the system is loaded.
-     * this method assumes that there are no sites in the system.
-     */
-    public void addAllSitesFirstTimeSystemLoad(List<Site> sites, boolean fetchTravelTimes, Runnable callback) throws TransportException {
-
-        // generate basic data needed for the system to work
-        for(Site site : sites){
-            try {
-                dao.insert(site);
-            } catch (DalException e) {
-                throw new TransportException(e.getMessage(),e);
-            }
-            if(site.siteType() == Site.SiteType.BRANCH){
-                employeesService.createBranch(TRANSPORT_MANAGER_USERNAME,site.name());
-            }
-        }
-
-        callback.run();
-
-        // asynchronously generate the rest of the data for the sites
         if(fetchTravelTimes){
-
             // get latitude and longitude for each site
             Map<Site,Point> coordinates = sitesRoutesController.getCoordinates(sites);
 
             List<Site> sitesWithCoordinates = new LinkedList<>();
             for(var entry : coordinates.entrySet()){
-                try {
-                    Site siteWithCoordinates = new Site(entry.getKey(), entry.getValue().latitude(), entry.getValue().longitude());
-                    sitesWithCoordinates.add(siteWithCoordinates);
-                    dao.update(siteWithCoordinates);
-                } catch (DalException e) {
-                    throw new TransportException(e.getMessage(),e);
-                }
+                Site siteWithCoordinates = new Site(entry.getKey(), entry.getValue().latitude(), entry.getValue().longitude());
+                sitesWithCoordinates.add(siteWithCoordinates);
             }
+            sites = sitesWithCoordinates;
+        }
 
+        try {
+            dao.insertAll(sites);
+        } catch (DalException e) {
+            throw new TransportException(e.getMessage(),e);
+        }
+        sites.stream()
+                .filter(site -> site.siteType() == Site.SiteType.BRANCH)
+                .forEach(site -> employeesService.createBranch(TRANSPORT_MANAGER_USERNAME,site.name()));
+
+        if(fetchTravelTimes){
             // get route information for between all sites
-            sitesRoutesController.addAllRouteObjectsFirstTimeLoad(sitesWithCoordinates);
+            sitesRoutesController.addAllRouteObjectsFirstTimeLoad(sites);
         }
     }
 }

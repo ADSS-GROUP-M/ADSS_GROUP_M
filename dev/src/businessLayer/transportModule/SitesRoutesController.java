@@ -150,8 +150,7 @@ public class SitesRoutesController {
                 .map(site -> new Point(site.address(), new double[]{site.latitude(),site.longitude()}))
                 .toArray(Point[]::new);
 
-        DistanceMatrixResponse response = null;
-        response = bingAPI.distanceMatrix(Arrays.stream(points).toList());
+        DistanceMatrixResponse response = bingAPI.distanceMatrix(Arrays.stream(points).toList());
         Result[] results = response.resourceSets()[0].resources()[0].results();
         Arrays.stream(results).forEach(result -> {
             int originIndex = result.originIndex();

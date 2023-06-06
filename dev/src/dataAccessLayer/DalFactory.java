@@ -1,6 +1,5 @@
 package dataAccessLayer;
 
-import businessLayer.transportModule.bingApi.BingAPI;
 import dataAccessLayer.dalAbstracts.SQLExecutor;
 import dataAccessLayer.dalUtils.SQLExecutorImpl;
 import dataAccessLayer.employeeModule.*;
@@ -23,7 +22,6 @@ public class DalFactory {
     private BranchEmployeesDAO branchEmployeesDAO;
     private DriversDAO driversDAO;
     private SitesRoutesDAO sitesRoutesDAO;
-    private ItemListsItemsDAO itemListsItemsDAO;
     private final SQLExecutor cursor;
     private TransportsDAO transportsDAO;
     private DeliveryRoutesDAO deliveryRoutesDAO;
@@ -92,7 +90,7 @@ public class DalFactory {
         //============== dependencies ================== |
         SQLExecutor itemListsCursor = cursor(); // shared SQLExecutor for batched transactions
         /*(1)*/ ItemListIdCounterDAO itemListIdCounterDAO = new ItemListIdCounterDAO(itemListsCursor);
-        /*(1)*/ itemListsItemsDAO = new ItemListsItemsDAO(itemListsCursor);
+        /*(1)*/ ItemListsItemsDAO itemListsItemsDAO = new ItemListsItemsDAO(itemListsCursor);
         /*(2)*/ itemListsDAO = new ItemListsDAO(itemListsCursor, itemListsItemsDAO, itemListIdCounterDAO);
         //============================================== |
 
@@ -154,10 +152,6 @@ public class DalFactory {
 
     public SitesRoutesDAO sitesRoutesDAO() {
         return sitesRoutesDAO;
-    }
-
-    public ItemListsItemsDAO itemListsItemsDAO() {
-        return itemListsItemsDAO;
     }
 
     public TransportsDAO transportsDAO() {

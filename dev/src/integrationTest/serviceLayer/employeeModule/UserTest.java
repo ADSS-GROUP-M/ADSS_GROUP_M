@@ -11,7 +11,6 @@ import serviceLayer.ServiceFactory;
 import serviceLayer.employeeModule.Services.UserService;
 import utils.Response;
 
-import java.sql.SQLException;
 import java.util.List;
 
 import static dataAccessLayer.DalFactory.TESTING_DB_NAME;

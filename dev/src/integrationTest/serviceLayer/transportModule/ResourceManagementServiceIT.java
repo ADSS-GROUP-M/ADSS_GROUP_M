@@ -15,7 +15,6 @@ import serviceLayer.ServiceFactory;
 import utils.ErrorCollection;
 import utils.Response;
 
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.LinkedList;

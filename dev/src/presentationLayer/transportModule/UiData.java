@@ -2,7 +2,6 @@ package presentationLayer.transportModule;
 
 import domainObjects.transportModule.*;
 import exceptions.ErrorOccurredException;
-import exceptions.TransportException;
 import serviceLayer.transportModule.ItemListsService;
 import serviceLayer.transportModule.ResourceManagementService;
 import serviceLayer.transportModule.TransportsService;

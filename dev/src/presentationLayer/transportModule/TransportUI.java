@@ -2,7 +2,6 @@ package presentationLayer.transportModule;
 
 
 import exceptions.ErrorOccurredException;
-import exceptions.TransportException;
 import presentationLayer.employeeModule.View.LoginMenu;
 import presentationLayer.employeeModule.View.Menu;
 import presentationLayer.employeeModule.View.MenuManager;

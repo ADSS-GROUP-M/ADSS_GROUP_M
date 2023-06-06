@@ -7,7 +7,6 @@ import dataAccessLayer.DalFactory;
 import domainObjects.transportModule.*;
 import exceptions.TransportException;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import serviceLayer.ServiceFactory;
 import serviceLayer.employeeModule.Objects.SShiftType;
@@ -16,7 +15,6 @@ import serviceLayer.employeeModule.Services.UserService;
 import utils.ErrorCollection;
 import utils.Response;
 
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;

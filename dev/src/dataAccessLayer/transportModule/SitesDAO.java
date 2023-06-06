@@ -160,6 +160,8 @@ public class SitesDAO extends DAOBase<Site> {
         try {
             if (cursor.executeWrite(query) != 1) {
                 throw new DalException("No site with name " + object.name() + " was found");
+            } else {
+                cache.put(object);
             }
         } catch (SQLException e) {
             throw new DalException("Failed to update site", e);

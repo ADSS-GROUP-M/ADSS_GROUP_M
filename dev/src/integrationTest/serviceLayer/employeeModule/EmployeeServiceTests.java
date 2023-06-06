@@ -22,7 +22,6 @@ import utils.DateUtils;
 import utils.Response;
 
 import java.lang.reflect.Type;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;

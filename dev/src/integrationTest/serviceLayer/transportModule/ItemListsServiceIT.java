@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import serviceLayer.ServiceFactory;
 import utils.Response;
 
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;

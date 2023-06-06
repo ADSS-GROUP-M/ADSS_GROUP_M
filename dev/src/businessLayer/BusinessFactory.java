@@ -3,10 +3,6 @@ package businessLayer;
 import businessLayer.employeeModule.Controllers.EmployeesController;
 import businessLayer.employeeModule.Controllers.ShiftsController;
 import businessLayer.employeeModule.Controllers.UserController;
-import businessLayer.inventoryModule.CategoryController;
-import businessLayer.inventoryModule.DiscountController;
-import businessLayer.inventoryModule.ProductController;
-import businessLayer.suppliersModule.*;
 import businessLayer.transportModule.*;
 import businessLayer.transportModule.bingApi.BingAPI;
 import dataAccessLayer.DalFactory;
@@ -26,14 +22,6 @@ public class BusinessFactory {
     private UserController userController;
     private final DalFactory dalFactory;
     private SitesRoutesController sitesRoutesController;
-    private OrderController orderController;
-    private SupplierController supplierController;
-    private AgreementController agreementController;
-    private BillOfQuantitiesController billOfQuantitiesController;
-    private PeriodicOrderController periodicOrderController;
-    private ProductController productController;
-    private DiscountController discountController;
-    private CategoryController categoryController;
 
     public BusinessFactory() throws TransportException{
         try {
@@ -59,32 +47,6 @@ public class BusinessFactory {
 
     private void buildInstances() throws TransportException {
         userController = new UserController(dalFactory.userDAO()); // independent
-
-        //==================== Dependencies ======================= |
-        /*(1)*/ agreementController = new AgreementController(dalFactory.agreementDataMapper());
-        /*(1)*/ supplierController = new SupplierController(dalFactory.supplierDataMapper());
-        /*(1)*/ billOfQuantitiesController = new BillOfQuantitiesController(dalFactory.billOfQuantitiesDataMapper());
-        /*(2)*/ periodicOrderController = new PeriodicOrderController(
-                    dalFactory.periodicOrderDataMapper(),
-                    agreementController);
-        /*(2)*/ discountController = new DiscountController(dalFactory.discountManagerMapper());
-        /*(2)*/ orderController = new OrderController(
-                    supplierController,
-                    agreementController,
-                    billOfQuantitiesController,
-                    dalFactory.orderHistoryDataMapper());
-        /*(3)*/ productController = new ProductController(
-                    discountController,
-                    dalFactory.productManagerMapper(),
-                    orderController,
-                    periodicOrderController);
-        /*(4)*/ categoryController = new CategoryController(
-                    productController,
-                    discountController,
-                    dalFactory.categoryManagerMapper(),
-                    dalFactory.productManagerMapper());
-        /*(5)*/ discountController.injectDependencies(categoryController);
-        //========================================================= |
 
         //==================== Dependencies ======================= |
         /*(1)*/ shiftsController = new ShiftsController(dalFactory.shiftDAO());
@@ -153,37 +115,5 @@ public class BusinessFactory {
 
     public DalFactory dalFactory() {
         return dalFactory;
-    }
-
-    public OrderController orderController() {
-        return orderController;
-    }
-
-    public SupplierController supplierController() {
-        return supplierController;
-    }
-
-    public AgreementController agreementController() {
-        return agreementController;
-    }
-
-    public BillOfQuantitiesController billOfQuantitiesController() {
-        return billOfQuantitiesController;
-    }
-
-    public PeriodicOrderController periodicOrderController() {
-        return periodicOrderController;
-    }
-
-    public ProductController productController() {
-        return productController;
-    }
-
-    public DiscountController discountController() {
-        return discountController;
-    }
-
-    public CategoryController categoryController() {
-        return categoryController;
     }
 }

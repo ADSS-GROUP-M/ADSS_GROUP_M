@@ -1,4 +1,4 @@
-package presentationLayer.transportModule;
+package presentationLayer.transportModule.cli;
 
 import domainObjects.transportModule.*;
 import exceptions.ErrorOccurredException;
@@ -12,9 +12,9 @@ import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
 import java.util.*;
 
-import static presentationLayer.transportModule.SitesManagement.SitesComparator;
+import static presentationLayer.transportModule.cli.SitesManagement.SitesComparator;
 
-public class UiData {
+public class CLIData {
 
     private Scanner scanner;
     private final HashMap<String, Driver> drivers;
@@ -26,7 +26,7 @@ public class UiData {
     private final ItemListsService ils;
     private final TransportsService ts;
 
-    public UiData(ResourceManagementService rms, ItemListsService ils, TransportsService ts){
+    public CLIData(ResourceManagementService rms, ItemListsService ils, TransportsService ts){
         scanner = new Scanner(System.in);
         this.rms = rms;
         this.ils = ils;

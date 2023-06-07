@@ -1,4 +1,4 @@
-package presentationLayer.transportModule;
+package presentationLayer.transportModule.cli;
 
 import domainObjects.transportModule.Site;
 import serviceLayer.transportModule.ResourceManagementService;
@@ -10,11 +10,11 @@ import java.util.Comparator;
 
 public class SitesManagement {
 
-    private final UiData uiData;
+    private final CLIData cliData;
     private final ResourceManagementService rms;
 
-    public SitesManagement(UiData transportAppData, ResourceManagementService rms) {
-        this.uiData = transportAppData;
+    public SitesManagement(CLIData transportAppData, ResourceManagementService rms) {
+        this.cliData = transportAppData;
         this.rms = rms;
     }
     
@@ -28,7 +28,7 @@ public class SitesManagement {
             System.out.println("3. View full site information");
             System.out.println("4. View all sites");
             System.out.println("5. Return to previous menu");
-            int option = uiData.readInt();
+            int option = cliData.readInt();
             switch (option) {
                 case 1 -> createSite();
                 case 2 -> updateSite();
@@ -45,16 +45,16 @@ public class SitesManagement {
     private void createSite() {
         System.out.println("=========================================");
         System.out.println("Enter site details:");
-        String name = uiData.readLine("Name: ");
-        String address = uiData.readLine("Address: ");
-        String transportZone = uiData.readLine("Transport zone: ");
-        String contactPhone = uiData.readLine("Contact phone: ");
-        String contactName = uiData.readLine("Contact name: ");
+        String name = cliData.readLine("Name: ");
+        String address = cliData.readLine("Address: ");
+        String transportZone = cliData.readLine("Transport zone: ");
+        String contactPhone = cliData.readLine("Contact phone: ");
+        String contactName = cliData.readLine("Contact name: ");
         System.out.println("Site type: ");
         System.out.println("1. Logistical center");
         System.out.println("2. Branch");
         System.out.println("3. Supplier");
-        int siteType = uiData.readInt();
+        int siteType = cliData.readInt();
         Site.SiteType type;
         switch (siteType) {
             case 1 -> type = Site.SiteType.LOGISTICAL_CENTER;
@@ -86,7 +86,7 @@ public class SitesManagement {
         Response response = JsonUtils.deserialize(responseJson[0], Response.class);
         if(response.success()) {
             Site addedSite = Site.fromJson(response.data());
-            uiData.sites().put(addedSite.name(), addedSite);
+            cliData.sites().put(addedSite.name(), addedSite);
         }
         System.out.println("\n"+response.message());
     }
@@ -95,7 +95,7 @@ public class SitesManagement {
         while(true) {
             System.out.println("=========================================");
             System.out.println("Select site to update:");
-            Site site = uiData.pickSite(true);
+            Site site = cliData.pickSite(true);
             if(site == null) {
                 return;
             }
@@ -108,10 +108,10 @@ public class SitesManagement {
                 System.out.println("1. Update contact name");
                 System.out.println("2. Update contact phone");
                 System.out.println("3. Return to previous menu");
-                int option = uiData.readInt();
+                int option = cliData.readInt();
                 switch (option) {
                     case 1 -> {
-                        String contactName = uiData.readLine("Contact name: ");
+                        String contactName = cliData.readLine("Contact name: ");
                         updateSiteHelperMethod(
                                 site.name(),
                                 site.address(),
@@ -122,7 +122,7 @@ public class SitesManagement {
                         );
                     }
                     case 2 -> {
-                        String contactPhone = uiData.readLine("Contact phone: ");
+                        String contactPhone = cliData.readLine("Contact phone: ");
                         updateSiteHelperMethod(
                                 site.name(),
                                 site.address(),
@@ -152,7 +152,7 @@ public class SitesManagement {
         Response response = JsonUtils.deserialize(responseJson, Response.class);
         if(response.success()) {
             Site updatedSite = Site.fromJson(response.data());
-            uiData.sites().put(updatedSite.name(), updatedSite);
+            cliData.sites().put(updatedSite.name(), updatedSite);
         }
         System.out.println("\n"+response.message());
     }
@@ -165,7 +165,7 @@ public class SitesManagement {
         while(true) {
             System.out.println("=========================================");
             System.out.println("Select site to remove:");
-            Site site = uiData.pickSite(true);
+            Site site = cliData.pickSite(true);
             if (site == null) {
                 return;
             }
@@ -174,14 +174,14 @@ public class SitesManagement {
             printSiteDetails(site);
             System.out.println("=========================================");
             System.out.println("Are you sure you want to remove this site? (y/n)");
-            String option = uiData.readLine();
+            String option = cliData.readLine();
             switch (option) {
                 case "y"-> {
                     String json = site.toJson();
                     String responseJson = rms.removeSite(json);
                     Response response = JsonUtils.deserialize(responseJson, Response.class);
                     if(response.success()) {
-                        uiData.sites().remove(site.name());
+                        cliData.sites().remove(site.name());
                     }
                     System.out.println("\n"+response.message());
                 }
@@ -194,34 +194,34 @@ public class SitesManagement {
     private void viewSite() {
         while(true) {
             System.out.println("=========================================");
-            String siteName = uiData.readLine("Enter name of site to view (enter 'done!' to return to previous menu): ");
+            String siteName = cliData.readLine("Enter name of site to view (enter 'done!' to return to previous menu): ");
             if(siteName.equals("done!")) {
                 return;
             }
-            if(uiData.sites().containsKey(siteName) == false) {
+            if(cliData.sites().containsKey(siteName) == false) {
                 System.out.println("Site not found!");
                 continue;
             }
-            Site site = uiData.sites().get(siteName);
+            Site site = cliData.sites().get(siteName);
             System.out.println("=========================================");
             System.out.println("Site details:");
             printSiteDetails(site);
             System.out.println("=========================================");
             System.out.println("Enter 'done!' to return to previous menu");
-            uiData.readLine();
+            cliData.readLine();
         }
     }
 
     private void viewAllSites() {
         System.out.println("=========================================");
         System.out.println("All sites:");
-        Collection<Site> _sites = uiData.sites().values().stream().sorted(new SitesComparator()).toList();
+        Collection<Site> _sites = cliData.sites().values().stream().sorted(new SitesComparator()).toList();
         for(Site site : _sites) {
             printSiteDetails(site);
             System.out.println("-----------------------------------------");
         }
         System.out.println("\nEnter 'done!' to return to previous menu");
-        uiData.readLine();
+        cliData.readLine();
     }
 
     void printSiteDetails(Site site) {

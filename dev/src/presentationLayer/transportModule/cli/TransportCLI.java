@@ -1,4 +1,4 @@
-package presentationLayer.transportModule;
+package presentationLayer.transportModule.cli;
 
 
 import exceptions.ErrorOccurredException;
@@ -8,10 +8,10 @@ import presentationLayer.employeeModule.View.MenuManager;
 import serviceLayer.ServiceFactory;
 import serviceLayer.employeeModule.Services.EmployeesService;
 
-public class TransportUI implements Menu {
+public class TransportCLI implements Menu {
 
     private static final String USERNAME = "transport";
-    private final UiData uiData;
+    private final CLIData cliData;
     private final TransportsManagement transportsManagement;
     private final ItemListsManagement itemListsManagement;
     private final SitesManagement sitesManagement;
@@ -19,25 +19,25 @@ public class TransportUI implements Menu {
     private final DriversManagement driversManagement;
     private final ServiceFactory factory;
 
-    public TransportUI(ServiceFactory factory){
+    public TransportCLI(ServiceFactory factory){
         this.factory = factory;
-        uiData = new UiData(
+        cliData = new CLIData(
                 factory.resourceManagementService(),
                 factory.itemListsService(),
                 factory.transportsService()
         );
         EmployeesService employeesService = factory.employeesService();
-        itemListsManagement = new ItemListsManagement(uiData,factory.itemListsService());
-        sitesManagement = new SitesManagement(uiData,factory.resourceManagementService());
-        trucksManagement = new TrucksManagement(uiData,factory.resourceManagementService());
-        driversManagement = new DriversManagement(uiData,factory.resourceManagementService());
-        transportsManagement = new TransportsManagement(uiData,factory.transportsService(), employeesService);
+        itemListsManagement = new ItemListsManagement(cliData,factory.itemListsService());
+        sitesManagement = new SitesManagement(cliData,factory.resourceManagementService());
+        trucksManagement = new TrucksManagement(cliData,factory.resourceManagementService());
+        driversManagement = new DriversManagement(cliData,factory.resourceManagementService());
+        transportsManagement = new TransportsManagement(cliData,factory.transportsService(), employeesService);
     }
 
     @Override
     public Menu run() {
         try {
-            uiData.loadData();
+            cliData.loadData();
         } catch (ErrorOccurredException e) {
             System.out.printf("""
                     
@@ -49,7 +49,7 @@ public class TransportUI implements Menu {
             return returnToMainMenu();
         }
         printCommands();
-        int option = uiData.readInt();
+        int option = cliData.readInt();
         switch (option) {
             case 1 -> transportsManagement.manageTransports();
             case 2 -> itemListsManagement.manageItemLists();
@@ -92,7 +92,7 @@ public class TransportUI implements Menu {
             System.out.println("2. Manage drivers");
             System.out.println("3. Manage trucks");
             System.out.println("4. Return to main menu");
-            int option = uiData.readInt();
+            int option = cliData.readInt();
             switch (option) {
                 case 1 -> sitesManagement.manageSites();
                 case 2 -> driversManagement.manageDrivers();

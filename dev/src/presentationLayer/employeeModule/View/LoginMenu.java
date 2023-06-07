@@ -3,7 +3,7 @@ package presentationLayer.employeeModule.View;
 import presentationLayer.DataGenerator;
 import presentationLayer.employeeModule.Model.BackendController;
 import presentationLayer.employeeModule.ViewModel.LoginMenuVM;
-import presentationLayer.transportModule.TransportUI;
+import presentationLayer.transportModule.cli.TransportCLI;
 import serviceLayer.ServiceFactory;
 
 import java.util.List;
@@ -62,7 +62,7 @@ public class LoginMenu implements Menu {
                     if (authorizations != null && authorizations.contains("HRManager")) {
                         return new HRManagerMenu(new BackendController());
                     } else if (authorizations != null && authorizations.contains("TransportManager")) {
-                        return new TransportUI(loginMenuVM.serviceFactory());
+                        return new TransportCLI(loginMenuVM.serviceFactory());
                     } else {
                         return new EmployeeMenu(new BackendController());
                     }

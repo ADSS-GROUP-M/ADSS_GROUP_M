@@ -1,4 +1,4 @@
-package presentationLayer.transportModule;
+package presentationLayer.transportModule.cli;
 
 import domainObjects.transportModule.ItemList;
 import serviceLayer.transportModule.ItemListsService;
@@ -9,11 +9,11 @@ import java.util.HashMap;
 
 public class ItemListsManagement {
 
-    private final UiData uiData;
+    private final CLIData cliData;
     private final ItemListsService ils;
 
-    ItemListsManagement(UiData uiData, ItemListsService ils){
-        this.uiData = uiData;
+    ItemListsManagement(CLIData cliData, ItemListsService ils){
+        this.cliData = cliData;
         this.ils = ils;
     }
 
@@ -28,7 +28,7 @@ public class ItemListsManagement {
             System.out.println("4. View full item list information");
             System.out.println("5. View all item lists");
             System.out.println("6. Return to previous menu");
-            int option = uiData.readInt();
+            int option = cliData.readInt();
             switch (option) {
                 case 1 -> createItemList();
                 case 2 -> updateItemList();
@@ -56,7 +56,7 @@ public class ItemListsManagement {
         Response response = JsonUtils.deserialize(responseJson, Response.class);
         if(response.success()) {
             ItemList addedItemList = ItemList.fromJson(response.data());
-            uiData.itemLists().put(addedItemList.id(),addedItemList);
+            cliData.itemLists().put(addedItemList.id(),addedItemList);
         }
         System.out.println("\n"+response.message());
     }
@@ -69,7 +69,7 @@ public class ItemListsManagement {
                 return;
             }
 
-            ItemList oldList = uiData.itemLists().get(id);
+            ItemList oldList = cliData.itemLists().get(id);
             ItemList newList = new ItemList(id, oldList.load(), oldList.unload());
 
             //unloading item list
@@ -90,7 +90,7 @@ public class ItemListsManagement {
             Response response = JsonUtils.deserialize(responseJson, Response.class);
             if(response.success()) {
                 ItemList updatedItemList = ItemList.fromJson(response.data());
-                uiData.itemLists().put(updatedItemList.id(),updatedItemList);
+                cliData.itemLists().put(updatedItemList.id(),updatedItemList);
 
             }
             System.out.println("\n"+response.message());
@@ -104,17 +104,17 @@ public class ItemListsManagement {
             if (id == null) {
                 return;
             }
-            ItemList list = uiData.itemLists().get(id);
+            ItemList list = cliData.itemLists().get(id);
             printItemList(list);
             System.out.println("Are you sure you want to remove this item list? (y/n)");
-            String option = uiData.readLine();
+            String option = cliData.readLine();
             switch(option){
                 case "y" ->{
                     String json = list.toJson();
                     String responseJson = ils.removeItemList(json);
                     Response response = JsonUtils.deserialize(responseJson, Response.class);
                     if(response.success()) {
-                        uiData.itemLists().remove(id);
+                        cliData.itemLists().remove(id);
                     }
                     System.out.println("\n"+response.message());
                 }
@@ -133,28 +133,28 @@ public class ItemListsManagement {
         if (id == null) {
             return;
         }
-        ItemList list = uiData.itemLists().get(id);
+        ItemList list = cliData.itemLists().get(id);
         printItemList(list);
         System.out.println("\nEnter 'done!' to return to previous menu");
-        uiData.readLine();
+        cliData.readLine();
     }
 
     private void viewAllItemLists() {
         System.out.println("=========================================");
         System.out.println("All item lists:");
-        for (ItemList list : uiData.itemLists().values()) {
+        for (ItemList list : cliData.itemLists().values()) {
             System.out.println("-----------------------------------------");
             printItemList(list);
         }
         System.out.println("\nEnter 'done!' to return to previous menu");
-        uiData.readWord();
+        cliData.readWord();
     }
 
     private void itemEditor(HashMap<String,Integer> items) {
         System.out.println("\nTo remove items from the list enter the item name and 0 in the quantity");
         System.out.println("To finish adding items, enter \"done!\" in the item name");
         while (true) {
-            String itemQuantity = uiData.readLine("<Item name> <Quantity>: ").toLowerCase();
+            String itemQuantity = cliData.readLine("<Item name> <Quantity>: ").toLowerCase();
 
             if(itemQuantity.equalsIgnoreCase("done!")){
                 break;
@@ -181,11 +181,11 @@ public class ItemListsManagement {
 
     private Integer getListID() {
         System.out.println();
-        int id = uiData.readInt("Enter item list ID (enter '-1' to return to the previous menu): ");
+        int id = cliData.readInt("Enter item list ID (enter '-1' to return to the previous menu): ");
         if (id == -1) {
             return null;
         }
-        if(uiData.itemLists().containsKey(id) == false){
+        if(cliData.itemLists().containsKey(id) == false){
             System.out.println("Item list with ID "+id+" does not exist!");
             return null;
         }

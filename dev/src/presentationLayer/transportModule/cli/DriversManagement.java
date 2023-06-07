@@ -1,4 +1,4 @@
-package presentationLayer.transportModule;
+package presentationLayer.transportModule.cli;
 
 import domainObjects.transportModule.Driver;
 import serviceLayer.transportModule.ResourceManagementService;
@@ -7,12 +7,12 @@ import utils.Response;
 
 public class DriversManagement {
 
-    private final UiData uiData;
+    private final CLIData cliData;
 
     private final ResourceManagementService rms;
 
-    public DriversManagement(UiData uiData, ResourceManagementService rms) {
-        this.uiData = uiData;
+    public DriversManagement(CLIData cliData, ResourceManagementService rms) {
+        this.cliData = cliData;
         this.rms = rms;
     }
 
@@ -25,7 +25,7 @@ public class DriversManagement {
             System.out.println("2. View full driver information");
             System.out.println("3. View all drivers");
             System.out.println("4. Return to previous menu");
-            int option = uiData.readInt();
+            int option = cliData.readInt();
             switch (option) {
                 case 1 -> updateLicense();
                 case 2 -> viewDriver();
@@ -41,7 +41,7 @@ public class DriversManagement {
     private void updateLicense() {
         System.out.println("=========================================");
         System.out.println("Select driver to update:");
-        Driver driver = uiData.pickDriver(true);
+        Driver driver = cliData.pickDriver(true);
         if (driver == null) {
             return;
         }
@@ -60,8 +60,8 @@ public class DriversManagement {
     private void createDriver() {
         System.out.println("=========================================");
         System.out.println("Enter driver details:");
-        String id = uiData.readLine("Employee ID: ");
-        String fullName = uiData.readLine("Name: ");
+        String id = cliData.readLine("Employee ID: ");
+        String fullName = cliData.readLine("Name: ");
         System.out.println("License type: ");
         Driver.LicenseType licenseType = pickLicenseType();
         if (licenseType == null) {
@@ -72,7 +72,7 @@ public class DriversManagement {
         String responseJson = rms.addDriver(json);
         Response response = JsonUtils.deserialize(responseJson, Response.class);
         if(response.success()) {
-            uiData.drivers().put(id, newDriver);
+            cliData.drivers().put(id, newDriver);
         }
         System.out.println("\n"+response.message());
     }
@@ -85,7 +85,7 @@ public class DriversManagement {
         while (true) {
             System.out.println("=========================================");
             System.out.println("Select driver to update:");
-            Driver driver = uiData.pickDriver(true);
+            Driver driver = cliData.pickDriver(true);
             if (driver == null) {
                 return;
             }
@@ -97,10 +97,10 @@ public class DriversManagement {
                 System.out.println("1. Update name");
                 System.out.println("2. Update license type");
                 System.out.println("3. Return to previous menu");
-                int option = uiData.readInt();
+                int option = cliData.readInt();
                 switch (option) {
                     case 1 -> {
-                        String name = uiData.readLine("Name: ");
+                        String name = cliData.readLine("Name: ");
                         updateDriverHelperMethod(driver.id(), name, driver.licenseType());
                     }
                     case 2 -> {
@@ -127,7 +127,7 @@ public class DriversManagement {
         String responseJson = rms.updateDriver(json);
         Response response = JsonUtils.deserialize(responseJson, Response.class);
         if(response.success()) {
-            uiData.drivers().put(id, updatedDriver);
+            cliData.drivers().put(id, updatedDriver);
         }
         System.out.println("\n"+response.message());
     }
@@ -140,7 +140,7 @@ public class DriversManagement {
         while(true) {
             System.out.println("=========================================");
             System.out.println("Select driver to remove:");
-            Driver driver = uiData.pickDriver(true);
+            Driver driver = cliData.pickDriver(true);
             if(driver == null) {
                 return;
             }
@@ -149,14 +149,14 @@ public class DriversManagement {
             printDriverDetails(driver);
             System.out.println("=========================================");
             System.out.println("Are you sure you want to remove this driver? (y/n)");
-            String option = uiData.readLine();
+            String option = cliData.readLine();
             switch(option) {
                 case "y" ->{
                     String json = driver.toJson();
                     String responseJson = rms.removeDriver(json);
                     Response response = JsonUtils.deserialize(responseJson, Response.class);
                     if(response.success()) {
-                        uiData.drivers().remove(driver.id());
+                        cliData.drivers().remove(driver.id());
                     }
                     System.out.println("\n"+response.message());
                 }
@@ -169,29 +169,29 @@ public class DriversManagement {
     private void viewDriver() {
         while(true){
             System.out.println("=========================================");
-            String driverId = uiData.readLine("Enter employee ID of driver to view (enter 'done!' to return to previous menu): ");
+            String driverId = cliData.readLine("Enter employee ID of driver to view (enter 'done!' to return to previous menu): ");
             if(driverId.equalsIgnoreCase("done!")) {
                 return;
             }
-            Driver driver = uiData.drivers().get(driverId);
+            Driver driver = cliData.drivers().get(driverId);
             System.out.println("=========================================");
             System.out.println("Driver details:");
             printDriverDetails(driver);
             System.out.println("=========================================");
             System.out.println("\nEnter 'done!' to return to previous menu");
-            uiData.readLine();
+            cliData.readLine();
         }
     }
 
     private void viewAllDrivers() {
         System.out.println("=========================================");
         System.out.println("All drivers:");
-        for(Driver driver : uiData.drivers().values()){
+        for(Driver driver : cliData.drivers().values()){
             System.out.println("-----------------------------------------");
             printDriverDetails(driver);
         }
         System.out.println("\nEnter 'done!' to return to previous menu");
-        uiData.readLine();
+        cliData.readLine();
     }
 
     private void printDriverDetails(Driver driver) {
@@ -207,7 +207,7 @@ public class DriversManagement {
                 System.out.println((i+1) + ". " + Driver.LicenseType.values()[i]);
             }
             System.out.println((i+1) + ". Cancel");
-            int option = uiData.readInt()-1;
+            int option = cliData.readInt()-1;
             if(option == Driver.LicenseType.values().length) {
                 return null;
             }

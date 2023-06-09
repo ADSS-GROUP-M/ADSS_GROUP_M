@@ -135,9 +135,4 @@ public class EmployeeMenu implements Menu {
         System.out.println(output);
         return this;
     }
-
-    @Override
-    public Menu runGUI() {
-        return null;
-    }
 }

@@ -9,14 +9,9 @@ public class MenuManager {
         menu = new LoginMenu();
     }
 
-    public void runCLI() {
+    public void run() {
         while (!finished)
-            menu = menu.runGUI();
-    }
-
-    public void runGUI() {
-        while (!finished)
-            menu = menu.runGUI();
+            menu = menu.run();
     }
 
     public static void terminate() {

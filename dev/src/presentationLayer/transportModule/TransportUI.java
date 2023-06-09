@@ -60,11 +60,6 @@ public class TransportUI implements Menu {
     }
 
     @Override
-    public Menu runGUI() {
-        return null;
-    }
-
-    @Override
     public void printCommands() {
         System.out.println("=========================================");
         System.out.println("Welcome to the Transport Module!");

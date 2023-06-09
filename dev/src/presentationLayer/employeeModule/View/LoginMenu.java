@@ -5,23 +5,75 @@ import presentationLayer.employeeModule.ViewModel.LoginMenuVM;
 import presentationLayer.transportModule.TransportUI;
 import serviceLayer.ServiceFactory;
 
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 import java.util.Scanner;
 
 public class LoginMenu implements Menu {
     private final LoginMenuVM loginMenuVM;
     private static Scanner scanner;
+    private Menu nextMenu;
+    private JFrame frame;
+    private JPanel panel;
+    private JButton login;
+    private JButton generateData;
+    private JButton exit;
+    private JTextField usernameField;
+    private JTextField passwordField;
+    private JLabel notice;
+    private ActionListener insert = new InsertAction();
+    private ActionListener command = new CommandAction();
 
     public LoginMenu() {
         this.loginMenuVM = new LoginMenuVM();
         scanner = new Scanner(System.in);
         System.out.println("Please log in to the system.");
+        initiateGUI();
     }
 
     public LoginMenu(ServiceFactory factory) {
         this.loginMenuVM = new LoginMenuVM(factory);
         scanner = new Scanner(System.in);
         System.out.println("Please log in to the system.");
+        initiateGUI();
+    }
+
+    private void initiateGUI(){
+        nextMenu = this;
+        frame = new JFrame("Login Menu");
+        frame.setSize(800,500);
+        panel = new JPanel();
+        BoxLayout boxlayout = new BoxLayout(panel, BoxLayout.Y_AXIS);
+        panel.setLayout(boxlayout);
+        panel.setBorder(new EmptyBorder(new Insets(45, 70, 45, 70)));
+        frame.setLayout(new GridLayout(2,1));
+        login = new JButton("Login");
+        login.addActionListener(command);
+        generateData = new JButton("Generate Data");
+        generateData.addActionListener(command);
+        usernameField = new JTextField("");
+        passwordField = new JTextField("");
+        usernameField.setColumns(13);
+        passwordField.setColumns(13);
+        usernameField.addActionListener(insert);
+        usernameField.setEnabled(true);
+        passwordField.addActionListener(insert);
+        passwordField.setEnabled(true);
+        notice = new JLabel("");
+        exit = new JButton("Exit");
+        exit.addActionListener(command);
+        frame.add(panel);
+        panel.add(notice);
+        panel.add(login);
+        panel.add(generateData);
+        panel.add(usernameField);
+        panel.add(passwordField);
+        panel.add(exit);
+
     }
 
     public void printCommands() {
@@ -74,4 +126,48 @@ public class LoginMenu implements Menu {
         System.out.println(output);
         return this;
     }
+
+    @Override
+    public Menu runGUI() {
+        frame.setVisible(true);
+        if(nextMenu != this)
+            frame.setVisible(false);
+        return nextMenu;
+    }
+
+    class InsertAction implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+
+        }
+    }
+
+    class CommandAction implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+            String command = e.getActionCommand();
+            String output = "";
+
+                if (command.equals("Login")) {
+                    output = loginMenuVM.login(usernameField.getText(),passwordField.getText());
+                    if (loginMenuVM.isLoggedIn()) {
+                        notice.setText(output);
+                        List<String> authorizations = loginMenuVM.getUserAuthorizations();
+                        if (authorizations != null && authorizations.contains("HRManager")) {
+                            nextMenu = new HRManagerMenu();
+                        } else if (authorizations != null && authorizations.contains("TransportManager")) {
+                            nextMenu = new TransportUI(loginMenuVM.serviceFactory());
+                        } else {
+                            nextMenu = new EmployeeMenu();
+                        }
+                    }
+                } else if(command.equals("Generate Data")){
+                    notice.setText(DataGenerator.generateData("SuperLiDB.db"));
+                }
+                else if(command.equals("Exit")){
+                    MenuManager.terminate();
+                    frame.setVisible(false);
+                }
+
+        }
+    }
+
 }

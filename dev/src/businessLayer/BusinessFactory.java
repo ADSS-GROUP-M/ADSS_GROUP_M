@@ -21,11 +21,14 @@ public class BusinessFactory {
     private ShiftsController shiftsController;
     private UserController userController;
     private final DalFactory dalFactory;
-
     private SitesRoutesController sitesRoutesController;
 
-    public BusinessFactory() throws DalException{
-        dalFactory = new DalFactory();
+    public BusinessFactory() throws TransportException{
+        try {
+            dalFactory = new DalFactory();
+        } catch (DalException e) {
+            throw new TransportException(e.getMessage(),e);
+        }
         buildInstances();
     }
 
@@ -33,37 +36,40 @@ public class BusinessFactory {
      * used for testing
      * @param dbName the name of the database to connect to
      */
-    public BusinessFactory(String dbName) throws DalException{
-        dalFactory = new DalFactory(dbName);
+    public BusinessFactory(String dbName) throws TransportException{
+        try {
+            dalFactory = new DalFactory(dbName);
+        } catch (DalException e) {
+            throw new TransportException(e.getMessage(),e);
+        }
         buildInstances();
     }
 
-    private void buildInstances() {
-        userController = new UserController(dalFactory.userDAO());
+    private void buildInstances() throws TransportException {
+        userController = new UserController(dalFactory.userDAO()); // independent
 
         //==================== Dependencies ======================= |
         /*(1)*/ shiftsController = new ShiftsController(dalFactory.shiftDAO());
-        /*(2)*/ employeesController = new EmployeesController(shiftsController, dalFactory.branchesDAO(), dalFactory.employeeDAO());
+        /*(2)*/ employeesController = new EmployeesController(
+                    shiftsController,
+                    dalFactory.branchesDAO(),
+                    dalFactory.employeeDAO());
         //========================================================= |
 
-        try {
-            // ======================== Dependencies ===================== |
-            /*(1)*/ sitesRoutesController = new SitesRoutesController(new BingAPI(),dalFactory.sitesRoutesDAO());
-            /*(1)*/ trucksController = new TrucksController(dalFactory.trucksDAO());
-            /*(1)*/ sitesController = new SitesController(dalFactory.sitesDAO(), sitesRoutesController);
-            /*(1)*/ driversController = new DriversController(dalFactory.driversDAO());
-            /*(1)*/ itemListsController = new ItemListsController(dalFactory.itemListsDAO());
-            /*(2)*/ transportsController = new TransportsController(trucksController,
+        // ======================== Dependencies ===================== |
+        /*(1)*/ sitesRoutesController = new SitesRoutesController(new BingAPI(),dalFactory.sitesRoutesDAO());
+        /*(1)*/ trucksController = new TrucksController(dalFactory.trucksDAO());
+        /*(1)*/ driversController = new DriversController(dalFactory.driversDAO());
+        /*(1)*/ itemListsController = new ItemListsController(dalFactory.itemListsDAO());
+        /*(2)*/ sitesController = new SitesController(dalFactory.sitesDAO(), sitesRoutesController);
+        /*(3)*/ transportsController = new TransportsController(
+                    trucksController,
                     driversController,
                     sitesController,
                     itemListsController,
                     sitesRoutesController,
-                    dalFactory.deliveryRoutesDAO(),
                     dalFactory.transportsDAO());
-            //========================================================= |
-        } catch (TransportException e) {
-            throw new RuntimeException(e);
-        }
+        //========================================================= |
     }
 
     public TransportsController transportsController() {
@@ -103,7 +109,7 @@ public class BusinessFactory {
         return userController;
     }
 
-    public SitesRoutesController getSitesRoutesController() {
+    public SitesRoutesController sitesRoutesController() {
         return sitesRoutesController;
     }
 

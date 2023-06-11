@@ -3,8 +3,9 @@ package dataAccessLayer.employeeModule;
 
 import businessLayer.employeeModule.Authorization;
 import businessLayer.employeeModule.User;
-import dataAccessLayer.dalAbstracts.ManyToManyDAO;
+import dataAccessLayer.dalAbstracts.DAOBase;
 import dataAccessLayer.dalAbstracts.SQLExecutor;
+import dataAccessLayer.dalUtils.CreateTableQueryBuilder;
 import dataAccessLayer.dalUtils.OfflineResultSet;
 import exceptions.DalException;
 import javafx.util.Pair;
@@ -15,31 +16,40 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class UserAuthorizationsDAO extends ManyToManyDAO<Pair<String,Authorization>> {
+import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnModifier;
+import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnType;
 
-    private static final String[] types = new String[]{"TEXT", "TEXT"};
-    private static final String[] parent_table_names = {"users"};
-    private static final String[] primary_keys = {Columns.username.name(), Columns.authorization.name()};
-    private static final String[][] foreign_keys = {{Columns.username.name()}};
-    private static final String[][] references = {{"username"}};
+public class UserAuthorizationsDAO extends DAOBase<Pair<String,Authorization>> {
+
+//    private static final String[] types = new String[]{"TEXT", "TEXT"};
+//    private static final String[] parent_table_names = {"users"};
+//    private static final String[][] foreign_keys = {{Columns.username.name()}};
+    //    private static final String[][] references = {{"username"}};
+    public static final String[] primaryKey = {Columns.username.name(), Columns.authorization.name()};
     public static final String tableName = "user_authorizations";
 
     private enum Columns {
         username,
-        authorization;
+        authorization
     }
 
     public UserAuthorizationsDAO(SQLExecutor cursor) throws DalException {
-        super(cursor,
-                tableName,
-                parent_table_names,
-                types,
-                primary_keys,
-                foreign_keys,
-                references,
-                Columns.username.name(),
-                Columns.authorization.name());
-        initTable();
+        super(cursor, tableName);
+    }
+
+    /**
+     * Used to insert data into {@link DAOBase#createTableQueryBuilder}. <br/>
+     * in order to add columns and foreign keys to the table use:<br/><br/>
+     * {@link CreateTableQueryBuilder#addColumn(String, ColumnType, ColumnModifier...)} <br/><br/>
+     * {@link CreateTableQueryBuilder#addForeignKey(String, String, String)}<br/><br/>
+     * {@link CreateTableQueryBuilder#addCompositeForeignKey(String[], String, String[])}
+     */
+    @Override
+    protected void initializeCreateTableQueryBuilder() {
+        createTableQueryBuilder
+                .addColumn(Columns.username.name(), ColumnType.TEXT, ColumnModifier.PRIMARY_KEY)
+                .addColumn(Columns.authorization.name(), ColumnType.TEXT, ColumnModifier.PRIMARY_KEY)
+                .addForeignKey(Columns.username.name(), UserDAO.tableName, UserDAO.primaryKey);
     }
 
     /**
@@ -84,8 +94,9 @@ public class UserAuthorizationsDAO extends ManyToManyDAO<Pair<String,Authorizati
     @Deprecated
     @Override
     public Pair<String,Authorization> select(Pair<String,Authorization> object) throws DalException {
-        if(cache.contains(object))
+        if(cache.contains(object)) {
             return object;
+        }
 
         String query = String.format("SELECT * FROM %s WHERE %s = '%s' AND %s = '%s';",
                 TABLE_NAME,
@@ -237,7 +248,7 @@ public class UserAuthorizationsDAO extends ManyToManyDAO<Pair<String,Authorizati
     }
 
     @Override
-    public boolean exists(Pair<String,Authorization> object) throws DalException {
+    public boolean exists(Pair<String,Authorization> object) {
         try {
             select(object); // Throws a DAL exception if the given authorization object doesn't exist in the system.
             return true;

@@ -1,9 +1,10 @@
 package dataAccessLayer.employeeModule;
 
 import businessLayer.employeeModule.Shift;
-import dataAccessLayer.dalAbstracts.ManyToManyDAO;
+import dataAccessLayer.dalAbstracts.DAOBase;
 import dataAccessLayer.dalAbstracts.SQLExecutor;
 import dataAccessLayer.dalAssociationClasses.employeeModule.ShiftCancel;
+import dataAccessLayer.dalUtils.CreateTableQueryBuilder;
 import dataAccessLayer.dalUtils.OfflineResultSet;
 import exceptions.DalException;
 
@@ -13,14 +14,15 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-public class ShiftToCancelsDAO extends ManyToManyDAO<ShiftCancel> {
+import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnModifier;
+import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnType;
 
-    private static final String[] types = {"TEXT", "TEXT" , "TEXT", "TEXT"};
-    private static final String[] parent_tables = {"shifts"};
-    private static final String[] primary_keys = {Columns.branch.name(), Columns.shift_date.name(), Columns.shift_type.name(), Columns.cancel_action.name()};
-    private static final String[][] foreign_keys = {{Columns.branch.name(), Columns.shift_date.name(), Columns.shift_type.name()}};
-    private static final String[][] references = {{"branch", "shift_date", "shift_type"}};
+public class ShiftToCancelsDAO extends DAOBase<ShiftCancel> {
+
+    public static final String[] primaryKey = {Columns.branch.name(), Columns.shift_date.name(), Columns.shift_type.name(), Columns.cancel_action.name()};
     public static final String tableName = "shift_cancels";
+
+    private static final String[] foreignKeyColumns = {Columns.branch.name(), Columns.shift_date.name(), Columns.shift_type.name()};
 
     private enum Columns {
         branch,
@@ -30,19 +32,24 @@ public class ShiftToCancelsDAO extends ManyToManyDAO<ShiftCancel> {
     }
 
     public ShiftToCancelsDAO(SQLExecutor cursor) throws DalException{
-        super(cursor,
-                tableName,
-                parent_tables,
-                types,
-                primary_keys,
-                foreign_keys,
-                references,
-                Columns.branch.name(),
-                Columns.shift_date.name(),
-                Columns.shift_type.name(),
-                Columns.cancel_action.name()
-        );
-        initTable();
+        super(cursor, tableName);
+    }
+
+    /**
+     * Used to insert data into {@link DAOBase#createTableQueryBuilder}. <br/>
+     * in order to add columns and foreign keys to the table use:<br/><br/>
+     * {@link CreateTableQueryBuilder#addColumn(String, ColumnType, ColumnModifier...)} <br/><br/>
+     * {@link CreateTableQueryBuilder#addForeignKey(String, String, String)}<br/><br/>
+     * {@link CreateTableQueryBuilder#addCompositeForeignKey(String[], String, String[])}
+     */
+    @Override
+    protected void initializeCreateTableQueryBuilder() {
+        createTableQueryBuilder
+                .addColumn(Columns.branch.name(), ColumnType.TEXT, ColumnModifier.PRIMARY_KEY)
+                .addColumn(Columns.shift_date.name(), ColumnType.TEXT, ColumnModifier.PRIMARY_KEY)
+                .addColumn(Columns.shift_type.name(), ColumnType.TEXT, ColumnModifier.PRIMARY_KEY)
+                .addColumn(Columns.cancel_action.name(), ColumnType.TEXT, ColumnModifier.PRIMARY_KEY)
+                .addCompositeForeignKey(foreignKeyColumns, ShiftDAO.tableName, ShiftDAO.primaryKey);
     }
 
     /**

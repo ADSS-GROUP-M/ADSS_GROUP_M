@@ -4,11 +4,9 @@ import businessLayer.employeeModule.Authorization;
 import businessLayer.employeeModule.Controllers.UserController;
 import businessLayer.employeeModule.User;
 import dataAccessLayer.DalFactory;
-import exceptions.EmployeeException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import presentationLayer.DataGenerator;
 import serviceLayer.ServiceFactory;
 import serviceLayer.employeeModule.Services.UserService;
 import utils.Response;
@@ -24,15 +22,15 @@ public class UserTest {
     private String username = "admin123";
     private String correctPassword = "123";
     private String wrongPassword = "1234";
+    private ServiceFactory factory;
 
     @BeforeEach
     public void setUp() throws Exception {
-        DalFactory.clearTestDB();
-        ServiceFactory serviceFactory = new ServiceFactory(TESTING_DB_NAME);
-        userService = serviceFactory.userService();
+        factory = new ServiceFactory(TESTING_DB_NAME);
+        userService = factory.userService();
 
         // Loads the HR Manager user: "admin123" "123", clears the data in each test
-        initUserData(userService, serviceFactory.businessFactory().userController());
+        initUserData(userService, factory.businessFactory().userController());
 
         user = Response.fromJson(userService.getUser(username)).data(User.class);
     }

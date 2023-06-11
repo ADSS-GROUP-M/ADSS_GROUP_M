@@ -3,10 +3,10 @@ package serviceLayer.transportModule;
 import businessLayer.transportModule.DriversController;
 import businessLayer.transportModule.SitesController;
 import businessLayer.transportModule.TrucksController;
+import domainObjects.transportModule.Driver;
+import domainObjects.transportModule.Site;
+import domainObjects.transportModule.Truck;
 import exceptions.TransportException;
-import objects.transportObjects.Driver;
-import objects.transportObjects.Site;
-import objects.transportObjects.Truck;
 import utils.JsonUtils;
 import utils.Response;
 

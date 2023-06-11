@@ -3,8 +3,9 @@ package dataAccessLayer.employeeModule;
 import businessLayer.employeeModule.Employee;
 import businessLayer.employeeModule.Shift;
 import businessLayer.employeeModule.Shift.ShiftType;
-import dataAccessLayer.dalAbstracts.ManyToManyDAO;
+import dataAccessLayer.dalAbstracts.DAOBase;
 import dataAccessLayer.dalAbstracts.SQLExecutor;
+import dataAccessLayer.dalUtils.CreateTableQueryBuilder;
 import dataAccessLayer.dalUtils.OfflineResultSet;
 import exceptions.DalException;
 
@@ -14,12 +15,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ShiftDAO extends ManyToManyDAO<Shift> { //DAO {
-    private static final String[] types = new String[]{"TEXT", "TEXT", "TEXT", "TEXT", "TEXT"};
-    private static final String[] parent_table_names = {"branches"};
-    private static final String[] primary_keys = {Columns.branch.name(), Columns.shift_date.name(), Columns.shift_type.name()};
-    private static final String[][] foreign_keys = {{Columns.branch.name()}};
-    private static final String[][] references = {{"name"}};
+import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnModifier;
+import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnType;
+
+public class ShiftDAO extends DAOBase<Shift> {
+
+    public static final String[] primaryKey = {Columns.branch.name(), Columns.shift_date.name(), Columns.shift_type.name()};
     public static final String tableName = "shifts";
 
     private final ShiftToNeededRolesDAO shiftToNeededRolesDAO;
@@ -32,23 +33,12 @@ public class ShiftDAO extends ManyToManyDAO<Shift> { //DAO {
         branch,
         shift_date,
         shift_type,
-        is_approved;
+        is_approved
     }
 
     public ShiftDAO(SQLExecutor cursor, ShiftToNeededRolesDAO shiftToNeededRolesDAO, ShiftToRequestsDAO shiftToRequestsDAO,
                     ShiftToWorkersDAO shiftToWorkersDAO, ShiftToCancelsDAO shiftToCancelsDAO, ShiftToActivityDAO shiftToActivityDAO) throws DalException {
-        super(cursor,
-                tableName,
-                parent_table_names,
-                types,
-                primary_keys,
-                foreign_keys,
-                references,
-                Columns.branch.name(),
-                Columns.shift_date.name(),
-                Columns.shift_type.name(),
-                Columns.is_approved.name());
-        initTable();
+        super(cursor, tableName);
         this.shiftToNeededRolesDAO = shiftToNeededRolesDAO;
         this.shiftToRequestsDAO = shiftToRequestsDAO;
         this.shiftToWorkersDAO = shiftToWorkersDAO;
@@ -65,6 +55,24 @@ public class ShiftDAO extends ManyToManyDAO<Shift> { //DAO {
      */
     public Shift select(String branchId, LocalDate shiftDate, ShiftType shiftType) throws DalException {
         return select(new Shift(branchId, shiftDate, shiftType));
+    }
+
+    /**
+     * Used to insert data into {@link DAOBase#createTableQueryBuilder}. <br/>
+     * in order to add columns and foreign keys to the table use:<br/><br/>
+     * {@link CreateTableQueryBuilder#addColumn(String, ColumnType, ColumnModifier...)} <br/><br/>
+     * {@link CreateTableQueryBuilder#addForeignKey(String, String, String)}<br/><br/>
+     * {@link CreateTableQueryBuilder#addCompositeForeignKey(String[], String, String[])}
+     */
+    @Override
+    protected void initializeCreateTableQueryBuilder() {
+        createTableQueryBuilder
+                .addColumn(Columns.branch.name(), ColumnType.TEXT, ColumnModifier.PRIMARY_KEY)
+                .addColumn(Columns.shift_date.name(), ColumnType.TEXT, ColumnModifier.PRIMARY_KEY)
+                .addColumn(Columns.shift_type.name(), ColumnType.TEXT, ColumnModifier.PRIMARY_KEY)
+                .addColumn(Columns.is_approved.name(), ColumnType.TEXT, ColumnModifier.NOT_NULL)
+                .addForeignKey(Columns.branch.name(), BranchesDAO.tableName, BranchesDAO.primaryKey);
+
     }
 
     /**

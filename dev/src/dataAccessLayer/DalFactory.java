@@ -1,15 +1,15 @@
 package dataAccessLayer;
 
 import dataAccessLayer.dalAbstracts.SQLExecutor;
-import dataAccessLayer.dalUtils.SQLExecutorProductionImpl;
-import dataAccessLayer.dalUtils.SQLExecutorTestingImpl;
+import dataAccessLayer.dalUtils.SQLExecutorImpl;
 import dataAccessLayer.employeeModule.*;
 import dataAccessLayer.transportModule.*;
 import exceptions.DalException;
 
 public class DalFactory {
 
-    public static String TESTING_DB_NAME = "TestingDB.db";
+    public static final String TESTING_DB_NAME = "TestingDB.db";
+    public static final String DEFAULT_DB_NAME = "SuperLiDB.db";
 
     private EmployeeDAO employeeDAO;
     private UserDAO userDAO;
@@ -21,65 +21,93 @@ public class DalFactory {
     private BranchesDAO branchesDAO;
     private BranchEmployeesDAO branchEmployeesDAO;
     private DriversDAO driversDAO;
-    private TransportsDAO transportsDAO;
     private SitesRoutesDAO sitesRoutesDAO;
-    private DeliveryRoutesDAO deliveryRoutesDAO;
-    private ItemListsItemsDAO itemListsItemsDAO;
     private final SQLExecutor cursor;
+    private TransportsDAO transportsDAO;
+    private DeliveryRoutesDAO deliveryRoutesDAO;
+    private TransportsMetaDataDAO transportsMetaDataDAO;
 
+    private SQLExecutor shiftEmployeeCursor;
+
+    /**
+     * connect to the default database {@link DalFactory#DEFAULT_DB_NAME}
+     */
     public DalFactory() throws DalException {
-        cursor = new SQLExecutorProductionImpl();
-        buildInstances(cursor);
+        this(DEFAULT_DB_NAME);
     }
 
     /**
-     * used for testing
      * @param dbName the name of the database to connect to
      */
     public DalFactory(String dbName) throws DalException {
-        cursor = new SQLExecutorTestingImpl(dbName);
-        buildInstances(cursor);
+        cursor = new SQLExecutorImpl(dbName);
+        buildInstances();
     }
 
-    private void buildInstances(SQLExecutor cursor) throws DalException {
+    private DalFactory(SQLExecutor cursor) throws DalException {
+        this.cursor = cursor;
+        buildInstances();
+    }
 
-        itemListsItemsDAO = new ItemListsItemsDAO(cursor);
-        trucksDAO = new TrucksDAO(cursor);
-        driversDAO = new DriversDAO(cursor);
-        deliveryRoutesDAO = new DeliveryRoutesDAO(cursor);
+    private void buildInstances() throws DalException {
 
-        //============== dependencies ============== |
-        /*(1)*/ userAuthorizationsDAO = new UserAuthorizationsDAO(cursor);
-        /*(2)*/ userDAO = new UserDAO(cursor,userAuthorizationsDAO);
+        trucksDAO = new TrucksDAO(cursor());                // independent
+        driversDAO = new DriversDAO(cursor());              // independent
+        sitesDAO = new SitesDAO(cursor());                  // independent
+        sitesRoutesDAO = new SitesRoutesDAO(cursor());      // independent
+
+        //============== dependencies ================== |
+        SQLExecutor transportCursor = cursor(); // shared SQLExecutor for batched transactions
+        /*(1)*/ TransportIdCounterDAO transportIdCounterDAO = new TransportIdCounterDAO(transportCursor);
+        /*(2)*/ transportsMetaDataDAO = new TransportsMetaDataDAO(transportCursor, transportIdCounterDAO);
+        /*(2)*/ deliveryRoutesDAO = new DeliveryRoutesDAO(transportCursor);
+        /*(3)*/ transportsDAO = new TransportsDAO(transportCursor,transportsMetaDataDAO, deliveryRoutesDAO);
+        //============================================== |
+
+        //============== dependencies ================== |
+        SQLExecutor userCursor = cursor(); // shared SQLExecutor for batched transactions
+        /*(1)*/ userAuthorizationsDAO = new UserAuthorizationsDAO(userCursor);
+        /*(2)*/ userDAO = new UserDAO(userCursor,userAuthorizationsDAO);
         //========================================== |
 
-        //============== dependencies ============== |
-        /*(1)*/ ShiftToActivityDAO shiftToActivityDAO = new ShiftToActivityDAO(cursor);
-        /*(1)*/ ShiftToCancelsDAO shiftToCancelsDAO = new ShiftToCancelsDAO(cursor);
-        /*(1)*/ ShiftToNeededRolesDAO shiftToNeededRolesDAO = new ShiftToNeededRolesDAO(cursor);
-        /*(1)*/ EmployeeRolesDAO employeeRolesDAO = new EmployeeRolesDAO(cursor);
-        /*(2)*/ employeeDAO = new EmployeeDAO(cursor,employeeRolesDAO);
-        /*(3)*/ ShiftToWorkersDAO shiftToWorkersDAO = new ShiftToWorkersDAO(cursor,employeeDAO);
-        /*(3)*/ ShiftToRequestsDAO shiftToRequestsDAO = new ShiftToRequestsDAO(cursor,employeeDAO);
-        /*(4)*/ shiftDAO = new ShiftDAO(cursor, shiftToNeededRolesDAO, shiftToRequestsDAO, shiftToWorkersDAO, shiftToCancelsDAO, shiftToActivityDAO);
-        //========================================== |
+        //============== dependencies ================== |
+        shiftEmployeeCursor = cursor(); // shared SQLExecutor for batched transactions
+        /*(1)*/ ShiftToActivityDAO shiftToActivityDAO = new ShiftToActivityDAO(shiftEmployeeCursor);
+        /*(1)*/ ShiftToCancelsDAO shiftToCancelsDAO = new ShiftToCancelsDAO(shiftEmployeeCursor);
+        /*(1)*/ ShiftToNeededRolesDAO shiftToNeededRolesDAO = new ShiftToNeededRolesDAO(shiftEmployeeCursor);
+        /*(1)*/ EmployeeRolesDAO employeeRolesDAO = new EmployeeRolesDAO(shiftEmployeeCursor);
+        /*(2)*/ employeeDAO = new EmployeeDAO(shiftEmployeeCursor,employeeRolesDAO);
+        /*(3)*/ ShiftToWorkersDAO shiftToWorkersDAO = new ShiftToWorkersDAO(shiftEmployeeCursor,employeeDAO);
+        /*(3)*/ ShiftToRequestsDAO shiftToRequestsDAO = new ShiftToRequestsDAO(shiftEmployeeCursor,employeeDAO);
+        /*(4)*/ shiftDAO = new ShiftDAO(shiftEmployeeCursor,
+                    shiftToNeededRolesDAO,
+                    shiftToRequestsDAO,
+                    shiftToWorkersDAO,
+                    shiftToCancelsDAO,
+                    shiftToActivityDAO);
+        //============================================= |
 
-        //============== dependencies ============== |
-        /*(1)*/ ItemListIdCounterDAO itemListIdCounterDAO = new ItemListIdCounterDAO(cursor);
-        /*(2)*/ itemListsDAO = new ItemListsDAO(cursor, itemListsItemsDAO, itemListIdCounterDAO);
-        //========================================== |
+        //============== dependencies ================== |
+        SQLExecutor itemListsCursor = cursor(); // shared SQLExecutor for batched transactions
+        /*(1)*/ ItemListIdCounterDAO itemListIdCounterDAO = new ItemListIdCounterDAO(itemListsCursor);
+        /*(1)*/ ItemListsItemsDAO itemListsItemsDAO = new ItemListsItemsDAO(itemListsCursor);
+        /*(2)*/ itemListsDAO = new ItemListsDAO(itemListsCursor, itemListsItemsDAO, itemListIdCounterDAO);
+        //============================================== |
 
-        //============== dependencies ============== |
-        /*(1)*/ sitesDAO = new SitesDAO(cursor);
-        /*(2)*/ sitesRoutesDAO = new SitesRoutesDAO(cursor);
-        /*(2)*/ branchEmployeesDAO = new BranchEmployeesDAO(cursor);
-        /*(3)*/ branchesDAO = new BranchesDAO(cursor,branchEmployeesDAO);
-        //========================================== |
+        //============== dependencies ================== |
+        SQLExecutor branchCursor = cursor(); // shared SQLExecutor for batched transactions
+        /*(1)*/ branchEmployeesDAO = new BranchEmployeesDAO(branchCursor);
+        /*(2)*/ branchesDAO = new BranchesDAO(branchCursor,branchEmployeesDAO);
+        //============================================== |
 
-        //============== dependencies ============== |
-        /*(1)*/ TransportIdCounterDAO transportIdCounterDAO = new TransportIdCounterDAO(cursor);
-        /*(2)*/ transportsDAO = new TransportsDAO(cursor, transportIdCounterDAO);
-        //========================================== |
+    }
+
+    public DeliveryRoutesDAO deliveryRoutesDAO() {
+        return deliveryRoutesDAO;
+    }
+
+    public TransportsMetaDataDAO transportsMetaDataDAO() {
+        return transportsMetaDataDAO;
     }
 
     public EmployeeDAO employeeDAO() {
@@ -122,49 +150,49 @@ public class DalFactory {
         return branchEmployeesDAO;
     }
 
-    public TransportsDAO transportsDAO() {
-        return transportsDAO;
-    }
-
     public SitesRoutesDAO sitesRoutesDAO() {
         return sitesRoutesDAO;
     }
 
-    public ItemListsItemsDAO itemListsItemsDAO() {
-        return itemListsItemsDAO;
+    public TransportsDAO transportsDAO() {
+        return transportsDAO;
     }
 
     public SQLExecutor cursor() {
-        return cursor;
-    }
-
-    public DeliveryRoutesDAO deliveryRoutesDAO() {
-        return deliveryRoutesDAO;
+        return cursor.clone();
     }
 
     public static void clearTestDB(){
         clearDB(TESTING_DB_NAME);
     }
 
+    public SQLExecutor shiftEmployeeCursor() {
+        return shiftEmployeeCursor;
+    }
+
     public static void clearDB(String dbName){
         try {
-            DalFactory factory = new DalFactory(dbName);
-            factory.shiftDAO().clearTable();
-            factory.userDAO().clearTable();
 
-            factory.deliveryRoutesDAO().clearTable();
-            factory.transportsDAO().clearTable();
+            //note: the order of the calls is important because of the foreign key constraints
+            DalFactory factory = new DalFactory(new SQLExecutorImpl(dbName));
 
-            factory.trucksDAO().clearTable();
-            factory.itemListsDAO().clearTable();
+            //============== dependencies ================== |
+            /*(-)*/ factory.userDAO().clearTable();
 
-            factory.branchEmployeesDAO().clearTable();
-            factory.branchesDAO().clearTable();
-            factory.sitesRoutesDAO().clearTable();
-            factory.sitesDAO().clearTable();
+            /*(1)*/ factory.shiftDAO().clearTable();
+            /*(1)*/ factory.transportsDAO().clearTable();
 
-            factory.driversDAO().clearTable();
-            factory.employeeDAO().clearTable();
+            /*(2)*/ factory.trucksDAO().clearTable();
+            /*(2)*/ factory.driversDAO().clearTable();
+            /*(2)*/ factory.branchEmployeesDAO().clearTable();
+            /*(2)*/ factory.sitesRoutesDAO().clearTable();
+
+            /*(3)*/ factory.branchesDAO().clearTable();
+            /*(3)*/ factory.itemListsDAO().clearTable();
+            /*(3)*/ factory.employeeDAO().clearTable();
+
+            /*(4)*/ factory.sitesDAO().clearTable();
+            //============================================== |
 
         } catch (DalException e) {
             e.printStackTrace();

@@ -1,7 +1,9 @@
 package dataAccessLayer.employeeModule;
 
-import dataAccessLayer.dalAbstracts.ManyToManyDAO;
+
+import dataAccessLayer.dalAbstracts.DAOBase;
 import dataAccessLayer.dalAbstracts.SQLExecutor;
+import dataAccessLayer.dalUtils.CreateTableQueryBuilder;
 import dataAccessLayer.dalUtils.OfflineResultSet;
 import exceptions.DalException;
 import javafx.util.Pair;
@@ -11,25 +13,31 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-public class BranchEmployeesDAO extends ManyToManyDAO<Pair<String,String>> {
-    private static final String[] types = new String[]{"TEXT", "TEXT"};
-    private static final String[] parent_table_names = {"branches","employees"};
-    private static final String[] primary_keys = {"name","employee_id"};
-    private static final String[][] foreign_keys = {{"name"},{"employee_id"}};
-    private static final String[][] references = {{"name"},{"id"}};
+import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnModifier;
+import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnType;
+
+public class BranchEmployeesDAO extends DAOBase<Pair<String,String>> {
+
+    public static final String[] primaryKey = {"name","employee_id"};
     public static final String tableName = "branch_employees";
 
     public BranchEmployeesDAO(SQLExecutor cursor) throws DalException {
-        super(cursor,
-                tableName,
-                parent_table_names,
-                types,
-                primary_keys,
-                foreign_keys,
-                references,
-                "name",
-                "employee_id");
-        initTable();
+        super(cursor, tableName);
+    }
+
+    /**
+     * Used to insert data into {@link DAOBase#createTableQueryBuilder}. <br/>
+     * in order to add columns and foreign keys to the table use:<br/><br/>
+     * {@link CreateTableQueryBuilder#addColumn(String, ColumnType, ColumnModifier...)} <br/><br/>
+     * {@link CreateTableQueryBuilder#addCompositeForeignKey(String[], String, String[])}
+     */
+    @Override
+    protected void initializeCreateTableQueryBuilder() {
+        createTableQueryBuilder
+                .addColumn("name", ColumnType.TEXT, ColumnModifier.PRIMARY_KEY)
+                .addColumn("employee_id", ColumnType.TEXT, ColumnModifier.PRIMARY_KEY)
+                .addForeignKey("name", BranchesDAO.tableName, BranchesDAO.primaryKey)
+                .addForeignKey("employee_id", EmployeeDAO.tableName, EmployeeDAO.primaryKey);
     }
 
     /**
@@ -181,7 +189,7 @@ public class BranchEmployeesDAO extends ManyToManyDAO<Pair<String,String>> {
     }
 
     @Override
-    public boolean exists(Pair<String,String> object) throws DalException {
+    public boolean exists(Pair<String,String> object) {
         try {
             select(object); // Throws a DAL exception if the given object doesn't exist in the system.
             return true;

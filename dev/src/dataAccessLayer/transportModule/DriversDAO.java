@@ -1,35 +1,43 @@
 package dataAccessLayer.transportModule;
 
-import dataAccessLayer.dalAbstracts.ManyToManyDAO;
+import dataAccessLayer.dalAbstracts.DAOBase;
 import dataAccessLayer.dalAbstracts.SQLExecutor;
+import dataAccessLayer.dalUtils.CreateTableQueryBuilder;
 import dataAccessLayer.dalUtils.OfflineResultSet;
+import dataAccessLayer.employeeModule.EmployeeDAO;
+import domainObjects.transportModule.Driver;
 import exceptions.DalException;
-import objects.transportObjects.Driver;
 
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
-public class DriversDAO extends ManyToManyDAO<Driver> {
+import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnModifier;
+import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnType;
 
-    private static final String[] types = new String[]{"TEXT", "TEXT"};
-    private static final String[] parent_table_names = {"EMPLOYEES"};
-    private static final String[] primary_keys = {"id"};
-    private static final String[][] foreign_keys = {{"id"}};
-    private static final String[][] references = {{"Id"}};
+public class DriversDAO extends DAOBase<Driver> {
+
     public static final String tableName = "truck_drivers";
+    public static final String primaryKey = "id";
+    private static final String PARENT_TABLE_NAME = EmployeeDAO.tableName;
 
     public DriversDAO(SQLExecutor cursor) throws DalException {
-        super(cursor,
-				tableName,
-                parent_table_names,
-                types,
-                primary_keys,
-                foreign_keys,
-                references,
-                "id",
-                "license_type");
-        initTable();
+        super(cursor, tableName);
+    }
+
+    /**
+     * Used to insert data into {@link DAOBase#createTableQueryBuilder}. <br/>
+     * in order to add columns and foreign keys to the table use:<br/><br/>
+     * {@link CreateTableQueryBuilder#addColumn(String, ColumnType, ColumnModifier...)} <br/><br/>
+     * {@link CreateTableQueryBuilder#addForeignKey(String, String, String)}<br/><br/>
+     * {@link CreateTableQueryBuilder#addCompositeForeignKey(String[], String, String[])}
+     */
+    @Override
+    protected void initializeCreateTableQueryBuilder() {
+        createTableQueryBuilder
+                .addColumn("id", ColumnType.TEXT, ColumnModifier.PRIMARY_KEY)
+                .addColumn("license_type", ColumnType.TEXT, ColumnModifier.NOT_NULL)
+                .addForeignKey("id", EmployeeDAO.tableName, EmployeeDAO.primaryKey);
     }
 
     /**
@@ -48,8 +56,8 @@ public class DriversDAO extends ManyToManyDAO<Driver> {
                     INNER JOIN %s ON %s.id = %s.id
                     WHERE %s.id = '%s';
                         """,
-            TABLE_NAME,PARENT_TABLE_NAME[0], TABLE_NAME, PARENT_TABLE_NAME[0], TABLE_NAME,
-                PARENT_TABLE_NAME[0], TABLE_NAME, object.id());
+            TABLE_NAME, PARENT_TABLE_NAME, TABLE_NAME, PARENT_TABLE_NAME, TABLE_NAME,
+                PARENT_TABLE_NAME, TABLE_NAME, object.id());
         OfflineResultSet resultSet;
         try {
             resultSet = cursor.executeRead(query);
@@ -75,7 +83,7 @@ public class DriversDAO extends ManyToManyDAO<Driver> {
                     SELECT %s.id,%s.name,license_type FROM %s
                     INNER JOIN %s ON %s.id = %s.id;
                         """,
-            TABLE_NAME,PARENT_TABLE_NAME[0], TABLE_NAME, PARENT_TABLE_NAME[0], TABLE_NAME, PARENT_TABLE_NAME[0]);
+            TABLE_NAME,PARENT_TABLE_NAME, TABLE_NAME, PARENT_TABLE_NAME, TABLE_NAME, PARENT_TABLE_NAME);
         OfflineResultSet resultSet;
         try {
             resultSet = cursor.executeRead(query);

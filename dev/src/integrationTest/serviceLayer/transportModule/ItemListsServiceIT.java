@@ -1,7 +1,7 @@
 package serviceLayer.transportModule;
 
 import dataAccessLayer.DalFactory;
-import objects.transportObjects.ItemList;
+import domainObjects.transportModule.ItemList;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,13 +19,12 @@ class ItemListsServiceIT {
 
     private ItemList itemList;
     private ItemListsService ils;
+    private ServiceFactory factory;
 
     @BeforeEach
     void setUp() {
-
-        DalFactory.clearTestDB();
-
-        ils = new ServiceFactory(TESTING_DB_NAME).itemListsService();
+        factory = new ServiceFactory(TESTING_DB_NAME);
+        ils = factory.itemListsService();
 
         HashMap<String, Integer> load1 = new HashMap<>();
         load1.put("Shirts", 20);

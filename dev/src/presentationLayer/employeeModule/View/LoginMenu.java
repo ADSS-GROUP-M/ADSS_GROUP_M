@@ -1,8 +1,9 @@
 package presentationLayer.employeeModule.View;
 
 import presentationLayer.DataGenerator;
+import presentationLayer.employeeModule.Model.BackendController;
 import presentationLayer.employeeModule.ViewModel.LoginMenuVM;
-import presentationLayer.transportModule.TransportUI;
+import presentationLayer.transportModule.cli.TransportCLI;
 import serviceLayer.ServiceFactory;
 
 import javax.swing.*;
@@ -41,6 +42,7 @@ public class LoginMenu implements Menu {
         System.out.println("Please log in to the system.");
         initiateGUI();
     }
+
 
     private void initiateGUI(){
         nextMenu = this;
@@ -100,7 +102,7 @@ public class LoginMenu implements Menu {
         else if (command[0].equals("generate_data") && command.length == 1) {
             // Call the generate_data function
             System.out.println("Generating data... this may take a while....");
-            output = DataGenerator.generateData("SuperLiDB.db");
+            output = new DataGenerator().generateData();
         }
         else if (command[0].equals("login")) {
             if (command.length != 3) {
@@ -113,9 +115,9 @@ public class LoginMenu implements Menu {
                     if (authorizations != null && authorizations.contains("HRManager")) {
                         return new HRManagerMenu();
                     } else if (authorizations != null && authorizations.contains("TransportManager")) {
-                        return new TransportUI(loginMenuVM.serviceFactory());
+                        return new TransportCLI(loginMenuVM.serviceFactory());
                     } else {
-                        return new EmployeeMenu();
+                        return new EmployeeMenu(new BackendController());
                     }
                 }
             }
@@ -161,15 +163,15 @@ public class LoginMenu implements Menu {
                         notice.setText(output);
                         List<String> authorizations = loginMenuVM.getUserAuthorizations();
                         if (authorizations != null && authorizations.contains("HRManager")) {
-                            nextMenu = new HRManagerMenu();
+                            nextMenu = new HRManagerMenu(new BackendController());
                         } else if (authorizations != null && authorizations.contains("TransportManager")) {
-                            nextMenu = new TransportUI(loginMenuVM.serviceFactory());
+                            nextMenu = new TransportCLI(loginMenuVM.serviceFactory());
                         } else {
-                            nextMenu = new EmployeeMenu();
+                            nextMenu = new EmployeeMenu(new BackendController());
                         }
                     }
                 } else if(command.equals("Generate Data")){
-                        notice.setText(DataGenerator.generateData("SuperLiDB.db"));
+                    notice.setText(new DataGenerator().generateData());
                 }
                 else if(command.equals("Exit")){
                     MenuManager.terminate();

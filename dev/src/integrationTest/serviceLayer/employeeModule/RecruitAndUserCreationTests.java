@@ -5,13 +5,11 @@ import businessLayer.employeeModule.Controllers.UserController;
 import businessLayer.employeeModule.User;
 import businessLayer.transportModule.SitesController;
 import dataAccessLayer.DalFactory;
-import exceptions.EmployeeException;
+import domainObjects.transportModule.Site;
 import exceptions.TransportException;
-import objects.transportObjects.Site;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import presentationLayer.DataGenerator;
 import serviceLayer.ServiceFactory;
 import serviceLayer.employeeModule.Objects.SEmployee;
 import serviceLayer.employeeModule.Services.EmployeesService;
@@ -35,18 +33,18 @@ public class RecruitAndUserCreationTests {
     private String password = "123";
     private String username2 = "111";
     private String password2 = "1234";
+    private ServiceFactory factory;
 
     @BeforeEach
     public void setUp() throws Exception {
-        DalFactory.clearTestDB();
-        ServiceFactory serviceFactory = new ServiceFactory(TESTING_DB_NAME);
-        userService = serviceFactory.userService();
-        empService = serviceFactory.employeesService();
+        factory = new ServiceFactory(TESTING_DB_NAME);
+        userService = factory.userService();
+        empService = factory.employeesService();
 
         // Loads the HR Manager user: "admin123" "123", clears the data in each test
-        initUserData(userService, serviceFactory.businessFactory().userController());
+        initUserData(userService, factory.businessFactory().userController());
         // Loads the branches data
-        initBranchData(serviceFactory.businessFactory().sitesController());
+        initBranchData(factory.businessFactory().sitesController());
 
         admin = Response.fromJson(userService.getUser(adminUsername)).data(User.class);
         if(Response.fromJson(userService.getUser(username2)).success() == false)
@@ -84,7 +82,7 @@ public class RecruitAndUserCreationTests {
         }};
 
         try {
-            sc.addAllSitesFirstTimeSystemLoad(sites);
+            sc.addAllSitesFirstTimeSystemLoad(sites,false);
         } catch (TransportException e) {
             fail(e.getMessage(),e.getCause());
         }

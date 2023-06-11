@@ -1,5 +1,6 @@
 package dataAccessLayer.dalAbstracts;
 
+import dataAccessLayer.dalUtils.CreateTableQueryBuilder;
 import dataAccessLayer.dalUtils.OfflineResultSet;
 import exceptions.DalException;
 
@@ -19,11 +20,13 @@ public abstract class CounterDAOBase implements CounterDAO {
     }
 
     protected void initTable() throws DalException{
-        String query = String.format("""
-                CREATE TABLE IF NOT EXISTS %s (
-                %s INTEGER NOT NULL
-                );
-                """, TABLE_NAME, COLUMN_NAME);
+        CreateTableQueryBuilder createTableQueryBuilder = new CreateTableQueryBuilder(TABLE_NAME);
+
+        createTableQueryBuilder.addColumn(COLUMN_NAME,
+                CreateTableQueryBuilder.ColumnType.INTEGER,
+                CreateTableQueryBuilder.ColumnModifier.NOT_NULL);
+
+        String query = createTableQueryBuilder.buildQuery();
         try {
             cursor.executeWrite(query);
             query = String.format("SELECT * FROM %s;", TABLE_NAME);

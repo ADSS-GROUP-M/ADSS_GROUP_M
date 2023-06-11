@@ -1,6 +1,7 @@
 package businessLayer.transportModule.bingApi;
 
 import exceptions.TransportException;
+import utils.FileUtils;
 import utils.JsonUtils;
 
 import java.io.IOException;
@@ -10,10 +11,18 @@ import java.util.List;
 import java.util.Scanner;
 
 public class BingAPI {
-    
-    private static final String key = "ApCimQpMhBbPbxxutJUbXvOeQZ7zrJh-ryeMWVyI7a0iyZ_aDIJdxqSUlED1D7l-";
+    private static final String BING_API_KEY_FILE_NAME = "BingAPI_Key.txt";
+    private final String key;
 
     public BingAPI() {
+        String _key;
+        try {
+            _key = FileUtils.getResource(BING_API_KEY_FILE_NAME);
+        } catch (IOException e) {
+            System.out.printf("Bing API key not found, please make sure that the file %s exists in the jar root directory%n", BING_API_KEY_FILE_NAME);
+            _key = "";
+        }
+        key = _key;
     }
 
     public LocationByQueryResponse locationByQuery(String address) throws TransportException {

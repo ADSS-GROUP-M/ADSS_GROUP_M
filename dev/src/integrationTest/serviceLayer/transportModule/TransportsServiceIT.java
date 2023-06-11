@@ -1,30 +1,26 @@
 package serviceLayer.transportModule;
 
-import businessLayer.employeeModule.Authorization;
 import businessLayer.employeeModule.Branch;
-import businessLayer.employeeModule.Controllers.UserController;
 import businessLayer.employeeModule.Role;
-import businessLayer.employeeModule.Shift;
 import businessLayer.transportModule.SitesController;
 import dataAccessLayer.DalFactory;
+import domainObjects.transportModule.*;
 import exceptions.TransportException;
-import objects.transportObjects.*;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import presentationLayer.DataGenerator;
 import serviceLayer.ServiceFactory;
 import serviceLayer.employeeModule.Objects.SShiftType;
 import serviceLayer.employeeModule.Services.EmployeesService;
 import serviceLayer.employeeModule.Services.UserService;
 import utils.ErrorCollection;
-import utils.JsonUtils;
 import utils.Response;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 
 import static dataAccessLayer.DalFactory.TESTING_DB_NAME;
 import static org.junit.jupiter.api.Assertions.*;
@@ -48,16 +44,15 @@ class TransportsServiceIT {
     private static int ITEM_LIST_ID = 1;
     private static int TRANSPORT_ID = 1;
     private SitesController sc;
+    private ServiceFactory factory;
 
     @AfterEach
     void tearDown() {
         DalFactory.clearTestDB();
     }
 
-    @BeforeEach
-    void setUp() {
-        DalFactory.clearTestDB();
-        ServiceFactory factory = new ServiceFactory(TESTING_DB_NAME);
+    void setUp(boolean fetchSitesDataFromAPI) {
+        factory = new ServiceFactory(TESTING_DB_NAME);
         ts = factory.transportsService();
         ils = factory.itemListsService();
         rms = factory.resourceManagementService();
@@ -77,7 +72,7 @@ class TransportsServiceIT {
             add(dest2);
         }};
         try {
-            sc.addAllSitesFirstTimeSystemLoad(sites);
+            sc.addAllSitesFirstTimeSystemLoad(sites,fetchSitesDataFromAPI);
         } catch (TransportException e) {
             fail(e.getMessage(),e);
         }
@@ -121,22 +116,25 @@ class TransportsServiceIT {
 
     @Test
     void addTransport() {
+        setUp(true);
         Response response = assertSuccessValue(ts.addTransport(transport.toJson()), true);
         Transport returned = Transport.fromJson(response.data());
         assertEquals(TRANSPORT_ID, returned.id());
         assertDeepEquals(transport, returned);
-        assertDoesNotThrow(() -> returned.deliveryRoute().getEstimatedTimeOfArrival(source.name()));
-        assertDoesNotThrow(() -> returned.deliveryRoute().getEstimatedTimeOfArrival(dest1.name()));
-        assertDoesNotThrow(() -> returned.deliveryRoute().getEstimatedTimeOfArrival(dest2.name()));
+        assertDoesNotThrow(() -> returned.getEstimatedTimeOfArrival(source.name()));
+        assertDoesNotThrow(() -> returned.getEstimatedTimeOfArrival(dest1.name()));
+        assertDoesNotThrow(() -> returned.getEstimatedTimeOfArrival(dest2.name()));
     }
 
     @Test
     void addTransportPredefinedId(){
+        setUp(false);
         assertThrows(UnsupportedOperationException.class, () -> ts.addTransport(Transport.getLookupObject(5).toJson()));
     }
 
     @Test
     void updateTransport() {
+        setUp(true);
         // set up
         Response _r = assertSuccessValue(ts.addTransport(transport.toJson()), true);
         transport = Transport.fromJson(_r.data());
@@ -161,17 +159,19 @@ class TransportsServiceIT {
         Response response = assertSuccessValue(ts.updateTransport(updated.toJson()), true);
         Transport returned = Transport.fromJson(response.data());
         assertDeepEquals(updated, returned);
-        assertDoesNotThrow(() -> returned.deliveryRoute().getEstimatedTimeOfArrival(source.name()));
-        assertDoesNotThrow(() -> returned.deliveryRoute().getEstimatedTimeOfArrival(dest1.name()));
+        assertDoesNotThrow(() -> returned.getEstimatedTimeOfArrival(source.name()));
+        assertDoesNotThrow(() -> returned.getEstimatedTimeOfArrival(dest1.name()));
     }
 
     @Test
     void updateTransportDoesNotExist(){
+        setUp(false);
         assertSuccessValue(ts.updateTransport(transport.toJson()), false);
     }
 
     @Test
     void removeTransport() {
+        setUp(true);
         // set up
         Response _r = assertSuccessValue(ts.addTransport(transport.toJson()), true);
         transport = Transport.fromJson(_r.data());
@@ -183,11 +183,13 @@ class TransportsServiceIT {
 
     @Test
     void removeTransportDoesNotExist(){
+        setUp(false);
         assertSuccessValue(ts.removeTransport(transport.toJson()), false);
     }
 
     @Test
     void getTransport() {
+        setUp(true);
         // set up
         Response _r = assertSuccessValue(ts.addTransport(transport.toJson()), true);
         transport = Transport.fromJson(_r.data());
@@ -196,18 +198,20 @@ class TransportsServiceIT {
         Response response = assertSuccessValue(ts.getTransport(Transport.getLookupObject(transport.id()).toJson()), true);
         Transport returned = Transport.fromJson(response.data());
         assertDeepEquals(transport, returned);
-        assertDoesNotThrow(() -> returned.deliveryRoute().getEstimatedTimeOfArrival(source.name()));
-        assertDoesNotThrow(() -> returned.deliveryRoute().getEstimatedTimeOfArrival(dest1.name()));
-        assertDoesNotThrow(() -> returned.deliveryRoute().getEstimatedTimeOfArrival(dest2.name()));
+        assertDoesNotThrow(() -> returned.getEstimatedTimeOfArrival(source.name()));
+        assertDoesNotThrow(() -> returned.getEstimatedTimeOfArrival(dest1.name()));
+        assertDoesNotThrow(() -> returned.getEstimatedTimeOfArrival(dest2.name()));
     }
 
     @Test
     void getTransportDoesNotExist(){
+        setUp(false);
         assertSuccessValue(ts.getTransport(Transport.getLookupObject(transport.id()).toJson()), false);
     }
 
     @Test
     void getAllTransports() {
+        setUp(true);
         // set up
         Response _r = assertSuccessValue(ts.addTransport(transport.toJson()), true);
         transport = Transport.fromJson(_r.data());
@@ -217,13 +221,14 @@ class TransportsServiceIT {
         List<Transport> returned = Transport.listFromJson(response.data());
         assertEquals(1, returned.size());
         assertDeepEquals(transport, returned.get(0));
-        assertDoesNotThrow(() -> returned.get(0).deliveryRoute().getEstimatedTimeOfArrival(source.name()));
-        assertDoesNotThrow(() -> returned.get(0).deliveryRoute().getEstimatedTimeOfArrival(dest1.name()));
-        assertDoesNotThrow(() -> returned.get(0).deliveryRoute().getEstimatedTimeOfArrival(dest2.name()));
+        assertDoesNotThrow(() -> returned.get(0).getEstimatedTimeOfArrival(source.name()));
+        assertDoesNotThrow(() -> returned.get(0).getEstimatedTimeOfArrival(dest1.name()));
+        assertDoesNotThrow(() -> returned.get(0).getEstimatedTimeOfArrival(dest2.name()));
     }
 
     @Test
     void createTransportWithTooMuchWeight(){
+        setUp(false);
         transport = new Transport(
                 new LinkedList<>() {{
                     add(source.name());
@@ -247,7 +252,7 @@ class TransportsServiceIT {
 
     @Test
     void createTransportWithBadLicense(){
-
+        setUp(false);
         driver = new Driver(
                 driver.id(),
                 driver.name(),
@@ -278,7 +283,7 @@ class TransportsServiceIT {
 
     @Test
     void createTransportWithBadLicenseAndTooMuchWeight(){
-
+        setUp(false);
         driver = new Driver(
                 driver.id(),
                 driver.name(),
@@ -310,7 +315,7 @@ class TransportsServiceIT {
 
     @Test
     void createTransportEverythingDoesNotExist(){
-
+        setUp(false);
         // generate some made up sites
         Site sourceBad = new Site("site1","address1","tz1","25125","awgawgaw", Site.SiteType.SUPPLIER);
         Site dest1Bad = new Site("site2","address2","tz1","25125","awgawgaw", Site.SiteType.BRANCH);
@@ -344,12 +349,11 @@ class TransportsServiceIT {
     }
 
     private void assertDeepEquals(Transport transport1, Transport transport2) {
-//        assertEquals(transport1.id(),transport2.id());
         assertEquals(transport1.route(),transport2.route());
         assertEquals(transport1.itemLists(),transport2.itemLists());
-//        assertEquals(transport1.deliveryRoute().estimatedArrivalTimes(),transport2.deliveryRoute().estimatedArrivalTimes());
         assertEquals(transport1.departureTime(),transport2.departureTime());
         assertEquals(transport1.driverId(),transport2.driverId());
+        assertEquals(transport1.truckId(),transport2.truckId());
         assertEquals(transport1.weight(),transport2.weight());
     }
 

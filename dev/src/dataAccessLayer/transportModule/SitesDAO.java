@@ -1,57 +1,46 @@
 package dataAccessLayer.transportModule;
 
-import dataAccessLayer.dalAbstracts.DAO;
+import dataAccessLayer.dalAbstracts.DAOBase;
 import dataAccessLayer.dalAbstracts.SQLExecutor;
+import dataAccessLayer.dalUtils.CreateTableQueryBuilder;
 import dataAccessLayer.dalUtils.OfflineResultSet;
+import domainObjects.transportModule.Site;
 import exceptions.DalException;
-import objects.transportObjects.Site;
 
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
-public class SitesDAO extends DAO<Site> {
+import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnModifier;
+import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnType;
 
-    private static final String[] types = new String[]{"TEXT","TEXT", "TEXT", "TEXT", "TEXT", "TEXT", "REAL", "REAL"};
-    private static final String[] primary_keys = {"name"};
+public class SitesDAO extends DAOBase<Site> {
+
     public static final String tableName = "sites";
+    public static final String primaryKey = "name";
 
     public SitesDAO(SQLExecutor cursor) throws DalException {
-        super(cursor,
-				tableName,
-                types,
-                primary_keys,
-                "name",
-                "address",
-                "transport_zone",
-                "contact_name",
-                "contact_phone",
-                "site_type",
-                "latitude",
-                "longitude");
-        initTable();
+        super(cursor, tableName);
     }
 
+    /**
+     * Used to insert data into {@link DAOBase#createTableQueryBuilder}. <br/>
+     * in order to add columns and foreign keys to the table use:<br/><br/>
+     * {@link CreateTableQueryBuilder#addColumn(String, ColumnType, ColumnModifier...)} <br/><br/>
+     * {@link CreateTableQueryBuilder#addForeignKey(String, String, String)}<br/><br/>
+     * {@link CreateTableQueryBuilder#addCompositeForeignKey(String[], String, String[])}
+     */
     @Override
-    protected void initTable() throws DalException {
-        String query = """
-                CREATE TABLE IF NOT EXISTS "sites" (
-                	"name"	TEXT NOT NULL,
-                	"address"	TEXT NOT NULL UNIQUE,
-                	"transport_zone"	TEXT NOT NULL,
-                	"contact_name"	TEXT NOT NULL,
-                	"contact_phone"	TEXT NOT NULL,
-                	"site_type"	TEXT NOT NULL,
-                	"latitude"	REAL NOT NULL,
-                	"longitude"	REAL NOT NULL,
-                	PRIMARY KEY("name")
-                )
-                """;
-        try {
-            cursor.executeWrite(query);
-        } catch (SQLException e) {
-            throw new DalException("Failed to create sites table", e);
-        }
+    protected void initializeCreateTableQueryBuilder() {
+        createTableQueryBuilder
+                .addColumn("name", ColumnType.TEXT, ColumnModifier.NOT_NULL, ColumnModifier.PRIMARY_KEY)
+                .addColumn("address", ColumnType.TEXT, ColumnModifier.NOT_NULL, ColumnModifier.UNIQUE)
+                .addColumn("transport_zone", ColumnType.TEXT, ColumnModifier.NOT_NULL)
+                .addColumn("contact_name", ColumnType.TEXT, ColumnModifier.NOT_NULL)
+                .addColumn("contact_phone", ColumnType.TEXT, ColumnModifier.NOT_NULL)
+                .addColumn("site_type", ColumnType.TEXT, ColumnModifier.NOT_NULL)
+                .addColumn("latitude", ColumnType.REAL, ColumnModifier.NOT_NULL)
+                .addColumn("longitude", ColumnType.REAL, ColumnModifier.NOT_NULL);
     }
 
     /**
@@ -119,13 +108,36 @@ public class SitesDAO extends DAO<Site> {
                 object.latitude(),
                 object.longitude());
         try {
-            if(cursor.executeWrite(query) == 1){
-                cache.put(object);
-            } else {
-                throw new RuntimeException("Unexpected error while inserting site");
-            }
+            cursor.executeWrite(query);
+            cache.put(object);
         } catch (SQLException e) {
             throw new DalException("Failed to insert site", e);
+        }
+    }
+
+    public void insertAll(List<Site> sites) throws DalException {
+        try {
+            cursor.beginTransaction();
+            for (Site site : sites) {
+                String query = String.format("INSERT INTO %s VALUES ('%s','%s', '%s', '%s', '%s', '%s', %f, %f);",
+                        TABLE_NAME,
+                        site.name(),
+                        site.address(),
+                        site.transportZone(),
+                        site.contactName(),
+                        site.phoneNumber(),
+                        site.siteType().toString(),
+                        site.latitude(),
+                        site.longitude());
+                cursor.executeWrite(query);
+            }
+            cursor.commit();
+            cache.putAll(sites);
+        } catch (SQLException e) {
+            try {
+                cursor.rollback();
+            } catch (SQLException ignored) {}
+            throw new DalException("Failed to insertAll sites", e);
         }
     }
 
@@ -146,13 +158,41 @@ public class SitesDAO extends DAO<Site> {
                 object.longitude(),
                 object.name());
         try {
-            if(cursor.executeWrite(query) == 1){
-                cache.put(object);
-            } else {
+            if (cursor.executeWrite(query) != 1) {
                 throw new DalException("No site with name " + object.name() + " was found");
+            } else {
+                cache.put(object);
             }
         } catch (SQLException e) {
             throw new DalException("Failed to update site", e);
+        }
+    }
+
+    public void updateAll(List<Site> sites) throws DalException {
+        try {
+            cursor.beginTransaction();
+            for (Site site : sites) {
+                String query = String.format("UPDATE %s SET address = '%s', transport_zone = '%s', contact_name = '%s', contact_phone = '%s', site_type = '%s', latitude = %f, longitude = %f WHERE name = '%s';",
+                        TABLE_NAME,
+                        site.address(),
+                        site.transportZone(),
+                        site.contactName(),
+                        site.phoneNumber(),
+                        site.siteType(),
+                        site.latitude(),
+                        site.longitude(),
+                        site.name());
+                if (cursor.executeWrite(query) != 1) {
+                    throw new DalException("No site with name " + site.name() + " was found");
+                }
+            }
+            cursor.commit();
+            cache.putAll(sites);
+        } catch (SQLException e) {
+            try {
+                cursor.rollback();
+            } catch (SQLException ignored) {}
+            throw new DalException("Failed to updateAll sites", e);
         }
     }
 

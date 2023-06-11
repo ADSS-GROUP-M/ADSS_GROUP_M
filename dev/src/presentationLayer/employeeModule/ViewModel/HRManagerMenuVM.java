@@ -8,10 +8,14 @@ import java.time.LocalTime;
 import java.util.List;
 
 public class HRManagerMenuVM {
-    private BackendController backendController;
+    private final BackendController backendController;
 
     public HRManagerMenuVM() {
         backendController = BackendController.getInstance();
+    }
+    public HRManagerMenuVM(BackendController backendController) {
+
+        this.backendController = backendController;
     }
 
     public String recruitEmployee(String branchId, String fullName, String id, String bankDetails, double hourlyRate, LocalDate employmentDate, String employmentConditions, String details) {
@@ -30,18 +34,20 @@ public class HRManagerMenuVM {
         try {
             List<SShift[]> shifts = backendController.getNextWeekShifts(branchId);
             // Return next week's shift requests for the HR Manager
-            String result = "";
+            StringBuilder result = new StringBuilder();
             boolean found = false;
             for(SShift[] dayShifts : shifts) {
-                for (SShift shift : dayShifts)
+                for (SShift shift : dayShifts) {
                     if (shift != null) {
-                        result += shift.requestsString() + "\n";
+                        result.append(shift.requestsString()).append("\n");
                         found = true;
                     }
+                }
             }
-            if (!found)
-                result = "There are no requests for shifts planned for next week in branch " + branchId + ".";
-            return result;
+            if (!found) {
+                result = new StringBuilder("There are no requests for shifts planned for next week in branch " + branchId + ".");
+            }
+            return result.toString();
         } catch (Exception e) {
             return "Error: " + e.getMessage();
         }
@@ -51,18 +57,20 @@ public class HRManagerMenuVM {
         try {
             List<SShift[]> shifts = backendController.getWeekShifts(branchId, weekStart);
             // Return the week's shift requests for the HR Manager
-            String result = "";
+            StringBuilder result = new StringBuilder();
             boolean found = false;
             for(SShift[] dayShifts : shifts) {
-                for (SShift shift : dayShifts)
+                for (SShift shift : dayShifts) {
                     if (shift != null) {
-                        result += shift.requestsString() + "\n";
+                        result.append(shift.requestsString()).append("\n");
                         found = true;
                     }
+                }
             }
-            if (!found)
-                result = "There are no requests for shifts planned in the specified week in branch " + branchId + ".";
-            return result;
+            if (!found) {
+                result = new StringBuilder("There are no requests for shifts planned in the specified week in branch " + branchId + ".");
+            }
+            return result.toString();
         } catch (Exception e) {
             return "Error: " + e.getMessage();
         }
@@ -72,18 +80,20 @@ public class HRManagerMenuVM {
         try {
             List<SShift[]> shifts = backendController.getNextWeekShifts(branchId);
             // Return week schedule for HR Manager
-            String result = "";
+            StringBuilder result = new StringBuilder();
             boolean found = false;
             for(SShift[] dayShifts : shifts) {
-                for (SShift shift : dayShifts)
+                for (SShift shift : dayShifts) {
                     if (shift != null) {
-                        result += shift.toString() + "\n";
+                        result.append(shift).append("\n");
                         found = true;
                     }
+                }
             }
-            if (!found)
-                result = "There are no shifts planned for next week in branch " + branchId + ".";
-            return result;
+            if (!found) {
+                result = new StringBuilder("There are no shifts planned for next week in branch " + branchId + ".");
+            }
+            return result.toString();
         } catch (Exception e) {
             return "Error: " + e.getMessage();
         }
@@ -93,18 +103,20 @@ public class HRManagerMenuVM {
         try {
             List<SShift[]> shifts = backendController.getWeekShifts(branchId, weekStart);
             // Return week schedule for HR Manager
-            String result = "";
+            StringBuilder result = new StringBuilder();
             boolean found = false;
             for(SShift[] dayShifts : shifts) {
-                for (SShift shift : dayShifts)
+                for (SShift shift : dayShifts) {
                     if (shift != null) {
-                        result += shift.toString() + "\n";
+                        result.append(shift).append("\n");
                         found = true;
                     }
+                }
             }
-            if (!found)
-                result = "There are no shifts planned in the specified week in branch " + branchId + ".";
-            return result;
+            if (!found) {
+                result = new StringBuilder("There are no shifts planned in the specified week in branch " + branchId + ".");
+            }
+            return result.toString();
         } catch (Exception e) {
             return "Error: " + e.getMessage();
         }

@@ -3,16 +3,14 @@ package serviceLayer.transportModule;
 import businessLayer.employeeModule.Employee;
 import dataAccessLayer.DalFactory;
 import dataAccessLayer.employeeModule.EmployeeDAO;
+import domainObjects.transportModule.Driver;
+import domainObjects.transportModule.Site;
+import domainObjects.transportModule.Truck;
 import exceptions.DalException;
-import objects.transportObjects.Driver;
-import objects.transportObjects.ItemList;
-import objects.transportObjects.Site;
-import objects.transportObjects.Truck;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.DisabledIf;
 import serviceLayer.ServiceFactory;
 import utils.ErrorCollection;
 import utils.Response;
@@ -34,13 +32,13 @@ class ResourceManagementServiceIT {
     private EmployeeDAO empDao;
     private DalFactory dalFactory;
     private Employee employee;
+    private ServiceFactory factory;
 
     @BeforeEach
     void setUp() {
-
-        ServiceFactory sFactory = new ServiceFactory(TESTING_DB_NAME);
-        rms = sFactory.resourceManagementService();
-        dalFactory = sFactory.businessFactory().dalFactory();
+        factory = new ServiceFactory(TESTING_DB_NAME);
+        rms = factory.resourceManagementService();
+        dalFactory = factory.businessFactory().dalFactory();
         empDao = dalFactory.employeeDAO();
 
         employee = new Employee("name", "123456789", "Poalim", 50, LocalDate.of(1999, 10, 10), "conditions", "details");

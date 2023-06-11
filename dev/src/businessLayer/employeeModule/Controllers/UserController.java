@@ -1,7 +1,6 @@
 package businessLayer.employeeModule.Controllers;
 
 import businessLayer.employeeModule.Authorization;
-import businessLayer.employeeModule.Employee;
 import businessLayer.employeeModule.User;
 import dataAccessLayer.employeeModule.UserDAO;
 import exceptions.DalException;
@@ -26,13 +25,10 @@ public class UserController {
     public void login(String username, String password) throws EmployeeException {
         User user = getUser(username); // Throws an exception if the user is not found
         boolean success = false;
-        try {
-            success = user.login(password);
-        } catch (Exception e) {
-            throw new EmployeeException(e.getMessage(),e);
-        }
-        if(!success)
+        success = user.login(password);
+        if(!success) {
             throw new EmployeeException("Invalid password.");
+        }
     }
 
     public void logout(String username) throws EmployeeException {
@@ -46,8 +42,9 @@ public class UserController {
         } catch (DalException e) {
             throw new EmployeeException(e.getMessage(),e);
         }
-        if (user == null)
+        if (user == null) {
             throw new EmployeeException("The given username doesn't exist.");
+        }
         return user;
     }
 

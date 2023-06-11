@@ -1,14 +1,11 @@
 package presentationLayer;
 
-import businessLayer.employeeModule.Authorization;
 import businessLayer.employeeModule.Branch;
-import businessLayer.employeeModule.Controllers.UserController;
 import businessLayer.employeeModule.Role;
 import businessLayer.transportModule.SitesController;
 import dataAccessLayer.DalFactory;
-import exceptions.EmployeeException;
+import domainObjects.transportModule.*;
 import exceptions.TransportException;
-import objects.transportObjects.*;
 import serviceLayer.ServiceFactory;
 import serviceLayer.employeeModule.Objects.SShiftType;
 import serviceLayer.employeeModule.Services.EmployeesService;
@@ -18,6 +15,7 @@ import serviceLayer.transportModule.ResourceManagementService;
 import serviceLayer.transportModule.TransportsService;
 import utils.Response;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -29,50 +27,55 @@ import static serviceLayer.employeeModule.Services.UserService.HR_MANAGER_USERNA
 
 public class DataGenerator {
 
-    private static final LocalDate EMPLOYMENT_DATE = LocalDate.of(2020,2,2);
-    private static final LocalDate SHIFT_DATE = LocalDate.of(2023,2,2);
-    private static UserService us;
-    private static EmployeesService es;
-    private static Driver driver1;
-    private static Driver driver2;
-    private static Driver driver3;
-    private static Driver driver4;
-    private static Driver driver5;
-    private static Truck truck1;
-    private static Truck truck2;
-    private static Truck truck3;
-    private static Truck truck4;
-    private static Truck truck5;
-    private static ItemList itemList1;
-    private static ItemList itemList2;
-    private static ItemList itemList3;
-    private static ItemList itemList4;
-    private static ItemList itemList5;
-    private static Site branch1;
-    private static Site branch2;
-    private static Site branch3;
-    private static Site branch4;
-    private static Site branch5;
-    private static Site branch6;
-    private static Site branch7;
-    private static Site branch8;
-    private static Site branch9;
-    private static Site supplier1;
-    private static Site supplier2;
-    private static Site supplier3;
-    private static Site supplier4;
-    private static Site supplier5;
-    private static Site logistical1;
+    private static final LocalDate EMPLOYMENT_DATE = LocalDate.of(2020, 2, 2);
+    private static final LocalDate SHIFT_DATE = LocalDate.of(2023, 2, 2);
+    private UserService us;
+    private EmployeesService es;
+    private Driver driver1;
+    private Driver driver2;
+    private Driver driver3;
+    private Driver driver4;
+    private Driver driver5;
+    private Truck truck1;
+    private Truck truck2;
+    private Truck truck3;
+    private Truck truck4;
+    private Truck truck5;
+    private ItemList itemList1;
+    private ItemList itemList2;
+    private ItemList itemList3;
+    private ItemList itemList4;
+    private ItemList itemList5;
+    private Site branch1;
+    private Site branch2;
+    private Site branch3;
+    private Site branch4;
+    private Site branch5;
+    private Site branch6;
+    private Site branch7;
+    private Site branch8;
+    private Site branch9;
+    private Site supplier1;
+    private Site supplier2;
+    private Site supplier3;
+    private Site supplier4;
+    private Site supplier5;
+    private Site logistical1;
+    private int tries;
+    private final long startTime = System.currentTimeMillis();
 
-    public static String generateData(String dbName){
-        try{
-            DalFactory.clearDB(dbName);
-            ServiceFactory factory = new ServiceFactory(dbName);
+    public String generateData() {
+        try {
+            DalFactory.clearDB(DalFactory.DEFAULT_DB_NAME);
+            ServiceFactory factory = new ServiceFactory();
             us = factory.userService();
+            us.initializeManagers();
+
+            generateSites(factory.businessFactory().sitesController());
+
             es = factory.employeesService();
             ItemListsService ils = factory.itemListsService();
-            us.initializeManagers();
-            generateSites(factory.businessFactory().sitesController());
+
             generateItemLists(ils);
             generateTrucks(factory.resourceManagementService());
 
@@ -87,19 +90,31 @@ public class DataGenerator {
             List<Driver> drivers = new ArrayList<>();
             drivers.addAll(morningDrivers);
             drivers.addAll(eveningDrivers);
-
             initializeBranches(drivers);
-            initializeShiftDay(morningDrivers, eveningDrivers, SHIFT_DATE);
-            assignStorekeepers(SHIFT_DATE);
-            generateTransports(factory.transportsService());
-        } catch (TransportException e) {
-            return "\n"+e.getMessage()+"\n";
-        }
 
-        return "\nGenerated data successfully.";
+            try {
+                // beginTransaction() and commit() is an optimization
+                // to reduce the number of connections to the DB and improve performance (drastically)
+                factory.businessFactory().dalFactory().shiftEmployeeCursor().beginTransaction();
+                initializeShiftDay(morningDrivers, eveningDrivers, SHIFT_DATE);
+                assignStorekeepers(SHIFT_DATE);
+                factory.businessFactory().dalFactory().shiftEmployeeCursor().commit();
+            } catch (SQLException e) {
+                throw new TransportException(e.getMessage());
+            }
+            generateTransports(factory.transportsService());
+
+            return "\nGenerated data successfully (%d ms).".formatted(System.currentTimeMillis()- startTime);
+        } catch (TransportException e) {
+            if(tries < 3) {
+                tries++;
+                return generateData();
+            }
+            return "\n" + e.getMessage() + "\n";
+        }
     }
 
-    public static void generateTrucks(ResourceManagementService rms) throws TransportException {
+    public void generateTrucks(ResourceManagementService rms) throws TransportException {
         truck1 = new Truck("abc123", "ford", 1500, 10000, Truck.CoolingCapacity.NONE);
         truck2 = new Truck("def456", "chevy", 2000, 15000, Truck.CoolingCapacity.COLD);
         truck3 = new Truck("ghi789", "toyota", 2500, 20000, Truck.CoolingCapacity.COLD);
@@ -113,7 +128,7 @@ public class DataGenerator {
         validateOperation(rms.addTruck(truck5.toJson()));
     }
 
-    public static void generateItemLists(ItemListsService ils) throws TransportException {
+    public void generateItemLists(ItemListsService ils) throws TransportException {
         HashMap<String, Integer> load1 = new HashMap<>();
         load1.put("shirts", 20);
         load1.put("pants", 15);
@@ -181,7 +196,7 @@ public class DataGenerator {
         validateOperation(ils.addItemList(itemList5.toJson()));
     }
 
-    public static void generateSites(SitesController controller) throws TransportException {
+    public void generateSites(SitesController controller) throws TransportException {
         branch1 = new Site("branch1", "14441 s inglewood ave, hawthorne, ca 90250, united states", "zone1", "111-111-1111", "John Smith", Site.SiteType.BRANCH, 0, 0);
         branch2 = new Site("branch2", "19503 s normandie ave, torrance, ca 90501, united states", "zone1", "222-222-2222", "Jane Doe", Site.SiteType.BRANCH, 0, 0);
         branch3 = new Site("branch3", "22015 hawthorne blvd, torrance, ca 90503, united states", "zone1", "333-333-3333", "Bob Johnson", Site.SiteType.BRANCH, 0, 0);
@@ -189,16 +204,16 @@ public class DataGenerator {
         branch5 = new Site("branch5", "19340 hawthorne blvd, torrance, ca 90503, united states", "zone2", "555-555-5555", "Mike Brown", Site.SiteType.BRANCH, 0, 0);
         branch6 = new Site("branch6", "4651 firestone blvd, south gate, ca 90280, united states", "zone2", "666-666-6666", "Emily Wilson", Site.SiteType.BRANCH, 0, 0);
         branch7 = new Site("branch7", "1301 n victory pl, burbank, ca 91502, united states", "zone3", "777-777-7777", "Tom Kim", Site.SiteType.BRANCH, 0, 0);
-        branch8 = new Site("branch8", "6433 fallbrook ave, west hills, ca 91307, united states","zone3", "888-888-8888", "Amanda Garcia", Site.SiteType.BRANCH, 0, 0);
-        branch9 = new Site("branch9", "8333 van nuys blvd, panorama city, ca 91402, united states","zone4", "123-456-7890" ,"David Kim", Site.SiteType.BRANCH, 0, 0);
+        branch8 = new Site("branch8", "6433 fallbrook ave, west hills, ca 91307, united states", "zone3", "888-888-8888", "Amanda Garcia", Site.SiteType.BRANCH, 0, 0);
+        branch9 = new Site("branch9", "8333 van nuys blvd, panorama city, ca 91402, united states", "zone4", "123-456-7890", "David Kim", Site.SiteType.BRANCH, 0, 0);
         supplier1 = new Site("supplier1", "8500 washington blvd, pico rivera, ca 90660, united states", "zone4", "456-789-0123", "William Davis", Site.SiteType.SUPPLIER, 0, 0);
         supplier2 = new Site("supplier2", "20226 avalon blvd, carson, ca 90746, united states", "zone3", "999-999-9999", "Steve Chen", Site.SiteType.SUPPLIER, 0, 0);
         supplier3 = new Site("supplier3", "9001 apollo way, downey, ca 90242, united states", "zone4", "345-678-9012", "Andrew Chen", Site.SiteType.SUPPLIER, 0, 0);
-        supplier4 = new Site("supplier4", "2770 e carson st, lakewood, ca 90712, united states", "zone5", "123-456-7890", "Andrew Chen", Site.SiteType.SUPPLIER, 0,0);
+        supplier4 = new Site("supplier4", "2770 e carson st, lakewood, ca 90712, united states", "zone5", "123-456-7890", "Andrew Chen", Site.SiteType.SUPPLIER, 0, 0);
         supplier5 = new Site("supplier5", "14501 lakewood blvd, paramount, ca 90723, united states", "zone4", "234-567-8901", "Jessica Park", Site.SiteType.SUPPLIER, 0, 0);
-        logistical1 = new Site("logistical1", "3705 e south st, long beach, ca 90805, united states", "zone5", "123-456-7890", "Jessica Park", Site.SiteType.LOGISTICAL_CENTER, 0,0);
+        logistical1 = new Site("logistical1", "3705 e south st, long beach, ca 90805, united states", "zone5", "123-456-7890", "Jessica Park", Site.SiteType.LOGISTICAL_CENTER, 0, 0);
 
-        List<Site> sites = new LinkedList<>(){{
+        List<Site> sites = new LinkedList<>() {{
             add(branch1);
             add(branch2);
             add(branch3);
@@ -215,19 +230,13 @@ public class DataGenerator {
             add(supplier5);
             add(logistical1);
         }};
-        controller.addAllSitesFirstTimeSystemLoad(sites);
+        controller.addAllSitesFirstTimeSystemLoad(sites, true);
     }
 
-//    public static void initializeUserData(UserService us, UserController uc) throws EmployeeException {
-//        uc.createManagerUser(HR_MANAGER_USERNAME, "123");
-//        us.createUser(HR_MANAGER_USERNAME, UserService.TRANSPORT_MANAGER_USERNAME, "123");
-//        us.authorizeUser(HR_MANAGER_USERNAME, UserService.TRANSPORT_MANAGER_USERNAME, Authorization.TransportManager.name());
-//    }
-
-    public static void initializeBranches(List<Driver> drivers) {
+    public void initializeBranches(List<Driver> drivers) {
         initializeHeadquarters(drivers);
-        for(int i=2; i<=9; i++) {
-            String branchId = "branch"+i;
+        for (int i = 2; i <= 9; i++) {
+            String branchId = "branch" + i;
             List<String> morningStorekeeperIds = List.of(branchId + "Morning");
             List<String> eveningStorekeeperIds = List.of(branchId + "Evening");
             List<String> storekeeperIds = new ArrayList<>();
@@ -237,16 +246,16 @@ public class DataGenerator {
         }
     }
 
-    public static void initializeHeadquarters(List<Driver> drivers) {
-        es.recruitEmployee(HR_MANAGER_USERNAME, Branch.HEADQUARTERS_ID, "Moshe Biton", "111","Hapoalim 12 230", 50, LocalDate.of(2023,2,2),"Employment Conditions Test", "More details about Moshe");
-        es.certifyEmployee(HR_MANAGER_USERNAME,"111", Role.ShiftManager.name());
-        es.certifyEmployee(HR_MANAGER_USERNAME,"111",Role.Storekeeper.name());
-        us.createUser(HR_MANAGER_USERNAME,"111","1234");
+    public void initializeHeadquarters(List<Driver> drivers) {
+        es.recruitEmployee(HR_MANAGER_USERNAME, Branch.HEADQUARTERS_ID, "Moshe Biton", "111", "Hapoalim 12 230", 50, LocalDate.of(2023, 2, 2), "Employment Conditions Test", "More details about Moshe");
+        es.certifyEmployee(HR_MANAGER_USERNAME, "111", Role.ShiftManager.name());
+        es.certifyEmployee(HR_MANAGER_USERNAME, "111", Role.Storekeeper.name());
+        us.createUser(HR_MANAGER_USERNAME, "111", "1234");
 
         initializeDrivers(drivers);
     }
 
-    public static void initializeDrivers(List<Driver> drivers) {
+    public void initializeDrivers(List<Driver> drivers) {
         for (Driver driver : drivers) {
             es.recruitEmployee(HR_MANAGER_USERNAME, Branch.HEADQUARTERS_ID, driver.name(), driver.id(), "Hapoalim 12 230", 40, EMPLOYMENT_DATE, "Employment Conditions Test", "More details about Driver");
             es.certifyDriver(HR_MANAGER_USERNAME, driver.id(), driver.licenseType().toString());
@@ -254,7 +263,7 @@ public class DataGenerator {
         }
     }
 
-    public static void initializeStorekeepers(String branchId, List<String> storekeeperIds){
+    public void initializeStorekeepers(String branchId, List<String> storekeeperIds) {
         for (String storekeeperId : storekeeperIds) {
             es.recruitEmployee(HR_MANAGER_USERNAME, branchId, "Name " + storekeeperId, storekeeperId, "Hapoalim 12 250", 30, LocalDate.of(2020, 2, 2), "Employment Conditions Test", "More details about Storekeeper");
             es.certifyEmployee(HR_MANAGER_USERNAME, storekeeperId, Role.Storekeeper.name());
@@ -262,35 +271,35 @@ public class DataGenerator {
         }
     }
 
-    public static void initializeShiftDay(List<Driver> morningDrivers, List<Driver> eveningDrivers, LocalDate date) {
+    public void initializeShiftDay(List<Driver> morningDrivers, List<Driver> eveningDrivers, LocalDate date) {
         // Shift Creation
-        es.createShiftDay(HR_MANAGER_USERNAME,Branch.HEADQUARTERS_ID,date);
-        es.setShiftNeededAmount(HR_MANAGER_USERNAME,Branch.HEADQUARTERS_ID,date,SShiftType.Morning,"Cashier",0);
-        es.setShiftNeededAmount(HR_MANAGER_USERNAME,Branch.HEADQUARTERS_ID,date,SShiftType.Morning,"GeneralWorker",0);
-        es.setShiftNeededAmount(HR_MANAGER_USERNAME,Branch.HEADQUARTERS_ID,date,SShiftType.Morning,"Storekeeper",0);
+        es.createShiftDay(HR_MANAGER_USERNAME, Branch.HEADQUARTERS_ID, date);
+        es.setShiftNeededAmount(HR_MANAGER_USERNAME, Branch.HEADQUARTERS_ID, date, SShiftType.Morning, "Cashier", 0);
+        es.setShiftNeededAmount(HR_MANAGER_USERNAME, Branch.HEADQUARTERS_ID, date, SShiftType.Morning, "GeneralWorker", 0);
+        es.setShiftNeededAmount(HR_MANAGER_USERNAME, Branch.HEADQUARTERS_ID, date, SShiftType.Morning, "Storekeeper", 0);
         // Only one ShiftManager is still necessary to fully approve the shift at the end of the employees assignments
 
         for (int i = 2; i <= 9; i++) {
-            String branchId = "branch"+i;
-            es.createShiftDay(HR_MANAGER_USERNAME,branchId,date);
-            es.setShiftNeededAmount(HR_MANAGER_USERNAME,branchId,date,SShiftType.Morning,"Cashier",0);
-            es.setShiftNeededAmount(HR_MANAGER_USERNAME,branchId,date,SShiftType.Morning,"GeneralWorker",0);
-            es.setShiftNeededAmount(HR_MANAGER_USERNAME,branchId,date,SShiftType.Morning,"Storekeeper",0);
+            String branchId = "branch" + i;
+            es.createShiftDay(HR_MANAGER_USERNAME, branchId, date);
+            es.setShiftNeededAmount(HR_MANAGER_USERNAME, branchId, date, SShiftType.Morning, "Cashier", 0);
+            es.setShiftNeededAmount(HR_MANAGER_USERNAME, branchId, date, SShiftType.Morning, "GeneralWorker", 0);
+            es.setShiftNeededAmount(HR_MANAGER_USERNAME, branchId, date, SShiftType.Morning, "Storekeeper", 0);
             // Only one ShiftManager is still necessary to fully approve the shift at the end of the employees assignments
         }
 
         // Drivers Assignment
-        assignDrivers(morningDrivers,date, SShiftType.Morning);
-        assignDrivers(eveningDrivers,date,SShiftType.Evening);
+        assignDrivers(morningDrivers, date, SShiftType.Morning);
+        assignDrivers(eveningDrivers, date, SShiftType.Evening);
     }
 
-    public static void assignStorekeepers(LocalDate date) {
+    public void assignStorekeepers(LocalDate date) {
         List<String> morningStorekeeperIds = List.of(Branch.HEADQUARTERS_ID + "Morning");
         List<String> eveningStorekeeperIds = List.of(Branch.HEADQUARTERS_ID + "Evening");
         assignShiftStorekeepers(Branch.HEADQUARTERS_ID, morningStorekeeperIds, date, SShiftType.Morning);
         assignShiftStorekeepers(Branch.HEADQUARTERS_ID, eveningStorekeeperIds, date, SShiftType.Evening);
 
-        for(int i=2; i<=9; i++) {
+        for (int i = 2; i <= 9; i++) {
             String branchId = "branch" + i;
             morningStorekeeperIds = List.of(branchId + "Morning");
             eveningStorekeeperIds = List.of(branchId + "Evening");
@@ -299,16 +308,16 @@ public class DataGenerator {
         }
     }
 
-    public static void assignDrivers(List<Driver> drivers, LocalDate date, SShiftType shiftType) {
+    public void assignDrivers(List<Driver> drivers, LocalDate date, SShiftType shiftType) {
         // Assign Drivers
-        es.setShiftNeededAmount(HR_MANAGER_USERNAME,Branch.HEADQUARTERS_ID,date, shiftType,"Driver",drivers.size());
-        for(Driver driver : drivers) {
+        es.setShiftNeededAmount(HR_MANAGER_USERNAME, Branch.HEADQUARTERS_ID, date, shiftType, "Driver", drivers.size());
+        for (Driver driver : drivers) {
             es.requestShift(driver.id(), Branch.HEADQUARTERS_ID, date, shiftType, "Driver");
         }
-        es.setShiftEmployees(HR_MANAGER_USERNAME,Branch.HEADQUARTERS_ID,date, shiftType,"Driver", drivers.stream().map(d->d.id()).toList());
+        es.setShiftEmployees(HR_MANAGER_USERNAME, Branch.HEADQUARTERS_ID, date, shiftType, "Driver", drivers.stream().map(d -> d.id()).toList());
     }
 
-    public static void assignShiftStorekeepers(String branchId, List<String> storekeeperIds, LocalDate date, SShiftType shiftType) {
+    public void assignShiftStorekeepers(String branchId, List<String> storekeeperIds, LocalDate date, SShiftType shiftType) {
         // Assign Storekeepers
         es.setShiftNeededAmount(HR_MANAGER_USERNAME, branchId, date, shiftType, "Storekeeper", storekeeperIds.size());
         for (String storekeeperId : storekeeperIds) {
@@ -317,10 +326,10 @@ public class DataGenerator {
         es.setShiftEmployees(HR_MANAGER_USERNAME, branchId, date, shiftType, "Storekeeper", storekeeperIds);
     }
 
-    private static void generateTransports(TransportsService ts) throws TransportException {
+    private void generateTransports(TransportsService ts) throws TransportException {
 
         Transport transport1 = new Transport(
-                new LinkedList<>(){{
+                new LinkedList<>() {{
                     add(logistical1.name());
                     add(supplier1.name());
                     add(branch2.name());
@@ -329,7 +338,7 @@ public class DataGenerator {
                     add(supplier3.name());
                     add(branch4.name());
                 }},
-                new HashMap<>(){{
+                new HashMap<>() {{
                     put(logistical1.name(), -1);
                     put(supplier1.name(), 4);
                     put(branch2.name(), 1);
@@ -340,12 +349,12 @@ public class DataGenerator {
                 }},
                 driver2.id(),
                 truck5.id(),
-                LocalDateTime.of(2023,2,2,12,0),
+                LocalDateTime.of(2023, 2, 2, 12, 0),
                 27800
         );
 
         Transport transport2 = new Transport(
-                new LinkedList<>(){{
+                new LinkedList<>() {{
                     add(logistical1.name());
                     add(supplier4.name());
                     add(branch5.name());
@@ -355,7 +364,7 @@ public class DataGenerator {
                     add(branch8.name());
                     add(branch9.name());
                 }},
-                new HashMap<>(){{
+                new HashMap<>() {{
                     put(logistical1.name(), -1);
                     put(supplier4.name(), 4);
                     put(branch5.name(), 1);
@@ -367,7 +376,7 @@ public class DataGenerator {
                 }},
                 driver1.id(),
                 truck1.id(),
-                LocalDateTime.of(2023,2,2,12,0),
+                LocalDateTime.of(2023, 2, 2, 12, 0),
                 9800
         );
 
@@ -375,10 +384,10 @@ public class DataGenerator {
         validateOperation(ts.addTransport(transport2.toJson()));
     }
 
-    private static void validateOperation(String json) throws TransportException {
+    private void validateOperation(String json) throws TransportException {
         Response response;
         response = Response.fromJson(json);
-        if(response.success() == false){
+        if (response.success() == false) {
             throw new TransportException(response.message());
         }
     }

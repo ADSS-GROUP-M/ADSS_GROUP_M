@@ -1,5 +1,6 @@
 package presentationLayer.employeeModule.View;
 
+import presentationLayer.employeeModule.Model.BackendController;
 import presentationLayer.employeeModule.ViewModel.HRManagerMenuVM;
 import utils.DateUtils;
 
@@ -85,6 +86,13 @@ public class HRManagerMenu implements Menu {
         System.out.println("Welcome to the HR Manager Menu.");
         initiateGUI();
     }
+    public HRManagerMenu(BackendController backendController) {
+        hrManagerMenuVM = new HRManagerMenuVM(backendController);
+        scanner = new Scanner(System.in);
+        System.out.println("Welcome to the HR Manager Menu.");
+        initiateGUI();
+    }
+
 
     public void printCommands() {
         System.out.println();

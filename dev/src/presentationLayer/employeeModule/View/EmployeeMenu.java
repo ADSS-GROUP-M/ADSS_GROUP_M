@@ -1,5 +1,6 @@
 package presentationLayer.employeeModule.View;
 
+import presentationLayer.employeeModule.Model.BackendController;
 import presentationLayer.employeeModule.ViewModel.EmployeeMenuVM;
 import utils.DateUtils;
 
@@ -8,8 +9,14 @@ import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
 public class EmployeeMenu implements Menu {
-    private EmployeeMenuVM employeeMenuVM;
-    private Scanner scanner;
+    private final EmployeeMenuVM employeeMenuVM;
+    private final Scanner scanner;
+
+    public EmployeeMenu(BackendController backendController) {
+        this.employeeMenuVM = new EmployeeMenuVM(backendController);
+        this.scanner = new Scanner(System.in);
+        System.out.println("Welcome to the Employee Menu.");
+    }
 
     public EmployeeMenu() {
         this.employeeMenuVM = new EmployeeMenuVM();
@@ -40,9 +47,9 @@ public class EmployeeMenu implements Menu {
         String input = scanner.nextLine();
         String[] command = input.split(" ", -1);
         String output;
-        if (command.length == 0)
+        if (command.length == 0) {
             output = "Invalid command, command cannot be empty.";
-        else if (command[0].equals("exit") && command.length == 1) {
+        } else if (command[0].equals("exit") && command.length == 1) {
             output = "Exiting CLI.";
             MenuManager.terminate();
         }
@@ -135,8 +142,9 @@ public class EmployeeMenu implements Menu {
                 output = "Invalid input, expected a date in the form " + DateUtils.DATE_PATTERN + ".";
             }
         }
-        else
+        else {
             output = "Invalid command was given, try again.";
+        }
         System.out.println(output);
         return this;
     }

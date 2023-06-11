@@ -1,32 +1,43 @@
 package dataAccessLayer.transportModule;
 
-import dataAccessLayer.dalAbstracts.DAO;
+import dataAccessLayer.dalAbstracts.DAOBase;
 import dataAccessLayer.dalAbstracts.SQLExecutor;
+import dataAccessLayer.dalUtils.CreateTableQueryBuilder;
 import dataAccessLayer.dalUtils.OfflineResultSet;
+import domainObjects.transportModule.Truck;
 import exceptions.DalException;
-import objects.transportObjects.Truck;
 
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
-public class TrucksDAO extends DAO<Truck> {
+import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnModifier;
+import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnType;
 
-    private static final String[] types = new String[]{"TEXT", "TEXT", "INTEGER", "INTEGER", "TEXT"};
-    private static final String[] primary_keys = {"id"};
+public class TrucksDAO extends DAOBase<Truck> {
+
+    public static final String primaryKey = "id";
     public static final String tableName = "trucks";
 
     public TrucksDAO(SQLExecutor cursor) throws DalException {
-        super(cursor,
-				tableName,
-                types,
-                primary_keys,
-                "id",
-                "model",
-                "base_weight",
-                "max_weight",
-                "cooling_capacity");
-        initTable();
+        super(cursor, tableName);
+    }
+
+    /**
+     * Used to insert data into {@link DAOBase#createTableQueryBuilder}. <br/>
+     * in order to add columns and foreign keys to the table use:<br/><br/>
+     * {@link CreateTableQueryBuilder#addColumn(String, ColumnType, ColumnModifier...)} <br/><br/>
+     * {@link CreateTableQueryBuilder#addForeignKey(String, String, String)}<br/><br/>
+     * {@link CreateTableQueryBuilder#addCompositeForeignKey(String[], String, String[])}
+     */
+    @Override
+    protected void initializeCreateTableQueryBuilder() {
+        createTableQueryBuilder
+                .addColumn("id", ColumnType.TEXT, ColumnModifier.PRIMARY_KEY)
+                .addColumn("model", ColumnType.TEXT, ColumnModifier.NOT_NULL)
+                .addColumn("base_weight", ColumnType.INTEGER, ColumnModifier.NOT_NULL)
+                .addColumn("max_weight", ColumnType.INTEGER, ColumnModifier.NOT_NULL)
+                .addColumn("cooling_capacity", ColumnType.TEXT, ColumnModifier.NOT_NULL);
     }
 
     /**

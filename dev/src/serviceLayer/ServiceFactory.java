@@ -2,7 +2,7 @@ package serviceLayer;
 
 
 import businessLayer.BusinessFactory;
-import exceptions.DalException;
+import exceptions.TransportException;
 import serviceLayer.employeeModule.Services.EmployeesService;
 import serviceLayer.employeeModule.Services.UserService;
 import serviceLayer.transportModule.ItemListsService;
@@ -16,13 +16,12 @@ public class ServiceFactory {
     private ItemListsService itemListsService;
     private EmployeesService employeesService;
     private UserService userService;
-
     private final BusinessFactory businessFactory;
 
     public ServiceFactory(){
         try {
             businessFactory = new BusinessFactory();
-        } catch (DalException e) {
+        } catch (TransportException e) {
             throw new RuntimeException(e);
         }
         buildInstances();
@@ -31,7 +30,7 @@ public class ServiceFactory {
     public ServiceFactory(String dbName){
         try {
             businessFactory = new BusinessFactory(dbName);
-        } catch (DalException e) {
+        } catch (TransportException e) {
             throw new RuntimeException(e);
         }
         buildInstances();

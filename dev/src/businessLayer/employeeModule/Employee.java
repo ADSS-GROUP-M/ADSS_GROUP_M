@@ -82,8 +82,9 @@ public class Employee {
 
 
     public void removeRole(Role role) throws EmployeeException {
-        if (!roles.contains(role))
+        if (!roles.contains(role)) {
             throw new EmployeeException("The given role: `" + role + "` is not one of the employee roles.");
+        }
         roles.remove(role);
     }
 

@@ -2,8 +2,9 @@ package dataAccessLayer.employeeModule;
 
 import businessLayer.employeeModule.Employee;
 import businessLayer.employeeModule.Role;
-import dataAccessLayer.dalAbstracts.ManyToManyDAO;
+import dataAccessLayer.dalAbstracts.DAOBase;
 import dataAccessLayer.dalAbstracts.SQLExecutor;
+import dataAccessLayer.dalUtils.CreateTableQueryBuilder;
 import dataAccessLayer.dalUtils.OfflineResultSet;
 import exceptions.DalException;
 import javafx.util.Pair;
@@ -14,31 +15,21 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-public class EmployeeRolesDAO extends ManyToManyDAO<Pair<String,Role>> {
+import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnModifier;
+import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnType;
 
-    private static final String[] types = new String[]{"TEXT", "TEXT"};
-    private static final String[] parent_table_names = {"employees"};
-    private static final String[] primary_keys = {Columns.employee_id.name(), Columns.role.name()};
-    private static final String[][] foreign_keys = {{Columns.employee_id.name()}};
-    private static final String[][] references = {{"id"}};
+public class EmployeeRolesDAO extends DAOBase<Pair<String,Role>> {
+
+    public static final String[] primaryKey = {Columns.employee_id.name(), Columns.role.name()};
     public static final String tableName = "employee_roles";
 
     private enum Columns {
         employee_id,
-        role;
+        role
     }
 
     public EmployeeRolesDAO(SQLExecutor cursor) throws DalException {
-        super(cursor,
-                tableName,
-                parent_table_names,
-                types,
-                primary_keys,
-                foreign_keys,
-                references,
-                Columns.employee_id.name(),
-                Columns.role.name());
-        initTable();
+        super(cursor, tableName);
     }
 
     /**
@@ -74,6 +65,21 @@ public class EmployeeRolesDAO extends ManyToManyDAO<Pair<String,Role>> {
     }
 
     /**
+     * Used to insert data into {@link DAOBase#createTableQueryBuilder}. <br/>
+     * in order to add columns and foreign keys to the table use:<br/><br/>
+     * {@link CreateTableQueryBuilder#addColumn(String, ColumnType, ColumnModifier...)} <br/><br/>
+     * {@link CreateTableQueryBuilder#addForeignKey(String, String, String)}<br/><br/>
+     * {@link CreateTableQueryBuilder#addCompositeForeignKey(String[], String, String[])}
+     */
+    @Override
+    protected void initializeCreateTableQueryBuilder() {
+        createTableQueryBuilder
+                .addColumn(Columns.employee_id.name(), ColumnType.TEXT, ColumnModifier.PRIMARY_KEY)
+                .addColumn(Columns.role.name(), ColumnType.TEXT, ColumnModifier.PRIMARY_KEY)
+                .addForeignKey(Columns.employee_id.name(), EmployeeDAO.tableName, EmployeeDAO.primaryKey);
+    }
+
+    /**
      * This method returns a role instance if exists in the database, but this method should not be used,
      * use selectByEmployeeId(String employeeId) to receive the set of roles of the given employee
      * @param object - the pair of employeeId and role to select
@@ -83,8 +89,9 @@ public class EmployeeRolesDAO extends ManyToManyDAO<Pair<String,Role>> {
     @Deprecated
     @Override
     public Pair<String,Role> select(Pair<String,Role> object) throws DalException {
-        if(cache.contains(object))
+        if(cache.contains(object)) {
             return object;
+        }
 
         String query = String.format("SELECT * FROM %s WHERE %s = '%s' AND %s = '%s';",
                 TABLE_NAME,
@@ -235,7 +242,7 @@ public class EmployeeRolesDAO extends ManyToManyDAO<Pair<String,Role>> {
     }
 
     @Override
-    public boolean exists(Pair<String,Role> object) throws DalException {
+    public boolean exists(Pair<String,Role> object) {
         try {
             select(object); // Throws a DAL exception if the given role object doesn't exist in the system.
             return true;

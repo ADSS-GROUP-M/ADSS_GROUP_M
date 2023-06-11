@@ -1,43 +1,48 @@
 package dataAccessLayer.transportModule;
 
-import dataAccessLayer.dalAbstracts.ManyToManyDAO;
+import dataAccessLayer.dalAbstracts.DAOBase;
 import dataAccessLayer.dalAbstracts.SQLExecutor;
+import dataAccessLayer.dalAssociationClasses.transportModule.DeliveryRoute;
+import dataAccessLayer.dalUtils.CreateTableQueryBuilder;
 import dataAccessLayer.dalUtils.OfflineResultSet;
 import exceptions.DalException;
-import objects.transportObjects.DeliveryRoute;
-import objects.transportObjects.Transport;
 
 import java.sql.SQLException;
 import java.time.LocalTime;
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 
-public class DeliveryRoutesDAO extends ManyToManyDAO<DeliveryRoute> {
+import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnModifier;
+import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnType;
 
-    private static final String[] types = {"INTEGER", "INTEGER" , "TEXT", "INTEGER", "TEXT"};
-    private static final String[] parent_tables = {"transports", "sites", "item_lists"};
-    private static final String[] primary_keys = {"transport_id", "destination_index"};
-    private static final String[][] foreign_keys = {{"transport_id"}, {"destination_name"}, {"item_list_id"}};
-    private static final String[][] references = {{"id"}, {"name"}, {"id"}};
-    public static final String tableName = "delivery_routes";
+public class DeliveryRoutesDAO extends DAOBase<DeliveryRoute> {
+
+    private static final String tableName = "delivery_routes";
 
     public DeliveryRoutesDAO(SQLExecutor cursor) throws DalException{
-        super(cursor,
-				tableName,
-                parent_tables,
-                types,
-                primary_keys,
-                foreign_keys,
-                references,
-                "transport_id",
-                "destination_index",
-                "destination_name",
-                "item_list_id",
-                "expected_arrival_time"
-        );
-        initTable();
+        super(cursor, tableName);
     }
 
-    //TODO: ADD CACHING
+    /**
+     * Used to insert data into {@link DAOBase#createTableQueryBuilder}. <br/>
+     * in order to add columns and foreign keys to the table use:<br/><br/>
+     * {@link CreateTableQueryBuilder#addColumn(String, ColumnType, ColumnModifier...)} <br/><br/>
+     * {@link CreateTableQueryBuilder#addForeignKey(String, String, String)}<br/><br/>
+     * {@link CreateTableQueryBuilder#addCompositeForeignKey(String[], String, String[])}
+     */
+    @Override
+    protected void initializeCreateTableQueryBuilder() {
+        createTableQueryBuilder
+                .addColumn("transport_id", ColumnType.INTEGER, ColumnModifier.PRIMARY_KEY)
+                .addColumn("destination_index", ColumnType.INTEGER, ColumnModifier.NOT_NULL, ColumnModifier.PRIMARY_KEY)
+                .addColumn("destination_name", ColumnType.TEXT, ColumnModifier.NOT_NULL)
+                .addColumn("item_list_id", ColumnType.INTEGER, ColumnModifier.NOT_NULL)
+                .addColumn("expected_arrival_time", ColumnType.TEXT, ColumnModifier.NOT_NULL)
+                .addForeignKey("transport_id", TransportsMetaDataDAO.tableName, TransportsMetaDataDAO.primaryKey)
+                .addForeignKey("destination_name", SitesDAO.tableName, SitesDAO.primaryKey)
+                .addForeignKey("item_list_id", ItemListsDAO.tableName, ItemListsDAO.primaryKey);
+    }
 
     /**
      * @param object getLookUpObject(identifier) of the object to select
@@ -57,9 +62,7 @@ public class DeliveryRoutesDAO extends ManyToManyDAO<DeliveryRoute> {
             throw new DalException("Failed to select delivery route", e);
         }
         if(resultSet.isEmpty() == false) {
-            DeliveryRoute selected =  getObjectFromResultSet(resultSet);
-            cache.put(selected);
-            return selected;
+            return getObjectFromResultSet(resultSet);
         } else {
             throw new DalException("No delivery route with transport id " + object.transportId() + " was found");
         }
@@ -96,7 +99,6 @@ public class DeliveryRoutesDAO extends ManyToManyDAO<DeliveryRoute> {
                 deliveryRoutes.add(getObjectFromResultSet(resultSet));
             }
         }
-        cache.putAll(deliveryRoutes);
         return deliveryRoutes;
     }
 
@@ -108,10 +110,7 @@ public class DeliveryRoutesDAO extends ManyToManyDAO<DeliveryRoute> {
     public void insert(DeliveryRoute object) throws DalException {
         String query = buildInsertQuery(object);
         try {
-            if(cursor.executeWrite(query) != object.route().size()){
-                throw new RuntimeException("Unexpected error while trying to insert delivery route");
-            }
-            cache.put(object);
+            cursor.executeWrite(query);
         } catch (SQLException e) {
             throw new DalException("Failed to insert delivery route", e);
         }
@@ -131,9 +130,7 @@ public class DeliveryRoutesDAO extends ManyToManyDAO<DeliveryRoute> {
 
         String query = buildDeleteQuery(object) + buildInsertQuery(object);
         try {
-            if(cursor.executeWrite(query) == 0){
-                throw new DalException("Failed to update delivery route");
-            }
+            cursor.executeWrite(query);
         } catch (SQLException e) {
             throw new DalException("Failed to update delivery route", e);
         }
@@ -144,12 +141,15 @@ public class DeliveryRoutesDAO extends ManyToManyDAO<DeliveryRoute> {
      */
     @Override
     public void delete(DeliveryRoute object) throws DalException {
+
+        if(exists(object) == false){
+            throw new DalException("No delivery route with transport id "
+                    + object.transportId() + " was found");
+        }
+
         String query = buildDeleteQuery(object);
         try {
-            if(cursor.executeWrite(query) == 0){
-                throw new DalException("No delivery route with transport id "
-                        + object.transportId() + " was found");
-            }
+            cursor.executeWrite(query);
         } catch (SQLException e) {
             throw new DalException("Failed to delete related delivery routes", e);
         }
@@ -192,7 +192,7 @@ public class DeliveryRoutesDAO extends ManyToManyDAO<DeliveryRoute> {
                     i++,
                     destination,
                     object.itemLists().get(destination),
-                    object.getEstimatedTimeOfArrival(destination).toString()));
+                    object.estimatedArrivalTimes().get(destination).toString()));
         }
         return queryBuilder.toString();
     }
@@ -202,5 +202,4 @@ public class DeliveryRoutesDAO extends ManyToManyDAO<DeliveryRoute> {
                 TABLE_NAME,
                 object.transportId());
     }
-
-   }
+}

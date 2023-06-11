@@ -2,8 +2,9 @@ package dataAccessLayer.employeeModule;
 
 import businessLayer.employeeModule.Authorization;
 import businessLayer.employeeModule.User;
-import dataAccessLayer.dalAbstracts.DAO;
+import dataAccessLayer.dalAbstracts.DAOBase;
 import dataAccessLayer.dalAbstracts.SQLExecutor;
+import dataAccessLayer.dalUtils.CreateTableQueryBuilder;
 import dataAccessLayer.dalUtils.OfflineResultSet;
 import exceptions.DalException;
 
@@ -12,11 +13,15 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-public class UserDAO extends DAO<User> {
+import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnModifier;
+import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnType;
 
-    private static final String[] types = new String[]{"TEXT", "TEXT"};
-    private static final String[] primary_keys = {Columns.username.name()};
-    private static final String tableName = "users";
+public class UserDAO extends DAOBase<User> {
+
+    public static final String primaryKey = Columns.username.name();
+    public static final String tableName = "users";
+    public static final String[] ALL_COLUMNS = {Columns.username.name(), Columns.password.name()};
+
     private final UserAuthorizationsDAO userAuthorizationsDAO;
 
     private enum Columns {
@@ -25,19 +30,26 @@ public class UserDAO extends DAO<User> {
     }
 
     public UserDAO(SQLExecutor cursor, UserAuthorizationsDAO userAuthorizationsDAO) throws DalException{
-        super(cursor,
-                tableName,
-                types,
-                primary_keys,
-                Columns.username.name(),
-                Columns.password.name()
-        );
-        initTable();
+        super(cursor, tableName);
         this.userAuthorizationsDAO = userAuthorizationsDAO;
     }
 
     public User select(String username) throws DalException {
         return select(User.getLookupObject(username));
+    }
+
+    /**
+     * Used to insert data into {@link DAOBase#createTableQueryBuilder}. <br/>
+     * in order to add columns and foreign keys to the table use:<br/><br/>
+     * {@link CreateTableQueryBuilder#addColumn(String, ColumnType, ColumnModifier...)} <br/><br/>
+     * {@link CreateTableQueryBuilder#addForeignKey(String, String, String)}<br/><br/>
+     * {@link CreateTableQueryBuilder#addCompositeForeignKey(String[], String, String[])}
+     */
+    @Override
+    protected void initializeCreateTableQueryBuilder() {
+            createTableQueryBuilder
+                    .addColumn(Columns.username.name(), ColumnType.TEXT, ColumnModifier.PRIMARY_KEY)
+                    .addColumn(Columns.password.name(), ColumnType.TEXT, ColumnModifier.NOT_NULL);
     }
 
     /**
@@ -50,7 +62,7 @@ public class UserDAO extends DAO<User> {
         if (cache.contains(object)) {
             return cache.get(object);
         }
-        String query = String.format("SELECT * FROM %s WHERE %s = '%s'", TABLE_NAME, PRIMARY_KEYS[0], object.getUsername());
+        String query = String.format("SELECT * FROM %s WHERE %s = '%s'", TABLE_NAME, primaryKey, object.getUsername());
         OfflineResultSet resultSet;
         try {
             resultSet = cursor.executeRead(query);
@@ -121,8 +133,9 @@ public class UserDAO extends DAO<User> {
                     TABLE_NAME,
                     Columns.password.name(), user.getPassword(),
                     Columns.username.name(), user.getUsername());
-            if (cursor.executeWrite(queryString) == 0)
+            if (cursor.executeWrite(queryString) == 0) {
                 throw new DalException("No user with username " + user.getUsername() + " was found");
+            }
             cache.put(user);
         } catch(SQLException e) {
             throw new DalException(e);
@@ -140,15 +153,16 @@ public class UserDAO extends DAO<User> {
 
         String query = String.format("DELETE FROM %s WHERE %s = '%s';", TABLE_NAME, Columns.username.name(), user.getUsername());
         try {
-            if (cursor.executeWrite(query) == 0)
+            if (cursor.executeWrite(query) == 0) {
                 throw new DalException("No user with username " + user.getUsername() + " was found");
+            }
         } catch (SQLException e) {
             throw new DalException("Failed to delete User", e);
         }
     }
 
     @Override
-    public boolean exists(User object) throws DalException {
+    public boolean exists(User object) {
         try {
             select(object);
             return true;

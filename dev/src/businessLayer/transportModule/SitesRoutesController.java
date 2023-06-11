@@ -3,23 +3,27 @@ package businessLayer.transportModule;
 import businessLayer.transportModule.bingApi.*;
 import dataAccessLayer.dalAssociationClasses.transportModule.SiteRoute;
 import dataAccessLayer.transportModule.SitesRoutesDAO;
+import domainObjects.transportModule.Site;
 import exceptions.DalException;
 import exceptions.TransportException;
 import javafx.util.Pair;
-import objects.transportObjects.Site;
 
-import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class SitesRoutesController {
 
     private final BingAPI bingAPI;
-
     private final SitesRoutesDAO dao;
+    private final ExecutorService executor;
+
 
     public SitesRoutesController(BingAPI bingAPI, SitesRoutesDAO dao) {
         this.bingAPI = bingAPI;
         this.dao = dao;
+        executor = Executors.newFixedThreadPool(10);
     }
 
     public Point getCoordinates(Site site) throws TransportException {
@@ -27,9 +31,42 @@ public class SitesRoutesController {
         queryResponse = bingAPI.locationByQuery(site.address());
         LocationResource[] locationResources = queryResponse.resourceSets()[0].resources();
         if (locationResources.length != 1) {
+
+            //TODO: handle this case properly
+
             throw new TransportException("Could not find site or found multiple sites");
         }
         return locationResources[0].point();
+    }
+
+    public Map<Site,Point> getCoordinates(List<Site> sites) throws TransportException {
+
+        Map<Site,Point> points = new HashMap<>(sites.size()*2){{
+            for(Site site : sites) {
+                put(site, null); // initialize keys to avoid need for synchronization
+            }
+        }};
+
+        final TransportException[] exception = {null};
+
+        List<Runnable> tasks = new LinkedList<>();
+        for(Site site : sites) {
+            tasks.add(() -> {
+                try {
+                    points.put(site, getCoordinates(site));
+                } catch (TransportException e) {
+                    exception[0] = e;
+                }
+            });
+        }
+
+        executeInParallel(tasks);
+
+        if(exception[0] != null) {
+            throw exception[0];
+        }
+
+        return points;
     }
 
     public void addRoutes(Site site , List<Site> otherSites) throws TransportException {
@@ -61,26 +98,45 @@ public class SitesRoutesController {
      */
     public Map<Pair<String,String>, Pair<Double,Double>> getTravelData(Site site, List<Site> otherSites) throws TransportException {
 
-        Map<Pair<String,String>, Pair<Double,Double>> routes = new HashMap<>();
-
+        Map<Pair<String,String>, Pair<Double,Double>> routes = new HashMap<>(otherSites.size()*4){{
+            for(Site other : otherSites) {  // initialize keys with null to avoid need for synchronization
+                put(new Pair<>(site.address(), other.address()), null);
+                put(new Pair<>(other.address(), site.address()), null);
+            }
+            put(new Pair<>(site.address(),site.address()),new Pair<>(0.0,0.0));
+        }};
         Point newSitePoint = new Point(site.address(), new double[]{site.latitude(),site.longitude()});
 
-        for(Site other : otherSites){
-            Point otherSitePoint = new Point(other.address(), new double[]{other.latitude(),other.longitude()});
+        final TransportException[] exception = {null};
 
-            DistanceMatrixResponse response;
-            response = bingAPI.distanceMatrix(List.of(newSitePoint,otherSitePoint));
-            Result[] results = Arrays.stream(response.resourceSets()[0].resources()[0].results())
-                    .filter(result -> result.originIndex() != result.destinationIndex())
-                    .toArray(Result[]::new);
+        List<Runnable> tasks = new LinkedList<>();
+        for(Site other : otherSites) {
+            tasks.add(() -> {
+                try {
+                    Point otherSitePoint = new Point(other.address(), new double[]{other.latitude(), other.longitude()});
 
-            routes.put(new Pair<>(site.address(),other.address()),
-                    new Pair<>(results[0].travelDistance(),results[0].travelDuration()));
-            routes.put(new Pair<>(other.address(),site.address()),
-                    new Pair<>(results[1].travelDistance(),results[1].travelDuration()));
+                    DistanceMatrixResponse response;
+                    response = bingAPI.distanceMatrix(List.of(newSitePoint, otherSitePoint));
+                    Result[] results = Arrays.stream(response.resourceSets()[0].resources()[0].results())
+                            .filter(result -> result.originIndex() != result.destinationIndex())
+                            .toArray(Result[]::new);
+
+                    routes.put(new Pair<>(site.address(), other.address()),
+                            new Pair<>(results[0].travelDistance(), results[0].travelDuration()));
+                    routes.put(new Pair<>(other.address(), site.address()),
+                            new Pair<>(results[1].travelDistance(), results[1].travelDuration()));
+
+                } catch (TransportException e) {
+                    exception[0] = e;
+                }
+            });
         }
 
-        routes.put(new Pair<>(site.address(),site.address()),new Pair<>(0.0,0.0));
+        executeInParallel(tasks);
+
+        if(exception[0] != null){
+            throw exception[0];
+        }
         return routes;
     }
 
@@ -94,8 +150,7 @@ public class SitesRoutesController {
                 .map(site -> new Point(site.address(), new double[]{site.latitude(),site.longitude()}))
                 .toArray(Point[]::new);
 
-        DistanceMatrixResponse response = null;
-        response = bingAPI.distanceMatrix(Arrays.stream(points).toList());
+        DistanceMatrixResponse response = bingAPI.distanceMatrix(Arrays.stream(points).toList());
         Result[] results = response.resourceSets()[0].resources()[0].results();
         Arrays.stream(results).forEach(result -> {
             int originIndex = result.originIndex();
@@ -146,5 +201,20 @@ public class SitesRoutesController {
             curr = next;
         }
         return distances;
+    }
+
+    private void executeInParallel(List<Runnable> tasks){
+
+        List<Future<?>> futures = new LinkedList<>();
+
+        for(Runnable task : tasks) {
+            futures.add(executor.submit(task));
+        }
+
+        while(! futures.stream().allMatch(Future::isDone)) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException ignored) {}
+        }
     }
 }

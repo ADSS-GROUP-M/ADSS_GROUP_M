@@ -1,44 +1,50 @@
 package dataAccessLayer.transportModule;
 
 import dataAccessLayer.dalAbstracts.CounterDAO;
-import dataAccessLayer.dalAbstracts.ManyToManyDAO;
+import dataAccessLayer.dalAbstracts.DAO;
 import dataAccessLayer.dalAbstracts.SQLExecutor;
-import dataAccessLayer.dalUtils.OfflineResultSet;
+import dataAccessLayer.dalAssociationClasses.transportModule.DeliveryRoute;
+import dataAccessLayer.dalAssociationClasses.transportModule.TransportMetaData;
+import dataAccessLayer.dalUtils.Cache;
+import domainObjects.transportModule.Transport;
 import exceptions.DalException;
-import objects.transportObjects.Transport;
 
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.ListIterator;
 
-public class TransportsDAO extends ManyToManyDAO<Transport> implements CounterDAO {
+public class TransportsDAO implements DAO<Transport>,CounterDAO {
 
-    private static final String[] types = {"INTEGER", "TEXT", "TEXT", "TEXT", "INTEGER"};
-    private static final String[] parent_tables = {"truck_drivers", "trucks"};
-    private static final String[] primary_keys = {"id"};
-    private static final String[][] foreign_keys = {{"driver_id"}, {"truck_id"}};
-    private static final String[][] references = {{"id"}, {"id"}};
-    private static final String tableName = "transports";
+    private final TransportsMetaDataDAO metaDataDAO;
+    private final DeliveryRoutesDAO deliveryRoutesDAO;
+    private final Cache<Transport> cache;
+    private final SQLExecutor cursor;
 
-    private final TransportIdCounterDAO counterDAO;
+    public TransportsDAO(SQLExecutor cursor, TransportsMetaDataDAO metaDataDAO, DeliveryRoutesDAO deliveryRoutesDAO) {
+        this.cursor = cursor;
+        this.metaDataDAO = metaDataDAO;
+        this.deliveryRoutesDAO = deliveryRoutesDAO;
+        this.cache = new Cache<>();
+    }
 
-    public TransportsDAO(SQLExecutor cursor, TransportIdCounterDAO counterDAO) throws DalException{
-        super(cursor,
-				tableName,
-                parent_tables,
-                types,
-                primary_keys,
-                foreign_keys,
-                references,
-                "id",
-                "driver_id",
-                "truck_id",
-                "departure_time",
-                "weight"
-        );
-        this.counterDAO = counterDAO;
-        initTable();
+    @Override
+    public Integer selectCounter() throws DalException {
+        return metaDataDAO.selectCounter();
+    }
+
+    @Override
+    public void insertCounter(Integer value) throws DalException {
+        metaDataDAO.insertCounter(value);
+    }
+
+    @Override
+    public void incrementCounter() throws DalException {
+        metaDataDAO.incrementCounter();
+    }
+
+    @Override
+    public void resetCounter() throws DalException {
+        metaDataDAO.resetCounter();
     }
 
     /**
@@ -49,27 +55,15 @@ public class TransportsDAO extends ManyToManyDAO<Transport> implements CounterDA
     @Override
     public Transport select(Transport object) throws DalException {
 
-        if(cache.contains(object)) {
+        if(cache.contains(object)){
             return cache.get(object);
         }
 
-        String query = String.format("SELECT * FROM %s WHERE id = %d;",
-                TABLE_NAME,
-                object.id()
-        );
-        OfflineResultSet resultSet;
-        try {
-            resultSet = cursor.executeRead(query);
-        } catch (SQLException e) {
-            throw new DalException("Failed to select transport", e);
-        }
-        if (resultSet.next()){
-            Transport selected = getObjectFromResultSet(resultSet);
-            cache.put(selected);
-            return selected;
-        } else {
-            throw new DalException("No transport with id " + object.id() + " was found");
-        }
+        DeliveryRoute route = deliveryRoutesDAO.select(DeliveryRoute.getLookupObject(object.id()));
+        TransportMetaData metaData =  metaDataDAO.select(TransportMetaData.getLookupObject(object.id()));
+        Transport selected = new Transport(metaData,route);
+        cache.put(selected);
+        return new Transport(metaData,route);
     }
 
     /**
@@ -78,17 +72,11 @@ public class TransportsDAO extends ManyToManyDAO<Transport> implements CounterDA
      */
     @Override
     public List<Transport> selectAll() throws DalException {
-        String query = String.format("SELECT * FROM %s;", TABLE_NAME);
+        List<TransportMetaData> metaDataList = metaDataDAO.selectAll();
         List<Transport> transports = new LinkedList<>();
-        OfflineResultSet resultSet;
-        try {
-            resultSet = cursor.executeRead(query);
-        } catch (SQLException e) {
-            throw new DalException("Failed to select all transports", e);
-        }
-        while (resultSet.next()){
-            Transport selected = getObjectFromResultSet(resultSet);
-            transports.add(selected);
+        for (TransportMetaData metaData : metaDataList) {
+            DeliveryRoute route = deliveryRoutesDAO.select(DeliveryRoute.getLookupObject(metaData.transportId()));
+            transports.add(new Transport(metaData,route));
         }
         cache.putAll(transports);
         return transports;
@@ -100,23 +88,33 @@ public class TransportsDAO extends ManyToManyDAO<Transport> implements CounterDA
      */
     @Override
     public void insert(Transport object) throws DalException {
-        String query = String.format("INSERT INTO %s VALUES (%d, '%s', '%s', '%s', %d);",
-                TABLE_NAME,
+
+        if(exists(object)){
+            throw new DalException("Transport with id %d already exists".formatted(object.id()));
+        }
+
+        TransportMetaData metaData = new TransportMetaData(
                 object.id(),
                 object.driverId(),
                 object.truckId(),
                 object.departureTime(),
                 object.weight()
         );
+        DeliveryRoute deliveryRoute =  new DeliveryRoute(
+                object.id(),
+                object.route(),
+                object.itemLists(),
+                object.estimatedArrivalTimes()
+        );
         try {
-            if(cursor.executeWrite(query) == 1){
-                cache.put(object);
-            } else {
-                throw new RuntimeException("Unexpected error while inserting transport");
-            }
+            cursor.beginTransaction();
+            metaDataDAO.insert(metaData);
+            deliveryRoutesDAO.insert(deliveryRoute);
+            cursor.commit();
         } catch (SQLException e) {
             throw new DalException("Failed to insert transport",e);
         }
+        cache.put(object);
     }
 
     /**
@@ -125,105 +123,79 @@ public class TransportsDAO extends ManyToManyDAO<Transport> implements CounterDA
      */
     @Override
     public void update(Transport object) throws DalException {
-        String query = String.format("UPDATE %s SET driver_id = '%s', truck_id = '%s', departure_time = '%s', weight = %d WHERE id = %d;",
-                TABLE_NAME,
+
+        if(exists(object) == false){
+            throw new DalException("Transport with id %d not found".formatted(object.id()));
+        }
+
+        TransportMetaData metaData = new TransportMetaData(
+                object.id(),
                 object.driverId(),
                 object.truckId(),
                 object.departureTime(),
-                object.weight(),
-                object.id()
+                object.weight()
         );
+        DeliveryRoute newDeliveryRoute = new DeliveryRoute(
+                object.id(),
+                object.route(),
+                object.itemLists(),
+                object.estimatedArrivalTimes());
+
         try {
-            if(cursor.executeWrite(query) == 1){
-                cache.put(object);
-            } else {
-                throw new DalException("No transport with id " + object.id() + " was found");
+            cursor.beginTransaction();
+            metaDataDAO.update(metaData);
+            DeliveryRoute oldDeliveryRoute = deliveryRoutesDAO.select(DeliveryRoute.getLookupObject(object.id()));
+            if(oldDeliveryRoute.deepEquals(newDeliveryRoute) == false){
+                deliveryRoutesDAO.update(newDeliveryRoute);
             }
+            cursor.commit();
         } catch (SQLException e) {
             throw new DalException("Failed to update transport",e);
         }
+        cache.put(object);
     }
 
     /**
-     * @param object@throws DalException if an error occurred while trying to delete the object
+     * @param object getLookUpObject(identifier) of the object to delete
+     * @throws DalException if an error occurred while trying to delete the object
      */
     @Override
     public void delete(Transport object) throws DalException {
-        String query = String.format("DELETE FROM %s WHERE id = %d;",
-                TABLE_NAME,
-                object.id()
-        );
+
+        if(exists(object) == false){
+            throw new DalException("Transport with id %d not found".formatted(object.id()));
+        }
+
         try {
-            if(cursor.executeWrite(query) == 1){
-                cache.remove(object);
-            } else {
-                throw new DalException("No transport with id " + object.id() + " was found");
-            }
+            cursor.beginTransaction();
+            deliveryRoutesDAO.delete(DeliveryRoute.getLookupObject(object.id()));
+            metaDataDAO.delete(TransportMetaData.getLookupObject(object.id()));
+            cursor.commit();
         } catch (SQLException e) {
             throw new DalException("Failed to delete transport",e);
         }
+        cache.remove(object);
     }
 
     @Override
     public boolean exists(Transport object) throws DalException {
-
-        if(cache.contains(object)) {
+        if(cache.contains(object)){
             return true;
         }
 
-        String query = String.format("SELECT * FROM %s WHERE id = %d;",
-                TABLE_NAME,
-                object.id()
-        );
-        try{
-            return cursor.executeRead(query).isEmpty() == false;
-        } catch (SQLException e) {
-            throw new DalException("Failed to check if transport exists",e);
-        }
-    }
-
-    @Override
-    public void clearTable() {
-        try {
-            resetCounter();
-        } catch (DalException e) {
-            throw new RuntimeException(e);
-        }
-        super.clearTable();
+        return metaDataDAO.exists(TransportMetaData.getLookupObject(object.id()));
     }
 
     /**
-     * @return Transport object where <br/> DeliveryRoute == null -> true
+     * used for testing
      */
-    @Override
-    protected Transport getObjectFromResultSet(OfflineResultSet resultSet) {
-        return new Transport(
-                resultSet.getInt("id"),
-                null,
-                resultSet.getString("driver_id"),
-                resultSet.getString("truck_id"),
-                resultSet.getLocalDateTime("departure_time"),
-                resultSet.getInt("weight")
-        );
+    public void clearTable() {
+        deliveryRoutesDAO.clearTable();
+        metaDataDAO.clearTable();
+        clearCache();
     }
 
-    @Override
-    public Integer selectCounter() throws DalException {
-        return counterDAO.selectCounter();
-    }
-
-    @Override
-    public void insertCounter(Integer value) throws DalException {
-        counterDAO.insertCounter(value);
-    }
-
-    @Override
-    public void incrementCounter() throws DalException {
-        counterDAO.incrementCounter();
-    }
-
-    @Override
-    public void resetCounter() throws DalException {
-        counterDAO.resetCounter();
+    public void clearCache() {
+        cache.clear();
     }
 }

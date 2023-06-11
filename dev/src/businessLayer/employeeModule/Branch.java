@@ -60,10 +60,11 @@ public class Branch {
     }
 
     public Shift.ShiftType getShiftType(LocalTime localTime) throws EmployeeException {
-        if (localTime.equals(morningStart) || (localTime.isAfter(morningStart) && localTime.isBefore(morningEnd)) || localTime.equals(morningEnd))
+        if (localTime.equals(morningStart) || (localTime.isAfter(morningStart) && localTime.isBefore(morningEnd)) || localTime.equals(morningEnd)) {
             return Shift.ShiftType.Morning;
-        else if (localTime.equals(eveningStart) || (localTime.isAfter(eveningStart) && localTime.isBefore(eveningEnd)) || localTime.equals(eveningEnd))
+        } else if (localTime.equals(eveningStart) || (localTime.isAfter(eveningStart) && localTime.isBefore(eveningEnd)) || localTime.equals(eveningEnd)) {
             return Shift.ShiftType.Evening;
+        }
         throw new EmployeeException("The given LocalTime isn't included in any shift of the day.");
     }
 
@@ -84,7 +85,7 @@ public class Branch {
             return false;
         }
         Branch branch = (Branch) o;
-        return name == branch.name;
+        return name.equals(branch.name);
     }
 
     @Override

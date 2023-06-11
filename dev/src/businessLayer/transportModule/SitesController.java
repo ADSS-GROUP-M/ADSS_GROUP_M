@@ -1,16 +1,15 @@
 package businessLayer.transportModule;
 
 import businessLayer.transportModule.bingApi.Point;
-import dataAccessLayer.dalAssociationClasses.transportModule.SiteRoute;
 import dataAccessLayer.transportModule.SitesDAO;
+import domainObjects.transportModule.Site;
 import exceptions.DalException;
 import exceptions.TransportException;
-import objects.transportObjects.Site;
 import serviceLayer.employeeModule.Services.EmployeesService;
 
-import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import static serviceLayer.employeeModule.Services.UserService.TRANSPORT_MANAGER_USERNAME;
 
@@ -160,28 +159,32 @@ public class SitesController {
      * this method is used only for the first time the system is loaded.
      * this method assumes that there are no sites in the system.
      */
-    public void addAllSitesFirstTimeSystemLoad(List<Site> sites) throws TransportException {
+    public void addAllSitesFirstTimeSystemLoad(List<Site> sites, boolean fetchTravelTimes) throws TransportException {
 
-        // get latitude and longitude
+        if(fetchTravelTimes){
+            // get latitude and longitude for each site
+            Map<Site,Point> coordinates = sitesRoutesController.getCoordinates(sites);
 
-        List<Site> _sites = new LinkedList<>();
-        for(Site site : sites){
-            Point p = sitesRoutesController.getCoordinates(site);
-            Site _site = new Site(site, p.latitude(), p.longitude());
-            _sites.add(_site);
-            try {
-                dao.insert(_site);
-            } catch (DalException e) {
-                throw new TransportException(e.getMessage(),e);
+            List<Site> sitesWithCoordinates = new LinkedList<>();
+            for(var entry : coordinates.entrySet()){
+                Site siteWithCoordinates = new Site(entry.getKey(), entry.getValue().latitude(), entry.getValue().longitude());
+                sitesWithCoordinates.add(siteWithCoordinates);
             }
+            sites = sitesWithCoordinates;
         }
 
-        sitesRoutesController.addAllRouteObjectsFirstTimeLoad(_sites);
+        try {
+            dao.insertAll(sites);
+        } catch (DalException e) {
+            throw new TransportException(e.getMessage(),e);
+        }
+        sites.stream()
+                .filter(site -> site.siteType() == Site.SiteType.BRANCH)
+                .forEach(site -> employeesService.createBranch(TRANSPORT_MANAGER_USERNAME,site.name()));
 
-        for(Site site : _sites){
-            if(site.siteType() == Site.SiteType.BRANCH){
-                employeesService.createBranch(TRANSPORT_MANAGER_USERNAME,site.name());
-            }
+        if(fetchTravelTimes){
+            // get route information for between all sites
+            sitesRoutesController.addAllRouteObjectsFirstTimeLoad(sites);
         }
     }
 }

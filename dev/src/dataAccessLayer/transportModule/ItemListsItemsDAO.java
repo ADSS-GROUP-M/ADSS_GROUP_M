@@ -1,10 +1,11 @@
 package dataAccessLayer.transportModule;
 
-import dataAccessLayer.dalAbstracts.ManyToManyDAO;
+import dataAccessLayer.dalAbstracts.DAOBase;
 import dataAccessLayer.dalAbstracts.SQLExecutor;
+import dataAccessLayer.dalUtils.CreateTableQueryBuilder;
 import dataAccessLayer.dalUtils.OfflineResultSet;
+import domainObjects.transportModule.ItemList;
 import exceptions.DalException;
-import objects.transportObjects.ItemList;
 
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -12,34 +13,38 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class ItemListsItemsDAO extends ManyToManyDAO<ItemList> {
+import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnModifier;
+import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnType;
 
-    private static final String[] parent_table_names = {"item_lists"};
-    private static final String[] primary_keys = {"id", "loading_type", "item_name"};
-    private static final String[][] foreign_keys = {{"id"}};
-    private static final String[][] references = {{"Id"}};
+public class ItemListsItemsDAO extends DAOBase<ItemList> {
+    public static final String[] primaryKey = {"id", "loading_type", "item_name"};
     public static final String tableName = "item_lists_items";
+    private static final String PARENT_TABLE_NAME = ItemListsDAO.tableName;
 
     private enum LoadingType {
         loading,
         unloading
     }
 
-    public static final String[] types = new String[]{"INTEGER", "TEXT", "TEXT", "INTEGER"};
-
     public ItemListsItemsDAO(SQLExecutor cursor) throws DalException {
-        super(cursor,
-				tableName,
-                parent_table_names,
-                types,
-                primary_keys,
-                foreign_keys,
-                references,
-                "id",
-                "loading_type",
-                "item_name",
-                "amount");
-        initTable();
+        super(cursor, tableName);
+    }
+
+    /**
+     * Used to insert data into {@link DAOBase#createTableQueryBuilder}. <br/>
+     * in order to add columns and foreign keys to the table use:<br/><br/>
+     * {@link CreateTableQueryBuilder#addColumn(String, ColumnType, ColumnModifier...)} <br/><br/>
+     * {@link CreateTableQueryBuilder#addForeignKey(String, String, String)}<br/><br/>
+     * {@link CreateTableQueryBuilder#addCompositeForeignKey(String[], String, String[])}
+     */
+    @Override
+    protected void initializeCreateTableQueryBuilder() {
+        createTableQueryBuilder
+                .addColumn("id", ColumnType.INTEGER, ColumnModifier.PRIMARY_KEY)
+                .addColumn("loading_type", ColumnType.TEXT, ColumnModifier.PRIMARY_KEY)
+                .addColumn("item_name", ColumnType.TEXT, ColumnModifier.PRIMARY_KEY)
+                .addColumn("amount", ColumnType.INTEGER)
+                .addForeignKey("id", ItemListsDAO.tableName, ItemListsDAO.primaryKey);
     }
 
     /**
@@ -70,7 +75,7 @@ public class ItemListsItemsDAO extends ManyToManyDAO<ItemList> {
     public List<ItemList> selectAll() throws DalException {
         OfflineResultSet resultSet;
 
-        String idsQuery = String.format("SELECT id FROM %s where id != -1;", PARENT_TABLE_NAME[0]);
+        String idsQuery = String.format("SELECT id FROM %s where id != -1;", PARENT_TABLE_NAME);
         try{
             resultSet = cursor.executeRead(idsQuery);
         } catch(SQLException e){
@@ -102,15 +107,17 @@ public class ItemListsItemsDAO extends ManyToManyDAO<ItemList> {
     @Override
     public void insert(ItemList object) throws DalException {
 
+        if(exists(object)){
+            throw new DalException("Item list with id %d already exists".formatted(object.id()));
+        }
+
         StringBuilder query = new StringBuilder();
 
         query.append(insertMapToDBQuery(object.id(), LoadingType.loading, object.load()));
         query.append(insertMapToDBQuery(object.id(), LoadingType.unloading, object.unload()));
 
         try {
-            if(cursor.executeWrite(query.toString()) != query.toString().split("\n").length){
-                throw new RuntimeException("Unexpected error while inserting item list");
-            }
+            cursor.executeWrite(query.toString());
         } catch (SQLException e) {
             throw new DalException("Failed to insert item list", e);
         }
@@ -122,16 +129,18 @@ public class ItemListsItemsDAO extends ManyToManyDAO<ItemList> {
      */
     @Override
     public void update(ItemList object) throws DalException {
-        ItemList oldObject = select(object);
 
+        if(exists(object) == false){
+            throw new DalException("Item list with id %d does not exist".formatted(object.id()));
+        }
+
+        ItemList oldObject = select(object);
         StringBuilder query = new StringBuilder();
         query.append(updateFromMapsQuery(object.id(), oldObject.unload(), object.unload(), LoadingType.unloading));
         query.append(updateFromMapsQuery(object.id(), oldObject.load(), object.load(), LoadingType.loading));
 
         try {
-            if(cursor.executeWrite(query.toString()) == 0){
-                throw new DalException("No item list with id " + object.id() + " was found");
-            }
+            cursor.executeWrite(query.toString());
         } catch (SQLException e) {
             throw new DalException("Failed to update item list", e);
         }
@@ -142,11 +151,14 @@ public class ItemListsItemsDAO extends ManyToManyDAO<ItemList> {
      */
     @Override
     public void delete(ItemList object) throws DalException {
+
+        if(exists(object) == false){
+            throw new DalException("Item list with id %d does not exist".formatted(object.id()));
+        }
+
         String query = String.format("DELETE FROM %s WHERE id = '%s';", TABLE_NAME, object.id());
         try {
-            if(cursor.executeWrite(query) == 0){
-                throw new DalException("No item list with id " + object.id() + " was found");
-            }
+            cursor.executeWrite(query);
         } catch (SQLException e) {
             throw new DalException("Failed to delete item list", e);
         }

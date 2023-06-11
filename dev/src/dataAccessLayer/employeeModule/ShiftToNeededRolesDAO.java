@@ -2,9 +2,10 @@ package dataAccessLayer.employeeModule;
 
 import businessLayer.employeeModule.Role;
 import businessLayer.employeeModule.Shift;
-import dataAccessLayer.dalAbstracts.ManyToManyDAO;
+import dataAccessLayer.dalAbstracts.DAOBase;
 import dataAccessLayer.dalAbstracts.SQLExecutor;
 import dataAccessLayer.dalAssociationClasses.employeeModule.ShiftNeededRole;
+import dataAccessLayer.dalUtils.CreateTableQueryBuilder;
 import dataAccessLayer.dalUtils.OfflineResultSet;
 import exceptions.DalException;
 
@@ -15,13 +16,15 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class ShiftToNeededRolesDAO extends ManyToManyDAO<ShiftNeededRole> {
-    private static final String[] types = {"TEXT", "TEXT" , "TEXT", "TEXT", "INTEGER"};
-    private static final String[] parent_tables = {"shifts"};
-    private static final String[] primary_keys = {Columns.branch.name(), Columns.shift_date.name(), Columns.shift_type.name(), Columns.role.name()};
-    private static final String[][] foreign_keys = {{Columns.branch.name(), Columns.shift_date.name(), Columns.shift_type.name()}};
-    private static final String[][] references = {{"branch", "shift_date", "shift_type"}};
+import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnModifier;
+import static dataAccessLayer.dalUtils.CreateTableQueryBuilder.ColumnType;
+
+public class ShiftToNeededRolesDAO extends DAOBase<ShiftNeededRole> {
+
+    public static final String[] primaryKey = {Columns.branch.name(), Columns.shift_date.name(), Columns.shift_type.name(), Columns.role.name()};
     public static final String tableName = "shift_roles";
+
+    private static final String[] foreignKeyColumns = {Columns.branch.name(), Columns.shift_date.name(), Columns.shift_type.name()};
 
     private enum Columns {
         branch,
@@ -32,20 +35,25 @@ public class ShiftToNeededRolesDAO extends ManyToManyDAO<ShiftNeededRole> {
     }
 
     public ShiftToNeededRolesDAO(SQLExecutor cursor) throws DalException{
-        super(cursor,
-                tableName,
-                parent_tables,
-                types,
-                primary_keys,
-                foreign_keys,
-                references,
-                Columns.branch.name(),
-                Columns.shift_date.name(),
-                Columns.shift_type.name(),
-                Columns.role.name(),
-                Columns.amount.name()
-        );
-        initTable();
+        super(cursor, tableName);
+    }
+
+    /**
+     * Used to insert data into {@link DAOBase#createTableQueryBuilder}. <br/>
+     * in order to add columns and foreign keys to the table use:<br/><br/>
+     * {@link CreateTableQueryBuilder#addColumn(String, ColumnType, ColumnModifier...)} <br/><br/>
+     * {@link CreateTableQueryBuilder#addForeignKey(String, String, String)}<br/><br/>
+     * {@link CreateTableQueryBuilder#addCompositeForeignKey(String[], String, String[])}
+     */
+    @Override
+    protected void initializeCreateTableQueryBuilder() {
+        createTableQueryBuilder
+                .addColumn(Columns.branch.name(), ColumnType.TEXT, ColumnModifier.PRIMARY_KEY)
+                .addColumn(Columns.shift_date.name(), ColumnType.TEXT, ColumnModifier.PRIMARY_KEY)
+                .addColumn(Columns.shift_type.name(), ColumnType.TEXT, ColumnModifier.PRIMARY_KEY)
+                .addColumn(Columns.role.name(), ColumnType.TEXT, ColumnModifier.PRIMARY_KEY)
+                .addColumn(Columns.amount.name(), ColumnType.INTEGER, ColumnModifier.NOT_NULL)
+                .addCompositeForeignKey(foreignKeyColumns, ShiftDAO.tableName, ShiftDAO.primaryKey);
     }
 
     /**

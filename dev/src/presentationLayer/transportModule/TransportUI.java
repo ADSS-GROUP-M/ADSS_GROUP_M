@@ -76,6 +76,11 @@ public class TransportUI implements Menu {
         System.out.println("5. Exit");
     }
 
+    @Override
+    public void terminate(){
+        //frame.dispose(); //When this class's menu is implementing, uncomment this.
+    }
+
     private void manageResources() {
         while(true){
             System.out.println("=========================================");

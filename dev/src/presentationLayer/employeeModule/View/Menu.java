@@ -4,4 +4,5 @@ public interface Menu {
     Menu run();
     Menu runGUI();
     void printCommands();
+    void terminate();
 }

@@ -1,8 +1,6 @@
 package presentationLayer.employeeModule.View;
 
-import presentationLayer.DataGenerator;
 import presentationLayer.employeeModule.ViewModel.HRManagerMenuVM;
-import presentationLayer.transportModule.TransportUI;
 import utils.DateUtils;
 
 import javax.swing.*;
@@ -17,7 +15,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
 import java.util.Arrays;
-import java.util.List;
+import java.util.Enumeration;
 import java.util.Scanner;
 
 public class HRManagerMenu implements Menu {
@@ -27,6 +25,9 @@ public class HRManagerMenu implements Menu {
     private JFrame frame = new JFrame("HRManagerMenu");
     private JPanel buttonPanel = new JPanel();
     private JPanel fieldsPanel = new JPanel();
+    private JPanel rolesPanel = new JPanel();
+    private JPanel shiftTypesPanel = new JPanel();
+    private JPanel authorizationPanel = new JPanel();
     private JPanel notificationsPanel = new JPanel();
     private JButton recruit_employee = new JButton("Recruit Employee");
     private JButton create_week_shifts = new JButton("Create Week Shifts");
@@ -43,18 +44,40 @@ public class HRManagerMenu implements Menu {
     private JButton authorize = new JButton("Authorize");
     private JButton exit = new JButton("Exit");
     private JTextField usernameField = new JTextField("-enter username-");
-    private DateFormat txtDate = new SimpleDateFormat("dd-mm-yyyy");
+    private DateFormat txtDate = new SimpleDateFormat("dd/mm/yyyy");
     private JFormattedTextField dateField = new JFormattedTextField(txtDate);
     private ButtonGroup authorizationField = new ButtonGroup();
-    private JRadioButton hrManager = new JRadioButton("HRManager");
-    private JRadioButton storekeeper = new JRadioButton("Storekeeper");
-    private JRadioButton cashier = new JRadioButton("Cashier");
-    private JRadioButton shiftManager = new JRadioButton("ShiftManager");
-    private JRadioButton transportManager = new JRadioButton("TransportManager");
-    private JTextField freeText = new JTextField("-additional text-");
+    private JRadioButton hrManagerA = new JRadioButton("HRManager");
+    private JRadioButton storekeeperA = new JRadioButton("Storekeeper");
+    private JRadioButton cashierA = new JRadioButton("Cashier");
+    private JRadioButton shiftManagerA = new JRadioButton("ShiftManager");
+    private JRadioButton transportManagerA = new JRadioButton("TransportManager");
+    private ButtonGroup roleField = new ButtonGroup();
+    private JRadioButton cashierR = new JRadioButton("Cashier");
+    private JRadioButton storekeeperR = new JRadioButton("Storekeeper");
+    private JRadioButton shiftManagerR = new JRadioButton("ShiftManager");
+    private JRadioButton generalWorkerR = new JRadioButton("GeneralWorker");
+    private JRadioButton securityGuardR = new JRadioButton("SecurityGuard");
+    private JRadioButton stewardR = new JRadioButton("Steward");
+    private JRadioButton cleanerR = new JRadioButton("Cleaner");
+    private JRadioButton driverR = new JRadioButton("Driver");
+    private JTextField freeTextField = new JTextField("-additional text-");
+    private ButtonGroup shiftTypeField = new ButtonGroup();
+    private JRadioButton morningShift = new JRadioButton("Morning");
+    private JRadioButton eveningShift = new JRadioButton("Evening");
+    private JTextField amountField = new JTextField("-amount-");
+    private JTextField branchIdField = new JTextField("-branch id-");
+    private JTextField nameField = new JTextField("-full name-");
+    private JTextField bankDetailsField = new JTextField("-bank details-");
+    private JTextField hourlyRateField = new JTextField("-hourly rate-");
+    private JTextField employmentConditionsField = new JTextField("-employment conditions-");
     private JLabel notice = new JLabel("welcome to HR manager menu");
     private ActionListener insert = new InsertAction();
     private ActionListener command = new CommandAction();
+    private String lastCommand = "";
+    private boolean isCreatingNewUser = false;
+    private boolean isUpdatingUser = false;
+
 
     public HRManagerMenu() {
         hrManagerMenuVM = new HRManagerMenuVM();
@@ -93,9 +116,13 @@ public class HRManagerMenu implements Menu {
         buttonPanel.setLayout(boxLayoutButton);
         fieldsPanel.setLayout(boxLayoutFields);
         notificationsPanel.setLayout(boxLayoutNotification);
+        rolesPanel.setLayout(new GridLayout(3,3));
+        shiftTypesPanel.setLayout(new GridLayout(3,3));
+        authorizationPanel.setLayout(new GridLayout(3,3));
         buttonPanel.setBorder(new EmptyBorder(new Insets(450, 700, 1000, 700)));
-        buttonPanel.setLayout(new GridLayout(3,5));
+        buttonPanel.setLayout(new GridLayout(3, 5));
         fieldsPanel.setBorder(new EmptyBorder(new Insets(45, 70, 45, 100)));
+        fieldsPanel.setLayout((new GridLayout(3,3)));
         notificationsPanel.setBorder(new EmptyBorder(new Insets(45, 70, 450, 700)));
         buttonPanel.setBorder(new TitledBorder(new TitledBorder("Buttons")));
         fieldsPanel.setBorder(new TitledBorder(new TitledBorder("Fields")));
@@ -118,30 +145,38 @@ public class HRManagerMenu implements Menu {
         usernameField.setEnabled(true);
         dateField.setEnabled(true);
         dateField.setText("-insert date-\n dd-mm-yyyy");
-        hrManager.setEnabled(true);
-        storekeeper.setEnabled(true);
-        cashier.setEnabled(true);
-        shiftManager.setEnabled(true);
-        transportManager.setEnabled(true);
-        freeText.setEnabled(true);
+        hrManagerA.setEnabled(true);
+        storekeeperA.setEnabled(true);
+        cashierA.setEnabled(true);
+        shiftManagerA.setEnabled(true);
+        transportManagerA.setEnabled(true);
+        freeTextField.setEnabled(true);
         notice = new JLabel("Welcome to HR Manager menu!");
         frame.add(buttonPanel);
         frame.add(fieldsPanel);
         frame.add(notificationsPanel);
-        authorizationField.add(hrManager);
-        authorizationField.add(storekeeper);
-        authorizationField.add(cashier);
-        authorizationField.add(shiftManager);
-        authorizationField.add(transportManager);
+        authorizationField.add(hrManagerA);
+        authorizationField.add(storekeeperA);
+        authorizationField.add(cashierA);
+        authorizationField.add(shiftManagerA);
+        authorizationField.add(transportManagerA);
+        roleField.add(cashierR);
+        roleField.add(storekeeperR);
+        roleField.add(shiftManagerR);
+        roleField.add(generalWorkerR);
+        roleField.add(securityGuardR);
+        roleField.add(stewardR);
+        roleField.add(cleanerR);
+        roleField.add(driverR);
+        shiftTypeField.add(morningShift);
+        shiftTypeField.add(eveningShift);
+        amountField.setEnabled(true);
+        branchIdField.setEnabled(true);
+        nameField.setEnabled(true);
+        bankDetailsField.setEnabled(true);
+        hourlyRateField.setEnabled(true);
+        employmentConditionsField.setEnabled(true);
         notificationsPanel.add(notice);
-        fieldsPanel.add(usernameField);
-        fieldsPanel.add(dateField);
-        fieldsPanel.add(freeText);
-        fieldsPanel.add(hrManager);
-        fieldsPanel.add(storekeeper);
-        fieldsPanel.add(cashier);
-        fieldsPanel.add(shiftManager);
-        fieldsPanel.add(transportManager);
         buttonPanel.add(recruit_employee);
         buttonPanel.add(create_week_shifts);
         buttonPanel.add(update_shift_needed);
@@ -156,6 +191,42 @@ public class HRManagerMenu implements Menu {
         buttonPanel.add(update_employee);
         buttonPanel.add(authorize);
         buttonPanel.add(exit);
+        shiftTypesPanel.add(morningShift);
+        shiftTypesPanel.add(eveningShift);
+        authorizationPanel.add(hrManagerA);
+        authorizationPanel.add(storekeeperA);
+        authorizationPanel.add(cashierA);
+        authorizationPanel.add(shiftManagerA);
+        authorizationPanel.add(transportManagerA);
+        rolesPanel.add(cashierR);
+        rolesPanel.add(storekeeperR);
+        rolesPanel.add(shiftManagerR);
+        rolesPanel.add(generalWorkerR);
+        rolesPanel.add(securityGuardR);
+        rolesPanel.add(stewardR);
+        rolesPanel.add(cleanerR);
+        rolesPanel.add(driverR);
+    }
+
+    public String getSelectedButtonName(ButtonGroup buttonGroup) {
+        for (Enumeration<AbstractButton> buttons = buttonGroup.getElements(); buttons.hasMoreElements();) {
+            AbstractButton button = buttons.nextElement();
+
+            if (button.isSelected()) {
+                return button.getText();
+            }
+        }
+        return null;
+    }
+
+    private void addShiftTypeButtons(JPanel p){
+        p.add(shiftTypesPanel);
+    }
+    private void addAuthorizationButtons(JPanel p){
+        p.add(authorizationPanel);
+    }
+    private void addRoleButtons(JPanel p){
+        p.add(rolesPanel);
     }
 
     public Menu run() {
@@ -430,28 +501,414 @@ public class HRManagerMenu implements Menu {
     @Override
     public Menu runGUI() {
         frame.setVisible(true);
-        //this.wait(500);
-        if (nextMenu != this)
+        try{
+            Thread.sleep(3);
+        } catch(Exception e){}
+        if (nextMenu != this) {
             frame.setVisible(false);
+            terminate();
+        }
         return nextMenu;
     }
 
     class InsertAction implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            notice.setText(e.getActionCommand());
+           // notice.setText(e.getActionCommand());
         }
     }
 
     class CommandAction implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
-            String command = e.getActionCommand();
+        public void actionPerformed(ActionEvent ev) {
+            String command = ev.getActionCommand();
             String output = "";
 
-            if (command.equals("Login")) {
+            if (command.equals("Exit")) {
+                output = "Exiting CLI.";
+                nextMenu = null;
+                MenuManager.terminate();
+            }  else if (command.equals("Recruit Employee")) {
+                // Parameters: <first_name> <last_name> <branch_id> <employee_id> <bank_number> <bank branch> <hourly_rate> <employment_date: DD/MM/YYYY>
+                try {
+                    if (!lastCommand.equals(command)) {
+                        isCreatingNewUser = false;
+                        fieldsPanel.removeAll();
+                        nameField.setText("Please enter the name of the employee:");
+                        branchIdField.setText("Please enter the branch id (branch address):");
+                        usernameField.setText("Please enter the employee id:");
+                        bankDetailsField.setText("Please enter the employee's bank number and bank branch number: <bank_number> <bank_branch>");
+                        hourlyRateField.setText("Please enter the employee's hourly salary rate:");
+                        dateField.setText("Please enter the employee's employment date <DD/MM/YYYY>:");
+                        employmentConditionsField.setText("Please enter the employment conditions:");
+                        freeTextField.setText("Please enter other employee details (optional):");
 
-            } else if (command.equals("Generate Data")) {
+                        fieldsPanel.add(nameField);
+                        fieldsPanel.add(branchIdField);
+                        fieldsPanel.add(usernameField);
+                        fieldsPanel.add(bankDetailsField);
+                        fieldsPanel.add(hourlyRateField);
+                        fieldsPanel.add(dateField);
+                        fieldsPanel.add(employmentConditionsField);
+                        fieldsPanel.add(freeTextField);
+
+                    } else if (lastCommand.equals(command)) {
+
+                        String employeeName = nameField.getText();
+                        String branchId = branchIdField.getText();
+                        String employeeId = usernameField.getText();
+                        String[] bankDetails = bankDetailsField.getText().split(" ", -1);
+                        int bankNumber = Integer.parseInt(bankDetails[0]);
+                        int branchNumber = Integer.parseInt(bankDetails[1]);
+                        String hourlyRateStr = hourlyRateField.getText();
+                        double hourlyRate = Double.parseDouble(hourlyRateStr);
+                        String employmentDateStr = dateField.getText();
+                        LocalDate employmentDate = DateUtils.parse(employmentDateStr);
+                        String employmentConditions = employmentConditionsField.getText();
+                        String details = freeTextField.getText();
+                        if (!isCreatingNewUser) {
+                            output = hrManagerMenuVM.recruitEmployee(employeeName, branchId, employeeId, bankNumber + " " + branchNumber, hourlyRate, employmentDate, employmentConditions, details);
+                            if (output == null) {
+                                fieldsPanel.removeAll();
+                                freeTextField.setText("To create user, enter: <password> and click Recruit Employee");
+                                fieldsPanel.add(freeTextField);
+                                notice.setText("Recruited employee successfully.\n Would you like to create a user for the new employee?");
+                                isCreatingNewUser = true;
+                            }
+                        } else if (isCreatingNewUser) {
+                            String input = "";
+                            input = freeTextField.getText();
+                            String[] command2 = input.split(" ", -1);
+                            String password = command2[0];
+                            output = hrManagerMenuVM.createUser(employeeId, password);
+                            isCreatingNewUser = false;
+
+                        }
+                    }
+                } catch (NumberFormatException ex) {
+                    output = "Invalid input, expected an integer value. " + ex.getMessage();
+                } catch (DateTimeParseException ex) {
+                    output = "Invalid input, expected a date in the form " + DateUtils.DATE_PATTERN + ".";
+                }
 
             }
+             else if (command.equals("Create Week Shifts")) {
+                // Parameters: <branch_id>  |  <branch_id> <week_start: DD/MM/YYYY>
+                if(!lastCommand.equals(command)) {
+                    fieldsPanel.removeAll();
+                    branchIdField.setText("Please enter the branch id (branch address):");
+                    dateField.setText("Please enter the starting date <DD/MM/YYYY> of the shifts week (or leave empty to create for next week):");
+                    fieldsPanel.add(branchIdField);
+                    fieldsPanel.add(dateField);
+                } else {
+                    String branchId = branchIdField.getText();
+                    String weekStartStr = dateField.getText();
+                    if (weekStartStr.isEmpty()) {
+                        output = hrManagerMenuVM.createNextWeekShifts(branchId);
+                    } else {
+                        try {
+                            LocalDate weekStart = DateUtils.parse(weekStartStr);
+                            output = hrManagerMenuVM.createWeekShifts(branchId, weekStart);
+                        } catch (DateTimeParseException e) {
+                            output = "Invalid input, expected a date in the form " + DateUtils.DATE_PATTERN + ".";
+                        }
+                    }
+                }
+            } else if (command.equals("Update Shift Needed")) {
+                // Parameters: <branch_id> <shift_date: DD/MM/YYYY> <shift_type: Morning/Evening> <role> <amount>
+                try {
+                    if (!lastCommand.equals(command)) {
+                        fieldsPanel.removeAll();
+                        branchIdField.setText("Please enter the branch id (branch address):");
+                        dateField.setText("Please enter the shift date <DD/MM/YYYY>:");
+                        amountField.setText("Please enter the needed amount of employees for this role:");
+                        fieldsPanel.add(branchIdField);
+                        fieldsPanel.add(dateField);
+                        fieldsPanel.add(amountField);
+                        addShiftTypeButtons(fieldsPanel);
+                        addRoleButtons(fieldsPanel);
+                    } else {
+                        String shiftDateStr = dateField.getText();
+                        LocalDate shiftDate = DateUtils.parse(shiftDateStr);
+                        String branchId = branchIdField.getText();
+                        String amountStr = amountField.getText();
+                        int amount = Integer.parseInt(amountStr);
+                        String shiftType = getSelectedButtonName(shiftTypeField);
+                        String role = getSelectedButtonName(roleField);
+                        output = hrManagerMenuVM.setShiftNeededAmount(branchId, shiftDate, shiftType, role, amount);
+                    }
+                    } catch(DateTimeParseException e){
+                        output = "Invalid input, expected a date in the form " + DateUtils.DATE_PATTERN + ".";
+                    } catch(NumberFormatException e){
+                        output = "Invalid input, expected an integer amount of employees.";
+                    }
+
+            } else if (command.equals("Update Shift Employees")) {
+                // Parameters: <branch_id>  |  <branch_id> <week_start: DD/MM/YYYY>
+                if (!lastCommand.equals(command)) {
+                    fieldsPanel.removeAll();
+                    branchIdField.setText("Please enter the branch id (branch address):");
+                    //dateField.setText("Please enter the starting date <DD/MM/YYYY> of the shifts week (or leave empty for next week's shifts):");
+                    dateField.setText("Please enter which shift date (DD/MM/YYYY) to update:");
+                    usernameField.setText("Please enter the employee ids for this role: `<id1> <id2> <id3> ...`");
+
+                    fieldsPanel.add(branchIdField);
+                    fieldsPanel.add(dateField);
+                    addRoleButtons(fieldsPanel);
+                    fieldsPanel.add(usernameField);
+                    addShiftTypeButtons(fieldsPanel);
+                } else {
+                String branchId = branchIdField.getText();
+                String dateInput = dateField.getText();
+                String shiftType = getSelectedButtonName(shiftTypeField);
+                String role = getSelectedButtonName(roleField);
+                String idsInput = usernameField.getText();
+                String[] employeeIds = idsInput.split(" ", -1);
+                if (!DateUtils.validDate(dateInput)) {
+                    output = ("Invalid input, expected a date in the form " + DateUtils.DATE_PATTERN + ", try again.");
+                } else if (!shiftType.equals("Morning") && !shiftType.equals("Evening")) {
+                    output = "Invalid input, expected a shift type of `Morning` or `Evening`.";
+                } else {
+                    LocalDate shiftDate = DateUtils.parse(dateInput);
+                    //System.out.println("Please enter which shift type (Morning/Evening):");
+
+                    //("Please enter which role (Cashier/Storekeeper/ShiftManager/GeneralWorker/Driver):");
+                    output = hrManagerMenuVM.setShiftEmployees(branchId, shiftDate, shiftType, role, Arrays.stream(employeeIds).toList());
+                }
+            }
+            } else if (command.equals("Week Shifts")) {
+                // Parameters: <branch_id>  |  <branch_id> <week_start: DD/MM/YYYY>
+                if(!lastCommand.equals(command)) {
+                    fieldsPanel.removeAll();
+                    branchIdField.setText("Please enter the branch id (branch address):");
+                    dateField.setText("Please enter the starting date <DD/MM/YYYY> of the shifts week (or leave empty for next week's shifts):");
+                    fieldsPanel.add(branchIdField);
+                    fieldsPanel.add(dateField);
+                } else if( lastCommand.equals(command)) {
+                    String branchId = branchIdField.getText();
+                    String weekStartStr = dateField.getText();
+                    if (weekStartStr.isEmpty()) {
+                        output = hrManagerMenuVM.getNextWeekShifts(branchId);
+                    } else {
+                        try {
+                            LocalDate weekStart = DateUtils.parse(weekStartStr);
+                            output = hrManagerMenuVM.getWeekShifts(branchId, weekStart);
+                        } catch (DateTimeParseException e) {
+                            output = "Invalid input, expected a date in the form " + DateUtils.DATE_PATTERN + ".";
+                        }
+                    }
+                }
+            } else if (command.equals("Certify")) {
+                // Parameters: <employee_id> <role>
+                if(!lastCommand.equals(command)){
+                fieldsPanel.removeAll();
+                usernameField.setText("Please enter the employee id:");
+                freeTextField.setText("If a Driver is being certified, Please enter the driver's license: (A1,A2,B1,B2,B3,C1,C2,C3)");
+                //System.out.println("Please enter the role to certify:");
+                addRoleButtons(fieldsPanel);
+                fieldsPanel.add(usernameField);
+                fieldsPanel.add(freeTextField);
+                } else if(lastCommand.equals(command)) {
+                    String role = getSelectedButtonName(roleField);
+                    String driverLicense = freeTextField.getText();
+                    String employeeId = usernameField.getText();
+                    if (role.equals("Driver")) {
+                        output = hrManagerMenuVM.certifyDriver(employeeId, driverLicense);
+                    } else
+                        output = hrManagerMenuVM.certifyEmployee(employeeId, role);
+                }
+            } else if (command.equals("Uncertify")) {
+                // Parameters: <employee_id> <role>
+                if(!lastCommand.equals(command)) {
+                    fieldsPanel.removeAll();
+                    usernameField.setText("Please enter the employee id:");
+                    addRoleButtons(fieldsPanel);
+                   fieldsPanel.add(usernameField);
+                } else if(lastCommand.equals(command)) {
+                    String role = getSelectedButtonName(roleField);
+                    String employeeId = usernameField.getText();
+                    output = hrManagerMenuVM.uncertifyEmployee(employeeId, role);
+                }
+            } else if (command.equals("Approve Shift")) {
+                // Parameters: <branch_id> <shift_date: DD/MM/YYYY> <shift_type: Morning/Evening>
+                    if (!lastCommand.equals(command)) {
+                        fieldsPanel.removeAll();
+                        branchIdField.setText("Please enter the branch id (branch address):");
+                        dateField.setText("Please enter the starting date <DD/MM/YYYY> of the shifts week (or leave empty for next week's shifts):");
+                        addShiftTypeButtons(fieldsPanel);
+                        fieldsPanel.add(branchIdField);
+                        fieldsPanel.add(dateField);
+                    } else if (lastCommand.equals(command)) {
+                        try {
+                        String branchId = branchIdField.getText();
+                        String shiftDateStr = dateField.getText();
+                        LocalDate shiftDate = DateUtils.parse(shiftDateStr);
+                        //System.out.println("Please enter the shift type (Morning/Evening):");
+                        String shiftType = getSelectedButtonName(shiftTypeField);
+                        output = hrManagerMenuVM.approveShift(branchId, shiftDate, shiftType);
+                    } catch(DateTimeParseException ex){
+                        output = "Invalid input, expected a date in the form " + DateUtils.DATE_PATTERN + ".";
+                    }
+                }
+            } else if (command.equals("Add Employee To Branch")) {
+                // Parameters: <employee_id> <branch_id>
+                if(!lastCommand.equals(command)) {
+                    fieldsPanel.removeAll();
+                    usernameField.setText("Please enter the employee id:");
+                    branchIdField.setText("Please enter the branch id (branch address):");
+                    fieldsPanel.add(usernameField);
+                    fieldsPanel.add(branchIdField);
+                } else if (lastCommand.equals(command)) {
+                    String employeeId = usernameField.getText();
+                    String branchId = branchIdField.getText();
+                    output = hrManagerMenuVM.addEmployeeToBranch(employeeId, branchId);
+                }
+            } else if (command.equals("Delete Shift")) {
+                // Parameters: <branch_id> <shift_date: DD/MM/YYYY> <shift_type: Morning/Evening>
+                    if (!lastCommand.equals(command)) {
+                        fieldsPanel.removeAll();
+                        branchIdField.setText("Please enter the branch id (branch address):");
+                        dateField.setText("Please enter the starting date <DD/MM/YYYY> of the shifts week (or leave empty for next week's shifts):");
+                        fieldsPanel.add(branchIdField);
+                        fieldsPanel.add(dateField);
+                        addShiftTypeButtons(fieldsPanel);
+                    } else if (lastCommand.equals(command)) {
+                        try {
+                        String branchId = branchIdField.getText();
+                        String shiftDateStr = dateField.getText();
+                        LocalDate shiftDate = DateUtils.parse(shiftDateStr);
+                        String shiftType = getSelectedButtonName(shiftTypeField);
+                        output = hrManagerMenuVM.deleteShift(branchId, shiftDate, shiftType);
+                    } catch(DateTimeParseException e){
+                        output = "Invalid input, expected a date in the form " + DateUtils.DATE_PATTERN + ".";
+                    }
+                }
+            } else if (command.equals("Update Branch Hours")) {
+                // Parameters: <branch_id> <morning_start> <morning_end> <evening_start> <evening_end>
+                    if (!lastCommand.equals(command)) {
+                        fieldsPanel.removeAll();
+                        branchIdField.setText("Please enter the branch id (branch address):");
+                        freeTextField.setText("Please enter the morning start time (HH:MM):");
+                        employmentConditionsField.setText("Please enter the morning end time (HH:MM):");
+                        nameField.setText("Please enter the evening start time (HH:MM):");
+                        bankDetailsField.setText("Please enter the evening end time (HH:MM):");
+                        fieldsPanel.add(branchIdField);
+                        fieldsPanel.add(freeTextField);
+                        fieldsPanel.add(employmentConditionsField);
+                        fieldsPanel.add(nameField);
+                        fieldsPanel.add(bankDetailsField);
+                    } else if (lastCommand.equals(command)) {
+                        try {
+                        String branchId = branchIdField.getText();
+                        LocalTime morningStart = LocalTime.parse(freeTextField.getText());
+                        LocalTime morningEnd = LocalTime.parse(employmentConditionsField.getText());
+                        LocalTime eveningStart = LocalTime.parse(nameField.getText());
+                        LocalTime eveningEnd = LocalTime.parse(bankDetailsField.getText());
+                        output = hrManagerMenuVM.updateBranchWorkingHours(branchId, morningStart, morningEnd, eveningStart, eveningEnd);
+                    } catch(DateTimeParseException e){
+                        output = "Invalid input, expected a time in the form HH:MM.";
+                    }
+                }
+            } else if (command.equals("Update Employee")) {
+                // Parameters: <employee_id>
+                if(!lastCommand.equals(command)) {
+                    fieldsPanel.removeAll();
+                    isUpdatingUser = false;
+                    usernameField.setText("Please enter the employee id:");
+                    freeTextField.setText("Please choose which detail to update:\n " +
+                            "1. Salary \n " +
+                            "2. Bank Details \n " +
+                            "3. Employment Conditions \n" +
+                            "4. Optional Details");
+                    fieldsPanel.add(usernameField);
+                    fieldsPanel.add(freeTextField);
+                } else if(lastCommand.equals(command)) {
+                    String employeeId = usernameField.getText();
+                    String detailsInput = freeTextField.getText();
+
+
+                    switch (detailsInput) {
+                        case "1": // Salary
+                            String hourlyRateString = "", salaryBonusString = "";
+                            try {
+                                if(!isUpdatingUser) {
+                                    fieldsPanel.removeAll();
+                                    hourlyRateField.setText("Please enter the updated employee's hourly rate:");
+                                    amountField.setText("Please enter the updated employee's salary bonus:");
+                                    fieldsPanel.add(hourlyRateField);
+                                    fieldsPanel.add(amountField);
+                                    isUpdatingUser = true;
+                                } else if(isUpdatingUser) {
+                                    hourlyRateString = hourlyRateField.getText();
+                                    salaryBonusString = amountField.getText();
+                                    double hourlySalaryRate = Double.parseDouble(hourlyRateString);
+                                    double salaryBonus = Double.parseDouble(salaryBonusString);
+                                    output = hrManagerMenuVM.updateEmployeeSalary(employeeId, hourlySalaryRate, salaryBonus);
+                                }
+                            } catch (NumberFormatException e) {
+                                output = "Invalid input, expected only decimal numbers, but received: " + hourlyRateString + " " + salaryBonusString + " try again.";
+                            }
+                            break;
+                        case "2": // Bank Details
+                            if(!isUpdatingUser) {
+                                fieldsPanel.removeAll();
+                                bankDetailsField.setText("Please enter the updated employee's bank details:");
+                                fieldsPanel.add(bankDetailsField);
+                                isUpdatingUser = true;
+                            } else if (isUpdatingUser) {
+                                String bankDetails = bankDetailsField.getText();
+                                output = hrManagerMenuVM.updateEmployeeBankDetails(employeeId, bankDetails);
+                            }
+                            break;
+                        case "3": // Employment Conditions
+                            if(!isUpdatingUser) {
+                                fieldsPanel.removeAll();
+                                employmentConditionsField.setText("Please enter the updated employee's employment conditions:");
+                                fieldsPanel.add(employmentConditionsField);
+                                isUpdatingUser = true;
+                            } else if(isUpdatingUser) {
+                                String employmentConditions = employmentConditionsField.getText();
+                                output = hrManagerMenuVM.updateEmployeeEmploymentConditions(employeeId, employmentConditions);
+
+                            }
+                            break;
+                        case "4": // Optional Details
+                            if(!isUpdatingUser) {
+                                fieldsPanel.removeAll();
+                                nameField.setText("Please enter the updated employee's optional details:");
+                                fieldsPanel.add(nameField);
+                                isUpdatingUser = true;
+                            } else if(isUpdatingUser) {
+                                String details = nameField.getText();
+                                output = hrManagerMenuVM.updateEmployeeDetails(employeeId, details);
+                            }
+                            break;
+                        default:
+                            output = "Invalid input, expected a number between 1 and 4, try again.";
+                    }
+                }
+            } else if (command.equals("Authorize")) {
+                // Parameters: <username> <authorization>
+                if(!lastCommand.equals(command)) {
+                    fieldsPanel.removeAll();
+                    usernameField.setText("Please enter the username to authorize:");
+                    addAuthorizationButtons(fieldsPanel);
+
+                } else if (lastCommand.equals(command)) {
+                    String username = usernameField.getText();
+                    String authorization = getSelectedButtonName(authorizationField);
+                    output = hrManagerMenuVM.authorizeUser(username, authorization);
+                }
+
+            } else
+                output = "Invalid command was given, try again.";
+            //System.out.println(output);
+            //nextMenu = this;
+            notice.setText(output);
+            frame.repaint();
+            lastCommand = command;
+        }
+        }
+
+        public void terminate(){
+        frame.dispose();
         }
     }
-}

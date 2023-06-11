@@ -30,6 +30,11 @@ public class EmployeeMenu implements Menu {
         System.out.println("10. `exit` - Exit command");
     }
 
+    @Override
+    public void terminate(){
+        //frame.dispose();
+    }
+
     public Menu run() {
         printCommands();
         String input = scanner.nextLine();

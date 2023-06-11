@@ -130,9 +130,18 @@ public class LoginMenu implements Menu {
     @Override
     public Menu runGUI() {
         frame.setVisible(true);
-        if(nextMenu != this)
+        try{
+            Thread.sleep(3);
+        } catch(Exception e){}
+        if(nextMenu != this) {
             frame.setVisible(false);
+            terminate();
+        }
         return nextMenu;
+    }
+
+    public void terminate(){
+        frame.dispose();
     }
 
     class InsertAction implements ActionListener {
@@ -160,12 +169,13 @@ public class LoginMenu implements Menu {
                         }
                     }
                 } else if(command.equals("Generate Data")){
-                    notice.setText(DataGenerator.generateData("SuperLiDB.db"));
+                        notice.setText(DataGenerator.generateData("SuperLiDB.db"));
                 }
                 else if(command.equals("Exit")){
                     MenuManager.terminate();
-                    frame.setVisible(false);
+                    nextMenu = null;
                 }
+                frame.repaint();
 
         }
     }

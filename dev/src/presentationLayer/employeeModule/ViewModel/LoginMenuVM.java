@@ -9,7 +9,7 @@ public class LoginMenuVM {
     private final BackendController backendController;
 
     public LoginMenuVM() {
-        backendController = new BackendController();
+        backendController = BackendController.getInstance();
     }
 
     public LoginMenuVM(ServiceFactory factory) {

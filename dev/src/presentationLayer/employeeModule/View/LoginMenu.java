@@ -117,7 +117,7 @@ public class LoginMenu implements Menu {
                     } else if (authorizations != null && authorizations.contains("TransportManager")) {
                         return new TransportCLI(loginMenuVM.serviceFactory());
                     } else {
-                        return new EmployeeMenu(new BackendController());
+                        return new EmployeeMenu();
                     }
                 }
             }
@@ -163,11 +163,11 @@ public class LoginMenu implements Menu {
                         notice.setText(output);
                         List<String> authorizations = loginMenuVM.getUserAuthorizations();
                         if (authorizations != null && authorizations.contains("HRManager")) {
-                            nextMenu = new HRManagerMenu(new BackendController());
+                            nextMenu = new HRManagerMenu();
                         } else if (authorizations != null && authorizations.contains("TransportManager")) {
                             nextMenu = new TransportCLI(loginMenuVM.serviceFactory());
                         } else {
-                            nextMenu = new EmployeeMenu(new BackendController());
+                            nextMenu = new EmployeeMenu();
                         }
                     }
                 } else if(command.equals("Generate Data")){

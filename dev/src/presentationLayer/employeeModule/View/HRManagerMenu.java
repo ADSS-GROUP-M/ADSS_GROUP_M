@@ -899,6 +899,7 @@ public class HRManagerMenu implements Menu {
                     fieldsPanel.removeAll();
                     usernameField.setText("Please enter the username to authorize:");
                     addAuthorizationButtons(fieldsPanel);
+                    fieldsPanel.add(usernameField);
 
                 } else if (lastCommand.equals(command)) {
                     String username = usernameField.getText();

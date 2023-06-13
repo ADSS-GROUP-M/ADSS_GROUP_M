@@ -1,5 +1,7 @@
 package presentationLayer.plAbstracts;
 
+import java.awt.Component;
+
 public interface UIComponent {
-    void setVisible(boolean val);
+    Component getComponent();
 }

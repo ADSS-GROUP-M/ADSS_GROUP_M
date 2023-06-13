@@ -1,7 +1,10 @@
 package presentationLayer.plAbstracts;
 
+import presentationLayer.plUtils.JPanelWithBackground;
+
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
 
 public abstract class Panel implements UIComponent {
 
@@ -10,8 +13,14 @@ public abstract class Panel implements UIComponent {
     protected Panel(){
         panel = new JPanel();
     }
-
-    public Component getComponent(){
-        return panel;
+    protected Panel(String fileName){
+        panel = new JPanelWithBackground(fileName);
+        panel.paintComponents(panel.getGraphics());
     }
+
+    public void add(Component component){
+        panel.add(component);
+    }
+
+    public abstract Component getComponent();
 }

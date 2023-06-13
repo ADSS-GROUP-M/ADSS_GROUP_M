@@ -1,27 +1,32 @@
 package presentationLayer.plAbstracts;
 
-import presentationLayer.plUtils.Panel1;
-
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
-public class Window {
+public abstract class Window {
 
     private final String title;
     private final JFrame frame;
-    protected final ArrayList<UIComponent> components;
+    protected final List<UIComponent> components;
     protected Panel currentPanel;
     
-    protected Window(String title, UIComponent ... components){
+    protected Window(String title,Panel startingPanel){
         this.title = title;
-        this.components = new ArrayList<>(Arrays.asList(components));
         frame = new JFrame();
-        currentPanel = new Panel1();
+        components = new LinkedList<>();
+        currentPanel = startingPanel;
     }
 
-    private void init(){
+    protected void setCurrentPanel(Panel p) {
+        currentPanel = p;
+        frame.remove(currentPanel.getComponent());
+        frame.add(currentPanel.getComponent());
+        frame.repaint();
+    }
+
+    protected void init(){
         frame.setTitle(title);
         Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
         frame.setSize(d.width, d.height);
@@ -29,17 +34,14 @@ public class Window {
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(null);
-        for (UIComponent component : components) {
-            component.setVisible(false);
-            frame.add((JComponent) component);
-        }
         frame.add(currentPanel.getComponent());
-        frame.setVisible(true);
-        currentPanel.setVisible(true);
+        components.forEach(component -> frame.add(component.getComponent()));
     }
 
-    public static void main(String[] args) {
-        Window window = new Window("Test");
-        window.init();
+    protected void addComponent(UIComponent component){
+        components.add(component);
+    }
+    protected void setVisible(boolean b){
+        frame.setVisible(b);
     }
 }

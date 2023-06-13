@@ -1,12 +1,11 @@
-package presentationLayer.plAbstracts;
+package presentationLayer.gui.plAbstracts;
 
-import presentationLayer.plUtils.JPanelWithBackground;
+import presentationLayer.gui.plUtils.JPanelWithBackground;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.List;
 
-public abstract class Panel implements UIComponent {
+public abstract class Panel implements UIElement {
 
     protected final JPanel panel;
 

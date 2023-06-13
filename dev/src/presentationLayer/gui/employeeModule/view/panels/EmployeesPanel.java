@@ -1,6 +1,6 @@
 package presentationLayer.gui.employeeModule.view.panels;
 
-import presentationLayer.plAbstracts.Panel;
+import presentationLayer.gui.plAbstracts.Panel;
 
 import javax.swing.*;
 import java.awt.*;

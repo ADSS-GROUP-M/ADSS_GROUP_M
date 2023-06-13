@@ -1,8 +1,7 @@
 package presentationLayer.gui.employeeModule.view;
 
 import presentationLayer.gui.employeeModule.view.panels.EmployeesPanel;
-import presentationLayer.plAbstracts.Window;
-import presentationLayer.plUtils.QuickAccess;
+import presentationLayer.gui.plAbstracts.Window;
 
 public class HRManagerView extends Window {
     public HRManagerView() {

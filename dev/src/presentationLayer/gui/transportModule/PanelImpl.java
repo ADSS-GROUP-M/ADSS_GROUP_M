@@ -1,6 +1,6 @@
-package presentationLayer.gui.transportModule.view.panels;
+package presentationLayer.gui.transportModule;
 
-import presentationLayer.plAbstracts.Panel;
+import presentationLayer.gui.plAbstracts.Panel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,8 +26,12 @@ public class PanelImpl extends Panel {
         header.setVerticalAlignment(JLabel.TOP);
         panel.add(header);
         panel.setAutoscrolls(true);
+
+
         scrollPane = new JScrollPane(panel);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         scrollPane.setSize((int)(d.getWidth()*0.8), d.height);
+        scrollPane.setLocation((int)(d.getWidth()*0.2), 0);
     }
 
     @Override

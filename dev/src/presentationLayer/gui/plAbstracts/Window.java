@@ -1,4 +1,4 @@
-package presentationLayer.plAbstracts;
+package presentationLayer.gui.plAbstracts;
 
 import javax.swing.*;
 import java.awt.*;
@@ -7,12 +7,12 @@ import java.util.List;
 
 public abstract class Window {
 
-    private final String title;
     private final JFrame frame;
-    protected final List<UIComponent> components;
+    private final String title;
+    protected final List<UIElement> components;
     protected Panel currentPanel;
     
-    protected Window(String title,Panel startingPanel){
+    protected Window(String title, Panel startingPanel){
         this.title = title;
         frame = new JFrame();
         components = new LinkedList<>();
@@ -38,7 +38,7 @@ public abstract class Window {
         components.forEach(component -> frame.add(component.getComponent()));
     }
 
-    protected void addComponent(UIComponent component){
+    protected void addComponent(UIElement component){
         components.add(component);
     }
     protected void setVisible(boolean b){

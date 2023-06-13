@@ -1,18 +1,19 @@
 package presentationLayer.gui.transportModule.view;
 
-import presentationLayer.plAbstracts.Window;
-import presentationLayer.plUtils.Link;
-import presentationLayer.plUtils.QuickAccess;
-import presentationLayer.gui.transportModule.view.panels.*;
+import presentationLayer.gui.transportModule.PanelImpl;
+import presentationLayer.gui.transportModule.panels.*;
+import presentationLayer.gui.plAbstracts.Window;
+import presentationLayer.gui.plUtils.Link;
+import presentationLayer.gui.plUtils.QuickAccess;
 
 public class TransportView extends Window {
     public TransportView() {
         super("Transport Module",
                 new PanelImpl());
 
+        super.addComponent(initQuickAccess());
         super.init();
         super.setVisible(true);
-//        super.addComponent(initQuickAccess());
     }
 
     private QuickAccess initQuickAccess(){

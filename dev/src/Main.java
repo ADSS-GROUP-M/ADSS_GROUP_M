@@ -1,6 +1,6 @@
 import org.junit.jupiter.api.Test;
 import presentationLayer.DataGenerator;
-import presentationLayer.employeeModule.View.MenuManager;
+import presentationLayer.cli.employeeModule.View.MenuManager;
 
 @SuppressWarnings("NewClassNamingConvention")
 public class Main {

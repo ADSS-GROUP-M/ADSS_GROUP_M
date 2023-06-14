@@ -1,5 +1,6 @@
 package presentationLayer.gui.transportModule.view;
 
+import presentationLayer.gui.plAbstracts.Panel;
 import presentationLayer.gui.transportModule.PanelImpl;
 import presentationLayer.gui.transportModule.panels.*;
 import presentationLayer.gui.plAbstracts.Window;
@@ -11,10 +12,13 @@ import presentationLayer.gui.transportModule.panels.trucks.UpdateTruckPanel;
 import presentationLayer.gui.transportModule.panels.trucks.ViewTrucksPanel;
 
 public class TransportView extends Window {
+
+    private Panel currentPanel;
+
     public TransportView() {
         super("Transport Module");
-
-        super.addComponent(new PanelImpl());
+        currentPanel = new PanelImpl();
+        super.addComponent(currentPanel);
         super.addComponent(initQuickAccess());
         super.init();
         super.setVisible(true);
@@ -23,33 +27,39 @@ public class TransportView extends Window {
     private QuickAccess initQuickAccess(){
         return new QuickAccess()
                 .addCategory("Transport Management",
-                        new Link("View Transports", () -> super.setCurrentPanel(new ViewTransportsPanel())),
-                        new Link("Add Transport", () -> super.setCurrentPanel(new AddTransportPanel())),
-                        new Link("Update Transport", () -> super.setCurrentPanel(new UpdateTransportPanel())),
-                        new Link("Remove Transport", () -> super.setCurrentPanel(new RemoveTransportPanel()))
+                        new Link("View Transports", () -> setCurrentPanel(new ViewTransportsPanel())),
+                        new Link("Add Transport", () -> setCurrentPanel(new AddTransportPanel())),
+                        new Link("Update Transport", () -> setCurrentPanel(new UpdateTransportPanel())),
+                        new Link("Remove Transport", () -> setCurrentPanel(new RemoveTransportPanel()))
                 )
                 .addCategory("Item List Management",
-                        new Link("View Item Lists", () -> super.setCurrentPanel(new ViewItemListPanel())),
-                        new Link("Add Item List", () -> super.setCurrentPanel(new AddItemListPanel())),
-                        new Link("Update Item List", () -> super.setCurrentPanel(new UpdateItemListPanel())),
-                        new Link("Remove Item List", () -> super.setCurrentPanel(new RemoveItemListPanel()))
+                        new Link("View Item Lists", () -> setCurrentPanel(new ViewItemListPanel())),
+                        new Link("Add Item List", () -> setCurrentPanel(new AddItemListPanel())),
+                        new Link("Update Item List", () -> setCurrentPanel(new UpdateItemListPanel())),
+                        new Link("Remove Item List", () -> setCurrentPanel(new RemoveItemListPanel()))
                 )
                 .addCategory("Drivers Management",
-                        new Link("View Drivers", () -> super.setCurrentPanel(new ViewDriversPanel())),
-                        new Link("Update Driver", () -> super.setCurrentPanel(new UpdateDriversPanel()))
+                        new Link("View Drivers", () -> setCurrentPanel(new ViewDriversPanel())),
+                        new Link("Update Driver", () -> setCurrentPanel(new UpdateDriversPanel()))
                 )
                 .addCategory("Trucks Management",
-                        new Link("View Trucks", () -> super.setCurrentPanel(new ViewTrucksPanel())),
-                        new Link("Add Truck", () -> super.setCurrentPanel(new AddTruckPanel())),
-                        new Link("Update Truck", () -> super.setCurrentPanel(new UpdateTruckPanel())),
-                        new Link("Remove Truck", () -> super.setCurrentPanel(new RemoveTruckPanel()))
+                        new Link("View Trucks", () -> setCurrentPanel(new ViewTrucksPanel())),
+                        new Link("Add Truck", () -> setCurrentPanel(new AddTruckPanel())),
+                        new Link("Update Truck", () -> setCurrentPanel(new UpdateTruckPanel())),
+                        new Link("Remove Truck", () -> setCurrentPanel(new RemoveTruckPanel()))
                 )
                 .addCategory("Sites Management",
-                        new Link("View Sites", () -> super.setCurrentPanel(new ViewSitesPanel())),
-                        new Link("Add Site", () -> super.setCurrentPanel(new AddSitePanel())),
-                        new Link("Update Site", () -> super.setCurrentPanel(new UpdateSitePanel()))
+                        new Link("View Sites", () -> setCurrentPanel(new ViewSitesPanel())),
+                        new Link("Add Site", () -> setCurrentPanel(new AddSitePanel())),
+                        new Link("Update Site", () -> setCurrentPanel(new UpdateSitePanel()))
                 );
     }
+    private void setCurrentPanel(Panel panel) {
+        super.removeComponent(currentPanel);
+        super.addComponent(panel);
+        currentPanel = panel;
+    }
+
     public static void main(String[] args) {
         Window window = new TransportView();
     }

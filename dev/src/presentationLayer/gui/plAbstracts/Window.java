@@ -47,7 +47,4 @@ public abstract class Window extends ComponentAdapter {
     public void componentResized(ComponentEvent e){
         components.forEach(component -> component.componentResized(frame.getSize()));
     }
-
-    protected void setCurrentPanel(Panel viewTransportsPanel) {
-    }
 }

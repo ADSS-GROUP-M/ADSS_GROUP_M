@@ -22,4 +22,8 @@ public abstract class Panel implements UIElement {
     }
 
     public abstract Component getComponent();
+
+    public void componentResized(Dimension newSize){
+
+    }
 }

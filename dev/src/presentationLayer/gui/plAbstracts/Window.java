@@ -2,10 +2,13 @@ package presentationLayer.gui.plAbstracts;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.util.LinkedList;
 import java.util.List;
 
-public abstract class Window {
+public abstract class Window extends ComponentAdapter {
 
     private final JFrame frame;
     private final String title;
@@ -17,6 +20,7 @@ public abstract class Window {
         frame = new JFrame();
         components = new LinkedList<>();
         currentPanel = startingPanel;
+        frame.addComponentListener(this);
     }
 
     protected void setCurrentPanel(Panel p) {
@@ -28,8 +32,7 @@ public abstract class Window {
 
     protected void init(){
         frame.setTitle(title);
-        Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
-        frame.setSize(d.width, d.height);
+        frame.setMinimumSize(new Dimension(800, 600));
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -43,5 +46,11 @@ public abstract class Window {
     }
     protected void setVisible(boolean b){
         frame.setVisible(b);
+    }
+
+    @Override
+    public void componentResized(ComponentEvent e){
+        components.forEach(component -> component.componentResized(frame.getSize()));
+        currentPanel.componentResized(frame.getSize());
     }
 }

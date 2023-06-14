@@ -35,4 +35,9 @@ public class Link implements UIElement {
     public Component getComponent() {
         return label;
     }
+
+    @Override
+    public void componentResized(Dimension newSize) {
+
+    }
 }

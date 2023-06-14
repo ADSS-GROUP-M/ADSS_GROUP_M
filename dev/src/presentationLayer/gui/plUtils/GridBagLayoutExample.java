@@ -15,7 +15,7 @@ public class GridBagLayoutExample {
         JLabel usernameLabel = new JLabel("Username:");
         constraints.gridx = 0;
         constraints.gridy = 0;
-//        constraints.anchor = GridBagConstraints.WEST;
+        constraints.anchor = GridBagConstraints.WEST;
         constraints.insets = new Insets(5, 5, 5, 5);
         panel.add(usernameLabel, constraints);
 

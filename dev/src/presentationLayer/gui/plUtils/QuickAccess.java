@@ -37,7 +37,6 @@ public class QuickAccess implements UIElement {
     public Component getComponent() {
         panel.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-//        gbc.weighty = 1;
         int i = 0;
         gbc.gridy = 0;
         for (Pair<String, List<Link>> link : links) {

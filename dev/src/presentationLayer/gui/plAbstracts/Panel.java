@@ -8,7 +8,6 @@ import java.awt.*;
 public abstract class Panel implements UIElement {
 
     protected final JPanel panel;
-
     protected Panel(){
         panel = new JPanel();
     }
@@ -22,8 +21,5 @@ public abstract class Panel implements UIElement {
     }
 
     public abstract Component getComponent();
-
-    public void componentResized(Dimension newSize){
-
-    }
+    public abstract void componentResized(Dimension newSize);
 }

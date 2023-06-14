@@ -1,11 +1,12 @@
 package presentationLayer.gui.employeeModule.view.panels;
 
 import presentationLayer.gui.plAbstracts.Panel;
+import presentationLayer.gui.plAbstracts.ScrollablePanel;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class EmployeesPanel extends Panel {
+public class EmployeesPanel extends ScrollablePanel {
 
     private JScrollPane scrollPane;
 

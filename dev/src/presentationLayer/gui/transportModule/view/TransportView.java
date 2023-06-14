@@ -5,6 +5,10 @@ import presentationLayer.gui.transportModule.panels.*;
 import presentationLayer.gui.plAbstracts.Window;
 import presentationLayer.gui.plUtils.Link;
 import presentationLayer.gui.plUtils.QuickAccess;
+import presentationLayer.gui.transportModule.panels.trucks.AddTruckPanel;
+import presentationLayer.gui.transportModule.panels.trucks.RemoveTruckPanel;
+import presentationLayer.gui.transportModule.panels.trucks.UpdateTruckPanel;
+import presentationLayer.gui.transportModule.panels.trucks.ViewTrucksPanel;
 
 public class TransportView extends Window {
     public TransportView() {

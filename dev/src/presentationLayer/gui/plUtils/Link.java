@@ -4,7 +4,6 @@ package presentationLayer.gui.plUtils;
 import presentationLayer.gui.plAbstracts.UIElement;
 
 import javax.swing.*;
-import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.util.Objects;
 
@@ -12,7 +11,7 @@ public class Link implements UIElement {
 
     private final String name;
     private final Runnable onClick;
-    private JLabel label;
+    private final JButton button;
 
     /**
      * @throws NullPointerException if name or onClick is null
@@ -20,7 +19,8 @@ public class Link implements UIElement {
     public Link (String name, Runnable onClick) {
         this.name = Objects.requireNonNull(name);
         this.onClick = Objects.requireNonNull(onClick);
-        label = new JLabel(name);
+        button = new JButton(name);
+        button.setPreferredSize(new Dimension(150, 20));
     }
 
     public void click(){
@@ -33,7 +33,7 @@ public class Link implements UIElement {
 
     @Override
     public Component getComponent() {
-        return label;
+        return button;
     }
 
     @Override

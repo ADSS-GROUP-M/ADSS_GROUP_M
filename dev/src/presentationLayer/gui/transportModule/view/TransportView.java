@@ -1,7 +1,7 @@
 package presentationLayer.gui.transportModule.view;
 
 import presentationLayer.gui.plAbstracts.Panel;
-import presentationLayer.gui.transportModule.PanelImpl;
+import presentationLayer.gui.transportModule.PanelExample;
 import presentationLayer.gui.transportModule.panels.*;
 import presentationLayer.gui.plAbstracts.Window;
 import presentationLayer.gui.plUtils.Link;
@@ -17,7 +17,7 @@ public class TransportView extends Window {
 
     public TransportView() {
         super("Transport Module");
-        currentPanel = new PanelImpl();
+        currentPanel = new PanelExample();
         super.addComponent(currentPanel);
         super.addComponent(initQuickAccess());
         super.init();

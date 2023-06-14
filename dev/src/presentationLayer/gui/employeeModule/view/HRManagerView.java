@@ -5,9 +5,9 @@ import presentationLayer.gui.plAbstracts.Window;
 
 public class HRManagerView extends Window {
     public HRManagerView() {
-        super("HRManager Page",
-                new EmployeesPanel());
+        super("HRManager Page");
 
+        super.addComponent(new EmployeesPanel());
         super.init();
         super.setVisible(true);
 //        super.addComponent(initQuickAccess());

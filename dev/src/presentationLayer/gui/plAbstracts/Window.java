@@ -1,33 +1,24 @@
 package presentationLayer.gui.plAbstracts;
 
+import presentationLayer.gui.transportModule.panels.ViewTransportsPanel;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public abstract class Window extends ComponentAdapter {
 
     private final JFrame frame;
     private final String title;
-    protected final List<UIElement> components;
-    protected Panel currentPanel;
+    protected final Set<UIElement> components;
     
-    protected Window(String title, Panel startingPanel){
+    protected Window(String title){
         this.title = title;
         frame = new JFrame();
-        components = new LinkedList<>();
-        currentPanel = startingPanel;
+        components = new HashSet<>();
         frame.addComponentListener(this);
-    }
-
-    protected void setCurrentPanel(Panel p) {
-        currentPanel = p;
-        frame.remove(currentPanel.getComponent());
-        frame.add(currentPanel.getComponent());
-        frame.repaint();
     }
 
     protected void init(){
@@ -37,13 +28,17 @@ public abstract class Window extends ComponentAdapter {
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(null);
-        frame.add(currentPanel.getComponent());
         components.forEach(component -> frame.add(component.getComponent()));
     }
 
     protected void addComponent(UIElement component){
         components.add(component);
     }
+
+    protected void removeComponent(UIElement component){
+        components.remove(component);
+    }
+
     protected void setVisible(boolean b){
         frame.setVisible(b);
     }
@@ -51,6 +46,8 @@ public abstract class Window extends ComponentAdapter {
     @Override
     public void componentResized(ComponentEvent e){
         components.forEach(component -> component.componentResized(frame.getSize()));
-        currentPanel.componentResized(frame.getSize());
+    }
+
+    protected void setCurrentPanel(Panel viewTransportsPanel) {
     }
 }

@@ -8,9 +8,9 @@ import presentationLayer.gui.plUtils.QuickAccess;
 
 public class TransportView extends Window {
     public TransportView() {
-        super("Transport Module",
-                new PanelImpl());
+        super("Transport Module");
 
+        super.addComponent(new PanelImpl());
         super.addComponent(initQuickAccess());
         super.init();
         super.setVisible(true);

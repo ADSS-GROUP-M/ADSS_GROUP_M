@@ -1,19 +1,17 @@
 package presentationLayer.gui.transportModule;
 
-import presentationLayer.gui.plAbstracts.Panel;
 import presentationLayer.gui.plAbstracts.ScrollablePanel;
 
 import javax.swing.*;
-import java.awt.*;
 
-public class PanelImpl extends ScrollablePanel {
+public class PanelExample extends ScrollablePanel {
 
-    public PanelImpl() {
+    public PanelExample() {
         super("src/resources/truck_main_page.jpg");
         init();
     }
 
-    public PanelImpl(String fileName) {
+    public PanelExample(String fileName) {
         super(fileName);
         init();
     }

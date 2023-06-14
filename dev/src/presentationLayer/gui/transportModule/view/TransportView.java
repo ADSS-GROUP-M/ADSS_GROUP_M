@@ -30,10 +30,12 @@ public class TransportView extends Window{
 
     private QuickAccess initQuickAccess(){
         return new QuickAccess()
+                .addCategory("Example Category",
+                        new Link("Example Panel", () -> setCurrentPanel(new PanelExample()))
+                )
                 .addCategory("Transport Management",
                         new Link("View Transports", () -> setCurrentPanel(new ViewTransportsPanel())),
-//                        new Link("Add Transport", () -> setCurrentPanel(new AddTransportPanel())),
-                        new Link("Add Transport", () -> setCurrentPanel(new PanelExample())),
+                        new Link("Add Transport", () -> setCurrentPanel(new AddTransportPanel())),
                         new Link("Update Transport", () -> setCurrentPanel(new UpdateTransportPanel())),
                         new Link("Remove Transport", () -> setCurrentPanel(new RemoveTransportPanel()))
                 )

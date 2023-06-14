@@ -19,15 +19,8 @@ public class PanelImpl extends ScrollablePanel {
     }
 
     private void init() {
-        Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
-        panel.setSize(scrollPane.getSize());
         JLabel header = new JLabel("Welcome to the Transport Module!");
         header.setVerticalAlignment(JLabel.TOP);
         panel.add(header);
-//        panel.setAutoscrolls(true);
-
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        scrollPane.setSize((int)(d.getWidth()*0.8), d.height);
-        scrollPane.setLocation((int)(d.getWidth()*0.2), 0);
     }
 }

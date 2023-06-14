@@ -10,7 +10,6 @@ public class JPanelWithBackground extends JPanel {
     public JPanelWithBackground(String fileName) {
         backgroundImage = new ImageIcon(fileName).getImage();
     }
-
     @Override
     public void paintComponent(Graphics g){
         super.paintComponent(g);

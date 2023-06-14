@@ -24,7 +24,8 @@ public abstract class ScrollablePanel extends Panel{
 
     @Override
     public void componentResized(Dimension newSize) {
-        scrollPane.setBounds((int)(newSize.getWidth()*0.2), 0, (int)(newSize.getWidth()*0.8), (int)newSize.getHeight());
+        Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
+        scrollPane.setBounds((int)(d.width*0.2), 0, (int)(newSize.getWidth()*0.8), (int)newSize.getHeight());
         scrollPane.revalidate();
     }
 }

@@ -14,10 +14,14 @@ import presentationLayer.gui.transportModule.panels.trucks.ViewTrucksPanel;
 public class TransportView extends Window {
 
     private Panel currentPanel;
+    //private AddTransportPanel currentPanel;
+
+
 
     public TransportView() {
         super("Transport Module");
-        currentPanel = new PanelExample();
+        //currentPanel = new PanelExample();
+        currentPanel = new AddTruckPanel();
         super.addComponent(currentPanel);
         super.addComponent(initQuickAccess());
         super.init();
@@ -57,7 +61,7 @@ public class TransportView extends Window {
     private void setCurrentPanel(Panel panel) {
         super.removeComponent(currentPanel);
         super.addComponent(panel);
-        currentPanel = panel;
+        //currentPanel = panel;
     }
 
     public static void main(String[] args) {

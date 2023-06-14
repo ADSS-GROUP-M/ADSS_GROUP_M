@@ -65,8 +65,8 @@ public class QuickAccess implements UIElement {
 
     @Override
     public void componentResized(Dimension newSize) {
-
         Dimension d = scrollPane.getSize();
         scrollPane.setBounds(0, 0, d.width, (int)(newSize.getHeight()*0.95));
+        scrollPane.revalidate();
     }
 }

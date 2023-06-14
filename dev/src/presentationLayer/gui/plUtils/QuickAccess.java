@@ -18,9 +18,7 @@ public class QuickAccess implements UIElement {
         links = new LinkedList<>();
         panel = new JPanel();
         Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
-        panel.setBounds(0, 0, (int)(d.getWidth()*0.2), (int)(d.height*0.9));
         scrollPane = new JScrollPane(panel);
-        scrollPane.setSize((int)(d.getWidth()*0.2), (int)(d.height*0.9));
         scrollPane.getVerticalScrollBar().setUnitIncrement(16);
     }
 
@@ -64,8 +62,8 @@ public class QuickAccess implements UIElement {
 
     @Override
     public void componentResized(Dimension newSize) {
-        Dimension d = scrollPane.getSize();
-        scrollPane.setBounds(0, 0, d.width, (int)(newSize.getHeight()*0.95));
+        Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
+        scrollPane.setBounds(0, 0, (int)(d.width*0.20), (int)(newSize.getHeight()*0.95));
         scrollPane.revalidate();
     }
 }

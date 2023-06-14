@@ -5,9 +5,11 @@ import presentationLayer.gui.plAbstracts.UIElement;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Objects;
 
-public class Link implements UIElement {
+public class Link implements UIElement, ActionListener {
 
     private final String name;
     private final Runnable onClick;
@@ -21,10 +23,7 @@ public class Link implements UIElement {
         this.onClick = Objects.requireNonNull(onClick);
         button = new JButton(name);
         button.setPreferredSize(new Dimension(150, 20));
-    }
-
-    public void click(){
-        onClick.run();
+        button.addActionListener(this);
     }
 
     public String getName() {
@@ -39,5 +38,15 @@ public class Link implements UIElement {
     @Override
     public void componentResized(Dimension newSize) {
 
+    }
+
+    /**
+     * Invoked when an action occurs.
+     *
+     * @param e the event to be processed
+     */
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        onClick.run();
     }
 }

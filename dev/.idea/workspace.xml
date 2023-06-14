@@ -10,7 +10,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bce1645c-5ea3-4256-9622-57158cdde0ea" name="Changes" comment="test">
+      <change afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/InventoryModule/gui/CategoriesMenu.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/InventoryModule/gui/DiscountsMenu.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/InventoryModule/gui/InventoryMainMenu.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/InventoryModule/gui/ProductsMenu.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/InventoryModule/gui/ReportsMenu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/InventoryModule/CategoriesMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/InventoryModule/cli/CategoriesMenu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/InventoryModule/DiscountsManu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/InventoryModule/cli/DiscountsManu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/InventoryModule/InventoryMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/InventoryModule/cli/InventoryMain.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/InventoryModule/InventoryProductsManu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/InventoryModule/cli/InventoryProductsManu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/InventoryModule/MainMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/InventoryModule/cli/MainMenu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/InventoryModule/ReportsMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/InventoryModule/cli/ReportsMenu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/Main.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -78,6 +91,8 @@
       <recent name="C:\Users\yossi\OneDrive\שולחן העבודה\ניתוצ\Assignment1\Assignment1\dev\src" />
     </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="Fronend.PresentationLayer.InventoryModule.gui" />
+      <recent name="Fronend.PresentationLayer.InventoryModule.cli" />
       <recent name="Backend.BusinessLayer" />
       <recent name="Backend.DataAccessLayer.dalUtils" />
     </key>
@@ -88,10 +103,23 @@
       <recent name="PresentationLayer" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.Main">
+  <component name="RunManager" selected="Application.InventoryMainMenu">
     <configuration name="InventoryMain" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="Fronend.PresentationLayer.InventoryModule.Main" />
       <module name="dev" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="InventoryMainMenu" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Fronend.PresentationLayer.InventoryModule.gui.InventoryMainMenu" />
+      <module name="dev" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="Fronend.PresentationLayer.InventoryModule.gui.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -119,21 +147,6 @@
       </extension>
       <option name="PACKAGE_NAME" value="Backend.BusinessLayer" />
       <option name="TEST_OBJECT" value="package" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="BillOfQuantitiesTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="dev" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="Backend.BusinessLayer.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="Backend.BusinessLayer" />
-      <option name="MAIN_CLASS_NAME" value="Backend.BusinessLayer.BillOfQuantitiesTest" />
-      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -174,16 +187,16 @@
       <item itemvalue="Application.Main" />
       <item itemvalue="JUnit.Backend.BusinessLayer in dev" />
       <item itemvalue="JUnit.ReportTest.getShortageReport" />
-      <item itemvalue="JUnit.BillOfQuantitiesTest" />
       <item itemvalue="JUnit.ProductItemTest" />
+      <item itemvalue="Application.InventoryMainMenu" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.InventoryMainMenu" />
         <item itemvalue="Application.Main" />
         <item itemvalue="JUnit.ProductItemTest" />
         <item itemvalue="JUnit.Backend.BusinessLayer in dev" />
         <item itemvalue="JUnit.ReportTest.getShortageReport" />
-        <item itemvalue="JUnit.BillOfQuantitiesTest" />
       </list>
     </recent_temporary>
   </component>
@@ -402,6 +415,15 @@
     <option name="version" value="3" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
     <option name="RECENT_FILTERS">
       <map>
         <entry key="User">
@@ -413,15 +435,6 @@
                 </option>
               </RecentGroup>
             </list>
-          </value>
-        </entry>
-      </map>
-    </option>
-    <option name="TAB_STATES">
-      <map>
-        <entry key="MAIN">
-          <value>
-            <State />
           </value>
         </entry>
       </map>
@@ -474,7 +487,7 @@
           <option name="timeStamp" value="52" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/Fronend/PresentationLayer/InventoryModule/DiscountsManu.java</url>
+          <url>file://$PROJECT_DIR$/src/Fronend/PresentationLayer/InventoryModule/cli/DiscountsManu.java</url>
           <line>42</line>
           <option name="timeStamp" value="64" />
         </line-breakpoint>

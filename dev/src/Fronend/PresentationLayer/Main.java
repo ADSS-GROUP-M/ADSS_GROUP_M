@@ -1,8 +1,7 @@
 package Fronend.PresentationLayer;
 
-import Fronend.PresentationLayer.InventoryModule.InventoryMain;
+import Fronend.PresentationLayer.InventoryModule.cli.InventoryMain;
 import Fronend.PresentationLayer.SuppliersModule.SupplierMain;
-import Fronend.PresentationLayer.SuppliersModule.UI;
 
 import java.util.Scanner;
 

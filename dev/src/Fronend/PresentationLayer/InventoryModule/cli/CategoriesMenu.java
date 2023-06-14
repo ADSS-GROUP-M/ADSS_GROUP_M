@@ -1,4 +1,4 @@
-package Fronend.PresentationLayer.InventoryModule;
+package Fronend.PresentationLayer.InventoryModule.cli;
 
 
 import Backend.BusinessLayer.BusinessLayerUsage.Branch;
@@ -7,7 +7,6 @@ import Backend.ServiceLayer.InventoryModule.Response;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 public class CategoriesMenu extends MainMenu {
 

@@ -11,12 +11,15 @@ import java.util.*;
 public abstract class Window extends ComponentAdapter {
 
     private final JFrame frame;
-    private final String title;
+    private final JPanel panel;
+    protected final String title;
     protected final Set<UIElement> components;
     
     protected Window(String title){
         this.title = title;
         frame = new JFrame();
+        panel = new JPanel();
+        frame.add(panel);
         components = new HashSet<>();
         frame.addComponentListener(this);
     }
@@ -28,15 +31,20 @@ public abstract class Window extends ComponentAdapter {
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(null);
-        components.forEach(component -> frame.add(component.getComponent()));
     }
 
     protected void addComponent(UIElement component){
         components.add(component);
+        panel.add(component.getComponent());
+        panel.revalidate();
+        panel.repaint();
     }
 
     protected void removeComponent(UIElement component){
         components.remove(component);
+        panel.remove(component.getComponent());
+        panel.revalidate();
+        panel.repaint();
     }
 
     protected void setVisible(boolean b){
@@ -45,6 +53,7 @@ public abstract class Window extends ComponentAdapter {
 
     @Override
     public void componentResized(ComponentEvent e){
-        components.forEach(component -> component.componentResized(frame.getSize()));
+        panel.setBounds(0, 0, frame.getWidth(), frame.getHeight());
+        components.forEach(component -> component.componentResized(panel.getSize()));
     }
 }

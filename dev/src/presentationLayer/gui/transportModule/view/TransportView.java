@@ -32,7 +32,8 @@ public class TransportView extends Window {
         return new QuickAccess()
                 .addCategory("Transport Management",
                         new Link("View Transports", () -> setCurrentPanel(new ViewTransportsPanel())),
-                        new Link("Add Transport", () -> setCurrentPanel(new AddTransportPanel())),
+//                        new Link("Add Transport", () -> setCurrentPanel(new AddTransportPanel())),
+                        new Link("Add Transport", () -> setCurrentPanel(new PanelExample())),
                         new Link("Update Transport", () -> setCurrentPanel(new UpdateTransportPanel())),
                         new Link("Remove Transport", () -> setCurrentPanel(new RemoveTransportPanel()))
                 )

@@ -23,6 +23,11 @@ public class PanelManager implements UIElement {
     }
 
     public void setPanel(Panel panel) {
+
+        if(currentPanel.getClass().getSimpleName().equals(panel.getClass().getSimpleName())) {
+            return;
+        }
+
         panelsHistory.push(currentPanel);
         currentPanel = panel;
         this.panel.removeAll();

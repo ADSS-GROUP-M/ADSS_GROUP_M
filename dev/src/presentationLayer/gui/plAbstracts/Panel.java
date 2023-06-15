@@ -21,5 +21,7 @@ public abstract class Panel implements UIElement {
     }
 
     public abstract Component getComponent();
-    public abstract void componentResized(Dimension newSize);
+    public void componentResized(Dimension newSize) {
+        panel.setSize(new Dimension((int)(newSize.width*0.8),newSize.height));
+    }
 }

@@ -28,17 +28,14 @@ public class PanelExample extends ScrollablePanel {
 
         GridBagConstraints gbc = new GridBagConstraints();
         contentPanel.add(header);
-        Dimension d = MainWindow.screenSize;
-        contentPanel.setMinimumSize(new Dimension((int)(d.width*0.2), (int)(d.height*0.5)));
-        panel.add(contentPanel,gbc);
+        panel.add(contentPanel);
     }
 
     @Override
     public void componentResized(Dimension newSize) {
         super.componentResized(newSize);
-        Dimension preferredSize = new Dimension((int) (panel.getWidth() * 0.8), panel.getHeight());
+        Dimension preferredSize = new Dimension((int) (panel.getWidth() * 0.8), (int) (panel.getHeight()*0.5));
         contentPanel.setPreferredSize(preferredSize);
-        contentPanel.validate();
-        panel.validate();
+        scrollPane.revalidate();
     }
 }

@@ -1,13 +1,12 @@
 package presentationLayer.gui.transportModule.panels.trucks;
 
-import presentationLayer.gui.plAbstracts.Panel;
-import presentationLayer.gui.plAbstracts.ScrollablePanel;
+import presentationLayer.gui.plAbstracts.TransportBasePanel;
 
 import java.awt.*;
 import javax.swing.*;
 
 
-public class UpdateTruckPanel extends ScrollablePanel {
+public class UpdateTruckPanel extends TransportBasePanel {
     public UpdateTruckPanel() {
         super("src/resources/truck_main_page.jpg");
         init();

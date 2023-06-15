@@ -1,12 +1,11 @@
 package presentationLayer.gui.transportModule.panels.trucks;
 
-import presentationLayer.gui.plAbstracts.Panel;
-import presentationLayer.gui.plAbstracts.ScrollablePanel;
+import presentationLayer.gui.plAbstracts.TransportBasePanel;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class AddTruckPanel extends ScrollablePanel {
+public class AddTruckPanel extends TransportBasePanel {
 
     public AddTruckPanel() {
         super("src/resources/truck_main_page.jpg");
@@ -16,14 +15,14 @@ public class AddTruckPanel extends ScrollablePanel {
     private void init() {
 
         Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
-        panel.setSize(scrollPane.getSize());
+        contentPanel.setSize(scrollPane.getSize());
         JLabel header = new JLabel("Enter Truck details:\n");
         header.setVerticalAlignment(JLabel.TOP);
-        panel.add(header);
+        contentPanel.add(header);
 
 
         //Panel panel = new JPanel();
-        panel.setLayout(new GridBagLayout());
+        contentPanel.setLayout(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
 
         JLabel idLabel = new JLabel("License Plate:");
@@ -31,46 +30,46 @@ public class AddTruckPanel extends ScrollablePanel {
         constraints.gridy = 1;
         constraints.anchor = GridBagConstraints.WEST;
         constraints.insets = new Insets(5, 5, 5, 5);
-        panel.add(idLabel, constraints);
+        contentPanel.add(idLabel, constraints);
 
         JTextField idField = new JTextField(20);
         constraints.gridx = 1;
         constraints.gridy = 1;
         constraints.fill = GridBagConstraints.HORIZONTAL;
-        panel.add(idField, constraints);
+        contentPanel.add(idField, constraints);
 
         JLabel modelLabel = new JLabel("Model:");
         constraints.gridx = 0;
         constraints.gridy = 2;
-        panel.add(modelLabel, constraints);
+        contentPanel.add(modelLabel, constraints);
 
         JTextField modelField = new JTextField(20);
         constraints.gridx = 1;
         constraints.gridy = 2;
         constraints.fill = GridBagConstraints.HORIZONTAL;
-        panel.add(modelField, constraints);
+        contentPanel.add(modelField, constraints);
 
         JLabel baseLabel = new JLabel("Base weight:");
         constraints.gridx = 0;
         constraints.gridy = 3;
-        panel.add(baseLabel, constraints);
+        contentPanel.add(baseLabel, constraints);
 
         JTextField baseField = new JTextField(20);
         constraints.gridx = 1;
         constraints.gridy = 3;
         constraints.fill = GridBagConstraints.HORIZONTAL;
-        panel.add(baseField, constraints);
+        contentPanel.add(baseField, constraints);
 
         JLabel maxLabel = new JLabel("Max weight:");
         constraints.gridx = 0;
         constraints.gridy = 4;
-        panel.add(maxLabel, constraints);
+        contentPanel.add(maxLabel, constraints);
 
         JTextField maxField = new JTextField(20);
         constraints.gridx = 1;
         constraints.gridy = 4;
         constraints.fill = GridBagConstraints.HORIZONTAL;
-        panel.add(maxField, constraints);
+        contentPanel.add(maxField, constraints);
 
 
         JLabel coolingLabel = new JLabel("Cooling Capacity:");
@@ -78,7 +77,7 @@ public class AddTruckPanel extends ScrollablePanel {
         constraints.gridy = 5;
         constraints.anchor = GridBagConstraints.WEST;
         constraints.insets = new Insets(5, 5, 5, 5);
-        panel.add(coolingLabel, constraints);
+        contentPanel.add(coolingLabel, constraints);
 
         JPanel coolingPanel = new JPanel();
         JRadioButton none = new JRadioButton("NONE");
@@ -94,7 +93,7 @@ public class AddTruckPanel extends ScrollablePanel {
         coolingPanel.add(frozen);
 
 
-        panel.add(coolingPanel, constraints);
+        contentPanel.add(coolingPanel, constraints);
 
 
 

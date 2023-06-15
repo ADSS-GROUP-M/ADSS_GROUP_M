@@ -106,5 +106,4 @@ public class AddSitePanel extends TransportBasePanel {
 
         contentPanel.add(typePanel, constraints);
     }
-
 }

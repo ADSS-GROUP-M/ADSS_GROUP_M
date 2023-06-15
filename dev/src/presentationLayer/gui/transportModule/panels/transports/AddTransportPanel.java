@@ -54,7 +54,7 @@ public class AddTransportPanel extends TransportBasePanel {
         constraints.anchor = GridBagConstraints.WEST;
         constraints.insets = new Insets(5, 5, 5, 5);
         contentPanel.add(driversLabel, constraints);
-        JButton addButton = new JButton("Add Driver");
+        JButton addButton = new JButton("Drivers");
         constraints.gridx = 1;
         constraints.gridy = 3;
         constraints.gridwidth = 2;
@@ -69,7 +69,7 @@ public class AddTransportPanel extends TransportBasePanel {
         constraints.anchor = GridBagConstraints.WEST;
         constraints.insets = new Insets(5, 5, 5, 5);
         contentPanel.add(trucksLabel, constraints);
-        JButton addButton2 = new JButton("Add Truck");
+        JButton addButton2 = new JButton("Trucks");
         constraints.gridx = 1;
         constraints.gridy = 4;
         constraints.gridwidth = 2;
@@ -89,9 +89,6 @@ public class AddTransportPanel extends TransportBasePanel {
         constraints.gridy = 5;
         constraints.fill = GridBagConstraints.HORIZONTAL;
         contentPanel.add(weightField, constraints);
-
-
-
     }
 
 }

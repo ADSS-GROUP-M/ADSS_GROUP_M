@@ -1,4 +1,4 @@
-package presentationLayer.gui.plUtils;
+package presentationLayer.gui.plUtils.examples;
 import javax.swing.*;
 import java.awt.*;
 import java.text.SimpleDateFormat;

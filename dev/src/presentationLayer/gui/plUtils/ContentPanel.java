@@ -6,8 +6,8 @@ import javax.swing.*;
 import java.awt.*;
 
 public class ContentPanel extends JPanel {
-    public ContentPanel(){
+    public ContentPanel(Color backgroundColor){
         super();
-        setBackground(new Color(107,190,255,150));
+        setBackground(backgroundColor);
     }
 }

@@ -1,6 +1,6 @@
 package presentationLayer.gui.plAbstracts;
 
-import presentationLayer.gui.plUtils.JPanelWithBackground;
+import presentationLayer.gui.plUtils.examples.JPanelWithBackground;
 
 import javax.swing.*;
 import java.awt.*;

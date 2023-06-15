@@ -1,9 +1,6 @@
 package presentationLayer.gui.transportModule.panels;
 
-import presentationLayer.gui.plAbstracts.Panel;
-import presentationLayer.gui.plAbstracts.ScrollablePanel;
+import presentationLayer.gui.plAbstracts.TransportBasePanel;
 
-import java.awt.*;
-
-public class RemoveItemListPanel extends ScrollablePanel {
+public class RemoveItemListPanel extends TransportBasePanel {
 }

@@ -1,12 +1,11 @@
 package presentationLayer.gui.transportModule.panels;
 
-import presentationLayer.gui.plAbstracts.Panel;
-import presentationLayer.gui.plAbstracts.ScrollablePanel;
+import presentationLayer.gui.plAbstracts.TransportBasePanel;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class AddSitePanel extends ScrollablePanel {
+public class AddSitePanel extends TransportBasePanel {
 
     public AddSitePanel() {
         super("src/resources/truck_main_page.jpg");
@@ -15,14 +14,14 @@ public class AddSitePanel extends ScrollablePanel {
 
     private void init() {
         Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
-        panel.setSize(scrollPane.getSize());
+        contentPanel.setSize(scrollPane.getSize());
         JLabel header = new JLabel("Enter Site details:\n");
         header.setVerticalAlignment(JLabel.TOP);
-        panel.add(header);
+        contentPanel.add(header);
 
 
         //Panel panel = new JPanel();
-        panel.setLayout(new GridBagLayout());
+        contentPanel.setLayout(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
 
         JLabel idLabel = new JLabel("Name:");
@@ -30,57 +29,57 @@ public class AddSitePanel extends ScrollablePanel {
         constraints.gridy = 1;
         constraints.anchor = GridBagConstraints.WEST;
         constraints.insets = new Insets(5, 5, 5, 5);
-        panel.add(idLabel, constraints);
+        contentPanel.add(idLabel, constraints);
 
         JTextField idField = new JTextField(20);
         constraints.gridx = 1;
         constraints.gridy = 1;
         constraints.fill = GridBagConstraints.HORIZONTAL;
-        panel.add(idField, constraints);
+        contentPanel.add(idField, constraints);
 
         JLabel addressLabel = new JLabel("Address:");
         constraints.gridx = 0;
         constraints.gridy = 2;
-        panel.add(addressLabel, constraints);
+        contentPanel.add(addressLabel, constraints);
 
         JTextField addressField = new JTextField(20);
         constraints.gridx = 1;
         constraints.gridy = 2;
         constraints.fill = GridBagConstraints.HORIZONTAL;
-        panel.add(addressField, constraints);
+        contentPanel.add(addressField, constraints);
 
         JLabel zoneLabel = new JLabel("Transport Zone");
         constraints.gridx = 0;
         constraints.gridy = 3;
-        panel.add(zoneLabel, constraints);
+        contentPanel.add(zoneLabel, constraints);
 
         JTextField zoneField = new JTextField(20);
         constraints.gridx = 1;
         constraints.gridy = 3;
         constraints.fill = GridBagConstraints.HORIZONTAL;
-        panel.add(zoneField, constraints);
+        contentPanel.add(zoneField, constraints);
 
         JLabel phoneLabel = new JLabel("Contact Phone");
         constraints.gridx = 0;
         constraints.gridy = 4;
-        panel.add(phoneLabel, constraints);
+        contentPanel.add(phoneLabel, constraints);
 
         JTextField maxField = new JTextField(20);
         constraints.gridx = 1;
         constraints.gridy = 4;
         constraints.fill = GridBagConstraints.HORIZONTAL;
-        panel.add(maxField, constraints);
+        contentPanel.add(maxField, constraints);
 
         JLabel nameLabel = new JLabel("Contact Name");
         constraints.gridx = 0;
         constraints.gridy = 5;
-        panel.add(nameLabel, constraints);
+        contentPanel.add(nameLabel, constraints);
 
         JTextField nameField = new JTextField(20);
         constraints.gridx = 1;
         constraints.gridy = 5;
         constraints.fill = GridBagConstraints.HORIZONTAL;
-        panel.add(nameField, constraints);
+        contentPanel.add(nameField, constraints);
 
 
         JLabel typeLabel = new JLabel("Site Type:");
@@ -88,7 +87,7 @@ public class AddSitePanel extends ScrollablePanel {
         constraints.gridy = 6;
         constraints.anchor = GridBagConstraints.WEST;
         constraints.insets = new Insets(5, 5, 5, 5);
-        panel.add(typeLabel, constraints);
+        contentPanel.add(typeLabel, constraints);
 
 
         JPanel typePanel = new JPanel();
@@ -105,7 +104,7 @@ public class AddSitePanel extends ScrollablePanel {
         typePanel.add(supplier);
 
 
-        panel.add(typePanel, constraints);
+        contentPanel.add(typePanel, constraints);
     }
 
 }

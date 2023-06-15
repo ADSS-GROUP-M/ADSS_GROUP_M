@@ -1,4 +1,4 @@
-package presentationLayer.gui.transportModule;
+package presentationLayer.gui.plAbstracts;
 
 import presentationLayer.gui.plAbstracts.ScrollablePanel;
 import presentationLayer.gui.plUtils.ContentPanel;
@@ -9,18 +9,18 @@ import java.awt.*;
 
 import static presentationLayer.gui.plUtils.ContentPanel.COLOR;
 
-public class PanelExample extends ScrollablePanel {
+public abstract class TransportBasePanel extends ScrollablePanel {
 
-    private TextNote text;
+    protected TextNote text;
 
-    private ContentPanel contentPanel;
+    protected ContentPanel contentPanel;
 
-    public PanelExample() {
+    public TransportBasePanel() {
         super("src/resources/truck_main_page.jpg");
         init();
     }
 
-    public PanelExample(String fileName) {
+    public TransportBasePanel(String fileName) {
         super(fileName);
         init();
     }
@@ -32,7 +32,7 @@ public class PanelExample extends ScrollablePanel {
 
         contentPanel.setLayout(new GridBagLayout());
         panel.setLayout(new GridBagLayout());
-
+/*
         text = new TextNote("""
                 This is an example of a panel.
                 
@@ -40,11 +40,11 @@ public class PanelExample extends ScrollablePanel {
                 You can add any component you want to it.
                 the blue part is the content panel.""");
         text.setSize(300,600);
-        text.setFont(new Font("Arial", Font.PLAIN, 20));
+        text.setFont(new Font("Arial", Font.PLAIN, 20));*/
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridy = 0;
-        contentPanel.add(text,gbc);
+        //contentPanel.add(text,gbc);
 
         gbc.insets = new Insets(50,0,75,0);
         panel.add(header,gbc);

@@ -26,13 +26,15 @@ public class SearchBox implements UIElement, KeyListener, FocusListener, Compone
     private void init(){
         textField.addKeyListener(this);
         textField.addFocusListener(this);
-        textField.addComponentListener(this);
         textField.setPreferredSize(new Dimension(200, 30));
         popup.setLocationRelativeTo(textField);
         popup.setLocation(popup.getX(), popup.getY()+30);
         popup.setBackground(Color.lightGray);
-
         popup.setSize(200, 100);
+    }
+
+    public void setComponentListener(Container container){
+        container.addComponentListener(this);
     }
 
 

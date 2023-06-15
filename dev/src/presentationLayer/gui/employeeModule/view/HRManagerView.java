@@ -1,9 +1,9 @@
 package presentationLayer.gui.employeeModule.view;
 
 import presentationLayer.gui.employeeModule.view.panels.EmployeesPanel;
-import presentationLayer.gui.plAbstracts.Window;
+import presentationLayer.gui.plAbstracts.MainWindow;
 
-public class HRManagerView extends Window {
+public class HRManagerView extends MainWindow {
     public HRManagerView() {
         super("HRManager Page");
 
@@ -23,6 +23,6 @@ public class HRManagerView extends Window {
 //                );
 //    }
     public static void main(String[] args) {
-        Window window = new HRManagerView();
+        MainWindow mainWindow = new HRManagerView();
     }
 }

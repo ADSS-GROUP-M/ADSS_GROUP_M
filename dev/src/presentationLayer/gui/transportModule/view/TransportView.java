@@ -4,7 +4,7 @@ import presentationLayer.gui.plAbstracts.Panel;
 import presentationLayer.gui.plAbstracts.PanelManager;
 import presentationLayer.gui.transportModule.PanelExample;
 import presentationLayer.gui.transportModule.panels.*;
-import presentationLayer.gui.plAbstracts.Window;
+import presentationLayer.gui.plAbstracts.MainWindow;
 import presentationLayer.gui.plUtils.Link;
 import presentationLayer.gui.plUtils.QuickAccess;
 import presentationLayer.gui.transportModule.panels.trucks.AddTruckPanel;
@@ -12,14 +12,13 @@ import presentationLayer.gui.transportModule.panels.trucks.RemoveTruckPanel;
 import presentationLayer.gui.transportModule.panels.trucks.UpdateTruckPanel;
 import presentationLayer.gui.transportModule.panels.trucks.ViewTrucksPanel;
 
-public class TransportView extends Window{
+public class TransportView extends MainWindow {
 
     private Panel currentPanel;
     private final PanelManager panelManager;
 
     public TransportView() {
         super("Transport Module");
-//        currentPanel = new PanelExample();
         currentPanel = new ViewTransportsPanel();
         panelManager = new PanelManager(currentPanel);
         super.addUIElement(panelManager);
@@ -64,9 +63,10 @@ public class TransportView extends Window{
     private void setCurrentPanel(Panel panel) {
         panelManager.setPanel(panel);
         currentPanel = panel;
+        currentPanel.componentResized(super.container.getSize());
     }
 
     public static void main(String[] args) {
-        Window window = new TransportView();
+        MainWindow mainWindow = new TransportView();
     }
 }

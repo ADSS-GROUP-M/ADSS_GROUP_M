@@ -6,7 +6,7 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.*;
 
-public abstract class Window extends ComponentAdapter {
+public abstract class MainWindow extends ComponentAdapter {
 
     public static final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
@@ -14,7 +14,7 @@ public abstract class Window extends ComponentAdapter {
     protected final String title;
     private final Set<UIElement> components;
     
-    protected Window(String title){
+    protected MainWindow(String title){
         this.title = title;
         container = new JFrame();
         components = new HashSet<>();
@@ -43,5 +43,10 @@ public abstract class Window extends ComponentAdapter {
     @Override
     public void componentResized(ComponentEvent e){
         components.forEach(component -> component.componentResized(container.getSize()));
+    }
+
+    @Override
+    public void componentMoved(ComponentEvent e){
+        componentResized(e);
     }
 }

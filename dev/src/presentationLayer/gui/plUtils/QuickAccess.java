@@ -4,6 +4,7 @@ import javafx.util.Pair;
 import presentationLayer.gui.plAbstracts.UIElement;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -20,6 +21,8 @@ public class QuickAccess implements UIElement {
         Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
         scrollPane = new JScrollPane(panel);
         scrollPane.getVerticalScrollBar().setUnitIncrement(16);
+        scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        panel.setBorder(new EmptyBorder(0,7,0,0));
     }
 
     public QuickAccess addCategory(String name, Link ... links){
@@ -63,7 +66,7 @@ public class QuickAccess implements UIElement {
     @Override
     public void componentResized(Dimension newSize) {
         Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
-        scrollPane.setBounds(0, 0, (int)(d.width*0.20), (int)(newSize.getHeight()*0.95));
+        scrollPane.setSize((int)(d.width*0.20),(int)(newSize.getHeight()*0.95));
         scrollPane.revalidate();
     }
 }

@@ -1,32 +1,18 @@
 package presentationLayer.gui.transportModule;
 
-import presentationLayer.gui.plAbstracts.MainWindow;
 import presentationLayer.gui.plAbstracts.ScrollablePanel;
 import presentationLayer.gui.plUtils.ContentPanel;
+import presentationLayer.gui.plUtils.TextNote;
 
 import javax.swing.*;
 import java.awt.*;
 
-import static java.awt.GridBagConstraints.RELATIVE;
+import static presentationLayer.gui.plUtils.ContentPanel.COLOR;
 
 public class PanelExample extends ScrollablePanel {
 
     private TextNote text;
 
-    public class TextNote extends JTextArea {
-        public TextNote(String text) {
-            super(text);
-            setBackground(null);
-            setOpaque(false);
-            setEditable(false);
-            setBorder(null);
-            setLineWrap(true);
-            setWrapStyleWord(true);
-            setFocusable(false);
-        }
-    }
-
-    private static final Color COLOR = new Color(107, 190, 255, 150);
     private ContentPanel contentPanel;
 
     public PanelExample() {
@@ -60,11 +46,13 @@ public class PanelExample extends ScrollablePanel {
         gbc.gridy = 0;
         contentPanel.add(text,gbc);
 
-        gbc.weighty = 1;
+        gbc.insets = new Insets(50,0,75,0);
         panel.add(header,gbc);
 
         gbc.gridy = 1;
-        gbc.weighty = 2;
+        gbc.weighty = 1;
+        gbc.insets = new Insets(0,0,0,0);
+        gbc.anchor = GridBagConstraints.NORTH;
         panel.add(contentPanel,gbc);
     }
 

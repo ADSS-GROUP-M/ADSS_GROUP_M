@@ -1,13 +1,12 @@
-package presentationLayer.gui.transportModule.panels.trucks;
+package presentationLayer.gui.transportModule.panels.sites;
 
 import presentationLayer.gui.plAbstracts.TransportBasePanel;
 
-import java.awt.*;
 import javax.swing.*;
+import java.awt.*;
 
-
-public class UpdateTruckPanel extends TransportBasePanel {
-    public UpdateTruckPanel() {
+public class UpdateSitePanel extends TransportBasePanel {
+    public UpdateSitePanel() {
         super("src/resources/truck_main_page.jpg");
         init();
     }
@@ -15,7 +14,7 @@ public class UpdateTruckPanel extends TransportBasePanel {
 
         Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
         contentPanel.setSize(scrollPane.getSize());
-        JLabel header = new JLabel("Update Truck:\n");
+        JLabel header = new JLabel("Update Site:\n");
         header.setVerticalAlignment(JLabel.TOP);
 
         //Panel panel = new JPanel();
@@ -28,13 +27,13 @@ public class UpdateTruckPanel extends TransportBasePanel {
         constraints.insets = new Insets(5, 5, 5, 5);
         contentPanel.add(header, constraints);
 
-        JLabel trucksLabel = new JLabel("Pick Truck:");
+        JLabel trucksLabel = new JLabel("Pick Site:");
         constraints.gridx = 0;
         constraints.gridy = 1;
         constraints.anchor = GridBagConstraints.WEST;
         constraints.insets = new Insets(5, 5, 5, 5);
         contentPanel.add(trucksLabel, constraints);
-        JButton addButton2 = new JButton("Trucks");
+        JButton addButton2 = new JButton("Sites");
         constraints.gridx = 1;
         constraints.gridy = 1;
         constraints.gridwidth = 2;
@@ -42,10 +41,10 @@ public class UpdateTruckPanel extends TransportBasePanel {
         constraints.anchor = GridBagConstraints.CENTER;
         contentPanel.add(addButton2, constraints);
 
-        JLabel baseLabel = new JLabel("New Base Weight:");
+        JLabel baseLabel = new JLabel("New Contact Name:");
+        constraints.gridwidth = 1;
         constraints.gridx = 0;
         constraints.gridy = 2;
-        constraints.gridwidth = 1;
         constraints.anchor = GridBagConstraints.WEST;
         contentPanel.add(baseLabel, constraints);
 
@@ -55,7 +54,7 @@ public class UpdateTruckPanel extends TransportBasePanel {
         constraints.fill = GridBagConstraints.HORIZONTAL;
         contentPanel.add(baseField, constraints);
 
-        JLabel maxLabel = new JLabel("New Max Weight:");
+        JLabel maxLabel = new JLabel("New Contact Number:");
         constraints.gridx = 0;
         constraints.gridy = 3;
         contentPanel.add(maxLabel, constraints);
@@ -65,28 +64,5 @@ public class UpdateTruckPanel extends TransportBasePanel {
         constraints.gridy = 3;
         constraints.fill = GridBagConstraints.HORIZONTAL;
         contentPanel.add(maxField, constraints);
-
-
-        JLabel coolingLabel = new JLabel("New Cooling Capacity:");
-        constraints.gridx = 0;
-        constraints.gridy = 4;
-        constraints.anchor = GridBagConstraints.WEST;
-        constraints.insets = new Insets(5, 5, 5, 5);
-        contentPanel.add(coolingLabel, constraints);
-
-        JPanel coolingPanel = new JPanel();
-        JRadioButton none = new JRadioButton("NONE");
-        constraints.gridx = 1;
-        constraints.gridy = 4;
-        //constraints.gridwidth = 2;
-        constraints.fill = GridBagConstraints.NONE;
-        constraints.anchor = GridBagConstraints.CENTER;
-        JRadioButton cold = new JRadioButton("COLD");
-        JRadioButton frozen = new JRadioButton("FROZEN");
-        coolingPanel.add(none);
-        coolingPanel.add(cold);
-        coolingPanel.add(frozen);
-
-        contentPanel.add(coolingPanel, constraints);
     }
 }

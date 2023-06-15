@@ -10,8 +10,7 @@ import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-
-public class AddOrRemoveElementsList extends JPanel {
+ public class AddOrRemoveElementsList extends JPanel {
 
     JList list;
 
@@ -44,7 +43,7 @@ public class AddOrRemoveElementsList extends JPanel {
 
         add(pane, BorderLayout.NORTH);
         add(addButton, BorderLayout.WEST);
-        add(removeButton, BorderLayout.EAST);
+        add(removeButton, BorderLayout.CENTER);
     }
 
     public static void main(String s[]) {

@@ -1,4 +1,4 @@
-package presentationLayer.gui.transportModule.panels;
+package presentationLayer.gui.transportModule.panels.sites;
 
 import presentationLayer.gui.plAbstracts.TransportBasePanel;
 
@@ -94,7 +94,6 @@ public class AddSitePanel extends TransportBasePanel {
         JRadioButton logisticCenter = new JRadioButton("Logistic Center");
         constraints.gridx = 1;
         constraints.gridy = 6;
-        //constraints.gridwidth = 2;
         constraints.fill = GridBagConstraints.NONE;
         constraints.anchor = GridBagConstraints.CENTER;
         JRadioButton branch = new JRadioButton("Branch");
@@ -106,5 +105,4 @@ public class AddSitePanel extends TransportBasePanel {
 
         contentPanel.add(typePanel, constraints);
     }
-
 }

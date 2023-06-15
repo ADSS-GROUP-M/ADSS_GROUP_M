@@ -16,10 +16,9 @@ public class AddTruckPanel extends TransportBasePanel {
 
         Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
         contentPanel.setSize(scrollPane.getSize());
-        JLabel header = new JLabel("Enter Truck details:\n");
+        JLabel header = new JLabel("Enter Truck Details:\n");
         header.setVerticalAlignment(JLabel.TOP);
         contentPanel.add(header);
-
 
         //Panel panel = new JPanel();
         contentPanel.setLayout(new GridBagLayout());
@@ -49,7 +48,7 @@ public class AddTruckPanel extends TransportBasePanel {
         constraints.fill = GridBagConstraints.HORIZONTAL;
         contentPanel.add(modelField, constraints);
 
-        JLabel baseLabel = new JLabel("Base weight:");
+        JLabel baseLabel = new JLabel("Base Weight:");
         constraints.gridx = 0;
         constraints.gridy = 3;
         contentPanel.add(baseLabel, constraints);
@@ -60,7 +59,7 @@ public class AddTruckPanel extends TransportBasePanel {
         constraints.fill = GridBagConstraints.HORIZONTAL;
         contentPanel.add(baseField, constraints);
 
-        JLabel maxLabel = new JLabel("Max weight:");
+        JLabel maxLabel = new JLabel("Max Weight:");
         constraints.gridx = 0;
         constraints.gridy = 4;
         contentPanel.add(maxLabel, constraints);
@@ -70,7 +69,6 @@ public class AddTruckPanel extends TransportBasePanel {
         constraints.gridy = 4;
         constraints.fill = GridBagConstraints.HORIZONTAL;
         contentPanel.add(maxField, constraints);
-
 
         JLabel coolingLabel = new JLabel("Cooling Capacity:");
         constraints.gridx = 0;
@@ -92,19 +90,6 @@ public class AddTruckPanel extends TransportBasePanel {
         coolingPanel.add(cold);
         coolingPanel.add(frozen);
 
-
         contentPanel.add(coolingPanel, constraints);
-
-
-
-
-
-
-
-
-
-
-
-
     }
 }

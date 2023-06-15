@@ -1,4 +1,4 @@
-package presentationLayer.gui.transportModule.panels;
+package presentationLayer.gui.transportModule.panels.sites;
 
 import presentationLayer.gui.plAbstracts.TransportBasePanel;
 
@@ -16,11 +16,16 @@ public class UpdateSitePanel extends TransportBasePanel {
         contentPanel.setSize(scrollPane.getSize());
         JLabel header = new JLabel("Update Site:\n");
         header.setVerticalAlignment(JLabel.TOP);
-        contentPanel.add(header);
 
         //Panel panel = new JPanel();
         contentPanel.setLayout(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
+
+        constraints.gridx = 0;
+        constraints.gridy = 0;
+        constraints.anchor = GridBagConstraints.WEST;
+        constraints.insets = new Insets(5, 5, 5, 5);
+        contentPanel.add(header, constraints);
 
         JLabel trucksLabel = new JLabel("Pick Site:");
         constraints.gridx = 0;

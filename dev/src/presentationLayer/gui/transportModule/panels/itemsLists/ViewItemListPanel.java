@@ -1,4 +1,4 @@
-package presentationLayer.gui.transportModule.panels;
+package presentationLayer.gui.transportModule.panels.itemsLists;
 
 import presentationLayer.gui.plAbstracts.TransportBasePanel;
 

@@ -59,6 +59,8 @@ public class AddTransportPanel extends TransportBasePanel {
         contentPanel.add(driversLabel, constraints);
 
 
+
+        //TODO: remove this example code and replace with real data
         class SearchableString implements Searchable {
 
             private String string;
@@ -84,7 +86,7 @@ public class AddTransportPanel extends TransportBasePanel {
         }
 
         List<Searchable> searchableStrings = List.of(new SearchableString("driver1"), new SearchableString("driver2"), new SearchableString("driver3"));
-        SearchBox drivers = new SearchBox(searchableStrings,"Select Driver",new Dimension(200,30), repaintListener);
+        SearchBox drivers = new SearchBox(searchableStrings,"Select Driver",new Dimension(200,30), this);
         constraints.gridx = 1;
         constraints.gridy = 3;
         constraints.gridwidth = 2;

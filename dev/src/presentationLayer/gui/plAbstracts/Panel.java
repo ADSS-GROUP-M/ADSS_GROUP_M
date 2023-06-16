@@ -6,20 +6,18 @@ import javax.swing.*;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 import java.awt.*;
+import java.util.EventListener;
 
-public abstract class Panel implements UIElement {
+public abstract class Panel implements UIElement, PopupMenuListener {
 
     protected final JPanel panel;
-    protected final PopupMenuListener repaintListener;
 
     protected Panel(){
         panel = new JPanel();
-        repaintListener = getRepaintListener();
     }
     protected Panel(String fileName){
         panel = new JPanelWithBackground(fileName);
         panel.paintComponents(panel.getGraphics());
-        repaintListener = getRepaintListener();
     }
 
     public void add(Component component){
@@ -32,11 +30,7 @@ public abstract class Panel implements UIElement {
         panel.revalidate();
     }
 
-    private PopupMenuListener getRepaintListener(){
-        return new PopupMenuListener() {
-            @Override public void popupMenuWillBecomeVisible(PopupMenuEvent e) {}
-            @Override public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {panel.repaint();}
-            @Override public void popupMenuCanceled(PopupMenuEvent e) {}
-        };
-    }
+    @Override public void popupMenuWillBecomeVisible(PopupMenuEvent e) {}
+    @Override public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {panel.repaint();}
+    @Override public void popupMenuCanceled(PopupMenuEvent e) {}
 }

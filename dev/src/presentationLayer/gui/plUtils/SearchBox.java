@@ -341,25 +341,7 @@ public class SearchBox implements UIElement {
             }
         });
 
-        cp.getContentPanel().add(
-                new SearchBox(List.of(s1, s2, s3, s4), "Enter site name or address", new Dimension(400, 30),
-                        new PopupMenuListener() {
-                            @Override
-                            public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
-
-                            }
-
-                            @Override
-                            public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
-                                frame.repaint();
-                            }
-
-                            @Override
-                            public void popupMenuCanceled(PopupMenuEvent e) {
-
-                            }
-                        }
-                ).getComponent());
+        cp.getContentPanel().add(new SearchBox(List.of(s1, s2, s3, s4), "Enter site name or address", new Dimension(400, 30),cp).getComponent());
         JButton test = new JButton("test");
         cp.getContentPanel().add(test);
         frame.add(cp.getComponent());

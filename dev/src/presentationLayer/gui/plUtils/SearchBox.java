@@ -1,6 +1,9 @@
 package presentationLayer.gui.plUtils;
 
+
 import presentationLayer.gui.plAbstracts.Searchable;
+import presentationLayer.gui.plAbstracts.Panel;
+import presentationLayer.gui.plAbstracts.TransportBasePanel;
 import presentationLayer.gui.plAbstracts.UIElement;
 
 import java.awt.event.*;
@@ -146,11 +149,11 @@ public class SearchBox implements UIElement {
             }
             @Override
             public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
-                // do nothing
+//                comboBox.getParent().getParent().repaint();
             }
             @Override
             public void popupMenuCanceled(PopupMenuEvent e) {
-                // do nothing
+
             }
         });
         comboBox.getEditor().getEditorComponent().addMouseListener(new MouseAdapter() {
@@ -177,7 +180,7 @@ public class SearchBox implements UIElement {
                 if(isSelected){
                     renderer.setBackground(new Color(200,200,200));
                 }
-                
+
                 return renderer;
             }
         });
@@ -241,6 +244,10 @@ public class SearchBox implements UIElement {
     @Override
     public void componentResized(Dimension newSize) {
         // do nothing
+    }
+
+    public void addPopupMenuListener(PopupMenuListener listener){
+        comboBox.addPopupMenuListener(listener);
     }
 
     public static void main(String[] args){
@@ -324,9 +331,23 @@ public class SearchBox implements UIElement {
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new FlowLayout());
-        frame.add(new SearchBox(List.of(s1,s2,s3,s4),"Enter site name or address",new Dimension(400, 30)).getComponent());
+        TransportBasePanel cp = new TransportBasePanel(){};
+        frame.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                cp.componentResized(frame.getSize());
+            }
+
+            @Override
+            public void componentMoved(ComponentEvent e) {
+                cp.componentResized(frame.getSize());
+            }
+        });
+
+        cp.getContentPanel().add(new SearchBox(List.of(s1,s2,s3,s4),"Enter site name or address",new Dimension(400, 30)).getComponent());
         JButton test = new JButton("test");
-        frame.add(test);
+        cp.getContentPanel().add(test);
+        frame.add(cp.getComponent());
         frame.pack();
         frame.setVisible(true);
         frame.requestFocus();

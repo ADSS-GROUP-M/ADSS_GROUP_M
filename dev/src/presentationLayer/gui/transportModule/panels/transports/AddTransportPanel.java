@@ -1,9 +1,15 @@
 package presentationLayer.gui.transportModule.panels.transports;
 
+import presentationLayer.gui.plAbstracts.Searchable;
 import presentationLayer.gui.plAbstracts.TransportBasePanel;
+import presentationLayer.gui.plUtils.SearchBox;
+import java.util.List;
 
 import javax.swing.*;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class AddTransportPanel extends TransportBasePanel {
     public AddTransportPanel() {
@@ -54,13 +60,41 @@ public class AddTransportPanel extends TransportBasePanel {
         constraints.anchor = GridBagConstraints.WEST;
         constraints.insets = new Insets(5, 5, 5, 5);
         contentPanel.add(driversLabel, constraints);
-        JButton addButton = new JButton("Drivers");
+
+
+        class SearchableString implements Searchable {
+
+            private String string;
+
+            public SearchableString(String string) {
+                this.string = string;
+            }
+
+            @Override
+            public boolean isMatch(String query) {
+                return string.contains(query);
+            }
+
+            @Override
+            public String getShortDescription() {
+                return string;
+            }
+
+            @Override
+            public String getLongDescription() {
+                return null;
+            }
+        }
+
+        List<Searchable> searchableStrings = List.of(new SearchableString("driver1"), new SearchableString("driver2"), new SearchableString("driver3"));
+        SearchBox drivers = new SearchBox(searchableStrings,"Select Driver",new Dimension(200,30));
+        drivers.addPopupMenuListener(popupMenuListener);
         constraints.gridx = 1;
         constraints.gridy = 3;
         constraints.gridwidth = 2;
         constraints.fill = GridBagConstraints.NONE;
         constraints.anchor = GridBagConstraints.CENTER;
-        contentPanel.add(addButton, constraints);
+        contentPanel.add(drivers.getComponent(), constraints);
 
 
         JLabel trucksLabel = new JLabel("Pick Truck:");

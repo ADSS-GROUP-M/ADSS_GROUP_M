@@ -13,6 +13,10 @@ public abstract class TransportBasePanel extends ScrollablePanel {
 
     protected TextNote text;
 
+    public ContentPanel getContentPanel() {
+        return contentPanel;
+    }
+
     protected ContentPanel contentPanel;
 
     public TransportBasePanel() {
@@ -32,19 +36,9 @@ public abstract class TransportBasePanel extends ScrollablePanel {
 
         contentPanel.setLayout(new GridBagLayout());
         panel.setLayout(new GridBagLayout());
-/*
-        text = new TextNote("""
-                This is an example of a panel.
-                
-                
-                You can add any component you want to it.
-                the blue part is the content panel.""");
-        text.setSize(300,600);
-        text.setFont(new Font("Arial", Font.PLAIN, 20));*/
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridy = 0;
-        //contentPanel.add(text,gbc);
 
         gbc.insets = new Insets(50,0,75,0);
         panel.add(header,gbc);

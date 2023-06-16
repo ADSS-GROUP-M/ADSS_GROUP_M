@@ -1,7 +1,4 @@
-package Fronend.PresentationLayer.InventoryModule;
-import Fronend.PresentationLayer.InventoryModule.MainMenu;
-
-import java.util.*;
+package Fronend.PresentationLayer.InventoryModule.cli;
 
 public class InventoryMain {
 

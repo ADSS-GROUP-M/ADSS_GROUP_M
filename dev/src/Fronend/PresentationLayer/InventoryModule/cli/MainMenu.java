@@ -1,4 +1,4 @@
-package Fronend.PresentationLayer.InventoryModule;
+package Fronend.PresentationLayer.InventoryModule.cli;
 
 import Backend.ServiceLayer.InventoryModule.CategoriesService;
 import Backend.ServiceLayer.InventoryModule.StockService;

@@ -2,5 +2,16 @@ package presentationLayer.gui.transportModule.panels;
 
 import presentationLayer.gui.plAbstracts.UIElement;
 
+import java.awt.*;
+
 public class ViewSearchable implements UIElement {
+    @Override
+    public Component getComponent() {
+        return null;
+    }
+
+    @Override
+    public void componentResized(Dimension newSize) {
+
+    }
 }

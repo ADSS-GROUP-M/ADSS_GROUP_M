@@ -23,6 +23,7 @@ public abstract class MainWindow extends ComponentAdapter {
 
     protected void init(){
         container.setTitle(title);
+        container.setBackground(Color.WHITE);
         container.setMinimumSize(new Dimension(800, 600));
         container.setExtendedState(JFrame.MAXIMIZED_BOTH);
         container.setLocationRelativeTo(null);

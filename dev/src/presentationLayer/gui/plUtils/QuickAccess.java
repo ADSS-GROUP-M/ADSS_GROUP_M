@@ -23,6 +23,7 @@ public class QuickAccess implements UIElement {
         scrollPane.getVerticalScrollBar().setUnitIncrement(16);
         scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         panel.setBorder(new EmptyBorder(0,7,0,0));
+        panel.setBackground(Color.WHITE);
     }
 
     public QuickAccess addCategory(String name, Link ... links){
@@ -66,7 +67,8 @@ public class QuickAccess implements UIElement {
     @Override
     public void componentResized(Dimension newSize) {
         Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
-        scrollPane.setSize((int)(d.width*0.20),(int)(newSize.getHeight()*0.95));
+        panel.setSize((int)(d.width*0.20), (int)(newSize.getHeight()));
+        scrollPane.setSize((int)(d.width*0.20),(int)(newSize.getHeight()));
         scrollPane.revalidate();
     }
 }

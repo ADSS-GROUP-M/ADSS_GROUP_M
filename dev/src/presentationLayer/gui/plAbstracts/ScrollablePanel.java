@@ -13,6 +13,7 @@ public abstract class ScrollablePanel extends Panel{
         super();
         this.scrollPane = new JScrollPane(panel);
         scrollPane.getVerticalScrollBar().setUnitIncrement(16);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
     }
 
     protected ScrollablePanel(String fileName) {

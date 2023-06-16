@@ -3,6 +3,8 @@ package presentationLayer.gui.transportModule.panels.transports;
 import presentationLayer.gui.plAbstracts.Searchable;
 import presentationLayer.gui.plAbstracts.TransportBasePanel;
 import presentationLayer.gui.plUtils.SearchBox;
+import presentationLayer.gui.plUtils.SearchableString;
+
 import java.util.List;
 
 import javax.swing.*;
@@ -61,32 +63,10 @@ public class AddTransportPanel extends TransportBasePanel {
 
 
         //TODO: remove this example code and replace with real data
-        class SearchableString implements Searchable {
 
-            private String string;
 
-            public SearchableString(String string) {
-                this.string = string;
-            }
-
-            @Override
-            public boolean isMatch(String query) {
-                return string.contains(query);
-            }
-
-            @Override
-            public String getShortDescription() {
-                return string;
-            }
-
-            @Override
-            public String getLongDescription() {
-                return null;
-            }
-        }
-
-        List<Searchable> searchableStrings = List.of(new SearchableString("driver1"), new SearchableString("driver2"), new SearchableString("driver3"));
-        SearchBox drivers = new SearchBox(searchableStrings,"Select Driver",new Dimension(200,30), this);
+        List<Searchable> searchableList = List.of(new SearchableString("item1"), new SearchableString("item2"), new SearchableString("item3"));
+        SearchBox drivers = new SearchBox(searchableList,"Select Driver",new Dimension(200,30), this);
         constraints.gridx = 1;
         constraints.gridy = 3;
         constraints.gridwidth = 2;
@@ -101,13 +81,13 @@ public class AddTransportPanel extends TransportBasePanel {
         constraints.anchor = GridBagConstraints.WEST;
         constraints.insets = new Insets(5, 5, 5, 5);
         contentPanel.add(trucksLabel, constraints);
-        JButton addButton2 = new JButton("Trucks");
+        SearchBox trucks = new SearchBox(searchableList,"Select Truck",new Dimension(200,30), this);
         constraints.gridx = 1;
         constraints.gridy = 4;
         constraints.gridwidth = 2;
         constraints.fill = GridBagConstraints.NONE;
         constraints.anchor = GridBagConstraints.CENTER;
-        contentPanel.add(addButton2, constraints);
+        contentPanel.add(trucks.getComponent(), constraints);
 
         JLabel weightLabel = new JLabel("Truck Weight:");
         constraints.anchor = GridBagConstraints.WEST;

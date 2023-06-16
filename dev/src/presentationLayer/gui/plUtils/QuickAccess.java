@@ -5,6 +5,7 @@ import presentationLayer.gui.plAbstracts.UIElement;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.plaf.basic.BasicLabelUI;
 import java.awt.*;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -42,13 +43,31 @@ public class QuickAccess implements UIElement {
         int i = 0;
         gbc.gridy = 0;
         for (Pair<String, List<Link>> link : links) {
-            JLabel comp = new JLabel(link.getKey());
-            comp.setFont(comp.getFont().deriveFont(Font.BOLD).deriveFont(20f));
+            JLabel header = new JLabel(link.getKey());
+            header.setBorder(new EmptyBorder(0,20,5,0));
+            header.setUI(new BasicLabelUI(){
+
+                private final Color coolOrange = new Color(236, 119, 78);
+                @Override
+                public void paint(Graphics g, JComponent c) {
+                    Graphics2D g2 = (Graphics2D)g;
+                    g2.setPaint(coolOrange);
+                    g2.setStroke(new BasicStroke(5));
+                    g2.fillOval(0,c.getHeight()/4, c.getHeight()/2-5, c.getHeight()/2-5);
+                    g2.drawLine(0,c.getHeight(),panel.getWidth(),c.getHeight());
+                    super.paint(g2, c);
+                }
+            });
+
+
+
+
+            header.setFont(header.getFont().deriveFont(Font.BOLD).deriveFont(20f));
             gbc.insets = new Insets(0, 0, 20, 0);
             gbc.ipadx = 25;
             gbc.gridwidth = 1;
             gbc.anchor = GridBagConstraints.WEST;
-            panel.add(comp, gbc);
+            panel.add(header, gbc);
             gbc.gridy = ++i;
 
 

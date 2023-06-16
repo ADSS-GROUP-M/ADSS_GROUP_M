@@ -4,9 +4,15 @@ package presentationLayer.gui.plUtils;
 import presentationLayer.gui.plAbstracts.UIElement;
 
 import javax.swing.*;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.MatteBorder;
+import javax.swing.plaf.basic.BasicButtonUI;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.Objects;
 
 public class Link implements UIElement, ActionListener {
@@ -24,6 +30,43 @@ public class Link implements UIElement, ActionListener {
         button = new JButton(name);
         button.setPreferredSize(new Dimension(150, 20));
         button.addActionListener(this);
+        button.setBorder(new EmptyBorder(5, 15, 5, 5));
+        button.setBackground(Color.WHITE);
+        button.setUI(new BasicButtonUI() {
+            private final Color coolOrange = new Color(236, 119, 78);
+            @Override
+            public void paint(Graphics g, JComponent c) {
+                Graphics2D g2 = (Graphics2D)g;
+                g2.setColor(new Color(200, 200, 200));
+                g2.fillRect(15,0, c.getWidth(), c.getHeight()+5);
+                g2.fillArc(0,0,c.getHeight(),c.getHeight(),90,180);
+                g2.setColor(coolOrange);
+                g2.fillRect(c.getHeight()/2,0,c.getHeight()/2 , c.getHeight());
+                super.paint(g2, c);
+            }
+
+            @Override
+            protected void paintButtonPressed(Graphics g, AbstractButton b) {
+                Graphics2D g2 = (Graphics2D)g;
+                g2.setColor(new Color(224, 216, 216));
+                g2.fillRect(15,0, b.getWidth(), b.getHeight()+5);
+                g2.fillArc(0,0,b.getHeight(),b.getHeight(),90,180);
+                g2.setColor(coolOrange);
+                g2.fillRect(b.getHeight()/2,0,b.getHeight()/2 , b.getHeight());
+                super.paintButtonPressed(g, b);
+            }
+        });
+        button.addMouseListener(new MouseAdapter() {
+            public void mouseEntered(MouseEvent evt) {
+                button.setPreferredSize(new Dimension(button.getPreferredSize().width+10, button.getPreferredSize().height));
+                button.revalidate();
+            }
+
+            public void mouseExited(MouseEvent evt) {
+                button.setPreferredSize(new Dimension(button.getPreferredSize().width-10, button.getPreferredSize().height));
+                button.revalidate();
+            }
+        });
     }
 
     public String getName() {

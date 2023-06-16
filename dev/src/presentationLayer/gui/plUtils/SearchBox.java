@@ -268,6 +268,7 @@ public class SearchBox implements UIElement {
             public String getLongDescription() {
                 return null;
             }
+
         };
 
         Searchable s2 = new Searchable() {

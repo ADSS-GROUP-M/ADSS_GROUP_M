@@ -1,12 +1,11 @@
 package presentationLayer.gui.plAbstracts;
 
-import presentationLayer.gui.plUtils.examples.JPanelWithBackground;
+import presentationLayer.gui.plUtils.JPanelWithBackground;
 
 import javax.swing.*;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 import java.awt.*;
-import java.util.EventListener;
 
 public abstract class Panel implements UIElement, PopupMenuListener {
 
@@ -26,7 +25,7 @@ public abstract class Panel implements UIElement, PopupMenuListener {
 
     public abstract Component getComponent();
     public void componentResized(Dimension newSize) {
-        panel.setPreferredSize(new Dimension((int)(newSize.width*0.8),newSize.height));
+        panel.setPreferredSize(new Dimension((int)(newSize.width*0.8)-20,newSize.height-40));
         panel.revalidate();
     }
 

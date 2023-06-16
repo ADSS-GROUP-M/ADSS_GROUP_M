@@ -1,4 +1,4 @@
-package presentationLayer.gui.plUtils.examples;
+package presentationLayer.gui.plUtils;
 
 import javax.swing.*;
 import java.awt.*;

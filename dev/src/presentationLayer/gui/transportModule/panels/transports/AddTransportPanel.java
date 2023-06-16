@@ -6,10 +6,7 @@ import presentationLayer.gui.plUtils.SearchBox;
 import java.util.List;
 
 import javax.swing.*;
-import javax.swing.event.PopupMenuEvent;
-import javax.swing.event.PopupMenuListener;
 import java.awt.*;
-import java.util.ArrayList;
 
 public class AddTransportPanel extends TransportBasePanel {
     public AddTransportPanel() {
@@ -87,8 +84,7 @@ public class AddTransportPanel extends TransportBasePanel {
         }
 
         List<Searchable> searchableStrings = List.of(new SearchableString("driver1"), new SearchableString("driver2"), new SearchableString("driver3"));
-        SearchBox drivers = new SearchBox(searchableStrings,"Select Driver",new Dimension(200,30));
-        drivers.addPopupMenuListener(popupMenuListener);
+        SearchBox drivers = new SearchBox(searchableStrings,"Select Driver",new Dimension(200,30), repaintListener);
         constraints.gridx = 1;
         constraints.gridy = 3;
         constraints.gridwidth = 2;

@@ -28,7 +28,7 @@ public class SearchBox implements UIElement {
     private String[] lastFilteredData;
     private String text;
 
-    public SearchBox(List<Searchable> data,String defaultText, Dimension size){
+    public SearchBox(List<Searchable> data,String defaultText, Dimension size, PopupMenuListener repaintListener){
         this.size = size;
         this.data = data;
         String[] dataStrings = data.stream()
@@ -39,6 +39,7 @@ public class SearchBox implements UIElement {
         clearTextOnClick = true;
         isPopupClickable = true;
         this.defaultText = defaultText;
+        comboBox.addPopupMenuListener(repaintListener);
         init();
     }
 
@@ -246,10 +247,6 @@ public class SearchBox implements UIElement {
         // do nothing
     }
 
-    public void addPopupMenuListener(PopupMenuListener listener){
-        comboBox.addPopupMenuListener(listener);
-    }
-
     public static void main(String[] args){
 
 
@@ -344,7 +341,25 @@ public class SearchBox implements UIElement {
             }
         });
 
-        cp.getContentPanel().add(new SearchBox(List.of(s1,s2,s3,s4),"Enter site name or address",new Dimension(400, 30)).getComponent());
+        cp.getContentPanel().add(
+                new SearchBox(List.of(s1, s2, s3, s4), "Enter site name or address", new Dimension(400, 30),
+                        new PopupMenuListener() {
+                            @Override
+                            public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
+
+                            }
+
+                            @Override
+                            public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
+                                frame.repaint();
+                            }
+
+                            @Override
+                            public void popupMenuCanceled(PopupMenuEvent e) {
+
+                            }
+                        }
+                ).getComponent());
         JButton test = new JButton("test");
         cp.getContentPanel().add(test);
         frame.add(cp.getComponent());

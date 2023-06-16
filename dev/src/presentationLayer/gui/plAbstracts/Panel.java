@@ -10,16 +10,16 @@ import java.awt.*;
 public abstract class Panel implements UIElement {
 
     protected final JPanel panel;
-    protected final PopupMenuListener popupMenuListener;
+    protected final PopupMenuListener repaintListener;
 
     protected Panel(){
         panel = new JPanel();
-        popupMenuListener = getPopupMenuListener();
+        repaintListener = getRepaintListener();
     }
     protected Panel(String fileName){
         panel = new JPanelWithBackground(fileName);
         panel.paintComponents(panel.getGraphics());
-        popupMenuListener = getPopupMenuListener();
+        repaintListener = getRepaintListener();
     }
 
     public void add(Component component){
@@ -32,7 +32,7 @@ public abstract class Panel implements UIElement {
         panel.revalidate();
     }
 
-    private PopupMenuListener getPopupMenuListener(){
+    private PopupMenuListener getRepaintListener(){
         return new PopupMenuListener() {
             @Override public void popupMenuWillBecomeVisible(PopupMenuEvent e) {}
             @Override public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {panel.repaint();}

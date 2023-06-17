@@ -23,6 +23,9 @@ import presentationLayer.gui.transportModule.view.panels.trucks.AddTruckPanel;
 import presentationLayer.gui.transportModule.view.panels.trucks.UpdateTruckPanel;
 import presentationLayer.gui.transportModule.view.panels.trucks.ViewTrucksPanel;
 
+import static presentationLayer.gui.plAbstracts.ObservableUIElement.*;
+import static presentationLayer.gui.plAbstracts.ObservableUIElement.UIElementEvent.*;
+
 public class TransportView extends MainWindow {
 
     private Panel currentPanel;
@@ -55,33 +58,35 @@ public class TransportView extends MainWindow {
     private QuickAccess initQuickAccess(){
         return new QuickAccess()
                 .addCategory("Transport Management",
-                        new Link("View Transports", () -> subscribeAndSet(new ViewTransportsPanel(), transportsControl)),
-                        new Link("Add Transport", () -> subscribeAndSet(new AddTransportPanel(), transportsControl)),
-                        new Link("Update Transport", () -> subscribeAndSet(new UpdateTransportPanel(), transportsControl))
+                        new Link("View Transports", () -> subscribeAndSet(new ViewTransportsPanel(), transportsControl, GET_ALL, REMOVE)),
+                        new Link("Add Transport", () -> subscribeAndSet(new AddTransportPanel(), transportsControl, ADD)),
+                        new Link("Update Transport", () -> subscribeAndSet(new UpdateTransportPanel(), transportsControl, UPDATE,GET))
                 )
                 .addCategory("Item List Management",
-                        new Link("View Item Lists", () -> subscribeAndSet(new ViewItemListPanel(), itemListsControl)),
-                        new Link("Add Item List", () -> subscribeAndSet(new AddItemListPanel(), itemListsControl)),
-                        new Link("Update Item List", () -> subscribeAndSet(new UpdateItemListPanel(), itemListsControl))
+                        new Link("View Item Lists", () -> subscribeAndSet(new ViewItemListPanel(), itemListsControl, GET_ALL, REMOVE)),
+                        new Link("Add Item List", () -> subscribeAndSet(new AddItemListPanel(), itemListsControl, ADD)),
+                        new Link("Update Item List", () -> subscribeAndSet(new UpdateItemListPanel(), itemListsControl, UPDATE,GET))
                 )
                 .addCategory("Drivers Management",
-                        new Link("View Drivers", () -> subscribeAndSet(new ViewDriversPanel(), driversControl)),
-                        new Link("Update Driver", () -> subscribeAndSet(new UpdateDriversPanel(), driversControl))
+                        new Link("View Drivers", () -> subscribeAndSet(new ViewDriversPanel(), driversControl, GET_ALL, REMOVE)),
+                        new Link("Update Driver", () -> subscribeAndSet(new UpdateDriversPanel(), driversControl, UPDATE,GET))
                 )
                 .addCategory("Trucks Management",
-                        new Link("View Trucks", () -> subscribeAndSet(new ViewTrucksPanel(), trucksControl)),
-                        new Link("Add Truck", () -> subscribeAndSet(new AddTruckPanel(), trucksControl)),
-                        new Link("Update Truck", () -> subscribeAndSet(new UpdateTruckPanel(), trucksControl))
+                        new Link("View Trucks", () -> subscribeAndSet(new ViewTrucksPanel(), trucksControl, GET_ALL, REMOVE)),
+                        new Link("Add Truck", () -> subscribeAndSet(new AddTruckPanel(), trucksControl, ADD)),
+                        new Link("Update Truck", () -> subscribeAndSet(new UpdateTruckPanel(), trucksControl, UPDATE,GET))
                 )
                 .addCategory("Sites Management",
-                        new Link("View Sites", () -> subscribeAndSet(new ViewSitesPanel(), sitesControl)),
-                        new Link("Add Site", () -> subscribeAndSet(new AddSitePanel(), sitesControl)),
-                        new Link("Update Site", () -> subscribeAndSet(new UpdateSitePanel(), sitesControl))
+                        new Link("View Sites", () -> subscribeAndSet(new ViewSitesPanel(), sitesControl, GET_ALL, REMOVE)),
+                        new Link("Add Site", () -> subscribeAndSet(new AddSitePanel(), sitesControl, ADD)),
+                        new Link("Update Site", () -> subscribeAndSet(new UpdateSitePanel(), sitesControl, UPDATE,GET))
                 );
     }
 
-    private void subscribeAndSet(Panel panel, UIElementObserver observer) {
-        panel.subscribe(observer);
+    private void subscribeAndSet(Panel panel, UIElementObserver observer, UIElementEvent ... events) {
+        for (UIElementEvent event : events){
+            panel.subscribe(observer, event);
+        }
         setCurrentPanel(panel);
     }
 

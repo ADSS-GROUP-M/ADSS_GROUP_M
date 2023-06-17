@@ -94,7 +94,7 @@ public class AddTruckPanel extends TransportBasePanel {
     }
 
     @Override
-    public Object getUpdate() {
+    public Object getUpdate(UIElementEvent event) {
         return null;
     }
 }

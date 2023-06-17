@@ -6,20 +6,20 @@ import presentationLayer.gui.plAbstracts.PanelManager;
 import presentationLayer.gui.plAbstracts.MainWindow;
 import presentationLayer.gui.plUtils.Link;
 import presentationLayer.gui.plUtils.QuickAccess;
-import presentationLayer.gui.transportModule.panels.drivers.UpdateDriversPanel;
-import presentationLayer.gui.transportModule.panels.drivers.ViewDriversPanel;
-import presentationLayer.gui.transportModule.panels.itemsLists.AddItemListPanel;
-import presentationLayer.gui.transportModule.panels.itemsLists.UpdateItemListPanel;
-import presentationLayer.gui.transportModule.panels.itemsLists.ViewItemListPanel;
-import presentationLayer.gui.transportModule.panels.sites.AddSitePanel;
-import presentationLayer.gui.transportModule.panels.sites.UpdateSitePanel;
-import presentationLayer.gui.transportModule.panels.sites.ViewSitesPanel;
-import presentationLayer.gui.transportModule.panels.transports.AddTransportPanel;
-import presentationLayer.gui.transportModule.panels.transports.UpdateTransportPanel;
-import presentationLayer.gui.transportModule.panels.transports.ViewTransportsPanel;
-import presentationLayer.gui.transportModule.panels.trucks.AddTruckPanel;
-import presentationLayer.gui.transportModule.panels.trucks.UpdateTruckPanel;
-import presentationLayer.gui.transportModule.panels.trucks.ViewTrucksPanel;
+import presentationLayer.gui.transportModule.view.panels.drivers.UpdateDriversPanel;
+import presentationLayer.gui.transportModule.view.panels.drivers.ViewDriversPanel;
+import presentationLayer.gui.transportModule.view.panels.itemsLists.AddItemListPanel;
+import presentationLayer.gui.transportModule.view.panels.itemsLists.UpdateItemListPanel;
+import presentationLayer.gui.transportModule.view.panels.itemsLists.ViewItemListPanel;
+import presentationLayer.gui.transportModule.view.panels.sites.AddSitePanel;
+import presentationLayer.gui.transportModule.view.panels.sites.UpdateSitePanel;
+import presentationLayer.gui.transportModule.view.panels.sites.ViewSitesPanel;
+import presentationLayer.gui.transportModule.view.panels.transports.AddTransportPanel;
+import presentationLayer.gui.transportModule.view.panels.transports.UpdateTransportPanel;
+import presentationLayer.gui.transportModule.view.panels.transports.ViewTransportsPanel;
+import presentationLayer.gui.transportModule.view.panels.trucks.AddTruckPanel;
+import presentationLayer.gui.transportModule.view.panels.trucks.UpdateTruckPanel;
+import presentationLayer.gui.transportModule.view.panels.trucks.ViewTrucksPanel;
 
 public class TransportView extends MainWindow{
 

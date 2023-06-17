@@ -1,4 +1,4 @@
-package presentationLayer.gui.transportModule.panels.trucks;
+package presentationLayer.gui.transportModule.view.panels.trucks;
 
 import presentationLayer.gui.plAbstracts.TransportBasePanel;
 

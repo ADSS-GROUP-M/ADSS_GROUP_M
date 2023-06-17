@@ -65,12 +65,9 @@ public class Link implements UIElement, ActionListener {
             }
         });
         button.addMouseListener(new MouseAdapter() {
-
             Timer timer;
-            int i = 1;
-
+            int i = 0;
             public void mouseEntered(MouseEvent evt) {
-
                 if(timer != null && timer.isRunning()) {
                     timer.stop();
                 }
@@ -86,29 +83,23 @@ public class Link implements UIElement, ActionListener {
                     }
                 });
                 timer.start();
-//                button.setPreferredSize(new Dimension(button.getPreferredSize().width+10, button.getPreferredSize().height));
-//                button.revalidate();
             }
-
             public void mouseExited(MouseEvent evt) {
-                if(timer.isRunning()) {
+                if(timer!= null && timer.isRunning()) {
                     timer.stop();
                 }
 
-                timer = new Timer(10, e -> {
-                    button.setPreferredSize(new Dimension(preferredSize.width+i, preferredSize.height));
+                timer = new Timer(1, e -> {
+                    button.setPreferredSize(new Dimension(preferredSize.width + i, preferredSize.height));
                     button.revalidate();
                     button.repaint();
-                    if (i <= 1) {
-                        ((Timer)e.getSource()).stop();
+                    if (i <= 0) {
+                        timer.stop();
                     } else {
                         i -=2;
                     }
                 });
                 timer.start();
-
-//                button.setPreferredSize(new Dimension(button.getPreferredSize().width-10, button.getPreferredSize().height));
-//                button.revalidate();
             }
         });
     }

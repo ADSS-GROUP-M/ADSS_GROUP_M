@@ -1,4 +1,4 @@
-package presentationLayer.gui.transportModule.panels.transports;
+package presentationLayer.gui.transportModule.view.panels.transports;
 
 import presentationLayer.gui.plAbstracts.Searchable;
 import presentationLayer.gui.plAbstracts.TransportBasePanel;

@@ -1,4 +1,4 @@
-package presentationLayer.gui.transportModule.panels.drivers;
+package presentationLayer.gui.transportModule.view.panels.drivers;
 
 import presentationLayer.gui.plAbstracts.TransportBasePanel;
 

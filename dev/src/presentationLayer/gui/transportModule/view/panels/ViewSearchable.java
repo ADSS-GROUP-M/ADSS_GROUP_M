@@ -1,4 +1,4 @@
-package presentationLayer.gui.transportModule.panels;
+package presentationLayer.gui.transportModule.view.panels;
 
 import presentationLayer.gui.plAbstracts.UIElement;
 

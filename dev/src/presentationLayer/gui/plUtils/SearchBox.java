@@ -9,12 +9,15 @@ import presentationLayer.gui.plAbstracts.UIElement;
 import java.awt.event.*;
 import java.util.List;
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 import javax.swing.plaf.basic.BasicComboBoxUI;
 import javax.swing.plaf.basic.BasicComboPopup;
 import javax.swing.plaf.basic.ComboPopup;
 import java.awt.*;
+
+import static presentationLayer.gui.plUtils.Fonts.textBoxFont;
 
 
 public class SearchBox implements UIElement {
@@ -48,6 +51,7 @@ public class SearchBox implements UIElement {
         setText(defaultText);
         comboBox.setPreferredSize(size);
         comboBox.setMaximumRowCount(10);
+        comboBox.setFont(textBoxFont);
         comboBox.setUI(new BasicComboBoxUI(){
             @Override
             protected JButton createArrowButton() {
@@ -70,6 +74,7 @@ public class SearchBox implements UIElement {
 
                     @Override
                     protected JScrollPane createScroller() {
+                        list.setFont(textBoxFont);
                         JScrollPane scroll = new JScrollPane(list, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
                         scroll.setBackground(Color.WHITE);
                         scroll.getVerticalScrollBar().setUnitIncrement(30);
@@ -185,6 +190,7 @@ public class SearchBox implements UIElement {
                 return renderer;
             }
         });
+        comboBox.setBorder(new TextFieldBorder());
     }
 
     private void setText(String newText) {

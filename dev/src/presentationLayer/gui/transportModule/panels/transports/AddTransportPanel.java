@@ -2,6 +2,7 @@ package presentationLayer.gui.transportModule.panels.transports;
 
 import presentationLayer.gui.plAbstracts.Searchable;
 import presentationLayer.gui.plAbstracts.TransportBasePanel;
+import presentationLayer.gui.plUtils.PrettyTextField;
 import presentationLayer.gui.plUtils.SearchBox;
 import presentationLayer.gui.plUtils.SearchableString;
 
@@ -36,22 +37,24 @@ public class AddTransportPanel extends TransportBasePanel {
         constraints.insets = new Insets(5, 5, 5, 5);
         contentPanel.add(dateLabel, constraints);
 
-        JTextField dateField = new JTextField(20);
+        Dimension textFieldSize = new Dimension(200,30);
+
+        PrettyTextField dateField = new PrettyTextField(textFieldSize);
         constraints.gridx = 1;
         constraints.gridy = 1;
         constraints.fill = GridBagConstraints.HORIZONTAL;
-        contentPanel.add(dateField, constraints);
+        contentPanel.add(dateField.getComponent(), constraints);
 
         JLabel timeLabel = new JLabel("Departure Time:");
         constraints.gridx = 0;
         constraints.gridy = 2;
         contentPanel.add(timeLabel, constraints);
 
-        JTextField timeField = new JTextField(20);
+        PrettyTextField timeField = new PrettyTextField(textFieldSize);
         constraints.gridx = 1;
         constraints.gridy = 2;
         constraints.fill = GridBagConstraints.HORIZONTAL;
-        contentPanel.add(timeField, constraints);
+        contentPanel.add(timeField.getComponent(), constraints);
 
         JLabel driversLabel = new JLabel("Pick Driver:");
         constraints.gridx = 0;
@@ -66,7 +69,7 @@ public class AddTransportPanel extends TransportBasePanel {
 
 
         List<Searchable> searchableList = List.of(new SearchableString("item1"), new SearchableString("item2"), new SearchableString("item3"));
-        SearchBox drivers = new SearchBox(searchableList,"Select Driver",new Dimension(200,30), this);
+        SearchBox drivers = new SearchBox(searchableList,"Select Driver",textFieldSize, this);
         constraints.gridx = 1;
         constraints.gridy = 3;
         constraints.gridwidth = 2;
@@ -81,7 +84,7 @@ public class AddTransportPanel extends TransportBasePanel {
         constraints.anchor = GridBagConstraints.WEST;
         constraints.insets = new Insets(5, 5, 5, 5);
         contentPanel.add(trucksLabel, constraints);
-        SearchBox trucks = new SearchBox(searchableList,"Select Truck",new Dimension(200,30), this);
+        SearchBox trucks = new SearchBox(searchableList,"Select Truck",textFieldSize, this);
         constraints.gridx = 1;
         constraints.gridy = 4;
         constraints.gridwidth = 2;
@@ -96,11 +99,11 @@ public class AddTransportPanel extends TransportBasePanel {
         constraints.gridy = 5;
         contentPanel.add(weightLabel, constraints);
 
-        JTextField weightField = new JTextField(20);
+        PrettyTextField weightField = new PrettyTextField(textFieldSize);
         constraints.gridx = 1;
         constraints.gridy = 5;
         constraints.fill = GridBagConstraints.HORIZONTAL;
-        contentPanel.add(weightField, constraints);
+        contentPanel.add(weightField.getComponent(), constraints);
     }
 
 }

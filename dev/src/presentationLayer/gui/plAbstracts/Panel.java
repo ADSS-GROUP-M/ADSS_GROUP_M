@@ -7,19 +7,19 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 import java.awt.*;
+import java.util.LinkedList;
+import java.util.List;
 
-public abstract class Panel implements UIElement, PopupMenuListener {
+public abstract class Panel implements ObservableUIElement, PopupMenuListener {
 
     protected final JPanel panel;
+    protected final List<UIElementObserver> observers;
 
     protected Panel(){
-        panel = new JPanel();
-        panel.setBorder(new EmptyBorder(0,0,0,0));
-    }
-    protected Panel(String fileName){
         panel = new JPanelWithBackground();
         panel.paintComponents(panel.getGraphics());
         panel.setBorder(new EmptyBorder(0,0,0,0));
+        observers = new LinkedList<>();
     }
 
     public void add(Component component){
@@ -30,6 +30,23 @@ public abstract class Panel implements UIElement, PopupMenuListener {
     public void componentResized(Dimension newSize) {
         panel.setPreferredSize(new Dimension((int)(newSize.width*0.8)-20,newSize.height-40));
         panel.revalidate();
+    }
+
+    @Override
+    public void subscribe(UIElementObserver observer) {
+        observers.add(observer);
+    }
+
+    @Override
+    public void unsubscribe(UIElementObserver observer) {
+        observers.remove(observer);
+    }
+
+    @Override
+    public void notifyObservers() {
+        for(UIElementObserver observer : observers) {
+            observer.update(this);
+        }
     }
 
     @Override public void popupMenuWillBecomeVisible(PopupMenuEvent e) {}

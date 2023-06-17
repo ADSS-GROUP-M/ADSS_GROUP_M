@@ -97,4 +97,9 @@ public class AddTruckPanel extends TransportBasePanel {
 
         contentPanel.add(coolingPanel, constraints);
     }
+
+    @Override
+    public Object getUpdate() {
+        return null;
+    }
 }

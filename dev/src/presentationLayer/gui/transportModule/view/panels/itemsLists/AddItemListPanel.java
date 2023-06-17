@@ -70,4 +70,8 @@ public class AddItemListPanel extends TransportBasePanel {
 
     }
 
+    @Override
+    public Object getUpdate() {
+        return null;
+    }
 }

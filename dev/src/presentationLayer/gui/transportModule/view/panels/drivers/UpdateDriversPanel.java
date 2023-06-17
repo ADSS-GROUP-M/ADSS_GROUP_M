@@ -68,4 +68,9 @@ public class UpdateDriversPanel extends TransportBasePanel {
         constraints.anchor = GridBagConstraints.CENTER;
         contentPanel.add(Licences.getComponent(), constraints);
     }
+
+    @Override
+    public Object getUpdate() {
+        return null;
+    }
 }

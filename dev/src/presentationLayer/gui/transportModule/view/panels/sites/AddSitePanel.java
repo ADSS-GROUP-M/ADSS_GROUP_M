@@ -100,4 +100,9 @@ public class AddSitePanel extends TransportBasePanel {
 
         contentPanel.add(typePanel, constraints);
     }
+
+    @Override
+    public Object getUpdate() {
+        return null;
+    }
 }

@@ -1,7 +1,6 @@
 package presentationLayer.gui.plUtils.examples;
 
-    import javax.swing.*;
-import java.awt.*;
+import javax.swing.*;
 
     public class ExpandablePanelExample {
         public static void main(String[] args) {

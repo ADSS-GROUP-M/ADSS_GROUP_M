@@ -4,9 +4,10 @@ import presentationLayer.gui.plAbstracts.UIElement;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
-import java.awt.font.TextAttribute;
-import java.util.HashMap;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 import static presentationLayer.gui.plUtils.Fonts.textBoxFont;
 

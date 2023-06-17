@@ -1,13 +1,10 @@
 package presentationLayer.gui.plAbstracts;
 
-import presentationLayer.gui.plAbstracts.ScrollablePanel;
+import presentationLayer.gui.plUtils.Colors;
 import presentationLayer.gui.plUtils.ContentPanel;
 import presentationLayer.gui.plUtils.TextNote;
 
-import javax.swing.*;
 import java.awt.*;
-
-import static presentationLayer.gui.plUtils.ContentPanel.COLOR;
 
 public abstract class TransportBasePanel extends ScrollablePanel {
 
@@ -30,7 +27,7 @@ public abstract class TransportBasePanel extends ScrollablePanel {
     }
 
     private void init() {
-        contentPanel = new ContentPanel(COLOR);
+        contentPanel = new ContentPanel(Colors.getContentPanelColor());
         contentPanel.setLayout(new GridBagLayout());
         panel.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();

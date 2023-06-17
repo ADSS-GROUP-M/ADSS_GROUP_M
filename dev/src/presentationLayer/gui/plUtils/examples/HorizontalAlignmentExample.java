@@ -1,7 +1,6 @@
 package presentationLayer.gui.plUtils.examples;
 
 import javax.swing.*;
-import java.awt.*;
 
 public class HorizontalAlignmentExample {
     public static void main(String[] args) {

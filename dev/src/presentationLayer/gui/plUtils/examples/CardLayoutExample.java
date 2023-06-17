@@ -1,10 +1,7 @@
 package presentationLayer.gui.plUtils.examples;
 
-import java.awt.CardLayout;
-import java.awt.Dimension;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
+import java.awt.*;
 
 public class CardLayoutExample {
     private JFrame frame;

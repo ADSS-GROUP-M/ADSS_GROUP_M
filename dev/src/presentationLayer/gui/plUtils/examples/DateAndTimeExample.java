@@ -1,8 +1,7 @@
 package presentationLayer.gui.plUtils.examples;
+
 import javax.swing.*;
-import java.awt.*;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class DateAndTimeExample {
     public static void main(String[] args) {

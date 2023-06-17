@@ -1,6 +1,5 @@
 package presentationLayer.gui.employeeModule.view.panels;
 
-import presentationLayer.gui.plAbstracts.Panel;
 import presentationLayer.gui.plAbstracts.ScrollablePanel;
 
 import javax.swing.*;

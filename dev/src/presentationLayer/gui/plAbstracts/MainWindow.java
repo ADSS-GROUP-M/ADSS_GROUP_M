@@ -4,7 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 
 public abstract class MainWindow extends ComponentAdapter {
 

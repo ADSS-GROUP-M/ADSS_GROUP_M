@@ -6,10 +6,6 @@ import java.awt.*;
 
 public class ContentPanel extends JPanel {
 
-    private static final int MAX_ALPHA = 255;
-    private static final int MIN_ALPHA = 230;
-    public static final Color COLOR = new Color(255, 255, 255, MIN_ALPHA);
-
     public ContentPanel(Color backgroundColor){
         super();
         setBackground(backgroundColor);
@@ -39,46 +35,5 @@ public class ContentPanel extends JPanel {
                 return false;
             }
         });
-
-//        addMouseListener(new MouseAdapter() {
-//
-//            int i = MIN_ALPHA;
-//            Timer timer;
-//
-//            @Override
-//            public void mouseEntered(MouseEvent e) {
-//
-//                if(timer != null && timer.isRunning()){
-//                    timer.stop();
-//                }
-//                timer = new Timer(10, e2 -> {
-//                    if (i >= MAX_ALPHA) {
-//                        timer.stop();
-//                    } else {
-//                        i++;
-//                        setBackground(new Color(COLOR.getRed(), COLOR.getGreen(), COLOR.getBlue(), i));
-//                        getParent().repaint();
-//                    }
-//                });
-//                timer.start();
-//            }
-//            @Override
-//            public void mouseExited(MouseEvent e) {
-//
-//                if(timer != null && timer.isRunning()){
-//                    timer.stop();
-//                }
-//                timer = new Timer(10, e2 -> {
-//                    if (i <= MIN_ALPHA) {
-//                        timer.stop();
-//                    } else {
-//                        i--;
-//                        setBackground(new Color(COLOR.getRed(), COLOR.getGreen(), COLOR.getBlue(), i));
-//                        getParent().repaint();
-//                    }
-//                });
-//                timer.start();
-//            }
-//        });
     }
 }

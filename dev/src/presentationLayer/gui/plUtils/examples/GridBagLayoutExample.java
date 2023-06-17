@@ -1,7 +1,7 @@
 package presentationLayer.gui.plUtils.examples;
 
-import java.awt.*;
 import javax.swing.*;
+import java.awt.*;
 
 public class GridBagLayoutExample {
     public static void main(String[] args) {

@@ -1,9 +1,8 @@
 package presentationLayer.gui.transportModule.view;
 
+import presentationLayer.gui.plAbstracts.MainWindow;
 import presentationLayer.gui.plAbstracts.Panel;
 import presentationLayer.gui.plAbstracts.PanelManager;
-
-import presentationLayer.gui.plAbstracts.MainWindow;
 import presentationLayer.gui.plUtils.Link;
 import presentationLayer.gui.plUtils.QuickAccess;
 import presentationLayer.gui.transportModule.view.panels.drivers.UpdateDriversPanel;

@@ -2,9 +2,10 @@ package presentationLayer.gui.plUtils.examples;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.awt.event.*;
 
 public class HoveringPanelExample {
     public static void main(String[] args) {

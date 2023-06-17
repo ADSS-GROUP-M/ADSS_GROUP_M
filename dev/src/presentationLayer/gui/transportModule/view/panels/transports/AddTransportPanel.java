@@ -7,10 +7,9 @@ import presentationLayer.gui.plUtils.PrettyTextField;
 import presentationLayer.gui.plUtils.SearchBox;
 import presentationLayer.gui.plUtils.SearchableString;
 
-import java.util.List;
-
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
 
 public class AddTransportPanel extends TransportBasePanel {
     public AddTransportPanel() {

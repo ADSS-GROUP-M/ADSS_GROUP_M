@@ -1,7 +1,5 @@
 package presentationLayer.gui.plAbstracts;
 
-import com.sun.tools.javac.Main;
-
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;

@@ -5,8 +5,6 @@ import presentationLayer.gui.plAbstracts.Searchable;
 import presentationLayer.gui.plAbstracts.TransportBasePanel;
 import presentationLayer.gui.plAbstracts.UIElement;
 
-import java.awt.event.*;
-import java.util.List;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.event.PopupMenuEvent;
@@ -16,6 +14,8 @@ import javax.swing.plaf.basic.BasicComboBoxUI;
 import javax.swing.plaf.basic.BasicComboPopup;
 import javax.swing.plaf.basic.ComboPopup;
 import java.awt.*;
+import java.awt.event.*;
+import java.util.List;
 
 import static presentationLayer.gui.plUtils.Fonts.textBoxFont;
 

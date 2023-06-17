@@ -2,8 +2,8 @@ package presentationLayer.gui.transportModule.view.panels.trucks;
 
 import presentationLayer.gui.plAbstracts.TransportBasePanel;
 
-import java.awt.*;
 import javax.swing.*;
+import java.awt.*;
 
 
 public class UpdateTruckPanel extends TransportBasePanel {

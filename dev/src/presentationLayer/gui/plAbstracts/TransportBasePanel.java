@@ -20,7 +20,7 @@ public abstract class TransportBasePanel extends ScrollablePanel {
     protected ContentPanel contentPanel;
 
     public TransportBasePanel() {
-        super("src/resources/truck_main_page.jpg");
+        super("src/resources/cartoon_truck.jpg");
         init();
     }
 

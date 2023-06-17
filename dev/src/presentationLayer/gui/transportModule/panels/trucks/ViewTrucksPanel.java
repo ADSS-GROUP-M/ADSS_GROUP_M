@@ -17,7 +17,7 @@ public class ViewTrucksPanel extends TransportBasePanel {
     private JList<String> list;
     private JButton removeButton;
     public ViewTrucksPanel() {
-        super("src/resources/truck_main_page.jpg");
+        super();
         init();
 
     }

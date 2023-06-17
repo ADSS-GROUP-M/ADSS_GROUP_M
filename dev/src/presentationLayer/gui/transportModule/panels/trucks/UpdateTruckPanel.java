@@ -8,7 +8,7 @@ import javax.swing.*;
 
 public class UpdateTruckPanel extends TransportBasePanel {
     public UpdateTruckPanel() {
-        super("src/resources/truck_main_page.jpg");
+        super();
         init();
     }
     private void init() {

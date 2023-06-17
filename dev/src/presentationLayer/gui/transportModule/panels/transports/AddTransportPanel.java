@@ -12,7 +12,7 @@ import java.awt.*;
 
 public class AddTransportPanel extends TransportBasePanel {
     public AddTransportPanel() {
-        super("src/resources/truck_main_page.jpg");
+        super();
         init();
     }
 

@@ -8,7 +8,7 @@ import java.awt.*;
 public class AddSitePanel extends TransportBasePanel {
 
     public AddSitePanel() {
-        super("src/resources/truck_main_page.jpg");
+        super();
         init();
     }
 

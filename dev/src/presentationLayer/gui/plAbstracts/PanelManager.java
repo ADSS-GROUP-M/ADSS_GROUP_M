@@ -1,6 +1,7 @@
 package presentationLayer.gui.plAbstracts;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.util.LinkedList;
 
@@ -16,6 +17,7 @@ public class PanelManager implements UIElement {
         container = new JPanel();
         container.setLayout(cardLayout);
         container.setLocation((int)(MainWindow.screenSize.width*0.2), 0);
+        container.setBorder(new EmptyBorder(0,0,0,0));
         String name = startingPanel.getClass().getSimpleName();
         container.add(startingPanel.getComponent(),name);
         cardLayout.show(container,name);

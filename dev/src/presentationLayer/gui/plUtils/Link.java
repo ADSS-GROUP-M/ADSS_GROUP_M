@@ -15,6 +15,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Objects;
 
+import static presentationLayer.gui.plUtils.FavoriteColors.buttonColor;
+import static presentationLayer.gui.plUtils.FavoriteColors.coolOrange;
+
 public class Link implements UIElement, ActionListener {
 
     private final String name;
@@ -31,13 +34,14 @@ public class Link implements UIElement, ActionListener {
         button.setPreferredSize(new Dimension(150, 20));
         button.addActionListener(this);
         button.setBorder(new EmptyBorder(5, 15, 5, 5));
-        button.setBackground(Color.WHITE);
+        button.setBackground(FavoriteColors.coolOrangeBackground);
         button.setUI(new BasicButtonUI() {
-            private final Color coolOrange = new Color(236, 119, 78);
             @Override
             public void paint(Graphics g, JComponent c) {
                 Graphics2D g2 = (Graphics2D)g;
-                g2.setColor(new Color(200, 200, 200));
+                g2.setColor(buttonColor);
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB);
                 g2.fillRect(15,0, c.getWidth(), c.getHeight()+5);
                 g2.fillArc(0,0,c.getHeight(),c.getHeight(),90,180);
                 g2.setColor(coolOrange);
@@ -49,6 +53,8 @@ public class Link implements UIElement, ActionListener {
             protected void paintButtonPressed(Graphics g, AbstractButton b) {
                 Graphics2D g2 = (Graphics2D)g;
                 g2.setColor(new Color(224, 216, 216));
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB);
                 g2.fillRect(15,0, b.getWidth(), b.getHeight()+5);
                 g2.fillArc(0,0,b.getHeight(),b.getHeight(),90,180);
                 g2.setColor(coolOrange);

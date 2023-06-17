@@ -7,7 +7,7 @@ import java.awt.*;
 
 public class UpdateSitePanel extends TransportBasePanel {
     public UpdateSitePanel() {
-        super("src/resources/truck_main_page.jpg");
+        super();
         init();
     }
     private void init() {

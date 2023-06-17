@@ -8,7 +8,7 @@ import java.awt.*;
 public class UpdateDriversPanel extends TransportBasePanel {
 
     public UpdateDriversPanel() {
-        super("src/resources/truck_main_page.jpg");
+        super();
         init();
     }
 

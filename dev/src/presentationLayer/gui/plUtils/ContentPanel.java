@@ -1,13 +1,8 @@
 package presentationLayer.gui.plUtils;
 
-import presentationLayer.gui.plAbstracts.UIElement;
-
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 public class ContentPanel extends JPanel {
 
@@ -21,7 +16,7 @@ public class ContentPanel extends JPanel {
         setBorder(new Border() {
             @Override
             public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
-                g.setColor(FavoriteColors.coolOrangeTransparent);
+                g.setColor(Colors.getTrasparentForegroundColor());
                 //bottom
                 g.fillRect(0,height-10,width,height);
 

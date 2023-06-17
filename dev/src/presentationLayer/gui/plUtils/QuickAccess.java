@@ -12,8 +12,6 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import static presentationLayer.gui.plUtils.FavoriteColors.*;
-
 public class QuickAccess implements UIElement {
     private final List<Pair<String, List<Link>>> links;
     private final JPanel panel;
@@ -22,13 +20,12 @@ public class QuickAccess implements UIElement {
     public QuickAccess(){
         links = new LinkedList<>();
         panel = new JPanel();
-        Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
         scrollPane = new JScrollPane(panel);
         scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setBorder(new Border() {
             @Override
             public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
-                g.setColor(coolOrangeTransparent);
+                g.setColor(Colors.getTrasparentForegroundColor());
                 g.fillRect(x,y,width,height);
             }
             @Override
@@ -44,7 +41,7 @@ public class QuickAccess implements UIElement {
         scrollPane.getVerticalScrollBar().setUnitIncrement(30);
 
         panel.setBorder(new EmptyBorder(0,7,30,0));
-        panel.setBackground(coolOrangeBackground);
+        panel.setBackground(Colors.getBackgroundColor());
 
     }
 
@@ -70,7 +67,7 @@ public class QuickAccess implements UIElement {
                 @Override
                 public void paint(Graphics g, JComponent c) {
                     Graphics2D g2 = (Graphics2D)g;
-                    g2.setPaint(coolOrange);
+                    g2.setPaint(Colors.getForegroundColor());
                     g2.setStroke(new BasicStroke(5));
                     g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
                     g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB);

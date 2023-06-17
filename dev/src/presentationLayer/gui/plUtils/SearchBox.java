@@ -2,7 +2,6 @@ package presentationLayer.gui.plUtils;
 
 
 import presentationLayer.gui.plAbstracts.Searchable;
-import presentationLayer.gui.plAbstracts.Panel;
 import presentationLayer.gui.plAbstracts.TransportBasePanel;
 import presentationLayer.gui.plAbstracts.UIElement;
 
@@ -64,7 +63,7 @@ public class SearchBox implements UIElement {
                     public void paint(Graphics g, JComponent c) {
 
                         Graphics2D g2 = (Graphics2D) g;
-                        g2.setColor(FavoriteColors.coolOrange);
+                        g2.setColor(Colors.getForegroundColor());
                         g2.setStroke(new BasicStroke(2));
                         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
                         Shape triangle = new Polygon(
@@ -82,7 +81,7 @@ public class SearchBox implements UIElement {
                         g2.setColor(new Color(200,200,200, 128));
                         g2.fillRect(0,0,b.getWidth(),b.getHeight());
 
-                        g2.setColor(FavoriteColors.coolOrange);
+                        g2.setColor(Colors.getForegroundColor());
                         g2.setStroke(new BasicStroke(2));
                         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
                         Shape triangle = new Polygon(
@@ -98,7 +97,7 @@ public class SearchBox implements UIElement {
                         Graphics2D g2 = (Graphics2D) g;
                         g2.setStroke(new BasicStroke(2));
                         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                        g.setColor(FavoriteColors.coolOrange);
+                        g.setColor(Colors.getForegroundColor());
                         g2.drawLine(0, (int) (height/6.0),0, (int) (5*height/6.0));
                     }
 

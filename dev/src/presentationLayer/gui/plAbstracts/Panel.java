@@ -17,7 +17,7 @@ public abstract class Panel implements UIElement, PopupMenuListener {
         panel.setBorder(new EmptyBorder(0,0,0,0));
     }
     protected Panel(String fileName){
-        panel = new JPanelWithBackground(fileName);
+        panel = new JPanelWithBackground();
         panel.paintComponents(panel.getGraphics());
         panel.setBorder(new EmptyBorder(0,0,0,0));
     }

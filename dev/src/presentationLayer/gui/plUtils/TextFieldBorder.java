@@ -6,7 +6,7 @@ import java.awt.*;
 class TextFieldBorder implements Border {
     @Override
     public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
-        g.setColor(FavoriteColors.coolOrange);
+        g.setColor(Colors.getForegroundColor());
         g.fillRect(x, height - 2, width, 2); // bottom
         g.setColor(new Color(200, 200, 200));
         g.fillRect(0, 0, width, 1); // top

@@ -4,6 +4,7 @@ package presentationLayer.gui.plUtils;
 import presentationLayer.gui.plAbstracts.UIElement;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
@@ -35,30 +36,42 @@ public class Link implements UIElement, ActionListener {
         preferredSize = new Dimension(150, 20);
         button.setPreferredSize(preferredSize);
         button.addActionListener(this);
-        button.setBorder(new EmptyBorder(5, 15, 5, 5));
-        button.setBackground(FavoriteColors.coolOrangeBackground);
-        button.setUI(new BasicButtonUI() {
+//        button.setBorder(new EmptyBorder(5, 15, 5, 5));
+        button.setBorder(new Border() {
             @Override
-            public void paint(Graphics g, JComponent c) {
-                Graphics2D g2 = (Graphics2D)g;
-                g2.setColor(buttonColor);
+            public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
+                Graphics2D g2 = (Graphics2D) g;
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
                 g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB);
-                g2.fillRect(15,0, c.getWidth(), c.getHeight()+5);
-                g2.fillArc(0,0,c.getHeight(),c.getHeight(),90,180);
                 g2.setColor(coolOrange);
+                g2.drawLine(15,1, c.getWidth(), 1);
+                g2.drawLine(15,height-1, c.getWidth(), height-1);
+                g2.drawArc(2,1,c.getHeight()-2,c.getHeight()-2,90,180);
                 g2.fillRect(c.getHeight()/2,0,c.getHeight()/2 , c.getHeight());
-                super.paint(g2, c);
             }
 
             @Override
+            public Insets getBorderInsets(Component c) {
+                return new Insets(0,0,0,0);
+            }
+
+            @Override
+            public boolean isBorderOpaque() {
+                return false;
+            }
+        });
+        button.setBackground(FavoriteColors.coolOrangeBackground);
+        button.setUI(new BasicButtonUI() {
+            @Override
             protected void paintButtonPressed(Graphics g, AbstractButton b) {
-                Graphics2D g2 = (Graphics2D)g;
-                g2.setColor(new Color(224, 216, 216));
+                Graphics2D g2 = (Graphics2D) g;
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
                 g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB);
-                g2.fillRect(15,0, b.getWidth(), b.getHeight()+5);
-                g2.fillArc(0,0,b.getHeight(),b.getHeight(),90,180);
+                g2.setColor(coolOrange);
+
+                g2.setColor(new Color(224, 216, 216));
+                g2.fillRect(15,1, b.getWidth(), b.getHeight());
+                g2.fillArc(2,1,b.getHeight()-2,b.getHeight()-2,90,180);
                 g2.setColor(coolOrange);
                 g2.fillRect(b.getHeight()/2,0,b.getHeight()/2 , b.getHeight());
                 super.paintButtonPressed(g, b);

@@ -12,6 +12,7 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
+import javax.swing.plaf.basic.BasicButtonUI;
 import javax.swing.plaf.basic.BasicComboBoxUI;
 import javax.swing.plaf.basic.BasicComboPopup;
 import javax.swing.plaf.basic.ComboPopup;
@@ -41,7 +42,7 @@ public class SearchBox implements UIElement {
         lastFilteredData = dataStrings;
         clearTextOnClick = true;
         isPopupClickable = true;
-        this.defaultText = defaultText;
+        this.defaultText = "    "+defaultText;
         comboBox.addPopupMenuListener(repaintListener);
         init();
     }
@@ -55,17 +56,99 @@ public class SearchBox implements UIElement {
         comboBox.setUI(new BasicComboBoxUI(){
             @Override
             protected JButton createArrowButton() {
-                return new JButton(){
+                JButton but = new JButton();
+                but.setBackground(Color.WHITE);
+                but.setUI(new BasicButtonUI(){
+
                     @Override
-                    public int getWidth() {
-                        return 0;
+                    public void paint(Graphics g, JComponent c) {
+
+                        Graphics2D g2 = (Graphics2D) g;
+                        g2.setColor(FavoriteColors.coolOrange);
+                        g2.setStroke(new BasicStroke(2));
+                        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                        Shape triangle = new Polygon(
+                                new int[]{(int) (2*c.getWidth()/6.0)-1, (int) (3*c.getWidth()/6.0), (int) (4*c.getWidth()/6.0)},
+                                new int[]{c.getHeight()/3, (int) (2*c.getHeight()/3.0),c.getHeight()/3},3);
+                        g2.fill(triangle);
+                        super.paint(g2, c);
                     }
 
                     @Override
-                    public synchronized void addMouseListener(MouseListener l) {
-                        // do nothing
+                    protected void paintButtonPressed(Graphics g, AbstractButton b) {
+
+                        Graphics2D g2 = (Graphics2D) g;
+
+                        g2.setColor(new Color(200,200,200, 128));
+                        g2.fillRect(0,0,b.getWidth(),b.getHeight());
+
+                        g2.setColor(FavoriteColors.coolOrange);
+                        g2.setStroke(new BasicStroke(2));
+                        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                        Shape triangle = new Polygon(
+                                new int[]{(int) (2*b.getWidth()/6.0)-1, (int) (3*b.getWidth()/6.0), (int) (4*b.getWidth()/6.0)},
+                                new int[]{b.getHeight()/3, (int) (2*b.getHeight()/3.0),b.getHeight()/3},3);
+                        g2.fill(triangle);
+                        super.paintButtonPressed(g2, b);
                     }
-                };
+                });
+                but.setBorder(new Border() {
+                    @Override
+                    public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
+                        Graphics2D g2 = (Graphics2D) g;
+                        g2.setStroke(new BasicStroke(2));
+                        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                        g.setColor(FavoriteColors.coolOrange);
+                        g2.drawLine(0, (int) (height/6.0),0, (int) (5*height/6.0));
+                    }
+
+                    @Override
+                    public Insets getBorderInsets(Component c) {
+                        return new Insets(0,0,0,0);
+                    }
+
+                    @Override
+                    public boolean isBorderOpaque() {
+                        return false;
+                    }
+                });
+                but.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseEntered(MouseEvent e) {
+                        super.mouseEntered(e);
+                        but.setBackground(new Color(200,200,200, 64));
+                        comboBox.revalidate();
+                        comboBox.repaint();
+                    }
+
+                    @Override
+                    public void mouseExited(MouseEvent e) {
+                        super.mouseExited(e);
+                        but.setBackground(Color.WHITE);
+                        comboBox.revalidate();
+                        comboBox.repaint();
+                    }
+
+                    @Override
+                    public void mousePressed(MouseEvent e){
+                        super.mousePressed(e);
+                        if(clearTextOnClick){
+                            setText("");
+                            clearTextOnClick = false;
+                        }
+                        comboBox.revalidate();
+                        comboBox.repaint();
+                    }
+
+                    @Override
+                    public void mouseReleased(MouseEvent e) {
+                        super.mouseReleased(e);
+                        comboBox.revalidate();
+                        comboBox.repaint();
+                    }
+                });
+
+                return but;
             }
 
             @Override
@@ -154,13 +237,9 @@ public class SearchBox implements UIElement {
                 filterResults();
             }
             @Override
-            public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
-//                comboBox.getParent().getParent().repaint();
-            }
+            public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {}
             @Override
-            public void popupMenuCanceled(PopupMenuEvent e) {
-
-            }
+            public void popupMenuCanceled(PopupMenuEvent e) {}
         });
         comboBox.getEditor().getEditorComponent().addMouseListener(new MouseAdapter() {
 

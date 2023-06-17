@@ -37,7 +37,7 @@ public class QuickAccess implements UIElement {
             }
             @Override
             public boolean isBorderOpaque() {
-                return true;
+                return false;
             }
         });
         scrollPane.setVerticalScrollBar(new PrettyScrollBar(360));

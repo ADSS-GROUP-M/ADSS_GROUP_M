@@ -65,4 +65,9 @@ public class UpdateSitePanel extends TransportBasePanel {
         constraints.fill = GridBagConstraints.HORIZONTAL;
         contentPanel.add(maxField, constraints);
     }
+
+    @Override
+    public Object getUpdate() {
+        return null;
+    }
 }

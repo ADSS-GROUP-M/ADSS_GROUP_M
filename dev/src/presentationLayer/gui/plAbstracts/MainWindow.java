@@ -7,10 +7,9 @@ import java.awt.event.ComponentEvent;
 import java.util.HashSet;
 import java.util.Set;
 
-public abstract class MainWindow extends ComponentAdapter {
+public abstract class MainWindow {
 
     public static final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-
     protected final JFrame container;
     protected final String title;
     private final Set<UIElement> components;
@@ -19,7 +18,19 @@ public abstract class MainWindow extends ComponentAdapter {
         this.title = title;
         container = new JFrame();
         components = new HashSet<>();
-        container.addComponentListener(this);
+        container.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                super.componentResized(e);
+                components.forEach(component -> component.componentResized(container.getSize()));
+                container.revalidate();
+            }
+            @Override
+            public void componentMoved(ComponentEvent e) {
+                super.componentMoved(e);
+                componentResized(e);
+            }
+        });
     }
 
     protected void init(){
@@ -40,19 +51,5 @@ public abstract class MainWindow extends ComponentAdapter {
 
     protected void setVisible(boolean b){
         container.setVisible(b);
-    }
-
-    double oldWidth = 0;
-    double oldHeight = 0;
-
-    @Override
-    public void componentResized(ComponentEvent e){
-        components.forEach(component -> component.componentResized(container.getSize()));
-        container.revalidate();
-    }
-
-    @Override
-    public void componentMoved(ComponentEvent e){
-        componentResized(e);
     }
 }

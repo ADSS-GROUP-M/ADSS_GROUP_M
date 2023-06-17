@@ -10,12 +10,7 @@ public class EmployeesPanel extends ScrollablePanel {
     private JScrollPane scrollPane;
 
     public EmployeesPanel() {
-        super("src/resources/hr_background.jpg");
-        init();
-    }
-
-    public EmployeesPanel(String fileName) {
-        super(fileName);
+        super();
         init();
     }
 
@@ -33,5 +28,10 @@ public class EmployeesPanel extends ScrollablePanel {
     @Override
     public Component getComponent() {
         return scrollPane;
+    }
+
+    @Override
+    public Object getUpdate() {
+        return null;
     }
 }

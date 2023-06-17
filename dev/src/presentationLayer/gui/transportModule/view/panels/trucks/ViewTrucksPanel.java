@@ -82,5 +82,8 @@ public class ViewTrucksPanel extends TransportBasePanel {
     }
 
 
-
+    @Override
+    public Object getUpdate() {
+        return null;
+    }
 }

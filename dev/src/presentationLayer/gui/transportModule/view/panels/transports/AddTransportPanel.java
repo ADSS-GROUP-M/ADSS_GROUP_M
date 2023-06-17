@@ -151,9 +151,14 @@ public class AddTransportPanel extends TransportBasePanel {
     @Override
     public void componentResized(Dimension newSize) {
         super.componentResized(newSize);
-        Dimension preferredSize = new Dimension((int) (panel.getWidth() * 0.8), (int) (panel.getHeight()*0.6));
-        contentPanel.setPreferredSize(new Dimension(preferredSize.width, preferredSize.height+250));
+        Dimension preferredSize = new Dimension((int) (panel.getWidth() * 0.8), (int) (panel.getHeight()*0.9));
+        contentPanel.setPreferredSize(preferredSize);
 //        panel.setPreferredSize(new Dimension(preferredSize.width, preferredSize.height*2));
         scrollPane.revalidate();
+    }
+
+    @Override
+    public Object getUpdate() {
+        return null;
     }
 }

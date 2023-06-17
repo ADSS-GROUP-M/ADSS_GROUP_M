@@ -68,7 +68,6 @@ public class PrettyTextField implements UIElement {
         this.maxChars = maxChars;
     }
 
-
     @Override
     public Component getComponent() {
         return textField;

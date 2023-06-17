@@ -3,6 +3,8 @@ package presentationLayer.gui.plUtils;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class ContentPanel extends JPanel {
 
@@ -33,6 +35,14 @@ public class ContentPanel extends JPanel {
             @Override
             public boolean isBorderOpaque() {
                 return false;
+            }
+        });
+
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                requestFocus();
             }
         });
     }

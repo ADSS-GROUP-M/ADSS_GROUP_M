@@ -285,10 +285,12 @@ public class SearchBox implements UIElement {
         String newText = comboBox.getEditor().getItem().toString().trim();
 
         if(newText.equals(text)){
-            if(lastFilteredData.length == 1 && lastFilteredData[0].equals("No results found")){
+            if(newText.equals("") && lastFilteredData.length != data.size()){
                 lastFilteredData = data.stream()
                         .map(Searchable::getShortDescription)
                         .toArray(String[]::new);
+                comboBox.setModel(new DefaultComboBoxModel<>(lastFilteredData));
+                comboBox.showPopup();
             }
             return;
         }

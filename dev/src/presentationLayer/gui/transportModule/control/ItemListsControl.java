@@ -5,7 +5,7 @@ import presentationLayer.gui.plAbstracts.ObservableUIElement;
 
 public class ItemListsControl extends ControlBase {
     @Override
-    public void update(ObservableUIElement observable) {
+    public void update(ObservableUIElement observable, ObservableUIElement.UIElementEvent event) {
 
     }
 }

@@ -4,10 +4,13 @@ package presentationLayer.gui.transportModule.view.panels.trucks;
 import domainObjects.transportModule.Truck;
 import presentationLayer.gui.plAbstracts.Searchable;
 import presentationLayer.gui.plAbstracts.TransportBasePanel;
+import presentationLayer.gui.plUtils.Colors;
 import serviceLayer.ServiceFactory;
 import serviceLayer.transportModule.ResourceManagementService;
 
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -108,16 +111,51 @@ public class ViewTrucksPanel extends TransportBasePanel {
         // Create the JList
         list = new JList<>(listModel);
         listPanel = new JScrollPane(list);
-        JPanel innerPanel = new JPanel();
-        innerPanel.add(listPanel);
 
+        list.setBackground(new Color(0,0,0,0));
+        listPanel.setBorder(new EmptyBorder(0,0,0,0));
+        listPanel.setBackground(new Color(0,0,0,0));
+
+        list.setCellRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                Component renderer = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                renderer.setBackground(new Color(0,0,0,0));
+                if(isSelected) {
+                    renderer.setBackground(new Color(200,200,200));
+                }
+                panel.repaint();
+                setBorder(new Border() {
+                    @Override
+                    public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
+                        Graphics2D g2 = (Graphics2D) g;
+                        g2.setStroke(new BasicStroke(3));
+                        g2.setColor(Colors.getForegroundColor());
+                        g2.drawLine(0,height-1, width,height-1);
+                    }
+
+                    @Override
+                    public Insets getBorderInsets(Component c) {
+                        return new Insets(10,5,10,5);
+                    }
+
+                    @Override
+                    public boolean isBorderOpaque() {
+                        return false;
+                    }
+                });
+                return renderer;
+            }
+        });
+
+        JPanel innerPanel = new JPanel();
+        innerPanel.setBackground(new Color(0,0,0,0));
+        innerPanel.add(listPanel);
 
         addItem(s1.getShortDescription());
         addItem(s2.getShortDescription());
         addItem(s3.getShortDescription());
         addItem(s4.getShortDescription());
-
-
 
         // Create the remove button
         JButton removeButton = new JButton("Remove");

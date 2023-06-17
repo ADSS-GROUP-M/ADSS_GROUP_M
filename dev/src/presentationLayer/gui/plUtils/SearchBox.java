@@ -160,6 +160,7 @@ public class SearchBox implements UIElement {
                         list.setFont(textBoxFont);
                         JScrollPane scroll = new JScrollPane(list, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
                         scroll.setBackground(Color.WHITE);
+                        scroll.setVerticalScrollBar(new PrettyScrollBar(50));
                         scroll.getVerticalScrollBar().setUnitIncrement(30);
                         return scroll;
                     }

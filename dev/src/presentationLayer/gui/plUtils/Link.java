@@ -23,6 +23,7 @@ public class Link implements UIElement, ActionListener {
     private final String name;
     private final Runnable onClick;
     private final JButton button;
+    private final Dimension preferredSize;
 
     /**
      * @throws NullPointerException if name or onClick is null
@@ -31,7 +32,8 @@ public class Link implements UIElement, ActionListener {
         this.name = Objects.requireNonNull(name);
         this.onClick = Objects.requireNonNull(onClick);
         button = new JButton(name);
-        button.setPreferredSize(new Dimension(150, 20));
+        preferredSize = new Dimension(150, 20);
+        button.setPreferredSize(preferredSize);
         button.addActionListener(this);
         button.setBorder(new EmptyBorder(5, 15, 5, 5));
         button.setBackground(FavoriteColors.coolOrangeBackground);
@@ -63,14 +65,50 @@ public class Link implements UIElement, ActionListener {
             }
         });
         button.addMouseListener(new MouseAdapter() {
+
+            Timer timer;
+            int i = 1;
+
             public void mouseEntered(MouseEvent evt) {
-                button.setPreferredSize(new Dimension(button.getPreferredSize().width+10, button.getPreferredSize().height));
-                button.revalidate();
+
+                if(timer != null && timer.isRunning()) {
+                    timer.stop();
+                }
+
+                timer = new Timer(1, e -> {
+                    button.setPreferredSize(new Dimension(preferredSize.width + i, preferredSize.height));
+                    button.revalidate();
+                    button.repaint();
+                    if (i >= 10) {
+                        timer.stop();
+                    } else {
+                        i +=2;
+                    }
+                });
+                timer.start();
+//                button.setPreferredSize(new Dimension(button.getPreferredSize().width+10, button.getPreferredSize().height));
+//                button.revalidate();
             }
 
             public void mouseExited(MouseEvent evt) {
-                button.setPreferredSize(new Dimension(button.getPreferredSize().width-10, button.getPreferredSize().height));
-                button.revalidate();
+                if(timer.isRunning()) {
+                    timer.stop();
+                }
+
+                timer = new Timer(10, e -> {
+                    button.setPreferredSize(new Dimension(preferredSize.width+i, preferredSize.height));
+                    button.revalidate();
+                    button.repaint();
+                    if (i <= 1) {
+                        ((Timer)e.getSource()).stop();
+                    } else {
+                        i -=2;
+                    }
+                });
+                timer.start();
+
+//                button.setPreferredSize(new Dimension(button.getPreferredSize().width-10, button.getPreferredSize().height));
+//                button.revalidate();
             }
         });
     }

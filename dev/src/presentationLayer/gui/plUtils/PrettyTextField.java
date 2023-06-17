@@ -16,7 +16,6 @@ public class PrettyTextField implements UIElement {
     public PrettyTextField(Dimension size){
         textField = new JTextField();
         textField.setBorder(new TextFieldBorder());
-        System.out.println(textField.getPreferredSize());
         textField.setPreferredSize(size);
         textField.setFont(textBoxFont);
     }

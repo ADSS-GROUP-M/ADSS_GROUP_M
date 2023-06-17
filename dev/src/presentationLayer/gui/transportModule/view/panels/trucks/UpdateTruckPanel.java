@@ -1,9 +1,15 @@
 package presentationLayer.gui.transportModule.view.panels.trucks;
 
+import presentationLayer.gui.plAbstracts.Searchable;
 import presentationLayer.gui.plAbstracts.TransportBasePanel;
+import presentationLayer.gui.plUtils.Fonts;
+import presentationLayer.gui.plUtils.PrettyTextField;
+import presentationLayer.gui.plUtils.SearchBox;
+import presentationLayer.gui.plUtils.SearchableString;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
 
 
 public class UpdateTruckPanel extends TransportBasePanel {
@@ -12,62 +18,63 @@ public class UpdateTruckPanel extends TransportBasePanel {
         init();
     }
     private void init() {
-
         Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
         contentPanel.setSize(scrollPane.getSize());
-        JLabel header = new JLabel("Update Truck:\n");
-        header.setVerticalAlignment(JLabel.TOP);
 
         //Panel panel = new JPanel();
         contentPanel.setLayout(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
 
-        constraints.gridx = 0;
-        constraints.gridy = 0;
-        constraints.anchor = GridBagConstraints.WEST;
-        constraints.insets = new Insets(5, 5, 5, 5);
-        contentPanel.add(header, constraints);
-
+        //title
         JLabel trucksLabel = new JLabel("Pick Truck:");
         constraints.gridx = 0;
         constraints.gridy = 1;
         constraints.anchor = GridBagConstraints.WEST;
         constraints.insets = new Insets(5, 5, 5, 5);
         contentPanel.add(trucksLabel, constraints);
-        JButton addButton2 = new JButton("Trucks");
+
+        Dimension textFieldSize = new Dimension(220,30);
+
+        //button
+        List<Searchable> trucksSearchableList = List.of(new SearchableString("item1"), new SearchableString("item2"), new SearchableString("item3"));
+        SearchBox trucks = new SearchBox(trucksSearchableList,"Select Truck",textFieldSize, this);
         constraints.gridx = 1;
         constraints.gridy = 1;
         constraints.gridwidth = 2;
         constraints.fill = GridBagConstraints.NONE;
         constraints.anchor = GridBagConstraints.CENTER;
-        contentPanel.add(addButton2, constraints);
+        contentPanel.add(trucks.getComponent(), constraints);
 
-        JLabel baseLabel = new JLabel("New Base Weight:");
+        //title
+        JLabel baseLabel = new JLabel("Base Weight:");
+        constraints.anchor = GridBagConstraints.WEST;
+        constraints.gridwidth = 1;
         constraints.gridx = 0;
         constraints.gridy = 2;
-        constraints.gridwidth = 1;
-        constraints.anchor = GridBagConstraints.WEST;
         contentPanel.add(baseLabel, constraints);
 
-        JTextField baseField = new JTextField(20);
+        //text box
+        PrettyTextField baseField = new PrettyTextField(textFieldSize);
         constraints.gridx = 1;
         constraints.gridy = 2;
         constraints.fill = GridBagConstraints.HORIZONTAL;
-        contentPanel.add(baseField, constraints);
+        contentPanel.add(baseField.getComponent(), constraints);
 
-        JLabel maxLabel = new JLabel("New Max Weight:");
+        //title
+        JLabel maxLabel = new JLabel("Max Weight:");
         constraints.gridx = 0;
         constraints.gridy = 3;
         contentPanel.add(maxLabel, constraints);
 
-        JTextField maxField = new JTextField(20);
+        //text box
+        PrettyTextField maxField = new PrettyTextField(textFieldSize);
         constraints.gridx = 1;
         constraints.gridy = 3;
         constraints.fill = GridBagConstraints.HORIZONTAL;
-        contentPanel.add(maxField, constraints);
+        contentPanel.add(maxField.getComponent(), constraints);
 
-
-        JLabel coolingLabel = new JLabel("New Cooling Capacity:");
+        //title
+        JLabel coolingLabel = new JLabel("Cooling Capacity:");
         constraints.gridx = 0;
         constraints.gridy = 4;
         constraints.anchor = GridBagConstraints.WEST;
@@ -90,3 +97,4 @@ public class UpdateTruckPanel extends TransportBasePanel {
         contentPanel.add(coolingPanel, constraints);
     }
 }
+

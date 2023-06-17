@@ -43,7 +43,7 @@ public class QuickAccess implements UIElement {
         scrollPane.setVerticalScrollBar(new PrettyScrollBar(360));
         scrollPane.getVerticalScrollBar().setUnitIncrement(30);
 
-        panel.setBorder(new EmptyBorder(0,7,0,0));
+        panel.setBorder(new EmptyBorder(0,7,30,0));
         panel.setBackground(coolOrangeBackground);
 
     }
@@ -104,7 +104,7 @@ public class QuickAccess implements UIElement {
     @Override
     public void componentResized(Dimension newSize) {
         Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
-        panel.setSize((int)(d.width*0.20), (int)(newSize.getHeight()));
+//        panel.setSize((int)(d.width*0.20), (int)(newSize.getHeight()));
         scrollPane.setSize((int)(d.width*0.20),(int)(newSize.getHeight()));
         scrollPane.revalidate();
     }

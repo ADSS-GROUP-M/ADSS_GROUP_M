@@ -24,7 +24,7 @@ public abstract class MainWindow extends ComponentAdapter {
     protected void init(){
         container.setTitle(title);
         container.setBackground(Color.WHITE);
-        container.setMinimumSize(new Dimension(800, 600));
+        container.setMinimumSize(new Dimension(1024, 768));
         container.setExtendedState(JFrame.MAXIMIZED_BOTH);
         container.setLocationRelativeTo(null);
         container.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -41,9 +41,13 @@ public abstract class MainWindow extends ComponentAdapter {
         container.setVisible(b);
     }
 
+    double oldWidth = 0;
+    double oldHeight = 0;
+
     @Override
     public void componentResized(ComponentEvent e){
         components.forEach(component -> component.componentResized(container.getSize()));
+        container.revalidate();
     }
 
     @Override

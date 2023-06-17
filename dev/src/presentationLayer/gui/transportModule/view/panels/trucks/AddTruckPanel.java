@@ -94,8 +94,12 @@ public class AddTruckPanel extends TransportBasePanel {
         coolingPanel.add(none);
         coolingPanel.add(cold);
         coolingPanel.add(frozen);
-
         contentPanel.add(coolingPanel, constraints);
+
+        ButtonGroup group = new ButtonGroup();
+        group.add(none);
+        group.add(cold);
+        group.add(frozen);
     }
 
     @Override

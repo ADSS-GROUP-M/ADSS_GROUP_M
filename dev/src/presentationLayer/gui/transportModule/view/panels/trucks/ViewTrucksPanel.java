@@ -1,7 +1,11 @@
 package presentationLayer.gui.transportModule.view.panels.trucks;
 
 
+import domainObjects.transportModule.Truck;
+import presentationLayer.gui.plAbstracts.Searchable;
 import presentationLayer.gui.plAbstracts.TransportBasePanel;
+import serviceLayer.ServiceFactory;
+import serviceLayer.transportModule.ResourceManagementService;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,56 +19,131 @@ import static com.sun.java.accessibility.util.AWTEventMonitor.addWindowListener;
 public class ViewTrucksPanel extends TransportBasePanel {
     private DefaultListModel<String> listModel;
     private JList<String> list;
-    private JButton removeButton;
+    private JScrollPane listPanel;
+
     public ViewTrucksPanel() {
         super();
         init();
-
     }
-    private void init() {
-        Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
-        contentPanel.setSize(scrollPane.getSize());
-        JLabel header = new JLabel("Trucks:\n");
-        header.setVerticalAlignment(JLabel.TOP);
-        contentPanel.add(header);
 
-        contentPanel.setLayout(new BorderLayout());
+    private void init() {
+
         // Create the list model
+        Searchable s1 = new Searchable() {
+            final String description = "ItEm NuMbEr 1, beri cool. Case-insensitive Searchable example";
+            @Override
+            public boolean isMatch(String query) {
+                return description.toLowerCase().contains(query.toLowerCase());
+            }
+
+            @Override
+            public String getShortDescription() {
+                return description;
+            }
+
+            @Override
+            public String getLongDescription() {
+                return null;
+            }
+
+        };
+
+        Searchable s2 = new Searchable() {
+            final String description = "Item number 2, muy suave. case-sensitive Searchable example";
+            @Override
+            public boolean isMatch(String query) {
+                return description.contains(query);
+            }
+
+            @Override
+            public String getShortDescription() {
+                return description;
+            }
+
+            @Override
+            public String getLongDescription() {
+                return null;
+            }
+        };
+
+        Searchable s3 = new Searchable() {
+            final String description = "Item number 3, un poco loco";
+            @Override
+            public boolean isMatch(String query) {
+                return description.contains(query);
+            }
+
+            @Override
+            public String getShortDescription() {
+                return description;
+            }
+
+            @Override
+            public String getLongDescription() {
+                return null;
+            }
+        };
+
+        Searchable s4 = new Searchable() {
+            final String description = "Item number 4, el gato es en la mesa";
+            @Override
+            public boolean isMatch(String query) {
+                return description.contains(query);
+            }
+
+            @Override
+            public String getShortDescription() {
+                return description;
+            }
+
+            @Override
+            public String getLongDescription() {
+                return null;
+            }
+        };
+        contentPanel.setLayout(new GridBagLayout());
+        GridBagConstraints constraints = new GridBagConstraints();
         listModel = new DefaultListModel<>();
 
         // Create the JList
         list = new JList<>(listModel);
-        contentPanel.add(new JScrollPane(list), BorderLayout.CENTER);
-        for (int i = 0; i < 15; i++)
-            addItem("Element " + i);
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        listPanel = new JScrollPane(list);
+        JPanel innerPanel = new JPanel();
+        innerPanel.add(listPanel);
+
+
+        addItem(s1.getShortDescription());
+        addItem(s2.getShortDescription());
+        addItem(s3.getShortDescription());
+        addItem(s4.getShortDescription());
+
+
+
         // Create the remove button
-        removeButton = new JButton("Remove");
+        JButton removeButton = new JButton("Remove");
         removeButton.setPreferredSize(new Dimension(100, 30));
+        innerPanel.add(removeButton,constraints);
+        contentPanel.add(innerPanel,constraints);
         removeButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 showConfirmationDialog();
             }
         });
-        buttonPanel.add(removeButton);
-        contentPanel.add(buttonPanel, BorderLayout.SOUTH);
 
-        // Set up the confirmation dialog on window close
+
+
+         //Set up the confirmation dialog on window close
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
                 showConfirmationDialog();
             }
         });
-
-
     }
 
     private void removeSelectedItems(int selectedIndex) {
-        //int[] selectedIndices = list.getSelectedIndices();
-        //for (int i = selectedIndices.length - 1; i >= 0; i--) {
             listModel.remove(selectedIndex);
-        //}
+
     }
 
     public void addItem(String item) {
@@ -74,7 +153,7 @@ public class ViewTrucksPanel extends TransportBasePanel {
     private void showConfirmationDialog() {
         int[] selectedIndices = list.getSelectedIndices();
         if (selectedIndices.length > 0) {
-            int choice = JOptionPane.showConfirmDialog(getComponent(), "Are you sure you want to remove the selected item(s)?", "Confirmation", JOptionPane.YES_NO_OPTION);
+            int choice = JOptionPane.showConfirmDialog(getComponent(), "Are you sure you want to remove the selected item?", "Confirmation", JOptionPane.YES_NO_OPTION);
             if (choice == JOptionPane.YES_OPTION) {
                 removeSelectedItems(selectedIndices[0]);
             }
@@ -83,6 +162,15 @@ public class ViewTrucksPanel extends TransportBasePanel {
 
 
     @Override
+    public void componentResized(Dimension newSize) {
+        super.componentResized(newSize);
+        Dimension contentPreferredSize = new Dimension((int) (panel.getWidth() * 0.8), (int) (panel.getHeight() * 0.6));
+        contentPanel.setPreferredSize(new Dimension(contentPreferredSize.width, contentPreferredSize.height + 250));
+        Dimension preferredSize = new Dimension((int) (scrollPane.getWidth() * 0.6), (int) (scrollPane.getHeight() * 0.8));
+        listPanel.setPreferredSize(preferredSize);
+        listPanel.revalidate();
+        scrollPane.revalidate();
+    }
     public Object getUpdate(UIElementEvent event) {
         return null;
     }

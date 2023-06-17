@@ -30,23 +30,10 @@ public abstract class TransportBasePanel extends ScrollablePanel {
     }
 
     private void init() {
-        JLabel header = new JLabel("Welcome to the Transport Module!");
-        header.setFont(header.getFont().deriveFont(30f));
         contentPanel = new ContentPanel(COLOR);
-
         contentPanel.setLayout(new GridBagLayout());
         panel.setLayout(new GridBagLayout());
-
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridy = 0;
-
-        gbc.insets = new Insets(50,0,75,0);
-        panel.add(header,gbc);
-
-        gbc.gridy = 1;
-        gbc.weighty = 1;
-        gbc.insets = new Insets(0,0,0,0);
-        gbc.anchor = GridBagConstraints.NORTH;
         panel.add(contentPanel,gbc);
     }
 

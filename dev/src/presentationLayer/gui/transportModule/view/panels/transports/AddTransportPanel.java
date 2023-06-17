@@ -21,13 +21,11 @@ public class AddTransportPanel extends TransportBasePanel {
     private void init() {
         Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
         contentPanel.setSize(scrollPane.getSize());
-            JLabel header = new JLabel("Enter transport details:\n");
+//            JLabel header = new JLabel("Enter transport details:\n");
+//
+//        header.setVerticalAlignment(JLabel.TOP);
+//        contentPanel.add(header);
 
-        header.setVerticalAlignment(JLabel.TOP);
-        contentPanel.add(header);
-
-
-        //Panel panel = new JPanel();
         contentPanel.setLayout(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
 
@@ -132,4 +130,12 @@ public class AddTransportPanel extends TransportBasePanel {
         contentPanel.add(weightField.getComponent(), constraints);
     }
 
+    @Override
+    public void componentResized(Dimension newSize) {
+        super.componentResized(newSize);
+        Dimension preferredSize = new Dimension((int) (panel.getWidth() * 0.8), (int) (panel.getHeight()*0.6));
+        contentPanel.setPreferredSize(new Dimension(preferredSize.width, preferredSize.height+250));
+//        panel.setPreferredSize(new Dimension(preferredSize.width, preferredSize.height*2));
+        scrollPane.revalidate();
+    }
 }

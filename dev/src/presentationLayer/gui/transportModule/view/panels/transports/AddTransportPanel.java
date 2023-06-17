@@ -2,6 +2,7 @@ package presentationLayer.gui.transportModule.view.panels.transports;
 
 import presentationLayer.gui.plAbstracts.Searchable;
 import presentationLayer.gui.plAbstracts.TransportBasePanel;
+import presentationLayer.gui.plUtils.Fonts;
 import presentationLayer.gui.plUtils.PrettyTextField;
 import presentationLayer.gui.plUtils.SearchBox;
 import presentationLayer.gui.plUtils.SearchableString;
@@ -39,11 +40,36 @@ public class AddTransportPanel extends TransportBasePanel {
 
         Dimension textFieldSize = new Dimension(200,30);
 
-        PrettyTextField dateField = new PrettyTextField(textFieldSize);
+        // date text fields
+        PrettyTextField year = new PrettyTextField(new Dimension(75,30), "YYYY");
+        year.setHorizontalAlignment(JTextField.CENTER);
+        year.setMaximumCharacters(4);
+        JLabel slash1 = new JLabel("/");
+        slash1.setPreferredSize(new Dimension(10,30));
+        slash1.setHorizontalAlignment(JLabel.CENTER);
+        slash1.setFont(Fonts.textBoxFont.deriveFont(20f));
+        PrettyTextField month = new PrettyTextField(new Dimension(35,30), "MM");
+        month.setHorizontalAlignment(JTextField.CENTER);
+        month.setMaximumCharacters(2);
+        JLabel slash2 = new JLabel("/");
+        slash2.setHorizontalAlignment(JLabel.CENTER);
+        slash2.setPreferredSize(new Dimension(10,30));
+        slash2.setFont(Fonts.textBoxFont.deriveFont(20f));
+        PrettyTextField day = new PrettyTextField(new Dimension(35,30), "DD");
+        day.setHorizontalAlignment(JTextField.CENTER);
+        day.setMaximumCharacters(2);
+
+        JPanel datePanel = new JPanel();
+        datePanel.add(year.getComponent());
+        datePanel.add(slash1);
+        datePanel.add(month.getComponent());
+        datePanel.add(slash2);
+        datePanel.add(day.getComponent());
+
         constraints.gridx = 1;
         constraints.gridy = 1;
         constraints.fill = GridBagConstraints.HORIZONTAL;
-        contentPanel.add(dateField.getComponent(), constraints);
+        contentPanel.add(datePanel, constraints);
 
         JLabel timeLabel = new JLabel("Departure Time:");
         constraints.gridx = 0;

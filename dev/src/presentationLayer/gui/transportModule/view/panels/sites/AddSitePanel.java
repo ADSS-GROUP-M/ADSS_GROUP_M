@@ -1,24 +1,20 @@
 package presentationLayer.gui.transportModule.view.panels.sites;
 
 import presentationLayer.gui.plAbstracts.TransportBasePanel;
+import presentationLayer.gui.plUtils.PrettyTextField;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class AddSitePanel extends TransportBasePanel {
-
     public AddSitePanel() {
         super();
         init();
     }
-
     private void init() {
         Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
         contentPanel.setSize(scrollPane.getSize());
-        JLabel header = new JLabel("Enter Site details:\n");
-        header.setVerticalAlignment(JLabel.TOP);
-        contentPanel.add(header);
-
+        Dimension textFieldSize = new Dimension(200,30);
 
         //Panel panel = new JPanel();
         contentPanel.setLayout(new GridBagLayout());
@@ -31,55 +27,55 @@ public class AddSitePanel extends TransportBasePanel {
         constraints.insets = new Insets(5, 5, 5, 5);
         contentPanel.add(idLabel, constraints);
 
-        JTextField idField = new JTextField(20);
+        PrettyTextField idField = new PrettyTextField(textFieldSize);
         constraints.gridx = 1;
         constraints.gridy = 1;
         constraints.fill = GridBagConstraints.HORIZONTAL;
-        contentPanel.add(idField, constraints);
+        contentPanel.add(idField.getComponent(), constraints);
 
         JLabel addressLabel = new JLabel("Address:");
         constraints.gridx = 0;
         constraints.gridy = 2;
         contentPanel.add(addressLabel, constraints);
 
-        JTextField addressField = new JTextField(20);
+        PrettyTextField addressField = new PrettyTextField(textFieldSize);
         constraints.gridx = 1;
         constraints.gridy = 2;
         constraints.fill = GridBagConstraints.HORIZONTAL;
-        contentPanel.add(addressField, constraints);
+        contentPanel.add(addressField.getComponent(), constraints);
 
-        JLabel zoneLabel = new JLabel("Transport Zone");
+        JLabel zoneLabel = new JLabel("Transport Zone:");
         constraints.gridx = 0;
         constraints.gridy = 3;
         contentPanel.add(zoneLabel, constraints);
 
-        JTextField zoneField = new JTextField(20);
+        PrettyTextField zoneField = new PrettyTextField(textFieldSize);
         constraints.gridx = 1;
         constraints.gridy = 3;
         constraints.fill = GridBagConstraints.HORIZONTAL;
-        contentPanel.add(zoneField, constraints);
+        contentPanel.add(zoneField.getComponent(), constraints);
 
-        JLabel phoneLabel = new JLabel("Contact Phone");
+        JLabel phoneLabel = new JLabel("Contact Phone:");
         constraints.gridx = 0;
         constraints.gridy = 4;
         contentPanel.add(phoneLabel, constraints);
 
-        JTextField maxField = new JTextField(20);
+        PrettyTextField maxField = new PrettyTextField(textFieldSize);
         constraints.gridx = 1;
         constraints.gridy = 4;
         constraints.fill = GridBagConstraints.HORIZONTAL;
-        contentPanel.add(maxField, constraints);
+        contentPanel.add(maxField.getComponent(), constraints);
 
-        JLabel nameLabel = new JLabel("Contact Name");
+        JLabel nameLabel = new JLabel("Contact Name:");
         constraints.gridx = 0;
         constraints.gridy = 5;
         contentPanel.add(nameLabel, constraints);
 
-        JTextField nameField = new JTextField(20);
+        PrettyTextField nameField = new PrettyTextField(textFieldSize);
         constraints.gridx = 1;
         constraints.gridy = 5;
         constraints.fill = GridBagConstraints.HORIZONTAL;
-        contentPanel.add(nameField, constraints);
+        contentPanel.add(nameField.getComponent(), constraints);
 
 
         JLabel typeLabel = new JLabel("Site Type:");
@@ -101,8 +97,15 @@ public class AddSitePanel extends TransportBasePanel {
         typePanel.add(logisticCenter);
         typePanel.add(branch);
         typePanel.add(supplier);
-
-
         contentPanel.add(typePanel, constraints);
+        ButtonGroup group = new ButtonGroup();
+        group.add(logisticCenter);
+        group.add(branch);
+        group.add(supplier);
+    }
+
+    @Override
+    public Object getUpdate(UIElementEvent event) {
+        return null;
     }
 }

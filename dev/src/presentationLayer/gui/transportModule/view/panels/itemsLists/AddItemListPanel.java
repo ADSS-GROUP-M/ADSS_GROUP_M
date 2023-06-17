@@ -65,9 +65,11 @@ public class AddItemListPanel extends TransportBasePanel {
         constraints.fill = GridBagConstraints.HORIZONTAL;
 
         contentPanel.add(areaScrollPane2, constraints);
-
-
-
+        
     }
 
+    @Override
+    public Object getUpdate(UIElementEvent event) {
+        return null;
+    }
 }

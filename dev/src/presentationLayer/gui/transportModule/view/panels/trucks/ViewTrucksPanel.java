@@ -24,8 +24,8 @@ public class ViewTrucksPanel extends TransportBasePanel {
     public ViewTrucksPanel() {
         super();
         init();
-
     }
+
     private void init() {
 
         // Create the list model
@@ -139,7 +139,6 @@ public class ViewTrucksPanel extends TransportBasePanel {
                 showConfirmationDialog();
             }
         });
-
     }
 
     private void removeSelectedItems(int selectedIndex) {
@@ -165,11 +164,14 @@ public class ViewTrucksPanel extends TransportBasePanel {
     @Override
     public void componentResized(Dimension newSize) {
         super.componentResized(newSize);
-        Dimension contentPreferredSize = new Dimension((int) (panel.getWidth() * 0.8), (int) (panel.getHeight()*0.6));
-        contentPanel.setPreferredSize(new Dimension(contentPreferredSize.width, contentPreferredSize.height+250));
-        Dimension preferredSize = new Dimension((int) (scrollPane.getWidth()*0.6), (int) (scrollPane.getHeight()*0.8));
+        Dimension contentPreferredSize = new Dimension((int) (panel.getWidth() * 0.8), (int) (panel.getHeight() * 0.6));
+        contentPanel.setPreferredSize(new Dimension(contentPreferredSize.width, contentPreferredSize.height + 250));
+        Dimension preferredSize = new Dimension((int) (scrollPane.getWidth() * 0.6), (int) (scrollPane.getHeight() * 0.8));
         listPanel.setPreferredSize(preferredSize);
         listPanel.revalidate();
         scrollPane.revalidate();
+    }
+    public Object getUpdate(UIElementEvent event) {
+        return null;
     }
 }

@@ -23,6 +23,7 @@ public class AddTransportPanel extends TransportBasePanel {
 //        JLabel header = new JLabel("Enter transport details:\n");
 //        header.setVerticalAlignment(JLabel.TOP);
 //        contentPanel.add(header);
+        Dimension textFieldSize = new Dimension(200,30);
 
         contentPanel.setLayout(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
@@ -33,8 +34,6 @@ public class AddTransportPanel extends TransportBasePanel {
         constraints.anchor = GridBagConstraints.WEST;
         constraints.insets = new Insets(5, 5, 5, 5);
         contentPanel.add(dateLabel, constraints);
-
-        Dimension textFieldSize = new Dimension(200,30);
 
         // date text fields
         PrettyTextField year = new PrettyTextField(new Dimension(75,30), "YYYY");
@@ -126,6 +125,7 @@ public class AddTransportPanel extends TransportBasePanel {
         constraints.anchor = GridBagConstraints.WEST;
         constraints.insets = new Insets(5, 5, 5, 5);
         contentPanel.add(trucksLabel, constraints);
+
         SearchBox trucks = new SearchBox(searchableList,"Select Truck",textFieldSize, this);
         constraints.gridx = 1;
         constraints.gridy = 4;
@@ -151,9 +151,14 @@ public class AddTransportPanel extends TransportBasePanel {
     @Override
     public void componentResized(Dimension newSize) {
         super.componentResized(newSize);
-        Dimension preferredSize = new Dimension((int) (panel.getWidth() * 0.8), (int) (panel.getHeight()*0.6));
-        contentPanel.setPreferredSize(new Dimension(preferredSize.width, preferredSize.height+250));
+        Dimension preferredSize = new Dimension((int) (panel.getWidth() * 0.8), (int) (panel.getHeight()*0.9));
+        contentPanel.setPreferredSize(preferredSize);
 //        panel.setPreferredSize(new Dimension(preferredSize.width, preferredSize.height*2));
         scrollPane.revalidate();
+    }
+
+    @Override
+    public Object getUpdate(UIElementEvent event) {
+        return null;
     }
 }

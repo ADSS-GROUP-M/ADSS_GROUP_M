@@ -80,7 +80,8 @@ public class ViewTransportsPanel extends TransportBasePanel {
             }
         }
     }
-
-
-
+    @Override
+    public Object getUpdate(UIElementEvent event) {
+        return null;
+    }
 }

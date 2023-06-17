@@ -4,4 +4,8 @@ import presentationLayer.gui.plAbstracts.TransportBasePanel;
 
 public class UpdateTransportPanel extends TransportBasePanel {
 
+    @Override
+    public Object getUpdate(UIElementEvent event) {
+        return null;
+    }
 }

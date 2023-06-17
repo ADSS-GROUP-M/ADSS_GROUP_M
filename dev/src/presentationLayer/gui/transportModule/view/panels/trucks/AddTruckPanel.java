@@ -1,6 +1,7 @@
 package presentationLayer.gui.transportModule.view.panels.trucks;
 
 import presentationLayer.gui.plAbstracts.TransportBasePanel;
+import presentationLayer.gui.plUtils.PrettyTextField;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,11 +17,9 @@ public class AddTruckPanel extends TransportBasePanel {
 
         Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
         contentPanel.setSize(scrollPane.getSize());
-        JLabel header = new JLabel("Enter Truck Details:\n");
-        header.setVerticalAlignment(JLabel.TOP);
-        contentPanel.add(header);
 
-        //Panel panel = new JPanel();
+        Dimension textFieldSize = new Dimension(220,30);
+
         contentPanel.setLayout(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
 
@@ -31,44 +30,50 @@ public class AddTruckPanel extends TransportBasePanel {
         constraints.insets = new Insets(5, 5, 5, 5);
         contentPanel.add(idLabel, constraints);
 
-        JTextField idField = new JTextField(20);
+        PrettyTextField idField = new PrettyTextField(textFieldSize);
         constraints.gridx = 1;
         constraints.gridy = 1;
         constraints.fill = GridBagConstraints.HORIZONTAL;
-        contentPanel.add(idField, constraints);
+        contentPanel.add(idField.getComponent(), constraints);
 
         JLabel modelLabel = new JLabel("Model:");
         constraints.gridx = 0;
         constraints.gridy = 2;
+        constraints.anchor = GridBagConstraints.WEST;
+        constraints.insets = new Insets(5, 5, 5, 5);
         contentPanel.add(modelLabel, constraints);
 
-        JTextField modelField = new JTextField(20);
+        PrettyTextField modelField = new PrettyTextField(textFieldSize);
         constraints.gridx = 1;
         constraints.gridy = 2;
         constraints.fill = GridBagConstraints.HORIZONTAL;
-        contentPanel.add(modelField, constraints);
+        contentPanel.add(modelField.getComponent(), constraints);
 
         JLabel baseLabel = new JLabel("Base Weight:");
         constraints.gridx = 0;
         constraints.gridy = 3;
+        constraints.anchor = GridBagConstraints.WEST;
+        constraints.insets = new Insets(5, 5, 5, 5);
         contentPanel.add(baseLabel, constraints);
 
-        JTextField baseField = new JTextField(20);
+        PrettyTextField baseField = new PrettyTextField(textFieldSize);
         constraints.gridx = 1;
         constraints.gridy = 3;
         constraints.fill = GridBagConstraints.HORIZONTAL;
-        contentPanel.add(baseField, constraints);
+        contentPanel.add(baseField.getComponent(), constraints);
 
         JLabel maxLabel = new JLabel("Max Weight:");
         constraints.gridx = 0;
         constraints.gridy = 4;
+        constraints.anchor = GridBagConstraints.WEST;
+        constraints.insets = new Insets(5, 5, 5, 5);
         contentPanel.add(maxLabel, constraints);
 
-        JTextField maxField = new JTextField(20);
+        PrettyTextField maxField = new PrettyTextField(textFieldSize);
         constraints.gridx = 1;
         constraints.gridy = 4;
         constraints.fill = GridBagConstraints.HORIZONTAL;
-        contentPanel.add(maxField, constraints);
+        contentPanel.add(maxField.getComponent(), constraints);
 
         JLabel coolingLabel = new JLabel("Cooling Capacity:");
         constraints.gridx = 0;
@@ -89,7 +94,16 @@ public class AddTruckPanel extends TransportBasePanel {
         coolingPanel.add(none);
         coolingPanel.add(cold);
         coolingPanel.add(frozen);
-
         contentPanel.add(coolingPanel, constraints);
+
+        ButtonGroup group = new ButtonGroup();
+        group.add(none);
+        group.add(cold);
+        group.add(frozen);
+    }
+
+    @Override
+    public Object getUpdate(UIElementEvent event) {
+        return null;
     }
 }

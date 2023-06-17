@@ -12,7 +12,7 @@ import java.awt.event.WindowEvent;
 import static com.sun.java.accessibility.util.AWTEventMonitor.addWindowListener;
 
 public class ViewSitesPanel extends TransportBasePanel {
-
+    
     private DefaultListModel<String> listModel;
     private JList<String> list;
     private JButton removeButton;
@@ -82,6 +82,8 @@ public class ViewSitesPanel extends TransportBasePanel {
         }
     }
 
-
-
+    @Override
+    public Object getUpdate(UIElementEvent event) {
+        return null;
+    }
 }

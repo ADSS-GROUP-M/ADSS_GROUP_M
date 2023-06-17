@@ -19,8 +19,8 @@ public class ViewTrucksPanel extends TransportBasePanel {
     public ViewTrucksPanel() {
         super();
         init();
-
     }
+
     private void init() {
         Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
         contentPanel.setSize(scrollPane.getSize());
@@ -56,8 +56,6 @@ public class ViewTrucksPanel extends TransportBasePanel {
                 showConfirmationDialog();
             }
         });
-
-
     }
 
     private void removeSelectedItems(int selectedIndex) {

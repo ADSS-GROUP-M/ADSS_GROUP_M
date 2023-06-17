@@ -97,8 +97,11 @@ public class AddSitePanel extends TransportBasePanel {
         typePanel.add(logisticCenter);
         typePanel.add(branch);
         typePanel.add(supplier);
-
         contentPanel.add(typePanel, constraints);
+        ButtonGroup group = new ButtonGroup();
+        group.add(logisticCenter);
+        group.add(branch);
+        group.add(supplier);
     }
 
     @Override

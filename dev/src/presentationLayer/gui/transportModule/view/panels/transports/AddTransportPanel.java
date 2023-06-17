@@ -20,8 +20,7 @@ public class AddTransportPanel extends TransportBasePanel {
     private void init() {
         Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
         contentPanel.setSize(scrollPane.getSize());
-//            JLabel header = new JLabel("Enter transport details:\n");
-//
+//        JLabel header = new JLabel("Enter transport details:\n");
 //        header.setVerticalAlignment(JLabel.TOP);
 //        contentPanel.add(header);
 
@@ -41,17 +40,21 @@ public class AddTransportPanel extends TransportBasePanel {
         PrettyTextField year = new PrettyTextField(new Dimension(75,30), "YYYY");
         year.setHorizontalAlignment(JTextField.CENTER);
         year.setMaximumCharacters(4);
+
         JLabel slash1 = new JLabel("/");
         slash1.setPreferredSize(new Dimension(10,30));
         slash1.setHorizontalAlignment(JLabel.CENTER);
         slash1.setFont(Fonts.textBoxFont.deriveFont(20f));
+
         PrettyTextField month = new PrettyTextField(new Dimension(35,30), "MM");
         month.setHorizontalAlignment(JTextField.CENTER);
         month.setMaximumCharacters(2);
+
         JLabel slash2 = new JLabel("/");
         slash2.setHorizontalAlignment(JLabel.CENTER);
         slash2.setPreferredSize(new Dimension(10,30));
         slash2.setFont(Fonts.textBoxFont.deriveFont(20f));
+
         PrettyTextField day = new PrettyTextField(new Dimension(35,30), "DD");
         day.setHorizontalAlignment(JTextField.CENTER);
         day.setMaximumCharacters(2);
@@ -62,22 +65,38 @@ public class AddTransportPanel extends TransportBasePanel {
         datePanel.add(month.getComponent());
         datePanel.add(slash2);
         datePanel.add(day.getComponent());
-
         constraints.gridx = 1;
         constraints.gridy = 1;
         constraints.fill = GridBagConstraints.HORIZONTAL;
         contentPanel.add(datePanel, constraints);
 
+        // time text fields
         JLabel timeLabel = new JLabel("Departure Time:");
         constraints.gridx = 0;
         constraints.gridy = 2;
         contentPanel.add(timeLabel, constraints);
 
-        PrettyTextField timeField = new PrettyTextField(textFieldSize);
+        PrettyTextField hour = new PrettyTextField(new Dimension(35,30), "HH");
+        hour.setHorizontalAlignment(JTextField.CENTER);
+        hour.setMaximumCharacters(2);
+
+        JLabel colon = new JLabel(":");
+        colon.setHorizontalAlignment(JLabel.CENTER);
+        colon.setPreferredSize(new Dimension(10,30));
+        colon.setFont(Fonts.textBoxFont.deriveFont(20f));
+
+        PrettyTextField minute = new PrettyTextField(new Dimension(35,30), "MM");
+        minute.setHorizontalAlignment(JTextField.CENTER);
+        minute.setMaximumCharacters(2);
+
+        JPanel timePanel = new JPanel();
+        timePanel.add(hour.getComponent());
+        timePanel.add(colon);
+        timePanel.add(minute.getComponent());
         constraints.gridx = 1;
         constraints.gridy = 2;
         constraints.fill = GridBagConstraints.HORIZONTAL;
-        contentPanel.add(timeField.getComponent(), constraints);
+        contentPanel.add(timePanel, constraints);
 
         JLabel driversLabel = new JLabel("Pick Driver:");
         constraints.gridx = 0;

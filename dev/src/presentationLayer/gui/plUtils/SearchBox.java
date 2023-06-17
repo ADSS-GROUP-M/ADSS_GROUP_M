@@ -285,6 +285,11 @@ public class SearchBox implements UIElement {
         String newText = comboBox.getEditor().getItem().toString().trim();
 
         if(newText.equals(text)){
+            if(lastFilteredData.length == 1 && lastFilteredData[0].equals("No results found")){
+                lastFilteredData = data.stream()
+                        .map(Searchable::getShortDescription)
+                        .toArray(String[]::new);
+            }
             return;
         }
         String[] filteredData = data.stream()

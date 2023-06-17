@@ -1,6 +1,9 @@
-package presentationLayer.gui.plAbstracts;
+package presentationLayer.gui.plAbstracts.interfaces;
 
-public interface ObservableUIElement extends UIElement{
+import presentationLayer.gui.plAbstracts.interfaces.UIElement;
+import presentationLayer.gui.plAbstracts.interfaces.UIElementObserver;
+
+public interface ObservableUIElement extends UIElement {
 
     enum UIElementEvent {
         ADD,

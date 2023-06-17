@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
 
-public class Transport {
+public final class Transport {
     private final int id;
     private final List<String> route;
     private final Map<String,Integer> destinations_itemListIds;

@@ -1,12 +1,10 @@
 package presentationLayer.gui.transportModule.view.panels.trucks;
 
 
-import domainObjects.transportModule.Truck;
-import presentationLayer.gui.plAbstracts.Searchable;
-import presentationLayer.gui.plAbstracts.TransportBasePanel;
+import presentationLayer.gui.plAbstracts.interfaces.ObservableObject;
+import presentationLayer.gui.plAbstracts.interfaces.Searchable;
+import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
 import presentationLayer.gui.plUtils.Colors;
-import serviceLayer.ServiceFactory;
-import serviceLayer.transportModule.ResourceManagementService;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -19,7 +17,7 @@ import java.awt.event.WindowEvent;
 
 import static com.sun.java.accessibility.util.AWTEventMonitor.addWindowListener;
 
-public class ViewTrucksPanel extends TransportBasePanel {
+public class ViewTrucksPanel extends AbstractTransportModulePanel {
     private DefaultListModel<String> listModel;
     private JList<String> list;
     private JScrollPane listPanel;
@@ -211,5 +209,10 @@ public class ViewTrucksPanel extends TransportBasePanel {
     }
     public Object getUpdate(UIElementEvent event) {
         return null;
+    }
+
+    @Override
+    public void notify(ObservableObject observable) {
+
     }
 }

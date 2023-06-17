@@ -1,6 +1,6 @@
 package presentationLayer.gui.plUtils;
 
-import presentationLayer.gui.plAbstracts.Searchable;
+import presentationLayer.gui.plAbstracts.interfaces.Searchable;
 
 public class SearchableString implements Searchable {
 

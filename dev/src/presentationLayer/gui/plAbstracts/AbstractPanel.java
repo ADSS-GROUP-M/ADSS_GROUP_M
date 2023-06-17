@@ -1,21 +1,21 @@
 package presentationLayer.gui.plAbstracts;
 
+import presentationLayer.gui.plAbstracts.interfaces.Panel;
+import presentationLayer.gui.plAbstracts.interfaces.UIElementObserver;
 import presentationLayer.gui.plUtils.JPanelWithBackground;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.PopupMenuEvent;
-import javax.swing.event.PopupMenuListener;
 import java.awt.*;
 import java.util.*;
-import java.util.List;
 
-public abstract class Panel implements ObservableUIElement, PopupMenuListener {
+public abstract class AbstractPanel implements Panel {
 
     protected final JPanel panel;
     protected final Map<UIElementEvent, Set<UIElementObserver>> observers;
 
-    protected Panel(){
+    protected AbstractPanel(){
         panel = new JPanelWithBackground();
         panel.paintComponents(panel.getGraphics());
         panel.setBorder(new EmptyBorder(0,0,0,0));
@@ -48,7 +48,7 @@ public abstract class Panel implements ObservableUIElement, PopupMenuListener {
     @Override
     public void notifyObservers(UIElementEvent event) {
         for(UIElementObserver observer : observers.get(event)) {
-            observer.update(this, event);
+            observer.notify(this, event);
         }
     }
 

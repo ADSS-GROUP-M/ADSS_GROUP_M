@@ -1,13 +1,10 @@
 package presentationLayer.gui.transportModule.view;
 
 import presentationLayer.gui.plAbstracts.*;
-import presentationLayer.gui.plAbstracts.Panel;
+import presentationLayer.gui.plAbstracts.interfaces.Panel;
 import presentationLayer.gui.plUtils.Link;
 import presentationLayer.gui.plUtils.QuickAccess;
-import presentationLayer.gui.transportModule.control.DriversControl;
-import presentationLayer.gui.transportModule.control.ItemListsControl;
-import presentationLayer.gui.transportModule.control.SitesControl;
-import presentationLayer.gui.transportModule.control.TransportsControl;
+import presentationLayer.gui.transportModule.control.*;
 import presentationLayer.gui.transportModule.view.panels.drivers.UpdateDriversPanel;
 import presentationLayer.gui.transportModule.view.panels.drivers.ViewDriversPanel;
 import presentationLayer.gui.transportModule.view.panels.itemsLists.AddItemListPanel;
@@ -23,24 +20,24 @@ import presentationLayer.gui.transportModule.view.panels.trucks.AddTruckPanel;
 import presentationLayer.gui.transportModule.view.panels.trucks.UpdateTruckPanel;
 import presentationLayer.gui.transportModule.view.panels.trucks.ViewTrucksPanel;
 
-import static presentationLayer.gui.plAbstracts.ObservableUIElement.*;
-import static presentationLayer.gui.plAbstracts.ObservableUIElement.UIElementEvent.*;
+import static presentationLayer.gui.plAbstracts.interfaces.ObservableUIElement.*;
+import static presentationLayer.gui.plAbstracts.interfaces.ObservableUIElement.UIElementEvent.*;
 
 public class TransportView extends MainWindow {
 
     private Panel currentPanel;
     private final PanelManager panelManager;
-    private final UIElementObserver transportsControl;
-    private final UIElementObserver itemListsControl;
-    private final UIElementObserver driversControl;
-    private final UIElementObserver trucksControl;
-    private final UIElementObserver sitesControl;
+    private final TransportsControl transportsControl;
+    private final ItemListsControl itemListsControl;
+    private final DriversControl driversControl;
+    private final TrucksControl trucksControl;
+    private final SitesControl sitesControl;
 
-    public TransportView(UIElementObserver transportsControl,
-                         UIElementObserver itemListsControl,
-                         UIElementObserver driversControl,
-                         UIElementObserver trucksControl,
-                         UIElementObserver sitesControl) {
+    public TransportView(TransportsControl transportsControl,
+                         ItemListsControl itemListsControl,
+                         DriversControl driversControl,
+                         TrucksControl trucksControl,
+                         SitesControl sitesControl) {
         super("Transport Module");
         this.transportsControl = transportsControl;
         this.itemListsControl = itemListsControl;
@@ -57,35 +54,51 @@ public class TransportView extends MainWindow {
 
     private QuickAccess initQuickAccess(){
         return new QuickAccess()
-                .addCategory("Transport Management",
-                        new Link("View Transports", () -> subscribeAndSet(new ViewTransportsPanel(), transportsControl, GET_ALL, REMOVE)),
-                        new Link("Add Transport", () -> subscribeAndSet(new AddTransportPanel(), transportsControl, ADD)),
-                        new Link("Update Transport", () -> subscribeAndSet(new UpdateTransportPanel(), transportsControl, UPDATE,GET))
-                )
-                .addCategory("Item List Management",
-                        new Link("View Item Lists", () -> subscribeAndSet(new ViewItemListPanel(), itemListsControl, GET_ALL, REMOVE)),
-                        new Link("Add Item List", () -> subscribeAndSet(new AddItemListPanel(), itemListsControl, ADD)),
-                        new Link("Update Item List", () -> subscribeAndSet(new UpdateItemListPanel(), itemListsControl, UPDATE,GET))
-                )
-                .addCategory("Drivers Management",
-                        new Link("View Drivers", () -> subscribeAndSet(new ViewDriversPanel(), driversControl, GET_ALL, REMOVE)),
-                        new Link("Update Driver", () -> subscribeAndSet(new UpdateDriversPanel(), driversControl, UPDATE,GET))
-                )
-                .addCategory("Trucks Management",
-                        new Link("View Trucks", () -> subscribeAndSet(new ViewTrucksPanel(), trucksControl, GET_ALL, REMOVE)),
-                        new Link("Add Truck", () -> subscribeAndSet(new AddTruckPanel(), trucksControl, ADD)),
-                        new Link("Update Truck", () -> subscribeAndSet(new UpdateTruckPanel(), trucksControl, UPDATE,GET))
-                )
-                .addCategory("Sites Management",
-                        new Link("View Sites", () -> subscribeAndSet(new ViewSitesPanel(), sitesControl, GET_ALL, REMOVE)),
-                        new Link("Add Site", () -> subscribeAndSet(new AddSitePanel(), sitesControl, ADD)),
-                        new Link("Update Site", () -> subscribeAndSet(new UpdateSitePanel(), sitesControl, UPDATE,GET))
-                );
+        .addCategory("Transport Management",
+                new Link("View Transports",
+                        () -> subscribeAndSet(new ViewTransportsPanel(), transportsControl, GET_ALL, REMOVE)),
+                new Link("Add Transport",
+                        () -> subscribeAndSet(new AddTransportPanel(), transportsControl, ADD)),
+                new Link("Update Transport",
+                        () -> subscribeAndSet(new UpdateTransportPanel(), transportsControl, UPDATE, GET))
+        )
+        .addCategory("Item List Management",
+                new Link("View Item Lists",
+                        () -> subscribeAndSet(new ViewItemListPanel(), itemListsControl, GET_ALL, REMOVE)),
+                new Link("Add Item List",
+                        () -> subscribeAndSet(new AddItemListPanel(), itemListsControl, ADD)),
+                new Link("Update Item List",
+                        () -> subscribeAndSet(new UpdateItemListPanel(), itemListsControl, UPDATE, GET))
+        )
+        .addCategory("Drivers Management",
+                new Link("View Drivers",
+                        () -> subscribeAndSet(new ViewDriversPanel(), driversControl, GET_ALL, REMOVE)),
+                new Link("Update Driver",
+                        () -> subscribeAndSet(new UpdateDriversPanel(), driversControl, UPDATE, GET))
+        )
+        .addCategory("Trucks Management",
+                new Link("View Trucks",
+                        () -> subscribeAndSet(new ViewTrucksPanel(), trucksControl, GET_ALL, REMOVE)),
+                new Link("Add Truck",
+                        () -> subscribeAndSet(new AddTruckPanel(), trucksControl, ADD)),
+                new Link("Update Truck",
+                        () -> subscribeAndSet(new UpdateTruckPanel(), trucksControl, UPDATE, GET))
+        )
+        .addCategory("Sites Management",
+                new Link("View Sites",
+                        () -> subscribeAndSet(new ViewSitesPanel(), sitesControl, GET_ALL, REMOVE)),
+                new Link("Add Site",
+                        () -> subscribeAndSet(new AddSitePanel(), sitesControl, ADD)),
+                new Link("Update Site",
+                        () -> subscribeAndSet(new UpdateSitePanel(), sitesControl, UPDATE, GET))
+        );
     }
 
-    private void subscribeAndSet(Panel panel, UIElementObserver observer, UIElementEvent ... events) {
+    private void subscribeAndSet(AbstractTransportModulePanel panel, AbstractControl control, UIElementEvent ... events) {
+
+        control.getModel().subscribe(panel);
         for (UIElementEvent event : events){
-            panel.subscribe(observer, event);
+            panel.subscribe(control, event);
         }
         setCurrentPanel(panel);
     }
@@ -101,7 +114,7 @@ public class TransportView extends MainWindow {
         TransportsControl transportsControl = new TransportsControl();
         ItemListsControl itemListsControl = new ItemListsControl();
         DriversControl driversControl = new DriversControl();
-        TransportsControl trucksControl = new TransportsControl();
+        TrucksControl trucksControl = new TrucksControl();
         SitesControl sitesControl = new SitesControl();
         MainWindow mainWindow = new TransportView(transportsControl, itemListsControl, driversControl, trucksControl, sitesControl);
     }

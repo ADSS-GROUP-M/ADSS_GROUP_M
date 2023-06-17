@@ -1,5 +1,8 @@
 package presentationLayer.gui.plAbstracts;
 
+import presentationLayer.gui.plAbstracts.interfaces.Panel;
+import presentationLayer.gui.plAbstracts.interfaces.UIElement;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
@@ -9,10 +12,10 @@ public class PanelManager implements UIElement {
 
     private final CardLayout cardLayout;
     private final JPanel container;
-    private Panel currentPanel;
-    private final LinkedList<Panel> panelsHistory = new LinkedList<>();
+    private presentationLayer.gui.plAbstracts.interfaces.Panel currentPanel;
+    private final LinkedList<presentationLayer.gui.plAbstracts.interfaces.Panel> panelsHistory = new LinkedList<>();
 
-    public PanelManager(Panel startingPanel) {
+    public PanelManager(presentationLayer.gui.plAbstracts.interfaces.Panel startingPanel) {
         cardLayout = new CardLayout();
         container = new JPanel();
         container.setLayout(cardLayout);

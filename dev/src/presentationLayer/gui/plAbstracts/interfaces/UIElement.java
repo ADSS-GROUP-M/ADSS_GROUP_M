@@ -1,4 +1,4 @@
-package presentationLayer.gui.plAbstracts;
+package presentationLayer.gui.plAbstracts.interfaces;
 
 import java.awt.*;
 

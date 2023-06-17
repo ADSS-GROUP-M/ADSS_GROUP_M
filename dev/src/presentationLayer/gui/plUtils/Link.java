@@ -1,7 +1,7 @@
 package presentationLayer.gui.plUtils;
 
 
-import presentationLayer.gui.plAbstracts.UIElement;
+import presentationLayer.gui.plAbstracts.interfaces.UIElement;
 
 import javax.swing.*;
 import javax.swing.border.Border;

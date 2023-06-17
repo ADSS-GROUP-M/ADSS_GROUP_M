@@ -1,12 +1,13 @@
 package presentationLayer.gui.transportModule.view.panels.sites;
 
-import presentationLayer.gui.plAbstracts.TransportBasePanel;
+import presentationLayer.gui.plAbstracts.interfaces.ObservableObject;
+import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
 import presentationLayer.gui.plUtils.PrettyTextField;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class AddSitePanel extends TransportBasePanel {
+public class AddSitePanel extends AbstractTransportModulePanel {
     public AddSitePanel() {
         super();
         init();
@@ -107,5 +108,10 @@ public class AddSitePanel extends TransportBasePanel {
     @Override
     public Object getUpdate(UIElementEvent event) {
         return null;
+    }
+
+    @Override
+    public void notify(ObservableObject observable) {
+
     }
 }

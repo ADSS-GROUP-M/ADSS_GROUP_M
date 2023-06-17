@@ -1,17 +1,17 @@
 package presentationLayer.gui.transportModule.view.panels.itemsLists;
 
-import presentationLayer.gui.plAbstracts.TransportBasePanel;
+import presentationLayer.gui.plAbstracts.interfaces.ObservableObject;
+import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class AddItemListPanel extends TransportBasePanel {
+public class AddItemListPanel extends AbstractTransportModulePanel {
 
     public AddItemListPanel() {
         super();
         init();
     }
-
     private void init() {
 
         Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
@@ -71,5 +71,10 @@ public class AddItemListPanel extends TransportBasePanel {
     @Override
     public Object getUpdate(UIElementEvent event) {
         return null;
+    }
+
+    @Override
+    public void notify(ObservableObject observable) {
+
     }
 }

@@ -1,6 +1,7 @@
 package presentationLayer.gui.transportModule.view.panels.drivers;
 
-import presentationLayer.gui.plAbstracts.TransportBasePanel;
+import presentationLayer.gui.plAbstracts.interfaces.ObservableObject;
+import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,7 +12,7 @@ import java.awt.event.WindowEvent;
 
 import static com.sun.java.accessibility.util.AWTEventMonitor.addWindowListener;
 
-public class ViewDriversPanel extends TransportBasePanel {
+public class ViewDriversPanel extends AbstractTransportModulePanel {
     private DefaultListModel<String> listModel;
     private JList<String> list;
     private JButton removeButton;
@@ -83,5 +84,10 @@ public class ViewDriversPanel extends TransportBasePanel {
     @Override
     public Object getUpdate(UIElementEvent event) {
         return null;
+    }
+
+    @Override
+    public void notify(ObservableObject observable) {
+
     }
 }

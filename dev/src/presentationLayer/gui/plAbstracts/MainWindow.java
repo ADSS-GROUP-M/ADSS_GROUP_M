@@ -1,5 +1,7 @@
 package presentationLayer.gui.plAbstracts;
 
+import presentationLayer.gui.plAbstracts.interfaces.UIElement;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;

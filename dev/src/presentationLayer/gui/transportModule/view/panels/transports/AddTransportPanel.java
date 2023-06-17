@@ -1,7 +1,8 @@
 package presentationLayer.gui.transportModule.view.panels.transports;
 
-import presentationLayer.gui.plAbstracts.Searchable;
-import presentationLayer.gui.plAbstracts.TransportBasePanel;
+import presentationLayer.gui.plAbstracts.interfaces.ObservableObject;
+import presentationLayer.gui.plAbstracts.interfaces.Searchable;
+import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
 import presentationLayer.gui.plUtils.Fonts;
 import presentationLayer.gui.plUtils.PrettyTextField;
 import presentationLayer.gui.plUtils.SearchBox;
@@ -11,7 +12,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
-public class AddTransportPanel extends TransportBasePanel {
+public class AddTransportPanel extends AbstractTransportModulePanel {
     public AddTransportPanel() {
         super();
         init();
@@ -160,5 +161,10 @@ public class AddTransportPanel extends TransportBasePanel {
     @Override
     public Object getUpdate(UIElementEvent event) {
         return null;
+    }
+
+    @Override
+    public void notify(ObservableObject observable) {
+
     }
 }

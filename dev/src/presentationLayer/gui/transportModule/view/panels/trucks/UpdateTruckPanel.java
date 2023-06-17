@@ -1,8 +1,8 @@
 package presentationLayer.gui.transportModule.view.panels.trucks;
 
-import presentationLayer.gui.plAbstracts.Searchable;
-import presentationLayer.gui.plAbstracts.TransportBasePanel;
-import presentationLayer.gui.plUtils.Fonts;
+import presentationLayer.gui.plAbstracts.interfaces.ObservableObject;
+import presentationLayer.gui.plAbstracts.interfaces.Searchable;
+import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
 import presentationLayer.gui.plUtils.PrettyTextField;
 import presentationLayer.gui.plUtils.SearchBox;
 import presentationLayer.gui.plUtils.SearchableString;
@@ -12,7 +12,7 @@ import java.awt.*;
 import java.util.List;
 
 
-public class UpdateTruckPanel extends TransportBasePanel {
+public class UpdateTruckPanel extends AbstractTransportModulePanel {
     public UpdateTruckPanel() {
         super();
         init();
@@ -104,6 +104,11 @@ public class UpdateTruckPanel extends TransportBasePanel {
     @Override
     public Object getUpdate(UIElementEvent event) {
         return null;
+    }
+
+    @Override
+    public void notify(ObservableObject observable) {
+
     }
 }
 

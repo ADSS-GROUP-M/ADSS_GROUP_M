@@ -1,6 +1,6 @@
 package presentationLayer.gui.transportModule.view.panels;
 
-import presentationLayer.gui.plAbstracts.UIElement;
+import presentationLayer.gui.plAbstracts.interfaces.UIElement;
 
 import java.awt.*;
 

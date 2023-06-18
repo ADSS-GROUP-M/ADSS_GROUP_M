@@ -12,15 +12,14 @@ public class Main {
 
         PresentationFactory factory = new PresentationFactory();
 
-
-
-        TransportsControl transportsControl = new TransportsControl();
-        ItemListsControl itemListsControl = new ItemListsControl();
-        DriversControl driversControl = new DriversControl();
+        TransportsControl transportsControl = factory.getTransportsControl();
+        ItemListsControl itemListsControl = factory.getItemListsControl();
+        DriversControl driversControl = factory.getDriversControl();
         TrucksControl trucksControl = factory.getTrucksControl();
-        SitesControl sitesControl = new SitesControl();
+        SitesControl sitesControl = factory.getSitesControl();
         MainWindow mainWindow = new TransportView(transportsControl, itemListsControl, driversControl, trucksControl, sitesControl);
     }
+
 //    public static void main(String[] args) {
 //        System.out.println("Welcome to the Transport-Employees CLI");
 //        new MenuManager().run();

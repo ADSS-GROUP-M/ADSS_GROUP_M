@@ -1,15 +1,36 @@
 package presentationLayer.gui.transportModule.view.panels.trucks;
 
+import domainObjects.transportModule.Truck;
 import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
+import presentationLayer.gui.plAbstracts.interfaces.ModelObserver;
 import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
+import presentationLayer.gui.plAbstracts.interfaces.Searchable;
 import presentationLayer.gui.plUtils.PrettyTextField;
+import presentationLayer.gui.plUtils.SearchBox;
+import presentationLayer.gui.plUtils.SearchableString;
 import presentationLayer.gui.transportModule.control.TrucksControl;
 import presentationLayer.gui.transportModule.model.ObservableTruck;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.List;
 
 public class AddTruckPanel extends AbstractTransportModulePanel {
+    private JLabel idLabel;
+    private PrettyTextField idField;
+    private JLabel modelLabel;
+    private PrettyTextField modelField;
+    private JLabel baseLabel;
+    private PrettyTextField baseField;
+    private JLabel maxLabel;
+    private PrettyTextField maxField;
+    private JLabel coolingLabel;
+    private JPanel coolingPanel;
+    private JRadioButton none;
+    private JRadioButton cold;
+    private JRadioButton frozen;
 
     public AddTruckPanel(TrucksControl control) {
         super(control);
@@ -26,92 +47,121 @@ public class AddTruckPanel extends AbstractTransportModulePanel {
         contentPanel.setLayout(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
 
-        JLabel idLabel = new JLabel("License Plate:");
+        idLabel = new JLabel("License Plate:");
         constraints.gridx = 0;
         constraints.gridy = 1;
         constraints.anchor = GridBagConstraints.WEST;
         constraints.insets = new Insets(5, 5, 5, 5);
         contentPanel.add(idLabel, constraints);
 
-        PrettyTextField idField = new PrettyTextField(textFieldSize);
+        idField = new PrettyTextField(textFieldSize);
         constraints.gridx = 1;
         constraints.gridy = 1;
         constraints.fill = GridBagConstraints.HORIZONTAL;
         contentPanel.add(idField.getComponent(), constraints);
 
-        JLabel modelLabel = new JLabel("Model:");
+        modelLabel = new JLabel("Model:");
         constraints.gridx = 0;
         constraints.gridy = 2;
         constraints.anchor = GridBagConstraints.WEST;
         constraints.insets = new Insets(5, 5, 5, 5);
         contentPanel.add(modelLabel, constraints);
 
-        PrettyTextField modelField = new PrettyTextField(textFieldSize);
+        modelField = new PrettyTextField(textFieldSize);
         constraints.gridx = 1;
         constraints.gridy = 2;
         constraints.fill = GridBagConstraints.HORIZONTAL;
         contentPanel.add(modelField.getComponent(), constraints);
 
-        JLabel baseLabel = new JLabel("Base Weight:");
+        baseLabel = new JLabel("Base Weight:");
         constraints.gridx = 0;
         constraints.gridy = 3;
         constraints.anchor = GridBagConstraints.WEST;
         constraints.insets = new Insets(5, 5, 5, 5);
         contentPanel.add(baseLabel, constraints);
 
-        PrettyTextField baseField = new PrettyTextField(textFieldSize);
+        baseField = new PrettyTextField(textFieldSize);
         constraints.gridx = 1;
         constraints.gridy = 3;
         constraints.fill = GridBagConstraints.HORIZONTAL;
         contentPanel.add(baseField.getComponent(), constraints);
 
-        JLabel maxLabel = new JLabel("Max Weight:");
+        maxLabel = new JLabel("Max Weight:");
         constraints.gridx = 0;
         constraints.gridy = 4;
         constraints.anchor = GridBagConstraints.WEST;
         constraints.insets = new Insets(5, 5, 5, 5);
         contentPanel.add(maxLabel, constraints);
 
-        PrettyTextField maxField = new PrettyTextField(textFieldSize);
+        maxField = new PrettyTextField(textFieldSize);
         constraints.gridx = 1;
         constraints.gridy = 4;
         constraints.fill = GridBagConstraints.HORIZONTAL;
         contentPanel.add(maxField.getComponent(), constraints);
 
-        JLabel coolingLabel = new JLabel("Cooling Capacity:");
+        coolingLabel = new JLabel("Cooling Capacity:");
         constraints.gridx = 0;
         constraints.gridy = 5;
         constraints.anchor = GridBagConstraints.WEST;
         constraints.insets = new Insets(5, 5, 5, 5);
         contentPanel.add(coolingLabel, constraints);
 
-        JPanel coolingPanel = new JPanel();
-        JRadioButton none = new JRadioButton("NONE");
+        coolingPanel = new JPanel();
+        none = new JRadioButton("NONE");
              constraints.gridx = 1;
         constraints.gridy = 5;
         //constraints.gridwidth = 2;
         constraints.fill = GridBagConstraints.NONE;
         constraints.anchor = GridBagConstraints.CENTER;
-        JRadioButton cold = new JRadioButton("COLD");
-        JRadioButton frozen = new JRadioButton("FROZEN");
+        cold = new JRadioButton("COLD");
+        frozen = new JRadioButton("FROZEN");
         coolingPanel.add(none);
         coolingPanel.add(cold);
         coolingPanel.add(frozen);
         contentPanel.add(coolingPanel, constraints);
-
         ButtonGroup group = new ButtonGroup();
         group.add(none);
         group.add(cold);
         group.add(frozen);
+
+        //Submit button
+        JButton submitButton = new JButton("Submit");
+        constraints.gridx = 0;
+        constraints.gridy = 6;
+        constraints.gridwidth = 2;
+        constraints.fill = GridBagConstraints.NONE;
+        constraints.anchor = GridBagConstraints.EAST;
+        contentPanel.add(submitButton, constraints);
+
+        ModelObserver o = this;
+        submitButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                buttonClicked();
+            }
+        });
     }
 
-    private void onButtonClick(){
+    private void buttonClicked(){
         ObservableTruck truck =  (ObservableTruck) control.getEmptyModel();
         truck.subscribe(this);
-
-
-        truck.id= "123";
-
+        truck.id = idField.getText();
+        truck.model = modelField.getText();
+        truck.baseWeight = Integer.parseInt(baseField.getText());
+        truck.maxWeight = Integer.parseInt(maxField.getText());
+        if(none.isSelected())
+        {
+            truck.coolingCapacity = Truck.CoolingCapacity.NONE;
+        }
+        else if(cold.isSelected())
+        {
+            truck.coolingCapacity = Truck.CoolingCapacity.COLD;
+        }
+        else
+        {
+            truck.coolingCapacity = Truck.CoolingCapacity.FROZEN;
+        }
         observers.forEach(observer -> observer.add(this, truck));
     }
 

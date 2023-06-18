@@ -9,11 +9,10 @@ import presentationLayer.gui.transportModule.model.ObservableTruck;
 import serviceLayer.transportModule.ResourceManagementService;
 import utils.Response;
 
+import java.awt.event.MouseAdapter;
 import java.util.List;
 
 public class TrucksControl extends AbstractControl {
-
-
     private final ResourceManagementService rms;
 
     public TrucksControl(ResourceManagementService rms) {
@@ -23,7 +22,6 @@ public class TrucksControl extends AbstractControl {
 
     @Override
     public void add(ObservableUIElement observable, ObservableModel model) {
-
         ObservableTruck truckModel = (ObservableTruck) model;
 
         Truck truck = new Truck(truckModel.id,
@@ -39,10 +37,31 @@ public class TrucksControl extends AbstractControl {
             throw new RuntimeException(e);
             //TODO: handle exception
         }
-
         truckModel.response = response.message();
         truckModel.notifyObservers();
     }
+
+    @Override
+    public void remove(ObservableUIElement observable, ObservableModel model) {
+        ObservableTruck truckModel = (ObservableTruck) model;
+
+        Truck truck = new Truck(truckModel.id,
+                truckModel.model,
+                truckModel.baseWeight,
+                truckModel.maxWeight,
+                truckModel.coolingCapacity);
+        String json = rms.addTruck(truck.toJson());
+        Response response;
+        try {
+            response = Response.fromJsonWithValidation(json);
+        } catch (ErrorOccurredException e) {
+            throw new RuntimeException(e);
+            //TODO: handle exception
+        }
+        truckModel.response = response.message();
+        truckModel.notifyObservers();
+    }
+
 
     @Override
     public ObservableModel getModel(ObservableModel lookupObject) {
@@ -51,7 +70,7 @@ public class TrucksControl extends AbstractControl {
 
     @Override
     public ObservableModel getEmptyModel() {
-        return null;
+        return new ObservableTruck();
     }
 
     @Override

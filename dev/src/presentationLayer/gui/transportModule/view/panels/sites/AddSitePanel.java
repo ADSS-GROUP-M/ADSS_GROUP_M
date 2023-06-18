@@ -1,14 +1,37 @@
 package presentationLayer.gui.transportModule.view.panels.sites;
 
+import domainObjects.transportModule.Site;
+import domainObjects.transportModule.Truck;
 import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
+import presentationLayer.gui.plAbstracts.interfaces.ModelObserver;
 import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
 import presentationLayer.gui.plUtils.PrettyTextField;
 import presentationLayer.gui.transportModule.control.SitesControl;
+import presentationLayer.gui.transportModule.model.ObservableSite;
+import presentationLayer.gui.transportModule.model.ObservableTruck;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class AddSitePanel extends AbstractTransportModulePanel {
+    private JLabel idLabel;
+    private PrettyTextField idField;
+    private JLabel addressLabel;
+    private PrettyTextField addressField;
+    private JLabel zoneLabel;
+    private PrettyTextField zoneField;
+    private JLabel phoneLabel;
+    private PrettyTextField maxField;
+    private JLabel nameLabel;
+    private PrettyTextField nameField;
+    private JLabel typeLabel;
+    private JPanel typePanel;
+    private JRadioButton logisticCenter;
+    private JRadioButton branch;
+    private JRadioButton supplier;
+
     public AddSitePanel(SitesControl control) {
         super(control);
         init();
@@ -22,80 +45,78 @@ public class AddSitePanel extends AbstractTransportModulePanel {
         contentPanel.setLayout(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
 
-        JLabel idLabel = new JLabel("Name:");
+        idLabel = new JLabel("Name:");
         constraints.gridx = 0;
         constraints.gridy = 1;
         constraints.anchor = GridBagConstraints.WEST;
         constraints.insets = new Insets(5, 5, 5, 5);
         contentPanel.add(idLabel, constraints);
 
-        PrettyTextField idField = new PrettyTextField(textFieldSize);
+        idField = new PrettyTextField(textFieldSize);
         constraints.gridx = 1;
         constraints.gridy = 1;
         constraints.fill = GridBagConstraints.HORIZONTAL;
         contentPanel.add(idField.getComponent(), constraints);
 
-        JLabel addressLabel = new JLabel("Address:");
+        addressLabel = new JLabel("Address:");
         constraints.gridx = 0;
         constraints.gridy = 2;
         contentPanel.add(addressLabel, constraints);
 
-        PrettyTextField addressField = new PrettyTextField(textFieldSize);
+        addressField = new PrettyTextField(textFieldSize);
         constraints.gridx = 1;
         constraints.gridy = 2;
         constraints.fill = GridBagConstraints.HORIZONTAL;
         contentPanel.add(addressField.getComponent(), constraints);
 
-        JLabel zoneLabel = new JLabel("Transport Zone:");
+        zoneLabel = new JLabel("Transport Zone:");
         constraints.gridx = 0;
         constraints.gridy = 3;
         contentPanel.add(zoneLabel, constraints);
 
-        PrettyTextField zoneField = new PrettyTextField(textFieldSize);
+        zoneField = new PrettyTextField(textFieldSize);
         constraints.gridx = 1;
         constraints.gridy = 3;
         constraints.fill = GridBagConstraints.HORIZONTAL;
         contentPanel.add(zoneField.getComponent(), constraints);
 
-        JLabel phoneLabel = new JLabel("Contact Phone:");
+        phoneLabel = new JLabel("Contact Phone:");
         constraints.gridx = 0;
         constraints.gridy = 4;
         contentPanel.add(phoneLabel, constraints);
 
-        PrettyTextField maxField = new PrettyTextField(textFieldSize);
+        maxField = new PrettyTextField(textFieldSize);
         constraints.gridx = 1;
         constraints.gridy = 4;
         constraints.fill = GridBagConstraints.HORIZONTAL;
         contentPanel.add(maxField.getComponent(), constraints);
 
-        JLabel nameLabel = new JLabel("Contact Name:");
+        nameLabel = new JLabel("Contact Name:");
         constraints.gridx = 0;
         constraints.gridy = 5;
         contentPanel.add(nameLabel, constraints);
 
-        PrettyTextField nameField = new PrettyTextField(textFieldSize);
+        nameField = new PrettyTextField(textFieldSize);
         constraints.gridx = 1;
         constraints.gridy = 5;
         constraints.fill = GridBagConstraints.HORIZONTAL;
         contentPanel.add(nameField.getComponent(), constraints);
 
-
-        JLabel typeLabel = new JLabel("Site Type:");
+        typeLabel = new JLabel("Site Type:");
         constraints.gridx = 0;
         constraints.gridy = 6;
         constraints.anchor = GridBagConstraints.WEST;
         constraints.insets = new Insets(5, 5, 5, 5);
         contentPanel.add(typeLabel, constraints);
 
-
-        JPanel typePanel = new JPanel();
-        JRadioButton logisticCenter = new JRadioButton("Logistic Center");
+        typePanel = new JPanel();
+        logisticCenter = new JRadioButton("Logistic Center");
         constraints.gridx = 1;
         constraints.gridy = 6;
         constraints.fill = GridBagConstraints.NONE;
         constraints.anchor = GridBagConstraints.CENTER;
-        JRadioButton branch = new JRadioButton("Branch");
-        JRadioButton supplier = new JRadioButton("Supplier");
+        branch = new JRadioButton("Branch");
+        supplier = new JRadioButton("Supplier");
         typePanel.add(logisticCenter);
         typePanel.add(branch);
         typePanel.add(supplier);
@@ -104,12 +125,50 @@ public class AddSitePanel extends AbstractTransportModulePanel {
         group.add(logisticCenter);
         group.add(branch);
         group.add(supplier);
+
+        //Submit button
+        JButton submitButton = new JButton("Submit");
+        constraints.gridx = 0;
+        constraints.gridy = 7;
+        constraints.gridwidth = 2;
+        constraints.fill = GridBagConstraints.NONE;
+        constraints.anchor = GridBagConstraints.EAST;
+        contentPanel.add(submitButton, constraints);
+
+        ModelObserver o = this;
+        submitButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                buttonClicked();
+            }
+        });
     }
 
-    
+    private void buttonClicked(){
+        ObservableSite site =  (ObservableSite) control.getEmptyModel();
+        site.subscribe(this);
+        site.name = idField.getText();
+        site.address = addressField.getText();
+        site.transportZone = zoneField.getText();
+        site.phoneNumber = maxField.getText();
+        site.contactName = nameField.getText();
+        if(branch.isSelected())
+        {
+            site.siteType = Site.SiteType.BRANCH;
+        }
+        else if(logisticCenter.isSelected())
+        {
+            site.siteType = Site.SiteType.LOGISTICAL_CENTER;
+        }
+        else
+        {
+            site.siteType = Site.SiteType.SUPPLIER;
+        }
+        observers.forEach(observer -> observer.add(this, site));
+    }
 
     @Override
     public void notify(ObservableModel observable) {
-
     }
 }

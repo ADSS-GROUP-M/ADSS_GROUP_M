@@ -9,6 +9,7 @@ public final class ObservableTruck extends AbstractObservableModel {
 
     public String id;
     public String model;
+    public String weightError;
     public int baseWeight;
     public int maxWeight;
     public CoolingCapacity coolingCapacity;

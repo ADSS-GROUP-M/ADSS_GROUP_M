@@ -128,11 +128,15 @@ public class ViewTrucksPanel extends AbstractTransportModulePanel {
             public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
                 Graphics2D g2 = (Graphics2D)g;
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                g2.setColor(Colors.getContentPanelColor());
-                g2.setStroke(new BasicStroke(1));
-//                g2.drawArc(0,height-25,25,25,180,90);
-                g2.fillRect(0,0,10,height);
-                g2.fillRect(0,height-10,width,10);
+                g2.setColor(Colors.getForegroundColor());
+                g2.setStroke(new BasicStroke(2));
+                g2.drawLine(0,0,0,c.getHeight()-26);
+                g2.drawArc(0,c.getHeight()-50,50,50,180,90);
+                g2.drawLine(26,c.getHeight(),c.getWidth()-25,c.getHeight());
+                g2.drawArc(c.getWidth()-50-1,c.getHeight()-50,50,50,270,90);
+                g2.drawLine(c.getWidth()-1,c.getHeight()-26,c.getWidth()-1,0);
+//                g2.fillRect(0,0,10,height);
+//                g2.fillRect(0,height-10,width,10);
             }
 
             @Override
@@ -168,7 +172,7 @@ public class ViewTrucksPanel extends AbstractTransportModulePanel {
 
                     @Override
                     public Insets getBorderInsets(Component c) {
-                        return new Insets(10,5,10,5);
+                        return new Insets(10,5,50,5);
                     }
 
                     @Override
@@ -240,6 +244,7 @@ public class ViewTrucksPanel extends AbstractTransportModulePanel {
             if (choice == JOptionPane.YES_OPTION) {
                 removeSelectedItems(selectedIndices[0]);
                 newOpenWindow.dispose();
+                //newOpenWindow = null;
             }
         }
     }
@@ -271,6 +276,7 @@ public class ViewTrucksPanel extends AbstractTransportModulePanel {
         JButton editButton = new JButton("Edit");
         editButton.setPreferredSize(new Dimension(100, 30));
         editButton.setBounds(100,400,100,30);
+        newOpenPanel = new JPanel();
         newOpenPanel.setLayout(null);
         newOpenPanel.add(label);
         newOpenPanel.add(removeButton);

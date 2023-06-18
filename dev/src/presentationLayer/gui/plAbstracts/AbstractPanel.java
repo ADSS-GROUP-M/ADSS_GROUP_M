@@ -8,18 +8,21 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.PopupMenuEvent;
 import java.awt.*;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 public abstract class AbstractPanel implements Panel {
 
     protected final JPanel panel;
-    protected final Map<UIElementEvent, Set<UIElementObserver>> observers;
+    protected final Set<UIElementObserver> observers;
 
     protected AbstractPanel(){
         panel = new JPanelWithBackground();
         panel.paintComponents(panel.getGraphics());
         panel.setBorder(new EmptyBorder(0,0,0,0));
-        observers = new HashMap<>();
+        observers = new HashSet<>();
     }
 
     public void add(Component component){
@@ -33,23 +36,13 @@ public abstract class AbstractPanel implements Panel {
     }
 
     @Override
-    public void subscribe(UIElementObserver observer, UIElementEvent event) {
-        if(!observers.containsKey(event)) {
-            observers.put(event, new HashSet<>());
-        }
-        observers.get(event).add(observer);
+    public void subscribe(UIElementObserver observer) {
+        observers.add(observer);
     }
 
     @Override
-    public void unsubscribe(UIElementObserver observer, UIElementEvent event) {
-        observers.get(event).remove(observer);
-    }
-
-    @Override
-    public void notifyObservers(UIElementEvent event) {
-        for(UIElementObserver observer : observers.get(event)) {
-            observer.notify(this, event);
-        }
+    public void unsubscribe(UIElementObserver observer) {
+        observers.remove(observer);
     }
 
     @Override public void popupMenuWillBecomeVisible(PopupMenuEvent e) {}

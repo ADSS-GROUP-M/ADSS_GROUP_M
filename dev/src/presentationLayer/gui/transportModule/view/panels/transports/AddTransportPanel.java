@@ -1,8 +1,8 @@
 package presentationLayer.gui.transportModule.view.panels.transports;
 
+import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
 import presentationLayer.gui.plAbstracts.interfaces.ObservableObject;
 import presentationLayer.gui.plAbstracts.interfaces.Searchable;
-import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
 import presentationLayer.gui.plUtils.Fonts;
 import presentationLayer.gui.plUtils.PrettyTextField;
 import presentationLayer.gui.plUtils.SearchBox;
@@ -158,10 +158,7 @@ public class AddTransportPanel extends AbstractTransportModulePanel {
         scrollPane.revalidate();
     }
 
-    @Override
-    public Object getUpdate(UIElementEvent event) {
-        return null;
-    }
+    
 
     @Override
     public void notify(ObservableObject observable) {

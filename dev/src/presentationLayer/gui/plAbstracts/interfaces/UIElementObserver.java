@@ -1,7 +1,11 @@
 package presentationLayer.gui.plAbstracts.interfaces;
 
-import static presentationLayer.gui.plAbstracts.interfaces.ObservableUIElement.*;
+import java.util.List;
 
 public interface UIElementObserver {
-    void notify(ObservableUIElement observable, UIElementEvent event);
+    default void add(ObservableUIElement observable){}
+    default void remove(ObservableUIElement observable) {}
+    default void update(ObservableUIElement observable){}
+    default void get(ObservableUIElement observable){}
+    default void getAll(ObservableUIElement observable){}
 }

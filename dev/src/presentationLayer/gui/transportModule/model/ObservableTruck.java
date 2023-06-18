@@ -1,9 +1,9 @@
 package presentationLayer.gui.transportModule.model;
 
-import presentationLayer.gui.plAbstracts.interfaces.ObservableObject;
 import presentationLayer.gui.plAbstracts.AbstractObservableObject;
+import presentationLayer.gui.plAbstracts.interfaces.ObservableObject;
 
-import static domainObjects.transportModule.Truck.*;
+import static domainObjects.transportModule.Truck.CoolingCapacity;
 
 public final class ObservableTruck extends AbstractObservableObject {
 

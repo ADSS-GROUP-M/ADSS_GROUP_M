@@ -1,9 +1,9 @@
 package presentationLayer.gui.transportModule.view.panels.trucks;
 
 
+import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
 import presentationLayer.gui.plAbstracts.interfaces.ObservableObject;
 import presentationLayer.gui.plAbstracts.interfaces.Searchable;
-import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
 import presentationLayer.gui.plUtils.Colors;
 
 import javax.swing.*;
@@ -206,9 +206,6 @@ public class ViewTrucksPanel extends AbstractTransportModulePanel {
         listPanel.setPreferredSize(preferredSize);
         listPanel.revalidate();
         scrollPane.revalidate();
-    }
-    public Object getUpdate(UIElementEvent event) {
-        return null;
     }
 
     @Override

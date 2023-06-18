@@ -1,7 +1,7 @@
 package presentationLayer.gui.transportModule.view.panels.trucks;
 
-import presentationLayer.gui.plAbstracts.interfaces.ObservableObject;
 import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
+import presentationLayer.gui.plAbstracts.interfaces.ObservableObject;
 import presentationLayer.gui.plUtils.PrettyTextField;
 
 import javax.swing.*;
@@ -103,10 +103,7 @@ public class AddTruckPanel extends AbstractTransportModulePanel {
         group.add(frozen);
     }
 
-    @Override
-    public Object getUpdate(UIElementEvent event) {
-        return null;
-    }
+    
 
     @Override
     public void notify(ObservableObject observable) {

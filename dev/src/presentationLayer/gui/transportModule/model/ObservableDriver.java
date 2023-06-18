@@ -1,9 +1,9 @@
 package presentationLayer.gui.transportModule.model;
 
-import presentationLayer.gui.plAbstracts.interfaces.ObservableObject;
 import presentationLayer.gui.plAbstracts.AbstractObservableObject;
+import presentationLayer.gui.plAbstracts.interfaces.ObservableObject;
 
-import static domainObjects.transportModule.Driver.*;
+import static domainObjects.transportModule.Driver.LicenseType;
 
 public class ObservableDriver extends AbstractObservableObject {
     public String id;

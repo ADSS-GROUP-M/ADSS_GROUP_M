@@ -2,7 +2,7 @@ package presentationLayer.gui.transportModule.model;
 
 import presentationLayer.gui.plAbstracts.AbstractObservableObject;
 
-import static domainObjects.transportModule.Site.*;
+import static domainObjects.transportModule.Site.SiteType;
 
 public class ObservableSite extends AbstractObservableObject {
     public String name;

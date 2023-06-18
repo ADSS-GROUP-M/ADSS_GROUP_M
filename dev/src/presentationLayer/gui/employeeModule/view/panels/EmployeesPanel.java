@@ -30,8 +30,5 @@ public class EmployeesPanel extends ScrollablePanel {
         return scrollPane;
     }
 
-    @Override
-    public Object getUpdate(UIElementEvent event) {
-        return null;
-    }
+    
 }

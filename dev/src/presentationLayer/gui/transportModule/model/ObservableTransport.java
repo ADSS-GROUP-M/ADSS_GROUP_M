@@ -1,7 +1,7 @@
 package presentationLayer.gui.transportModule.model;
 
-import presentationLayer.gui.plAbstracts.interfaces.ObservableObject;
 import presentationLayer.gui.plAbstracts.AbstractObservableObject;
+import presentationLayer.gui.plAbstracts.interfaces.ObservableObject;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;

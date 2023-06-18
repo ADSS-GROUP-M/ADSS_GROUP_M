@@ -2,14 +2,8 @@ package presentationLayer.gui.transportModule.control;
 
 import presentationLayer.gui.plAbstracts.AbstractControl;
 import presentationLayer.gui.plAbstracts.interfaces.ObservableObject;
-import presentationLayer.gui.plAbstracts.interfaces.ObservableUIElement;
-import presentationLayer.gui.plAbstracts.interfaces.ObservableUIElement.UIElementEvent;
 
 public class TrucksControl extends AbstractControl {
-    @Override
-    public void notify(ObservableUIElement observable, UIElementEvent event) {
-
-    }
 
     @Override
     public ObservableObject getModel() {

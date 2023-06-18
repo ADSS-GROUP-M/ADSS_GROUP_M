@@ -1,9 +1,10 @@
 package presentationLayer.gui.transportModule.view.panels.trucks;
 
 import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
-import presentationLayer.gui.plAbstracts.interfaces.ObservableObject;
+import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
 import presentationLayer.gui.plUtils.PrettyTextField;
 import presentationLayer.gui.transportModule.control.TrucksControl;
+import presentationLayer.gui.transportModule.model.ObservableTruck;
 
 import javax.swing.*;
 import java.awt.*;
@@ -104,10 +105,18 @@ public class AddTruckPanel extends AbstractTransportModulePanel {
         group.add(frozen);
     }
 
-    
+    private void onButtonClick(){
+        ObservableTruck truck =  (ObservableTruck) control.getEmptyModel();
+        truck.subscribe(this);
+
+
+        truck.id= "123";
+
+        observers.forEach(observer -> observer.add(this, truck));
+    }
 
     @Override
-    public void notify(ObservableObject observable) {
+    public void notify(ObservableModel observable) {
 
     }
 }

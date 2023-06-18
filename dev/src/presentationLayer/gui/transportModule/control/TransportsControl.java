@@ -1,7 +1,7 @@
 package presentationLayer.gui.transportModule.control;
 
 import presentationLayer.gui.plAbstracts.AbstractControl;
-import presentationLayer.gui.plAbstracts.interfaces.ObservableObject;
+import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
 
 import java.util.List;
 
@@ -9,17 +9,17 @@ public class TransportsControl extends AbstractControl {
 
 
     @Override
-    public ObservableObject getModel(ObservableObject lookupObject) {
+    public ObservableModel getModel(ObservableModel lookupObject) {
         return null;
     }
 
     @Override
-    public ObservableObject getEmptyModel() {
+    public ObservableModel getEmptyModel() {
         return null;
     }
 
     @Override
-    public List<ObservableObject> getAllModels() {
+    public List<ObservableModel> getAllModels() {
         return null;
     }
 }

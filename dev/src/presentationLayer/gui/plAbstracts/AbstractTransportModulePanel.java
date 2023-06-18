@@ -1,12 +1,12 @@
 package presentationLayer.gui.plAbstracts;
 
-import presentationLayer.gui.plAbstracts.interfaces.ObjectObserver;
+import presentationLayer.gui.plAbstracts.interfaces.ModelObserver;
 import presentationLayer.gui.plUtils.Colors;
 import presentationLayer.gui.plUtils.ContentPanel;
 
 import java.awt.*;
 
-public abstract class AbstractTransportModulePanel extends ScrollablePanel implements ObjectObserver {
+public abstract class AbstractTransportModulePanel extends ScrollablePanel implements ModelObserver {
 
     protected ContentPanel contentPanel;
     protected AbstractControl control;

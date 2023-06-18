@@ -2,7 +2,7 @@ package presentationLayer.gui.transportModule.view.panels.trucks;
 
 
 import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
-import presentationLayer.gui.plAbstracts.interfaces.ObservableObject;
+import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
 import presentationLayer.gui.plAbstracts.interfaces.Searchable;
 import presentationLayer.gui.plUtils.Colors;
 import presentationLayer.gui.transportModule.control.TrucksControl;
@@ -116,20 +116,23 @@ public class ViewTrucksPanel extends AbstractTransportModulePanel {
         };
         contentPanel.setLayout(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
-        listModel = new DefaultListModel<String>();
+        listModel = new DefaultListModel<>();
 
         // Create the JList
         list = new JList<>(listModel);
         listPanel = new JScrollPane(list);
 
-//        list.setBackground(new Color(0,0,0,0));
-        list.setBorder(new Border() {
+        list.setBackground(new Color(0,0,0,0));
+        listPanel.setBorder(new Border() {
             @Override
             public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
                 Graphics2D g2 = (Graphics2D)g;
-                g2.setColor(Colors.getContentPanelColor());
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                g2.drawArc(0,height-20,20,20,180,90);
+                g2.setColor(Colors.getContentPanelColor());
+                g2.setStroke(new BasicStroke(1));
+//                g2.drawArc(0,height-25,25,25,180,90);
+                g2.fillRect(0,0,10,height);
+                g2.fillRect(0,height-10,width,10);
             }
 
             @Override
@@ -142,7 +145,7 @@ public class ViewTrucksPanel extends AbstractTransportModulePanel {
                 return false;
             }
         });
-        listPanel.setBorder(new EmptyBorder(0,0,0,0));
+        list.setBorder(new EmptyBorder(0,20,20,20));
         listPanel.setBackground(new Color(0,0,0,0));
 
         list.setCellRenderer(new DefaultListCellRenderer() {
@@ -310,7 +313,7 @@ public class ViewTrucksPanel extends AbstractTransportModulePanel {
     }
 
     @Override
-    public void notify(ObservableObject observable) {
+    public void notify(ObservableModel observable) {
 
     }
 }

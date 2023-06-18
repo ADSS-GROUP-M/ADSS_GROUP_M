@@ -1,7 +1,7 @@
 package presentationLayer.gui.transportModule.view.panels.transports;
 
 import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
-import presentationLayer.gui.plAbstracts.interfaces.ObservableObject;
+import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
 import presentationLayer.gui.plAbstracts.interfaces.Searchable;
 import presentationLayer.gui.plUtils.Fonts;
 import presentationLayer.gui.plUtils.PrettyTextField;
@@ -162,7 +162,7 @@ public class AddTransportPanel extends AbstractTransportModulePanel {
     
 
     @Override
-    public void notify(ObservableObject observable) {
+    public void notify(ObservableModel observable) {
 
     }
 }

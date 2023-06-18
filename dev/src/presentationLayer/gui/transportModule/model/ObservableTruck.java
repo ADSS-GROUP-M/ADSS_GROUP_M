@@ -1,20 +1,21 @@
 package presentationLayer.gui.transportModule.model;
 
-import presentationLayer.gui.plAbstracts.AbstractObservableObject;
-import presentationLayer.gui.plAbstracts.interfaces.ObservableObject;
+import presentationLayer.gui.plAbstracts.AbstractObservableModel;
+import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
 
 import static domainObjects.transportModule.Truck.CoolingCapacity;
 
-public final class ObservableTruck extends AbstractObservableObject {
+public final class ObservableTruck extends AbstractObservableModel {
 
     public String id;
     public String model;
     public int baseWeight;
     public int maxWeight;
     public CoolingCapacity coolingCapacity;
+    public String response;
 
     @Override
-    public ObservableObject getUpdate() {
+    public ObservableModel getUpdate() {
         return null;
     }
 

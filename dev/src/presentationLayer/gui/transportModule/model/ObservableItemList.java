@@ -1,10 +1,10 @@
 package presentationLayer.gui.transportModule.model;
 
-import presentationLayer.gui.plAbstracts.AbstractObservableObject;
+import presentationLayer.gui.plAbstracts.AbstractObservableModel;
 
 import java.util.HashMap;
 
-public class ObservableItemList extends AbstractObservableObject {
+public class ObservableItemList extends AbstractObservableModel {
 
     public int id;
     public HashMap<String, Integer> load;

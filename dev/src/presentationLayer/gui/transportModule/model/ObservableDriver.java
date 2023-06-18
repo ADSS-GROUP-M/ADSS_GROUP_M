@@ -1,17 +1,17 @@
 package presentationLayer.gui.transportModule.model;
 
-import presentationLayer.gui.plAbstracts.AbstractObservableObject;
-import presentationLayer.gui.plAbstracts.interfaces.ObservableObject;
+import presentationLayer.gui.plAbstracts.AbstractObservableModel;
+import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
 
 import static domainObjects.transportModule.Driver.LicenseType;
 
-public class ObservableDriver extends AbstractObservableObject {
+public class ObservableDriver extends AbstractObservableModel {
     public String id;
     public String name;
     public LicenseType licenseType;
 
     @Override
-    public ObservableObject getUpdate() {
+    public ObservableModel getUpdate() {
         return null;
     }
 

@@ -1,10 +1,10 @@
 package presentationLayer.gui.transportModule.model;
 
-import presentationLayer.gui.plAbstracts.AbstractObservableObject;
+import presentationLayer.gui.plAbstracts.AbstractObservableModel;
 
 import static domainObjects.transportModule.Site.SiteType;
 
-public class ObservableSite extends AbstractObservableObject {
+public class ObservableSite extends AbstractObservableModel {
     public String name;
     public String address;
     public String transportZone;

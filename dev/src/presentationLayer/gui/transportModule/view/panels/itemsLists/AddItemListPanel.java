@@ -1,8 +1,7 @@
 package presentationLayer.gui.transportModule.view.panels.itemsLists;
 
-import presentationLayer.gui.plAbstracts.AbstractControl;
 import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
-import presentationLayer.gui.plAbstracts.interfaces.ObservableObject;
+import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
 import presentationLayer.gui.transportModule.control.ItemListsControl;
 
 import javax.swing.*;
@@ -73,7 +72,7 @@ public class AddItemListPanel extends AbstractTransportModulePanel {
     
 
     @Override
-    public void notify(ObservableObject observable) {
+    public void notify(ObservableModel observable) {
 
     }
 }

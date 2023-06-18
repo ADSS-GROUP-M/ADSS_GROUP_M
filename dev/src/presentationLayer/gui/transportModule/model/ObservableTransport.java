@@ -1,7 +1,7 @@
 package presentationLayer.gui.transportModule.model;
 
-import presentationLayer.gui.plAbstracts.AbstractObservableObject;
-import presentationLayer.gui.plAbstracts.interfaces.ObservableObject;
+import presentationLayer.gui.plAbstracts.AbstractObservableModel;
+import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class ObservableTransport extends AbstractObservableObject {
+public class ObservableTransport extends AbstractObservableModel {
 
     public int id;
     public List<String> route;
@@ -23,7 +23,7 @@ public class ObservableTransport extends AbstractObservableObject {
     public boolean manualOverride;
 
     @Override
-    public ObservableObject getUpdate() {
+    public ObservableModel getUpdate() {
         return null;
     }
 

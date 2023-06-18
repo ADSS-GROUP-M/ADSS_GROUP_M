@@ -1,9 +1,8 @@
 package presentationLayer.gui.transportModule.view.panels.drivers;
 
 import domainObjects.transportModule.Driver;
-import presentationLayer.gui.plAbstracts.AbstractControl;
 import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
-import presentationLayer.gui.plAbstracts.interfaces.ObservableObject;
+import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
 import presentationLayer.gui.plAbstracts.interfaces.Searchable;
 import presentationLayer.gui.plUtils.SearchBox;
 import presentationLayer.gui.plUtils.SearchableString;
@@ -75,7 +74,7 @@ public class UpdateDriversPanel extends AbstractTransportModulePanel {
     
 
     @Override
-    public void notify(ObservableObject observable) {
+    public void notify(ObservableModel observable) {
 
     }
 }

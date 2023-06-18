@@ -1,8 +1,7 @@
 package presentationLayer.gui.transportModule.view.panels.drivers;
 
-import presentationLayer.gui.plAbstracts.AbstractControl;
 import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
-import presentationLayer.gui.plAbstracts.interfaces.ObservableObject;
+import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
 import presentationLayer.gui.transportModule.control.DriversControl;
 
 import javax.swing.*;
@@ -86,7 +85,7 @@ public class ViewDriversPanel extends AbstractTransportModulePanel {
     
 
     @Override
-    public void notify(ObservableObject observable) {
+    public void notify(ObservableModel observable) {
 
     }
 }

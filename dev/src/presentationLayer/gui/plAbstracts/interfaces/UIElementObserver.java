@@ -8,9 +8,9 @@ package presentationLayer.gui.plAbstracts.interfaces;
  * @see ObservableUIElement
  */
 public interface UIElementObserver {
-    default void add(ObservableUIElement observable){}
-    default void remove(ObservableUIElement observable) {}
-    default void update(ObservableUIElement observable){}
-    default void get(ObservableUIElement observable){}
+    default void add(ObservableUIElement observable, ObservableModel model){}
+    default void remove(ObservableUIElement observable, ObservableModel model) {}
+    default void update(ObservableUIElement observable, ObservableModel model){}
+    default void get(ObservableUIElement observable, ObservableModel model){}
     default void getAll(ObservableUIElement observable){}
 }

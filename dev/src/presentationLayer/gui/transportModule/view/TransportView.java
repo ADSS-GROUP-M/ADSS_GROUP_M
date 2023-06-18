@@ -98,13 +98,4 @@ public class TransportView extends MainWindow {
         currentPanel.componentResized(super.container.getSize());
         super.container.revalidate();
     }
-
-    public static void main(String[] args) {
-        TransportsControl transportsControl = new TransportsControl();
-        ItemListsControl itemListsControl = new ItemListsControl();
-        DriversControl driversControl = new DriversControl();
-        TrucksControl trucksControl = new TrucksControl();
-        SitesControl sitesControl = new SitesControl();
-        MainWindow mainWindow = new TransportView(transportsControl, itemListsControl, driversControl, trucksControl, sitesControl);
-    }
 }

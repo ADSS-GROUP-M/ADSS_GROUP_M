@@ -1,7 +1,7 @@
 package presentationLayer.gui.transportModule.view.panels.transports;
 
 import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
-import presentationLayer.gui.plAbstracts.interfaces.ObservableObject;
+import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
 import presentationLayer.gui.transportModule.control.TransportsControl;
 
 public class UpdateTransportPanel extends AbstractTransportModulePanel {
@@ -12,7 +12,7 @@ public class UpdateTransportPanel extends AbstractTransportModulePanel {
     }
 
     @Override
-    public void notify(ObservableObject observable) {
+    public void notify(ObservableModel observable) {
 
     }
 }

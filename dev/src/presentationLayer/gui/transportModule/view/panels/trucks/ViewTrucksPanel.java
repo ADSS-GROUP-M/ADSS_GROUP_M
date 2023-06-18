@@ -122,7 +122,26 @@ public class ViewTrucksPanel extends AbstractTransportModulePanel {
         list = new JList<>(listModel);
         listPanel = new JScrollPane(list);
 
-        list.setBackground(new Color(0,0,0,0));
+//        list.setBackground(new Color(0,0,0,0));
+        list.setBorder(new Border() {
+            @Override
+            public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
+                Graphics2D g2 = (Graphics2D)g;
+                g2.setColor(Colors.getContentPanelColor());
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                g2.drawArc(0,height-20,20,20,180,90);
+            }
+
+            @Override
+            public Insets getBorderInsets(Component c) {
+                return new Insets(0,20,20,20);
+            }
+
+            @Override
+            public boolean isBorderOpaque() {
+                return false;
+            }
+        });
         listPanel.setBorder(new EmptyBorder(0,0,0,0));
         listPanel.setBackground(new Color(0,0,0,0));
 
@@ -132,15 +151,15 @@ public class ViewTrucksPanel extends AbstractTransportModulePanel {
                 Component renderer = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
                 renderer.setBackground(new Color(0,0,0,0));
                 if(isSelected) {
-                    renderer.setBackground(new Color(200,200,200));
+                    renderer.setBackground(new Color(200,200,200,128));
                 }
                 panel.repaint();
                 setBorder(new Border() {
                     @Override
                     public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
                         Graphics2D g2 = (Graphics2D) g;
-                        g2.setStroke(new BasicStroke(3));
-                        g2.setColor(Colors.getForegroundColor());
+                        g2.setStroke(new BasicStroke(1));
+                        g2.setColor(new Color(200,200,200,100));
                         g2.drawLine(0,height-1, width,height-1);
                     }
 

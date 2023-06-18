@@ -42,7 +42,7 @@ public class TransportView extends MainWindow {
         this.driversControl = driversControl;
         this.trucksControl = trucksControl;
         this.sitesControl = sitesControl;
-        currentPanel = new ViewTransportsPanel();
+        currentPanel = new ViewTransportsPanel(transportsControl);
         panelManager = new PanelManager(currentPanel);
         super.addUIElement(panelManager);
         super.addUIElement(initQuickAccess());

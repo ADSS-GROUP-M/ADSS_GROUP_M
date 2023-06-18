@@ -11,10 +11,7 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 
 import static com.sun.java.accessibility.util.AWTEventMonitor.addWindowListener;
 
@@ -22,6 +19,8 @@ public class ViewTrucksPanel extends AbstractTransportModulePanel {
     private DefaultListModel<String> listModel;
     private JList<String> list;
     private JScrollPane listPanel;
+    JPanel newOpenPanel = new JPanel();
+    JFrame newOpenWindow;
 
     public ViewTrucksPanel(TrucksControl control) {
         super(control);
@@ -32,7 +31,7 @@ public class ViewTrucksPanel extends AbstractTransportModulePanel {
 
         // Create the list model
         Searchable s1 = new Searchable() {
-            final String description = "ItEm NuMbEr 1, beri cool. Case-insensitive Searchable example";
+            final String description = "Truck 1";
             @Override
             public boolean isMatch(String query) {
                 return description.toLowerCase().contains(query.toLowerCase());
@@ -45,13 +44,16 @@ public class ViewTrucksPanel extends AbstractTransportModulePanel {
 
             @Override
             public String getLongDescription() {
-                return null;
+                return "Truck ID : 1\n" +
+                        "License Plate : 123456\n" +
+                        "Model : Toyota 2019\n" +
+                        "Weight : 10000\n" ;
             }
 
         };
 
         Searchable s2 = new Searchable() {
-            final String description = "Item number 2, muy suave. case-sensitive Searchable example";
+            final String description = "Truck 2";
             @Override
             public boolean isMatch(String query) {
                 return description.contains(query);
@@ -64,12 +66,15 @@ public class ViewTrucksPanel extends AbstractTransportModulePanel {
 
             @Override
             public String getLongDescription() {
-                return null;
+                return "Truck ID : 2\n" +
+                        "License Plate : 123456\n" +
+                        "Model : Toyota 2019\n" +
+                        "Weight : 10000\n";
             }
         };
 
         Searchable s3 = new Searchable() {
-            final String description = "Item number 3, un poco loco";
+            final String description = "Truck 3";
             @Override
             public boolean isMatch(String query) {
                 return description.contains(query);
@@ -82,12 +87,15 @@ public class ViewTrucksPanel extends AbstractTransportModulePanel {
 
             @Override
             public String getLongDescription() {
-                return null;
+                return "Truck ID : 3\n" +
+                        "License Plate : 123456\n" +
+                        "Model : Toyota 2019\n" +
+                        "Weight : 10000\n";
             }
         };
 
         Searchable s4 = new Searchable() {
-            final String description = "Item number 4, el gato es en la mesa";
+            final String description = "Truck 4";
             @Override
             public boolean isMatch(String query) {
                 return description.contains(query);
@@ -100,12 +108,15 @@ public class ViewTrucksPanel extends AbstractTransportModulePanel {
 
             @Override
             public String getLongDescription() {
-                return null;
+                return "Truck ID : 4\n" +
+                        "License Plate : 123456\n" +
+                        "Model : Toyota 2019\n" +
+                        "Weight : 10000\n";
             }
         };
         contentPanel.setLayout(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
-        listModel = new DefaultListModel<>();
+        listModel = new DefaultListModel<String>();
 
         // Create the JList
         list = new JList<>(listModel);
@@ -147,6 +158,19 @@ public class ViewTrucksPanel extends AbstractTransportModulePanel {
             }
         });
 
+        list.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) { // Double-click event
+                    int selectedIndex = list.getSelectedIndex();
+                    if (selectedIndex != -1) {
+                        String selectedItem = listModel.getElementAt(selectedIndex);
+
+                        openNewWindow(selectedItem);
+                    }
+                }
+            }
+        });
+
         JPanel innerPanel = new JPanel();
         innerPanel.setBackground(new Color(0,0,0,0));
         innerPanel.add(listPanel);
@@ -157,15 +181,15 @@ public class ViewTrucksPanel extends AbstractTransportModulePanel {
         addItem(s4.getShortDescription());
 
         // Create the remove button
-        JButton removeButton = new JButton("Remove");
-        removeButton.setPreferredSize(new Dimension(100, 30));
-        innerPanel.add(removeButton,constraints);
+        //JButton removeButton = new JButton("Remove");
+        //removeButton.setPreferredSize(new Dimension(100, 30));
+        //innerPanel.add(removeButton,constraints);
         contentPanel.add(innerPanel,constraints);
-        removeButton.addActionListener(new ActionListener() {
+      /*  removeButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 showConfirmationDialog();
             }
-        });
+        });*/
 
 
 
@@ -190,13 +214,70 @@ public class ViewTrucksPanel extends AbstractTransportModulePanel {
     private void showConfirmationDialog() {
         int[] selectedIndices = list.getSelectedIndices();
         if (selectedIndices.length > 0) {
-            int choice = JOptionPane.showConfirmDialog(getComponent(), "Are you sure you want to remove the selected item?", "Confirmation", JOptionPane.YES_NO_OPTION);
+            int choice = JOptionPane.showConfirmDialog(newOpenPanel, "Are you sure you want to remove the selected item?", "Confirmation", JOptionPane.YES_NO_OPTION);
             if (choice == JOptionPane.YES_OPTION) {
                 removeSelectedItems(selectedIndices[0]);
+                newOpenWindow.dispose();
             }
         }
     }
+    private void openNewWindow(String selectedItem) {
+        newOpenWindow = new JFrame(selectedItem);
+        newOpenWindow.setSize(800, 600);
+        newOpenWindow.setLocationRelativeTo(contentPanel);
+        newOpenWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
+        //newOpenWindow.setLayout(new GridBagLayout());
+
+        newOpenWindow.getContentPane();
+
+
+
+        JLabel label = new JLabel("Selected Item: \n" + selectedItem);
+        label.setFont(new Font("Arial", Font.BOLD, 20));
+        label.setForeground(Colors.getForegroundColor());
+       
+        label.setBounds(0,0,400,200);
+
+        //newOpenWindow.add(label);
+
+        //Create the remove button
+        //JPanel buttonPanel = new JPanel();
+        JButton removeButton = new JButton("Remove");
+        removeButton.setPreferredSize(new Dimension(100, 30));
+        removeButton.setBounds(550,400,100,30);
+        JButton editButton = new JButton("Edit");
+        editButton.setPreferredSize(new Dimension(100, 30));
+        editButton.setBounds(100,400,100,30);
+        newOpenPanel.setLayout(null);
+        newOpenPanel.add(label);
+        newOpenPanel.add(removeButton);
+        newOpenPanel.add(editButton);
+
+        removeButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                showConfirmationDialog();
+            }
+        });
+
+        editButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // TODO: Open the edit window
+
+            }
+        });
+        //GridBagConstraints constraints = new GridBagConstraints();
+        //constraints.fill = GridBagConstraints.WEST;
+        //constraints.anchor = GridBagConstraints.PAGE_END;
+        //newOpenPanel.add(buttonPanel);
+        //buttonPanel.setLocation(0,20);
+        newOpenWindow.add(newOpenPanel);
+
+
+
+
+        newOpenWindow.setVisible(true);
+    }
 
     @Override
     public void componentResized(Dimension newSize) {

@@ -1,11 +1,13 @@
 package presentationLayer.gui.transportModule.view.panels.drivers;
 
 import domainObjects.transportModule.Driver;
+import presentationLayer.gui.plAbstracts.AbstractControl;
 import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
 import presentationLayer.gui.plAbstracts.interfaces.ObservableObject;
 import presentationLayer.gui.plAbstracts.interfaces.Searchable;
 import presentationLayer.gui.plUtils.SearchBox;
 import presentationLayer.gui.plUtils.SearchableString;
+import presentationLayer.gui.transportModule.control.DriversControl;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,8 +16,8 @@ import java.util.List;
 
 public class UpdateDriversPanel extends AbstractTransportModulePanel {
 
-    public UpdateDriversPanel() {
-        super();
+    public UpdateDriversPanel(DriversControl control) {
+        super(control);
         init();
     }
 

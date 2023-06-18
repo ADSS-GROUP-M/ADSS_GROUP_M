@@ -1,7 +1,9 @@
 package presentationLayer.gui.transportModule.view.panels.drivers;
 
+import presentationLayer.gui.plAbstracts.AbstractControl;
 import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
 import presentationLayer.gui.plAbstracts.interfaces.ObservableObject;
+import presentationLayer.gui.transportModule.control.DriversControl;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,8 +18,8 @@ public class ViewDriversPanel extends AbstractTransportModulePanel {
     private DefaultListModel<String> listModel;
     private JList<String> list;
     private JButton removeButton;
-    public ViewDriversPanel() {
-        super();
+    public ViewDriversPanel(DriversControl control) {
+        super(control);
         init();
 
     }

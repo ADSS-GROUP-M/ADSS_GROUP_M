@@ -2,6 +2,7 @@ package presentationLayer.gui.transportModule.view.panels.sites;
 
 import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
 import presentationLayer.gui.plAbstracts.interfaces.ObservableObject;
+import presentationLayer.gui.transportModule.control.SitesControl;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,8 +19,8 @@ public class ViewSitesPanel extends AbstractTransportModulePanel {
     private JList<String> list;
     private JButton removeButton;
 
-    public ViewSitesPanel() {
-        super();
+    public ViewSitesPanel(SitesControl control) {
+        super(control);
         init();
     }
 

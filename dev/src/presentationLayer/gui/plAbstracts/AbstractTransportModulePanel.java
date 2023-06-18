@@ -9,9 +9,12 @@ import java.awt.*;
 public abstract class AbstractTransportModulePanel extends ScrollablePanel implements ObjectObserver {
 
     protected ContentPanel contentPanel;
+    protected AbstractControl control;
 
-    public AbstractTransportModulePanel() {
+    protected AbstractTransportModulePanel(AbstractControl control) {
         super();
+        this.control = control;
+        subscribe(control);
         init();
     }
 

@@ -1,7 +1,9 @@
 package presentationLayer.gui.transportModule.view.panels.itemsLists;
 
+import presentationLayer.gui.plAbstracts.AbstractControl;
 import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
 import presentationLayer.gui.plAbstracts.interfaces.ObservableObject;
+import presentationLayer.gui.transportModule.control.ItemListsControl;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,8 +18,8 @@ public class ViewItemListPanel extends AbstractTransportModulePanel {
     private DefaultListModel<String> listModel;
     private JList<String> list;
     private JButton removeButton;
-    public ViewItemListPanel() {
-        super();
+    public ViewItemListPanel(ItemListsControl control) {
+        super(control);
         init();
 
     }

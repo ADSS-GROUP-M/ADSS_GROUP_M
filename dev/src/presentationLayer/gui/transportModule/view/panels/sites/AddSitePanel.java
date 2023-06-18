@@ -3,13 +3,14 @@ package presentationLayer.gui.transportModule.view.panels.sites;
 import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
 import presentationLayer.gui.plAbstracts.interfaces.ObservableObject;
 import presentationLayer.gui.plUtils.PrettyTextField;
+import presentationLayer.gui.transportModule.control.SitesControl;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class AddSitePanel extends AbstractTransportModulePanel {
-    public AddSitePanel() {
-        super();
+    public AddSitePanel(SitesControl control) {
+        super(control);
         init();
     }
     private void init() {

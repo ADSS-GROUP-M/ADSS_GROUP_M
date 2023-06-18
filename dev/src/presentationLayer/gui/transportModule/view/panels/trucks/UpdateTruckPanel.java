@@ -6,6 +6,7 @@ import presentationLayer.gui.plAbstracts.interfaces.Searchable;
 import presentationLayer.gui.plUtils.PrettyTextField;
 import presentationLayer.gui.plUtils.SearchBox;
 import presentationLayer.gui.plUtils.SearchableString;
+import presentationLayer.gui.transportModule.control.TrucksControl;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,8 +14,8 @@ import java.util.List;
 
 
 public class UpdateTruckPanel extends AbstractTransportModulePanel {
-    public UpdateTruckPanel() {
-        super();
+    public UpdateTruckPanel(TrucksControl control) {
+        super(control);
         init();
     }
     private void init() {

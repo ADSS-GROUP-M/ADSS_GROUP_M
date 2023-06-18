@@ -7,14 +7,15 @@ import presentationLayer.gui.plUtils.Fonts;
 import presentationLayer.gui.plUtils.PrettyTextField;
 import presentationLayer.gui.plUtils.SearchBox;
 import presentationLayer.gui.plUtils.SearchableString;
+import presentationLayer.gui.transportModule.control.TransportsControl;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
 public class AddTransportPanel extends AbstractTransportModulePanel {
-    public AddTransportPanel() {
-        super();
+    public AddTransportPanel(TransportsControl control) {
+        super(control);
         init();
     }
 

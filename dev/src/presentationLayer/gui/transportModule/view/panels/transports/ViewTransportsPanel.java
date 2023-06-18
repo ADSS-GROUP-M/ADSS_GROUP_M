@@ -2,6 +2,7 @@ package presentationLayer.gui.transportModule.view.panels.transports;
 
 import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
 import presentationLayer.gui.plAbstracts.interfaces.ObservableObject;
+import presentationLayer.gui.transportModule.control.TransportsControl;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,8 +18,8 @@ public class ViewTransportsPanel extends AbstractTransportModulePanel {
     private DefaultListModel<String> listModel;
     private JList<String> list;
     private JButton removeButton;
-    public ViewTransportsPanel() {
-        super();
+    public ViewTransportsPanel(TransportsControl control) {
+        super(control);
         init();
 
     }

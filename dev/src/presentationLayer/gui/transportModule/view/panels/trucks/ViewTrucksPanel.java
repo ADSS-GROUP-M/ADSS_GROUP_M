@@ -5,6 +5,7 @@ import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
 import presentationLayer.gui.plAbstracts.interfaces.ObservableObject;
 import presentationLayer.gui.plAbstracts.interfaces.Searchable;
 import presentationLayer.gui.plUtils.Colors;
+import presentationLayer.gui.transportModule.control.TrucksControl;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -22,8 +23,8 @@ public class ViewTrucksPanel extends AbstractTransportModulePanel {
     private JList<String> list;
     private JScrollPane listPanel;
 
-    public ViewTrucksPanel() {
-        super();
+    public ViewTrucksPanel(TrucksControl control) {
+        super(control);
         init();
     }
 

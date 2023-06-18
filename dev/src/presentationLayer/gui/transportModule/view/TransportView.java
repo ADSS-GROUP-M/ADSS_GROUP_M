@@ -1,7 +1,5 @@
 package presentationLayer.gui.transportModule.view;
 
-import presentationLayer.gui.plAbstracts.AbstractControl;
-import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
 import presentationLayer.gui.plAbstracts.MainWindow;
 import presentationLayer.gui.plAbstracts.PanelManager;
 import presentationLayer.gui.plAbstracts.interfaces.Panel;
@@ -56,50 +54,42 @@ public class TransportView extends MainWindow {
         return new QuickAccess()
         .addCategory("Transport Management",
                 new Link("View Transports",
-                        () -> subscribeAndSet(new ViewTransportsPanel(), transportsControl)),
+                        () -> setCurrentPanel(new ViewTransportsPanel(transportsControl))),
                 new Link("Add Transport",
-                        () -> subscribeAndSet(new AddTransportPanel(), transportsControl)),
+                        () -> setCurrentPanel(new AddTransportPanel(transportsControl))),
                 new Link("Update Transport",
-                        () -> subscribeAndSet(new UpdateTransportPanel(), transportsControl))
+                        () -> setCurrentPanel(new UpdateTransportPanel(transportsControl)))
         )
         .addCategory("Item List Management",
                 new Link("View Item Lists",
-                        () -> subscribeAndSet(new ViewItemListPanel(), itemListsControl)),
+                        () -> setCurrentPanel(new ViewItemListPanel(itemListsControl))),
                 new Link("Add Item List",
-                        () -> subscribeAndSet(new AddItemListPanel(), itemListsControl)),
+                        () -> setCurrentPanel(new AddItemListPanel(itemListsControl))),
                 new Link("Update Item List",
-                        () -> subscribeAndSet(new UpdateItemListPanel(), itemListsControl))
+                        () -> setCurrentPanel(new UpdateItemListPanel(itemListsControl)))
         )
         .addCategory("Drivers Management",
                 new Link("View Drivers",
-                        () -> subscribeAndSet(new ViewDriversPanel(), driversControl)),
+                        () -> setCurrentPanel(new ViewDriversPanel(driversControl))),
                 new Link("Update Driver",
-                        () -> subscribeAndSet(new UpdateDriversPanel(), driversControl))
+                        () -> setCurrentPanel(new UpdateDriversPanel(driversControl)))
         )
         .addCategory("Trucks Management",
                 new Link("View Trucks",
-                        () -> subscribeAndSet(new ViewTrucksPanel(), trucksControl)),
+                        () -> setCurrentPanel(new ViewTrucksPanel(trucksControl))),
                 new Link("Add Truck",
-                        () -> subscribeAndSet(new AddTruckPanel(), trucksControl)),
+                        () -> setCurrentPanel(new AddTruckPanel(trucksControl))),
                 new Link("Update Truck",
-                        () -> subscribeAndSet(new UpdateTruckPanel(), trucksControl))
+                        () -> setCurrentPanel(new UpdateTruckPanel(trucksControl)))
         )
         .addCategory("Sites Management",
                 new Link("View Sites",
-                        () -> subscribeAndSet(new ViewSitesPanel(), sitesControl)),
+                        () -> setCurrentPanel(new ViewSitesPanel(sitesControl))),
                 new Link("Add Site",
-                        () -> subscribeAndSet(new AddSitePanel(), sitesControl)),
+                        () -> setCurrentPanel(new AddSitePanel(sitesControl))),
                 new Link("Update Site",
-                        () -> subscribeAndSet(new UpdateSitePanel(), sitesControl))
+                        () -> setCurrentPanel(new UpdateSitePanel(sitesControl)))
         );
-    }
-
-    private void subscribeAndSet(AbstractTransportModulePanel panel, AbstractControl control) {
-
-        //TODO: currently returns null. needs to be implemented
-        // ---- control.getModel().subscribe(panel);
-        panel.subscribe(control);
-        setCurrentPanel(panel);
     }
 
     private void setCurrentPanel(Panel panel) {

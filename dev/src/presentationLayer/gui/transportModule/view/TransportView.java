@@ -96,7 +96,8 @@ public class TransportView extends MainWindow {
 
     private void subscribeAndSet(AbstractTransportModulePanel panel, AbstractControl control, UIElementEvent ... events) {
 
-        control.getModel().subscribe(panel);
+        //TODO: currently returns null. needs to be implemented
+        // ---- control.getModel().subscribe(panel);
         for (UIElementEvent event : events){
             panel.subscribe(control, event);
         }

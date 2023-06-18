@@ -7,9 +7,10 @@ public class Colors {
 
     public static ColorPalette colorPalette = ColorPalette.blue;
 
-    enum ColorPalette{
+    public enum ColorPalette{
         orange,
-        blue
+        blue,
+        hr
     }
 
 
@@ -25,12 +26,19 @@ public class Colors {
     private static final Color blueBackground = new Color(244, 250, 255, 255);
     private static final Color blueContentPanel = new Color(255, 255, 255, 230);
     private static final Image blueImage = new ImageIcon("src/resources/blue_truck.jpg").getImage();
+    // ================================= HR ================================== |
+    private static final Color hrForeground = new Color(39, 103, 166, 255);
+    private static final Color hrTransparentForeground = new Color(39, 103, 166, 128);
+    private static final Color hrBackground = new Color(244, 250, 255, 255);
+    private static final Color hrContentPanel = new Color(255, 255, 255, 230);
+    private static final Image hrImage = new ImageIcon("src/resources/hr_background.jpg").getImage();
 
 
     public static Color getForegroundColor(){
         return switch(colorPalette){
             case orange -> orangeForeground;
             case blue -> blueForeground;
+            case hr -> hrForeground;
         };
     }
 
@@ -38,6 +46,7 @@ public class Colors {
         return switch(colorPalette){
             case orange -> orangeTransparentForeground;
             case blue -> blueTransparentForeground;
+            case hr -> hrTransparentForeground;
         };
     }
 
@@ -45,6 +54,7 @@ public class Colors {
         return switch(colorPalette){
             case orange -> orangeBackground;
             case blue -> blueBackground;
+            case hr -> hrBackground;
         };
     }
 
@@ -52,6 +62,7 @@ public class Colors {
         return switch(colorPalette){
             case orange -> orangeImage;
             case blue -> blueImage;
+            case hr -> hrImage;
         };
     }
 
@@ -59,6 +70,7 @@ public class Colors {
         return switch(colorPalette){
             case orange -> orangeContentPanel;
             case blue -> blueContentPanel;
+            case hr -> hrContentPanel;
         };
     }
 }

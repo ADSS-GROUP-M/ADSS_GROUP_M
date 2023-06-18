@@ -1,18 +1,23 @@
-package presentationLayer.gui.transportModule.model;
+package presentationLayer.gui.employeeModule.model;
 
 import presentationLayer.gui.plAbstracts.AbstractObservableModel;
 import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
+import serviceLayer.employeeModule.Objects.SEmployee;
+import serviceLayer.employeeModule.Objects.SShiftType;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
 
 import static domainObjects.transportModule.Truck.CoolingCapacity;
 
-public final class ObservableTruck extends AbstractObservableModel {
+public final class ObservableShift extends AbstractObservableModel {
 
-    public String id;
-    public String model;
-    public String weightError;
-    public int baseWeight;
-    public int maxWeight;
-    public CoolingCapacity coolingCapacity;
+    public LocalDate shiftDate;
+    public SShiftType shiftType;
+    public Map<String, List<ObservableEmployee>> shiftRequests;
+    public Map<String, List<ObservableEmployee>> shiftWorkers;
+    public boolean isApproved;
     public String response;
 
     @Override

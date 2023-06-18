@@ -5,6 +5,7 @@ import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
 import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
 import presentationLayer.gui.plAbstracts.interfaces.Searchable;
 import presentationLayer.gui.plUtils.Colors;
+import presentationLayer.gui.plUtils.PrettyScrollBar;
 import presentationLayer.gui.transportModule.control.TrucksControl;
 
 import javax.swing.*;
@@ -151,7 +152,9 @@ public class ViewTrucksPanel extends AbstractTransportModulePanel {
         });
         list.setBorder(new EmptyBorder(0,20,20,20));
         listPanel.setBackground(new Color(0,0,0,0));
-
+        listPanel.setVerticalScrollBar(new PrettyScrollBar(160));
+        listPanel.getVerticalScrollBar().setUnitIncrement(30);
+        listPanel.getVerticalScrollBar().setBackground(new Color(0,0,0,0));
         list.setCellRenderer(new DefaultListCellRenderer() {
             @Override
             public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
@@ -205,6 +208,9 @@ public class ViewTrucksPanel extends AbstractTransportModulePanel {
         addItem(s2.getShortDescription());
         addItem(s3.getShortDescription());
         addItem(s4.getShortDescription());
+        for(int i = 5; i < 20; i++) {
+            addItem("Truck " + i);
+        }
 
         // Create the remove button
         //JButton removeButton = new JButton("Remove");

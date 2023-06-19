@@ -1,33 +1,30 @@
 package presentationLayer.gui.transportModule.control;
 
 import domainObjects.transportModule.ItemList;
-import domainObjects.transportModule.Truck;
 import exceptions.ErrorOccurredException;
 import presentationLayer.gui.plAbstracts.AbstractControl;
 import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
 import presentationLayer.gui.plAbstracts.interfaces.ObservableUIElement;
 import presentationLayer.gui.plUtils.ObservableList;
 import presentationLayer.gui.transportModule.model.ObservableItemList;
-import presentationLayer.gui.transportModule.model.ObservableTruck;
 import serviceLayer.transportModule.ItemListsService;
-import serviceLayer.transportModule.ResourceManagementService;
 import utils.Response;
 
 import java.util.List;
 
 public class ItemListsControl extends AbstractControl {
-    private final ItemListsService rms;
+    private final ItemListsService ils;
 
-    public ItemListsControl(ItemListsService rms) {
+    public ItemListsControl(ItemListsService ils) {
 
-        this.rms = rms;
+        this.ils = ils;
     }
 
     @Override
     public void add(ObservableUIElement observable, ObservableModel model) {
         ObservableItemList itemList = (ObservableItemList) model;
         ItemList toAdd =  new ItemList(itemList.id, itemList.load, itemList.unload);
-        String json = rms.addItemList(toAdd.toJson());
+        String json = ils.addItemList(toAdd.toJson());
         Response response;
         try {
             response = Response.fromJsonWithValidation(json);
@@ -43,7 +40,7 @@ public class ItemListsControl extends AbstractControl {
     public void remove(ObservableUIElement observable, ObservableModel model) {
         ObservableItemList itemList = (ObservableItemList) model;
         ItemList toRemove = ItemList.getLookupObject(itemList.id);
-        String json = rms.removeItemList(toRemove.toJson());
+        String json = ils.removeItemList(toRemove.toJson());
         Response response;
         try {
             response = Response.fromJsonWithValidation(json);
@@ -59,7 +56,7 @@ public class ItemListsControl extends AbstractControl {
     public void update(ObservableUIElement observable, ObservableModel model) {
         ObservableItemList itemList = (ObservableItemList) model;
         ItemList toUpdate =  new ItemList(itemList.id, itemList.load, itemList.unload);
-        String json = rms.updateItemList(toUpdate.toJson());
+        String json = ils.updateItemList(toUpdate.toJson());
         Response response;
         try {
             response = Response.fromJsonWithValidation(json);
@@ -75,7 +72,7 @@ public class ItemListsControl extends AbstractControl {
     public void get(ObservableUIElement observable, ObservableModel model) {
         ObservableItemList itemList = (ObservableItemList) model;
         ItemList toGet = ItemList.getLookupObject(itemList.id);
-        String json = rms.getItemList(toGet.toJson());
+        String json = ils.getItemList(toGet.toJson());
         Response response;
         try {
             response = Response.fromJsonWithValidation(json);
@@ -89,7 +86,7 @@ public class ItemListsControl extends AbstractControl {
 
     @Override
     public void getAll(ObservableUIElement observable, ObservableList<ObservableModel> models) {
-        String json = rms.getAllItemLists();
+        String json = ils.getAllItemLists();
         Response response;
         try {
             response = Response.fromJsonWithValidation(json);
@@ -106,6 +103,7 @@ public class ItemListsControl extends AbstractControl {
             observableItemList.unload = itemList.unload();
             models.add(observableItemList);
         }
+        models.message = response.message();
         models.notifyObservers();
     }
 

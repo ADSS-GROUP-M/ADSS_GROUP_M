@@ -9,6 +9,7 @@ import java.util.function.UnaryOperator;
 public class ObservableList<E> extends AbstractObservableModel implements List<E> {
 
     private List<E> list;
+    public String message;
 
     public ObservableList() {
         list = new ArrayList<>();

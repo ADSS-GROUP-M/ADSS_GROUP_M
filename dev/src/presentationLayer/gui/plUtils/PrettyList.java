@@ -57,12 +57,12 @@ public class PrettyList implements UIElement {
         list.setBorder(new EmptyBorder(0,20,20,20));
         listPanel.setBackground(new Color(0,0,0,0));
         listPanel.setVerticalScrollBar(new PrettyScrollBar(160));
-        listPanel.setHorizontalScrollBar(new PrettyScrollBar(50));
+//        listPanel.setHorizontalScrollBar(new PrettyScrollBar(50));
         listPanel.getVerticalScrollBar().setUnitIncrement(30);
-        listPanel.getHorizontalScrollBar().setUnitIncrement(30);
+//        listPanel.getHorizontalScrollBar().setUnitIncrement(30);
         listPanel.getVerticalScrollBar().setBackground(new Color(0,0,0,0));
-        listPanel.getHorizontalScrollBar().setBackground(new Color(0,0,0,0));
-        listPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+//        listPanel.getHorizontalScrollBar().setBackground(new Color(0,0,0,0));
+//        listPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 
 
 
@@ -71,9 +71,8 @@ public class PrettyList implements UIElement {
             @Override
             public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
                 Component r = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-
-                list.setFixedCellHeight(-1);
-                setPreferredSize(new Dimension(500, 100));
+                
+                r.setPreferredSize(new Dimension(value.toString().length()*8,100));
 
                 if(isSelected) {
                     setBackground(new Color(200,200,200,128));
@@ -100,7 +99,7 @@ public class PrettyList implements UIElement {
                         return false;
                     }
                 });
-                r.revalidate();
+                repaintListener.revalidate();
                 repaintListener.repaint();
                 return r;
             }
@@ -120,6 +119,7 @@ public class PrettyList implements UIElement {
         Dimension preferredSize = new Dimension((int) (newSize.getWidth() * 0.6), (int) (newSize.getHeight() * 0.8));
         listPanel.setPreferredSize(preferredSize);
         listPanel.revalidate();
+//        listPanel.repaint();
 //        panel.repaint();
     }
 }

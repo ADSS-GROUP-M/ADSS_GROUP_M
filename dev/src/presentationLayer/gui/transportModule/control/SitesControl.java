@@ -45,7 +45,24 @@ public class SitesControl extends AbstractControl {
 
     @Override
     public ObservableModel getModel(ObservableModel lookupObject) {
-        return null;
+        ObservableSite site = (ObservableSite) lookupObject;
+        Site toLookUp = Site.getLookupObject(site.name);
+        String json = rms.getSite(toLookUp.toJson());
+        Response response;
+        try {
+            response = Response.fromJsonWithValidation(json);
+        } catch (ErrorOccurredException e) {
+            throw new RuntimeException(e);
+        }
+        Site fetched = Site.fromJson(response.data());
+        ObservableSite toReturn = new ObservableSite();
+        toReturn.name = fetched.name();
+        toReturn.address = fetched.address();
+        toReturn.transportZone = fetched.transportZone();
+        toReturn.phoneNumber = fetched.phoneNumber();
+        toReturn.contactName = fetched.contactName();
+        toReturn.siteType = fetched.siteType();
+        return toReturn;
     }
 
     @Override

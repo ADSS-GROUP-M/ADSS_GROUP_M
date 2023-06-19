@@ -5,7 +5,7 @@ import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
 
 import static domainObjects.transportModule.Truck.CoolingCapacity;
 
-public final class ObservableTruck extends AbstractObservableModel {
+public class ObservableTruck extends AbstractObservableModel {
 
     public String id;
     public String model;

@@ -1,6 +1,7 @@
 package Backend.ServiceLayer.SuppliersModule;
 
 import Backend.BusinessLayer.SuppliersModule.AgreementController;
+import Backend.BusinessLayer.SuppliersModule.BillOfQuantities;
 import Backend.BusinessLayer.SuppliersModule.BillOfQuantitiesController;
 import Backend.BusinessLayer.SuppliersModule.Discounts.Discount;
 import com.google.gson.Gson;
@@ -17,6 +18,15 @@ public class BillOfQuantitiesService {
         billOfQuantitiesController = BillOfQuantitiesController.getInstance();
         gson = new Gson();
     }
+
+    public String getBillOfQuantities(String bnNumber){
+        try {
+            BillOfQuantities b = billOfQuantitiesController.getBillOfQuantities(bnNumber);
+            return gson.toJson(new Response<BillOfQuantities>(b));
+        }
+        catch (Exception e){
+            return gson.toJson(new Response<BillOfQuantities>(e.getMessage(), true));
+        }    }
 
     public String setProductDiscount(String bnNumber, String catalogNumber, int amount, Discount discount){
         try {

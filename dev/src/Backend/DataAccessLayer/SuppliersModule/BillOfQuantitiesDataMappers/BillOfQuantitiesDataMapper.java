@@ -98,6 +98,7 @@ public class BillOfQuantitiesDataMapper {
     }
 
     public void setDiscountOnAmountOfProducts(String bnNumber, int amountOfProductsForDiscount, Discount discount) throws SQLException {
+        discountOnAmountDataMapper.delete(bnNumber);
         discountOnAmountDataMapper.insert(bnNumber, amountOfProductsForDiscount, discount);
     }
 

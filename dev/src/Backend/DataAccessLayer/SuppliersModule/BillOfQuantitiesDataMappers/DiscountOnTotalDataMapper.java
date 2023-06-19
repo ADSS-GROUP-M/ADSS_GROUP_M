@@ -17,9 +17,9 @@ public class DiscountOnTotalDataMapper  extends AbstractDataMapper {
     public void insert(String bnNumber, double priceToReach, Discount discount) throws SQLException {
         double percentage = -1,cash = -1;
         if(discount instanceof PercentageDiscount)
-            percentage = ((PercentageDiscount) discount).getPercentage();
+            percentage = discount != null ? ((PercentageDiscount) discount).getPercentage() : 0;
         else
-            cash = ((CashDiscount)discount).getAmountOfDiscount();
+            cash = discount != null ? ((CashDiscount)discount).getAmountOfDiscount() : 0;
         String columnsString = String.join(", ", columns);
         sqlExecutor.executeWrite(String.format("INSERT INTO %s (%s) VALUES('%s', %f, %f, %f)",tableName, columnsString, bnNumber,
                 priceToReach, percentage, cash));

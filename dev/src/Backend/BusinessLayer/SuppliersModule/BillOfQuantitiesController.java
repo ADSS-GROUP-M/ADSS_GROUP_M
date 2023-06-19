@@ -26,7 +26,7 @@ public class BillOfQuantitiesController {
     }
 
 
-    private BillOfQuantities getBillOfQuantities(String bnNumber) throws SQLException, DalException {
+    public BillOfQuantities getBillOfQuantities(String bnNumber) throws SQLException, DalException {
         return billOfQuantitiesDataMapper.getBillOfQuantities(bnNumber);
     }
 

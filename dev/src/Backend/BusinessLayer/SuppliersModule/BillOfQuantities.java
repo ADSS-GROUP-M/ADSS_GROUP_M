@@ -13,11 +13,11 @@ public class BillOfQuantities {
     /***
      * discount to be applied on the total order after discount on amount - T is the price before and R is the price after
      */
-    private Function<Double, Double> discountOnTotalOrder;
+    private transient Function<Double, Double> discountOnTotalOrder;
     /***
      * discount to be applied on the total order after per-product discounts - T is the price before and R is the price after
      */
-    private Function<Integer, Function<Double, Double>> discountOnAmountOfProducts;
+    private transient Function<Integer, Function<Double, Double>> discountOnAmountOfProducts;
     /***
      * for "toString" purpose
      */
@@ -35,6 +35,31 @@ public class BillOfQuantities {
     public BillOfQuantities(Map<String, Map<Integer, Discount>> productsDiscounts){
         this.productsDiscounts = productsDiscounts;
     }
+
+    public Map<String, Map<Integer, Discount>> getProductsDiscounts() {
+        return productsDiscounts;
+    }
+
+    public int getAmountToReachForDiscount() {
+        return amountToReachForDiscount;
+    }
+
+    public double getPriceToReachForDiscount() {
+        return priceToReachForDiscount;
+    }
+
+    public Discount getDiscountOnAmount() {
+        return discountOnAmount;
+    }
+
+    public Discount getDiscountOnTotal() {
+        return discountOnTotal;
+    }
+
+    public boolean isAmountBeforeTotal() {
+        return amountBeforeTotal;
+    }
+
     public void setOrderOfDiscounts(boolean amountBeforeTotal){
         this.amountBeforeTotal = amountBeforeTotal;
     }

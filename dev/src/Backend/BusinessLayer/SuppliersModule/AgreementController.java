@@ -21,11 +21,11 @@ public class AgreementController {
         return instance;
     }
 
-    public void addAgreement(String bnNumber, List<Product> productsList, DeliveryAgreement deliveryAgreement) throws SQLException {
+    public void addAgreement(String bnNumber, List<Product> productsList, DeliveryAgreement deliveryAgreement) throws Exception {
         agreementDataMapper.insertAgreement(bnNumber ,productsList, deliveryAgreement);
     }
 
-    private Agreement getAgreement(String bnNumber) throws SQLException{
+    public Agreement getAgreement(String bnNumber) throws SQLException{
         return agreementDataMapper.getAgreement(bnNumber);
     }
 

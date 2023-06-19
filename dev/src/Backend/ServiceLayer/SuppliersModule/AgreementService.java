@@ -1,5 +1,6 @@
 package Backend.ServiceLayer.SuppliersModule;
 
+import Backend.BusinessLayer.SuppliersModule.Agreement;
 import Backend.BusinessLayer.SuppliersModule.AgreementController;
 import Backend.BusinessLayer.SuppliersModule.BillOfQuantitiesController;
 import com.google.gson.Gson;
@@ -17,6 +18,15 @@ public class AgreementService {
         gson = new Gson();
     }
 
+    public String getAgreement(String bnNumber){
+        try {
+            Agreement agreement = agreementController.getAgreement(bnNumber);
+            return gson.toJson(new Response<Agreement>(agreement));
+        }
+        catch (Exception e){
+            return gson.toJson(new Response<Agreement>(e.getMessage(), true));
+        }
+    }
     public String setFixedDeliveryAgreement(String bnNumber, boolean haveTransport, List<Integer> days){
         try {
             agreementController.setFixedDeliveryAgreement(bnNumber, haveTransport, days);
@@ -30,7 +40,7 @@ public class AgreementService {
     public String setByInvitationDeliveryAgreement(String bnNumber, boolean haveTransport, int numOfDays){
         try {
             agreementController.setByInvitationDeliveryAgreement(bnNumber, haveTransport, numOfDays);
-            return gson.toJson(new Response<String>("contact phone number is edited!", false));
+            return gson.toJson(new Response<String>("delivery agreement is edited!", false));
         }
         catch (Exception e){
             return gson.toJson(new Response<>(e.getMessage(), true));

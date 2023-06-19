@@ -13,6 +13,7 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.plaf.basic.BasicButtonUI;
 import java.awt.*;
 import java.awt.event.*;
 
@@ -127,14 +128,26 @@ public class ViewTrucksPanel extends AbstractTransportModulePanel {
         constraints.gridy = 0;
         constraints.gridx = 0;
         constraints.anchor = GridBagConstraints.WEST;
-        JButton editButton = new JButton("Edit");
-        editButton.setPreferredSize(new Dimension(100, 30));
+        JButton editButton = new JButton();
+        editButton.setPreferredSize(new Dimension(30, 30));
         buttonsPanel.add(editButton);
 
-        JButton removeButton = new JButton("Remove");
-        removeButton.setPreferredSize(new Dimension(100, 30));
+        JButton removeButton = new JButton();
+        removeButton.setPreferredSize(new Dimension(30, 30));
+        removeButton.setBorder(new EmptyBorder(0,0,0,0));
+        removeButton.setBackground(new Color(0,0,0,0));
         buttonsPanel.add(removeButton);
         contentPanel.add(buttonsPanel, constraints);
+        removeButton.setUI(new BasicButtonUI(){
+            @Override
+            public void paint(Graphics g, JComponent c) {
+                super.paint(g, c);
+                Graphics2D g2 = (Graphics2D)g;
+                g2.setStroke(new BasicStroke(2));
+                g2.setColor(Color.RED);
+                g2.fillRoundRect(3,13,c.getWidth()-4,4,1,1);
+            }
+        });
 
 
 

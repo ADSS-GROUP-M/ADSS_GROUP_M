@@ -8,6 +8,8 @@ import presentationLayer.gui.transportModule.model.ObservableTruck;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 
 public class PrettyList implements UIElement {
@@ -15,6 +17,7 @@ public class PrettyList implements UIElement {
     private final ObservableList<Searchable> models;
     private final Container repaintListener;
     private JScrollPane listPanel;
+    private JList<Searchable> list;
 
     public PrettyList(ObservableList<Searchable> models , Container repaintListener) {
         this.models = models;
@@ -26,7 +29,7 @@ public class PrettyList implements UIElement {
 
         DefaultListModel<Searchable> listModel = new DefaultListModel<>();
         listModel.addAll(models);
-        JList<Searchable> list = new JList<>(listModel);
+        list = new JList<>(listModel);
         listPanel = new JScrollPane(list);
 
         list.setBackground(new Color(0,0,0,0));
@@ -60,7 +63,6 @@ public class PrettyList implements UIElement {
         listPanel.getVerticalScrollBar().setUnitIncrement(30);
         listPanel.getHorizontalScrollBar().setUnitIncrement(30);
         listPanel.getVerticalScrollBar().setBackground(new Color(0,0,0,0));
-
 
 
         list.setCellRenderer(new DefaultListCellRenderer() {
@@ -102,8 +104,13 @@ public class PrettyList implements UIElement {
         });
     }
 
+    public void addListSelectionListener(ListSelectionListener listener){
+        list.addListSelectionListener(listener);
+    }
 
-
+    public JList<Searchable> getList(){
+        return list;
+    }
 
     @Override
     public Component getComponent() {
@@ -115,7 +122,5 @@ public class PrettyList implements UIElement {
         Dimension preferredSize = new Dimension((int) (newSize.getWidth() * 0.6), (int) (newSize.getHeight() * 0.8));
         listPanel.setPreferredSize(preferredSize);
         listPanel.revalidate();
-//        listPanel.repaint();
-//        panel.repaint();
     }
 }

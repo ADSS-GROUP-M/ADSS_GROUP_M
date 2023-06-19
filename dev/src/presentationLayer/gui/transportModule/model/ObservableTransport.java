@@ -18,7 +18,6 @@ public class ObservableTransport extends AbstractObservableModel {
     public String truckId;
     public LocalDateTime departureTime;
     public int weight;
-    public Set<String> destinationsSet;
     public Map<String, LocalTime> estimatedArrivalTimes;
     public boolean manualOverride;
     public String message;
@@ -40,6 +39,7 @@ public class ObservableTransport extends AbstractObservableModel {
 
     @Override
     public String getLongDescription() {
-        return null;
+        return String.format("Transport ID: %d | Driver ID: %s | Truck ID: %s | Departure Time: %s | Weight: %d",
+                id, driverId, truckId, departureTime, weight);
     }
 }

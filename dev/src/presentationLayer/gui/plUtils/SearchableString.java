@@ -24,4 +24,9 @@ public class SearchableString implements Searchable {
     public String getLongDescription() {
         return null;
     }
+
+    @Override
+    public String toString() {
+        return string;
+    }
 }

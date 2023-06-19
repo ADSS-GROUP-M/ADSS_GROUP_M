@@ -42,7 +42,7 @@ public class TransportView extends MainWindow {
         this.driversControl = driversControl;
         this.trucksControl = trucksControl;
         this.sitesControl = sitesControl;
-        currentPanel = new ViewTransportsPanel(transportsControl);
+        currentPanel = new ViewTransportsPanel(transportsControl, sitesControl);
         panelManager = new PanelManager(currentPanel);
         super.addUIElement(panelManager);
         super.addUIElement(initQuickAccess());
@@ -54,7 +54,7 @@ public class TransportView extends MainWindow {
         return new QuickAccess()
         .addCategory("Transport Management",
                 new Link("View Transports",
-                        () -> setCurrentPanel(new ViewTransportsPanel(transportsControl))),
+                        () -> setCurrentPanel(new ViewTransportsPanel(transportsControl, sitesControl))),
                 new Link("Add Transport",
                         () -> setCurrentPanel(new AddTransportPanel(transportsControl))),
                 new Link("Update Transport",

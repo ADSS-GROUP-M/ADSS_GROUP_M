@@ -37,7 +37,6 @@ public class ViewSitesPanel extends AbstractTransportModulePanel {
         contentPanel.setLayout(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
 
-
         JPanel buttonsPanel = new JPanel();
         buttonsPanel.setBackground(new Color(0,0,0,0));
         constraints.gridy = 0;
@@ -91,7 +90,7 @@ public class ViewSitesPanel extends AbstractTransportModulePanel {
         Dimension contentPreferredSize = new Dimension((int) (panel.getWidth() * 0.8), (int) (panel.getHeight() * 0.6));
         contentPanel.setPreferredSize(new Dimension(contentPreferredSize.width, contentPreferredSize.height + 250));
         sitesList.componentResized(scrollPane.getSize());
-        scrollPane.revalidate();
+        contentPanel.revalidate();
     }
 
     @Override

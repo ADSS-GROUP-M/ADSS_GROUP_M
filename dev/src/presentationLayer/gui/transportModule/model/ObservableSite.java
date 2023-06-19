@@ -27,7 +27,7 @@ public class ObservableSite extends AbstractObservableModel {
 
     @Override
     public String getShortDescription() {
-        return null;
+        return name;
     }
 
     @Override

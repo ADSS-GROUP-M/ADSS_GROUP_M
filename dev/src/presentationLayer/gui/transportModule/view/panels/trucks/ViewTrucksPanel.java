@@ -33,7 +33,6 @@ public class ViewTrucksPanel extends AbstractTransportModulePanel {
         contentPanel.setLayout(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
 
-
         JPanel buttonsPanel = new JPanel();
         buttonsPanel.setBackground(new Color(0,0,0,0));
         constraints.gridy = 0;
@@ -49,16 +48,6 @@ public class ViewTrucksPanel extends AbstractTransportModulePanel {
         removeButton.setBackground(new Color(0,0,0,0));
         buttonsPanel.add(removeButton);
         contentPanel.add(buttonsPanel, constraints);
-        removeButton.setUI(new BasicButtonUI(){
-            @Override
-            public void paint(Graphics g, JComponent c) {
-                super.paint(g, c);
-                Graphics2D g2 = (Graphics2D)g;
-                g2.setStroke(new BasicStroke(2));
-                g2.setColor(Color.RED);
-                g2.fillRoundRect(3,13,c.getWidth()-4,4,1,1);
-            }
-        });
 
         constraints.anchor = GridBagConstraints.CENTER;
         constraints.gridx = 0;

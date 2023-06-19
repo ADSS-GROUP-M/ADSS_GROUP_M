@@ -3,13 +3,17 @@ package presentationLayer.gui.transportModule.view.panels.sites;
 import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
 import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
 import presentationLayer.gui.plAbstracts.interfaces.Searchable;
+import presentationLayer.gui.plUtils.ObservableList;
 import presentationLayer.gui.plUtils.PrettyTextField;
 import presentationLayer.gui.plUtils.SearchBox;
 import presentationLayer.gui.plUtils.SearchableString;
 import presentationLayer.gui.transportModule.control.SitesControl;
+import presentationLayer.gui.transportModule.model.ObservableSite;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class UpdateSitePanel extends AbstractTransportModulePanel {
@@ -18,6 +22,20 @@ public class UpdateSitePanel extends AbstractTransportModulePanel {
         init();
     }
     private void init() {
+
+
+        ObservableList emptySiteList = new ObservableList<>();
+        control.getAll(this,emptySiteList);
+        ObservableList<Searchable> sites = emptySiteList;
+        Collections.sort(sites, new Comparator<Searchable>() {
+            @Override
+            public int compare(Searchable o1, Searchable o2) {
+                return o1.getShortDescription().compareTo(o2.getShortDescription());
+            }
+        });
+
+
+
         Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
         contentPanel.setSize(scrollPane.getSize());
         Dimension textFieldSize = new Dimension(200,30);
@@ -32,14 +50,16 @@ public class UpdateSitePanel extends AbstractTransportModulePanel {
         constraints.insets = new Insets(5, 5, 5, 5);
         contentPanel.add(sitesLabel, constraints);
 
-        List<Searchable> searchableList = List.of(new SearchableString("item1"), new SearchableString("item2"), new SearchableString("item3"));
-        SearchBox sites = new SearchBox(searchableList,"Select Site",textFieldSize, this);
+
+
+
+        SearchBox searchBox = new SearchBox(sites,"Select Site",textFieldSize, this);
         constraints.gridx = 1;
         constraints.gridy = 1;
         constraints.gridwidth = 2;
         constraints.fill = GridBagConstraints.NONE;
         constraints.anchor = GridBagConstraints.CENTER;
-        contentPanel.add(sites.getComponent(), constraints);
+        contentPanel.add(searchBox.getComponent(), constraints);
 
         JLabel baseLabel = new JLabel("Contact Name:");
         constraints.gridwidth = 1;

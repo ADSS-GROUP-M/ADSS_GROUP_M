@@ -41,7 +41,8 @@ public class TransportsControl extends AbstractControl {
         Transport added = Transport.fromJson(response.data());
         transportModel.id = added.id();
         transportModel.estimatedArrivalTimes = added.estimatedArrivalTimes();
-        transportModel.response = response.message();
+
+        transportModel.message = response.message();
         transportModel.notifyObservers();
     }
 
@@ -68,7 +69,7 @@ public class TransportsControl extends AbstractControl {
         }
         Transport updated = Transport.fromJson(response.data());
         transportModel.estimatedArrivalTimes = updated.estimatedArrivalTimes();
-        transportModel.response = response.message();
+        transportModel.message = response.message();
         transportModel.notifyObservers();
     }
 
@@ -83,7 +84,7 @@ public class TransportsControl extends AbstractControl {
         } catch (ErrorOccurredException e) {
             throw new RuntimeException(e);
         }
-        transportModel.response = response.message();
+        transportModel.message = response.message();
         transportModel.notifyObservers();
     }
 
@@ -107,7 +108,7 @@ public class TransportsControl extends AbstractControl {
         transportModel.weight = got.weight();
         transportModel.estimatedArrivalTimes = got.estimatedArrivalTimes();
         transportModel.manualOverride = got.arrivalTimesManualOverride();
-        transportModel.response = response.message();
+        transportModel.message = response.message();
         transportModel.notifyObservers();
     }
 
@@ -134,20 +135,5 @@ public class TransportsControl extends AbstractControl {
             transportModel.manualOverride = transport.arrivalTimesManualOverride();
             models.add(transportModel);
         }
-    }
-
-    @Override
-    public ObservableModel getModel(ObservableModel lookupObject) {
-        return null;
-    }
-
-    @Override
-    public ObservableModel getEmptyModel() {
-        return new ObservableTransport();
-    }
-
-    @Override
-    public List<ObservableModel> getAllModels() {
-        return null;
     }
 }

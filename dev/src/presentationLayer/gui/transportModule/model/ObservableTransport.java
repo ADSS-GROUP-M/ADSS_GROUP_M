@@ -21,7 +21,7 @@ public class ObservableTransport extends AbstractObservableModel {
     public Set<String> destinationsSet;
     public Map<String, LocalTime> estimatedArrivalTimes;
     public boolean manualOverride;
-    public String response;
+    public String message;
 
     @Override
     public ObservableModel getUpdate() {

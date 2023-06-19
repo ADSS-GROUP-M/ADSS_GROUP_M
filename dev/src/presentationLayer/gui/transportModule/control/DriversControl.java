@@ -23,6 +23,7 @@ public class DriversControl extends AbstractControl {
     @Override
     public void update(ObservableUIElement observable, ObservableModel model) {
         ObservableDriver driver = (ObservableDriver) model;
+
         Driver toAdd =  new Driver(driver.id, driver.name, driver.licenseType);
         String json = rms.updateDriver(toAdd.toJson());
         Response response;
@@ -37,24 +38,9 @@ public class DriversControl extends AbstractControl {
     }
 
     @Override
-    public void remove(ObservableUIElement observable, ObservableModel model) {
-        ObservableDriver driver = (ObservableDriver) model;
-        Driver toRemove = Driver.getLookupObject(driver.id);
-        String json = rms.removeDriver(toRemove.toJson());
-        Response response;
-        try {
-            response = Response.fromJsonWithValidation(json);
-        } catch (ErrorOccurredException e) {
-            throw new RuntimeException(e);
-        }
-
-        driver.response = response.message();
-        driver.notifyObservers();
-    }
-
-    @Override
     public void get(ObservableUIElement observable, ObservableModel model) {
         ObservableDriver driver = (ObservableDriver) model;
+
         Driver toGet = Driver.getLookupObject(driver.id);
         String json = rms.getDriver(toGet.toJson());
         Response response;
@@ -74,6 +60,7 @@ public class DriversControl extends AbstractControl {
 
     @Override
     public void getAll(ObservableUIElement observable, ObservableList<ObservableModel> models) {
+
         String json = rms.getAllDrivers();
         Response response;
         try {
@@ -81,31 +68,17 @@ public class DriversControl extends AbstractControl {
         } catch (ErrorOccurredException e) {
             throw new RuntimeException(e);
         }
-        List<Driver> fetched = Driver.listFromJson(response.data());
 
+        List<Driver> fetched = Driver.listFromJson(response.data());
         for (Driver driver : fetched) {
             ObservableDriver observableDriver = new ObservableDriver();
             observableDriver.id = driver.id();
             observableDriver.name = driver.name();
             observableDriver.licenseType = driver.licenseType();
-            observableDriver.response = response.message();
             models.add(observableDriver);
         }
+
+        models.message = response.message();
         models.notifyObservers();
-    }
-
-    @Override
-    public ObservableModel getModel(ObservableModel lookupObject) {
-        return null;
-    }
-
-    @Override
-    public ObservableModel getEmptyModel() {
-        return new ObservableDriver();
-    }
-
-    @Override
-    public List<ObservableModel> getAllModels() {
-        return null;
     }
 }

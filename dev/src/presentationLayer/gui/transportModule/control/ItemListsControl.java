@@ -23,6 +23,7 @@ public class ItemListsControl extends AbstractControl {
     @Override
     public void add(ObservableUIElement observable, ObservableModel model) {
         ObservableItemList itemList = (ObservableItemList) model;
+
         ItemList toAdd =  new ItemList(itemList.id, itemList.load, itemList.unload);
         String json = ils.addItemList(toAdd.toJson());
         Response response;
@@ -39,6 +40,7 @@ public class ItemListsControl extends AbstractControl {
     @Override
     public void remove(ObservableUIElement observable, ObservableModel model) {
         ObservableItemList itemList = (ObservableItemList) model;
+
         ItemList toRemove = ItemList.getLookupObject(itemList.id);
         String json = ils.removeItemList(toRemove.toJson());
         Response response;
@@ -55,6 +57,7 @@ public class ItemListsControl extends AbstractControl {
     @Override
     public void update(ObservableUIElement observable, ObservableModel model) {
         ObservableItemList itemList = (ObservableItemList) model;
+
         ItemList toUpdate =  new ItemList(itemList.id, itemList.load, itemList.unload);
         String json = ils.updateItemList(toUpdate.toJson());
         Response response;
@@ -71,6 +74,7 @@ public class ItemListsControl extends AbstractControl {
     @Override
     public void get(ObservableUIElement observable, ObservableModel model) {
         ObservableItemList itemList = (ObservableItemList) model;
+
         ItemList toGet = ItemList.getLookupObject(itemList.id);
         String json = ils.getItemList(toGet.toJson());
         Response response;
@@ -86,6 +90,7 @@ public class ItemListsControl extends AbstractControl {
 
     @Override
     public void getAll(ObservableUIElement observable, ObservableList<ObservableModel> models) {
+
         String json = ils.getAllItemLists();
         Response response;
         try {
@@ -94,31 +99,17 @@ public class ItemListsControl extends AbstractControl {
             throw new RuntimeException(e);
         }
 
-        List<ItemList> itemListList = ItemList.listFromJson(response.data());
+        List<ItemList> itemLists = ItemList.listFromJson(response.data());
 
-        for (ItemList itemList : itemListList) {
+        for (ItemList itemList : itemLists) {
             ObservableItemList observableItemList = new ObservableItemList();
             observableItemList.id = itemList.id();
             observableItemList.load = itemList.load();
             observableItemList.unload = itemList.unload();
             models.add(observableItemList);
         }
+
         models.message = response.message();
         models.notifyObservers();
-    }
-
-    @Override
-    public ObservableModel getModel(ObservableModel lookupObject) {
-        return null;
-    }
-
-    @Override
-    public ObservableModel getEmptyModel() {
-        return new ObservableItemList();
-    }
-
-    @Override
-    public List<ObservableModel> getAllModels() {
-        return null;
     }
 }

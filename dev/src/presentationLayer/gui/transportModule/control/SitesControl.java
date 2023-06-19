@@ -69,14 +69,24 @@ public class SitesControl extends AbstractControl {
     @Override
     public void get(ObservableUIElement observable, ObservableModel model) {
         ObservableSite siteModel = (ObservableSite) model;
-        Site site = Site.getLookupObject(siteModel.name);
-        String json = rms.getSite(site.toJson());
+
+        String json = rms.getSite(Site.getLookupObject(siteModel.name).toJson());
         Response response;
         try {
             response = Response.fromJsonWithValidation(json);
         } catch (ErrorOccurredException e) {
             throw new RuntimeException(e);
         }
+        Site fetched = Site.fromJson(response.data());
+        siteModel.name = fetched.name();
+        siteModel.address = fetched.address();
+        siteModel.transportZone = fetched.transportZone();
+        siteModel.phoneNumber = fetched.phoneNumber();
+        siteModel.contactName = fetched.contactName();
+        siteModel.siteType = fetched.siteType();
+        siteModel.latitude = fetched.latitude();
+        siteModel.longitude = fetched.longitude();
+
         siteModel.response = response.message();
         siteModel.notifyObservers();
     }
@@ -102,37 +112,5 @@ public class SitesControl extends AbstractControl {
             models.add(siteModel);
         }
         models.notifyObservers();
-    }
-
-    @Override
-    public ObservableModel getModel(ObservableModel lookupObject) {
-        ObservableSite site = (ObservableSite) lookupObject;
-        Site toLookUp = Site.getLookupObject(site.name);
-        String json = rms.getSite(toLookUp.toJson());
-        Response response;
-        try {
-            response = Response.fromJsonWithValidation(json);
-        } catch (ErrorOccurredException e) {
-            throw new RuntimeException(e);
-        }
-        Site fetched = Site.fromJson(response.data());
-        ObservableSite toReturn = new ObservableSite();
-        toReturn.name = fetched.name();
-        toReturn.address = fetched.address();
-        toReturn.transportZone = fetched.transportZone();
-        toReturn.phoneNumber = fetched.phoneNumber();
-        toReturn.contactName = fetched.contactName();
-        toReturn.siteType = fetched.siteType();
-        return toReturn;
-    }
-
-    @Override
-    public ObservableModel getEmptyModel() {
-        return new ObservableSite();
-    }
-
-    @Override
-    public List<ObservableModel> getAllModels() {
-        return null;
     }
 }

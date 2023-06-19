@@ -22,7 +22,7 @@ public class SearchableString implements Searchable {
 
     @Override
     public String getLongDescription() {
-        return null;
+        return string;
     }
 
     @Override

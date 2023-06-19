@@ -9,6 +9,7 @@ public class ObservableDriver extends AbstractObservableModel {
     public String id;
     public String name;
     public LicenseType licenseType;
+    public String response;
 
     @Override
     public ObservableModel getUpdate() {

@@ -67,6 +67,9 @@ public class PrettyTextField implements UIElement {
     public void setMaximumCharacters(int maxChars) {
         this.maxChars = maxChars;
     }
+    public String getText(){
+        return textField.getText();
+    }
 
     @Override
     public Component getComponent() {

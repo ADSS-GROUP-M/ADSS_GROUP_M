@@ -13,6 +13,7 @@ public class ObservableSite extends AbstractObservableModel {
     public SiteType siteType;
     public double latitude;
     public double longitude;
+    public String response;
 
     @Override
     public ObservableSite getUpdate() {

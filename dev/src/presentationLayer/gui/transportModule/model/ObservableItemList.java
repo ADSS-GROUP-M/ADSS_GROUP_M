@@ -9,6 +9,7 @@ public class ObservableItemList extends AbstractObservableModel {
     public int id;
     public HashMap<String, Integer> load;
     public HashMap<String, Integer> unload;
+    public String response;
 
     @Override
     public ObservableItemList getUpdate() {

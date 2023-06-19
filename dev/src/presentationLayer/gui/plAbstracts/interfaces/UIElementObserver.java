@@ -1,6 +1,6 @@
 package presentationLayer.gui.plAbstracts.interfaces;
 
-import java.util.List;
+import presentationLayer.gui.plUtils.ObservableList;
 
 /**
  * Observer interface for UIElements. <br/>
@@ -14,5 +14,5 @@ public interface UIElementObserver {
     default void remove(ObservableUIElement observable, ObservableModel model) {}
     default void update(ObservableUIElement observable, ObservableModel model){}
     default void get(ObservableUIElement observable, ObservableModel model){}
-    default void getAll(ObservableUIElement observable, List<ObservableModel> models){}
+    default void getAll(ObservableUIElement observable, ObservableList<ObservableModel> models){}
 }

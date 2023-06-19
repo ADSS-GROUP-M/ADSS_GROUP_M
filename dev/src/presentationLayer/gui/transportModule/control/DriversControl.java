@@ -5,6 +5,7 @@ import exceptions.ErrorOccurredException;
 import presentationLayer.gui.plAbstracts.AbstractControl;
 import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
 import presentationLayer.gui.plAbstracts.interfaces.ObservableUIElement;
+import presentationLayer.gui.plUtils.ObservableList;
 import presentationLayer.gui.transportModule.model.ObservableDriver;
 import serviceLayer.transportModule.ResourceManagementService;
 import utils.Response;
@@ -72,8 +73,25 @@ public class DriversControl extends AbstractControl {
     }
 
     @Override
-    public void getAll(ObservableUIElement observable, List<ObservableModel> models) {
-        super.getAll(observable, );
+    public void getAll(ObservableUIElement observable, ObservableList<ObservableModel> models) {
+        String json = rms.getAllDrivers();
+        Response response;
+        try {
+            response = Response.fromJsonWithValidation(json);
+        } catch (ErrorOccurredException e) {
+            throw new RuntimeException(e);
+        }
+        List<Driver> fetched = Driver.listFromJson(response.data());
+
+        for (Driver driver : fetched) {
+            ObservableDriver observableDriver = new ObservableDriver();
+            observableDriver.id = driver.id();
+            observableDriver.name = driver.name();
+            observableDriver.licenseType = driver.licenseType();
+            observableDriver.response = response.message();
+            models.add(observableDriver);
+        }
+        models.notifyObservers();
     }
 
     @Override

@@ -28,6 +28,7 @@ public class ObservableDriver extends AbstractObservableModel {
 
     @Override
     public String getLongDescription() {
-        return null;
+        return String.format("Id: %s | Name: %s | Licence: %s",
+                id, name, licenseType);
     }
 }

@@ -32,6 +32,7 @@ public class ObservableSite extends AbstractObservableModel {
 
     @Override
     public String getLongDescription() {
-        return null;
+        return String.format("Name: %s | Address: %s | Zone: %s | Phone Number: %s | Contact Name: %s | Type: %s",
+                name, address, transportZone, phoneNumber, contactName, siteType);
     }
 }

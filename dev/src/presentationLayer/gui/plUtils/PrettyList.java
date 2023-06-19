@@ -57,11 +57,13 @@ public class PrettyList implements UIElement {
         list.setBorder(new EmptyBorder(0,20,20,20));
         listPanel.setBackground(new Color(0,0,0,0));
         listPanel.setVerticalScrollBar(new PrettyScrollBar(160));
-        listPanel.setHorizontalScrollBar(new PrettyScrollBar(160));
+        listPanel.setHorizontalScrollBar(new PrettyScrollBar(50));
         listPanel.getVerticalScrollBar().setUnitIncrement(30);
         listPanel.getHorizontalScrollBar().setUnitIncrement(30);
         listPanel.getVerticalScrollBar().setBackground(new Color(0,0,0,0));
         listPanel.getHorizontalScrollBar().setBackground(new Color(0,0,0,0));
+        listPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+
 
 
         list.setCellRenderer(new DefaultListCellRenderer() {
@@ -98,6 +100,7 @@ public class PrettyList implements UIElement {
                         return false;
                     }
                 });
+                r.revalidate();
                 repaintListener.repaint();
                 return r;
             }

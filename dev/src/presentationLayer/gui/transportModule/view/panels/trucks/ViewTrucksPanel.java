@@ -16,8 +16,6 @@ import java.awt.event.*;
 import static com.sun.java.accessibility.util.AWTEventMonitor.addWindowListener;
 
 public class ViewTrucksPanel extends AbstractTransportModulePanel {
-    JPanel newOpenPanel = new JPanel();
-    JFrame newOpenWindow;
     private PrettyList truckList;
 
     public ViewTrucksPanel(TrucksControl control) {

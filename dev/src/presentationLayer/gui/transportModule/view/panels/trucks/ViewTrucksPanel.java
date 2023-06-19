@@ -11,15 +11,18 @@ import presentationLayer.gui.transportModule.control.TrucksControl;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.*;
 
 import static com.sun.java.accessibility.util.AWTEventMonitor.addWindowListener;
 
 public class ViewTrucksPanel extends AbstractTransportModulePanel {
-    private DefaultListModel<String> listModel;
-    private JList<String> list;
-    private JScrollPane listPanel;
+    private DefaultListModel<JPanel> listModel;
+    private JList<JPanel> list;
+    //private JScrollPane listPanel;
+    //private JPanel cellPanel;
     JPanel newOpenPanel = new JPanel();
     JFrame newOpenWindow;
 
@@ -117,11 +120,30 @@ public class ViewTrucksPanel extends AbstractTransportModulePanel {
         };
         contentPanel.setLayout(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
+
+
+        JPanel buttonsPanel = new JPanel();
+        buttonsPanel.setBackground(new Color(0,0,0,0));
+        constraints.gridy = 0;
+        constraints.gridx = 0;
+        constraints.anchor = GridBagConstraints.WEST;
+        JButton editButton = new JButton("Edit");
+        editButton.setPreferredSize(new Dimension(100, 30));
+        buttonsPanel.add(editButton);
+
+        JButton removeButton = new JButton("Remove");
+        removeButton.setPreferredSize(new Dimension(100, 30));
+        buttonsPanel.add(removeButton);
+        contentPanel.add(buttonsPanel, constraints);
+
+
+
         listModel = new DefaultListModel<>();
 
         // Create the JList
         list = new JList<>(listModel);
-        listPanel = new JScrollPane(list);
+        JScrollPane listPanel = new JScrollPane(list);
+
 
         list.setBackground(new Color(0,0,0,0));
         listPanel.setBorder(new Border() {
@@ -136,8 +158,6 @@ public class ViewTrucksPanel extends AbstractTransportModulePanel {
                 g2.drawLine(26,c.getHeight(),c.getWidth()-25,c.getHeight());
                 g2.drawArc(c.getWidth()-50-1,c.getHeight()-50,50,50,270,90);
                 g2.drawLine(c.getWidth()-1,c.getHeight()-26,c.getWidth()-1,0);
-//                g2.fillRect(0,0,10,height);
-//                g2.fillRect(0,height-10,width,10);
             }
 
             @Override
@@ -155,27 +175,36 @@ public class ViewTrucksPanel extends AbstractTransportModulePanel {
         listPanel.setVerticalScrollBar(new PrettyScrollBar(160));
         listPanel.getVerticalScrollBar().setUnitIncrement(30);
         listPanel.getVerticalScrollBar().setBackground(new Color(0,0,0,0));
-        list.setCellRenderer(new DefaultListCellRenderer() {
+
+
+        list.setCellRenderer(new ListCellRenderer<JPanel>() {
             @Override
-            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-                Component renderer = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-                renderer.setBackground(new Color(0,0,0,0));
+            public Component getListCellRendererComponent(JList<? extends JPanel> list, JPanel value, int index, boolean isSelected, boolean cellHasFocus) {
+
+                list.setOpaque(true);
+
+                // Clear the panel and add the custom component
+                list.add(value);
+                list.setFixedCellHeight(-1);
+                value.setPreferredSize(new Dimension(500, 100));
+
+                value.setBackground(new Color(0,0,0,0));
                 if(isSelected) {
-                    renderer.setBackground(new Color(200,200,200,128));
+                    value.setBackground(new Color(200,200,200,128));
                 }
-                panel.repaint();
-                setBorder(new Border() {
+
+                value.setBorder(new Border() {
                     @Override
                     public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
                         Graphics2D g2 = (Graphics2D) g;
                         g2.setStroke(new BasicStroke(1));
-                        g2.setColor(new Color(200,200,200,100));
-                        g2.drawLine(0,height-1, width,height-1);
+                        g2.setColor(new Color(200, 200, 200, 100));
+                        g2.drawLine(0, height - 1, width, height - 1);
                     }
 
                     @Override
                     public Insets getBorderInsets(Component c) {
-                        return new Insets(10,5,50,5);
+                        return new Insets(0, 0, 0, 0);
                     }
 
                     @Override
@@ -183,20 +212,11 @@ public class ViewTrucksPanel extends AbstractTransportModulePanel {
                         return false;
                     }
                 });
-                return renderer;
-            }
-        });
-
-        list.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) { // Double-click event
-                    int selectedIndex = list.getSelectedIndex();
-                    if (selectedIndex != -1) {
-                        String selectedItem = listModel.getElementAt(selectedIndex);
-
-                        openNewWindow(selectedItem);
-                    }
-                }
+                Dimension preferredSize = new Dimension((int) (scrollPane.getWidth() * 0.6), (int) (scrollPane.getHeight() * 0.8));
+                listPanel.setPreferredSize(preferredSize);
+                listPanel.revalidate();
+                panel.repaint();
+                return value;
             }
         });
 
@@ -204,26 +224,61 @@ public class ViewTrucksPanel extends AbstractTransportModulePanel {
         innerPanel.setBackground(new Color(0,0,0,0));
         innerPanel.add(listPanel);
 
-        addItem(s1.getShortDescription());
-        addItem(s2.getShortDescription());
-        addItem(s3.getShortDescription());
-        addItem(s4.getShortDescription());
-        for(int i = 5; i < 20; i++) {
-            addItem("Truck " + i);
+        for(int i = 1; i <= 20; i++) {
+            JPanel cellPanel = new JPanel();
+            cellPanel.setLayout( new GridBagLayout());
+
+            JLabel cellLabel = new JLabel("Truck " + i);
+            cellLabel.setFont(new Font("Arial", Font.PLAIN, 20));
+            cellLabel.setForeground(Colors.getForegroundColor());
+
+            GridBagConstraints c = new GridBagConstraints();
+
+//            c.gridy = 0;
+//            c.gridx = 0;
+//            c.anchor = GridBagConstraints.NORTHWEST;
+            cellPanel.add(cellLabel,c);
+
+//            c.gridy = 1;
+//            c.gridx = 2;
+//            c.anchor = GridBagConstraints.EAST;
+//            cellPanel.add(editButton,c);
+//
+//
+//            c.gridy = 1;
+//            c.gridx = 3;
+//            c.anchor = GridBagConstraints.EAST;
+//            cellPanel.add(removeButton,c);
+
+            listPanel.add(cellPanel);
+            listModel.addElement(cellPanel);
         }
 
-        // Create the remove button
-        //JButton removeButton = new JButton("Remove");
-        //removeButton.setPreferredSize(new Dimension(100, 30));
-        //innerPanel.add(removeButton,constraints);
+//        list.addListSelectionListener(new ListSelectionListener() {
+//
+//            JButton prevAdd;
+//            JButton prevRem;
+//
+//            @Override
+//            public void valueChanged(ListSelectionEvent e) {
+//                if(prevAdd != null) prevAdd.setVisible(false);
+//                if(prevRem != null) prevRem.setVisible(false);
+//                JPanel selectedPanel = list.getSelectedValue();
+//                prevAdd = (JButton) selectedPanel.getComponent(1);
+//                prevRem = (JButton) selectedPanel.getComponent(2);
+//                prevRem.setVisible(true);
+//                prevRem.setEnabled(true);
+//                prevAdd.setVisible(true);
+//                prevAdd.setEnabled(true);
+//            }
+//        });
+
+
+        constraints.anchor = GridBagConstraints.CENTER;
+        constraints.gridx = 0;
+        constraints.gridy = 1;
+
         contentPanel.add(innerPanel,constraints);
-      /*  removeButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                showConfirmationDialog();
-            }
-        });*/
-
-
 
          //Set up the confirmation dialog on window close
         addWindowListener(new WindowAdapter() {
@@ -239,10 +294,6 @@ public class ViewTrucksPanel extends AbstractTransportModulePanel {
 
     }
 
-    public void addItem(String item) {
-        listModel.addElement(item);
-    }
-
     private void showConfirmationDialog() {
         int[] selectedIndices = list.getSelectedIndices();
         if (selectedIndices.length > 0) {
@@ -254,73 +305,13 @@ public class ViewTrucksPanel extends AbstractTransportModulePanel {
             }
         }
     }
-    private void openNewWindow(String selectedItem) {
-        newOpenWindow = new JFrame(selectedItem);
-        newOpenWindow.setSize(800, 600);
-        newOpenWindow.setLocationRelativeTo(contentPanel);
-        newOpenWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
-        //newOpenWindow.setLayout(new GridBagLayout());
-
-        newOpenWindow.getContentPane();
-
-
-
-        JLabel label = new JLabel("Selected Item: \n" + selectedItem);
-        label.setFont(new Font("Arial", Font.BOLD, 20));
-        label.setForeground(Colors.getForegroundColor());
-       
-        label.setBounds(0,0,400,200);
-
-        //newOpenWindow.add(label);
-
-        //Create the remove button
-        //JPanel buttonPanel = new JPanel();
-        JButton removeButton = new JButton("Remove");
-        removeButton.setPreferredSize(new Dimension(100, 30));
-        removeButton.setBounds(550,400,100,30);
-        JButton editButton = new JButton("Edit");
-        editButton.setPreferredSize(new Dimension(100, 30));
-        editButton.setBounds(100,400,100,30);
-        newOpenPanel = new JPanel();
-        newOpenPanel.setLayout(null);
-        newOpenPanel.add(label);
-        newOpenPanel.add(removeButton);
-        newOpenPanel.add(editButton);
-
-        removeButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                showConfirmationDialog();
-            }
-        });
-
-        editButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                // TODO: Open the edit window
-
-            }
-        });
-        //GridBagConstraints constraints = new GridBagConstraints();
-        //constraints.fill = GridBagConstraints.WEST;
-        //constraints.anchor = GridBagConstraints.PAGE_END;
-        //newOpenPanel.add(buttonPanel);
-        //buttonPanel.setLocation(0,20);
-        newOpenWindow.add(newOpenPanel);
-
-
-
-
-        newOpenWindow.setVisible(true);
-    }
 
     @Override
     public void componentResized(Dimension newSize) {
         super.componentResized(newSize);
         Dimension contentPreferredSize = new Dimension((int) (panel.getWidth() * 0.8), (int) (panel.getHeight() * 0.6));
         contentPanel.setPreferredSize(new Dimension(contentPreferredSize.width, contentPreferredSize.height + 250));
-        Dimension preferredSize = new Dimension((int) (scrollPane.getWidth() * 0.6), (int) (scrollPane.getHeight() * 0.8));
-        listPanel.setPreferredSize(preferredSize);
-        listPanel.revalidate();
+
         scrollPane.revalidate();
     }
 

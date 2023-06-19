@@ -1,7 +1,9 @@
 package presentationLayer.gui.transportModule.control;
 
+import domainObjects.transportModule.Transport;
 import presentationLayer.gui.plAbstracts.AbstractControl;
 import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
+import presentationLayer.gui.plAbstracts.interfaces.ObservableUIElement;
 import presentationLayer.gui.transportModule.model.ObservableTransport;
 import serviceLayer.transportModule.ResourceManagementService;
 import serviceLayer.transportModule.TransportsService;
@@ -16,22 +18,23 @@ public class TransportsControl extends AbstractControl {
         this.rms = rms;
     }
 
-//    @Override
-//    public void add(ObservableUIElement observable, ObservableModel model) {
-//        ObservableTransport transportModel = (ObservableTransport) model;
-//
-//        Transport transport = new Transport(transport.de);
-//        String json = rms.addTruck(transport.toJson());
-//        Response response;
-//        try {
-//            response = Response.fromJsonWithValidation(json);
-//        } catch (ErrorOccurredException e) {
-//            throw new RuntimeException(e);
-//            //TODO: handle exception
-//        }
-//        truckModel.response = response.message();
-//        truckModel.notifyObservers();
-//    }
+    @Override
+    public void add(ObservableUIElement observable, ObservableModel model) {
+        ObservableTransport transportModel = (ObservableTransport) model;
+
+        Transport transport = new Transport(
+                transportModel.id,
+                transportModel.route,
+                transportModel.destinations_itemListIds
+                transportModel.truckId,
+                transportModel.driverId,
+                transportModel.
+        );
+        String json = rms.addTransport(transport.toJson());
+        transportModel.response = json;
+        transportModel.notifyObservers();
+
+    }
 
     @Override
     public ObservableModel getModel(ObservableModel lookupObject) {

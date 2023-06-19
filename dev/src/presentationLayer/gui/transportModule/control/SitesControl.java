@@ -6,6 +6,7 @@ import exceptions.ErrorOccurredException;
 import presentationLayer.gui.plAbstracts.AbstractControl;
 import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
 import presentationLayer.gui.plAbstracts.interfaces.ObservableUIElement;
+import presentationLayer.gui.plUtils.ObservableList;
 import presentationLayer.gui.transportModule.model.ObservableSite;
 import presentationLayer.gui.transportModule.model.ObservableTruck;
 import serviceLayer.transportModule.ResourceManagementService;
@@ -41,6 +42,66 @@ public class SitesControl extends AbstractControl {
         }
         siteModel.response = response.message();
         siteModel.notifyObservers();
+    }
+
+    @Override
+    public void update(ObservableUIElement observable, ObservableModel model) {
+        ObservableSite siteModel = (ObservableSite) model;
+
+        Site site = new Site(siteModel.name,
+                siteModel.address,
+                siteModel.transportZone,
+                siteModel.phoneNumber,
+                siteModel.contactName,
+                siteModel.siteType);
+        String json = rms.updateSite(site.toJson());
+        Response response;
+        try {
+            response = Response.fromJsonWithValidation(json);
+        } catch (ErrorOccurredException e) {
+            throw new RuntimeException(e);
+        }
+
+        siteModel.response = response.message();
+        siteModel.notifyObservers();
+    }
+
+    @Override
+    public void get(ObservableUIElement observable, ObservableModel model) {
+        ObservableSite siteModel = (ObservableSite) model;
+        Site site = Site.getLookupObject(siteModel.name);
+        String json = rms.getSite(site.toJson());
+        Response response;
+        try {
+            response = Response.fromJsonWithValidation(json);
+        } catch (ErrorOccurredException e) {
+            throw new RuntimeException(e);
+        }
+        siteModel.response = response.message();
+        siteModel.notifyObservers();
+    }
+
+    @Override
+    public void getAll(ObservableUIElement observable, ObservableList<ObservableModel> models) {
+        String json = rms.getAllSites();
+        Response response;
+        try {
+            response = Response.fromJsonWithValidation(json);
+        } catch (ErrorOccurredException e) {
+            throw new RuntimeException(e);
+        }
+        List<Site> sites = Site.listFromJson(response.data());
+        for (Site site : sites) {
+            ObservableSite siteModel = new ObservableSite();
+            siteModel.name = site.name();
+            siteModel.address = site.address();
+            siteModel.transportZone = site.transportZone();
+            siteModel.phoneNumber = site.phoneNumber();
+            siteModel.contactName = site.contactName();
+            siteModel.siteType = site.siteType();
+            models.add(siteModel);
+        }
+        models.notifyObservers();
     }
 
     @Override

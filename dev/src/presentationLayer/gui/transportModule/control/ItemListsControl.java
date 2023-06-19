@@ -6,6 +6,7 @@ import exceptions.ErrorOccurredException;
 import presentationLayer.gui.plAbstracts.AbstractControl;
 import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
 import presentationLayer.gui.plAbstracts.interfaces.ObservableUIElement;
+import presentationLayer.gui.plUtils.ObservableList;
 import presentationLayer.gui.transportModule.model.ObservableItemList;
 import presentationLayer.gui.transportModule.model.ObservableTruck;
 import serviceLayer.transportModule.ItemListsService;
@@ -68,6 +69,44 @@ public class ItemListsControl extends AbstractControl {
 
         itemList.response = response.message();
         itemList.notifyObservers();
+    }
+
+    @Override
+    public void get(ObservableUIElement observable, ObservableModel model) {
+        ObservableItemList itemList = (ObservableItemList) model;
+        ItemList toGet = ItemList.getLookupObject(itemList.id);
+        String json = rms.getItemList(toGet.toJson());
+        Response response;
+        try {
+            response = Response.fromJsonWithValidation(json);
+        } catch (ErrorOccurredException e) {
+            throw new RuntimeException(e);
+        }
+
+        itemList.response = response.message();
+        itemList.notifyObservers();
+    }
+
+    @Override
+    public void getAll(ObservableUIElement observable, ObservableList<ObservableModel> models) {
+        String json = rms.getAllItemLists();
+        Response response;
+        try {
+            response = Response.fromJsonWithValidation(json);
+        } catch (ErrorOccurredException e) {
+            throw new RuntimeException(e);
+        }
+
+        List<ItemList> itemListList = ItemList.listFromJson(response.data());
+
+        for (ItemList itemList : itemListList) {
+            ObservableItemList observableItemList = new ObservableItemList();
+            observableItemList.id = itemList.id();
+            observableItemList.load = itemList.load();
+            observableItemList.unload = itemList.unload();
+            models.add(observableItemList);
+        }
+        models.notifyObservers();
     }
 
     @Override

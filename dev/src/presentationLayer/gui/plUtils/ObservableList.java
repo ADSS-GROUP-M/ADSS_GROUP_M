@@ -1,7 +1,6 @@
 package presentationLayer.gui.plUtils;
 
 import presentationLayer.gui.plAbstracts.AbstractObservableModel;
-import presentationLayer.gui.plAbstracts.interfaces.ModelObserver;
 import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
 
 import java.util.*;
@@ -13,21 +12,6 @@ public class ObservableList<E> extends AbstractObservableModel implements List<E
 
     public ObservableList() {
         list = new ArrayList<>();
-    }
-
-    @Override
-    public void subscribe(ModelObserver observer) {
-        // Implement the subscription logic here
-    }
-
-    @Override
-    public void unsubscribe(ModelObserver observer) {
-        // Implement the unsubscription logic here
-    }
-
-    @Override
-    public void notifyObservers() {
-        // Implement the notification logic here
     }
 
     @Override

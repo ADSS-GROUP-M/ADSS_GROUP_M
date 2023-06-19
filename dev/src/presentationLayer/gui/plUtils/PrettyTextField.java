@@ -81,4 +81,7 @@ public class PrettyTextField implements UIElement {
         // do nothing
     }
 
+    public void setText(String text){
+        textField.setText(text);
+    }
 }

@@ -333,6 +333,9 @@ public class SearchBox implements UIElement {
         return comboBox;
     }
 
+    public Searchable getSelected(){
+        return (Searchable) comboBox.getSelectedItem();
+    }
     @Override
     public void componentResized(Dimension newSize) {
         // do nothing

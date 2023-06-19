@@ -333,8 +333,12 @@ public class SearchBox implements UIElement {
         return comboBox;
     }
 
-    public Searchable getSelected(){
-        return (Searchable) comboBox.getSelectedItem();
+    public void addItemListener(ItemListener listener){
+        comboBox.addItemListener(listener);
+    }
+
+    public String getSelected(){
+        return (String)comboBox.getSelectedItem();
     }
     @Override
     public void componentResized(Dimension newSize) {

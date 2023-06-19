@@ -82,7 +82,7 @@ public class UpdateSitePanel extends AbstractTransportModulePanel {
         constraints.gridy = 2;
         constraints.fill = GridBagConstraints.HORIZONTAL;
         contentPanel.add(contactNameField.getComponent(), constraints);
-        contactNameField.setText(((ObservableSite)selectedSite.getSelected()).getShortDescription());
+//        contactNameField.setTextselectedSite.getSelected().getShortDescription());
 
         contactNumberLabel = new JLabel("Contact Number:");
         constraints.gridx = 0;

@@ -28,6 +28,6 @@ public class ObservableItemList extends AbstractObservableModel {
 
     @Override
     public String getLongDescription() {
-
+        return null;
     }
 }

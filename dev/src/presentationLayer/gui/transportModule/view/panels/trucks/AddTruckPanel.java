@@ -144,7 +144,7 @@ public class AddTruckPanel extends AbstractTransportModulePanel {
     }
 
     private void buttonClicked(){
-        ObservableTruck truck =  (ObservableTruck) control.getEmptyModel();
+        ObservableTruck truck =  new ObservableTruck();
         truck.subscribe(this);
         truck.id = idField.getText();
         truck.model = modelField.getText();

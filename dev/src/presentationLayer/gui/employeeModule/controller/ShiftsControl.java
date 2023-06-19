@@ -45,19 +45,4 @@ public class ShiftsControl extends AbstractControl {
 //        truckModel.response = response.message();
         shiftModel.notifyObservers();
     }
-
-    @Override
-    public ObservableModel getModel(ObservableModel lookupObject) {
-        return null;
-    }
-
-    @Override
-    public ObservableModel getEmptyModel() {
-        return null;
-    }
-
-    @Override
-    public List<ObservableModel> getAllModels() {
-        return null;
-    }
 }

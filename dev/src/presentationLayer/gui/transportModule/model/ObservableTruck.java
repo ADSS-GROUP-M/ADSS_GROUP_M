@@ -32,6 +32,7 @@ public class ObservableTruck extends AbstractObservableModel {
 
     @Override
     public String getLongDescription() {
-        return null;
+        return String.format("Id: %s | Model: %s | Weight: %s | Max Weight: %s | Cooling: %s",
+                id, model, baseWeight, maxWeight, coolingCapacity);
     }
 }

@@ -146,7 +146,7 @@ public class AddSitePanel extends AbstractTransportModulePanel {
     }
 
     private void buttonClicked(){
-        ObservableSite site =  (ObservableSite) control.getEmptyModel();
+        ObservableSite site =  new ObservableSite();
         site.subscribe(this);
         site.name = idField.getText();
         site.address = addressField.getText();

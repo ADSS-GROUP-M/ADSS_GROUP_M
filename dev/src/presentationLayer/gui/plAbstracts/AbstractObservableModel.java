@@ -30,4 +30,9 @@ public abstract class AbstractObservableModel implements ObservableModel, Search
             observer.notify(this);
         }
     }
+
+    @Override
+    public String toString() {
+        return getLongDescription();
+    }
 }

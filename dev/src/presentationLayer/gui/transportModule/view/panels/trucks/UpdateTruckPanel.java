@@ -5,6 +5,7 @@ import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
 import presentationLayer.gui.plAbstracts.interfaces.ModelObserver;
 import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
 import presentationLayer.gui.plAbstracts.interfaces.Searchable;
+import presentationLayer.gui.plUtils.ObservableList;
 import presentationLayer.gui.plUtils.PrettyTextField;
 import presentationLayer.gui.plUtils.SearchBox;
 import presentationLayer.gui.plUtils.SearchableString;
@@ -15,6 +16,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class UpdateTruckPanel extends AbstractTransportModulePanel {
@@ -29,15 +32,22 @@ public class UpdateTruckPanel extends AbstractTransportModulePanel {
     private JRadioButton none;
     private JRadioButton cold;
     private JRadioButton frozen;
-    private List<Searchable> trucksSearchableList;
     public UpdateTruckPanel(TrucksControl control) {
         super(control);
-//        for(ObservableModel truck : control.getAllModels()){
-//            trucksSearchableList.add(truck)
-//        }
         init();
     }
     private void init() {
+
+        ObservableList emptyTruckList = new ObservableList<>();
+        control.getAll(this,emptyTruckList);
+        ObservableList<Searchable> trucksList = emptyTruckList;
+        Collections.sort(trucksList, new Comparator<Searchable>() {
+            @Override
+            public int compare(Searchable o1, Searchable o2) {
+                return o1.getShortDescription().compareTo(o2.getShortDescription());
+            }
+        });
+
         Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
         contentPanel.setSize(scrollPane.getSize());
 
@@ -54,10 +64,8 @@ public class UpdateTruckPanel extends AbstractTransportModulePanel {
 
         Dimension textFieldSize = new Dimension(220,30);
 
-//        //need to change the list to real items
-//        trucksSearchableList = List.of(new SearchableString("item1"), new SearchableString("item2"), new SearchableString("item3"));
         //button
-        trucks = new SearchBox(trucksSearchableList,"Select Truck",textFieldSize, this);
+        trucks = new SearchBox(trucksList,"Select Truck",textFieldSize, this);
         constraints.gridx = 1;
         constraints.gridy = 1;
         constraints.gridwidth = 2;
@@ -134,13 +142,15 @@ public class UpdateTruckPanel extends AbstractTransportModulePanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                //buttonClicked();
+                buttonClicked();
             }
         });
     }
 
-//    private void buttonClicked(){
-//        ObservableTruck truck =  (ObservableTruck) control.getModel(trucks.getComponent());
+    private void buttonClicked(){
+//        ObservableTruck truck =  (ObservableTruck)trucks.getSelected();
+//        truck.id = ((ObservableTruck)trucks.getSelected()).id;
+//        control.get(this,truck);
 //        truck.subscribe(this);
 //        truck.baseWeight = Integer.parseInt(baseField.getText());
 //        truck.maxWeight = Integer.parseInt(maxField.getText());
@@ -156,12 +166,11 @@ public class UpdateTruckPanel extends AbstractTransportModulePanel {
 //        {
 //            truck.coolingCapacity = Truck.CoolingCapacity.FROZEN;
 //        }
-//        observers.forEach(observer -> observer.add(this, truck));
-//    }
+//        observers.forEach(observer -> observer.update(this, truck));
+    }
 
     @Override
     public void notify(ObservableModel observable) {
-
     }
 }
 

@@ -1,6 +1,8 @@
 package presentationLayer.gui.transportModule.view.panels.transports;
 
+import domainObjects.transportModule.Truck;
 import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
+import presentationLayer.gui.plAbstracts.interfaces.ModelObserver;
 import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
 import presentationLayer.gui.plAbstracts.interfaces.Searchable;
 import presentationLayer.gui.plUtils.Fonts;
@@ -8,9 +10,13 @@ import presentationLayer.gui.plUtils.PrettyTextField;
 import presentationLayer.gui.plUtils.SearchBox;
 import presentationLayer.gui.plUtils.SearchableString;
 import presentationLayer.gui.transportModule.control.TransportsControl;
+import presentationLayer.gui.transportModule.model.ObservableTransport;
+import presentationLayer.gui.transportModule.model.ObservableTruck;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.List;
 
 public class AddTransportPanel extends AbstractTransportModulePanel {
@@ -148,6 +154,31 @@ public class AddTransportPanel extends AbstractTransportModulePanel {
         constraints.gridy = 5;
         constraints.fill = GridBagConstraints.HORIZONTAL;
         contentPanel.add(weightField.getComponent(), constraints);
+
+        //Submit button
+        JButton submitButton = new JButton("Submit");
+        constraints.gridx = 0;
+        constraints.gridy = 6;
+        constraints.gridwidth = 2;
+        constraints.fill = GridBagConstraints.NONE;
+        constraints.anchor = GridBagConstraints.EAST;
+        contentPanel.add(submitButton, constraints);
+
+        ModelObserver o = this;
+        submitButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                buttonClicked();
+            }
+        });
+    }
+
+    private void buttonClicked(){
+        ObservableTransport transport =  new ObservableTransport();
+        transport.subscribe(this);
+//        transport.id = ;
+        observers.forEach(observer -> observer.add(this, transport));
     }
 
     @Override

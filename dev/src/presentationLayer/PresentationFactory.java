@@ -16,10 +16,10 @@ public class PresentationFactory {
 
     public PresentationFactory() {
         serviceFactory = new ServiceFactory();
+        transportsControl = new TransportsControl(serviceFactory.transportsService());
+        itemListsControl = new ItemListsControl(serviceFactory.itemListsService());
         driversControl = new DriversControl(serviceFactory.resourceManagementService());
-        itemListsControl = new ItemListsControl(serviceFactory.resourceManagementService());
         sitesControl = new SitesControl(serviceFactory.resourceManagementService());
-        transportsControl = new TransportsControl(serviceFactory.resourceManagementService());
         trucksControl = new TrucksControl(serviceFactory.resourceManagementService());
         shiftsControl = new ShiftsControl(serviceFactory.employeesService(), serviceFactory.resourceManagementService());
     }

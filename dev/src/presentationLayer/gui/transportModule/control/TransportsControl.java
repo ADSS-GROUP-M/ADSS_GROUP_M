@@ -1,22 +1,17 @@
 package presentationLayer.gui.transportModule.control;
 
-import domainObjects.transportModule.Transport;
-import domainObjects.transportModule.Truck;
-import exceptions.ErrorOccurredException;
 import presentationLayer.gui.plAbstracts.AbstractControl;
 import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
-import presentationLayer.gui.plAbstracts.interfaces.ObservableUIElement;
 import presentationLayer.gui.transportModule.model.ObservableTransport;
-import presentationLayer.gui.transportModule.model.ObservableTruck;
 import serviceLayer.transportModule.ResourceManagementService;
-import utils.Response;
+import serviceLayer.transportModule.TransportsService;
 
 import java.util.List;
 
 public class TransportsControl extends AbstractControl {
-    private final ResourceManagementService rms;
+    private final TransportsService rms;
 
-    public TransportsControl(ResourceManagementService rms) {
+    public TransportsControl(TransportsService rms) {
 
         this.rms = rms;
     }

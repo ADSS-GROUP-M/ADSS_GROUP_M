@@ -20,7 +20,6 @@ import java.util.GregorianCalendar;
 public class ViewShiftsPanel extends AbstractTransportModulePanel {
     JPanel newOpenPanel = new JPanel();
     JFrame newOpenWindow;
-    JPanel innerPanel;
     JTable calendarTable;
     JLabel monthLabel;
     Calendar calendar;
@@ -111,8 +110,10 @@ public class ViewShiftsPanel extends AbstractTransportModulePanel {
 //            }
 //        });
 //
-        innerPanel = new JPanel();
-        innerPanel.setBackground(new Color(0, 0, 0, 0));
+
+//        innerPanel = new JPanel();
+//        innerPanel.setBackground(new Color(0, 0, 0, 0));
+
 //        innerPanel.add(listPanel);
 //
 //        addItem(s1.getShortDescription());
@@ -141,7 +142,11 @@ public class ViewShiftsPanel extends AbstractTransportModulePanel {
         monthLabel = new JLabel("");
         monthLabel.setHorizontalAlignment(SwingConstants.CENTER);
         monthLabel.setFont(new Font("Tahoma", Font.BOLD, 20));
-        innerPanel.add(monthLabel, BorderLayout.NORTH);
+        constraints.gridx = 0;
+        constraints.gridy = 0;
+        constraints.gridwidth = 1;
+        constraints.anchor = GridBagConstraints.NORTH;
+        contentPanel.add(monthLabel, constraints);
 
         calendarTable = new JTable();
         calendarTable.setRowHeight(50);
@@ -179,10 +184,18 @@ public class ViewShiftsPanel extends AbstractTransportModulePanel {
         });
 
         JScrollPane scrollPane = new JScrollPane(calendarTable);
-        innerPanel.add(scrollPane, BorderLayout.CENTER);
+        constraints.gridx = 0;
+        constraints.gridy = 1;
+        constraints.gridwidth = 1;
+        constraints.anchor = GridBagConstraints.CENTER;
+        contentPanel.add(scrollPane, constraints);
 
         JPanel buttonPanel = new JPanel(new FlowLayout());
-        innerPanel.add(buttonPanel, BorderLayout.SOUTH);
+        constraints.gridx = 0;
+        constraints.gridy = 2;
+        constraints.gridwidth = 1;
+        constraints.anchor = GridBagConstraints.SOUTH;
+        contentPanel.add(buttonPanel, constraints);
 
         JButton prevButton = new JButton("<<");
         prevButton.addActionListener(e -> {
@@ -199,7 +212,6 @@ public class ViewShiftsPanel extends AbstractTransportModulePanel {
         // Initialize the calendar instance and display the current month's shifts
         calendar = new GregorianCalendar();
         displayMonth(calendar);
-        contentPanel.add(innerPanel, constraints);
     }
 
     private void displayPreviousMonth() {

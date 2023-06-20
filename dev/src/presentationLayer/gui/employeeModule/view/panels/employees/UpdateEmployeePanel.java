@@ -8,14 +8,18 @@ import presentationLayer.gui.plAbstracts.interfaces.ModelObserver;
 import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
 import presentationLayer.gui.plUtils.Fonts;
 import presentationLayer.gui.plUtils.PrettyTextField;
+import serviceLayer.employeeModule.Objects.SEmployee;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.time.LocalDate;
 
 public class UpdateEmployeePanel extends AbstractTransportModulePanel {
     JPanel newOpenPanel = new JPanel();
     JFrame newOpenWindow;
+    PrettyTextField employeeIdField, nameField, bankNumberField, bankBranchField, salaryRateField, salaryBonusField, year, month, day, employmentConditionsField, employeeDetailsField;
+    JButton submitButton;
 
     public UpdateEmployeePanel(EmployeesControl control) {
         super(control);
@@ -39,7 +43,7 @@ public class UpdateEmployeePanel extends AbstractTransportModulePanel {
         constraints.gridy = 1;
         contentPanel.add(employeeIdLabel, constraints);
 
-        PrettyTextField employeeIdField = new PrettyTextField(textFieldSize);
+        employeeIdField = new PrettyTextField(textFieldSize);
         constraints.gridx = 1;
         constraints.gridy = 1;
         constraints.fill = GridBagConstraints.HORIZONTAL;
@@ -63,30 +67,16 @@ public class UpdateEmployeePanel extends AbstractTransportModulePanel {
             }
         });
 
-        JLabel branchIdLabel = new JLabel("Branch Id:");
-        constraints.anchor = GridBagConstraints.WEST;
-        constraints.gridwidth = 1;
-        constraints.gridx = 0;
-        constraints.gridy = 2;
-        contentPanel.add(branchIdLabel, constraints);
-
-        PrettyTextField branchIdField = new PrettyTextField(textFieldSize);
-        constraints.gridx = 1;
-        constraints.gridy = 2;
-        constraints.fill = GridBagConstraints.HORIZONTAL;
-        branchIdField.getComponent().setEnabled(false);
-        contentPanel.add(branchIdField.getComponent(), constraints);
-
         JLabel nameLabel = new JLabel("Employee Name:");
         constraints.anchor = GridBagConstraints.WEST;
         constraints.gridwidth = 1;
         constraints.gridx = 0;
-        constraints.gridy = 3;
+        constraints.gridy = 2;
         contentPanel.add(nameLabel, constraints);
 
-        PrettyTextField nameField = new PrettyTextField(textFieldSize);
+        nameField = new PrettyTextField(textFieldSize);
         constraints.gridx = 1;
-        constraints.gridy = 3;
+        constraints.gridy = 2;
         constraints.fill = GridBagConstraints.HORIZONTAL;
         nameField.getComponent().setEnabled(false);
         contentPanel.add(nameField.getComponent(), constraints);
@@ -95,12 +85,12 @@ public class UpdateEmployeePanel extends AbstractTransportModulePanel {
         constraints.anchor = GridBagConstraints.WEST;
         constraints.gridwidth = 1;
         constraints.gridx = 0;
-        constraints.gridy = 4;
+        constraints.gridy = 3;
         contentPanel.add(bankNumberLabel, constraints);
 
-        PrettyTextField bankNumberField = new PrettyTextField(textFieldSize);
+        bankNumberField = new PrettyTextField(textFieldSize);
         constraints.gridx = 1;
-        constraints.gridy = 4;
+        constraints.gridy = 3;
         constraints.fill = GridBagConstraints.HORIZONTAL;
         bankNumberField.getComponent().setEnabled(false);
         contentPanel.add(bankNumberField.getComponent(), constraints);
@@ -109,12 +99,12 @@ public class UpdateEmployeePanel extends AbstractTransportModulePanel {
         constraints.anchor = GridBagConstraints.WEST;
         constraints.gridwidth = 1;
         constraints.gridx = 0;
-        constraints.gridy = 5;
+        constraints.gridy = 4;
         contentPanel.add(bankBranchLabel, constraints);
 
-        PrettyTextField bankBranchField = new PrettyTextField(textFieldSize);
+        bankBranchField = new PrettyTextField(textFieldSize);
         constraints.gridx = 1;
-        constraints.gridy = 5;
+        constraints.gridy = 4;
         constraints.fill = GridBagConstraints.HORIZONTAL;
         bankBranchField.getComponent().setEnabled(false);
         contentPanel.add(bankBranchField.getComponent(), constraints);
@@ -123,15 +113,29 @@ public class UpdateEmployeePanel extends AbstractTransportModulePanel {
         constraints.anchor = GridBagConstraints.WEST;
         constraints.gridwidth = 1;
         constraints.gridx = 0;
-        constraints.gridy = 6;
+        constraints.gridy = 5;
         contentPanel.add(salaryRateLabel, constraints);
 
-        PrettyTextField salaryRateField = new PrettyTextField(textFieldSize);
+        salaryRateField = new PrettyTextField(textFieldSize);
         constraints.gridx = 1;
-        constraints.gridy = 6;
+        constraints.gridy = 5;
         constraints.fill = GridBagConstraints.HORIZONTAL;
         salaryRateField.getComponent().setEnabled(false);
         contentPanel.add(salaryRateField.getComponent(), constraints);
+
+        JLabel salaryBonusLabel = new JLabel("Salary Bonus:");
+        constraints.anchor = GridBagConstraints.WEST;
+        constraints.gridwidth = 1;
+        constraints.gridx = 0;
+        constraints.gridy = 6;
+        contentPanel.add(salaryBonusLabel, constraints);
+
+        salaryBonusField = new PrettyTextField(textFieldSize);
+        constraints.gridx = 1;
+        constraints.gridy = 6;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        salaryBonusField.getComponent().setEnabled(false);
+        contentPanel.add(salaryBonusField.getComponent(), constraints);
 
         JLabel dateLabel = new JLabel("Employment Date:");
         constraints.gridx = 0;
@@ -141,7 +145,7 @@ public class UpdateEmployeePanel extends AbstractTransportModulePanel {
         contentPanel.add(dateLabel, constraints);
 
         // date text fields
-        PrettyTextField year = new PrettyTextField(new Dimension(75,30), "YYYY");
+        year = new PrettyTextField(new Dimension(75,30), "YYYY");
         year.setHorizontalAlignment(JTextField.CENTER);
         year.setMaximumCharacters(4);
 
@@ -150,7 +154,7 @@ public class UpdateEmployeePanel extends AbstractTransportModulePanel {
         slash1.setHorizontalAlignment(JLabel.CENTER);
         slash1.setFont(Fonts.textBoxFont.deriveFont(20f));
 
-        PrettyTextField month = new PrettyTextField(new Dimension(35,30), "MM");
+        month = new PrettyTextField(new Dimension(35,30), "MM");
         month.setHorizontalAlignment(JTextField.CENTER);
         month.setMaximumCharacters(2);
 
@@ -159,7 +163,7 @@ public class UpdateEmployeePanel extends AbstractTransportModulePanel {
         slash2.setPreferredSize(new Dimension(10,30));
         slash2.setFont(Fonts.textBoxFont.deriveFont(20f));
 
-        PrettyTextField day = new PrettyTextField(new Dimension(35,30), "DD");
+        day = new PrettyTextField(new Dimension(35,30), "DD");
         day.setHorizontalAlignment(JTextField.CENTER);
         day.setMaximumCharacters(2);
 
@@ -184,7 +188,7 @@ public class UpdateEmployeePanel extends AbstractTransportModulePanel {
         constraints.gridy = 8;
         contentPanel.add(employmentConditionsLabel, constraints);
 
-        PrettyTextField employmentConditionsField = new PrettyTextField(textFieldSize);
+        employmentConditionsField = new PrettyTextField(textFieldSize);
         constraints.gridx = 1;
         constraints.gridy = 8;
         constraints.fill = GridBagConstraints.HORIZONTAL;
@@ -198,15 +202,17 @@ public class UpdateEmployeePanel extends AbstractTransportModulePanel {
         constraints.gridy = 9;
         contentPanel.add(employeeDetailsLabel, constraints);
 
-        PrettyTextField employeeDetailsField = new PrettyTextField(textFieldSize);
+        employeeDetailsField = new PrettyTextField(textFieldSize);
         constraints.gridx = 1;
         constraints.gridy = 9;
         constraints.fill = GridBagConstraints.HORIZONTAL;
         employeeDetailsField.getComponent().setEnabled(false);
         contentPanel.add(employeeDetailsField.getComponent(), constraints);
 
+        // TODO: Add the list of roles
+
         //Submit button
-        JButton submitButton = new JButton("Submit");
+        submitButton = new JButton("Submit");
         constraints.gridx = 0;
         constraints.gridy = 10;
         constraints.gridwidth = 2;
@@ -226,16 +232,83 @@ public class UpdateEmployeePanel extends AbstractTransportModulePanel {
     }
 
     private void submitButtonClicked(){
-        ObservableEmployee employee =  new ObservableEmployee();
-        employee.subscribe(this);
-        observers.forEach(observer -> observer.add(this, employee));
+//        ObservableEmployee employee =  new ObservableEmployee();
+//        employee.subscribe(this);
+//        observers.forEach(observer -> observer.add(this, employee));
+        String employeeId = employeeIdField.getText();
+        double salaryRate = Double.parseDouble(salaryRateField.getText());
+        double salaryBonus = Double.parseDouble(salaryBonusField.getText());
+        String bankDetails = bankNumberField.getText() + " " + bankBranchField.getText();
+        String employmentConditions = employmentConditionsField.getText();
+        String employeeDetails = employeeDetailsField.getText();
+
+        String salaryResponse = ((EmployeesControl)control).updateEmployeeSalary(employeeId,salaryRate,salaryBonus);
+        String bankDetailsResponse = ((EmployeesControl)control).updateEmployeeBankDetails(employeeId,bankDetails);
+        String employmentConditionsResponse = ((EmployeesControl)control).updateEmployeeEmploymentConditions(employeeId,employmentConditions);
+        String detailsResponse = ((EmployeesControl)control).updateEmployeeDetails(employeeId,employeeDetails);
+
+        String message = "";
+        message += (salaryResponse != null ? salaryResponse + "\n" : "");
+        message += (bankDetailsResponse != null ? bankDetailsResponse + "\n" : "");
+        message += (employmentConditionsResponse != null ? employmentConditionsResponse + "\n" : "");
+        message += (detailsResponse != null ? detailsResponse + "\n" : "");
+
+        if (!message.equals("")) {
+            JOptionPane.showMessageDialog(null,message);
+        }
     }
 
     private void findEmployeeButtonClicked(){
-        ObservableEmployee employee =  new ObservableEmployee();
-        employee.subscribe(this);
+//        ObservableEmployee employee =  new ObservableEmployee();
+//        employee.subscribe(this);
+//        observers.forEach(observer -> observer.add(this, employee));
         //TODO: Update the find employee button logic here - need to enable back all the other text fields and submit button.
-        observers.forEach(observer -> observer.add(this, employee));
+        Object result = ((EmployeesControl)control).findEmployee(employeeIdField.getText());
+        if (result instanceof String) {
+            JOptionPane.showMessageDialog(null, result);
+            bankNumberField.getComponent().setEnabled(false);
+            bankBranchField.getComponent().setEnabled(false);
+            salaryRateField.getComponent().setEnabled(false);
+            salaryBonusField.getComponent().setEnabled(false);
+            employmentConditionsField.getComponent().setEnabled(false);
+            employeeDetailsField.getComponent().setEnabled(false);
+            submitButton.setEnabled(false);
+        } else if (result instanceof SEmployee employee) {
+            nameField.setText(employee.getFullName());
+
+            String bankDetails = employee.getBankDetails();
+            String bankNumber = bankDetails.substring(0,bankDetails.lastIndexOf(' '));
+            String bankBranch = bankDetails.substring(bankDetails.lastIndexOf(' ') + 1);
+            bankNumberField.setText(bankNumber);
+            bankBranchField.setText(bankBranch);
+
+            salaryRateField.setText(String.valueOf(employee.getHourlySalaryRate()));
+            salaryBonusField.setText(String.valueOf(employee.getSalaryBonus()));
+
+            LocalDate employmentDate = employee.getEmploymentDate();
+            year.setText(String.valueOf(employmentDate.getYear()));
+            month.setText(String.valueOf(employmentDate.getMonth().getValue()));
+            day.setText(String.valueOf(employmentDate.getDayOfMonth()));
+            employmentConditionsField.setText(employee.getEmploymentConditions());
+            employeeDetailsField.setText(employee.getDetails());
+
+            bankNumberField.getComponent().setEnabled(true);
+            bankBranchField.getComponent().setEnabled(true);
+            salaryRateField.getComponent().setEnabled(true);
+            salaryBonusField.getComponent().setEnabled(true);
+            employmentConditionsField.getComponent().setEnabled(true);
+            employeeDetailsField.getComponent().setEnabled(true);
+            submitButton.setEnabled(true);
+        } else {
+            JOptionPane.showMessageDialog(null,"An error has occurred when retrieving the employee with the given id.");
+            bankNumberField.getComponent().setEnabled(false);
+            bankBranchField.getComponent().setEnabled(false);
+            salaryRateField.getComponent().setEnabled(false);
+            salaryBonusField.getComponent().setEnabled(false);
+            employmentConditionsField.getComponent().setEnabled(false);
+            employeeDetailsField.getComponent().setEnabled(false);
+            submitButton.setEnabled(false);
+        }
     }
 
     @Override

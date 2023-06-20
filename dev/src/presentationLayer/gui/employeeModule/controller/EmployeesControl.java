@@ -5,6 +5,7 @@ import presentationLayer.gui.employeeModule.model.ObservableEmployee;
 import presentationLayer.gui.plAbstracts.AbstractControl;
 import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
 import presentationLayer.gui.plAbstracts.interfaces.ObservableUIElement;
+import serviceLayer.employeeModule.Objects.SEmployee;
 import serviceLayer.employeeModule.Services.EmployeesService;
 import serviceLayer.employeeModule.Services.UserService;
 import utils.Response;
@@ -70,5 +71,55 @@ public class EmployeesControl extends AbstractControl {
             return e.getMessage();
         }
         return "Recruited the employee successfully.";
+    }
+
+    public Object findEmployee(String employeeId) {
+        String json = employeesService.getEmployee(employeeId);
+        try {
+            Response response = Response.fromJsonWithValidation(json); // Throws an exception if an error has occurred.
+            return response.data(SEmployee.class);
+        } catch (ErrorOccurredException e) {
+            return e.getMessage();
+        }
+    }
+
+    public String updateEmployeeEmploymentConditions(String employeeId, String employmentConditions) {
+        String json = employeesService.updateEmployeeEmploymentConditions(UserService.HR_MANAGER_USERNAME,employeeId,employmentConditions);
+        try {
+            Response response = Response.fromJsonWithValidation(json); // Throws an exception if an error has occurred.
+        } catch (ErrorOccurredException e) {
+            return e.getMessage();
+        }
+        return "Updated employee's employment conditions successfully.";
+    }
+
+    public String updateEmployeeSalary(String employeeId, double hourlySalaryRate, double salaryBonus) {
+        String json = employeesService.updateEmployeeSalary(UserService.HR_MANAGER_USERNAME,employeeId,hourlySalaryRate, salaryBonus);
+        try {
+            Response response = Response.fromJsonWithValidation(json); // Throws an exception if an error has occurred.
+        } catch (ErrorOccurredException e) {
+            return e.getMessage();
+        }
+        return "Updated employee's salary successfully.";
+    }
+
+    public String updateEmployeeBankDetails(String employeeId, String bankDetails) {
+        String json = employeesService.updateEmployeeBankDetails(UserService.HR_MANAGER_USERNAME,employeeId,bankDetails);
+        try {
+            Response response = Response.fromJsonWithValidation(json); // Throws an exception if an error has occurred.
+        } catch (ErrorOccurredException e) {
+            return e.getMessage();
+        }
+        return "Updated employee's bank details successfully.";
+    }
+
+    public String updateEmployeeDetails(String employeeId, String employeeDetails) {
+        String json = employeesService.updateEmployeeDetails(UserService.HR_MANAGER_USERNAME,employeeId,employeeDetails);
+        try {
+            Response response = Response.fromJsonWithValidation(json); // Throws an exception if an error has occurred.
+        } catch (ErrorOccurredException e) {
+            return e.getMessage();
+        }
+        return "Updated employee's details successfully.";
     }
 }

@@ -15,6 +15,9 @@ public class SEmployee {
     private final Set<String> roles;
     private final String details;
     private final double expectedSalary;
+    private final double hourlySalaryRate;
+    private final double salaryBonus;
+    private final String bankDetails;
 
     public SEmployee(Employee employee) {
         this.fullName = employee.getName();
@@ -24,6 +27,9 @@ public class SEmployee {
         this.roles = employee.getRoles().stream().map(Object::toString).collect(Collectors.toSet());
         this.details = employee.getDetails();
         this.expectedSalary = employee.calculateSalary();
+        this.hourlySalaryRate = employee.getHourlySalaryRate();
+        this.salaryBonus = employee.getSalaryBonus();
+        this.bankDetails = employee.getBankDetails();
     }
 
     public String getFullName() {
@@ -52,6 +58,18 @@ public class SEmployee {
 
     public double getExpectedSalary() {
         return expectedSalary;
+    }
+
+    public double getHourlySalaryRate() {
+        return hourlySalaryRate;
+    }
+
+    public double getSalaryBonus() {
+        return salaryBonus;
+    }
+
+    public String getBankDetails() {
+        return bankDetails;
     }
 
     @Override

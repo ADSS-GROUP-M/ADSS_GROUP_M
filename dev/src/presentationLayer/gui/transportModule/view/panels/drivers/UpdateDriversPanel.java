@@ -28,6 +28,7 @@ public class UpdateDriversPanel extends AbstractTransportModulePanel {
     private SearchBox selectedDrivers;
     private JLabel licencesLabel;
     private SearchBox selectedLicence;
+    private JButton submitButton;
 
     public UpdateDriversPanel(DriversControl control) {
         super(control);
@@ -90,12 +91,12 @@ public class UpdateDriversPanel extends AbstractTransportModulePanel {
         contentPanel.add(selectedLicence.getComponent(), constraints);
 
         //Submit button
-        JButton submitButton = new JButton("Submit");
-        constraints.gridx = 0;
+        submitButton = new JButton("Submit");
+        constraints.gridx = 1;
         constraints.gridy = 3;
         constraints.gridwidth = 2;
         constraints.fill = GridBagConstraints.NONE;
-        constraints.anchor = GridBagConstraints.EAST;
+        constraints.anchor = GridBagConstraints.CENTER;
         contentPanel.add(submitButton, constraints);
 
         submitButton.addMouseListener(new MouseAdapter() {

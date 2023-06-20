@@ -20,6 +20,9 @@ public class PrettyList implements UIElement {
     private JScrollPane listPanel;
     private JList<Searchable> list;
 
+
+    private DefaultListModel<Searchable> listModel;
+
     public PrettyList(ObservableList<Searchable> models , Container repaintListener) {
         this.models = models;
         this.repaintListener = repaintListener;
@@ -28,7 +31,7 @@ public class PrettyList implements UIElement {
 
     private void init(){
 
-        DefaultListModel<Searchable> listModel = new DefaultListModel<>();
+        listModel = new DefaultListModel<>();
         listModel.addAll(models);
         list = new JList<>(listModel);
         listPanel = new JScrollPane(list);
@@ -112,6 +115,10 @@ public class PrettyList implements UIElement {
     public JList<Searchable> getList(){
         return list;
     }
+    public DefaultListModel<Searchable> getListModel() {
+        return listModel;
+    }
+
 
     @Override
     public Component getComponent() {

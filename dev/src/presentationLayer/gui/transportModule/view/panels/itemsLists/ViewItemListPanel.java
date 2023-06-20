@@ -82,6 +82,20 @@ public class ViewItemListPanel extends AbstractTransportModulePanel {
                 loadingList.getList().setModel(loadModel);
             }
         });
+
+        loadingList.getList().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                SwingUtilities.invokeLater(panel::repaint);
+            }
+        });
+
+        unLoadingList.getList().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                SwingUtilities.invokeLater(panel::repaint);
+            }
+        });
     }
 
     @Override

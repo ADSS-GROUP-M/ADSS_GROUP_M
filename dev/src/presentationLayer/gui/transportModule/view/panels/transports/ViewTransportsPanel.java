@@ -30,6 +30,7 @@ public class ViewTransportsPanel extends AbstractTransportModulePanel {
     private final SitesControl sitesControl;
     private PrettyList transportsList;
     private PrettyList destinationsList;
+    private ObservableList<Searchable> transports;
 
     public ViewTransportsPanel(TransportsControl control, SitesControl sitesControl) {
         super(control);
@@ -41,7 +42,7 @@ public class ViewTransportsPanel extends AbstractTransportModulePanel {
 
         ObservableList emptyTransportList = new ObservableList<>();
         control.getAll(this,emptyTransportList);
-        ObservableList<Searchable> transports = emptyTransportList;
+        transports = emptyTransportList;
         ObservableList<Searchable> destinations = new ObservableList<>();
 
         ObservableList emptySiteList = new ObservableList<>();
@@ -54,12 +55,37 @@ public class ViewTransportsPanel extends AbstractTransportModulePanel {
         contentPanel.setLayout(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
 
+        JPanel buttonsPanel = new JPanel();
+        buttonsPanel.setBackground(new Color(0, 0, 0, 0));
         constraints.gridy = 0;
+        constraints.gridx = 0;
+        constraints.anchor = GridBagConstraints.WEST;
+        JButton removeButton = new JButton();
+        removeButton.setPreferredSize(new Dimension(30, 30));
+        buttonsPanel.add(removeButton);
+
+        removeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                showConfirmationDialog();
+            }
+
+        });
+
+        contentPanel.add(buttonsPanel, constraints);
+
+
+        constraints.anchor = GridBagConstraints.CENTER;
+        constraints.gridx = 0;
+        constraints.gridy = 1;
+
+
+        //constraints.gridy = 0;
 //        constraints.anchor = GridBagConstraints.NORTH;
         transportsList = new PrettyList(transports,panel);
         contentPanel.add(transportsList.getComponent(),constraints);
 
-        constraints.gridy = 1;
+        constraints.gridy = 2;
         constraints.ipady = 0;
 //        constraints.anchor = GridBagConstraints.SOUTH;
         destinationsList = new PrettyList(destinations,panel);
@@ -96,6 +122,29 @@ public class ViewTransportsPanel extends AbstractTransportModulePanel {
 
         panel.revalidate();
     }
+
+
+
+    private void showConfirmationDialog() {
+        int[] selectedIndices = transportsList.getList().getSelectedIndices();
+        if (selectedIndices.length > 0) {
+            int choice = JOptionPane.showConfirmDialog(contentPanel, "Are you sure you want to remove the selected item?", "Confirmation", JOptionPane.YES_NO_OPTION);
+            if (choice == JOptionPane.YES_OPTION) {
+                transportsList.getListModel().remove(selectedIndices[0]);
+                updateListAfterRemove(selectedIndices[0]);
+                //destinationsList.getComponent().setVisible(false);
+
+
+            }
+        }
+    }
+
+
+    private void updateListAfterRemove(int selectedIndex){
+
+        control.remove(this, (ObservableModel) transports.remove(selectedIndex));
+    }
+
 
     @Override
     public void notify(ObservableModel observable) {

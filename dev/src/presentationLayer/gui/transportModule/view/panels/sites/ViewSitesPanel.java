@@ -9,10 +9,13 @@ import presentationLayer.gui.transportModule.control.SitesControl;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Comparator;
 
 public class ViewSitesPanel extends AbstractTransportModulePanel {
     private PrettyList sitesList;
+
 
     public ViewSitesPanel(SitesControl control) {
         super(control);
@@ -35,52 +38,17 @@ public class ViewSitesPanel extends AbstractTransportModulePanel {
         contentPanel.setLayout(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
 
-        JPanel buttonsPanel = new JPanel();
-        buttonsPanel.setBackground(new Color(0,0,0,0));
-        constraints.gridy = 0;
-        constraints.gridx = 0;
-        constraints.anchor = GridBagConstraints.WEST;
-        JButton editButton = new JButton();
-        editButton.setPreferredSize(new Dimension(30, 30));
-        buttonsPanel.add(editButton);
-
-        JButton removeButton = new JButton();
-        removeButton.setPreferredSize(new Dimension(30, 30));
-        buttonsPanel.add(removeButton);
-        contentPanel.add(buttonsPanel, constraints);
 
         constraints.anchor = GridBagConstraints.CENTER;
         constraints.gridx = 0;
-        constraints.gridy = 1;
+        constraints.gridy = 0;
+        constraints.weightx = 0.5;
+
 
         sitesList = new PrettyList(sites,panel);
         contentPanel.add(sitesList.getComponent(),constraints);
 
-        //Set up the confirmation dialog on window close
-//        addWindowListener(new WindowAdapter() {
-//            @Override
-//            public void windowClosing(WindowEvent e) {
-//                showConfirmationDialog();
-//            }
-//        });
     }
-
-//    private void removeSelectedItems(int selectedIndex) {
-//            listModel.remove(selectedIndex);
-//
-//    }
-//
-//    private void showConfirmationDialog() {
-//        int[] selectedIndices = list.getSelectedIndices();
-//        if (selectedIndices.length > 0) {
-//            int choice = JOptionPane.showConfirmDialog(newOpenPanel, "Are you sure you want to remove the selected item?", "Confirmation", JOptionPane.YES_NO_OPTION);
-//            if (choice == JOptionPane.YES_OPTION) {
-//                removeSelectedItems(selectedIndices[0]);
-//                newOpenWindow.dispose();
-//                //newOpenWindow = null;
-//            }
-//        }
-//    }
 
     @Override
     public void componentResized(Dimension newSize) {
@@ -93,6 +61,7 @@ public class ViewSitesPanel extends AbstractTransportModulePanel {
 
         contentPanel.revalidate();
     }
+
 
     @Override
     public void notify(ObservableModel observable) {

@@ -21,8 +21,7 @@ import java.util.Comparator;
 import static com.sun.java.accessibility.util.AWTEventMonitor.addWindowListener;
 
 public class ViewDriversPanel extends AbstractTransportModulePanel {
-    JPanel newOpenPanel = new JPanel();
-    JFrame newOpenWindow;
+
     private PrettyList driverList;
     private ObservableList emptyDriverList;
     private ObservableList<Searchable> drivers;
@@ -34,6 +33,7 @@ public class ViewDriversPanel extends AbstractTransportModulePanel {
 
     private void init() {
 
+
         emptyDriverList = new ObservableList<>();
         control.getAll(this,emptyDriverList);
         drivers = emptyDriverList;
@@ -44,68 +44,20 @@ public class ViewDriversPanel extends AbstractTransportModulePanel {
             }
         });
 
+
         contentPanel.setLayout(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
 
 
-        JPanel buttonsPanel = new JPanel();
-        buttonsPanel.setBackground(new Color(0,0,0,0));
-        constraints.gridy = 0;
-        constraints.gridx = 0;
-        constraints.anchor = GridBagConstraints.WEST;
-        JButton editButton = new JButton();
-        editButton.setPreferredSize(new Dimension(30, 30));
-        buttonsPanel.add(editButton);
-
-        JButton removeButton = new JButton();
-        removeButton.setPreferredSize(new Dimension(30, 30));
-        removeButton.setBorder(new EmptyBorder(0,0,0,0));
-        removeButton.setBackground(new Color(0,0,0,0));
-        buttonsPanel.add(removeButton);
-        contentPanel.add(buttonsPanel, constraints);
-        removeButton.setUI(new BasicButtonUI(){
-            @Override
-            public void paint(Graphics g, JComponent c) {
-                super.paint(g, c);
-                Graphics2D g2 = (Graphics2D)g;
-                g2.setStroke(new BasicStroke(2));
-                g2.setColor(Color.RED);
-                g2.fillRoundRect(3,13,c.getWidth()-4,4,1,1);
-            }
-        });
-
         constraints.anchor = GridBagConstraints.CENTER;
         constraints.gridx = 0;
-        constraints.gridy = 1;
+        constraints.gridy = 0;
+        constraints.weightx = 0.5;
 
-        driverList = new PrettyList(drivers,panel);
-        contentPanel.add(driverList.getComponent(),constraints);
+        driverList = new PrettyList(drivers, panel);
+        contentPanel.add(driverList.getComponent(), constraints);
 
-        //Set up the confirmation dialog on window close
-//        addWindowListener(new WindowAdapter() {
-//            @Override
-//            public void windowClosing(WindowEvent e) {
-//                showConfirmationDialog();
-//            }
-//        });
     }
-
-//    private void removeSelectedItems(int selectedIndex) {
-//            listModel.remove(selectedIndex);
-//
-//    }
-//
-//    private void showConfirmationDialog() {
-//        int[] selectedIndices = list.getSelectedIndices();
-//        if (selectedIndices.length > 0) {
-//            int choice = JOptionPane.showConfirmDialog(newOpenPanel, "Are you sure you want to remove the selected item?", "Confirmation", JOptionPane.YES_NO_OPTION);
-//            if (choice == JOptionPane.YES_OPTION) {
-//                removeSelectedItems(selectedIndices[0]);
-//                newOpenWindow.dispose();
-//                //newOpenWindow = null;
-//            }
-//        }
-//    }
 
     @Override
     public void componentResized(Dimension newSize) {

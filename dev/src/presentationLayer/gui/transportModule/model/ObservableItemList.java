@@ -18,16 +18,16 @@ public class ObservableItemList extends AbstractObservableModel {
 
     @Override
     public boolean isMatch(String query) {
-        return false;
+        return String.valueOf(id).contains(query);
     }
 
     @Override
     public String getShortDescription() {
-        return null;
+        return String.valueOf(id);
     }
 
     @Override
     public String getLongDescription() {
-        return null;
+        throw new UnsupportedOperationException("Item List does not have a long description");
     }
 }

@@ -1,6 +1,7 @@
 package presentationLayer.gui.transportModule.view.panels.sites;
 
 import domainObjects.transportModule.Truck;
+import org.junit.platform.commons.util.CollectionUtils;
 import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
 import presentationLayer.gui.plAbstracts.interfaces.ModelObserver;
 import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
@@ -41,15 +42,15 @@ public class UpdateSitePanel extends AbstractTransportModulePanel {
         ObservableList emptySiteList = new ObservableList<>();
         control.getAll(this,emptySiteList);
         ObservableList<Searchable> sitesList = emptySiteList;
-        Collections.sort(sitesList, new Comparator<Searchable>() {
+
+
+        sitesList.sort(new Comparator<Searchable>() {
             @Override
             public int compare(Searchable o1, Searchable o2) {
                 return o1.getShortDescription().compareTo(o2.getShortDescription());
             }
         });
 
-        Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
-        contentPanel.setSize(scrollPane.getSize());
         Dimension textFieldSize = new Dimension(200,30);
 
         contentPanel.setLayout(new GridBagLayout());
@@ -82,7 +83,6 @@ public class UpdateSitePanel extends AbstractTransportModulePanel {
         constraints.gridy = 2;
         constraints.fill = GridBagConstraints.HORIZONTAL;
         contentPanel.add(contactNameField.getComponent(), constraints);
-//        contactNameField.setTextselectedSite.getSelected().getShortDescription());
 
         contactNumberLabel = new JLabel("Contact Number:");
         constraints.gridx = 0;
@@ -113,11 +113,32 @@ public class UpdateSitePanel extends AbstractTransportModulePanel {
             }
         });
 
-        ((JComboBox)selectedSite.getComponent()).addItemListener(new ItemListener() {
+        selectedSite.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
-                ObservableSite s = (ObservableSite) e.getItem();
+                if(e.getStateChange() != ItemEvent.SELECTED){
+                    return;
+                }
 
+                Object o = e.getItem();
+
+                if(o == null || o instanceof String s && (s.equals("") || s.trim().equals("Select Site") || s.equals("No results found"))){
+                    contactNameField.setText("");
+                    contactNumberField.setText("");
+                    return;
+                }
+                String siteName = (String) o;
+
+                for(Searchable s : sitesList){
+                    if(s.getShortDescription().equals(siteName)){
+                        ObservableSite site = (ObservableSite) s;
+                        contactNameField.setText(site.contactName);
+                        contactNumberField.setText(site.phoneNumber);
+                        return;
+                    }
+                }
+                contactNameField.setText("");
+                contactNumberField.setText("");
             }
         });
     }

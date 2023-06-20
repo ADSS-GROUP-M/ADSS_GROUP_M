@@ -26,8 +26,6 @@ public class AddTransportPanel extends AbstractTransportModulePanel {
     }
 
     private void init() {
-        Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
-        contentPanel.setSize(scrollPane.getSize());
 //        JLabel header = new JLabel("Enter transport details:\n");
 //        header.setVerticalAlignment(JLabel.TOP);
 //        contentPanel.add(header);

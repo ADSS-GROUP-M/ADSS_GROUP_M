@@ -22,7 +22,7 @@ public class ObservableTruck extends AbstractObservableModel {
 
     @Override
     public boolean isMatch(String query) {
-        return false;
+        return id.contains(query);
     }
 
     @Override

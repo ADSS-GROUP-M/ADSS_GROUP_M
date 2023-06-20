@@ -29,12 +29,12 @@ public class ObservableTransport extends AbstractObservableModel {
 
     @Override
     public boolean isMatch(String query) {
-        return false;
+        return String.valueOf(id).contains(query);
     }
 
     @Override
     public String getShortDescription() {
-        return null;
+        return String.valueOf(id);
     }
 
     @Override

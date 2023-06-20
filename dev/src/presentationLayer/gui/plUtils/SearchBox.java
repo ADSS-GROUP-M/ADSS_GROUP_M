@@ -125,7 +125,6 @@ public class SearchBox implements UIElement {
                     public void mouseExited(MouseEvent e) {
                         super.mouseExited(e);
                         but.setBackground(Color.WHITE);
-//                        comboBox.repaint();
                         repaintListener.repaint();
                     }
 
@@ -136,16 +135,12 @@ public class SearchBox implements UIElement {
                             setText("");
                             clearTextOnClick = false;
                         }
-//                        comboBox.revalidate();
-//                        comboBox.repaint();
                         repaintListener.repaint();
                     }
 
                     @Override
                     public void mouseReleased(MouseEvent e) {
                         super.mouseReleased(e);
-//                        comboBox.revalidate();
-//                        comboBox.repaint();
                         repaintListener.repaint();
                     }
                 });

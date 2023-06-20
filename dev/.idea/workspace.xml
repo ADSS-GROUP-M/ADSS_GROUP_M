@@ -9,21 +9,23 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e454f93c-4ee8-4f4b-9a14-eaaf36aa303c" name="Changes" comment="added gui - use case of adding a supplier">
-      <change afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/GUI/ViewLayer/PeriodicOrdersGUI.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/GUI/ViewLayer/SupplierOrdersGUI.java" afterDir="false" />
+    <list default="true" id="e454f93c-4ee8-4f4b-9a14-eaaf36aa303c" name="Changes" comment="added gui - use case of adding periodic order">
+      <change afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/ManagerWindowCLI.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/ManagerWindowGUI.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/SuppliersModule/PeriodicOrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/BusinessLayer/SuppliersModule/PeriodicOrderController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/PeriodicOrderDataMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/SuppliersModule/PeriodicOrderDataMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/ServiceLayer/SuppliersModule/PeriodicOrderService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/ServiceLayer/SuppliersModule/PeriodicOrderService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/GUI/ControllersLayer/MainViewController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/GUI/ControllersLayer/MainViewController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/GUI/ViewLayer/AddSupplierGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/GUI/ViewLayer/AddSupplierGUI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/GUI/ViewLayer/AgreementGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/GUI/ViewLayer/AgreementGUI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/GUI/ViewLayer/BillOfQuantitiesPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/GUI/ViewLayer/BillOfQuantitiesPage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/GUI/ViewLayer/DiscountTable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/GUI/ViewLayer/DiscountTable.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/DeliveryAgreements/DeliveryAgreement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/CLI/DeliveryAgreements/DeliveryAgreement.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/DeliveryAgreements/DeliveryByInvitation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/CLI/DeliveryAgreements/DeliveryByInvitation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/DeliveryAgreements/DeliveryFixedDays.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/CLI/DeliveryAgreements/DeliveryFixedDays.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/Discounts/CashDiscount.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/CLI/Discounts/Discounts/CashDiscount.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/Discounts/Discount.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/CLI/Discounts/Discounts/Discount.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/Discounts/PercentageDiscount.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/CLI/Discounts/Discounts/PercentageDiscount.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/GUI/GUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/GUI/SuppliersGUI.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/GUI/ViewLayer/MainView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/GUI/ViewLayer/MainView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/GUI/ViewLayer/ManageSuppliersView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/GUI/ViewLayer/ManageSuppliersView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/GUI/ViewLayer/SupplierPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/GUI/ViewLayer/SupplierPage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/Order.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/CLI/Order.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/Response.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/CLI/Response.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/SupplierMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/CLI/SupplierMain.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/UI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/CLI/UI.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -106,22 +108,9 @@
       <recent name="PresentationLayer" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.GUI">
+  <component name="RunManager" selected="Application.ManagerWindowGUI">
     <configuration name="AddSupplierGUI" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="Fronend.PresentationLayer.SuppliersModule.GUI.ViewLayer.AddSupplierGUI" />
-      <module name="dev" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="Fronend.PresentationLayer.SuppliersModule.GUI.ViewLayer.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="Fronend.PresentationLayer.SuppliersModule.GUI.ViewLayer.DiscountTable" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="Fronend.PresentationLayer.SuppliersModule.GUI.ViewLayer.DiscountTable" />
       <module name="dev" />
       <extension name="coverage">
         <pattern>
@@ -149,6 +138,19 @@
     <configuration name="InventoryMain" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="Fronend.PresentationLayer.InventoryModule.Main" />
       <module name="dev" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ManagerWindowGUI" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Fronend.PresentationLayer.ManagerWindowGUI" />
+      <module name="dev" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="Fronend.PresentationLayer.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -196,18 +198,18 @@
       <item itemvalue="Application.GUI" />
       <item itemvalue="Application.InventoryMain" />
       <item itemvalue="Application.AddSupplierGUI" />
-      <item itemvalue="Application.Fronend.PresentationLayer.SuppliersModule.GUI.ViewLayer.DiscountTable" />
+      <item itemvalue="Application.ManagerWindowGUI" />
       <item itemvalue="Application.OrderGUI" />
       <item itemvalue="Application.ProductsMenu" />
       <item itemvalue="Application.SupplierOrdersGUI" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.ManagerWindowGUI" />
         <item itemvalue="Application.AddSupplierGUI" />
         <item itemvalue="Application.SupplierOrdersGUI" />
         <item itemvalue="Application.OrderGUI" />
         <item itemvalue="Application.ProductsMenu" />
-        <item itemvalue="Application.Fronend.PresentationLayer.SuppliersModule.GUI.ViewLayer.DiscountTable" />
       </list>
     </recent_temporary>
   </component>
@@ -230,7 +232,7 @@
       <workItem from="1683488131151" duration="9878000" />
       <workItem from="1683644904745" duration="1332000" />
       <workItem from="1684742723644" duration="4247000" />
-      <workItem from="1686905551760" duration="99973000" />
+      <workItem from="1686905551760" duration="102410000" />
     </task>
     <task id="LOCAL-00001" summary="done with order functionality - moving to the ability to print the order etc">
       <created>1680693870968</created>
@@ -442,7 +444,21 @@
       <option name="project" value="LOCAL" />
       <updated>1687203827453</updated>
     </task>
-    <option name="localTasksCounter" value="31" />
+    <task id="LOCAL-00031" summary="added gui - use case of adding periodic order">
+      <created>1687262130998</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1687262130998</updated>
+    </task>
+    <task id="LOCAL-00032" summary="added gui - use case of adding periodic order">
+      <created>1687262151480</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1687262151480</updated>
+    </task>
+    <option name="localTasksCounter" value="33" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -497,14 +513,15 @@
     <MESSAGE value="test" />
     <MESSAGE value="fix exit" />
     <MESSAGE value="added gui - use case of adding a supplier" />
-    <option name="LAST_COMMIT_MESSAGE" value="added gui - use case of adding a supplier" />
+    <MESSAGE value="added gui - use case of adding periodic order" />
+    <option name="LAST_COMMIT_MESSAGE" value="added gui - use case of adding periodic order" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/UI.java</url>
-          <line>779</line>
+          <url>file://$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/CLI/UI.java</url>
+          <line>781</line>
           <option name="timeStamp" value="10" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
@@ -566,6 +583,11 @@
           <url>file://$PROJECT_DIR$/src/Backend/BusinessLayer/SuppliersModule/AgreementController.java</url>
           <line>40</line>
           <option name="timeStamp" value="173" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/Fronend/PresentationLayer/ManagerWindowGUI.java</url>
+          <line>31</line>
+          <option name="timeStamp" value="175" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

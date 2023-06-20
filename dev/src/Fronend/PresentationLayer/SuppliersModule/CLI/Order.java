@@ -1,4 +1,4 @@
-package Fronend.PresentationLayer.SuppliersModule;
+package Fronend.PresentationLayer.SuppliersModule.CLI;
 
 import java.util.HashMap;
 import java.util.Map;

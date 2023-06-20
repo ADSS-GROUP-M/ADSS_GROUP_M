@@ -1,5 +1,7 @@
 package Fronend.PresentationLayer.SuppliersModule.GUI.ViewLayer;
 
+import Fronend.PresentationLayer.ManagerWindowGUI;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -10,7 +12,7 @@ public class MainView extends JFrame {
     private JButton suppliersInfoB;
     private JButton manageOrdersB;
     private JLabel welcomeLabel;
-    public MainView(){
+    public MainView(boolean manager){
 
         //panel
         jpanel = new BackgruondPanel("src/Fronend/PresentationLayer/SuppliersModule/GUI/ViewLayer/resource/supermarketMain.png");
@@ -29,10 +31,21 @@ public class MainView extends JFrame {
             new PeriodicOrdersGUI();
         });
         manageOrdersB.setFocusable(false);
+        if(manager){
+            JButton back = new JButton("Back");
+            back.setBounds(20, 450, 70, 20);
+            back.addActionListener((ActionEvent e)->{
+                dispose();
+                new ManagerWindowGUI();
+            });
+            back.setFont(new Font("Comic Sans", Font.BOLD, 12));
+            back.setFocusable(false);
+            jpanel.add(back);
+        }
         //welcome label
         welcomeLabel = new JLabel("WELCOME TO SUPER-LI SUPPLIERS MANAGEMENT");
         //welcomeLabel.setIcon(new ImageIcon(new ImageIcon("src/Fronend/PresentationLayer/SuppliersModule/GUI/ViewLayer/resource/shoppingCart.png").getImage().getScaledInstance(50, 50,java.awt.Image.SCALE_SMOOTH)));
-        welcomeLabel.setBounds(25, 80, 850, 200);
+        welcomeLabel.setBounds(55, 50, 850, 200);
         welcomeLabel.setFont(new Font("Comic Sans", Font.BOLD, 30));
         welcomeLabel.setForeground(Color.black);
 
@@ -63,7 +76,4 @@ public class MainView extends JFrame {
         manageOrdersB.addActionListener(actionListener);
     }
 
-    public static void main(String[] args) {
-        new MainView();
-    }
 }

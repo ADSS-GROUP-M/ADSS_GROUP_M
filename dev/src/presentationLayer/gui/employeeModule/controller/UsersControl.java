@@ -8,6 +8,8 @@ import presentationLayer.gui.plAbstracts.interfaces.ObservableUIElement;
 import serviceLayer.employeeModule.Services.UserService;
 import utils.Response;
 
+import java.util.List;
+
 public class UsersControl extends AbstractControl {
 
     private final UserService userService;
@@ -47,5 +49,15 @@ public class UsersControl extends AbstractControl {
             return e.getMessage();
         }
         return "Authorized the user successfully.";
+    }
+
+    public Object findUserAuthorizations(String username) {
+        String json = userService.getUserAuthorizations(username);
+        try {
+            Response response = Response.fromJsonWithValidation(json); // Throws an exception if an error has occurred.
+            return response.data(List.class);
+        } catch (ErrorOccurredException e) {
+            return e.getMessage();
+        }
     }
 }

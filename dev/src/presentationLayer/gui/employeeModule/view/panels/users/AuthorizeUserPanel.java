@@ -1,6 +1,7 @@
 package presentationLayer.gui.employeeModule.view.panels.users;
 
 
+import businessLayer.employeeModule.Authorization;
 import presentationLayer.gui.employeeModule.controller.UsersControl;
 import presentationLayer.gui.employeeModule.model.ObservableUser;
 import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
@@ -12,11 +13,17 @@ import presentationLayer.gui.plUtils.PrettyTextField;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class AuthorizeUserPanel extends AbstractTransportModulePanel {
     JPanel newOpenPanel = new JPanel();
     JFrame newOpenWindow;
-    PrettyTextField usernameField, authorizationField;
+    PrettyTextField usernameField;
+    JList<String> authorizationField;
+    JTextArea authorizationsTextArea;
+    JButton authorizeButton;
 
     public AuthorizeUserPanel(UsersControl control) {
         super(control);
@@ -43,6 +50,23 @@ public class AuthorizeUserPanel extends AbstractTransportModulePanel {
         constraints.fill = GridBagConstraints.HORIZONTAL;
         contentPanel.add(usernameField.getComponent(), constraints);
 
+        // Find Employee Button
+        JButton findUserAuthorizationsButton = new JButton("Find User Authorizations");
+        constraints.gridx = 2;
+        constraints.gridy = 1;
+        constraints.gridwidth = 1;
+        constraints.fill = GridBagConstraints.NONE;
+        constraints.anchor = GridBagConstraints.WEST;
+        contentPanel.add(findUserAuthorizationsButton, constraints);
+
+        findUserAuthorizationsButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                findUserAuthorizationsButtonClicked();
+            }
+        });
+
         JLabel authorizationLabel = new JLabel("Authorization:");
         constraints.anchor = GridBagConstraints.WEST;
         constraints.gridwidth = 1;
@@ -50,37 +74,88 @@ public class AuthorizeUserPanel extends AbstractTransportModulePanel {
         constraints.gridy = 2;
         contentPanel.add(authorizationLabel, constraints);
 
-        authorizationField = new PrettyTextField(textFieldSize);
+
+        DefaultListModel<String> validAuthorizations = new DefaultListModel<>();
+        for(Authorization auth : Authorization.values()) {
+            validAuthorizations.addElement(auth.toString());
+        }
+
+        authorizationField = new JList<>(validAuthorizations);
+        authorizationField.setEnabled(false);
         constraints.gridx = 1;
         constraints.gridy = 2;
         constraints.fill = GridBagConstraints.HORIZONTAL;
-        contentPanel.add(authorizationField.getComponent(), constraints);
+        contentPanel.add(authorizationField, constraints);
 
-        //Certify button
-        JButton certifyButton = new JButton("Authorize");
+        //Authorize button
+        authorizeButton = new JButton("Authorize");
+        authorizeButton.setEnabled(false);
         constraints.gridx = 1;
         constraints.gridy = 3;
         constraints.gridwidth = 1;
         constraints.fill = GridBagConstraints.NONE;
         constraints.anchor = GridBagConstraints.CENTER;
-        contentPanel.add(certifyButton, constraints);
+        contentPanel.add(authorizeButton, constraints);
 
         ModelObserver o = this;
-        certifyButton.addMouseListener(new MouseAdapter() {
+        authorizeButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 authorizeButtonClicked();
             }
         });
+
+        JLabel authorizationsLabel = new JLabel("User Authorizations:");
+        constraints.anchor = GridBagConstraints.WEST;
+        constraints.gridwidth = 1;
+        constraints.gridx = 0;
+        constraints.gridy = 4;
+        contentPanel.add(authorizationsLabel, constraints);
+
+        authorizationsTextArea = new JTextArea("");
+        authorizationsTextArea.setFont(new Font("Arial", Font.BOLD, 20));
+        authorizationsTextArea.setForeground(Colors.getForegroundColor());
+        authorizationsTextArea.setEditable(false);
+        constraints.anchor = GridBagConstraints.SOUTHEAST;
+        constraints.gridwidth = 1;
+        constraints.gridx = 1;
+        constraints.gridy = 4;
+        contentPanel.add(authorizationsTextArea, constraints);
     }
 
     private void authorizeButtonClicked(){
-        ObservableUser user =  new ObservableUser();
-        user.subscribe(this);
-        observers.forEach(observer -> observer.add(this, user));
-        String result = ((UsersControl)control).authorizeUser(usernameField.getText(),authorizationField.getText());
-        JOptionPane.showMessageDialog(null,result);
+//        ObservableUser user =  new ObservableUser();
+//        user.subscribe(this);
+//        observers.forEach(observer -> observer.add(this, user));
+        if (authorizationField.isSelectionEmpty()) {
+            JOptionPane.showMessageDialog(null, "Please select an authorization.");
+        } else {
+            String result = ((UsersControl) control).authorizeUser(usernameField.getText(), authorizationField.getSelectedValue());
+            JOptionPane.showMessageDialog(null, result);
+            findUserAuthorizationsButtonClicked(); // Refreshes the user's authorizations list once updated
+        }
+    }
+
+    private void findUserAuthorizationsButtonClicked() {
+        Object result = ((UsersControl)control).findUserAuthorizations(usernameField.getText());
+        if (result instanceof String) {
+            JOptionPane.showMessageDialog(null, result);
+            authorizationsTextArea.setText("");
+            authorizationField.setEnabled(false);
+            authorizeButton.setEnabled(false);
+        } else if (result instanceof List authorizations) {
+            List<String> auths = new ArrayList<>();
+            authorizations.forEach(auth -> auths.add(auth.toString()));
+            authorizationsTextArea.setText(String.join("\n",auths));
+            authorizationField.setEnabled(true);
+            authorizeButton.setEnabled(true);
+        } else {
+            JOptionPane.showMessageDialog(null,"An error has occurred when retrieving the user authorizations.");
+            authorizationsTextArea.setText("");
+            authorizationField.setEnabled(false);
+            authorizeButton.setEnabled(false);
+        }
     }
     
     private void openNewWindow(String selectedItem) {

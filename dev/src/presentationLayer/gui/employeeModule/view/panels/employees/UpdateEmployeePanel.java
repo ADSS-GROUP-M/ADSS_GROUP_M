@@ -209,8 +209,6 @@ public class UpdateEmployeePanel extends AbstractTransportModulePanel {
         employeeDetailsField.getComponent().setEnabled(false);
         contentPanel.add(employeeDetailsField.getComponent(), constraints);
 
-        // TODO: Add the list of roles
-
         //Submit button
         submitButton = new JButton("Submit");
         constraints.gridx = 0;
@@ -262,7 +260,6 @@ public class UpdateEmployeePanel extends AbstractTransportModulePanel {
 //        ObservableEmployee employee =  new ObservableEmployee();
 //        employee.subscribe(this);
 //        observers.forEach(observer -> observer.add(this, employee));
-        //TODO: Update the find employee button logic here - need to enable back all the other text fields and submit button.
         Object result = ((EmployeesControl)control).findEmployee(employeeIdField.getText());
         if (result instanceof String) {
             JOptionPane.showMessageDialog(null, result);

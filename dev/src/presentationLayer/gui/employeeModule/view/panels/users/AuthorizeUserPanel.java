@@ -16,6 +16,7 @@ import java.awt.event.*;
 public class AuthorizeUserPanel extends AbstractTransportModulePanel {
     JPanel newOpenPanel = new JPanel();
     JFrame newOpenWindow;
+    PrettyTextField usernameField, authorizationField;
 
     public AuthorizeUserPanel(UsersControl control) {
         super(control);
@@ -36,24 +37,24 @@ public class AuthorizeUserPanel extends AbstractTransportModulePanel {
         constraints.gridy = 1;
         contentPanel.add(usernameLabel, constraints);
 
-        PrettyTextField usernameField = new PrettyTextField(textFieldSize);
+        usernameField = new PrettyTextField(textFieldSize);
         constraints.gridx = 1;
         constraints.gridy = 1;
         constraints.fill = GridBagConstraints.HORIZONTAL;
         contentPanel.add(usernameField.getComponent(), constraints);
 
-        JLabel roleLabel = new JLabel("Authorization:");
+        JLabel authorizationLabel = new JLabel("Authorization:");
         constraints.anchor = GridBagConstraints.WEST;
         constraints.gridwidth = 1;
         constraints.gridx = 0;
         constraints.gridy = 2;
-        contentPanel.add(roleLabel, constraints);
+        contentPanel.add(authorizationLabel, constraints);
 
-        PrettyTextField roleField = new PrettyTextField(textFieldSize);
+        authorizationField = new PrettyTextField(textFieldSize);
         constraints.gridx = 1;
         constraints.gridy = 2;
         constraints.fill = GridBagConstraints.HORIZONTAL;
-        contentPanel.add(roleField.getComponent(), constraints);
+        contentPanel.add(authorizationField.getComponent(), constraints);
 
         //Certify button
         JButton certifyButton = new JButton("Authorize");
@@ -78,6 +79,8 @@ public class AuthorizeUserPanel extends AbstractTransportModulePanel {
         ObservableUser user =  new ObservableUser();
         user.subscribe(this);
         observers.forEach(observer -> observer.add(this, user));
+        String result = ((UsersControl)control).authorizeUser(usernameField.getText(),authorizationField.getText());
+        JOptionPane.showMessageDialog(null,result);
     }
     
     private void openNewWindow(String selectedItem) {

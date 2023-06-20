@@ -1,14 +1,12 @@
 package presentationLayer.gui.employeeModule.controller;
 
-import presentationLayer.gui.employeeModule.model.ObservableShift;
+import exceptions.ErrorOccurredException;
 import presentationLayer.gui.employeeModule.model.ObservableUser;
 import presentationLayer.gui.plAbstracts.AbstractControl;
 import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
 import presentationLayer.gui.plAbstracts.interfaces.ObservableUIElement;
 import serviceLayer.employeeModule.Services.UserService;
-import serviceLayer.transportModule.ResourceManagementService;
-
-import java.util.List;
+import utils.Response;
 
 public class UsersControl extends AbstractControl {
 
@@ -39,5 +37,15 @@ public class UsersControl extends AbstractControl {
 
 //        truckModel.response = response.message();
         shiftModel.notifyObservers();
+    }
+
+    public String authorizeUser(String username, String authorization) {
+        String json = userService.authorizeUser(UserService.HR_MANAGER_USERNAME,username,authorization);
+        try {
+            Response response = Response.fromJsonWithValidation(json); // Throws an exception if an error has occurred.
+        } catch (ErrorOccurredException e) {
+            return e.getMessage();
+        }
+        return "Authorized the user successfully.";
     }
 }

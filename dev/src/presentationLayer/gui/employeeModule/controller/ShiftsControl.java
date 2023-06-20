@@ -57,7 +57,7 @@ public class ShiftsControl extends AbstractControl {
     public Object getShifts(LocalDate day) {
         String json = employeesService.getWeekShifts(UserService.HR_MANAGER_USERNAME, Branch.HEADQUARTERS_ID,day);
         try {
-            Response response = Response.fromJsonWithValidation(json);
+            Response response = Response.fromJsonWithValidation(json); // Throws an exception if an error has occurred.
             List<SShift[]> weekShifts = response.data(LIST_SSHIFT_ARRAY_TYPE);
             for(SShift[] dayShifts : weekShifts) {
                 if (dayShifts != null && ((dayShifts[0] != null && dayShifts[0].getShiftDate().equals(day))
@@ -73,9 +73,7 @@ public class ShiftsControl extends AbstractControl {
     public String deleteShift(SShift shift) {
         String json = employeesService.deleteShift(UserService.HR_MANAGER_USERNAME,Branch.HEADQUARTERS_ID,shift.getShiftDate(),shift.getShiftType());
         try {
-            Response response = Response.fromJsonWithValidation(json);
-            if (!response.dataToBoolean())
-                return response.message();
+            Response response = Response.fromJsonWithValidation(json); // Throws an exception if an error has occurred.
         } catch (ErrorOccurredException e) {
             return e.getMessage();
         }

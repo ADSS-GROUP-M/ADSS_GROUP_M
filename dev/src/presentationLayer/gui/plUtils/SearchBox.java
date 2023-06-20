@@ -287,9 +287,7 @@ public class SearchBox implements UIElement {
 
         if(newText.equals(text)){
             if(newText.equals("") && lastFilteredData.length != data.size()){
-                lastFilteredData = data.stream()
-                        .map(Searchable::getShortDescription)
-                        .toArray(String[]::new);
+                resetFilteredData();
                 comboBox.setModel(new DefaultComboBoxModel<>(lastFilteredData));
                 comboBox.showPopup();
             }
@@ -330,6 +328,12 @@ public class SearchBox implements UIElement {
         comboBox.showPopup();
     }
 
+    private void resetFilteredData() {
+        lastFilteredData = data.stream()
+                .map(Searchable::getShortDescription)
+                .toArray(String[]::new);
+    }
+
     @Override
     public Component getComponent() {
         return comboBox;
@@ -341,6 +345,12 @@ public class SearchBox implements UIElement {
 
     public String getSelected(){
         return (String)comboBox.getSelectedItem();
+    }
+
+    public void reset(){
+        comboBox.setSelectedItem(defaultText);
+        resetFilteredData();
+        clearTextOnClick = true;
     }
     @Override
     public void componentResized(Dimension newSize) {

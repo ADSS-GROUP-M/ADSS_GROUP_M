@@ -1,18 +1,13 @@
 package presentationLayer.gui.transportModule.view.panels.sites;
 
-import domainObjects.transportModule.Truck;
-import org.junit.platform.commons.util.CollectionUtils;
 import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
-import presentationLayer.gui.plAbstracts.interfaces.ModelObserver;
 import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
 import presentationLayer.gui.plAbstracts.interfaces.Searchable;
 import presentationLayer.gui.plUtils.ObservableList;
 import presentationLayer.gui.plUtils.PrettyTextField;
 import presentationLayer.gui.plUtils.SearchBox;
-import presentationLayer.gui.plUtils.SearchableString;
 import presentationLayer.gui.transportModule.control.SitesControl;
 import presentationLayer.gui.transportModule.model.ObservableSite;
-import presentationLayer.gui.transportModule.model.ObservableTruck;
 
 import javax.swing.*;
 import java.awt.*;
@@ -22,7 +17,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
 
 public class UpdateSitePanel extends AbstractTransportModulePanel {
     private JLabel sitesLabel;
@@ -32,6 +26,8 @@ public class UpdateSitePanel extends AbstractTransportModulePanel {
     private JLabel contactNumberLabel;
     private PrettyTextField contactNumberField;
     private JButton submitButton;
+    private ObservableList emptySiteList;
+    private ObservableList<Searchable> sitesList;
 
     public UpdateSitePanel(SitesControl control) {
         super(control);
@@ -39,20 +35,19 @@ public class UpdateSitePanel extends AbstractTransportModulePanel {
     }
     private void init() {
 
-        ObservableList emptySiteList = new ObservableList<>();
-        control.getAll(this,emptySiteList);
-        ObservableList<Searchable> sitesList = emptySiteList;
+        emptySiteList = new ObservableList<>();
+        control.getAll(this, emptySiteList);
+        sitesList = emptySiteList;
 
-
-        sitesList.sort(new Comparator<Searchable>() {
+        Collections.sort(sitesList, new Comparator<Searchable>() {
             @Override
             public int compare(Searchable o1, Searchable o2) {
                 return o1.getShortDescription().compareTo(o2.getShortDescription());
             }
         });
 
-        Dimension textFieldSize = new Dimension(200,30);
-
+        Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
+        contentPanel.setSize(scrollPane.getSize());
         contentPanel.setLayout(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
 
@@ -62,6 +57,8 @@ public class UpdateSitePanel extends AbstractTransportModulePanel {
         constraints.anchor = GridBagConstraints.WEST;
         constraints.insets = new Insets(5, 5, 5, 5);
         contentPanel.add(sitesLabel, constraints);
+
+        Dimension textFieldSize = new Dimension(200,30);
 
         selectedSite = new SearchBox(sitesList,"Select Site",textFieldSize, panel);
         constraints.gridx = 1;
@@ -78,7 +75,7 @@ public class UpdateSitePanel extends AbstractTransportModulePanel {
         constraints.anchor = GridBagConstraints.WEST;
         contentPanel.add(contactNameLabel, constraints);
 
-        contactNameField = new PrettyTextField(textFieldSize);
+        contactNameField = new PrettyTextField(textFieldSize,false);
         constraints.gridx = 1;
         constraints.gridy = 2;
         constraints.fill = GridBagConstraints.HORIZONTAL;
@@ -89,7 +86,7 @@ public class UpdateSitePanel extends AbstractTransportModulePanel {
         constraints.gridy = 3;
         contentPanel.add(contactNumberLabel, constraints);
 
-        contactNumberField = new PrettyTextField(textFieldSize);
+        contactNumberField = new PrettyTextField(textFieldSize,false);
         constraints.gridx = 1;
         constraints.gridy = 3;
         constraints.fill = GridBagConstraints.HORIZONTAL;
@@ -98,13 +95,12 @@ public class UpdateSitePanel extends AbstractTransportModulePanel {
         //Submit button
         submitButton = new JButton("Submit");
         constraints.gridx = 0;
-        constraints.gridy = 5;
+        constraints.gridy = 4;
         constraints.gridwidth = 2;
         constraints.fill = GridBagConstraints.NONE;
         constraints.anchor = GridBagConstraints.EAST;
         contentPanel.add(submitButton, constraints);
 
-        ModelObserver o = this;
         submitButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -127,6 +123,7 @@ public class UpdateSitePanel extends AbstractTransportModulePanel {
                     contactNumberField.setText("");
                     return;
                 }
+
                 String siteName = (String) o;
 
                 for(Searchable s : sitesList){
@@ -144,11 +141,15 @@ public class UpdateSitePanel extends AbstractTransportModulePanel {
     }
 
     private void buttonClicked(){
-        ObservableSite site =  new ObservableSite();
-        site.subscribe(this);
-        site.contactName = contactNameField.getText();
-        site.phoneNumber = contactNumberField.getText();
-        observers.forEach(observer -> observer.add(this, site));
+        for(Searchable s : sitesList){
+            if(s.getShortDescription().equals(selectedSite.getSelected())){
+                ObservableSite site = (ObservableSite) s;
+                site.subscribe(this);
+                site.contactName = contactNameField.getText();
+                site.phoneNumber = contactNumberField.getText();
+                observers.forEach(observer -> observer.update(this, site));
+            }
+        }
     }
 
     @Override
@@ -164,6 +165,12 @@ public class UpdateSitePanel extends AbstractTransportModulePanel {
 
     @Override
     public void notify(ObservableModel observable) {
-
+        System.out.println("site updated");
     }
 }
+
+
+
+//////////////////////////////////
+//fix compare to show on view!!!!!!!!!!!!!
+//clear fields after submit

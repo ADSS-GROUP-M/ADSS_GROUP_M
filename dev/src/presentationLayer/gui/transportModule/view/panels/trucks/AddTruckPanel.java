@@ -133,7 +133,6 @@ public class AddTruckPanel extends AbstractTransportModulePanel {
         constraints.anchor = GridBagConstraints.EAST;
         contentPanel.add(submitButton, constraints);
 
-        ModelObserver o = this;
         submitButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -165,6 +164,27 @@ public class AddTruckPanel extends AbstractTransportModulePanel {
         observers.forEach(observer -> observer.add(this, truck));
     }
 
+    private void setCoolingButton(Truck.CoolingCapacity cc){
+        none.setSelected(false);
+        cold.setSelected(false);
+        frozen.setSelected(false);
+        if(cc == null) return;
+        switch(cc){
+            case NONE -> none.setSelected(true);
+            case COLD -> cold.setSelected(true);
+            case FROZEN -> frozen.setSelected(true);
+        }
+    }
+
+    private void clearFields(){
+        idField.setText("");
+        modelField.setText("");
+        baseField.setText("");
+        maxField.setText("");
+        setCoolingButton(null);
+    }
+
+
     @Override
     public void componentResized(Dimension newSize) {
         super.componentResized(newSize);
@@ -178,6 +198,6 @@ public class AddTruckPanel extends AbstractTransportModulePanel {
 
     @Override
     public void notify(ObservableModel observable) {
-
+        clearFields();
     }
 }

@@ -286,7 +286,8 @@ public class SearchBox implements UIElement {
         comboBox.setBorder(new TextFieldBorder());
     }
 
-    private void setText(String newText) {
+    private void
+    setText(String newText) {
         comboBox.getEditor().setItem(newText);
         text = newText;
         if(newText.equals("")) {
@@ -375,6 +376,10 @@ public class SearchBox implements UIElement {
     @Override
     public void componentResized(Dimension newSize) {
         // do nothing
+    }
+
+    public void setSelected(String text){
+        setText(text);
     }
 }
 

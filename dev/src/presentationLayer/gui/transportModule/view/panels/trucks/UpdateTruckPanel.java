@@ -39,6 +39,7 @@ public class UpdateTruckPanel extends AbstractTransportModulePanel {
     private ObservableList emptyTruckList;
     private ObservableList<Searchable> trucksList;
     private ButtonGroup group;
+
     public UpdateTruckPanel(TrucksControl control) {
         super(control);
         init();
@@ -55,8 +56,6 @@ public class UpdateTruckPanel extends AbstractTransportModulePanel {
             }
         });
 
-        Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
-        contentPanel.setSize(scrollPane.getSize());
         contentPanel.setLayout(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
 
@@ -161,8 +160,8 @@ public class UpdateTruckPanel extends AbstractTransportModulePanel {
                 Object o = e.getItem();
 
                 if(o == null || o instanceof String s && (s.equals("") || s.trim().equals("Select Truck") || s.equals("No results found"))){
-                    setTextInTextField(baseField, "");
-                    setTextInTextField(maxField,"");
+                    baseField.setText("");
+                    maxField.setText("");
                     return;
                 }
 
@@ -171,20 +170,16 @@ public class UpdateTruckPanel extends AbstractTransportModulePanel {
                 for(Searchable t : trucksList){
                     if(t.getShortDescription().equals(truckId)){
                         ObservableTruck truck = (ObservableTruck) t;
-                        setTextInTextField(baseField, String.valueOf(truck.baseWeight));
-                        setTextInTextField(maxField, String.valueOf(truck.maxWeight));
+                        baseField.setText(String.valueOf(truck.baseWeight));
+                        maxField.setText(String.valueOf(truck.maxWeight));
                         setCoolingButton(truck.coolingCapacity);
                         return;
                     }
                 }
-                setTextInTextField(baseField, "");
-                setTextInTextField(maxField,"");
+                baseField.setText("");
+                maxField.setText("");
             }
         });
-    }
-
-    private void setTextInTextField(PrettyTextField field, String text) {;
-        field.setText(text);
     }
 
     private void setCoolingButton(CoolingCapacity cc){
@@ -219,14 +214,12 @@ public class UpdateTruckPanel extends AbstractTransportModulePanel {
         }
     }
 
-
     private void clearFields(){
         selectedTruck.reset();
         baseField.setText("");
         maxField.setText("");
         setCoolingButton(null);
     }
-
 
     @Override
     public void componentResized(Dimension newSize) {
@@ -245,7 +238,3 @@ public class UpdateTruckPanel extends AbstractTransportModulePanel {
     }
 }
 
-
-
-//////////////////////////////////////
-//clear fields after submit

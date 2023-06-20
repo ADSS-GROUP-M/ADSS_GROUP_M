@@ -70,10 +70,7 @@ public class PrettyList implements UIElement {
             public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
                 Component r = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 
-//                r.setPreferredSize(new Dimension(value.toString().length()*8,100));
-
                 int w = SwingUtilities.computeStringWidth(getFontMetrics(Fonts.textBoxFont), value.toString());
-//                FontMetrics fm = ;
                 r.setPreferredSize(new Dimension(w,100));
 
                 if(isSelected) {

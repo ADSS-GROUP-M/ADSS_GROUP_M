@@ -19,4 +19,8 @@ public class MenuManager {
     public static void terminate() {
         finished = true;
     }
+
+    public static void main(String[] args) {
+        new MenuManager().run();
+    }
 }

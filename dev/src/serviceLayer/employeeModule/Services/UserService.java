@@ -116,7 +116,11 @@ public class UserService {
             {
                 return new Response("User " + actorUsername + " is not authorized to authorize other users.", false).toJson();
             }
-            userController.authorizeUser(username, Authorization.valueOf(authorization));
+            try {
+                userController.authorizeUser(username, Authorization.valueOf(authorization));
+            } catch (IllegalArgumentException e) {
+                return Response.getErrorResponse(new IllegalArgumentException("Invalid Authorization was given: " + authorization, e.getCause())).toJson();
+            }
             return new Response(true).toJson();
         } catch (EmployeeException e) {
             return Response.getErrorResponse(e).toJson();

@@ -166,7 +166,7 @@ public class ShiftToActivityDAO extends DAOBase<ShiftActivity> {
                 cache.put(object);
             }
         } catch (SQLException e) {
-            throw new DalException("Failed to insert shif activity", e);
+            throw new DalException("Failed to insert shift activity", e);
         }
     }
 

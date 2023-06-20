@@ -60,11 +60,11 @@ public class LoginMenu implements Menu {
                     System.out.println(output);
                     List<String> authorizations = loginMenuVM.getUserAuthorizations();
                     if (authorizations != null && authorizations.contains("HRManager")) {
-                        return new HRManagerMenu(new BackendController());
+                        return new HRManagerMenu(loginMenuVM.backendController());
                     } else if (authorizations != null && authorizations.contains("TransportManager")) {
                         return new TransportCLI(loginMenuVM.serviceFactory());
                     } else {
-                        return new EmployeeMenu(new BackendController());
+                        return new EmployeeMenu(loginMenuVM.backendController());
                     }
                 }
             }

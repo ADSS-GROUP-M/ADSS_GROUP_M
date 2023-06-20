@@ -1,5 +1,8 @@
 package presentationLayer.gui.employeeModule.controller;
 
+import businessLayer.employeeModule.Branch;
+import businessLayer.employeeModule.Shift;
+import com.google.gson.reflect.TypeToken;
 import domainObjects.transportModule.Truck;
 import exceptions.ErrorOccurredException;
 import presentationLayer.gui.employeeModule.model.ObservableShift;
@@ -7,20 +10,25 @@ import presentationLayer.gui.plAbstracts.AbstractControl;
 import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
 import presentationLayer.gui.plAbstracts.interfaces.ObservableUIElement;
 import presentationLayer.gui.transportModule.model.ObservableTruck;
+import serviceLayer.employeeModule.Objects.SShift;
 import serviceLayer.employeeModule.Services.EmployeesService;
+import serviceLayer.employeeModule.Services.UserService;
 import serviceLayer.transportModule.ResourceManagementService;
 import utils.Response;
 
+import java.lang.reflect.Type;
+import java.time.LocalDate;
 import java.util.List;
 
 public class ShiftsControl extends AbstractControl {
 
-    private final EmployeesService emp;
-    private final ResourceManagementService rms;
+    public static final Type STRING_LIST_TYPE = new TypeToken<List<String>>(){}.getType();
+    private static final Type LIST_SSHIFT_ARRAY_TYPE = new TypeToken<List<SShift[]>>(){}.getType();
 
-    public ShiftsControl(EmployeesService emp, ResourceManagementService rms) {
-        this.emp = emp;
-        this.rms = rms;
+    private final EmployeesService employeesService;
+
+    public ShiftsControl(EmployeesService employeesService) {
+        this.employeesService = employeesService;
     }
 
     @Override
@@ -44,5 +52,31 @@ public class ShiftsControl extends AbstractControl {
 
 //        truckModel.response = response.message();
         shiftModel.notifyObservers();
+    }
+
+    public Object getShifts(LocalDate day) {
+        String json = employeesService.getWeekShifts(UserService.HR_MANAGER_USERNAME, Branch.HEADQUARTERS_ID,day);
+        try {
+            Response response = Response.fromJsonWithValidation(json); // Throws an exception if an error has occurred.
+            List<SShift[]> weekShifts = response.data(LIST_SSHIFT_ARRAY_TYPE);
+            for(SShift[] dayShifts : weekShifts) {
+                if (dayShifts != null && ((dayShifts[0] != null && dayShifts[0].getShiftDate().equals(day))
+                                       || (dayShifts[1] != null && dayShifts[1].getShiftDate().equals(day))))
+                    return dayShifts;
+            }
+            return "There are no shifts in the specified day";
+        } catch (ErrorOccurredException e) {
+            return e.getMessage();
+        }
+    }
+
+    public String deleteShift(SShift shift) {
+        String json = employeesService.deleteShift(UserService.HR_MANAGER_USERNAME,Branch.HEADQUARTERS_ID,shift.getShiftDate(),shift.getShiftType());
+        try {
+            Response response = Response.fromJsonWithValidation(json); // Throws an exception if an error has occurred.
+        } catch (ErrorOccurredException e) {
+            return e.getMessage();
+        }
+        return null;
     }
 }

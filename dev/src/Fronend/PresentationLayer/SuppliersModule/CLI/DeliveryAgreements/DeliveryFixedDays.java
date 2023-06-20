@@ -1,4 +1,4 @@
-package Fronend.PresentationLayer.SuppliersModule.DeliveryAgreements;
+package Fronend.PresentationLayer.SuppliersModule.CLI.DeliveryAgreements;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package Fronend.PresentationLayer.SuppliersModule;
+package Fronend.PresentationLayer.SuppliersModule.CLI;
 
 import Backend.BusinessLayer.BusinessLayerUsage.Branch;
 import Backend.BusinessLayer.SuppliersModule.BankAccount;
@@ -11,6 +11,8 @@ import Backend.BusinessLayer.SuppliersModule.Discounts.PercentageDiscount;
 import Backend.BusinessLayer.SuppliersModule.Pair;
 import Backend.BusinessLayer.SuppliersModule.Product;
 import Backend.ServiceLayer.SuppliersModule.*;
+import Fronend.PresentationLayer.SuppliersModule.CLI.Order;
+import Fronend.PresentationLayer.SuppliersModule.CLI.Response;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -258,7 +260,7 @@ public class UI {
 
             }
             System.out.println(gson.fromJson(supplierService.addSupplier(name, bnNumber, bankAccount, paymentMethod, fields,
-                    contactsInfo, products, deliveryAgreement), Response.class).getMsg() + "\n");
+                    contactsInfo, products, deliveryAgreement), Fronend.PresentationLayer.SuppliersModule.CLI.Response.class).getMsg() + "\n");
         }
         catch (Exception e){
             System.out.println("invalid input");
@@ -271,7 +273,7 @@ public class UI {
             String bnNumber = sc.nextLine();
             billOfQuantitiesService.removeBillOfQuantities(bnNumber);
             agreementService.removeAgreement(bnNumber);
-            System.out.println(gson.fromJson(supplierService.removeSupplier(bnNumber), Response.class).getMsg()+"\n");
+            System.out.println(gson.fromJson(supplierService.removeSupplier(bnNumber), Fronend.PresentationLayer.SuppliersModule.CLI.Response.class).getMsg()+"\n");
         }
         catch (Exception e){
             System.out.println("invalid input");
@@ -285,7 +287,7 @@ public class UI {
             String bnNumber = sc.nextLine();
             System.out.println("enter new name");
             String name = sc.nextLine();
-            System.out.println(gson.fromJson(supplierService.setSupplierName(bnNumber, name), Response.class).getMsg());
+            System.out.println(gson.fromJson(supplierService.setSupplierName(bnNumber, name), Fronend.PresentationLayer.SuppliersModule.CLI.Response.class).getMsg());
         }
         catch (Exception e){
             System.out.println("invalid input");
@@ -299,7 +301,7 @@ public class UI {
             String bnNumber = sc.nextLine();
             System.out.println("enter new bn number");
             String newBnNumber = sc.nextLine();
-            System.out.println(gson.fromJson(supplierService.setSupplierBnNumber(bnNumber, newBnNumber), Response.class).getMsg());
+            System.out.println(gson.fromJson(supplierService.setSupplierBnNumber(bnNumber, newBnNumber), Fronend.PresentationLayer.SuppliersModule.CLI.Response.class).getMsg());
         }
         catch (Exception e){
             System.out.println("invalid input");
@@ -314,7 +316,7 @@ public class UI {
             String bnNumber = sc.nextLine();
             System.out.println("enter new bank account: <bank> <branch> <account number>");
             String[] bankAccount = sc.nextLine().split(" ");
-            System.out.println(gson.fromJson(supplierService.setSupplierBankAccount(bnNumber, bankAccount[0], bankAccount[1], bankAccount[2]), Response.class).getMsg());
+            System.out.println(gson.fromJson(supplierService.setSupplierBankAccount(bnNumber, bankAccount[0], bankAccount[1], bankAccount[2]), Fronend.PresentationLayer.SuppliersModule.CLI.Response.class).getMsg());
         }
         catch (Exception e){
             System.out.println("invalid input");
@@ -339,7 +341,7 @@ public class UI {
                     paymentMethod = "net 60 EOM";
                     break;
             }
-            System.out.println(gson.fromJson(supplierService.setSupplierPaymentMethod(bnNumber, paymentMethod), Response.class).getMsg());
+            System.out.println(gson.fromJson(supplierService.setSupplierPaymentMethod(bnNumber, paymentMethod), Fronend.PresentationLayer.SuppliersModule.CLI.Response.class).getMsg());
         }
         catch (Exception e){
             System.out.println("invalid input");
@@ -352,7 +354,7 @@ public class UI {
             String bnNumber = sc.nextLine();
             System.out.println("enter contact info: <name> <email> <phone number>");
             String[] contactInfo = sc.nextLine().split(" ");
-            System.out.println(gson.fromJson(supplierService.addContactInfo(bnNumber, contactInfo[0], contactInfo[1], contactInfo[2]), Response.class).getMsg());
+            System.out.println(gson.fromJson(supplierService.addContactInfo(bnNumber, contactInfo[0], contactInfo[1], contactInfo[2]), Fronend.PresentationLayer.SuppliersModule.CLI.Response.class).getMsg());
         }
         catch (Exception e){
             System.out.println("invalid input");
@@ -365,7 +367,7 @@ public class UI {
             String bnNumber = sc.nextLine();
             System.out.println("enter contact email");
             String email = sc.nextLine();
-            System.out.println(gson.fromJson(supplierService.removeContactInfo(bnNumber, email), Response.class).getMsg());
+            System.out.println(gson.fromJson(supplierService.removeContactInfo(bnNumber, email), Fronend.PresentationLayer.SuppliersModule.CLI.Response.class).getMsg());
         }
         catch (Exception e){
             System.out.println("invalid input");
@@ -380,7 +382,7 @@ public class UI {
             String email = sc.nextLine();
             System.out.println("enter new email");
             String newEmail = sc.nextLine();
-            System.out.println(gson.fromJson(supplierService.setContactsEmail(bnNumber, email, newEmail), Response.class).getMsg());
+            System.out.println(gson.fromJson(supplierService.setContactsEmail(bnNumber, email, newEmail), Fronend.PresentationLayer.SuppliersModule.CLI.Response.class).getMsg());
         }
         catch (Exception e){
             System.out.println("invalid input");
@@ -395,7 +397,7 @@ public class UI {
             String email = sc.nextLine();
             System.out.println("enter new phone number");
             String phoneNumber = sc.nextLine();
-            System.out.println(gson.fromJson(supplierService.setContactsPhoneNumber(bnNumber, email, phoneNumber), Response.class).getMsg());
+            System.out.println(gson.fromJson(supplierService.setContactsPhoneNumber(bnNumber, email, phoneNumber), Fronend.PresentationLayer.SuppliersModule.CLI.Response.class).getMsg());
         }
         catch (Exception e){
             System.out.println("invalid input");
@@ -423,12 +425,12 @@ public class UI {
                         System.out.println("invalid input");
                     }
                 }
-                System.out.println(gson.fromJson(agreementService.setFixedDeliveryAgreement(bnNumber, haveTransport, days), Response.class).getMsg());
+                System.out.println(gson.fromJson(agreementService.setFixedDeliveryAgreement(bnNumber, haveTransport, days), Fronend.PresentationLayer.SuppliersModule.CLI.Response.class).getMsg());
             } else {
                 System.out.println("enter the number of days takes from order to supplier visit");
                 try {
                     int numOfDays = Integer.parseInt(sc.nextLine());
-                    System.out.println(gson.fromJson(agreementService.setByInvitationDeliveryAgreement(bnNumber, haveTransport, numOfDays), Response.class).getMsg());
+                    System.out.println(gson.fromJson(agreementService.setByInvitationDeliveryAgreement(bnNumber, haveTransport, numOfDays), Fronend.PresentationLayer.SuppliersModule.CLI.Response.class).getMsg());
                 } catch (Exception e) {
                     System.out.println("invalid input");
                 }
@@ -447,7 +449,7 @@ public class UI {
             String catalogNumber = sc.nextLine();
             System.out.println("enter new catalog number");
             String suppliersCatalogNumber = sc.nextLine();
-            System.out.println(gson.fromJson(agreementService.setSuppliersCatalogNumber(bnNumber, catalogNumber, suppliersCatalogNumber), Response.class).getMsg());
+            System.out.println(gson.fromJson(agreementService.setSuppliersCatalogNumber(bnNumber, catalogNumber, suppliersCatalogNumber), Fronend.PresentationLayer.SuppliersModule.CLI.Response.class).getMsg());
         }
         catch (Exception e){
             System.out.println("invalid input");
@@ -462,7 +464,7 @@ public class UI {
             String catalogNumber = sc.nextLine();
             System.out.println("enter new price");
             double price = Double.parseDouble(sc.nextLine());
-            System.out.println(gson.fromJson(agreementService.setProductPrice(bnNumber,catalogNumber, price), Response.class).getMsg());
+            System.out.println(gson.fromJson(agreementService.setProductPrice(bnNumber,catalogNumber, price), Fronend.PresentationLayer.SuppliersModule.CLI.Response.class).getMsg());
         }
         catch (Exception e){
             System.out.println("invalid input");
@@ -477,7 +479,7 @@ public class UI {
             String catalogNumber = sc.nextLine();
             System.out.println("enter amount");
             int amount = Integer.parseInt(sc.nextLine());
-            System.out.println(gson.fromJson(agreementService.setProductAmount(bnNumber,catalogNumber, amount), Response.class).getMsg());
+            System.out.println(gson.fromJson(agreementService.setProductAmount(bnNumber,catalogNumber, amount), Fronend.PresentationLayer.SuppliersModule.CLI.Response.class).getMsg());
         }
         catch (Exception e){
             System.out.println("invalid input");
@@ -496,7 +498,7 @@ public class UI {
             double price = Double.parseDouble(sc.nextLine());
             System.out.println("enter number of units");
             int amount = Integer.parseInt(sc.nextLine());
-            System.out.println(gson.fromJson(agreementService.addProduct(bnNumber,catalogNumber, suppliersCatalogNumber, price, amount), Response.class).getMsg());
+            System.out.println(gson.fromJson(agreementService.addProduct(bnNumber,catalogNumber, suppliersCatalogNumber, price, amount), Fronend.PresentationLayer.SuppliersModule.CLI.Response.class).getMsg());
         }
         catch (Exception e){
             System.out.println("invalid input");
@@ -524,7 +526,7 @@ public class UI {
                 double cash = Double.parseDouble(sc.nextLine());
                 discount = new CashDiscount(cash);
             }
-            System.out.println(gson.fromJson(billOfQuantitiesService.setProductDiscount(bnNumber, catalogNumber, amount, discount), Response.class).getMsg());
+            System.out.println(gson.fromJson(billOfQuantitiesService.setProductDiscount(bnNumber, catalogNumber, amount, discount), Fronend.PresentationLayer.SuppliersModule.CLI.Response.class).getMsg());
         }
         catch (Exception e){
             System.out.println("invalid input");
@@ -539,7 +541,7 @@ public class UI {
             String catalogNumber = sc.nextLine();
             System.out.println("enter number of units");
             int amount = Integer.parseInt(sc.nextLine());
-            System.out.println(gson.fromJson(billOfQuantitiesService.removeProductDiscount(bnNumber, catalogNumber, amount), Response.class).getMsg());
+            System.out.println(gson.fromJson(billOfQuantitiesService.removeProductDiscount(bnNumber, catalogNumber, amount), Fronend.PresentationLayer.SuppliersModule.CLI.Response.class).getMsg());
         }
         catch (Exception e){
             System.out.println("invalid input");
@@ -552,7 +554,7 @@ public class UI {
             String bnNumber = sc.nextLine();
             System.out.println("enter product id");
             String catalogNumber = sc.nextLine();
-            System.out.println(gson.fromJson(billOfQuantitiesService.removeProductDiscounts(bnNumber, catalogNumber), Response.class).getMsg());
+            System.out.println(gson.fromJson(billOfQuantitiesService.removeProductDiscounts(bnNumber, catalogNumber), Fronend.PresentationLayer.SuppliersModule.CLI.Response.class).getMsg());
         }
         catch (Exception e){
             System.out.println("invalid input");
@@ -564,7 +566,7 @@ public class UI {
         try {
             System.out.println("enter bn number of the supplier");
             String bnNumber = sc.nextLine();
-            System.out.println(gson.fromJson(billOfQuantitiesService.removeDiscountOnTotalOrder(bnNumber), Response.class).getMsg());
+            System.out.println(gson.fromJson(billOfQuantitiesService.removeDiscountOnTotalOrder(bnNumber), Fronend.PresentationLayer.SuppliersModule.CLI.Response.class).getMsg());
         }
         catch (Exception e){
             System.out.println("invalid input");
@@ -590,7 +592,7 @@ public class UI {
                 double cash = Double.parseDouble(sc.nextLine());
                 discount = new CashDiscount(cash);
             }
-            System.out.println(gson.fromJson(billOfQuantitiesService.setDiscountOnTotalOrder(bnNumber, price, discount), Response.class).getMsg());
+            System.out.println(gson.fromJson(billOfQuantitiesService.setDiscountOnTotalOrder(bnNumber, price, discount), Fronend.PresentationLayer.SuppliersModule.CLI.Response.class).getMsg());
         }
         catch (Exception e){
             System.out.println("invalid input");
@@ -605,9 +607,9 @@ public class UI {
                     "2. apply total-order-price discount before amount discount");
             int choice = Integer.parseInt(sc.nextLine());
             if(choice == 1)
-                System.out.println(gson.fromJson(billOfQuantitiesService.setOrderOfDiscounts(bnNumber, true), Response.class).getMsg());
+                System.out.println(gson.fromJson(billOfQuantitiesService.setOrderOfDiscounts(bnNumber, true), Fronend.PresentationLayer.SuppliersModule.CLI.Response.class).getMsg());
             else if(choice == 2)
-                System.out.println(gson.fromJson(billOfQuantitiesService.setOrderOfDiscounts(bnNumber, false), Response.class).getMsg());
+                System.out.println(gson.fromJson(billOfQuantitiesService.setOrderOfDiscounts(bnNumber, false), Fronend.PresentationLayer.SuppliersModule.CLI.Response.class).getMsg());
             else
                 throw new RuntimeException("invalid input");
         }
@@ -653,7 +655,7 @@ public class UI {
                     productsDiscounts.get(catalogNumber).put(amount, discount);
                 }
             }
-            System.out.println(gson.fromJson(billOfQuantitiesService.setProductsDiscounts(bnNumber,productsDiscounts), Response.class).getMsg());
+            System.out.println(gson.fromJson(billOfQuantitiesService.setProductsDiscounts(bnNumber,productsDiscounts), Fronend.PresentationLayer.SuppliersModule.CLI.Response.class).getMsg());
         }
         catch (Exception e){
             System.out.println("invalid input");
@@ -680,7 +682,7 @@ public class UI {
                 double cash = Double.parseDouble(sc.nextLine());
                 discount = new CashDiscount(cash);
             }
-            System.out.println(gson.fromJson(billOfQuantitiesService.setDiscountOnAmountOfProducts(bnNumber, amount, discount), Response.class).getMsg());
+            System.out.println(gson.fromJson(billOfQuantitiesService.setDiscountOnAmountOfProducts(bnNumber, amount, discount), Fronend.PresentationLayer.SuppliersModule.CLI.Response.class).getMsg());
         }
         catch (Exception e){
             System.out.println("invalid input");
@@ -691,7 +693,7 @@ public class UI {
         try {
             System.out.println("enter bn number of the supplier");
             String bnNumber = sc.nextLine();
-            System.out.println(gson.fromJson(billOfQuantitiesService.removeDiscountOnAmountOfProducts(bnNumber), Response.class).getMsg());
+            System.out.println(gson.fromJson(billOfQuantitiesService.removeDiscountOnAmountOfProducts(bnNumber), Fronend.PresentationLayer.SuppliersModule.CLI.Response.class).getMsg());
         }
         catch (Exception e){
             System.out.println("invalid input");
@@ -702,8 +704,8 @@ public class UI {
         try {
             System.out.println("enter bn number of the supplier");
             String bnNumber = sc.nextLine();
-            Type responseOfList = new TypeToken<Response<List<Order>>>(){}.getType();
-            List<Order> orders = ((Response<List<Order>>)gson.fromJson(orderService.getOrderHistory(bnNumber), responseOfList)).getReturnValue();
+            Type responseOfList = new TypeToken<Fronend.PresentationLayer.SuppliersModule.CLI.Response<List<Order>>>(){}.getType();
+            List<Order> orders = ((Fronend.PresentationLayer.SuppliersModule.CLI.Response<List<Order>>)gson.fromJson(orderService.getOrderHistory(bnNumber), responseOfList)).getReturnValue();
             if(orders == null)
                 System.out.println("no orders have been ordered from this supplier");
             else {
@@ -724,7 +726,7 @@ public class UI {
             String bnNumber = sc.nextLine();
             System.out.println("enter field");
             String field = sc.nextLine();
-            System.out.println(gson.fromJson(supplierService.addField(bnNumber, field), Response.class).getMsg());
+            System.out.println(gson.fromJson(supplierService.addField(bnNumber, field), Fronend.PresentationLayer.SuppliersModule.CLI.Response.class).getMsg());
         }
         catch (Exception e){
             System.out.println("invalid input");
@@ -737,7 +739,7 @@ public class UI {
             String bnNumber = sc.nextLine();
             System.out.println("enter field");
             String field = sc.nextLine();
-            System.out.println(gson.fromJson(supplierService.removeField(bnNumber, field), Response.class).getMsg());
+            System.out.println(gson.fromJson(supplierService.removeField(bnNumber, field), Fronend.PresentationLayer.SuppliersModule.CLI.Response.class).getMsg());
         }
         catch (Exception e){
             System.out.println("invalid input");
@@ -750,7 +752,7 @@ public class UI {
             String bnNumber = sc.nextLine();
             System.out.println("enter product's id");
             String catalogNumber = sc.nextLine();
-            System.out.println(gson.fromJson(agreementService.getSuppliersCatalogNumber(bnNumber, catalogNumber), Response.class).getReturnValue());
+            System.out.println(gson.fromJson(agreementService.getSuppliersCatalogNumber(bnNumber, catalogNumber), Fronend.PresentationLayer.SuppliersModule.CLI.Response.class).getReturnValue());
         }
         catch (Exception e){
             System.out.println("invalid input");
@@ -761,7 +763,7 @@ public class UI {
         try {
             System.out.println("enter bn number of the supplier");
             String bnNumber = sc.nextLine();
-            System.out.println(gson.fromJson(agreementService.getDeliveryAgreement(bnNumber), Response.class).getReturnValue());
+            System.out.println(gson.fromJson(agreementService.getDeliveryAgreement(bnNumber), Fronend.PresentationLayer.SuppliersModule.CLI.Response.class).getReturnValue());
         }
         catch (Exception e){
             System.out.println("invalid input");
@@ -774,7 +776,7 @@ public class UI {
             String bnNumber = sc.nextLine();
             System.out.println("enter product id");
             String catalogNumber = sc.nextLine();
-            System.out.println(gson.fromJson(agreementService.removeProduct(bnNumber, catalogNumber), Response.class).getMsg());
+            System.out.println(gson.fromJson(agreementService.removeProduct(bnNumber, catalogNumber), Fronend.PresentationLayer.SuppliersModule.CLI.Response.class).getMsg());
         }
         catch (Exception e){
             System.out.println("invalid input");
@@ -786,7 +788,7 @@ public class UI {
         try {
             System.out.println("enter bn number of the supplier");
             String bnNumber = sc.nextLine();
-            System.out.println(gson.fromJson(supplierService.getSupplierDetails(bnNumber), Response.class).getMsg());
+            System.out.println(gson.fromJson(supplierService.getSupplierDetails(bnNumber), Fronend.PresentationLayer.SuppliersModule.CLI.Response.class).getMsg());
         }
         catch (Exception e){
             System.out.println("invalid input");
@@ -812,10 +814,10 @@ public class UI {
             catch (Exception e){
                 System.out.println("invalid input");
             }
-            Type orderResponse = new TypeToken<Response< Map<String, Pair<Map<Integer, Integer>, Double>>>>(){}.getType();
+            Type orderResponse = new TypeToken<Fronend.PresentationLayer.SuppliersModule.CLI.Response< Map<String, Pair<Map<Integer, Integer>, Double>>>>(){}.getType();
 //                Response<Map<String, Pair<Map<Integer, Integer>, Double>>> finalOrderResponse =
 //                        gson.fromJson(orderService.order(order), orderResponse);
-            System.out.println(gson.fromJson(orderService.orderDueToShortage(order, Branch.branch1), Response.class).getMsg());
+            System.out.println(gson.fromJson(orderService.orderDueToShortage(order, Branch.branch1), Fronend.PresentationLayer.SuppliersModule.CLI.Response.class).getMsg());
 //            Response<Map<String, Pair<Map<Integer, Integer>, Double>>> finalOrderResponse =
 //                    gson.fromJson(orderService.order(order, Branch.branch1), orderResponse);
 //            if(finalOrderResponse.getReturnValue() == null)
@@ -851,7 +853,7 @@ public class UI {
             System.out.println("enter bn number of supplier");
             String bnNumber = sc.nextLine();
             System.out.println("choose products");
-            System.out.println(gson.fromJson(supplierService.getSupplierDetails(bnNumber), Response.class).getMsg());
+            System.out.println(gson.fromJson(supplierService.getSupplierDetails(bnNumber), Fronend.PresentationLayer.SuppliersModule.CLI.Response.class).getMsg());
             Map<String, Integer> order = new HashMap<>();
             try {
                 while (true) {
@@ -902,7 +904,7 @@ public class UI {
                     branch = Branch.branch9;
                     break;
             }
-            System.out.println(gson.fromJson(periodicOrderService.addPeriodicOrder(bnNumber, order, day, branch), Response.class).getMsg());
+            System.out.println(gson.fromJson(periodicOrderService.addPeriodicOrder(bnNumber, order, day, branch), Fronend.PresentationLayer.SuppliersModule.CLI.Response.class).getMsg());
         }
         catch (Exception e){
             System.out.println("invalid input");

@@ -1,4 +1,4 @@
-package Fronend.PresentationLayer.SuppliersModule.Discounts;
+package Fronend.PresentationLayer.SuppliersModule.CLI.Discounts.Discounts;
 
 public class PercentageDiscount extends Discount {
     private double percentage;

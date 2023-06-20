@@ -1,22 +1,21 @@
 package Backend.BusinessLayer.SuppliersModule.Discounts;
 
 public class CashDiscount extends Discount {
-    private double amountOfDiscount;
     public CashDiscount(double amountOfDiscount){
+        super(amountOfDiscount, true);
         if(amountOfDiscount < 0)
             throw new RuntimeException("amount of cash cant be less than 0");
-        this.amountOfDiscount = amountOfDiscount;
     }
     @Override
     public double applyDiscount(double price) {
-        return Math.max(price - amountOfDiscount, 0);
+        return Math.max(price - value, 0);
     }
 
     public String toString(){
-        return "discount in cash, amount: " + amountOfDiscount;
+        return "discount in cash, amount: " + value;
     }
 
     public double getAmountOfDiscount(){
-        return amountOfDiscount;
+        return value;
     }
 }

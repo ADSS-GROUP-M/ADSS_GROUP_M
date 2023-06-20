@@ -1,4 +1,4 @@
-package Fronend.PresentationLayer.SuppliersModule.Discounts;
+package Fronend.PresentationLayer.SuppliersModule.CLI.Discounts.Discounts;
 
 public class CashDiscount extends Discount {
     private double amountOfDiscount;

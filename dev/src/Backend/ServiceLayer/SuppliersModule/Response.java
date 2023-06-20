@@ -7,6 +7,7 @@ public class Response <T>{
 
     public Response(T returnValue){
         this.returnValue = returnValue;
+        error = false;
     }
 
     public Response(String msg, boolean error){
@@ -22,7 +23,18 @@ public class Response <T>{
         return msg;
     }
 
+    public String getError(){
+        return msg;
+    }
+
+    public T getData() {
+        return returnValue;
+    }
     public boolean errorOccurred(){
         return error;
+    }
+
+    public boolean isSuccess(){
+        return !error;
     }
 }

@@ -1,4 +1,4 @@
-package Fronend.PresentationLayer.SuppliersModule;
+package Fronend.PresentationLayer.SuppliersModule.CLI;
 
 public class SupplierMain {
     public void run() {

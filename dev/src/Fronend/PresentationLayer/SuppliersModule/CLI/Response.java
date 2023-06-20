@@ -1,8 +1,10 @@
-package Fronend.PresentationLayer.SuppliersModule;
+package Fronend.PresentationLayer.SuppliersModule.CLI;
 
 public class Response <T>{
     private T returnValue;
     private String msg;
+    private boolean error;
+
 
     public Response(T returnValue){
         this.returnValue = returnValue;
@@ -18,5 +20,17 @@ public class Response <T>{
 
     public String getMsg() {
         return msg;
+    }
+
+    public String getError() {
+        return msg;
+    }
+
+    public T getData() {
+        return returnValue;
+    }
+
+    public boolean isSuccess() {
+        return !error;
     }
 }

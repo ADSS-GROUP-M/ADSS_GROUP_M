@@ -22,6 +22,7 @@ import static presentationLayer.gui.plUtils.Fonts.textBoxFont;
 public class SearchBox implements UIElement {
 
     private final List<Searchable> data;
+    private final DescriptionType descriptionType;
     private final String defaultText;
     private final Dimension size;
     private final JComboBox<String> comboBox;
@@ -31,9 +32,15 @@ public class SearchBox implements UIElement {
     private String[] lastFilteredData;
     private String text;
 
-    public SearchBox(List<Searchable> data,String defaultText, Dimension size, Container repaintListener){
+    enum DescriptionType{
+        SHORT,
+        LONG
+
+        }
+    public SearchBox(List<Searchable> data,String defaultText, Dimension size,DescriptionType descriptionType, Container repaintListener){
         this.size = size;
         this.data = data;
+        this.descriptionType = descriptionType;
         String[] dataStrings = data.stream()
                 .map(Searchable::getShortDescription)
                 .toArray(String[]::new);
@@ -44,6 +51,10 @@ public class SearchBox implements UIElement {
         this.defaultText = "    "+defaultText;
         this.repaintListener = repaintListener;
         init();
+    }
+
+    public SearchBox(List<Searchable> data,String defaultText, Dimension size, Container repaintListener){
+        this(data,defaultText,size,DescriptionType.SHORT,repaintListener);
     }
 
     private void init(){
@@ -116,8 +127,6 @@ public class SearchBox implements UIElement {
                     public void mouseEntered(MouseEvent e) {
                         super.mouseEntered(e);
                         but.setBackground(new Color(200,200,200, 64));
-//                        comboBox.revalidate();
-//                        comboBox.repaint();
                         repaintListener.repaint();
                     }
 

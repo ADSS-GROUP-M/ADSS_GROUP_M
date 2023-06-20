@@ -167,7 +167,7 @@ public class AddTransportPanel extends AbstractTransportModulePanel {
         complexComponentsPanel.add(destinationsLabel, constraints);
 
         Dimension boxFieldSize = new Dimension(700,30);
-        SearchBox destinations = new SearchBox(searchableList,"Select Destination",boxFieldSize, panel);
+        SearchBox destinations = new SearchBox(sites,"Select Destination",boxFieldSize, panel);
         constraints.gridx = 1;
         constraints.gridy = 0;
         constraints.gridwidth = 6;

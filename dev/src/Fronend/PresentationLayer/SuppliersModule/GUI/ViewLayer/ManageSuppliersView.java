@@ -37,6 +37,18 @@ public class ManageSuppliersView extends JFrame {
             public void keyPressed(KeyEvent e) {
                 if(e.getKeyCode() == KeyEvent.VK_ENTER)
                     searchB.doClick();
+                if(e.getKeyCode() == 47) {
+                }
+            }
+            @Override
+            public void keyReleased(KeyEvent e){
+                if(e.getKeyCode() == 47) {
+                    try {
+                        String text = searchSupplier.getText().substring(0, searchSupplier.getText().length() - 1);
+                        searchSupplier.setText(text);
+                    }
+                    catch (Exception ignored){}
+                }
             }
         });
         //search button

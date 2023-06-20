@@ -2,6 +2,7 @@ package Fronend.PresentationLayer.SuppliersModule.GUI.ViewLayer;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class MainView extends JFrame {
@@ -24,6 +25,9 @@ public class MainView extends JFrame {
         manageOrdersB = new JButton("manage orders");
         manageOrdersB.setBounds(510, 350, 200, 50);
         manageOrdersB.setFont(new Font("Comic Sans", Font.BOLD, 15));
+        manageOrdersB.addActionListener((ActionEvent e)->{
+            new PeriodicOrdersGUI();
+        });
         manageOrdersB.setFocusable(false);
         //welcome label
         welcomeLabel = new JLabel("WELCOME TO SUPER-LI SUPPLIERS MANAGEMENT");

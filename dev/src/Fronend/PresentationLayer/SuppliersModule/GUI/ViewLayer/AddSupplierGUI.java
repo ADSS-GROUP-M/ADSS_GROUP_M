@@ -217,7 +217,7 @@ public class AddSupplierGUI extends JFrame {
         else {
             JOptionPane.showMessageDialog(null, r.getMsg(), "success", JOptionPane.INFORMATION_MESSAGE);
             // Clear the form
-            clearForm();
+            dispose();
         }
 
     }
@@ -314,7 +314,6 @@ public class AddSupplierGUI extends JFrame {
         bankTextField.setText("");
         branchTextField.setText("");
         accountNumberTextField.setText("");
-        paymentMethodTextField.setText("");
         fieldTextField.setText("");
         contactNameTextField.setText("");
         emailTextField.setText("");

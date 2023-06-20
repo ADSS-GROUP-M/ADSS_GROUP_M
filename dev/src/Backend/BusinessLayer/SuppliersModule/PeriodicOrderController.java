@@ -25,12 +25,20 @@ public class PeriodicOrderController {
     public PeriodicOrder getPeriodicOrder(int orderId) throws SQLException {
         return periodicOrderDataMapper.getPeriodicOrder(orderId);
     }
+
+    public void removePeriodicOrder(int orderId) throws SQLException {
+        periodicOrderDataMapper.delete(orderId);
+    }
     public void addPeriodicOrder(String bnNumber, Map<String, Integer> products, int day, Branch branch) throws Exception {
+        if(day < 0 || day > 6)
+            throw new Exception("invalid day");
         for(Map.Entry<String, Integer> productOrder : products.entrySet()){
             String catalogNumber = productOrder.getKey();
             int quantity = productOrder.getValue();
+            if(!agreementController.productExist(bnNumber, catalogNumber))
+                throw new Exception("supplier - " + bnNumber + " doesn't supply product - " + catalogNumber);
             if(agreementController.getProduct(bnNumber, catalogNumber).getNumberOfUnits() < quantity)
-                throw new Exception("supplier - " + bnNumber + "can't supply more than - " + agreementController.getProduct(bnNumber, catalogNumber).getNumberOfUnits() + " units of product - " + catalogNumber);
+                throw new Exception("supplier - " + bnNumber + " can't supply more than - " + agreementController.getProduct(bnNumber, catalogNumber).getNumberOfUnits() + " units of product - " + catalogNumber);
         }
         periodicOrderDataMapper.insert(bnNumber, new Order(products), day, branch);
     }
@@ -43,6 +51,10 @@ public class PeriodicOrderController {
         return getPeriodicOrder(orderId).toString(orderId);
     }
 
+    public Map<Integer, PeriodicOrder> getAllPeriodicOrders() throws SQLException {
+        Map<Integer, PeriodicOrder> periodicOrders = periodicOrderDataMapper.getAllPeriodicOrders();
+        return periodicOrders;
+    }
 
     /***
      * to use after insert

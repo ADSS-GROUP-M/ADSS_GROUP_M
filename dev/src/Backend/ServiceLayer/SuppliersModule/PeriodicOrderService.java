@@ -28,6 +28,26 @@ public class PeriodicOrderService {
         }
     }
 
+    public String removePeriodicOrder(int orderId){
+        try {
+            periodicOrderController.removePeriodicOrder(orderId);
+            return gson.toJson(new Response<String>("periodic order removed!", false));
+        }
+        catch (Exception e){
+            return gson.toJson(new Response<>(e.getMessage(), true));
+        }
+    }
+
+    public String getAllPeriodicOrders(){
+        try {
+            Map<Integer, PeriodicOrder> periodicOrders = periodicOrderController.getAllPeriodicOrders();
+            return gson.toJson(new Response<Map<Integer, PeriodicOrder>>(periodicOrders));
+        }
+        catch (Exception e){
+            return gson.toJson(new Response<>(e.getMessage(), true));
+        }
+    }
+
     public String setDay(int orderId, int day)  {
         try {
             periodicOrderController.setDay(orderId, day);

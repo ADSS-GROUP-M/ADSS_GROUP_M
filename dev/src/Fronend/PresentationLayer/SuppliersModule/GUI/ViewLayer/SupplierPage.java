@@ -63,10 +63,10 @@ public class SupplierPage extends JFrame {
         fields = createEditableLabel(fieldsText.toString(), 260, 230, 300, 50, (String value) -> true);
 
         // Payment method
-        paymentMethod = createEditableLabel("PAYMENT METHOD: " + supplier.getPaymentMethod(), 260, 290, 300, 50, (String value) -> manageSuppliersController.setPaymentMethod(supplier.getBnNumber(), value));
+        paymentMethod = createEditableLabel("PAYMENT METHOD: " + supplier.getPaymentMethod(), 260, 290, 400, 50, (String value) -> manageSuppliersController.setPaymentMethod(supplier.getBnNumber(), value));
 
         // Show Agreement button
-        showAgreementButton = createButton("Show Agreement", 330, 380, 180, 30);
+        showAgreementButton = createButton("Show Agreement", 200, 380, 180, 30);
         showAgreementButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -76,7 +76,7 @@ public class SupplierPage extends JFrame {
         });
 
         // Show Bill of Quantities button
-        showBillButton = createButton("Show Bill of Quantities", 520, 380, 180, 30);
+        showBillButton = createButton("Show Bill of Quantities", 400, 380, 180, 30);
         showBillButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -88,10 +88,16 @@ public class SupplierPage extends JFrame {
                 else {
                     JFrame f = new JFrame("Bill of Quantities");
                     f.add(new BillOfQuantitiesPage(supplier.getBnNumber()));
+                    f.setBounds(330, 150, 650, 400);
                     f.pack();
                     f.setVisible(true);
                 }
             }
+        });
+
+        JButton showOrderHistoryButton = createButton("Show Order History",600, 380, 180, 30 );
+        showOrderHistoryButton.addActionListener((ActionEvent e) ->{
+            new SupplierOrdersGUI(supplier.getBnNumber());
         });
 
         jpanel.add(picture);
@@ -102,8 +108,9 @@ public class SupplierPage extends JFrame {
         jpanel.add(bankAccount);
         jpanel.add(showAgreementButton);
         jpanel.add(showBillButton);
-
+        jpanel.add(showOrderHistoryButton);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setResizable(false);
         setLayout(null);
         setBounds(330, 150, 850, 550);
         setVisible(true);

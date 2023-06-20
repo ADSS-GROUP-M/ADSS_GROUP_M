@@ -41,7 +41,6 @@ public class AgreementGUI extends JFrame {
         this.deliveryAgreement = r.getReturnValue().getDeliveryAgreement();
         // Set up the main panel
         JPanel mainPanel = new JPanel(new BorderLayout());
-        this.setContentPane(mainPanel);
         this.setTitle("Agreement GUI");
 
         // Create the delivery agreement panel
@@ -62,17 +61,21 @@ public class AgreementGUI extends JFrame {
         editButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 DeliveryAgreement d = showDeliveryAgreementDialog();
-                Response r;
-                if(d instanceof DeliveryFixedDays)
-                    r = gson.fromJson(agreementService.setFixedDeliveryAgreement(bnNumber, d.getHavaTransport(), ((DeliveryFixedDays)d).getDaysOfTheWeek()), Response.class);
-                else
-                    r = gson.fromJson(agreementService.setByInvitationDeliveryAgreement(bnNumber, d.getHavaTransport(), ((DeliveryByInvitation)d).getNumberOfDays()), Response.class);
-                if(r.errorOccurred())
-                    JOptionPane.showMessageDialog(null, r.getError(), "error", JOptionPane.ERROR_MESSAGE);
+                if(d == null)
+                    JOptionPane.showMessageDialog(null,"No delivery agreement was selected", "error", JOptionPane.ERROR_MESSAGE);
                 else {
-                    JOptionPane.showMessageDialog(null, r.getMsg(), "success", JOptionPane.INFORMATION_MESSAGE);
-                    deliveryAgreement = d;
-                    refreshDeliveryPanel();
+                    Response r;
+                    if (d instanceof DeliveryFixedDays)
+                        r = gson.fromJson(agreementService.setFixedDeliveryAgreement(bnNumber, d.getHavaTransport(), ((DeliveryFixedDays) d).getDaysOfTheWeek()), Response.class);
+                    else
+                        r = gson.fromJson(agreementService.setByInvitationDeliveryAgreement(bnNumber, d.getHavaTransport(), ((DeliveryByInvitation) d).getNumberOfDays()), Response.class);
+                    if (r.errorOccurred())
+                        JOptionPane.showMessageDialog(null, r.getError(), "error", JOptionPane.ERROR_MESSAGE);
+                    else {
+                        JOptionPane.showMessageDialog(null, r.getMsg(), "success", JOptionPane.INFORMATION_MESSAGE);
+                        deliveryAgreement = d;
+                        refreshDeliveryPanel();
+                    }
                 }
             }
         });
@@ -84,7 +87,11 @@ public class AgreementGUI extends JFrame {
         DefaultTableModel tableModel = new DefaultTableModel(
                 new Object[]{"Catalog Number", "Supplier's Catalog Number", "Price", "Number of Units"}, 0);
 
-        productTable = new JTable(tableModel);
+        productTable = new JTable(tableModel) {
+            public boolean editCellAt(int row, int column, java.util.EventObject e) {
+                return false;
+            }
+        };
         JScrollPane scrollPane = new JScrollPane(productTable);
         mainPanel.add(scrollPane, BorderLayout.CENTER);
 
@@ -106,10 +113,40 @@ public class AgreementGUI extends JFrame {
             }
         });
         mainPanel.add(addProductButton, BorderLayout.SOUTH);
+        // Create the "Remove Selected Row" button
+        JButton removeRowButton = new JButton("Remove Selected Row");
+        removeRowButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                removeSelectedRow();
+            }
+        });
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.add(mainPanel, BorderLayout.CENTER);
+        panel.add(removeRowButton, BorderLayout.SOUTH);
+
+        // Add the panel and the "Add Discount" button to the main frame
+        getContentPane().add(panel, BorderLayout.CENTER);
+        getContentPane().add(addProductButton, BorderLayout.SOUTH);
 
         // Set initial visibility and size of the GUI window
         this.setVisible(true);
         this.setBounds(330, 150, 600, 400);
+    }
+
+    private void removeSelectedRow() {
+        int selectedRow = productTable.getSelectedRow();
+        if (selectedRow != -1) {
+            String catalogNumber = productTable.getValueAt(selectedRow, 0).toString();
+            Response r = gson.fromJson(agreementService.removeProduct(bnNumber, catalogNumber), Response.class);
+            if(r.errorOccurred())
+                JOptionPane.showMessageDialog(null, r.getError(), "error", JOptionPane.ERROR_MESSAGE);
+            else {
+                JOptionPane.showMessageDialog(null, r.getMsg(), "success", JOptionPane.INFORMATION_MESSAGE);
+                // remove the row
+                DefaultTableModel tableModel = (DefaultTableModel) productTable.getModel();
+                tableModel.removeRow(selectedRow);
+            }
+        }
     }
 
     private void refreshDeliveryPanel(){

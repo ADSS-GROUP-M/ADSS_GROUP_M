@@ -266,7 +266,7 @@ public class BillOfQuantitiesPage extends JPanel {
     }
 
     private void showProductsDiscounts(){
-        new DiscountTable(billOfQuantities.getProductsDiscounts()).setVisible(true);
+        new DiscountTable(bnNumber).setVisible(true);
     }
 
 
@@ -293,7 +293,7 @@ public class BillOfQuantitiesPage extends JPanel {
 
     @Override
     public Dimension getPreferredSize() {
-        return new Dimension(850, 550);
+        return new Dimension(650, 400);
     }
 
 

@@ -22,11 +22,9 @@ public class MainViewController implements ActionListener {
             //go to supplier info page
             mainView.dispose();
             new ManageSuppliersController(new ManageSuppliersView(), new SuppliersModel());
-            System.out.println("supplier info");
         }
         else{
             //go to manage order page
-            System.out.println("manage orders");
         }
     }
 }

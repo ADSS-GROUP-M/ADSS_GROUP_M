@@ -1,9 +1,16 @@
 package presentationLayer.gui.employeeModule.view;
 
 import presentationLayer.PresentationFactory;
+import presentationLayer.gui.employeeModule.controller.EmployeesControl;
 import presentationLayer.gui.employeeModule.controller.ShiftsControl;
+import presentationLayer.gui.employeeModule.controller.UsersControl;
 import presentationLayer.gui.employeeModule.view.panels.EmployeesPanel;
+import presentationLayer.gui.employeeModule.view.panels.employees.EmployeeCertificationPanel;
+import presentationLayer.gui.employeeModule.view.panels.employees.RecruitEmployeePanel;
+import presentationLayer.gui.employeeModule.view.panels.employees.UpdateEmployeePanel;
+import presentationLayer.gui.employeeModule.view.panels.shifts.CreateShiftsPanel;
 import presentationLayer.gui.employeeModule.view.panels.shifts.ViewShiftsPanel;
+import presentationLayer.gui.employeeModule.view.panels.users.AuthorizeUserPanel;
 import presentationLayer.gui.plAbstracts.MainWindow;
 import presentationLayer.gui.plAbstracts.PanelManager;
 import presentationLayer.gui.plAbstracts.interfaces.Panel;
@@ -15,11 +22,15 @@ public class HRManagerView extends MainWindow {
 
     private Panel currentPanel;
     private final PanelManager panelManager;
+    private final EmployeesControl employeesControl;
     private final ShiftsControl shiftsControl;
+    private final UsersControl usersControl;
 
-    public HRManagerView(ShiftsControl shiftsControl) {
+    public HRManagerView(EmployeesControl employeesControl, ShiftsControl shiftsControl, UsersControl usersControl) {
         super("HRManager Page");
+        this.employeesControl = employeesControl;
         this.shiftsControl = shiftsControl;
+        this.usersControl = usersControl;
         Colors.colorPalette = Colors.ColorPalette.hr;
         currentPanel = new EmployeesPanel();
         panelManager = new PanelManager(currentPanel);
@@ -30,51 +41,24 @@ public class HRManagerView extends MainWindow {
     }
 
     private QuickAccess initQuickAccess(){
-//        return new QuickAccess()
-//                .addCategory("Transport Management",
-//                        new Link("View Transports", () -> super.setCurrentPanel(new ViewTransportsPanel())),
-//                        new Link("Add Transport", () -> super.setCurrentPanel(new AddTransportPanel())),
-//                        new Link("Update Transport", () -> super.setCurrentPanel(new UpdateTransportPanel())),
-//                        new Link("Remove Transport", () -> super.setCurrentPanel(new RemoveTransportPanel()))
-//                );
         return new QuickAccess()
-//                .addCategory("Transport Management",
-//                        new Link("View Transports",
-//                                () -> setCurrentPanel(new ViewTransportsPanel(transportsControl))),
-//                        new Link("Add Transport",
-//                                () -> setCurrentPanel(new AddTransportPanel(transportsControl))),
-//                        new Link("Update Transport",
-//                                () -> setCurrentPanel(new UpdateTransportPanel(transportsControl)))
-//                )
-//                .addCategory("Item List Management",
-//                        new Link("View Item Lists",
-//                                () -> setCurrentPanel(new ViewItemListPanel(itemListsControl))),
-//                        new Link("Add Item List",
-//                                () -> setCurrentPanel(new AddItemListPanel(itemListsControl))),
-//                        new Link("Update Item List",
-//                                () -> setCurrentPanel(new UpdateItemListPanel(itemListsControl)))
-//                )
-//                .addCategory("Drivers Management",
-//                        new Link("View Drivers",
-//                                () -> setCurrentPanel(new ViewDriversPanel(driversControl))),
-//                        new Link("Update Driver",
-//                                () -> setCurrentPanel(new UpdateDriversPanel(driversControl)))
-//                )
-//                .addCategory("Trucks Management",
-//                        new Link("View Trucks",
-//                                () -> setCurrentPanel(new ViewTrucksPanel(trucksControl))),
-//                        new Link("Add Truck",
-//                                () -> setCurrentPanel(new AddTruckPanel(trucksControl))),
-//                        new Link("Update Truck",
-//                                () -> setCurrentPanel(new UpdateTruckPanel(trucksControl)))
-//                )
+                .addCategory("Employees Management",
+                        new Link("Recruit Employee",
+                                () -> setCurrentPanel(new RecruitEmployeePanel(employeesControl))),
+                        new Link("Update Employee",
+                                () -> setCurrentPanel(new UpdateEmployeePanel(employeesControl))),
+                        new Link("Certify Employee", // + Remove employee certification
+                                () -> setCurrentPanel(new EmployeeCertificationPanel(employeesControl)))
+                )
                 .addCategory("Shifts Management",
                         new Link("View Shifts",
-                                () -> setCurrentPanel(new ViewShiftsPanel(shiftsControl)))
-//                        new Link("Create Shift",
-//                                () -> setCurrentPanel(new AddShiftPanel(shiftsControl))),
-//                        new Link("Update Shift",
-//                                () -> setCurrentPanel(new UpdateShiftPanel(shiftsControl)))
+                                () -> setCurrentPanel(new ViewShiftsPanel(shiftsControl))), // + Update Shifts, Approve Shifts, Delete Shifts
+                        new Link("Create Shifts",
+                                () -> setCurrentPanel(new CreateShiftsPanel(shiftsControl)))
+                )
+                .addCategory("User Management",
+                        new Link("Authorize User",
+                                () -> setCurrentPanel(new AuthorizeUserPanel(usersControl)))
                 );
     }
 
@@ -87,8 +71,10 @@ public class HRManagerView extends MainWindow {
 
     public static void main(String[] args) {
         PresentationFactory factory = new PresentationFactory();
+        EmployeesControl employeesControl = factory.employeesControl();
         ShiftsControl shiftsControl = factory.shiftsControl();
+        UsersControl usersControl = factory.usersControl();
 
-        MainWindow mainWindow = new HRManagerView(shiftsControl);
+        MainWindow mainWindow = new HRManagerView(employeesControl, shiftsControl, usersControl);
     }
 }

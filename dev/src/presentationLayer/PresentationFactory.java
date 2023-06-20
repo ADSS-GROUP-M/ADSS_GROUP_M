@@ -1,5 +1,7 @@
 package presentationLayer;
 
+import presentationLayer.gui.employeeModule.controller.EmployeesControl;
+import presentationLayer.gui.employeeModule.controller.UsersControl;
 import presentationLayer.gui.transportModule.control.*;
 import presentationLayer.gui.employeeModule.controller.ShiftsControl;
 import presentationLayer.gui.transportModule.control.TrucksControl;
@@ -12,7 +14,9 @@ public class PresentationFactory {
     private SitesControl sitesControl;
     private TransportsControl transportsControl;
     private TrucksControl trucksControl;
+    private EmployeesControl employeesControl;
     private ShiftsControl shiftsControl;
+    private UsersControl usersControl;
 
     public PresentationFactory() {
         serviceFactory = new ServiceFactory();
@@ -21,7 +25,9 @@ public class PresentationFactory {
         driversControl = new DriversControl(serviceFactory.resourceManagementService());
         sitesControl = new SitesControl(serviceFactory.resourceManagementService());
         trucksControl = new TrucksControl(serviceFactory.resourceManagementService());
-        shiftsControl = new ShiftsControl(serviceFactory.employeesService(), serviceFactory.resourceManagementService());
+        employeesControl = new EmployeesControl(serviceFactory.employeesService());
+        shiftsControl = new ShiftsControl(serviceFactory.employeesService());
+        usersControl = new UsersControl(serviceFactory.userService());
     }
 
     public DriversControl getDriversControl() {
@@ -40,7 +46,15 @@ public class PresentationFactory {
         return trucksControl;
     }
 
+    public EmployeesControl employeesControl() {
+        return employeesControl;
+    }
+
     public ShiftsControl shiftsControl() {
         return shiftsControl;
+    }
+
+    public UsersControl usersControl() {
+        return usersControl;
     }
 }

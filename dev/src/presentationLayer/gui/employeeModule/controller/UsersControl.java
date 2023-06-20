@@ -1,30 +1,27 @@
 package presentationLayer.gui.employeeModule.controller;
 
-import domainObjects.transportModule.Truck;
-import exceptions.ErrorOccurredException;
 import presentationLayer.gui.employeeModule.model.ObservableShift;
+import presentationLayer.gui.employeeModule.model.ObservableUser;
 import presentationLayer.gui.plAbstracts.AbstractControl;
 import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
 import presentationLayer.gui.plAbstracts.interfaces.ObservableUIElement;
-import presentationLayer.gui.transportModule.model.ObservableTruck;
-import serviceLayer.employeeModule.Services.EmployeesService;
+import serviceLayer.employeeModule.Services.UserService;
 import serviceLayer.transportModule.ResourceManagementService;
-import utils.Response;
 
 import java.util.List;
 
-public class ShiftsControl extends AbstractControl {
+public class UsersControl extends AbstractControl {
 
-    private final EmployeesService employeesService;
+    private final UserService userService;
 
-    public ShiftsControl(EmployeesService employeesService) {
-        this.employeesService = employeesService;
+    public UsersControl(UserService userService) {
+        this.userService = userService;
     }
 
     @Override
     public void add(ObservableUIElement observable, ObservableModel model) {
 
-        ObservableShift shiftModel = (ObservableShift) model;
+        ObservableUser shiftModel = (ObservableUser) model;
 
 //        Shift shift = new Truck(truckModel.id,
 //                truckModel.model,

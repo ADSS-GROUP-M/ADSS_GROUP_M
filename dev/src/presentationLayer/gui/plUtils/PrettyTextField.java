@@ -15,11 +15,13 @@ public class PrettyTextField implements UIElement {
 
     private final JTextField textField;
     private boolean clearTextOnclick;
-    private final String defaultText;
+    private String defaultText;
+    private final boolean enableClearOnClick;
     private int maxChars;
 
-    public PrettyTextField(Dimension size, String defaultText){
+    public PrettyTextField(Dimension size, String defaultText, boolean enableClearOnClick){
         this.defaultText = defaultText;
+        this.enableClearOnClick = enableClearOnClick;
         textField = new JTextField();
         textField.setBorder(new TextFieldBorder());
         textField.setPreferredSize(size);
@@ -27,11 +29,22 @@ public class PrettyTextField implements UIElement {
         textField.setText(defaultText);
         clearTextOnclick = true;
         maxChars = -1;
+        init();
+    }
 
+    public PrettyTextField(Dimension size, String defaultText){
+        this(size,defaultText,true);
+    }
+
+    public PrettyTextField(Dimension size, boolean enableClearOnClick){
+        this(size,"",enableClearOnClick);
+    }
+
+    private void init() {
         textField.addFocusListener(new FocusAdapter() {
             @Override
             public void focusGained(FocusEvent evt) {
-                if(clearTextOnclick){
+                if(enableClearOnClick && clearTextOnclick){
                     textField.setText("");
                     clearTextOnclick = false;
                 }
@@ -39,7 +52,7 @@ public class PrettyTextField implements UIElement {
 
             @Override
             public void focusLost(FocusEvent evt) {
-                if(textField.getText().equals("")){
+                if(enableClearOnClick && textField.getText().equals("")){
                     textField.setText(defaultText);
                     clearTextOnclick = true;
                 }
@@ -58,6 +71,10 @@ public class PrettyTextField implements UIElement {
 
     public PrettyTextField(Dimension size){
         this(size, "");
+    }
+
+    public void setDefaultText(String text){
+        defaultText = text;
     }
 
     public void setHorizontalAlignment(int alignment) {

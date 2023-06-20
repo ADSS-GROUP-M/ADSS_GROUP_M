@@ -1,6 +1,7 @@
 package presentationLayer.gui.transportModule.view.panels.trucks;
 
 import domainObjects.transportModule.Truck;
+import domainObjects.transportModule.Truck.CoolingCapacity;
 import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
 import presentationLayer.gui.plAbstracts.interfaces.ModelObserver;
 import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
@@ -10,10 +11,13 @@ import presentationLayer.gui.plUtils.PrettyTextField;
 import presentationLayer.gui.plUtils.SearchBox;
 import presentationLayer.gui.plUtils.SearchableString;
 import presentationLayer.gui.transportModule.control.TrucksControl;
+import presentationLayer.gui.transportModule.model.ObservableSite;
 import presentationLayer.gui.transportModule.model.ObservableTruck;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Collections;
@@ -22,7 +26,7 @@ import java.util.List;
 
 public class UpdateTruckPanel extends AbstractTransportModulePanel {
     private JLabel trucksLabel;
-    private SearchBox trucks;
+    private SearchBox selectedTruck;
     private JLabel baseLabel;
     private PrettyTextField baseField;
     private JLabel maxLabel;
@@ -32,15 +36,18 @@ public class UpdateTruckPanel extends AbstractTransportModulePanel {
     private JRadioButton none;
     private JRadioButton cold;
     private JRadioButton frozen;
+    private ObservableList emptyTruckList;
+    private ObservableList<Searchable> trucksList;
+    private ButtonGroup group;
     public UpdateTruckPanel(TrucksControl control) {
         super(control);
         init();
     }
     private void init() {
 
-        ObservableList emptyTruckList = new ObservableList<>();
-        control.getAll(this,emptyTruckList);
-        ObservableList<Searchable> trucksList = emptyTruckList;
+        emptyTruckList = new ObservableList<>();
+        control.getAll(this, emptyTruckList);
+        trucksList = emptyTruckList;
         Collections.sort(trucksList, new Comparator<Searchable>() {
             @Override
             public int compare(Searchable o1, Searchable o2) {
@@ -50,7 +57,6 @@ public class UpdateTruckPanel extends AbstractTransportModulePanel {
 
         Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
         contentPanel.setSize(scrollPane.getSize());
-
         contentPanel.setLayout(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
 
@@ -65,13 +71,13 @@ public class UpdateTruckPanel extends AbstractTransportModulePanel {
         Dimension textFieldSize = new Dimension(220,30);
 
         //button
-        trucks = new SearchBox(trucksList,"Select Truck",textFieldSize, panel);
+        selectedTruck = new SearchBox(trucksList,"Select Truck",textFieldSize, panel);
         constraints.gridx = 1;
         constraints.gridy = 1;
         constraints.gridwidth = 2;
         constraints.fill = GridBagConstraints.NONE;
         constraints.anchor = GridBagConstraints.CENTER;
-        contentPanel.add(trucks.getComponent(), constraints);
+        contentPanel.add(selectedTruck.getComponent(), constraints);
 
         //title
         baseLabel = new JLabel("Base Weight:");
@@ -82,7 +88,7 @@ public class UpdateTruckPanel extends AbstractTransportModulePanel {
         contentPanel.add(baseLabel, constraints);
 
         //text box
-        baseField = new PrettyTextField(textFieldSize);
+        baseField = new PrettyTextField(textFieldSize, false);
         constraints.gridx = 1;
         constraints.gridy = 2;
         constraints.fill = GridBagConstraints.HORIZONTAL;
@@ -95,7 +101,7 @@ public class UpdateTruckPanel extends AbstractTransportModulePanel {
         contentPanel.add(maxLabel, constraints);
 
         //text box
-        maxField = new PrettyTextField(textFieldSize);
+        maxField = new PrettyTextField(textFieldSize, false);
         constraints.gridx = 1;
         constraints.gridy = 3;
         constraints.fill = GridBagConstraints.HORIZONTAL;
@@ -123,7 +129,7 @@ public class UpdateTruckPanel extends AbstractTransportModulePanel {
         coolingPanel.add(frozen);
         contentPanel.add(coolingPanel, constraints);
 
-        ButtonGroup group = new ButtonGroup();
+        group = new ButtonGroup();
         group.add(none);
         group.add(cold);
         group.add(frozen);
@@ -137,7 +143,6 @@ public class UpdateTruckPanel extends AbstractTransportModulePanel {
         constraints.anchor = GridBagConstraints.EAST;
         contentPanel.add(submitButton, constraints);
 
-        ModelObserver o = this;
         submitButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -145,29 +150,83 @@ public class UpdateTruckPanel extends AbstractTransportModulePanel {
                 buttonClicked();
             }
         });
+
+        selectedTruck.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if(e.getStateChange() != ItemEvent.SELECTED){
+                    return;
+                }
+
+                Object o = e.getItem();
+
+                if(o == null || o instanceof String s && (s.equals("") || s.trim().equals("Select Truck") || s.equals("No results found"))){
+                    setTextInTextField(baseField, "");
+                    setTextInTextField(maxField,"");
+                    return;
+                }
+
+                String truckId = (String) o;
+
+                for(Searchable t : trucksList){
+                    if(t.getShortDescription().equals(truckId)){
+                        ObservableTruck truck = (ObservableTruck) t;
+                        setTextInTextField(baseField, String.valueOf(truck.baseWeight));
+                        setTextInTextField(maxField, String.valueOf(truck.maxWeight));
+                        setCoolingButton(truck.coolingCapacity);
+                        return;
+                    }
+                }
+                setTextInTextField(baseField, "");
+                setTextInTextField(maxField,"");
+            }
+        });
+    }
+
+    private void setTextInTextField(PrettyTextField field, String text) {;
+        field.setText(text);
+    }
+
+    private void setCoolingButton(CoolingCapacity cc){
+        none.setSelected(false);
+        cold.setSelected(false);
+        frozen.setSelected(false);
+        if(cc == null) return;
+        switch(cc){
+            case NONE -> none.setSelected(true);
+            case COLD -> cold.setSelected(true);
+            case FROZEN -> frozen.setSelected(true);
+        }
     }
 
     private void buttonClicked(){
-//        ObservableTruck truck =  (ObservableTruck)trucks.getSelected();
-//        truck.id = ((ObservableTruck)trucks.getSelected()).id;
-//        control.get(this,truck);
-//        truck.subscribe(this);
-//        truck.baseWeight = Integer.parseInt(baseField.getText());
-//        truck.maxWeight = Integer.parseInt(maxField.getText());
-//        if(none.isSelected())
-//        {
-//            truck.coolingCapacity = Truck.CoolingCapacity.NONE;
-//        }
-//        else if(cold.isSelected())
-//        {
-//            truck.coolingCapacity = Truck.CoolingCapacity.COLD;
-//        }
-//        else
-//        {
-//            truck.coolingCapacity = Truck.CoolingCapacity.FROZEN;
-//        }
-//        observers.forEach(observer -> observer.update(this, truck));
+        for(Searchable t : trucksList){
+            if(t.getShortDescription().equals(selectedTruck.getSelected())){
+                ObservableTruck truck = (ObservableTruck) t;
+                truck.subscribe(this);
+                truck.baseWeight = Integer.parseInt(baseField.getText());
+                truck.maxWeight = Integer.parseInt(maxField.getText());
+                if(group.isSelected(none.getModel())){
+                    truck.coolingCapacity = CoolingCapacity.valueOf("NONE");
+                } else if (group.isSelected(cold.getModel())) {
+                    truck.coolingCapacity = CoolingCapacity.valueOf("COLD");
+                }
+                else{
+                    truck.coolingCapacity = CoolingCapacity.valueOf("FROZEN");
+                }
+                observers.forEach(observer -> observer.update(this, truck));
+            }
+        }
     }
+
+
+    private void clearFields(){
+        selectedTruck.reset();
+        baseField.setText("");
+        maxField.setText("");
+        setCoolingButton(null);
+    }
+
 
     @Override
     public void componentResized(Dimension newSize) {
@@ -182,6 +241,11 @@ public class UpdateTruckPanel extends AbstractTransportModulePanel {
 
     @Override
     public void notify(ObservableModel observable) {
+        clearFields();
     }
 }
 
+
+
+//////////////////////////////////////
+//clear fields after submit

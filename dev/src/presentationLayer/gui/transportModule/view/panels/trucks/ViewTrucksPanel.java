@@ -1,6 +1,5 @@
 package presentationLayer.gui.transportModule.view.panels.trucks;
 
-
 import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
 import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
 import presentationLayer.gui.plAbstracts.interfaces.Searchable;
@@ -9,11 +8,8 @@ import presentationLayer.gui.transportModule.control.TrucksControl;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.plaf.basic.BasicButtonUI;
 import java.awt.*;
-import java.awt.event.*;
-
-import static com.sun.java.accessibility.util.AWTEventMonitor.addWindowListener;
+import java.util.Comparator;
 
 public class ViewTrucksPanel extends AbstractTransportModulePanel {
     private PrettyList truckList;
@@ -29,6 +25,12 @@ public class ViewTrucksPanel extends AbstractTransportModulePanel {
         control.getAll(this, emptyTruckList);
         ObservableList<Searchable> trucks = emptyTruckList;
 
+        trucks.sort(new Comparator<Searchable>() {
+            @Override
+            public int compare(Searchable o1, Searchable o2) {
+                return o1.getShortDescription().compareTo(o2.getShortDescription());
+            }
+        });
 
         contentPanel.setLayout(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();

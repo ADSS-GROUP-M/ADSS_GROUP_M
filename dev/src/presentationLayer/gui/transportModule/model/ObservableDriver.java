@@ -23,7 +23,7 @@ public class ObservableDriver extends AbstractObservableModel {
 
     @Override
     public String getShortDescription() {
-        return String.valueOf(id);
+        return id + " - " + name ;
     }
 
     @Override

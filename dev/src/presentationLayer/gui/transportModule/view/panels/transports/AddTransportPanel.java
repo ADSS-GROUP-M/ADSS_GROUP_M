@@ -1,6 +1,5 @@
 package presentationLayer.gui.transportModule.view.panels.transports;
 
-import domainObjects.transportModule.Truck;
 import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
 import presentationLayer.gui.plAbstracts.interfaces.ModelObserver;
 import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
@@ -8,25 +7,19 @@ import presentationLayer.gui.plAbstracts.interfaces.Searchable;
 import presentationLayer.gui.plUtils.*;
 import presentationLayer.gui.transportModule.control.*;
 import presentationLayer.gui.transportModule.model.ObservableTransport;
-import presentationLayer.gui.transportModule.model.ObservableTruck;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.List;
 
-import static presentationLayer.gui.plUtils.SearchBox.*;
 import static presentationLayer.gui.plUtils.SearchBox.DescriptionType.*;
 
 public class AddTransportPanel extends AbstractTransportModulePanel {
     private final SitesControl sitesControl;
     private final DriversControl driversControl;
     private final TrucksControl trucksControl;
-    private PrettyList sitesList;
-    private PrettyList driversList;
-    private PrettyList trucksList;
+    private PrettyList destinationsList;
     public AddTransportPanel(TransportsControl control,
                              SitesControl sitesControl,
                              DriversControl driversControl,
@@ -38,6 +31,7 @@ public class AddTransportPanel extends AbstractTransportModulePanel {
         init();
     }
 
+    @SuppressWarnings({"unchecked", "rawtypes"})
     private void init() {
         contentPanel.setLayout(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
@@ -46,7 +40,15 @@ public class AddTransportPanel extends AbstractTransportModulePanel {
         //Add the sites list to the screen
         ObservableList emptySiteList = new ObservableList<>();
         sitesControl.getAll(this,emptySiteList);
-        ObservableList<Searchable> sites = emptySiteList;
+        ObservableList<Searchable> sitesList = emptySiteList;
+
+        ObservableList emptyDriversList = new ObservableList<>();
+        driversControl.getAll(this,emptyDriversList);
+        ObservableList<Searchable> driversList = emptyDriversList;
+
+        ObservableList emptyTruckList = new ObservableList<>();
+        trucksControl.getAll(this,emptyTruckList);
+        ObservableList<Searchable> trucksList = emptyTruckList;
 
 
         // ====================== SIMPLE COMPONENTS =============================
@@ -139,23 +141,20 @@ public class AddTransportPanel extends AbstractTransportModulePanel {
         constraints.insets = new Insets(0,0,0,10);
         simpleComponentsPanel.add(driversLabel, constraints);
 
-        //TODO: remove this example code and replace with real data
-
-        List<Searchable> searchableList = List.of(new SearchableString("item1"), new SearchableString("item2"), new SearchableString("item3"));
-        SearchBox drivers = new SearchBox(searchableList,"Select Driver",textFieldSize, panel);
+        SearchBox driverSearchBox = new SearchBox(driversList,"Select Driver",textFieldSize,LONG, panel);
         constraints.gridx = 3;
         constraints.gridy = 0;
-        simpleComponentsPanel.add(drivers.getComponent(), constraints);
+        simpleComponentsPanel.add(driverSearchBox.getComponent(), constraints);
 
         JLabel trucksLabel = new JLabel("Truck:");
         constraints.gridx = 2;
         constraints.gridy = 1;
         simpleComponentsPanel.add(trucksLabel, constraints);
 
-        SearchBox trucks = new SearchBox(searchableList,"Select Truck",textFieldSize, panel);
+        SearchBox truckSearchBox = new SearchBox(trucksList,"Select Truck",textFieldSize,LONG, panel);
         constraints.gridx = 3;
         constraints.gridy = 1;
-        simpleComponentsPanel.add(trucks.getComponent(), constraints);
+        simpleComponentsPanel.add(truckSearchBox.getComponent(), constraints);
 
         // ================================= END OF SIMPLE COMPONENTS =================================
 
@@ -174,8 +173,8 @@ public class AddTransportPanel extends AbstractTransportModulePanel {
 
         complexComponentsPanel.add(destinationsLabel, constraints);
 
-        Dimension boxFieldSize = new Dimension(700,30);
-        SearchBox destinations = new SearchBox(sites,"Select Destination",boxFieldSize, LONG, panel);
+        Dimension boxFieldSize = new Dimension(700,30); //TODO: change this to a better size
+        SearchBox destinations = new SearchBox(sitesList,"Select Destination",boxFieldSize, LONG, panel);
         constraints.gridx = 1;
         constraints.gridy = 0;
         constraints.gridwidth = 6;
@@ -234,10 +233,10 @@ public class AddTransportPanel extends AbstractTransportModulePanel {
         constraints.insets = new Insets(0, 0, 50, 0);
         contentPanel.add(complexComponentsPanel,constraints);
 
-        sitesList = new PrettyList(sites,panel);
+        this.destinationsList = new PrettyList(new ObservableList<>(),panel);
         constraints.gridx = 0;
         constraints.gridy = 2;
-        contentPanel.add(sitesList.getComponent(),constraints);
+        contentPanel.add(this.destinationsList.getComponent(),constraints);
 
 
         //Submit button
@@ -272,7 +271,7 @@ public class AddTransportPanel extends AbstractTransportModulePanel {
         Dimension panelSize = panel.getPreferredSize();
         Dimension contentPanelSize = new Dimension((int) (panelSize.width * 0.8), (int) (panelSize.height * 0.9));
         contentPanel.setPreferredSize(contentPanelSize);
-        sitesList.componentResized(new Dimension((int) (contentPanelSize.width*0.8), (int) (-75 + 2 *contentPanelSize.height/3.0)));
+        destinationsList.componentResized(new Dimension((int) (contentPanelSize.width*0.8), (int) (-75 + 2 *contentPanelSize.height/3.0)));
 
         panel.revalidate();
     }

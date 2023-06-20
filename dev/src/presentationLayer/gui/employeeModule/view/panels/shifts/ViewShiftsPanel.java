@@ -12,6 +12,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
 import java.text.DateFormatSymbols;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -19,8 +20,10 @@ import java.util.GregorianCalendar;
 public class ViewShiftsPanel extends AbstractTransportModulePanel {
     JPanel newOpenPanel = new JPanel();
     JFrame newOpenWindow;
+    JPanel innerPanel;
     JTable calendarTable;
     JLabel monthLabel;
+    Calendar calendar;
 
     public ViewShiftsPanel(ShiftsControl control) {
         super(control);
@@ -29,82 +32,6 @@ public class ViewShiftsPanel extends AbstractTransportModulePanel {
 
     private void init() {
         // TODO: Swap all this example implementation
-//        Searchable s1 = new Searchable() {
-//            final String description = "Shift 1";
-//            @Override
-//            public boolean isMatch(String query) {
-//                return description.toLowerCase().contains(query.toLowerCase());
-//            }
-//
-//            @Override
-//            public String getShortDescription() {
-//                return description;
-//            }
-//
-//            @Override
-//            public String getLongDescription() {
-//                return "Shift ID : 1\n" +
-//                        "Shift Date : 12/12/2023\n";
-//            }
-//
-//        };
-//
-//        Searchable s2 = new Searchable() {
-//            final String description = "Shift 2";
-//            @Override
-//            public boolean isMatch(String query) {
-//                return description.contains(query);
-//            }
-//
-//            @Override
-//            public String getShortDescription() {
-//                return description;
-//            }
-//
-//            @Override
-//            public String getLongDescription() {
-//                return "Shift ID : 2\n" +
-//                        "Shift Date : 13/12/2023\n";
-//            }
-//        };
-//
-//        Searchable s3 = new Searchable() {
-//            final String description = "Shift 3";
-//            @Override
-//            public boolean isMatch(String query) {
-//                return description.contains(query);
-//            }
-//
-//            @Override
-//            public String getShortDescription() {
-//                return description;
-//            }
-//
-//            @Override
-//            public String getLongDescription() {
-//                return "Shift ID : 3\n" +
-//                        "Shift Date : 13/12/2023\n";
-//            }
-//        };
-//
-//        Searchable s4 = new Searchable() {
-//            final String description = "Shift 4";
-//            @Override
-//            public boolean isMatch(String query) {
-//                return description.contains(query);
-//            }
-//
-//            @Override
-//            public String getShortDescription() {
-//                return description;
-//            }
-//
-//            @Override
-//            public String getLongDescription() {
-//                return "Shift ID : 4\n" +
-//                        "Shift Date : 13/12/2023\n";
-//            }
-//        };
         contentPanel.setLayout(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
 //        listModel = new DefaultListModel<>();
@@ -184,8 +111,8 @@ public class ViewShiftsPanel extends AbstractTransportModulePanel {
 //            }
 //        });
 //
-        JPanel innerPanel = new JPanel();
-        innerPanel.setBackground(new Color(0,0,0,0));
+        innerPanel = new JPanel();
+        innerPanel.setBackground(new Color(0, 0, 0, 0));
 //        innerPanel.add(listPanel);
 //
 //        addItem(s1.getShortDescription());
@@ -203,9 +130,6 @@ public class ViewShiftsPanel extends AbstractTransportModulePanel {
 //                showConfirmationDialog();
 //            }
 //        });*/
-//
-//
-//
 //         //Set up the confirmation dialog on window close
 //        addWindowListener(new WindowAdapter() {
 //            @Override
@@ -217,11 +141,9 @@ public class ViewShiftsPanel extends AbstractTransportModulePanel {
         monthLabel = new JLabel("");
         monthLabel.setHorizontalAlignment(SwingConstants.CENTER);
         monthLabel.setFont(new Font("Tahoma", Font.BOLD, 20));
-        monthLabel.setBounds(100, 30, 600, 30);
-        innerPanel.add(monthLabel);
+        innerPanel.add(monthLabel, BorderLayout.NORTH);
 
         calendarTable = new JTable();
-        calendarTable.setBounds(100, 80, 600, 400);
         calendarTable.setRowHeight(50);
         calendarTable.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
             @Override
@@ -238,52 +160,40 @@ public class ViewShiftsPanel extends AbstractTransportModulePanel {
                 return cell;
             }
         });
-        innerPanel.add(calendarTable);
+
+        JScrollPane scrollPane = new JScrollPane(calendarTable);
+        innerPanel.add(scrollPane, BorderLayout.CENTER);
+
+        JPanel buttonPanel = new JPanel(new FlowLayout());
+        innerPanel.add(buttonPanel, BorderLayout.SOUTH);
 
         JButton prevButton = new JButton("<<");
         prevButton.addActionListener(e -> {
-            // Go to the previous month
-            // TODO: Implement the logic to load the shifts for the previous month
-            // For this example, we are simply displaying the previous month's name
-
             displayPreviousMonth();
         });
-        prevButton.setBounds(150, 500, 100, 30);
-        innerPanel.add(prevButton);
+        buttonPanel.add(prevButton);
 
         JButton nextButton = new JButton(">>");
         nextButton.addActionListener(e -> {
-            // Go to the next month
-            // TODO: Implement the logic to load the shifts for the next month
-            // For this example, we are simply displaying the next month's name
-
             displayNextMonth();
         });
-        nextButton.setBounds(550, 500, 100, 30);
-        innerPanel.add(nextButton);
-        contentPanel.add(innerPanel,constraints);
+        buttonPanel.add(nextButton);
 
-        // Initially, display the current month's shifts
-        displayCurrentMonth();
-    }
-
-    private void displayCurrentMonth() {
-        Calendar calendar = new GregorianCalendar();
+        // Initialize the calendar instance and display the current month's shifts
+        calendar = new GregorianCalendar();
         displayMonth(calendar);
+        contentPanel.add(innerPanel, constraints);
     }
 
     private void displayPreviousMonth() {
-        Calendar calendar = new GregorianCalendar();
         calendar.add(Calendar.MONTH, -1);
         displayMonth(calendar);
     }
 
     private void displayNextMonth() {
-        Calendar calendar = new GregorianCalendar();
         calendar.add(Calendar.MONTH, 1);
         displayMonth(calendar);
     }
-
 
     private void displayMonth(Calendar calendar) {
         int month = calendar.get(Calendar.MONTH);
@@ -300,11 +210,13 @@ public class ViewShiftsPanel extends AbstractTransportModulePanel {
         int rows = (int) Math.ceil((startDay + numberOfDays - 1) / 7.0);
         int cols = 7;
 
+        DefaultTableModel tableModel = (DefaultTableModel) calendarTable.getModel();
+        tableModel.setRowCount(0); // Clear the table's data model
+
         Object[][] data = new Object[rows][cols];
         String[] columnNames = new String[]{"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
 
-        DefaultTableModel tableModel = new DefaultTableModel(data, columnNames);
-        calendarTable.setModel(tableModel);
+        tableModel.setDataVector(data, columnNames); // Set the new data in the table's data model
 
         DefaultTableCellRenderer defaultRenderer = new DefaultTableCellRenderer();
         defaultRenderer.setHorizontalAlignment(SwingConstants.CENTER);
@@ -322,6 +234,29 @@ public class ViewShiftsPanel extends AbstractTransportModulePanel {
             col++;
         }
         calendarTable.getColumnModel().getColumn(0).setPreferredWidth(50); // Adjust width of the first column
+
+        // Simulates a button click on the panel to reload the calendar table
+        try {
+            Robot robot = new Robot();
+            // Get current mouse position
+            Point originalMousePos = MouseInfo.getPointerInfo().getLocation();
+            // Calculate new click position
+            int offsetX = 0;
+            int offsetY = 100;
+            int clickX = originalMousePos.x + offsetX;
+            int clickY = originalMousePos.y + offsetY;
+
+            // Move the mouse cursor to the new position
+            robot.mouseMove(clickX, clickY);
+            // Simulate left mouse button press
+            robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
+            // Simulate left mouse button release
+            robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
+            // Return the mouse cursor to its original position
+            robot.mouseMove(originalMousePos.x, originalMousePos.y);
+        } catch (AWTException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -396,9 +331,6 @@ public class ViewShiftsPanel extends AbstractTransportModulePanel {
         //newOpenPanel.add(buttonPanel);
         //buttonPanel.setLocation(0,20);
         newOpenWindow.add(newOpenPanel);
-
-
-
 
         newOpenWindow.setVisible(true);
     }

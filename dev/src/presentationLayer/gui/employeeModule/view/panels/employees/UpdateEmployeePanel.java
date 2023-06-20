@@ -14,9 +14,6 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class UpdateEmployeePanel extends AbstractTransportModulePanel {
-    private DefaultListModel<String> listModel;
-    private JList<String> list;
-    private JScrollPane listPanel;
     JPanel newOpenPanel = new JPanel();
     JFrame newOpenWindow;
 

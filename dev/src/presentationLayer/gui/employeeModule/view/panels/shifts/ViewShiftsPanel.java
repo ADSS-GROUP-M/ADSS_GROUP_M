@@ -5,15 +5,15 @@ import presentationLayer.gui.employeeModule.controller.ShiftsControl;
 import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
 import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
 import presentationLayer.gui.plUtils.Colors;
+import serviceLayer.employeeModule.Objects.SShift;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.InputEvent;
+import java.awt.event.*;
 import java.text.DateFormatSymbols;
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -145,6 +145,7 @@ public class ViewShiftsPanel extends AbstractTransportModulePanel {
 
         calendarTable = new JTable();
         calendarTable.setRowHeight(50);
+        calendarTable.setDefaultEditor(Object.class, null);
         calendarTable.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
@@ -158,6 +159,22 @@ public class ViewShiftsPanel extends AbstractTransportModulePanel {
                 }
 
                 return cell;
+            }
+        });
+
+        calendarTable.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                // Check for double-click event
+                if (e.getClickCount() == 2) {
+                    // Get the selected cell coordinates
+                    int row = calendarTable.getSelectedRow();
+                    int col = calendarTable.getSelectedColumn();
+
+                    // Get the day value from the selected cell
+                    int day = (int)calendarTable.getValueAt(row, col);
+                    openNewWindow(((ShiftsControl)control).getShifts(LocalDate.of(calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH) + 1, day)));
+                }
             }
         });
 
@@ -262,74 +279,110 @@ public class ViewShiftsPanel extends AbstractTransportModulePanel {
 
 //    private void removeSelectedItems(int selectedIndex) {
 //            listModel.remove(selectedIndex);
-//
 //    }
 //
 //    public void addItem(String item) {
 //        listModel.addElement(item);
 //    }
 //
-//    private void showConfirmationDialog() {
-//        int[] selectedIndices = list.getSelectedIndices();
-//        if (selectedIndices.length > 0) {
-//            int choice = JOptionPane.showConfirmDialog(newOpenPanel, "Are you sure you want to remove the selected item?", "Confirmation", JOptionPane.YES_NO_OPTION);
-//            if (choice == JOptionPane.YES_OPTION) {
-//                removeSelectedItems(selectedIndices[0]);
-//                newOpenWindow.dispose();
-//            }
-//        }
-//    }
+    private void showConfirmationDialog(SShift shift) {
+        int choice = JOptionPane.showConfirmDialog(newOpenPanel, "Are you sure you want to remove the selected shift?", "Confirmation", JOptionPane.YES_NO_OPTION);
+        if (choice == JOptionPane.YES_OPTION) {
+            String errorMessage = ((ShiftsControl)control).deleteShift(shift);
+            if (errorMessage != null) {
+                JOptionPane.showMessageDialog(null,errorMessage);
+            }
+            newOpenWindow.dispose();
+        }
+    }
 
-    private void openNewWindow(String selectedItem) {
-        newOpenWindow = new JFrame(selectedItem);
-        newOpenWindow.setSize(800, 600);
+    private void openNewWindow(Object dayShifts) {
+        newOpenWindow = new JFrame();
+        newOpenWindow.setSize(800, 650);
         newOpenWindow.setLocationRelativeTo(contentPanel);
         newOpenWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         //newOpenWindow.setLayout(new GridBagLayout());
 
         newOpenWindow.getContentPane();
-
-
-
-        JLabel label = new JLabel("Selected Item: \n" + selectedItem);
-        label.setFont(new Font("Arial", Font.BOLD, 20));
-        label.setForeground(Colors.getForegroundColor());
-       
-        label.setBounds(0,0,400,200);
-
-        //newOpenWindow.add(label);
-
-        //Create the remove button
-        //JPanel buttonPanel = new JPanel();
-        JButton removeButton = new JButton("Remove");
-        removeButton.setPreferredSize(new Dimension(100, 30));
-        removeButton.setBounds(550,400,100,30);
-        JButton editButton = new JButton("Edit");
-        editButton.setPreferredSize(new Dimension(100, 30));
-        editButton.setBounds(100,400,100,30);
         newOpenPanel.setLayout(null);
-        newOpenPanel.add(label);
-        newOpenPanel.add(removeButton);
-        newOpenPanel.add(editButton);
 
-//        removeButton.addActionListener(new ActionListener() {
-//            public void actionPerformed(ActionEvent e) {
-//                showConfirmationDialog();
-//            }
-//        });
+        if (dayShifts instanceof SShift[] shifts){
+            JTextArea morningShiftTextArea = new JTextArea("Morning Shift: \n" + (shifts[0] != null ? shifts[0].toString() : "-"));
+            JTextArea eveningShiftTextArea = new JTextArea("Evening Shift: \n" + (shifts[1] != null ? shifts[1].toString() : "-"));
+            JRadioButton morningRadioButton = new JRadioButton("Morning");
+            JRadioButton eveningRadioButton = new JRadioButton("Evening");
+            ButtonGroup buttonGroup = new ButtonGroup();
+            buttonGroup.add(morningRadioButton);
+            buttonGroup.add(eveningRadioButton);
 
-        editButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                // TODO: Open the edit window
+            morningShiftTextArea.setFont(new Font("Arial", Font.BOLD, 20));
+            morningShiftTextArea.setForeground(Colors.getForegroundColor());
+            morningShiftTextArea.setBounds(50, 50, 800, 200);
+            morningShiftTextArea.setEditable(false);
+            morningRadioButton.setBounds(20,140,20,20);
 
-            }
-        });
-        //GridBagConstraints constraints = new GridBagConstraints();
-        //constraints.fill = GridBagConstraints.WEST;
-        //constraints.anchor = GridBagConstraints.PAGE_END;
-        //newOpenPanel.add(buttonPanel);
-        //buttonPanel.setLocation(0,20);
+            eveningShiftTextArea.setFont(new Font("Arial", Font.BOLD, 20));
+            eveningShiftTextArea.setForeground(Colors.getForegroundColor());
+            eveningShiftTextArea.setBounds(50, 300, 800, 200);
+            eveningShiftTextArea.setEditable(false);
+            eveningRadioButton.setBounds(20,390,20,20);
+
+            //newOpenWindow.add(label);
+
+            //Create the remove button
+            //JPanel buttonPanel = new JPanel();
+            JButton deleteButton = new JButton("Delete");
+            deleteButton.setPreferredSize(new Dimension(100, 30));
+            deleteButton.setBounds(550, 550, 100, 30);
+            JButton editButton = new JButton("Edit");
+            editButton.setPreferredSize(new Dimension(100, 30));
+            editButton.setBounds(100, 550, 100, 30);
+
+            newOpenPanel.add(morningShiftTextArea);
+            newOpenPanel.add(eveningShiftTextArea);
+            newOpenPanel.add(morningRadioButton);
+            newOpenPanel.add(eveningRadioButton);
+            newOpenPanel.add(deleteButton);
+            newOpenPanel.add(editButton);
+
+            deleteButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    if (morningRadioButton.isSelected()) {
+                        showConfirmationDialog(shifts[0]);
+                    } else if (eveningRadioButton.isSelected()) {
+                        showConfirmationDialog(shifts[1]);
+                    } else {
+                        JOptionPane.showMessageDialog(null,"Please choose one of the shifts.");
+                    }
+                }
+            });
+
+            editButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    // TODO: Open the edit window
+
+                }
+            });
+            //GridBagConstraints constraints = new GridBagConstraints();
+            //constraints.fill = GridBagConstraints.WEST;
+            //constraints.anchor = GridBagConstraints.PAGE_END;
+            //newOpenPanel.add(buttonPanel);
+            //buttonPanel.setLocation(0,20);
+        }
+        else if (dayShifts instanceof String) {
+            JTextArea errorTextArea = new JTextArea("Error: \n" + dayShifts);
+            errorTextArea.setFont(new Font("Arial", Font.BOLD, 20));
+            errorTextArea.setForeground(Colors.getForegroundColor());
+            errorTextArea.setBounds(50, 50, 800, 200);
+            newOpenWindow.add(errorTextArea);
+        } else {
+            JTextArea errorTextArea = new JTextArea("An error has occurred when retrieving the shifts in this day.\n");
+            errorTextArea.setFont(new Font("Arial", Font.BOLD, 20));
+            errorTextArea.setForeground(Colors.getForegroundColor());
+            errorTextArea.setBounds(50, 50, 800, 200);
+            newOpenWindow.add(errorTextArea);
+        }
         newOpenWindow.add(newOpenPanel);
 
         newOpenWindow.setVisible(true);
@@ -341,7 +394,7 @@ public class ViewShiftsPanel extends AbstractTransportModulePanel {
         Dimension contentPreferredSize = new Dimension((int) (panel.getWidth() * 0.8), (int) (panel.getHeight() * 0.6));
         Dimension contentPanelSize = new Dimension(contentPreferredSize.width, contentPreferredSize.height + 250);
         contentPanel.setPreferredSize(contentPanelSize);
-        calendarTable.setPreferredSize(new Dimension((int) (contentPanelSize.width*0.8), (int) (- 50 + 2 *contentPanelSize.height/3.0)));
+        //calendarTable.setPreferredSize(new Dimension((int) (contentPanelSize.width*0.8), (int) (- 50 + 2 *contentPanelSize.height/3.0)));
         scrollPane.revalidate();
     }
 

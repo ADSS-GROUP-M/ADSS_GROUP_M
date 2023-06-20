@@ -25,12 +25,13 @@ public class SearchBox implements UIElement {
     private final String defaultText;
     private final Dimension size;
     private final JComboBox<String> comboBox;
+    private final Container repaintListener;
     private boolean clearTextOnClick;
     private boolean isPopupClickable;
     private String[] lastFilteredData;
     private String text;
 
-    public SearchBox(List<Searchable> data,String defaultText, Dimension size, PopupMenuListener repaintListener){
+    public SearchBox(List<Searchable> data,String defaultText, Dimension size, Container repaintListener){
         this.size = size;
         this.data = data;
         String[] dataStrings = data.stream()
@@ -41,7 +42,7 @@ public class SearchBox implements UIElement {
         clearTextOnClick = true;
         isPopupClickable = true;
         this.defaultText = "    "+defaultText;
-        comboBox.addPopupMenuListener(repaintListener);
+        this.repaintListener = repaintListener;
         init();
     }
 
@@ -115,16 +116,17 @@ public class SearchBox implements UIElement {
                     public void mouseEntered(MouseEvent e) {
                         super.mouseEntered(e);
                         but.setBackground(new Color(200,200,200, 64));
-                        comboBox.revalidate();
-                        comboBox.repaint();
+//                        comboBox.revalidate();
+//                        comboBox.repaint();
+                        repaintListener.repaint();
                     }
 
                     @Override
                     public void mouseExited(MouseEvent e) {
                         super.mouseExited(e);
                         but.setBackground(Color.WHITE);
-                        comboBox.revalidate();
-                        comboBox.repaint();
+//                        comboBox.repaint();
+                        repaintListener.repaint();
                     }
 
                     @Override
@@ -134,15 +136,17 @@ public class SearchBox implements UIElement {
                             setText("");
                             clearTextOnClick = false;
                         }
-                        comboBox.revalidate();
-                        comboBox.repaint();
+//                        comboBox.revalidate();
+//                        comboBox.repaint();
+                        repaintListener.repaint();
                     }
 
                     @Override
                     public void mouseReleased(MouseEvent e) {
                         super.mouseReleased(e);
-                        comboBox.revalidate();
-                        comboBox.repaint();
+//                        comboBox.revalidate();
+//                        comboBox.repaint();
+                        repaintListener.repaint();
                     }
                 });
 
@@ -190,7 +194,6 @@ public class SearchBox implements UIElement {
                 };
 
                 pop.setBorder(BorderFactory.createLineBorder(new Color(200,200,200),1));
-
                 return pop;
             }
 
@@ -234,11 +237,16 @@ public class SearchBox implements UIElement {
             @Override
             public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
                 filterResults();
+                repaintListener.repaint();
             }
             @Override
-            public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {}
+            public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
+                repaintListener.repaint();
+            }
             @Override
-            public void popupMenuCanceled(PopupMenuEvent e) {}
+            public void popupMenuCanceled(PopupMenuEvent e) {
+                repaintListener.repaint();
+            }
         });
         comboBox.getEditor().getEditorComponent().addMouseListener(new MouseAdapter() {
 
@@ -261,10 +269,9 @@ public class SearchBox implements UIElement {
                 setBorder(BorderFactory.createEmptyBorder(10, 5, 10, 5));
 
                 setBackground(Color.WHITE);
-                if(isSelected){
-                    renderer.setBackground(new Color(200,200,200));
+                if(isSelected) {
+                    renderer.setBackground(new Color(200, 200, 200));
                 }
-
                 return renderer;
             }
         });

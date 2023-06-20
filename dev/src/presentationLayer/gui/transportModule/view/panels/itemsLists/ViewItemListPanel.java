@@ -14,6 +14,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class ViewItemListPanel extends AbstractTransportModulePanel {
     private SearchBox idsBox;
@@ -39,18 +41,15 @@ public class ViewItemListPanel extends AbstractTransportModulePanel {
 
 
         constraints.gridy = 0;
-//        constraints.anchor = GridBagConstraints.NORTH;
-        idsBox = new SearchBox(ids,"Select item list",new Dimension(200,30),this);
+        idsBox = new SearchBox(ids,"Select item list",new Dimension(200,30),panel);
         contentPanel.add(idsBox.getComponent(),constraints);
 
 
         constraints.gridy = 1;
-//        constraints.anchor = GridBagConstraints.CENTER;
         unLoadingList = new PrettyList(new ObservableList<>(),panel);
         contentPanel.add(unLoadingList.getComponent(),constraints);
 
         constraints.gridy = 2;
-//        constraints.anchor = GridBagConstraints.SOUTH;
         loadingList = new PrettyList(new ObservableList<>(),panel);
         contentPanel.add(loadingList.getComponent(),constraints);
 
@@ -59,9 +58,18 @@ public class ViewItemListPanel extends AbstractTransportModulePanel {
             public void itemStateChanged(ItemEvent e) {
 
                 Object o = idsBox.getSelected();
-                if(o == null || o instanceof String s && s.equals("")) return;
+                if(o == null || o instanceof String s && (s.equals("") || s.trim().equals("Select item list") )){
+                    unLoadingList.getList().setModel(new DefaultListModel<>());
+                    loadingList.getList().setModel(new DefaultListModel<>());
+                    return;
+                }
 
-                int index = Integer.parseInt(o.toString())-1;
+                int index;
+                try{
+                    index = Integer.parseInt(o.toString())-1;
+                } catch(NumberFormatException ex){
+                    return;
+                }
                 ObservableItemList ils = itemLists.get(index);
 
                 DefaultListModel<Searchable> unLoadModel = new DefaultListModel<>();
@@ -79,11 +87,15 @@ public class ViewItemListPanel extends AbstractTransportModulePanel {
     @Override
     public void componentResized(Dimension newSize) {
         super.componentResized(newSize);
-        Dimension contentPreferredSize = new Dimension((int) (panel.getWidth() * 0.8), (int) (panel.getHeight() * 0.6));
-        contentPanel.setPreferredSize(new Dimension(contentPreferredSize.width, contentPreferredSize.height + 250));
-        loadingList.componentResized(new Dimension(scrollPane.getWidth(), contentPanel.getHeight()/2));
-        unLoadingList.componentResized(new Dimension(scrollPane.getWidth(), contentPanel.getHeight()/2));
-        contentPanel.revalidate();
+
+        Dimension panelSize = panel.getPreferredSize();
+        Dimension contentPanelSize = new Dimension((int) (panelSize.width * 0.8), (int) (panelSize.height * 0.9));
+        contentPanel.setPreferredSize(contentPanelSize);
+
+        loadingList.componentResized(new Dimension((int) (contentPanelSize.width*0.8), (int) (-50 + contentPanelSize.height/2.0)));
+        unLoadingList.componentResized(new Dimension((int) (contentPanelSize.width*0.8), (int) (-50 + contentPanelSize.height/2.0)));
+
+        panel.revalidate();
     }
 
     @Override

@@ -55,13 +55,13 @@ public class ViewTransportsPanel extends AbstractTransportModulePanel {
         GridBagConstraints constraints = new GridBagConstraints();
 
         constraints.gridy = 0;
-        constraints.anchor = GridBagConstraints.NORTH;
+//        constraints.anchor = GridBagConstraints.NORTH;
         transportsList = new PrettyList(transports,panel);
         contentPanel.add(transportsList.getComponent(),constraints);
 
         constraints.gridy = 1;
         constraints.ipady = 0;
-        constraints.anchor = GridBagConstraints.SOUTH;
+//        constraints.anchor = GridBagConstraints.SOUTH;
         destinationsList = new PrettyList(destinations,panel);
         contentPanel.add(destinationsList.getComponent(),constraints);
 
@@ -86,11 +86,15 @@ public class ViewTransportsPanel extends AbstractTransportModulePanel {
     @Override
     public void componentResized(Dimension newSize) {
         super.componentResized(newSize);
-        Dimension contentPreferredSize = new Dimension((int) (panel.getWidth() * 0.8), (int) (panel.getHeight() * 0.6));
-        contentPanel.setPreferredSize(new Dimension(contentPreferredSize.width, contentPreferredSize.height + 250));
-        transportsList.componentResized(new Dimension(scrollPane.getWidth(), (int) (2*contentPanel.getHeight()/3.0)));
-        destinationsList.componentResized(new Dimension(scrollPane.getWidth(), contentPanel.getHeight() / 3));
-        contentPanel.revalidate();
+
+        Dimension panelSize = panel.getPreferredSize();
+        Dimension contentPanelSize = new Dimension((int) (panelSize.width * 0.8), (int) (panelSize.height * 0.9));
+        contentPanel.setPreferredSize(contentPanelSize);
+
+        transportsList.componentResized(new Dimension((int) (contentPanelSize.width*0.8), (int) (- 50 + 2 *contentPanelSize.height/3.0)));
+        destinationsList.componentResized(new Dimension((int) (contentPanelSize.width * 0.8), (int) (-50 + contentPanelSize.height/3.0)));
+
+        panel.revalidate();
     }
 
     @Override

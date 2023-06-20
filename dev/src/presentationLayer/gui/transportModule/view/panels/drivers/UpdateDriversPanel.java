@@ -40,7 +40,7 @@ public class UpdateDriversPanel extends AbstractTransportModulePanel {
         //button
         java.util.List<Searchable> driversSearchableList = List.of(new SearchableString("item1"), new SearchableString("item2"), new SearchableString("item3"));
 
-        SearchBox drivers = new SearchBox(driversSearchableList,"Select Driver",textFieldSize, this);
+        SearchBox drivers = new SearchBox(driversSearchableList,"Select Driver",textFieldSize, panel);
         constraints.gridx = 1;
         constraints.gridy = 1;
         constraints.gridwidth = 2;
@@ -62,7 +62,7 @@ public class UpdateDriversPanel extends AbstractTransportModulePanel {
             LicencesSearchableList.add(new SearchableString(type.toString()));
         }
 
-        SearchBox Licences = new SearchBox(LicencesSearchableList,"Select Licence",textFieldSize, this);
+        SearchBox Licences = new SearchBox(LicencesSearchableList,"Select Licence",textFieldSize, panel);
         constraints.gridx = 1;
         constraints.gridy = 2;
         constraints.gridwidth = 2;
@@ -71,7 +71,16 @@ public class UpdateDriversPanel extends AbstractTransportModulePanel {
         contentPanel.add(Licences.getComponent(), constraints);
     }
 
-    
+    @Override
+    public void componentResized(Dimension newSize) {
+        super.componentResized(newSize);
+
+        Dimension panelSize = panel.getPreferredSize();
+        Dimension contentPanelSize = new Dimension((int) (panelSize.width * 0.8), (int) (panelSize.height * 0.9));
+        contentPanel.setPreferredSize(contentPanelSize);
+
+        panel.revalidate();
+    }
 
     @Override
     public void notify(ObservableModel observable) {

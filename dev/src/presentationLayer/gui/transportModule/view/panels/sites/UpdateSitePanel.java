@@ -62,7 +62,7 @@ public class UpdateSitePanel extends AbstractTransportModulePanel {
         constraints.insets = new Insets(5, 5, 5, 5);
         contentPanel.add(sitesLabel, constraints);
 
-        selectedSite = new SearchBox(sitesList,"Select Site",textFieldSize, this);
+        selectedSite = new SearchBox(sitesList,"Select Site",textFieldSize, panel);
         constraints.gridx = 1;
         constraints.gridy = 1;
         constraints.gridwidth = 2;
@@ -128,6 +128,17 @@ public class UpdateSitePanel extends AbstractTransportModulePanel {
         site.contactName = contactNameField.getText();
         site.phoneNumber = contactNumberField.getText();
         observers.forEach(observer -> observer.add(this, site));
+    }
+
+    @Override
+    public void componentResized(Dimension newSize) {
+        super.componentResized(newSize);
+
+        Dimension panelSize = panel.getPreferredSize();
+        Dimension contentPanelSize = new Dimension((int) (panelSize.width * 0.8), (int) (panelSize.height * 0.9));
+        contentPanel.setPreferredSize(contentPanelSize);
+
+        panel.revalidate();
     }
 
     @Override

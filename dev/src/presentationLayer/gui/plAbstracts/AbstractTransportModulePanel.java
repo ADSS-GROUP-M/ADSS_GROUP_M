@@ -4,7 +4,10 @@ import presentationLayer.gui.plAbstracts.interfaces.ModelObserver;
 import presentationLayer.gui.plUtils.Colors;
 import presentationLayer.gui.plUtils.ContentPanel;
 
+import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public abstract class AbstractTransportModulePanel extends ScrollablePanel implements ModelObserver {
 
@@ -24,13 +27,12 @@ public abstract class AbstractTransportModulePanel extends ScrollablePanel imple
         panel.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         panel.add(contentPanel,gbc);
-    }
-
-    @Override
-    public void componentResized(Dimension newSize) {
-        super.componentResized(newSize);
-        Dimension preferredSize = new Dimension((int) (panel.getWidth() * 0.8), (int) (panel.getHeight()*0.6));
-        contentPanel.setPreferredSize(preferredSize);
-        scrollPane.revalidate();
+        contentPanel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                contentPanel.requestFocus();
+                SwingUtilities.invokeLater(panel::repaint);
+            }
+        });
     }
 }

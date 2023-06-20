@@ -87,9 +87,12 @@ public class ViewSitesPanel extends AbstractTransportModulePanel {
     @Override
     public void componentResized(Dimension newSize) {
         super.componentResized(newSize);
-        Dimension contentPreferredSize = new Dimension((int) (panel.getWidth() * 0.8), (int) (panel.getHeight() * 0.6));
-        contentPanel.setPreferredSize(new Dimension(contentPreferredSize.width, contentPreferredSize.height + 250));
-        sitesList.componentResized(scrollPane.getSize());
+        Dimension panelSize = panel.getPreferredSize();
+        Dimension contentPanelSize = new Dimension((int) (panelSize.width * 0.8), (int) (panelSize.height * 0.9));
+        contentPanel.setPreferredSize(contentPanelSize);
+
+        sitesList.componentResized(new Dimension((int) (contentPanelSize.width * 0.8), (int) (contentPanelSize.height * 0.9)));
+
         contentPanel.revalidate();
     }
 

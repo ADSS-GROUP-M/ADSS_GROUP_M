@@ -26,7 +26,7 @@ public class ViewTrucksPanel extends AbstractTransportModulePanel {
     private void init() {
 
         ObservableList emptyTruckList = new ObservableList<>();
-        control.getAll(this,emptyTruckList);
+        control.getAll(this, emptyTruckList);
         ObservableList<Searchable> trucks = emptyTruckList;
 
 
@@ -34,7 +34,7 @@ public class ViewTrucksPanel extends AbstractTransportModulePanel {
         GridBagConstraints constraints = new GridBagConstraints();
 
         JPanel buttonsPanel = new JPanel();
-        buttonsPanel.setBackground(new Color(0,0,0,0));
+        buttonsPanel.setBackground(new Color(0, 0, 0, 0));
         constraints.gridy = 0;
         constraints.gridx = 0;
         constraints.anchor = GridBagConstraints.WEST;
@@ -44,8 +44,8 @@ public class ViewTrucksPanel extends AbstractTransportModulePanel {
 
         JButton removeButton = new JButton();
         removeButton.setPreferredSize(new Dimension(30, 30));
-        removeButton.setBorder(new EmptyBorder(0,0,0,0));
-        removeButton.setBackground(new Color(0,0,0,0));
+        removeButton.setBorder(new EmptyBorder(0, 0, 0, 0));
+        removeButton.setBackground(new Color(0, 0, 0, 0));
         buttonsPanel.add(removeButton);
         contentPanel.add(buttonsPanel, constraints);
 
@@ -53,42 +53,22 @@ public class ViewTrucksPanel extends AbstractTransportModulePanel {
         constraints.gridx = 0;
         constraints.gridy = 1;
 
-        truckList = new PrettyList(trucks,panel);
-        contentPanel.add(truckList.getComponent(),constraints);
+        truckList = new PrettyList(trucks, panel);
+        contentPanel.add(truckList.getComponent(), constraints);
 
-         //Set up the confirmation dialog on window close
-//        addWindowListener(new WindowAdapter() {
-//            @Override
-//            public void windowClosing(WindowEvent e) {
-//                showConfirmationDialog();
-//            }
-//        });
     }
-
-//    private void removeSelectedItems(int selectedIndex) {
-//            listModel.remove(selectedIndex);
-//
-//    }
-//
-//    private void showConfirmationDialog() {
-//        int[] selectedIndices = list.getSelectedIndices();
-//        if (selectedIndices.length > 0) {
-//            int choice = JOptionPane.showConfirmDialog(newOpenPanel, "Are you sure you want to remove the selected item?", "Confirmation", JOptionPane.YES_NO_OPTION);
-//            if (choice == JOptionPane.YES_OPTION) {
-//                removeSelectedItems(selectedIndices[0]);
-//                newOpenWindow.dispose();
-//                //newOpenWindow = null;
-//            }
-//        }
-//    }
 
     @Override
     public void componentResized(Dimension newSize) {
         super.componentResized(newSize);
-        Dimension contentPreferredSize = new Dimension((int) (panel.getWidth() * 0.8), (int) (panel.getHeight() * 0.6));
-        contentPanel.setPreferredSize(new Dimension(contentPreferredSize.width, contentPreferredSize.height + 250));
-        truckList.componentResized(scrollPane.getSize());
-        scrollPane.revalidate();
+
+        Dimension panelSize = panel.getPreferredSize();
+        Dimension contentPanelSize = new Dimension((int) (panelSize.width * 0.8), (int) (panelSize.height * 0.9));
+        contentPanel.setPreferredSize(contentPanelSize);
+
+        truckList.componentResized(new Dimension((int) (contentPanelSize.width*0.8), (int) (contentPanelSize.height*0.9)));
+
+        panel.revalidate();
     }
 
     @Override

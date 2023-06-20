@@ -65,7 +65,7 @@ public class UpdateTruckPanel extends AbstractTransportModulePanel {
         Dimension textFieldSize = new Dimension(220,30);
 
         //button
-        trucks = new SearchBox(trucksList,"Select Truck",textFieldSize, this);
+        trucks = new SearchBox(trucksList,"Select Truck",textFieldSize, panel);
         constraints.gridx = 1;
         constraints.gridy = 1;
         constraints.gridwidth = 2;
@@ -167,6 +167,17 @@ public class UpdateTruckPanel extends AbstractTransportModulePanel {
 //            truck.coolingCapacity = Truck.CoolingCapacity.FROZEN;
 //        }
 //        observers.forEach(observer -> observer.update(this, truck));
+    }
+
+    @Override
+    public void componentResized(Dimension newSize) {
+        super.componentResized(newSize);
+
+        Dimension panelSize = panel.getPreferredSize();
+        Dimension contentPanelSize = new Dimension((int) (panelSize.width * 0.8), (int) (panelSize.height * 0.9));
+        contentPanel.setPreferredSize(contentPanelSize);
+
+        panel.revalidate();
     }
 
     @Override

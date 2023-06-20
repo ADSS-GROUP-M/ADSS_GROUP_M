@@ -69,7 +69,16 @@ public class AddItemListPanel extends AbstractTransportModulePanel {
         
     }
 
-    
+    @Override
+    public void componentResized(Dimension newSize) {
+        super.componentResized(newSize);
+
+        Dimension panelSize = panel.getPreferredSize();
+        Dimension contentPanelSize = new Dimension((int) (panelSize.width * 0.8), (int) (panelSize.height * 0.9));
+        contentPanel.setPreferredSize(contentPanelSize);
+
+        panel.revalidate();
+    }
 
     @Override
     public void notify(ObservableModel observable) {

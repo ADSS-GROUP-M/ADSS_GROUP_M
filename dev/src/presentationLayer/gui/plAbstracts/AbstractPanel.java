@@ -8,6 +8,8 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.PopupMenuEvent;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -23,6 +25,13 @@ public abstract class AbstractPanel implements Panel {
         panel.paintComponents(panel.getGraphics());
         panel.setBorder(new EmptyBorder(0,0,0,0));
         observers = new HashSet<>();
+        panel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                panel.requestFocus();
+                SwingUtilities.invokeLater(panel::repaint);
+            }
+        });
     }
 
     public void add(Component component){
@@ -32,7 +41,6 @@ public abstract class AbstractPanel implements Panel {
     public abstract Component getComponent();
     public void componentResized(Dimension newSize) {
         panel.setPreferredSize(new Dimension((int)(newSize.width*0.8)-20,newSize.height-40));
-        panel.revalidate();
     }
 
     @Override

@@ -118,7 +118,7 @@ public class AddTransportPanel extends AbstractTransportModulePanel {
 
 
         List<Searchable> searchableList = List.of(new SearchableString("item1"), new SearchableString("item2"), new SearchableString("item3"));
-        SearchBox drivers = new SearchBox(searchableList,"Select Driver",textFieldSize, this);
+        SearchBox drivers = new SearchBox(searchableList,"Select Driver",textFieldSize, panel);
         constraints.gridx = 1;
         constraints.gridy = 3;
         constraints.gridwidth = 2;
@@ -134,7 +134,7 @@ public class AddTransportPanel extends AbstractTransportModulePanel {
         constraints.insets = new Insets(5, 5, 5, 5);
         contentPanel.add(trucksLabel, constraints);
 
-        SearchBox trucks = new SearchBox(searchableList,"Select Truck",textFieldSize, this);
+        SearchBox trucks = new SearchBox(searchableList,"Select Truck",textFieldSize, panel);
         constraints.gridx = 1;
         constraints.gridy = 4;
         constraints.gridwidth = 2;
@@ -184,10 +184,11 @@ public class AddTransportPanel extends AbstractTransportModulePanel {
     @Override
     public void componentResized(Dimension newSize) {
         super.componentResized(newSize);
-        Dimension preferredSize = new Dimension((int) (panel.getWidth() * 0.8), (int) (panel.getHeight()*0.9));
-        contentPanel.setPreferredSize(preferredSize);
-//        panel.setPreferredSize(new Dimension(preferredSize.width, preferredSize.height*2));
-        scrollPane.revalidate();
+        Dimension panelSize = panel.getPreferredSize();
+        Dimension contentPanelSize = new Dimension((int) (panelSize.width * 0.8), (int) (panelSize.height * 0.9));
+        contentPanel.setPreferredSize(contentPanelSize);
+
+        panel.revalidate();
     }
 
     

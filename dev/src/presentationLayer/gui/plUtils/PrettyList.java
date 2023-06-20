@@ -64,14 +64,17 @@ public class PrettyList implements UIElement {
         listPanel.getHorizontalScrollBar().setUnitIncrement(30);
         listPanel.getVerticalScrollBar().setBackground(new Color(0,0,0,0));
 
-
         list.setCellRenderer(new DefaultListCellRenderer() {
 
             @Override
             public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
                 Component r = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 
-                r.setPreferredSize(new Dimension(value.toString().length()*8,100));
+//                r.setPreferredSize(new Dimension(value.toString().length()*8,100));
+
+                int w = SwingUtilities.computeStringWidth(getFontMetrics(Fonts.textBoxFont), value.toString());
+//                FontMetrics fm = ;
+                r.setPreferredSize(new Dimension(w,100));
 
                 if(isSelected) {
                     setBackground(new Color(200,200,200,128));
@@ -119,8 +122,6 @@ public class PrettyList implements UIElement {
 
     @Override
     public void componentResized(Dimension newSize) {
-        Dimension preferredSize = new Dimension((int) (newSize.getWidth() * 0.6), (int) (newSize.getHeight() * 0.8));
-        listPanel.setPreferredSize(preferredSize);
-        listPanel.revalidate();
+        listPanel.setPreferredSize(newSize);
     }
 }

@@ -1,10 +1,14 @@
 package presentationLayer.gui.employeeModule.view.panels.shifts;
 
 
+import businessLayer.employeeModule.Role;
 import presentationLayer.gui.employeeModule.controller.ShiftsControl;
+import presentationLayer.gui.employeeModule.view.HRManagerView;
 import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
+import presentationLayer.gui.plAbstracts.PanelManager;
 import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
 import presentationLayer.gui.plUtils.Colors;
+import serviceLayer.employeeModule.Objects.SEmployee;
 import serviceLayer.employeeModule.Objects.SShift;
 
 import javax.swing.*;
@@ -14,18 +18,23 @@ import java.awt.*;
 import java.awt.event.*;
 import java.text.DateFormatSymbols;
 import java.time.LocalDate;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+import java.util.*;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class ViewShiftsPanel extends AbstractTransportModulePanel {
+    HRManagerView hrManagerView;
     JPanel newOpenPanel = new JPanel();
     JFrame newOpenWindow;
     JTable calendarTable;
     JLabel monthLabel;
     Calendar calendar;
+    JRadioButton morningRadioButton, eveningRadioButton;
+    ButtonGroup buttonGroup;
 
-    public ViewShiftsPanel(ShiftsControl control) {
+    public ViewShiftsPanel(ShiftsControl control, HRManagerView hrManagerView) {
         super(control);
+        this.hrManagerView = hrManagerView;
         init();
     }
 
@@ -178,6 +187,10 @@ public class ViewShiftsPanel extends AbstractTransportModulePanel {
 
                     // Get the day value from the selected cell
                     int day = (int)calendarTable.getValueAt(row, col);
+                    if (newOpenWindow != null) {
+                        newOpenWindow.dispose();
+                        newOpenWindow = null;
+                    }
                     openNewWindow(((ShiftsControl)control).getShifts(LocalDate.of(calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH) + 1, day)));
                 }
             }
@@ -310,7 +323,7 @@ public class ViewShiftsPanel extends AbstractTransportModulePanel {
 
     private void openNewWindow(Object dayShifts) {
         newOpenWindow = new JFrame();
-        newOpenWindow.setSize(800, 650);
+        newOpenWindow.setSize(900, 950);
         newOpenWindow.setLocationRelativeTo(contentPanel);
         newOpenWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
@@ -320,25 +333,258 @@ public class ViewShiftsPanel extends AbstractTransportModulePanel {
         newOpenPanel.setLayout(null);
 
         if (dayShifts instanceof SShift[] shifts){
-            JTextArea morningShiftTextArea = new JTextArea("Morning Shift: \n" + (shifts[0] != null ? shifts[0].toString() : "-"));
-            JTextArea eveningShiftTextArea = new JTextArea("Evening Shift: \n" + (shifts[1] != null ? shifts[1].toString() : "-"));
-            JRadioButton morningRadioButton = new JRadioButton("Morning");
-            JRadioButton eveningRadioButton = new JRadioButton("Evening");
-            ButtonGroup buttonGroup = new ButtonGroup();
+            GridLayout g = new GridLayout(0,2);
+            g.setHgap(-300);
+            JPanel morningShiftPanel = new JPanel(g);
+            morningShiftPanel.setBackground(new Color(255,255,255));
+
+            JPanel eveningShiftPanel = new JPanel(g);
+            eveningShiftPanel.setBackground(new Color(255,255,255));
+
+            JScrollPane morningShiftScrollPane = new JScrollPane(morningShiftPanel);
+            morningShiftScrollPane.setBounds(50, 50, 800, 350);
+            morningShiftScrollPane.getVerticalScrollBar().setUnitIncrement(20);
+            morningShiftScrollPane.getVerticalScrollBar().setBlockIncrement(100);
+            JScrollPane eveningShiftScrollPane = new JScrollPane(eveningShiftPanel);
+            eveningShiftScrollPane.setBounds(50, 450, 800, 350);
+            eveningShiftScrollPane.getVerticalScrollBar().setUnitIncrement(20);
+            eveningShiftScrollPane.getVerticalScrollBar().setBlockIncrement(100);
+
+            JLabel morningShiftLabel = new JLabel("Morning Shift:");
+            JLabel eveningShiftLabel = new JLabel("Evening Shift:");
+            morningShiftLabel.setFont(new Font("Arial", Font.BOLD, 20));
+            morningShiftLabel.setForeground(Colors.getForegroundColor());
+            morningShiftLabel.setBounds(50, 50, 800, 50);
+
+            morningRadioButton = new JRadioButton("Morning");
+            if (shifts[0] != null) {
+                // Shift date and type
+                JLabel shiftDateTypeLabel = new JLabel("ShiftDate,Type:");
+                shiftDateTypeLabel.setFont(new Font("Arial", Font.BOLD, 20));
+                shiftDateTypeLabel.setForeground(Colors.getForegroundColor());
+                morningShiftPanel.add(shiftDateTypeLabel);
+
+                JLabel shiftDateTypeDescription = new JLabel(shifts[0].getShiftDate().toString() + " " + shifts[0].getShiftType());
+                shiftDateTypeDescription.setFont(new Font("Arial", Font.BOLD, 20));
+                shiftDateTypeDescription.setForeground(Colors.getForegroundColor());
+                morningShiftPanel.add(shiftDateTypeDescription);
+
+                // Needed Roles
+
+                JLabel neededRolesLabel = new JLabel("Needed Roles:");
+                neededRolesLabel.setFont(new Font("Arial", Font.BOLD, 20));
+                neededRolesLabel.setForeground(Colors.getForegroundColor());
+                morningShiftPanel.add(neededRolesLabel);
+
+                DefaultListModel<String> neededRolesListModel = new DefaultListModel<>();
+                for(Map.Entry<String,Integer> neededRole : shifts[0].getNeededRoles().entrySet()) {
+                    neededRolesListModel.addElement(neededRole.getKey() + ": " + neededRole.getValue().toString());
+                }
+                JList<String> neededRolesList = new JList<String>(neededRolesListModel);
+                morningShiftPanel.add(neededRolesList);
+
+                // Shift Requests
+
+                JLabel requestsLabel = new JLabel("Requests:");
+                requestsLabel.setFont(new Font("Arial", Font.BOLD, 20));
+                requestsLabel.setForeground(Colors.getForegroundColor());
+                morningShiftPanel.add(requestsLabel);
+
+                JPanel requestsPanel = new JPanel(new GridLayout(0,2));
+                for (Role role : Role.values()) {
+                    JLabel roleLabel = new JLabel(role.toString());
+                    DefaultListModel<String> requestsInRoleListModel = new DefaultListModel<>();
+                    if (shifts[0].getShiftRequestsEmployees(role.toString()) != null) {
+                        requestsPanel.add(roleLabel);
+                        for (SEmployee employee : shifts[0].getShiftRequestsEmployees(role.toString())) {
+                            requestsInRoleListModel.addElement(employee.getId());
+                        }
+                        JList<String> neededInRole = new JList<String>(requestsInRoleListModel);
+                        requestsPanel.add(neededInRole);
+                    }
+                }
+                morningShiftPanel.add(requestsPanel);
+
+                // Shift Workers
+
+                JLabel workersLabel = new JLabel("Workers:");
+                workersLabel.setFont(new Font("Arial", Font.BOLD, 20));
+                workersLabel.setForeground(Colors.getForegroundColor());
+                morningShiftPanel.add(workersLabel);
+
+                JPanel workersPanel = new JPanel(new GridLayout(0,2));
+                for (Role role : Role.values()) {
+                    JLabel roleLabel = new JLabel(role.toString());
+                    DefaultListModel<String> requestsInRoleListModel = new DefaultListModel<>();
+                    if (shifts[0].getShiftRequestsEmployees(role.toString()) != null) {
+                        workersPanel.add(roleLabel);
+                        for (SEmployee employee : shifts[0].getShiftWorkersEmployees(role.toString())) {
+                            requestsInRoleListModel.addElement(employee.getId());
+                        }
+                        JList<String> neededInRole = new JList<String>(requestsInRoleListModel);
+                        workersPanel.add(neededInRole);
+                    }
+                }
+                morningShiftPanel.add(workersPanel);
+
+                // Cancel Card Applies
+                JLabel cancelCardAppliesLabel = new JLabel("Cancel Card Applies:");
+                cancelCardAppliesLabel.setFont(new Font("Arial", Font.BOLD, 20));
+                cancelCardAppliesLabel.setForeground(Colors.getForegroundColor());
+                morningShiftPanel.add(cancelCardAppliesLabel);
+
+                DefaultListModel<String> cancelCardAppliesListModel = new DefaultListModel<>();
+                for(String cancelCartApply : shifts[0].getCancelCardApplies()) {
+                    cancelCardAppliesListModel.addElement(cancelCartApply);
+                }
+                JList<String> cancelCartAppliesList = new JList<String>(cancelCardAppliesListModel);
+                morningShiftPanel.add(cancelCartAppliesList);
+
+                // Shift Activities
+
+                JLabel shiftActivitiesLabel = new JLabel("Shift Activities:");
+                shiftActivitiesLabel.setFont(new Font("Arial", Font.BOLD, 20));
+                shiftActivitiesLabel.setForeground(Colors.getForegroundColor());
+                morningShiftPanel.add(shiftActivitiesLabel);
+
+                DefaultListModel<String> shiftActivitiesListModel = new DefaultListModel<>();
+                for(String shiftActivity : shifts[0].getShiftActivities()) {
+                    shiftActivitiesListModel.addElement(shiftActivity);
+                }
+                JList<String> shiftActivitiesList = new JList<String>(shiftActivitiesListModel);
+                morningShiftPanel.add(shiftActivitiesList);
+
+                // Is Approved
+                JLabel approvedLabel = new JLabel("Approved:");
+                approvedLabel.setFont(new Font("Arial", Font.BOLD, 20));
+                approvedLabel.setForeground(Colors.getForegroundColor());
+                morningShiftPanel.add(approvedLabel);
+
+                JLabel approvedDescription = new JLabel(String.valueOf(shifts[0].isApproved()));
+                approvedDescription.setFont(new Font("Arial", Font.BOLD, 20));
+                approvedDescription.setForeground(Colors.getForegroundColor());
+                morningShiftPanel.add(approvedDescription);
+            }
+            if (shifts[1] != null) {
+                // Shift date and type
+                JLabel shiftDateTypeLabel = new JLabel("ShiftDate,Type:");
+                shiftDateTypeLabel.setFont(new Font("Arial", Font.BOLD, 20));
+                shiftDateTypeLabel.setForeground(Colors.getForegroundColor());
+                eveningShiftPanel.add(shiftDateTypeLabel);
+
+                JLabel shiftDateTypeDescription = new JLabel(shifts[1].getShiftDate().toString() + " " + shifts[1].getShiftType());
+                shiftDateTypeDescription.setFont(new Font("Arial", Font.BOLD, 20));
+                shiftDateTypeDescription.setForeground(Colors.getForegroundColor());
+                eveningShiftPanel.add(shiftDateTypeDescription);
+
+                // Needed Roles
+
+                JLabel neededRolesLabel = new JLabel("Needed Roles:");
+                neededRolesLabel.setFont(new Font("Arial", Font.BOLD, 20));
+                neededRolesLabel.setForeground(Colors.getForegroundColor());
+                eveningShiftPanel.add(neededRolesLabel);
+
+                DefaultListModel<String> neededRolesListModel = new DefaultListModel<>();
+                for(Map.Entry<String,Integer> neededRole : shifts[1].getNeededRoles().entrySet()) {
+                    neededRolesListModel.addElement(neededRole.getKey() + ": " + neededRole.getValue().toString());
+                }
+                JList<String> neededRolesList = new JList<String>(neededRolesListModel);
+                eveningShiftPanel.add(neededRolesList);
+
+                // Shift Requests
+
+                JLabel requestsLabel = new JLabel("Requests:");
+                requestsLabel.setFont(new Font("Arial", Font.BOLD, 20));
+                requestsLabel.setForeground(Colors.getForegroundColor());
+                eveningShiftPanel.add(requestsLabel);
+
+                JPanel requestsPanel = new JPanel(new GridLayout(0,2));
+                for (Role role : Role.values()) {
+                    JLabel roleLabel = new JLabel(role.toString());
+                    DefaultListModel<String> requestsInRoleListModel = new DefaultListModel<>();
+                    if (shifts[1].getShiftRequestsEmployees(role.toString()) != null) {
+                        requestsPanel.add(roleLabel);
+                        for (SEmployee employee : shifts[1].getShiftRequestsEmployees(role.toString())) {
+                            requestsInRoleListModel.addElement(employee.getId());
+                        }
+                        JList<String> neededInRole = new JList<String>(requestsInRoleListModel);
+                        requestsPanel.add(neededInRole);
+                    }
+                }
+                eveningShiftPanel.add(requestsPanel);
+
+                // Shift Workers
+
+                JLabel workersLabel = new JLabel("Workers:");
+                workersLabel.setFont(new Font("Arial", Font.BOLD, 20));
+                workersLabel.setForeground(Colors.getForegroundColor());
+                eveningShiftPanel.add(workersLabel);
+
+                JPanel workersPanel = new JPanel(new GridLayout(0,2));
+                for (Role role : Role.values()) {
+                    JLabel roleLabel = new JLabel(role.toString());
+                    DefaultListModel<String> requestsInRoleListModel = new DefaultListModel<>();
+                    if (shifts[1].getShiftRequestsEmployees(role.toString()) != null) {
+                        workersPanel.add(roleLabel);
+                        for (SEmployee employee : shifts[1].getShiftWorkersEmployees(role.toString())) {
+                            requestsInRoleListModel.addElement(employee.getId());
+                        }
+                        JList<String> neededInRole = new JList<String>(requestsInRoleListModel);
+                        workersPanel.add(neededInRole);
+                    }
+                }
+                eveningShiftPanel.add(workersPanel);
+
+                // Cancel Card Applies
+                JLabel cancelCardAppliesLabel = new JLabel("Cancel Card Applies:");
+                cancelCardAppliesLabel.setFont(new Font("Arial", Font.BOLD, 20));
+                cancelCardAppliesLabel.setForeground(Colors.getForegroundColor());
+                eveningShiftPanel.add(cancelCardAppliesLabel);
+
+                DefaultListModel<String> cancelCardAppliesListModel = new DefaultListModel<>();
+                for(String cancelCartApply : shifts[1].getCancelCardApplies()) {
+                    cancelCardAppliesListModel.addElement(cancelCartApply);
+                }
+                JList<String> cancelCartAppliesList = new JList<String>(cancelCardAppliesListModel);
+                eveningShiftPanel.add(cancelCartAppliesList);
+
+                // Shift Activities
+
+                JLabel shiftActivitiesLabel = new JLabel("Shift Activities:");
+                shiftActivitiesLabel.setFont(new Font("Arial", Font.BOLD, 20));
+                shiftActivitiesLabel.setForeground(Colors.getForegroundColor());
+                eveningShiftPanel.add(shiftActivitiesLabel);
+
+                DefaultListModel<String> shiftActivitiesListModel = new DefaultListModel<>();
+                for(String shiftActivity : shifts[1].getShiftActivities()) {
+                    shiftActivitiesListModel.addElement(shiftActivity);
+                }
+                JList<String> shiftActivitiesList = new JList<String>(shiftActivitiesListModel);
+                eveningShiftPanel.add(shiftActivitiesList);
+
+                // Is Approved
+                JLabel approvedLabel = new JLabel("Approved:");
+                approvedLabel.setFont(new Font("Arial", Font.BOLD, 20));
+                approvedLabel.setForeground(Colors.getForegroundColor());
+                eveningShiftPanel.add(approvedLabel);
+
+                JLabel approvedDescription = new JLabel(String.valueOf(shifts[1].isApproved()));
+                approvedDescription.setFont(new Font("Arial", Font.BOLD, 20));
+                approvedDescription.setForeground(Colors.getForegroundColor());
+                eveningShiftPanel.add(approvedDescription);
+            }
+            eveningRadioButton = new JRadioButton("Evening");
+            buttonGroup = new ButtonGroup();
             buttonGroup.add(morningRadioButton);
             buttonGroup.add(eveningRadioButton);
 
-            morningShiftTextArea.setFont(new Font("Arial", Font.BOLD, 20));
-            morningShiftTextArea.setForeground(Colors.getForegroundColor());
-            morningShiftTextArea.setBounds(50, 50, 800, 200);
-            morningShiftTextArea.setEditable(false);
-            morningRadioButton.setBounds(20,140,20,20);
+            morningRadioButton.setBounds(20,215,20,20);
 
-            eveningShiftTextArea.setFont(new Font("Arial", Font.BOLD, 20));
-            eveningShiftTextArea.setForeground(Colors.getForegroundColor());
-            eveningShiftTextArea.setBounds(50, 300, 800, 200);
-            eveningShiftTextArea.setEditable(false);
-            eveningRadioButton.setBounds(20,390,20,20);
+            eveningShiftLabel.setFont(new Font("Arial", Font.BOLD, 20));
+            eveningShiftLabel.setForeground(Colors.getForegroundColor());
+            eveningShiftLabel.setBounds(50, 450, 800, 350);
+
+            eveningRadioButton.setBounds(20,615,20,20);
 
             //newOpenWindow.add(label);
 
@@ -346,17 +592,21 @@ public class ViewShiftsPanel extends AbstractTransportModulePanel {
             //JPanel buttonPanel = new JPanel();
             JButton deleteButton = new JButton("Delete");
             deleteButton.setPreferredSize(new Dimension(100, 30));
-            deleteButton.setBounds(550, 550, 100, 30);
+            deleteButton.setBounds(550, 850, 100, 30);
             JButton updateButton = new JButton("Update");
             updateButton.setPreferredSize(new Dimension(100, 30));
-            updateButton.setBounds(100, 550, 100, 30);
+            updateButton.setBounds(100, 850, 100, 30);
 
-            newOpenPanel.add(morningShiftTextArea);
-            newOpenPanel.add(eveningShiftTextArea);
+            newOpenPanel.add(morningShiftScrollPane);
+            newOpenPanel.add(eveningShiftScrollPane);
             newOpenPanel.add(morningRadioButton);
             newOpenPanel.add(eveningRadioButton);
             newOpenPanel.add(deleteButton);
             newOpenPanel.add(updateButton);
+            newOpenPanel.revalidate();
+            newOpenPanel.repaint();
+            contentPanel.revalidate();
+            contentPanel.repaint();
 
             deleteButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
@@ -373,7 +623,7 @@ public class ViewShiftsPanel extends AbstractTransportModulePanel {
             updateButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     // TODO: Open the update window
-
+                    updateButtonClicked(shifts);
                 }
             });
             //GridBagConstraints constraints = new GridBagConstraints();
@@ -396,8 +646,77 @@ public class ViewShiftsPanel extends AbstractTransportModulePanel {
             newOpenWindow.add(errorTextArea);
         }
         newOpenWindow.add(newOpenPanel);
-
+        newOpenWindow.revalidate();
+        newOpenWindow.repaint();
+        newOpenWindow.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                int month = calendar.get(Calendar.MONTH);
+                hrManagerView.setCurrentPanel(new CreateShiftsPanel((ShiftsControl) control));
+                hrManagerView.setCurrentPanel(new ViewShiftsPanel((ShiftsControl) control, hrManagerView));
+                calendar.set(Calendar.MONTH, month);
+            }
+        });
         newOpenWindow.setVisible(true);
+    }
+
+    private void updateButtonClicked(SShift[] shifts) {
+        String[] updateOptions = {"Needed Roles", "Shift Workers", "Approve"};
+        String selectedOption = (String) JOptionPane.showInputDialog(contentPanel, "Select Update Option:", "Update Selection", JOptionPane.PLAIN_MESSAGE, null, updateOptions, updateOptions[0]);
+        if (selectedOption == null) {
+            JOptionPane.showMessageDialog(null, "Invalid Update Option", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        else if (selectedOption.equals("Needed Roles")) {
+            if (morningRadioButton.isSelected()) {
+                // Create an array of button text
+                String[] buttonText = { "Modify", "Add", "Remove" };
+
+                // Set the custom button text
+                UIManager.put("OptionPane.yesButtonText", buttonText[0]);
+                UIManager.put("OptionPane.noButtonText", buttonText[1]);
+                UIManager.put("OptionPane.cancelButtonText", buttonText[2]);
+                // Show the option pane with custom button text
+                int choice = JOptionPane.showConfirmDialog(null, "Do you want to proceed?", "Confirmation", JOptionPane.YES_NO_CANCEL_OPTION);
+                UIManager.put("OptionPane.yesButtonText", null);
+                UIManager.put("OptionPane.noButtonText", null);
+                UIManager.put("OptionPane.cancelButtonText", null);
+                // Get the selected button index
+                if (choice == JOptionPane.YES_OPTION) { // Modify
+                    Map<String, Integer> neededRoles = shifts[0].getNeededRoles();
+                    List<String> neededRolesList = neededRoles.entrySet().stream().map(x -> x.getKey()).collect(Collectors.toList());
+                    String neededRoleSelection = (String) JOptionPane.showInputDialog(contentPanel, "Select Needed Role:", "Update Selection", JOptionPane.PLAIN_MESSAGE, null, neededRolesList.toArray(), neededRolesList.toArray()[0]);
+                    int numberSelection = Integer.parseInt((String)JOptionPane.showInputDialog(contentPanel, "Select Needed Amount:"));
+                    String result = ((ShiftsControl)control).setShiftNeededAmount(shifts[0].getShiftDate(), shifts[0].getShiftType(),neededRoleSelection, numberSelection);
+                    JOptionPane.showMessageDialog(contentPanel, result);
+                    int month = calendar.get(Calendar.MONTH);
+                    hrManagerView.setCurrentPanel(new CreateShiftsPanel((ShiftsControl)control));
+                    hrManagerView.setCurrentPanel(new ViewShiftsPanel((ShiftsControl)control,hrManagerView));
+                    calendar.set(Calendar.MONTH,month);
+                } else if (choice == JOptionPane.NO_OPTION) { // Add
+
+                } else if (choice == JOptionPane.CANCEL_OPTION || choice == JOptionPane.CLOSED_OPTION) { // Remove
+
+                }
+
+
+
+
+
+
+                // Modify / Add / Remove
+
+            } else if (eveningRadioButton.isSelected()) {
+                // TODO: implement
+            } else {
+                JOptionPane.showMessageDialog(null,"Please choose one of the shifts.");
+            }
+        }
+        else if (selectedOption.equals("Shift Workers")) {
+
+        }
+        else if (selectedOption.equals("Approve")) {
+
+        }
     }
 
     @Override

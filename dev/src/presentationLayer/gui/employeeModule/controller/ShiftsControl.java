@@ -11,6 +11,7 @@ import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
 import presentationLayer.gui.plAbstracts.interfaces.ObservableUIElement;
 import presentationLayer.gui.transportModule.model.ObservableTruck;
 import serviceLayer.employeeModule.Objects.SShift;
+import serviceLayer.employeeModule.Objects.SShiftType;
 import serviceLayer.employeeModule.Services.EmployeesService;
 import serviceLayer.employeeModule.Services.UserService;
 import serviceLayer.transportModule.ResourceManagementService;
@@ -79,4 +80,15 @@ public class ShiftsControl extends AbstractControl {
         }
         return null;
     }
+
+    public String setShiftNeededAmount(LocalDate shiftDate, SShiftType shiftType, String role, int amount) {
+        String json = employeesService.setShiftNeededAmount(UserService.HR_MANAGER_USERNAME, Branch.HEADQUARTERS_ID, shiftDate, shiftType, role, amount);
+        try {
+            Response response = Response.fromJsonWithValidation(json); // Throws an exception if an error has occurred.
+        } catch (ErrorOccurredException e) {
+            return e.getMessage();
+        }
+        return "Updated the role needed amount successfully.";
+    }
+
 }

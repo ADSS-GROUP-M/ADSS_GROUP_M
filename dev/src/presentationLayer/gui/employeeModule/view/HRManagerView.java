@@ -52,7 +52,7 @@ public class HRManagerView extends MainWindow {
                 )
                 .addCategory("Shifts Management",
                         new Link("View Shifts",
-                                () -> setCurrentPanel(new ViewShiftsPanel(shiftsControl))), // + Update Shifts, Approve Shifts, Delete Shifts
+                                () -> setCurrentPanel(new ViewShiftsPanel(shiftsControl, this))), // + Update Shifts, Approve Shifts, Delete Shifts
                         new Link("Create Shifts",
                                 () -> setCurrentPanel(new CreateShiftsPanel(shiftsControl)))
                 )
@@ -62,7 +62,7 @@ public class HRManagerView extends MainWindow {
                 );
     }
 
-    private void setCurrentPanel(Panel panel) {
+    public void setCurrentPanel(Panel panel) {
         panelManager.setPanel(panel);
         currentPanel = panel;
         currentPanel.componentResized(super.container.getSize());

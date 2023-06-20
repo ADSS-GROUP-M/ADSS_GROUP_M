@@ -335,16 +335,16 @@ public class ViewShiftsPanel extends AbstractTransportModulePanel {
             JButton deleteButton = new JButton("Delete");
             deleteButton.setPreferredSize(new Dimension(100, 30));
             deleteButton.setBounds(550, 550, 100, 30);
-            JButton editButton = new JButton("Edit");
-            editButton.setPreferredSize(new Dimension(100, 30));
-            editButton.setBounds(100, 550, 100, 30);
+            JButton updateButton = new JButton("Update");
+            updateButton.setPreferredSize(new Dimension(100, 30));
+            updateButton.setBounds(100, 550, 100, 30);
 
             newOpenPanel.add(morningShiftTextArea);
             newOpenPanel.add(eveningShiftTextArea);
             newOpenPanel.add(morningRadioButton);
             newOpenPanel.add(eveningRadioButton);
             newOpenPanel.add(deleteButton);
-            newOpenPanel.add(editButton);
+            newOpenPanel.add(updateButton);
 
             deleteButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
@@ -358,9 +358,9 @@ public class ViewShiftsPanel extends AbstractTransportModulePanel {
                 }
             });
 
-            editButton.addActionListener(new ActionListener() {
+            updateButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    // TODO: Open the edit window
+                    // TODO: Open the update window
 
                 }
             });
@@ -394,7 +394,6 @@ public class ViewShiftsPanel extends AbstractTransportModulePanel {
         Dimension contentPreferredSize = new Dimension((int) (panel.getWidth() * 0.8), (int) (panel.getHeight() * 0.6));
         Dimension contentPanelSize = new Dimension(contentPreferredSize.width, contentPreferredSize.height + 250);
         contentPanel.setPreferredSize(contentPanelSize);
-        //calendarTable.setPreferredSize(new Dimension((int) (contentPanelSize.width*0.8), (int) (- 50 + 2 *contentPanelSize.height/3.0)));
         scrollPane.revalidate();
     }
 

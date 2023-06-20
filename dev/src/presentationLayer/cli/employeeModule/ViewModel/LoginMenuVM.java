@@ -31,4 +31,8 @@ public class LoginMenuVM {
     public ServiceFactory serviceFactory() {
         return backendController.serviceFactory();
     }
+
+    public BackendController backendController() {
+        return backendController;
+    }
 }

@@ -270,11 +270,11 @@ public class SearchBox implements UIElement {
             @Override
             public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
                 Component renderer = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-                setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
+                setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
 
 
                 int w = SwingUtilities.computeStringWidth(getFontMetrics(getFont()), value.toString());
-                renderer.setPreferredSize(new Dimension(w, 50));
+                renderer.setPreferredSize(new Dimension(value.toString().length()*8, 50));
 
                 setBackground(Color.WHITE);
                 if(isSelected) {

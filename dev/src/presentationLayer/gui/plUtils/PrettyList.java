@@ -1,5 +1,6 @@
 package presentationLayer.gui.plUtils;
 
+import javafx.util.Pair;
 import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
 import presentationLayer.gui.plAbstracts.interfaces.Searchable;
 import presentationLayer.gui.plAbstracts.interfaces.UIElement;
@@ -70,14 +71,14 @@ public class PrettyList implements UIElement {
             public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
                 Component r = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 
-                int w = SwingUtilities.computeStringWidth(getFontMetrics(Fonts.textBoxFont), value.toString());
-                r.setPreferredSize(new Dimension(w,100));
+                setFont(Fonts.textBoxFont);
+
+//                int w = SwingUtilities.computeStringWidth(getFontMetrics(getFont()), value.toString());
+                r.setPreferredSize(new Dimension(value.toString().length()*8,50));
 
                 if(isSelected) {
                     setBackground(new Color(200,200,200,128));
                 }
-
-                setFont(Fonts.textBoxFont);
 
                 setBorder(new Border() {
                     @Override

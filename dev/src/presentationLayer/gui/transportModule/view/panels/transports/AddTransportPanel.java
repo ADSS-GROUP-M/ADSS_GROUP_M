@@ -1,17 +1,21 @@
 package presentationLayer.gui.transportModule.view.panels.transports;
 
+import javafx.util.Pair;
 import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
 import presentationLayer.gui.plAbstracts.interfaces.ModelObserver;
 import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
 import presentationLayer.gui.plAbstracts.interfaces.Searchable;
 import presentationLayer.gui.plUtils.*;
 import presentationLayer.gui.transportModule.control.*;
+import presentationLayer.gui.transportModule.model.ObservableSite;
 import presentationLayer.gui.transportModule.model.ObservableTransport;
+import java.util.List;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.LinkedList;
 
 import static presentationLayer.gui.plUtils.SearchBox.DescriptionType.*;
 
@@ -20,6 +24,8 @@ public class AddTransportPanel extends AbstractTransportModulePanel {
     private final DriversControl driversControl;
     private final TrucksControl trucksControl;
     private PrettyList destinationsList;
+
+    private List<Pair<String,Integer>> destinations_itemLists;
     public AddTransportPanel(TransportsControl control,
                              SitesControl sitesControl,
                              DriversControl driversControl,
@@ -28,6 +34,7 @@ public class AddTransportPanel extends AbstractTransportModulePanel {
         this.sitesControl = sitesControl;
         this.driversControl = driversControl;
         this.trucksControl = trucksControl;
+        destinations_itemLists = new LinkedList<>();
         init();
     }
 
@@ -242,10 +249,47 @@ public class AddTransportPanel extends AbstractTransportModulePanel {
         //Submit button
         JButton submitButton = new JButton("Submit");
         constraints.gridx = 0;
-        constraints.gridy = 6;
-        constraints.gridwidth = 2;
+        constraints.gridy = 3;
+        constraints.gridwidth = 6;
         constraints.anchor = GridBagConstraints.CENTER;
-//        simpleComponentsPanel.add(submitButton, constraints);
+        contentPanel.add(submitButton, constraints);
+
+
+
+        addItemButton.addMouseListener(new MouseAdapter() {
+
+            DefaultListModel<Searchable> model = new DefaultListModel<>();
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                String selectedDestination = destinations.getSelected();
+                String selectedItemList = itemList.getText();
+
+                if((selectedDestination == null || selectedDestination.trim().equals("") || selectedDestination.trim().equals("Select Destination") || selectedDestination.trim().equals("No results found"))
+                        || (selectedItemList == null || selectedItemList.trim().equals(""))){
+                    return;
+                }
+
+                int itemListId;
+                try{
+                    itemListId = Integer.parseInt(selectedItemList);
+                } catch(NumberFormatException ex){
+                    return;
+                }
+
+                for(Searchable s : sitesList){
+                    if(s.getLongDescription().equals(selectedDestination)){
+                        ObservableSite site = (ObservableSite) s;
+
+                        model.addElement(new SearchableString("List id: %d | %s".formatted(itemListId,s.getLongDescription())));
+//                        model.addElement(s);
+                        destinationsList.getList().setModel(model);
+
+                        destinations_itemLists.add(new Pair<>(site.name, itemListId));
+                        break;
+                    }
+                }
+            }
+        });
 
 
         ModelObserver o = this;
@@ -271,7 +315,7 @@ public class AddTransportPanel extends AbstractTransportModulePanel {
         Dimension panelSize = panel.getPreferredSize();
         Dimension contentPanelSize = new Dimension((int) (panelSize.width * 0.8), (int) (panelSize.height * 0.9));
         contentPanel.setPreferredSize(contentPanelSize);
-        destinationsList.componentResized(new Dimension((int) (contentPanelSize.width*0.8), (int) (-75 + 2 *contentPanelSize.height/3.0)));
+        destinationsList.componentResized(new Dimension((int) (contentPanelSize.width*0.8), (int) (-150 + 2 *contentPanelSize.height/3.0)));
 
         panel.revalidate();
     }

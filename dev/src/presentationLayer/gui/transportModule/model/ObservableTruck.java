@@ -27,7 +27,7 @@ public class ObservableTruck extends AbstractObservableModel {
 
     @Override
     public String getShortDescription() {
-        return id;
+        return id + " - " + model;
     }
 
     @Override

@@ -22,6 +22,7 @@ import static presentationLayer.gui.plUtils.Fonts.textBoxFont;
 public class SearchBox implements UIElement {
 
     private final List<Searchable> data;
+    private final DescriptionType descriptionType;
     private final String defaultText;
     private final Dimension size;
     private final JComboBox<String> comboBox;
@@ -31,11 +32,17 @@ public class SearchBox implements UIElement {
     private String[] lastFilteredData;
     private String text;
 
-    public SearchBox(List<Searchable> data,String defaultText, Dimension size, Container repaintListener){
+    public enum DescriptionType{
+        SHORT,
+        LONG
+
+        }
+    public SearchBox(List<Searchable> data,String defaultText, Dimension size,DescriptionType descriptionType, Container repaintListener){
         this.size = size;
         this.data = data;
+        this.descriptionType = descriptionType;
         String[] dataStrings = data.stream()
-                .map(Searchable::getShortDescription)
+                .map(this::getDescription)
                 .toArray(String[]::new);
         comboBox = new JComboBox<>(dataStrings);
         lastFilteredData = dataStrings;
@@ -44,6 +51,10 @@ public class SearchBox implements UIElement {
         this.defaultText = "    "+defaultText;
         this.repaintListener = repaintListener;
         init();
+    }
+
+    public SearchBox(List<Searchable> data,String defaultText, Dimension size, Container repaintListener){
+        this(data,defaultText,size,DescriptionType.SHORT,repaintListener);
     }
 
     private void init(){
@@ -116,8 +127,6 @@ public class SearchBox implements UIElement {
                     public void mouseEntered(MouseEvent e) {
                         super.mouseEntered(e);
                         but.setBackground(new Color(200,200,200, 64));
-//                        comboBox.revalidate();
-//                        comboBox.repaint();
                         repaintListener.repaint();
                     }
 
@@ -155,7 +164,7 @@ public class SearchBox implements UIElement {
                     @Override
                     protected JScrollPane createScroller() {
                         list.setFont(textBoxFont);
-                        JScrollPane scroll = new JScrollPane(list, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+                        JScrollPane scroll = new JScrollPane(list);
                         scroll.setBackground(Color.WHITE);
                         scroll.setVerticalScrollBar(new PrettyScrollBar(50));
                         scroll.getVerticalScrollBar().setUnitIncrement(30);
@@ -261,7 +270,11 @@ public class SearchBox implements UIElement {
             @Override
             public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
                 Component renderer = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-                setBorder(BorderFactory.createEmptyBorder(10, 5, 10, 5));
+                setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
+
+
+                int w = SwingUtilities.computeStringWidth(getFontMetrics(getFont()), value.toString());
+                renderer.setPreferredSize(new Dimension(w, 50));
 
                 setBackground(Color.WHITE);
                 if(isSelected) {
@@ -273,7 +286,8 @@ public class SearchBox implements UIElement {
         comboBox.setBorder(new TextFieldBorder());
     }
 
-    private void setText(String newText) {
+    private void
+    setText(String newText) {
         comboBox.getEditor().setItem(newText);
         text = newText;
         if(newText.equals("")) {
@@ -295,7 +309,7 @@ public class SearchBox implements UIElement {
         }
         String[] filteredData = data.stream()
                 .filter(searchable -> searchable.isMatch(newText))
-                .map(Searchable::getShortDescription)
+                .map(this::getDescription)
                 .toArray(String[]::new);
 
         if(lastFilteredData != null && lastFilteredData.length == filteredData.length){
@@ -330,13 +344,20 @@ public class SearchBox implements UIElement {
 
     private void resetFilteredData() {
         lastFilteredData = data.stream()
-                .map(Searchable::getShortDescription)
+                .map(this::getDescription)
                 .toArray(String[]::new);
     }
 
     @Override
     public Component getComponent() {
         return comboBox;
+    }
+
+    private String getDescription(Searchable searchable){
+        return switch (descriptionType) {
+            case SHORT -> searchable.getShortDescription();
+            case LONG -> searchable.getLongDescription();
+        };
     }
 
     public void addItemListener(ItemListener listener){
@@ -355,6 +376,10 @@ public class SearchBox implements UIElement {
     @Override
     public void componentResized(Dimension newSize) {
         // do nothing
+    }
+
+    public void setSelected(String text){
+        setText(text);
     }
 }
 

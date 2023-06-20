@@ -170,7 +170,3 @@ public class UpdateSitePanel extends AbstractTransportModulePanel {
 }
 
 
-
-//////////////////////////////////
-//fix compare to show on view!!!!!!!!!!!!!
-//clear fields after submit

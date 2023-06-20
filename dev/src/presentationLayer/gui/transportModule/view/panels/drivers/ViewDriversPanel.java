@@ -16,12 +16,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.Comparator;
 
 import static com.sun.java.accessibility.util.AWTEventMonitor.addWindowListener;
 
 public class ViewDriversPanel extends AbstractTransportModulePanel {
 
     private PrettyList driverList;
+    private ObservableList emptyDriverList;
+    private ObservableList<Searchable> drivers;
 
     public ViewDriversPanel(DriversControl control) {
         super(control);
@@ -30,9 +33,16 @@ public class ViewDriversPanel extends AbstractTransportModulePanel {
 
     private void init() {
 
-        ObservableList emptyDriverList = new ObservableList<>();
-        control.getAll(this, emptyDriverList);
-        ObservableList<Searchable> drivers = emptyDriverList;
+
+        emptyDriverList = new ObservableList<>();
+        control.getAll(this,emptyDriverList);
+        drivers = emptyDriverList;
+        drivers.sort(new Comparator<Searchable>() {
+            @Override
+            public int compare(Searchable o1, Searchable o2) {
+                return o1.getShortDescription().compareTo(o2.getShortDescription());
+            }
+        });
 
 
         contentPanel.setLayout(new GridBagLayout());

@@ -1,45 +1,70 @@
 package presentationLayer.gui.transportModule.view.panels.transports;
 
-import domainObjects.transportModule.Truck;
 import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
 import presentationLayer.gui.plAbstracts.interfaces.ModelObserver;
 import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
 import presentationLayer.gui.plAbstracts.interfaces.Searchable;
-import presentationLayer.gui.plUtils.Fonts;
-import presentationLayer.gui.plUtils.PrettyTextField;
-import presentationLayer.gui.plUtils.SearchBox;
-import presentationLayer.gui.plUtils.SearchableString;
-import presentationLayer.gui.transportModule.control.TransportsControl;
+import presentationLayer.gui.plUtils.*;
+import presentationLayer.gui.transportModule.control.*;
 import presentationLayer.gui.transportModule.model.ObservableTransport;
-import presentationLayer.gui.transportModule.model.ObservableTruck;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.List;
+
+import static presentationLayer.gui.plUtils.SearchBox.DescriptionType.*;
 
 public class AddTransportPanel extends AbstractTransportModulePanel {
-    public AddTransportPanel(TransportsControl control) {
+    private final SitesControl sitesControl;
+    private final DriversControl driversControl;
+    private final TrucksControl trucksControl;
+    private PrettyList destinationsList;
+    public AddTransportPanel(TransportsControl control,
+                             SitesControl sitesControl,
+                             DriversControl driversControl,
+                             TrucksControl trucksControl){
         super(control);
+        this.sitesControl = sitesControl;
+        this.driversControl = driversControl;
+        this.trucksControl = trucksControl;
         init();
     }
 
+    @SuppressWarnings({"unchecked", "rawtypes"})
     private void init() {
-//        JLabel header = new JLabel("Enter transport details:\n");
-//        header.setVerticalAlignment(JLabel.TOP);
-//        contentPanel.add(header);
-        Dimension textFieldSize = new Dimension(200,30);
-
         contentPanel.setLayout(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
 
-        JLabel dateLabel = new JLabel("Departure Date:");
+
+        //Add the sites list to the screen
+        ObservableList emptySiteList = new ObservableList<>();
+        sitesControl.getAll(this,emptySiteList);
+        ObservableList<Searchable> sitesList = emptySiteList;
+
+        ObservableList emptyDriversList = new ObservableList<>();
+        driversControl.getAll(this,emptyDriversList);
+        ObservableList<Searchable> driversList = emptyDriversList;
+
+        ObservableList emptyTruckList = new ObservableList<>();
+        trucksControl.getAll(this,emptyTruckList);
+        ObservableList<Searchable> trucksList = emptyTruckList;
+
+
+        // ====================== SIMPLE COMPONENTS =============================
+
+        JPanel simpleComponentsPanel = new JPanel();
+        simpleComponentsPanel.setLayout(new GridBagLayout());
+        simpleComponentsPanel.setBackground(new Color(0,0,0,0));
+
+        Dimension textFieldSize = new Dimension(200,30);
+
+        JLabel dateLabel = new JLabel("Departure Date And Time:");
         constraints.gridx = 0;
-        constraints.gridy = 1;
+        constraints.gridy = 0;
+        constraints.insets = new Insets(0,0,0,10);
         constraints.anchor = GridBagConstraints.WEST;
-        constraints.insets = new Insets(5, 5, 5, 5);
-        contentPanel.add(dateLabel, constraints);
+        simpleComponentsPanel.add(dateLabel, constraints);
 
         // date text fields
         PrettyTextField year = new PrettyTextField(new Dimension(75,30), "YYYY");
@@ -64,22 +89,10 @@ public class AddTransportPanel extends AbstractTransportModulePanel {
         day.setHorizontalAlignment(JTextField.CENTER);
         day.setMaximumCharacters(2);
 
-        JPanel datePanel = new JPanel();
-        datePanel.add(year.getComponent());
-        datePanel.add(slash1);
-        datePanel.add(month.getComponent());
-        datePanel.add(slash2);
-        datePanel.add(day.getComponent());
-        constraints.gridx = 1;
-        constraints.gridy = 1;
-        constraints.fill = GridBagConstraints.HORIZONTAL;
-        contentPanel.add(datePanel, constraints);
-
-        // time text fields
-        JLabel timeLabel = new JLabel("Departure Time:");
-        constraints.gridx = 0;
-        constraints.gridy = 2;
-        contentPanel.add(timeLabel, constraints);
+        JLabel dateTimeSeparator = new JLabel("");
+        dateTimeSeparator.setHorizontalAlignment(JLabel.CENTER);
+        dateTimeSeparator.setPreferredSize(new Dimension(15,30));
+        dateTimeSeparator.setFont(Fonts.textBoxFont.deriveFont(20f));
 
         PrettyTextField hour = new PrettyTextField(new Dimension(35,30), "HH");
         hour.setHorizontalAlignment(JTextField.CENTER);
@@ -94,73 +107,146 @@ public class AddTransportPanel extends AbstractTransportModulePanel {
         minute.setHorizontalAlignment(JTextField.CENTER);
         minute.setMaximumCharacters(2);
 
-        JPanel timePanel = new JPanel();
-        timePanel.add(hour.getComponent());
-        timePanel.add(colon);
-        timePanel.add(minute.getComponent());
+        JPanel dateTimePanel = new JPanel();
+        dateTimePanel.setBackground(new Color(0,0,0,0));
+        dateTimePanel.add(year.getComponent());
+        dateTimePanel.add(slash1);
+        dateTimePanel.add(month.getComponent());
+        dateTimePanel.add(slash2);
+        dateTimePanel.add(day.getComponent());
+        dateTimePanel.add(dateTimeSeparator);
+        dateTimePanel.add(hour.getComponent());
+        dateTimePanel.add(colon);
+        dateTimePanel.add(minute.getComponent());
+
         constraints.gridx = 1;
-        constraints.gridy = 2;
-        constraints.fill = GridBagConstraints.HORIZONTAL;
-        contentPanel.add(timePanel, constraints);
-
-        JLabel driversLabel = new JLabel("Pick Driver:");
-        constraints.gridx = 0;
-        constraints.gridy = 3;
-        constraints.anchor = GridBagConstraints.WEST;
-        constraints.insets = new Insets(5, 5, 5, 5);
-        contentPanel.add(driversLabel, constraints);
-
-
-
-        //TODO: remove this example code and replace with real data
-
-
-        List<Searchable> searchableList = List.of(new SearchableString("item1"), new SearchableString("item2"), new SearchableString("item3"));
-        SearchBox drivers = new SearchBox(searchableList,"Select Driver",textFieldSize, panel);
-        constraints.gridx = 1;
-        constraints.gridy = 3;
-        constraints.gridwidth = 2;
-        constraints.fill = GridBagConstraints.NONE;
-        constraints.anchor = GridBagConstraints.CENTER;
-        contentPanel.add(drivers.getComponent(), constraints);
-
-
-        JLabel trucksLabel = new JLabel("Pick Truck:");
-        constraints.gridx = 0;
-        constraints.gridy = 4;
-        constraints.anchor = GridBagConstraints.WEST;
-        constraints.insets = new Insets(5, 5, 5, 5);
-        contentPanel.add(trucksLabel, constraints);
-
-        SearchBox trucks = new SearchBox(searchableList,"Select Truck",textFieldSize, panel);
-        constraints.gridx = 1;
-        constraints.gridy = 4;
-        constraints.gridwidth = 2;
-        constraints.fill = GridBagConstraints.NONE;
-        constraints.anchor = GridBagConstraints.CENTER;
-        contentPanel.add(trucks.getComponent(), constraints);
+        constraints.insets = new Insets(0,0,0,60);
+        simpleComponentsPanel.add(dateTimePanel, constraints);
 
         JLabel weightLabel = new JLabel("Truck Weight:");
-        constraints.anchor = GridBagConstraints.WEST;
-        constraints.gridwidth = 1;
         constraints.gridx = 0;
-        constraints.gridy = 5;
-        contentPanel.add(weightLabel, constraints);
+        constraints.gridy = 1;
+        simpleComponentsPanel.add(weightLabel, constraints);
 
         PrettyTextField weightField = new PrettyTextField(textFieldSize);
         constraints.gridx = 1;
-        constraints.gridy = 5;
-        constraints.fill = GridBagConstraints.HORIZONTAL;
-        contentPanel.add(weightField.getComponent(), constraints);
+        constraints.gridy = 1;
+        constraints.insets = new Insets(0,5,0,0);
+        simpleComponentsPanel.add(weightField.getComponent(), constraints);
+
+        JLabel driversLabel = new JLabel("Driver:");
+        constraints.gridx = 2;
+        constraints.gridy = 0;
+        constraints.anchor = GridBagConstraints.EAST;
+        constraints.insets = new Insets(0,0,0,10);
+        simpleComponentsPanel.add(driversLabel, constraints);
+
+        SearchBox driverSearchBox = new SearchBox(driversList,"Select Driver",textFieldSize,LONG, panel);
+        constraints.gridx = 3;
+        constraints.gridy = 0;
+        simpleComponentsPanel.add(driverSearchBox.getComponent(), constraints);
+
+        JLabel trucksLabel = new JLabel("Truck:");
+        constraints.gridx = 2;
+        constraints.gridy = 1;
+        simpleComponentsPanel.add(trucksLabel, constraints);
+
+        SearchBox truckSearchBox = new SearchBox(trucksList,"Select Truck",textFieldSize,LONG, panel);
+        constraints.gridx = 3;
+        constraints.gridy = 1;
+        simpleComponentsPanel.add(truckSearchBox.getComponent(), constraints);
+
+        // ================================= END OF SIMPLE COMPONENTS =================================
+
+
+        constraints = new GridBagConstraints();
+
+        JPanel complexComponentsPanel = new JPanel();
+        complexComponentsPanel.setLayout(new GridBagLayout());
+        complexComponentsPanel.setBackground(new Color(0,0,0,0));
+
+        JLabel destinationsLabel = new JLabel("Destination:");
+        constraints.gridx = 0;
+        constraints.gridy = 0;
+        constraints.insets = new Insets(0,0,0,0);
+        constraints.anchor = GridBagConstraints.WEST;
+
+        complexComponentsPanel.add(destinationsLabel, constraints);
+
+        Dimension boxFieldSize = new Dimension(700,30); //TODO: change this to a better size
+        SearchBox destinations = new SearchBox(sitesList,"Select Destination",boxFieldSize, LONG, panel);
+        constraints.gridx = 1;
+        constraints.gridy = 0;
+        constraints.gridwidth = 6;
+        constraints.insets = new Insets(0,10,0,0);
+        complexComponentsPanel.add(destinations.getComponent(), constraints);
+
+        constraints.gridwidth = 1;
+        JLabel itemListLabel = new JLabel("Item List:");
+        constraints.gridx = 0;
+        constraints.gridy = 1;
+        constraints.insets = new Insets(10,0,0,0);
+        constraints.anchor = GridBagConstraints.WEST;
+        complexComponentsPanel.add(itemListLabel, constraints);
+
+        PrettyTextField itemList = new PrettyTextField(new Dimension(100,30));
+        constraints.gridx = 1;
+        constraints.gridy = 1;
+        constraints.insets = new Insets(10,10,0,50);
+        complexComponentsPanel.add(itemList.getComponent(), constraints);
+
+        constraints.insets = new Insets(10,10,0,0);
+        JButton addItemButton = new JButton("Add");
+        constraints.gridx = 2;
+        constraints.gridy = 1;
+        complexComponentsPanel.add(addItemButton, constraints);
+
+        JButton removeItemButton = new JButton("Remove");
+        constraints.gridx = 3;
+        constraints.gridy = 1;
+        constraints.insets = new Insets(10,10,0,100);
+        complexComponentsPanel.add(removeItemButton, constraints);
+
+        constraints.insets = new Insets(10,10,0,0);
+        JButton moveUpButton = new JButton("Move Up");
+        constraints.gridx = 4;
+        constraints.gridy = 1;
+        complexComponentsPanel.add(moveUpButton, constraints);
+
+        JButton moveDownButton = new JButton("Move Down");
+        constraints.gridx = 5;
+        constraints.gridy = 1;
+        complexComponentsPanel.add(moveDownButton, constraints);
+
+        // ================================= END OF COMPLEX COMPONENTS =================================
+        constraints = new GridBagConstraints();
+        constraints.anchor = GridBagConstraints.NORTH;
+
+        constraints.gridx = 0;
+        constraints.gridy = 0;
+        constraints.insets = new Insets(25, 0, 25, 0);
+        contentPanel.add(simpleComponentsPanel,constraints);
+
+        constraints = new GridBagConstraints();
+        constraints.gridx = 0;
+        constraints.gridy = 1;
+        constraints.insets = new Insets(0, 0, 50, 0);
+        contentPanel.add(complexComponentsPanel,constraints);
+
+        this.destinationsList = new PrettyList(new ObservableList<>(),panel);
+        constraints.gridx = 0;
+        constraints.gridy = 2;
+        contentPanel.add(this.destinationsList.getComponent(),constraints);
+
 
         //Submit button
         JButton submitButton = new JButton("Submit");
         constraints.gridx = 0;
         constraints.gridy = 6;
         constraints.gridwidth = 2;
-        constraints.fill = GridBagConstraints.NONE;
-        constraints.anchor = GridBagConstraints.EAST;
-        contentPanel.add(submitButton, constraints);
+        constraints.anchor = GridBagConstraints.CENTER;
+//        simpleComponentsPanel.add(submitButton, constraints);
+
 
         ModelObserver o = this;
         submitButton.addMouseListener(new MouseAdapter() {
@@ -185,6 +271,7 @@ public class AddTransportPanel extends AbstractTransportModulePanel {
         Dimension panelSize = panel.getPreferredSize();
         Dimension contentPanelSize = new Dimension((int) (panelSize.width * 0.8), (int) (panelSize.height * 0.9));
         contentPanel.setPreferredSize(contentPanelSize);
+        destinationsList.componentResized(new Dimension((int) (contentPanelSize.width*0.8), (int) (-75 + 2 *contentPanelSize.height/3.0)));
 
         panel.revalidate();
     }

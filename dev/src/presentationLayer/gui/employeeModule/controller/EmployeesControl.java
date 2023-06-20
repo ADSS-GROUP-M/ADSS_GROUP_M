@@ -1,14 +1,13 @@
 package presentationLayer.gui.employeeModule.controller;
 
+import exceptions.ErrorOccurredException;
 import presentationLayer.gui.employeeModule.model.ObservableEmployee;
-import presentationLayer.gui.employeeModule.model.ObservableShift;
 import presentationLayer.gui.plAbstracts.AbstractControl;
 import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
 import presentationLayer.gui.plAbstracts.interfaces.ObservableUIElement;
 import serviceLayer.employeeModule.Services.EmployeesService;
-import serviceLayer.transportModule.ResourceManagementService;
-
-import java.util.List;
+import serviceLayer.employeeModule.Services.UserService;
+import utils.Response;
 
 public class EmployeesControl extends AbstractControl {
 
@@ -39,5 +38,25 @@ public class EmployeesControl extends AbstractControl {
 
 //        truckModel.response = response.message();
         employeeModel.notifyObservers();
+    }
+
+    public String certifyEmployee(String employeeId, String role) {
+        String json = employeesService.certifyEmployee(UserService.HR_MANAGER_USERNAME,employeeId,role);
+        try {
+            Response response = Response.fromJsonWithValidation(json); // Throws an exception if an error has occurred.
+        } catch (ErrorOccurredException e) {
+            return e.getMessage();
+        }
+        return "Certified the employee successfully.";
+    }
+
+    public String uncertifyEmployee(String employeeId, String role) {
+        String json = employeesService.uncertifyEmployee(UserService.HR_MANAGER_USERNAME,employeeId,role);
+        try {
+            Response response = Response.fromJsonWithValidation(json); // Throws an exception if an error has occurred.
+        } catch (ErrorOccurredException e) {
+            return e.getMessage();
+        }
+        return "Uncertified the employee successfully.";
     }
 }

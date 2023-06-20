@@ -16,6 +16,7 @@ import java.awt.event.*;
 public class EmployeeCertificationPanel extends AbstractTransportModulePanel {
     JPanel newOpenPanel = new JPanel();
     JFrame newOpenWindow;
+    PrettyTextField employeeIdField, roleField;
 
     public EmployeeCertificationPanel(EmployeesControl control) {
         super(control);
@@ -36,7 +37,7 @@ public class EmployeeCertificationPanel extends AbstractTransportModulePanel {
         constraints.gridy = 1;
         contentPanel.add(employeeIdLabel, constraints);
 
-        PrettyTextField employeeIdField = new PrettyTextField(textFieldSize);
+        employeeIdField = new PrettyTextField(textFieldSize);
         constraints.gridx = 1;
         constraints.gridy = 1;
         constraints.fill = GridBagConstraints.HORIZONTAL;
@@ -49,7 +50,7 @@ public class EmployeeCertificationPanel extends AbstractTransportModulePanel {
         constraints.gridy = 2;
         contentPanel.add(roleLabel, constraints);
 
-        PrettyTextField roleField = new PrettyTextField(textFieldSize);
+        roleField = new PrettyTextField(textFieldSize);
         constraints.gridx = 1;
         constraints.gridy = 2;
         constraints.fill = GridBagConstraints.HORIZONTAL;
@@ -96,6 +97,8 @@ public class EmployeeCertificationPanel extends AbstractTransportModulePanel {
         ObservableEmployee employee =  new ObservableEmployee();
         employee.subscribe(this);
         observers.forEach(observer -> observer.add(this, employee));
+        String result = ((EmployeesControl)control).certifyEmployee(employeeIdField.getText(),roleField.getText());
+        JOptionPane.showMessageDialog(null,result);
     }
 
     private void uncertifyButtonClicked(){
@@ -103,6 +106,8 @@ public class EmployeeCertificationPanel extends AbstractTransportModulePanel {
         employee.subscribe(this);
         // TODO: Swap the implementation of uncertify here
         observers.forEach(observer -> observer.add(this, employee));
+        String result = ((EmployeesControl)control).uncertifyEmployee(employeeIdField.getText(),roleField.getText());
+        JOptionPane.showMessageDialog(null,result);
     }
 
     private void openNewWindow(String selectedItem) {

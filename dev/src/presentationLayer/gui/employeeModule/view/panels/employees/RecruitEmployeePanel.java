@@ -7,14 +7,18 @@ import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
 import presentationLayer.gui.plAbstracts.interfaces.ModelObserver;
 import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
 import presentationLayer.gui.plUtils.*;
+import utils.DateUtils;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 
 public class RecruitEmployeePanel extends AbstractTransportModulePanel {
     JPanel newOpenPanel = new JPanel();
     JFrame newOpenWindow;
+    PrettyTextField nameField, branchIdField, employeeIdField, bankNumberField, bankBranchField, salaryRateField, year, month, day, employmentConditionsField, employeeDetailsField;
 
     public RecruitEmployeePanel(EmployeesControl control) {
         super(control);
@@ -38,7 +42,7 @@ public class RecruitEmployeePanel extends AbstractTransportModulePanel {
         constraints.gridy = 1;
         contentPanel.add(nameLabel, constraints);
 
-        PrettyTextField nameField = new PrettyTextField(textFieldSize);
+        nameField = new PrettyTextField(textFieldSize);
         constraints.gridx = 1;
         constraints.gridy = 1;
         constraints.fill = GridBagConstraints.HORIZONTAL;
@@ -51,7 +55,7 @@ public class RecruitEmployeePanel extends AbstractTransportModulePanel {
         constraints.gridy = 2;
         contentPanel.add(branchIdLabel, constraints);
 
-        PrettyTextField branchIdField = new PrettyTextField(textFieldSize);
+        branchIdField = new PrettyTextField(textFieldSize);
         constraints.gridx = 1;
         constraints.gridy = 2;
         constraints.fill = GridBagConstraints.HORIZONTAL;
@@ -64,7 +68,7 @@ public class RecruitEmployeePanel extends AbstractTransportModulePanel {
         constraints.gridy = 3;
         contentPanel.add(employeeIdLabel, constraints);
 
-        PrettyTextField employeeIdField = new PrettyTextField(textFieldSize);
+        employeeIdField = new PrettyTextField(textFieldSize);
         constraints.gridx = 1;
         constraints.gridy = 3;
         constraints.fill = GridBagConstraints.HORIZONTAL;
@@ -77,7 +81,7 @@ public class RecruitEmployeePanel extends AbstractTransportModulePanel {
         constraints.gridy = 4;
         contentPanel.add(bankNumberLabel, constraints);
 
-        PrettyTextField bankNumberField = new PrettyTextField(textFieldSize);
+        bankNumberField = new PrettyTextField(textFieldSize);
         constraints.gridx = 1;
         constraints.gridy = 4;
         constraints.fill = GridBagConstraints.HORIZONTAL;
@@ -90,7 +94,7 @@ public class RecruitEmployeePanel extends AbstractTransportModulePanel {
         constraints.gridy = 5;
         contentPanel.add(bankBranchLabel, constraints);
 
-        PrettyTextField bankBranchField = new PrettyTextField(textFieldSize);
+        bankBranchField = new PrettyTextField(textFieldSize);
         constraints.gridx = 1;
         constraints.gridy = 5;
         constraints.fill = GridBagConstraints.HORIZONTAL;
@@ -103,7 +107,7 @@ public class RecruitEmployeePanel extends AbstractTransportModulePanel {
         constraints.gridy = 6;
         contentPanel.add(salaryRateLabel, constraints);
 
-        PrettyTextField salaryRateField = new PrettyTextField(textFieldSize);
+        salaryRateField = new PrettyTextField(textFieldSize);
         constraints.gridx = 1;
         constraints.gridy = 6;
         constraints.fill = GridBagConstraints.HORIZONTAL;
@@ -117,7 +121,7 @@ public class RecruitEmployeePanel extends AbstractTransportModulePanel {
         contentPanel.add(dateLabel, constraints);
 
         // date text fields
-        PrettyTextField year = new PrettyTextField(new Dimension(75,30), "YYYY");
+        year = new PrettyTextField(new Dimension(75,30), "YYYY");
         year.setHorizontalAlignment(JTextField.CENTER);
         year.setMaximumCharacters(4);
 
@@ -126,7 +130,7 @@ public class RecruitEmployeePanel extends AbstractTransportModulePanel {
         slash1.setHorizontalAlignment(JLabel.CENTER);
         slash1.setFont(Fonts.textBoxFont.deriveFont(20f));
 
-        PrettyTextField month = new PrettyTextField(new Dimension(35,30), "MM");
+        month = new PrettyTextField(new Dimension(35,30), "MM");
         month.setHorizontalAlignment(JTextField.CENTER);
         month.setMaximumCharacters(2);
 
@@ -135,7 +139,7 @@ public class RecruitEmployeePanel extends AbstractTransportModulePanel {
         slash2.setPreferredSize(new Dimension(10,30));
         slash2.setFont(Fonts.textBoxFont.deriveFont(20f));
 
-        PrettyTextField day = new PrettyTextField(new Dimension(35,30), "DD");
+        day = new PrettyTextField(new Dimension(35,30), "DD");
         day.setHorizontalAlignment(JTextField.CENTER);
         day.setMaximumCharacters(2);
 
@@ -157,7 +161,7 @@ public class RecruitEmployeePanel extends AbstractTransportModulePanel {
         constraints.gridy = 8;
         contentPanel.add(employmentConditionsLabel, constraints);
 
-        PrettyTextField employmentConditionsField = new PrettyTextField(textFieldSize);
+        employmentConditionsField = new PrettyTextField(textFieldSize);
         constraints.gridx = 1;
         constraints.gridy = 8;
         constraints.fill = GridBagConstraints.HORIZONTAL;
@@ -170,7 +174,7 @@ public class RecruitEmployeePanel extends AbstractTransportModulePanel {
         constraints.gridy = 9;
         contentPanel.add(employeeDetailsLabel, constraints);
 
-        PrettyTextField employeeDetailsField = new PrettyTextField(textFieldSize);
+        employeeDetailsField = new PrettyTextField(textFieldSize);
         constraints.gridx = 1;
         constraints.gridy = 9;
         constraints.fill = GridBagConstraints.HORIZONTAL;
@@ -199,6 +203,22 @@ public class RecruitEmployeePanel extends AbstractTransportModulePanel {
         ObservableEmployee employee =  new ObservableEmployee();
         employee.subscribe(this);
         observers.forEach(observer -> observer.add(this, employee));
+        try {
+            String branchId = branchIdField.getText();
+            String employeeName = nameField.getText();
+            String employeeId = employeeIdField.getText();
+            String bankDetails = bankNumberField.getText() + " " + bankBranchField.getText();
+            double salaryRate = Double.parseDouble(salaryRateField.getText());
+            LocalDate employmentDate = DateUtils.parse(day.getText() + "/" + month.getText() + "/" + year.getText());
+            String employmentConditions = employmentConditionsField.getText();
+            String employeeDetails = employeeDetailsField.getText();
+            String result = ((EmployeesControl) control).recruitEmployee(branchId, employeeName, employeeId, bankDetails, salaryRate, employmentDate, employmentConditions, employeeDetails);
+            JOptionPane.showMessageDialog(null, result);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Invalid salary rate was given: " + salaryRateField.getText());
+        } catch (DateTimeParseException e) {
+            JOptionPane.showMessageDialog(null, "Invalid employment date was given. " + e.getMessage());
+        }
     }
 
     @Override

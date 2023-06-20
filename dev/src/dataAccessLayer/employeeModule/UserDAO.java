@@ -117,7 +117,7 @@ public class UserDAO extends DAOBase<User> {
             cache.put(object);
             this.userAuthorizationsDAO.insert(object); // Should insert the dependent values only after creating the user in the database
         } catch (SQLException e) {
-            throw new DalException(e);
+            throw new DalException("Failed to insert user", e);
         }
     }
 
@@ -138,7 +138,7 @@ public class UserDAO extends DAOBase<User> {
             }
             cache.put(user);
         } catch(SQLException e) {
-            throw new DalException(e);
+            throw new DalException("Failed to update user", e);
         }
     }
 

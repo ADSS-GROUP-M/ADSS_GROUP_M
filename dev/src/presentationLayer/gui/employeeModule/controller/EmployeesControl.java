@@ -9,6 +9,8 @@ import serviceLayer.employeeModule.Services.EmployeesService;
 import serviceLayer.employeeModule.Services.UserService;
 import utils.Response;
 
+import java.time.LocalDate;
+
 public class EmployeesControl extends AbstractControl {
 
     private final EmployeesService employeesService;
@@ -58,5 +60,15 @@ public class EmployeesControl extends AbstractControl {
             return e.getMessage();
         }
         return "Uncertified the employee successfully.";
+    }
+
+    public String recruitEmployee(String branchId, String employeeName, String employeeId, String bankDetails, double hourlyRate, LocalDate employmentDate, String employmentConditions, String employeeDetails) {
+        String json = employeesService.recruitEmployee(UserService.HR_MANAGER_USERNAME, branchId, employeeName, employeeId,bankDetails, hourlyRate, employmentDate, employmentConditions, employeeDetails);
+        try {
+            Response response = Response.fromJsonWithValidation(json); // Throws an exception if an error has occurred.
+        } catch (ErrorOccurredException e) {
+            return e.getMessage();
+        }
+        return "Recruited the employee successfully.";
     }
 }

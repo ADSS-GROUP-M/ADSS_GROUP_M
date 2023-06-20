@@ -70,7 +70,7 @@ public class EmployeeDAO extends DAOBase<Employee> {
         try {
             resultSet = cursor.executeRead(query);
         } catch (SQLException e) {
-            throw new DalException("Failed to select Employee from database");
+            throw new DalException("Failed to select Employee from database", e);
         }
 
         Employee ans;
@@ -94,7 +94,7 @@ public class EmployeeDAO extends DAOBase<Employee> {
         try {
             resultSet = cursor.executeRead(query);
         } catch (SQLException e) {
-            throw new DalException("Failed to select all Employees from database");
+            throw new DalException("Failed to select all Employees from database", e);
         }
         List<Employee> ans = new LinkedList<>();
         while (resultSet.next()) {
@@ -123,7 +123,7 @@ public class EmployeeDAO extends DAOBase<Employee> {
             cache.put(object);
             this.employeeRolesDAO.insert(object); // Should insert the dependent values only after creating the employee in the database
         } catch (SQLException e) {
-            throw new DalException(e);
+            throw new DalException("Failed to insert employee", e);
         }
     }
 
@@ -150,7 +150,7 @@ public class EmployeeDAO extends DAOBase<Employee> {
             }
             cache.put(emp);
         } catch(SQLException e) {
-            throw new DalException(e);
+            throw new DalException("Failed to update employee", e);
         }
     }
 

@@ -24,6 +24,5 @@ public abstract class ScrollablePanel extends AbstractPanel {
     public void componentResized(Dimension newSize) {
         super.componentResized(newSize);
         scrollPane.setPreferredSize(panel.getPreferredSize());
-//        scrollPane.revalidate();
     }
 }

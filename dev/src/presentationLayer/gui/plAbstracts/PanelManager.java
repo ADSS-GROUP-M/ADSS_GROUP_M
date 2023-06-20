@@ -58,6 +58,6 @@ public class PanelManager implements UIElement {
     public void componentResized(Dimension newSize) {
         container.setSize(new Dimension((int)(newSize.width*0.8)-10,newSize.height-20));
         currentPanel.componentResized(newSize);
-        container.validate();
+//        container.validate();
     }
 }

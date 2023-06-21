@@ -10,6 +10,8 @@ public class ObservableList<E> extends AbstractObservableModel implements List<E
 
     private List<E> list;
     public String message;
+    public boolean errorOccurred;
+    public String errorMessage;
 
     public ObservableList() {
         list = new ArrayList<>();
@@ -18,6 +20,16 @@ public class ObservableList<E> extends AbstractObservableModel implements List<E
     @Override
     public ObservableModel getUpdate() {
         return this;
+    }
+
+    @Override
+    public boolean errorOccurred() {
+        return errorOccurred;
+    }
+
+    @Override
+    public String getErrorMessage() {
+        return errorMessage;
     }
 
     // Delegate methods to the 'list' field
@@ -150,6 +162,11 @@ public class ObservableList<E> extends AbstractObservableModel implements List<E
     @Override
     public Spliterator<E> spliterator() {
         return list.spliterator();
+    }
+
+    @Override
+    public boolean isMatchExactly(String query) {
+        return false;
     }
 
     @Override

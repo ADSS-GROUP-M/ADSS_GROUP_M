@@ -1,14 +1,12 @@
 package presentationLayer.gui.transportModule.control;
 
 import domainObjects.transportModule.Site;
-import domainObjects.transportModule.Truck;
 import exceptions.ErrorOccurredException;
 import presentationLayer.gui.plAbstracts.AbstractControl;
 import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
 import presentationLayer.gui.plAbstracts.interfaces.ObservableUIElement;
 import presentationLayer.gui.plUtils.ObservableList;
 import presentationLayer.gui.transportModule.model.ObservableSite;
-import presentationLayer.gui.transportModule.model.ObservableTruck;
 import serviceLayer.transportModule.ResourceManagementService;
 import utils.Response;
 
@@ -37,10 +35,12 @@ public class SitesControl extends AbstractControl {
         try {
             response = Response.fromJsonWithValidation(json);
         } catch (ErrorOccurredException e) {
-            throw new RuntimeException(e);
-            //TODO: handle exception
+            siteModel.errorOccurred = true;
+            siteModel.errorMessage = e.getMessage();
+            siteModel.notifyObservers();
+            return;
         }
-        siteModel.response = response.message();
+        siteModel.message = response.message();
         siteModel.notifyObservers();
     }
 
@@ -59,10 +59,13 @@ public class SitesControl extends AbstractControl {
         try {
             response = Response.fromJsonWithValidation(json);
         } catch (ErrorOccurredException e) {
-            throw new RuntimeException(e);
+            siteModel.errorOccurred = true;
+            siteModel.errorMessage = e.getMessage();
+            siteModel.notifyObservers();
+            return;
         }
 
-        siteModel.response = response.message();
+        siteModel.message = response.message();
         siteModel.notifyObservers();
     }
 
@@ -75,7 +78,10 @@ public class SitesControl extends AbstractControl {
         try {
             response = Response.fromJsonWithValidation(json);
         } catch (ErrorOccurredException e) {
-            throw new RuntimeException(e);
+            siteModel.errorOccurred = true;
+            siteModel.errorMessage = e.getMessage();
+            siteModel.notifyObservers();
+            return;
         }
         Site fetched = Site.fromJson(response.data());
         siteModel.name = fetched.name();
@@ -87,7 +93,7 @@ public class SitesControl extends AbstractControl {
         siteModel.latitude = fetched.latitude();
         siteModel.longitude = fetched.longitude();
 
-        siteModel.response = response.message();
+        siteModel.message = response.message();
         siteModel.notifyObservers();
     }
 
@@ -98,7 +104,10 @@ public class SitesControl extends AbstractControl {
         try {
             response = Response.fromJsonWithValidation(json);
         } catch (ErrorOccurredException e) {
-            throw new RuntimeException(e);
+            models.errorOccurred = true;
+            models.errorMessage = e.getMessage();
+            models.notifyObservers();
+            return;
         }
         List<Site> sites = Site.listFromJson(response.data());
         for (Site site : sites) {

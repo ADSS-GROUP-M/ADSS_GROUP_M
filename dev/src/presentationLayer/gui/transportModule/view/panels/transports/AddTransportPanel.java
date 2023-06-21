@@ -9,6 +9,7 @@ import presentationLayer.gui.plUtils.*;
 import presentationLayer.gui.transportModule.control.*;
 import presentationLayer.gui.transportModule.model.*;
 
+import java.time.DateTimeException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -297,7 +298,8 @@ public class AddTransportPanel extends AbstractTransportModulePanel {
                 try{
                     itemListId = Integer.parseInt(selectedItemList);
                 } catch(NumberFormatException ex){
-                    throw new IllegalArgumentException("item list id must be a number");
+                    JOptionPane.showMessageDialog(null, "Item list id must be a number", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
                 }
 
                 for(Searchable s1 : itemLists) {
@@ -307,7 +309,8 @@ public class AddTransportPanel extends AbstractTransportModulePanel {
                             if(s2.getLongDescription().equals(selectedDestination)){
                                 ObservableSite site = (ObservableSite) s2;
                                 if (destinations_itemLists.stream().anyMatch(p -> p.getKey().equals(site.name))){
-                                    throw new IllegalArgumentException("destination already added");
+                                    JOptionPane.showMessageDialog(null, "Destination already added", "Error", JOptionPane.ERROR_MESSAGE);
+                                    return;
                                 }
 
                                 model.addElement(new SearchableString("List id: %d | %s".formatted(itemListId,s2.getLongDescription())));
@@ -320,7 +323,7 @@ public class AddTransportPanel extends AbstractTransportModulePanel {
                         }
                     }
                 }
-                throw new IllegalArgumentException("item list not found");
+                JOptionPane.showMessageDialog(null, "Item list not found", "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
 
@@ -352,7 +355,6 @@ public class AddTransportPanel extends AbstractTransportModulePanel {
             destinations_itemLists.add(index-1, pair);
             Searchable removed = model.remove(index);
             model.add(index-1, removed);
-//            model.add(index-1, new SearchableString("List id: %d | %s".formatted(pair.getValue(), pair.getKey())));
             destinationsList.getList().setModel(model);
             destinationsList.getList().setSelectedIndex(index-1);
         });
@@ -383,7 +385,8 @@ public class AddTransportPanel extends AbstractTransportModulePanel {
         try{
             transport.weight = Integer.parseInt(weightField.getText());
         } catch(NumberFormatException e){
-            throw new IllegalArgumentException("weight must be a number");
+            JOptionPane.showMessageDialog(null, "Weight must be a number", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
         }
         transport.driverId = ((ObservableDriver) driversList.stream()
                     .filter(s -> s.getLongDescription().equals(driverSearchBox.getSelected()))
@@ -407,8 +410,9 @@ public class AddTransportPanel extends AbstractTransportModulePanel {
             int hourInt = Integer.parseInt(hour.getText());
             int minuteInt = Integer.parseInt(minute.getText());
             transport.departureTime =  LocalDateTime.of(yearInt, monthInt, dayInt, hourInt, minuteInt);
-        } catch (NumberFormatException e){
-            throw new IllegalArgumentException("Invalid date format");
+        } catch (NumberFormatException | DateTimeException e){
+            JOptionPane.showMessageDialog(this.getComponent(), "Invalid date format", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
         }
 
         System.out.println();
@@ -426,10 +430,18 @@ public class AddTransportPanel extends AbstractTransportModulePanel {
         panel.revalidate();
     }
 
-    
-
     @Override
-    public void notify(ObservableModel observable) {
-
+    protected void clearFields() {
+        year.setText("");
+        month.setText("");
+        day.setText("");
+        hour.setText("");
+        minute.setText("");
+        weightField.setText("");
+        destinationsList.getList().setModel(new DefaultListModel<>());
+        destinations_itemLists.clear();
+        model.clear();
+        driverSearchBox.reset();
+        truckSearchBox.reset();
     }
 }

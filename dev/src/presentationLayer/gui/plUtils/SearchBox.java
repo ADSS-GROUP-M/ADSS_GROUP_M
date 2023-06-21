@@ -23,6 +23,7 @@ public class SearchBox implements UIElement {
 
     private final List<Searchable> data;
     private final DescriptionType descriptionType;
+    private final boolean enableClearTextOnClick;
     private final String defaultText;
     private final Dimension size;
     private final JComboBox<String> comboBox;
@@ -37,10 +38,11 @@ public class SearchBox implements UIElement {
         LONG
 
         }
-    public SearchBox(List<Searchable> data,String defaultText, Dimension size,DescriptionType descriptionType, Container repaintListener){
+    public SearchBox(List<Searchable> data,String defaultText, Dimension size,DescriptionType descriptionType,boolean enableClearTextOnClick, Container repaintListener){
         this.size = size;
         this.data = data;
         this.descriptionType = descriptionType;
+        this.enableClearTextOnClick = enableClearTextOnClick;
         String[] dataStrings = data.stream()
                 .map(this::getDescription)
                 .toArray(String[]::new);
@@ -54,7 +56,11 @@ public class SearchBox implements UIElement {
     }
 
     public SearchBox(List<Searchable> data,String defaultText, Dimension size, Container repaintListener){
-        this(data,defaultText,size,DescriptionType.SHORT,repaintListener);
+        this(data,defaultText,size,DescriptionType.SHORT,true,repaintListener);
+    }
+
+    public SearchBox(List<Searchable> data,String defaultText, Dimension size,DescriptionType descriptionType, Container repaintListener){
+        this(data,defaultText,size,descriptionType,true,repaintListener);
     }
 
     private void init(){
@@ -140,7 +146,7 @@ public class SearchBox implements UIElement {
                     @Override
                     public void mousePressed(MouseEvent e){
                         super.mousePressed(e);
-                        if(clearTextOnClick){
+                        if(enableClearTextOnClick && clearTextOnClick){
                             setText("");
                             clearTextOnClick = false;
                         }
@@ -220,13 +226,13 @@ public class SearchBox implements UIElement {
         comboBox.getEditor().getEditorComponent().addFocusListener(new FocusAdapter() {
             @Override
             public void focusLost(FocusEvent e) {
-                if(comboBox.getEditor().getItem().toString().equals("")){
+                if(enableClearTextOnClick && comboBox.getEditor().getItem().toString().equals("")){
                     setText(defaultText);
                     clearTextOnClick = true;
                 }
             }
             public void focusGained(FocusEvent e) {
-                if(clearTextOnClick){
+                if(enableClearTextOnClick && clearTextOnClick){
                     setText("");
                 }
             }
@@ -258,7 +264,7 @@ public class SearchBox implements UIElement {
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
 
-                if(clearTextOnClick){
+                if(enableClearTextOnClick && clearTextOnClick){
                     clearTextOnClick = false;
                     setText("");
                 }
@@ -274,7 +280,7 @@ public class SearchBox implements UIElement {
 
 
                 int w = SwingUtilities.computeStringWidth(getFontMetrics(getFont()), value.toString());
-                renderer.setPreferredSize(new Dimension(value.toString().length()*8, 50));
+                renderer.setPreferredSize(new Dimension(value.toString().length()*8, 65));
 
                 setBackground(Color.WHITE);
                 if(isSelected) {

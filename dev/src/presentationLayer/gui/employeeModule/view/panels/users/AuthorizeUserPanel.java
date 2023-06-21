@@ -168,7 +168,7 @@ public class AuthorizeUserPanel extends AbstractTransportModulePanel {
     }
 
     @Override
-    public void notify(ObservableModel observable) {
-
+    protected void clearFields() {
+        throw new UnsupportedOperationException("not implemented yet");
     }
 }

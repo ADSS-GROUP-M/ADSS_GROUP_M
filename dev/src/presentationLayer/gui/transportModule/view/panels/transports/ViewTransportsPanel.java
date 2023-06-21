@@ -145,6 +145,12 @@ public class ViewTransportsPanel extends AbstractTransportModulePanel {
 
 
     @Override
+    protected void clearFields() {
+        // do nothing
+    }
+
+    @Override
     public void notify(ObservableModel observable) {
+        // do nothing
     }
 }

@@ -123,6 +123,11 @@ public class CreateShiftsPanel extends AbstractTransportModulePanel {
         displayMonth(calendar);
     }
 
+    @Override
+    protected void clearFields() {
+        
+    }
+
     private void displayPreviousMonth() {
         calendar.add(Calendar.MONTH, -1);
         displayMonth(calendar);
@@ -214,8 +219,5 @@ public class CreateShiftsPanel extends AbstractTransportModulePanel {
         scrollPane.revalidate();
     }
 
-    @Override
-    public void notify(ObservableModel observable) {
-
-    }
+    
 }

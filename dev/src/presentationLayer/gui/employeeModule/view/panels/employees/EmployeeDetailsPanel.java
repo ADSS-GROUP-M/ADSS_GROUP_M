@@ -179,6 +179,11 @@ public class EmployeeDetailsPanel extends AbstractTransportModulePanel {
         fillDetails();
     }
 
+    @Override
+    protected void clearFields() {
+        
+    }
+
     private void fillDetails(){
 //        ObservableEmployee employee =  new ObservableEmployee();
 //        employee.subscribe(this);
@@ -221,8 +226,5 @@ public class EmployeeDetailsPanel extends AbstractTransportModulePanel {
         panel.revalidate();
     }
 
-    @Override
-    public void notify(ObservableModel observable) {
-
-    }
+    
 }

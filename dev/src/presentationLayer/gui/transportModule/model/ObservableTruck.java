@@ -9,11 +9,9 @@ public class ObservableTruck extends AbstractObservableModel {
 
     public String id;
     public String model;
-    public String weightError;
     public int baseWeight;
     public int maxWeight;
     public CoolingCapacity coolingCapacity;
-    public String response;
 
     @Override
     public ObservableModel getUpdate() {
@@ -21,8 +19,13 @@ public class ObservableTruck extends AbstractObservableModel {
     }
 
     @Override
+    public boolean isMatchExactly(String query) {
+        return id.equals(query.trim());
+    }
+
+    @Override
     public boolean isMatch(String query) {
-        return id.contains(query.trim());
+        return id.contains(query.trim()) || super.isMatch(query);
     }
 
     @Override

@@ -29,11 +29,12 @@ public class ItemListsControl extends AbstractControl {
         Response response;
         try {
             response = Response.fromJsonWithValidation(json);
+            itemList.message = response.message();
         } catch (ErrorOccurredException e) {
-            throw new RuntimeException(e);
+            itemList.errorOccurred = true;
+            itemList.errorMessage = e.getMessage();
         }
 
-        itemList.response = response.message();
         itemList.notifyObservers();
     }
 
@@ -47,10 +48,13 @@ public class ItemListsControl extends AbstractControl {
         try {
             response = Response.fromJsonWithValidation(json);
         } catch (ErrorOccurredException e) {
-            throw new RuntimeException(e);
+            itemList.errorMessage = e.getMessage();
+            itemList.errorOccurred = true;
+            itemList.notifyObservers();
+            return;
         }
 
-        itemList.response = response.message();
+        itemList.message = response.message();
         itemList.notifyObservers();
     }
 
@@ -64,10 +68,13 @@ public class ItemListsControl extends AbstractControl {
         try {
             response = Response.fromJsonWithValidation(json);
         } catch (ErrorOccurredException e) {
-            throw new RuntimeException(e);
+            itemList.errorMessage = e.getMessage();
+            itemList.errorOccurred = true;
+            itemList.notifyObservers();
+            return;
         }
 
-        itemList.response = response.message();
+        itemList.message = response.message();
         itemList.notifyObservers();
     }
 
@@ -81,10 +88,13 @@ public class ItemListsControl extends AbstractControl {
         try {
             response = Response.fromJsonWithValidation(json);
         } catch (ErrorOccurredException e) {
-            throw new RuntimeException(e);
+            itemList.errorMessage = e.getMessage();
+            itemList.errorOccurred = true;
+            itemList.notifyObservers();
+            return;
         }
 
-        itemList.response = response.message();
+        itemList.message = response.message();
         itemList.notifyObservers();
     }
 
@@ -96,7 +106,10 @@ public class ItemListsControl extends AbstractControl {
         try {
             response = Response.fromJsonWithValidation(json);
         } catch (ErrorOccurredException e) {
-            throw new RuntimeException(e);
+            models.errorMessage = e.getMessage();
+            models.errorOccurred = true;
+            models.notifyObservers();
+            return;
         }
 
         List<ItemList> itemLists = ItemList.listFromJson(response.data());

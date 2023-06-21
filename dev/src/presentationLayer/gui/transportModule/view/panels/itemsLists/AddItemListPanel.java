@@ -81,7 +81,5 @@ public class AddItemListPanel extends AbstractTransportModulePanel {
     }
 
     @Override
-    public void notify(ObservableModel observable) {
-
-    }
+    protected void clearFields() {}
 }

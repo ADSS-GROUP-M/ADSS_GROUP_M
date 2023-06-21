@@ -29,13 +29,15 @@ public class initialPanel extends AbstractTransportModulePanel {
     }
 
     @Override
+    protected void clearFields() {
+        
+    }
+
+    @Override
     public void componentResized(Dimension newSize) {
         super.componentResized(newSize);
         panel.revalidate();
     }
 
-    @Override
-    public void notify(ObservableModel observable) {
-
-    }
+    
 }

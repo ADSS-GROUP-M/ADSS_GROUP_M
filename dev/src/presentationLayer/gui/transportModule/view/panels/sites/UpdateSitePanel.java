@@ -140,6 +140,13 @@ public class UpdateSitePanel extends AbstractTransportModulePanel {
         });
     }
 
+    @Override
+    protected void clearFields() {
+        selectedSite.setSelected("Select Site");
+        contactNameField.setText("");
+        contactNumberField.setText("");
+    }
+
     private void buttonClicked(){
         for(Searchable s : sitesList){
             if(s.getShortDescription().equals(selectedSite.getSelected())){
@@ -163,10 +170,6 @@ public class UpdateSitePanel extends AbstractTransportModulePanel {
         panel.revalidate();
     }
 
-    @Override
-    public void notify(ObservableModel observable) {
-        System.out.println("site updated");
-    }
 }
 
 

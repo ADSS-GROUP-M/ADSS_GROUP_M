@@ -11,6 +11,11 @@ public class SearchableString implements Searchable {
     }
 
     @Override
+    public boolean isMatchExactly(String query) {
+        return string.equals(query);
+    }
+
+    @Override
     public boolean isMatch(String query) {
         return string.contains(query);
     }

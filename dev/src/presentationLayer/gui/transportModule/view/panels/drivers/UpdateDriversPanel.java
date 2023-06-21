@@ -146,11 +146,6 @@ public class UpdateDriversPanel extends AbstractTransportModulePanel {
         }
     }
 
-    private void clearFields(){
-        selectedDrivers.reset();
-        selectedLicence.reset();
-    }
-
     @Override
     public void componentResized(Dimension newSize) {
         super.componentResized(newSize);
@@ -163,7 +158,8 @@ public class UpdateDriversPanel extends AbstractTransportModulePanel {
     }
 
     @Override
-    public void notify(ObservableModel observable) {
-        clearFields();
+    protected void clearFields(){
+        selectedDrivers.reset();
+        selectedLicence.reset();
     }
 }

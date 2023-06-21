@@ -62,9 +62,13 @@ public class ViewSitesPanel extends AbstractTransportModulePanel {
         contentPanel.revalidate();
     }
 
+    @Override
+    protected void clearFields() {
+        // do nothing
+    }
 
     @Override
     public void notify(ObservableModel observable) {
-
+        // do nothing
     }
 }

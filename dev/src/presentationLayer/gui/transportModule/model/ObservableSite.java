@@ -13,7 +13,6 @@ public class ObservableSite extends AbstractObservableModel {
     public SiteType siteType;
     public double latitude;
     public double longitude;
-    public String response;
 
     @Override
     public ObservableSite getUpdate() {
@@ -21,8 +20,13 @@ public class ObservableSite extends AbstractObservableModel {
     }
 
     @Override
+    public boolean isMatchExactly(String query) {
+        return name.equals(query.trim());
+    }
+
+    @Override
     public boolean isMatch(String query) {
-        return name.contains(query.trim());
+        return name.contains(query.trim()) || super.isMatch(query);
     }
 
     @Override

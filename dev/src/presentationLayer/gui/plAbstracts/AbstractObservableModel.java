@@ -9,9 +9,26 @@ import java.util.Set;
 public abstract class AbstractObservableModel implements ObservableModel, Searchable {
 
     protected Set<ModelObserver> observers;
+    public boolean errorOccurred;
+    public String errorMessage;
+    public String message;
 
     protected AbstractObservableModel() {
         observers = new java.util.HashSet<>();
+    }
+
+    @Override
+    public boolean errorOccurred() {
+        return errorOccurred;
+    }
+
+    @Override
+    public String getErrorMessage() {
+        return errorMessage;
+    }
+
+    public String getMessage() {
+        return message;
     }
 
     @Override
@@ -29,6 +46,13 @@ public abstract class AbstractObservableModel implements ObservableModel, Search
         for (ModelObserver observer : observers) {
             observer.notify(this);
         }
+    }
+
+    @Override
+    public boolean isMatch(String query) {
+        return getLongDescription() != null
+                && getShortDescription() != null
+                && (getLongDescription().contains(query.trim()) || getShortDescription().contains(query.trim()));
     }
 
     @Override

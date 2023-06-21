@@ -20,7 +20,6 @@ public class ObservableTransport extends AbstractObservableModel {
     public int weight;
     public Map<String, LocalTime> estimatedArrivalTimes;
     public boolean manualOverride;
-    public String message;
 
     @Override
     public ObservableModel getUpdate() {
@@ -28,8 +27,13 @@ public class ObservableTransport extends AbstractObservableModel {
     }
 
     @Override
+    public boolean isMatchExactly(String query) {
+        return String.valueOf(id).equals(query.trim());
+    }
+
+    @Override
     public boolean isMatch(String query) {
-        return String.valueOf(id).contains(query.trim());
+        return String.valueOf(id).contains(query.trim()) || super.isMatch(query);
     }
 
     @Override

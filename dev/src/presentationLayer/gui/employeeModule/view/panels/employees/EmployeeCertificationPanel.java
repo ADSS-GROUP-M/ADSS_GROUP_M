@@ -143,6 +143,11 @@ public class EmployeeCertificationPanel extends AbstractTransportModulePanel {
         contentPanel.add(rolesTextArea, constraints);
     }
 
+    @Override
+    protected void clearFields() {
+        
+    }
+
     private void findEmployeeRolesButtonClicked(){
 //        ObservableEmployee employee =  new ObservableEmployee();
 //        employee.subscribe(this);
@@ -203,8 +208,5 @@ public class EmployeeCertificationPanel extends AbstractTransportModulePanel {
         panel.revalidate();
     }
 
-    @Override
-    public void notify(ObservableModel observable) {
-
-    }
+    
 }

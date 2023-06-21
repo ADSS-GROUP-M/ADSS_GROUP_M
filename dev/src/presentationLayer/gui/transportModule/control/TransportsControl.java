@@ -36,7 +36,10 @@ public class TransportsControl extends AbstractControl {
         try {
             response = Response.fromJsonWithValidation(json);
         } catch (ErrorOccurredException e) {
-            throw new RuntimeException(e);
+            transportModel.errorOccurred = true;
+            transportModel.errorMessage = e.getMessage();
+            transportModel.notifyObservers();
+            return;
         }
         Transport added = Transport.fromJson(response.data());
         transportModel.id = added.id();
@@ -65,7 +68,10 @@ public class TransportsControl extends AbstractControl {
         try {
             response = Response.fromJsonWithValidation(json);
         } catch (ErrorOccurredException e) {
-            throw new RuntimeException(e);
+            transportModel.errorOccurred = true;
+            transportModel.errorMessage = e.getMessage();
+            transportModel.notifyObservers();
+            return;
         }
         Transport updated = Transport.fromJson(response.data());
         transportModel.estimatedArrivalTimes = updated.estimatedArrivalTimes();
@@ -82,7 +88,10 @@ public class TransportsControl extends AbstractControl {
         try {
             response = Response.fromJsonWithValidation(json);
         } catch (ErrorOccurredException e) {
-            throw new RuntimeException(e);
+            transportModel.errorOccurred = true;
+            transportModel.errorMessage = e.getMessage();
+            transportModel.notifyObservers();
+            return;
         }
         transportModel.message = response.message();
         transportModel.notifyObservers();
@@ -97,7 +106,10 @@ public class TransportsControl extends AbstractControl {
         try {
             response = Response.fromJsonWithValidation(json);
         } catch (ErrorOccurredException e) {
-            throw new RuntimeException(e);
+            transportModel.errorOccurred = true;
+            transportModel.errorMessage = e.getMessage();
+            transportModel.notifyObservers();
+            return;
         }
         Transport got = Transport.fromJson(response.data());
         transportModel.route = got.route();
@@ -119,7 +131,10 @@ public class TransportsControl extends AbstractControl {
         try {
             response = Response.fromJsonWithValidation(json);
         } catch (ErrorOccurredException e) {
-            throw new RuntimeException(e);
+            models.errorOccurred = true;
+            models.errorMessage = e.getMessage();
+            models.notifyObservers();
+            return;
         }
         List<Transport> got = Transport.listFromJson(response.data());
         for (Transport transport : got) {

@@ -214,7 +214,8 @@ public class UpdateTruckPanel extends AbstractTransportModulePanel {
         }
     }
 
-    private void clearFields(){
+    @Override
+    protected void clearFields(){
         selectedTruck.reset();
         baseField.setText("");
         maxField.setText("");
@@ -230,11 +231,6 @@ public class UpdateTruckPanel extends AbstractTransportModulePanel {
         contentPanel.setPreferredSize(contentPanelSize);
 
         panel.revalidate();
-    }
-
-    @Override
-    public void notify(ObservableModel observable) {
-        clearFields();
     }
 }
 

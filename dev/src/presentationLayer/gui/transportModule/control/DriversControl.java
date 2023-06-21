@@ -30,10 +30,13 @@ public class DriversControl extends AbstractControl {
         try {
             response = Response.fromJsonWithValidation(json);
         } catch (ErrorOccurredException e) {
-            throw new RuntimeException(e);
+            driver.errorOccurred = true;
+            driver.errorMessage = e.getMessage();
+            driver.notifyObservers();
+            return;
         }
 
-        driver.response = response.message();
+        driver.message = response.message();
         driver.notifyObservers();
     }
 
@@ -47,14 +50,17 @@ public class DriversControl extends AbstractControl {
         try {
             response = Response.fromJsonWithValidation(json);
         } catch (ErrorOccurredException e) {
-            throw new RuntimeException(e);
+            driver.errorOccurred = true;
+            driver.errorMessage = e.getMessage();
+            driver.notifyObservers();
+            return;
         }
         Driver fetched = Driver.fromJson(response.data());
 
         driver.id = fetched.id();
         driver.name = fetched.name();
         driver.licenseType = fetched.licenseType();
-        driver.response = response.message();
+        driver.message = response.message();
         driver.notifyObservers();
     }
 
@@ -66,7 +72,10 @@ public class DriversControl extends AbstractControl {
         try {
             response = Response.fromJsonWithValidation(json);
         } catch (ErrorOccurredException e) {
-            throw new RuntimeException(e);
+            models.errorOccurred = true;
+            models.errorMessage = e.getMessage();
+            models.notifyObservers();
+            return;
         }
 
         List<Driver> fetched = Driver.listFromJson(response.data());

@@ -181,7 +181,8 @@ public class AddSitePanel extends AbstractTransportModulePanel {
     }
 
 
-    private void clearFields(){
+    @Override
+    protected void clearFields(){
         nameField.setText("");
         addressField.setText("");
         zoneField.setText("");

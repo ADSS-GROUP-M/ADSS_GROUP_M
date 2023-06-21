@@ -1,6 +1,7 @@
 package presentationLayer.gui.plAbstracts;
 
 import presentationLayer.gui.plAbstracts.interfaces.ModelObserver;
+import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
 import presentationLayer.gui.plUtils.Colors;
 import presentationLayer.gui.plUtils.ContentPanel;
 
@@ -34,5 +35,17 @@ public abstract class AbstractTransportModulePanel extends ScrollablePanel imple
                 SwingUtilities.invokeLater(panel::repaint);
             }
         });
+    }
+
+    protected abstract void clearFields();
+
+    @Override
+    public void notify(ObservableModel observable) {
+        if (observable.errorOccurred()) {
+            JOptionPane.showMessageDialog(this.getComponent(), observable.getErrorMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this.getComponent(), observable.getMessage(), "Success", JOptionPane.INFORMATION_MESSAGE);
+            clearFields();
+        }
     }
 }

@@ -148,6 +148,11 @@ public class EmployeeShiftsPanel extends AbstractTransportModulePanel {
         contentPanel.add(myShiftsButton, constraints);
     }
 
+    @Override
+    protected void clearFields() {
+        
+    }
+
     private void displayPreviousMonth() {
         calendar.add(Calendar.MONTH, -1);
         displayMonth(calendar);
@@ -795,8 +800,5 @@ public class EmployeeShiftsPanel extends AbstractTransportModulePanel {
         scrollPane.revalidate();
     }
 
-    @Override
-    public void notify(ObservableModel observable) {
-
-    }
+    
 }

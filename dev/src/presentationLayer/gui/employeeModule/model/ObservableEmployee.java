@@ -26,6 +26,21 @@ public final class ObservableEmployee extends AbstractObservableModel {
     }
 
     @Override
+    public boolean errorOccurred() {
+        return false;
+    }
+
+    @Override
+    public String getErrorMessage() {
+        return null;
+    }
+
+    @Override
+    public boolean isMatchExactly(String query) {
+        return false;
+    }
+
+    @Override
     public boolean isMatch(String query) {
         return false;
     }

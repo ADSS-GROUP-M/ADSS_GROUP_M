@@ -113,7 +113,5 @@ public class ViewItemListPanel extends AbstractTransportModulePanel {
     }
 
     @Override
-    public void notify(ObservableModel observable) {
-
-    }
+    protected void clearFields() {}
 }

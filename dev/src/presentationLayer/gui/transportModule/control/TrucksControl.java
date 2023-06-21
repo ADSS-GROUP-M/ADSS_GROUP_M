@@ -10,7 +10,6 @@ import presentationLayer.gui.transportModule.model.ObservableTruck;
 import serviceLayer.transportModule.ResourceManagementService;
 import utils.Response;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class TrucksControl extends AbstractControl {
@@ -35,10 +34,12 @@ public class TrucksControl extends AbstractControl {
         try {
             response = Response.fromJsonWithValidation(json);
         } catch (ErrorOccurredException e) {
-            throw new RuntimeException(e);
-            //TODO: handle exception
+            truckModel.errorOccurred = true;
+            truckModel.errorMessage = e.getMessage();
+            truckModel.notifyObservers();
+            return;
         }
-        truckModel.response = response.message();
+        truckModel.message = response.message();
         truckModel.notifyObservers();
     }
 
@@ -56,10 +57,13 @@ public class TrucksControl extends AbstractControl {
         try {
             response = Response.fromJsonWithValidation(json);
         } catch (ErrorOccurredException e) {
-            throw new RuntimeException(e);
+            truckModel.errorOccurred = true;
+            truckModel.errorMessage = e.getMessage();
+            truckModel.notifyObservers();
+            return;
         }
 
-        truckModel.response = response.message();
+        truckModel.message = response.message();
         truckModel.notifyObservers();
     }
 
@@ -72,10 +76,13 @@ public class TrucksControl extends AbstractControl {
         try {
             response = Response.fromJsonWithValidation(json);
         } catch (ErrorOccurredException e) {
-            throw new RuntimeException(e);
+            truckModel.errorOccurred = true;
+            truckModel.errorMessage = e.getMessage();
+            truckModel.notifyObservers();
+            return;
         }
 
-        truckModel.response = response.message();
+        truckModel.message = response.message();
         truckModel.notifyObservers();
     }
 
@@ -88,7 +95,10 @@ public class TrucksControl extends AbstractControl {
         try {
             response = Response.fromJsonWithValidation(json);
         } catch (ErrorOccurredException e) {
-            throw new RuntimeException(e);
+            truckModel.errorOccurred = true;
+            truckModel.errorMessage = e.getMessage();
+            truckModel.notifyObservers();
+            return;
         }
 
         Truck fetched = Truck.fromJson(response.data());
@@ -98,7 +108,7 @@ public class TrucksControl extends AbstractControl {
         truckModel.maxWeight = fetched.maxWeight();
         truckModel.coolingCapacity = fetched.coolingCapacity();
 
-        truckModel.response = response.message();
+        truckModel.message = response.message();
         truckModel.notifyObservers();
     }
 
@@ -110,7 +120,10 @@ public class TrucksControl extends AbstractControl {
         try {
             response = Response.fromJsonWithValidation(json);
         } catch (ErrorOccurredException e) {
-            throw new RuntimeException(e);
+            models.errorOccurred = true;
+            models.errorMessage = e.getMessage();
+            models.notifyObservers();
+            return;
         }
 
         List<Truck> fetched = Truck.listFromJson(response.data());

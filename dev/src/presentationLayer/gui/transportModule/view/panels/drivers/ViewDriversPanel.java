@@ -73,7 +73,7 @@ public class ViewDriversPanel extends AbstractTransportModulePanel {
     }
 
     @Override
-    public void notify(ObservableModel observable) {
-
+    protected void clearFields() {
+        // do nothing
     }
 }

@@ -176,7 +176,8 @@ public class AddTruckPanel extends AbstractTransportModulePanel {
         }
     }
 
-    private void clearFields(){
+    @Override
+    protected void clearFields(){
         idField.setText("");
         modelField.setText("");
         baseField.setText("");
@@ -194,10 +195,5 @@ public class AddTruckPanel extends AbstractTransportModulePanel {
         contentPanel.setPreferredSize(contentPanelSize);
 
         panel.revalidate();
-    }
-
-    @Override
-    public void notify(ObservableModel observable) {
-        clearFields();
     }
 }

@@ -9,7 +9,6 @@ public class ObservableDriver extends AbstractObservableModel {
     public String id;
     public String name;
     public LicenseType licenseType;
-    public String response;
 
     @Override
     public ObservableModel getUpdate() {
@@ -17,8 +16,13 @@ public class ObservableDriver extends AbstractObservableModel {
     }
 
     @Override
+    public boolean isMatchExactly(String query) {
+        return id.equals(query.trim());
+    }
+
+    @Override
     public boolean isMatch(String query) {
-        return id.contains(query.trim());
+        return id.contains(query.trim()) || super.isMatch(query);
     }
 
     @Override

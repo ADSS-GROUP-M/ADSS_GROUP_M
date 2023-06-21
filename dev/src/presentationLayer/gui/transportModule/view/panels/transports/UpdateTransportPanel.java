@@ -2,7 +2,6 @@ package presentationLayer.gui.transportModule.view.panels.transports;
 
 import javafx.util.Pair;
 import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
-import presentationLayer.gui.plAbstracts.interfaces.ModelObserver;
 import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
 import presentationLayer.gui.plAbstracts.interfaces.Searchable;
 import presentationLayer.gui.plUtils.*;
@@ -13,10 +12,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.time.DateTimeException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static presentationLayer.gui.plUtils.SearchBox.DescriptionType.LONG;
 
@@ -36,12 +37,13 @@ public class UpdateTransportPanel extends AbstractTransportModulePanel {
     private PrettyTextField minute;
     private PrettyTextField weightField;
     private SearchBox driverSearchBox;
-    private SearchBox truckSearchBox;
+    private SearchBox trucksSearchBox;
     private PrettyTextField itemListField;
     private ObservableList<Searchable> sitesList;
     private ObservableList<Searchable> driversList;
     private ObservableList<Searchable> trucksList;
     private ObservableList<Searchable> itemLists;
+    private DefaultListModel<Searchable> model;
 
     public UpdateTransportPanel(ObservableTransport toEdit,
                                 TransportsControl control,
@@ -56,6 +58,7 @@ public class UpdateTransportPanel extends AbstractTransportModulePanel {
         this.trucksControl = trucksControl;
         this.itemListsControl = itemListsControl;
         destinations_itemLists = new LinkedList<>();
+        model = new DefaultListModel<>();
         init();
     }
 
@@ -102,7 +105,7 @@ public class UpdateTransportPanel extends AbstractTransportModulePanel {
         simpleComponentsPanel.add(dateLabel, constraints);
 
         // date text fields
-        year = new PrettyTextField(new Dimension(75,30), "YYYY");
+        year = new PrettyTextField(new Dimension(75,30), "YYYY", false);
         year.setHorizontalAlignment(JTextField.CENTER);
         year.setMaximumCharacters(4);
 
@@ -111,7 +114,7 @@ public class UpdateTransportPanel extends AbstractTransportModulePanel {
         slash1.setHorizontalAlignment(JLabel.CENTER);
         slash1.setFont(Fonts.textBoxFont.deriveFont(20f));
 
-        month = new PrettyTextField(new Dimension(35,30), "MM");
+        month = new PrettyTextField(new Dimension(35,30), "MM", false);
         month.setHorizontalAlignment(JTextField.CENTER);
         month.setMaximumCharacters(2);
 
@@ -120,7 +123,7 @@ public class UpdateTransportPanel extends AbstractTransportModulePanel {
         slash2.setPreferredSize(new Dimension(10,30));
         slash2.setFont(Fonts.textBoxFont.deriveFont(20f));
 
-        day = new PrettyTextField(new Dimension(35,30), "DD");
+        day = new PrettyTextField(new Dimension(35,30), "DD", false);
         day.setHorizontalAlignment(JTextField.CENTER);
         day.setMaximumCharacters(2);
 
@@ -129,7 +132,7 @@ public class UpdateTransportPanel extends AbstractTransportModulePanel {
         dateTimeSeparator.setPreferredSize(new Dimension(15,30));
         dateTimeSeparator.setFont(Fonts.textBoxFont.deriveFont(20f));
 
-        hour = new PrettyTextField(new Dimension(35,30), "HH");
+        hour = new PrettyTextField(new Dimension(35,30), "HH", false);
         hour.setHorizontalAlignment(JTextField.CENTER);
         hour.setMaximumCharacters(2);
 
@@ -138,7 +141,7 @@ public class UpdateTransportPanel extends AbstractTransportModulePanel {
         colon.setPreferredSize(new Dimension(10,30));
         colon.setFont(Fonts.textBoxFont.deriveFont(20f));
 
-        minute = new PrettyTextField(new Dimension(35,30), "MM");
+        minute = new PrettyTextField(new Dimension(35,30), "MM", false);
         minute.setHorizontalAlignment(JTextField.CENTER);
         minute.setMaximumCharacters(2);
 
@@ -163,7 +166,7 @@ public class UpdateTransportPanel extends AbstractTransportModulePanel {
         constraints.gridy = 1;
         simpleComponentsPanel.add(weightLabel, constraints);
 
-        weightField = new PrettyTextField(textFieldSize);
+        weightField = new PrettyTextField(textFieldSize, false);
         constraints.gridx = 1;
         constraints.gridy = 1;
         constraints.insets = new Insets(0,5,0,0);
@@ -176,7 +179,7 @@ public class UpdateTransportPanel extends AbstractTransportModulePanel {
         constraints.insets = new Insets(0,0,0,10);
         simpleComponentsPanel.add(driversLabel, constraints);
 
-        driverSearchBox = new SearchBox(driversList,"Select Driver",textFieldSize,LONG, panel);
+        driverSearchBox = new SearchBox(driversList,"Select Driver",textFieldSize,LONG,false, panel);
         constraints.gridx = 3;
         constraints.gridy = 0;
         simpleComponentsPanel.add(driverSearchBox.getComponent(), constraints);
@@ -186,10 +189,10 @@ public class UpdateTransportPanel extends AbstractTransportModulePanel {
         constraints.gridy = 1;
         simpleComponentsPanel.add(trucksLabel, constraints);
 
-        truckSearchBox = new SearchBox(trucksList,"Select Truck",textFieldSize,LONG, panel);
+        trucksSearchBox = new SearchBox(trucksList,"Select Truck",textFieldSize,LONG,false, panel);
         constraints.gridx = 3;
         constraints.gridy = 1;
-        simpleComponentsPanel.add(truckSearchBox.getComponent(), constraints);
+        simpleComponentsPanel.add(trucksSearchBox.getComponent(), constraints);
 
         // ================================= END OF SIMPLE COMPONENTS =================================
 
@@ -290,8 +293,6 @@ public class UpdateTransportPanel extends AbstractTransportModulePanel {
 
 
         addItemButton.addMouseListener(new MouseAdapter() {
-
-            DefaultListModel<Searchable> model = new DefaultListModel<>();
             @Override
             public void mouseClicked(MouseEvent e) {
                 String selectedDestination = destinations.getSelected();
@@ -306,7 +307,8 @@ public class UpdateTransportPanel extends AbstractTransportModulePanel {
                 try{
                     itemListId = Integer.parseInt(selectedItemList);
                 } catch(NumberFormatException ex){
-                    throw new IllegalArgumentException("item list id must be a number");
+                    JOptionPane.showMessageDialog(null, "Item list id must be a number", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
                 }
 
                 for(Searchable s1 : itemLists) {
@@ -316,7 +318,8 @@ public class UpdateTransportPanel extends AbstractTransportModulePanel {
                             if(s2.getLongDescription().equals(selectedDestination)){
                                 ObservableSite site = (ObservableSite) s2;
                                 if (destinations_itemLists.stream().anyMatch(p -> p.getKey().equals(site.name))){
-                                    throw new IllegalArgumentException("destination already added");
+                                    JOptionPane.showMessageDialog(null, "Destination already added", "Error", JOptionPane.ERROR_MESSAGE);
+                                    return;
                                 }
 
                                 model.addElement(new SearchableString("List id: %d | %s".formatted(itemListId,s2.getLongDescription())));
@@ -329,12 +332,10 @@ public class UpdateTransportPanel extends AbstractTransportModulePanel {
                         }
                     }
                 }
-                throw new IllegalArgumentException("item list not found");
+                JOptionPane.showMessageDialog(null, "Item list not found", "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
 
-
-        ModelObserver o = this;
         submitButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -342,23 +343,81 @@ public class UpdateTransportPanel extends AbstractTransportModulePanel {
                 buttonClicked();
             }
         });
+
+        removeItemButton.addActionListener(e -> {
+            int index = destinationsList.getList().getSelectedIndex();
+            if(index == -1){
+                return;
+            }
+            destinations_itemLists.remove(index);
+            model.remove(index);
+            destinationsList.getList().setModel(model);
+        });
+
+        moveUpButton.addActionListener(e -> {
+            int index = destinationsList.getList().getSelectedIndex();
+            if(index == -1 || index == 0){
+                return;
+            }
+            Pair<String, Integer> pair = destinations_itemLists.get(index);
+            destinations_itemLists.remove(index);
+            destinations_itemLists.add(index-1, pair);
+            Searchable removed = model.remove(index);
+            model.add(index-1, removed);
+            destinationsList.getList().setModel(model);
+            destinationsList.getList().setSelectedIndex(index-1);
+        });
+
+        moveDownButton.addActionListener(e -> {
+            int index = destinationsList.getList().getSelectedIndex();
+            if(index == -1 || index == destinations_itemLists.size()-1){
+                return;
+            }
+            Pair<String, Integer> pair = destinations_itemLists.get(index);
+            destinations_itemLists.remove(index);
+            destinations_itemLists.add(index+1, pair);
+            Searchable removed = model.remove(index);
+            model.add(index+1, removed);
+            destinationsList.getList().setModel(model);
+            destinationsList.getList().setSelectedIndex(index+1);
+        });
+
+        loadDataToFields();
+
+    }
+
+    private void loadDataToFields() {
+
+        year.setText(String.valueOf(toEdit.departureTime.getYear()));
+        month.setText(String.valueOf(toEdit.departureTime.getMonthValue()));
+        day.setText(String.valueOf(toEdit.departureTime.getDayOfMonth()));
+        hour.setText(String.valueOf(toEdit.departureTime.getHour()));
+        minute.setText(String.valueOf(toEdit.departureTime.getMinute()));
+        weightField.setText(String.valueOf(toEdit.weight));
+        driverSearchBox.setSelected(driversList.stream().filter(s -> s.isMatchExactly(toEdit.driverId)).findFirst().get().getLongDescription());
+        trucksSearchBox.setSelected(trucksList.stream().filter(s -> s.isMatchExactly(toEdit.truckId)).findFirst().get().getLongDescription());
+        destinations_itemLists = toEdit.route.stream().map(s -> new Pair<>(s,toEdit.destinations_itemListIds.get(s))).collect(Collectors.toList());
+        destinationsList.getList().setModel(new DefaultListModel<>());
+        destinations_itemLists.forEach(p -> model.addElement(new SearchableString("List id: %d | %s".formatted(p.getValue(), sitesList.stream().filter(s->s.isMatchExactly(p.getKey())).findFirst().get().getLongDescription()))));
+        destinationsList.getList().setModel(model);
     }
 
     private void buttonClicked(){
         ObservableTransport transport =  new ObservableTransport();
         transport.subscribe(this);
 
-        transport.id = -1;
+        transport.id = toEdit.id;
         try{
             transport.weight = Integer.parseInt(weightField.getText());
         } catch(NumberFormatException e){
-            throw new IllegalArgumentException("weight must be a number");
+            JOptionPane.showMessageDialog(this.getComponent(), "Weight must be a number", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
         }
         transport.driverId = ((ObservableDriver) driversList.stream()
                 .filter(s -> s.getLongDescription().equals(driverSearchBox.getSelected()))
                 .findFirst().get()).id;
         transport.truckId = ((ObservableTruck) trucksList.stream()
-                .filter(s -> s.getLongDescription().equals(truckSearchBox.getSelected()))
+                .filter(s -> s.getLongDescription().equals(trucksSearchBox.getSelected()))
                 .findFirst().get()).id;
         transport.route = destinations_itemLists.stream()
                 .map(Pair::getKey)
@@ -376,12 +435,11 @@ public class UpdateTransportPanel extends AbstractTransportModulePanel {
             int hourInt = Integer.parseInt(hour.getText());
             int minuteInt = Integer.parseInt(minute.getText());
             transport.departureTime =  LocalDateTime.of(yearInt, monthInt, dayInt, hourInt, minuteInt);
-        } catch (NumberFormatException e){
-            throw new IllegalArgumentException("Invalid date format");
+        } catch (NumberFormatException | DateTimeException e){
+            JOptionPane.showMessageDialog(this.getComponent(), "Invalid date format", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
         }
-
-        System.out.println();
-        observers.forEach(observer -> observer.add(this, transport));
+        observers.forEach(observer -> observer.update(this, transport));
     }
 
     @Override
@@ -395,10 +453,18 @@ public class UpdateTransportPanel extends AbstractTransportModulePanel {
         panel.revalidate();
     }
 
-
-
     @Override
-    public void notify(ObservableModel observable) {
-
+    protected void clearFields() {
+        year.setText("");
+        month.setText("");
+        day.setText("");
+        hour.setText("");
+        minute.setText("");
+        weightField.setText("");
+        destinationsList.getList().setModel(new DefaultListModel<>());
+        destinations_itemLists.clear();
+        model.clear();
+        driverSearchBox.reset();
+        trucksSearchBox.reset();
     }
 }

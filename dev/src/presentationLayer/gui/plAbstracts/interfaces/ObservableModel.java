@@ -6,4 +6,7 @@ public interface ObservableModel {
     void unsubscribe(ModelObserver observer);
     void notifyObservers();
     ObservableModel getUpdate();
+    boolean errorOccurred();
+    String getErrorMessage();
+    String getMessage();
 }

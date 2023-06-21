@@ -9,7 +9,6 @@ public class ObservableItemList extends AbstractObservableModel {
     public int id;
     public HashMap<String, Integer> load;
     public HashMap<String, Integer> unload;
-    public String response;
 
     @Override
     public ObservableItemList getUpdate() {
@@ -17,8 +16,13 @@ public class ObservableItemList extends AbstractObservableModel {
     }
 
     @Override
+    public boolean isMatchExactly(String query) {
+        return String.valueOf(id).equals(query.trim());
+    }
+
+    @Override
     public boolean isMatch(String query) {
-        return String.valueOf(id).contains(query.trim());
+        return String.valueOf(id).contains(query.trim()) || super.isMatch(query);
     }
 
     @Override

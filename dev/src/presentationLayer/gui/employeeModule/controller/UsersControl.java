@@ -60,4 +60,14 @@ public class UsersControl extends AbstractControl {
             return e.getMessage();
         }
     }
+
+    public Object login(String username, String password) {
+        String json = userService.login(username,password);
+        try {
+            Response response = Response.fromJsonWithValidation(json); // Throws an exception if an error has occurred.
+            return response.success();
+        } catch (ErrorOccurredException e) {
+            return e.getMessage();
+        }
+    }
 }

@@ -156,4 +156,14 @@ public class ShiftsControl extends AbstractControl {
         }
         return "Cancelled the shift request successfully.";
     }
+
+    public Object getEmployeeShifts(String employeeId) {
+        String json = employeesService.getEmployeeShifts(employeeId);
+        try {
+            Response response = Response.fromJsonWithValidation(json); // Throws an exception if an error has occurred.
+            return response.data(LIST_SSHIFT_ARRAY_TYPE);
+        } catch (ErrorOccurredException e) {
+            return e.getMessage();
+        }
+    }
 }

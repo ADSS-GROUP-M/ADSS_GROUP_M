@@ -17,7 +17,7 @@ public class EmployeeDetailsPanel extends AbstractTransportModulePanel {
     PrettyTextField year, month, day;
     String employeeId;
 
-    public EmployeeDetailsPanel(EmployeesControl control, String employeeId) {
+    public EmployeeDetailsPanel(String employeeId, EmployeesControl control) {
         super(control);
         this.employeeId = employeeId;
         init();

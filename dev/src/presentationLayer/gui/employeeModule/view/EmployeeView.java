@@ -3,14 +3,9 @@ package presentationLayer.gui.employeeModule.view;
 import presentationLayer.PresentationFactory;
 import presentationLayer.gui.employeeModule.controller.EmployeesControl;
 import presentationLayer.gui.employeeModule.controller.ShiftsControl;
-import presentationLayer.gui.employeeModule.controller.UsersControl;
 import presentationLayer.gui.employeeModule.view.panels.EmployeesPanel;
-import presentationLayer.gui.employeeModule.view.panels.employees.EmployeeCertificationPanel;
 import presentationLayer.gui.employeeModule.view.panels.employees.EmployeeDetailsPanel;
-import presentationLayer.gui.employeeModule.view.panels.employees.RecruitEmployeePanel;
-import presentationLayer.gui.employeeModule.view.panels.employees.UpdateEmployeePanel;
 import presentationLayer.gui.employeeModule.view.panels.shifts.*;
-import presentationLayer.gui.employeeModule.view.panels.users.AuthorizeUserPanel;
 import presentationLayer.gui.plAbstracts.MainWindow;
 import presentationLayer.gui.plAbstracts.PanelManager;
 import presentationLayer.gui.plAbstracts.interfaces.Panel;
@@ -43,8 +38,8 @@ public class EmployeeView extends MainWindow {
     private QuickAccess initQuickAccess(){
         return new QuickAccess()
                 .addCategory("Shifts",
-//                        new Link("View Shifts", // + My shifts
-//                                () -> setCurrentPanel(new EmployeeShiftsPanel(employeeId, shiftsControl, this))),
+                        new Link("View Shifts", // + My shifts
+                                () -> setCurrentPanel(new EmployeeShiftsPanel(employeeId, shiftsControl, this))),
                         new Link("Request Shift",
                                 () -> setCurrentPanel(new RequestShiftPanel(employeeId, shiftsControl, this))),
                         new Link("Cancel Shift Request",
@@ -56,7 +51,7 @@ public class EmployeeView extends MainWindow {
                 )
                 .addCategory("Employee Details",
                         new Link("Show my details",
-                                () -> setCurrentPanel(new EmployeeDetailsPanel(employeesControl, employeeId)))
+                                () -> setCurrentPanel(new EmployeeDetailsPanel(employeeId, employeesControl)))
                 );
     }
 

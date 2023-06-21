@@ -7,12 +7,17 @@ import presentationLayer.gui.employeeModule.controller.UsersControl;
 import presentationLayer.gui.plAbstracts.MainWindow;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 public class EmployeeLoginView {
     public EmployeeLoginView() {
         JFrame frame = new JFrame("Employee Login");
+        // Initialize and center the frame on the screen
+        frame.setLocationRelativeTo(null);
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLocation((int)(MainWindow.screenSize.width*0.4), (int)(MainWindow.screenSize.height*0.4));
 
         JPanel panel = new JPanel();
         panel.setLayout(new GridBagLayout());
@@ -60,6 +65,9 @@ public class EmployeeLoginView {
                 }
             }
         });
+
+        // Set the default enter button
+        frame.getRootPane().setDefaultButton(loginButton);
 
         constraints.gridx = 0;
         constraints.gridy = 2;

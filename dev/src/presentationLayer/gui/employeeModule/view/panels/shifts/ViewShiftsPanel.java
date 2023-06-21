@@ -318,7 +318,7 @@ public class ViewShiftsPanel extends AbstractTransportModulePanel {
                 for (Role role : Role.values()) {
                     JLabel roleLabel = new JLabel(role.toString());
                     DefaultListModel<String> requestsInRoleListModel = new DefaultListModel<>();
-                    if (shifts[0].getShiftRequestsEmployees(role.toString()) != null) {
+                    if (shifts[0].getShiftWorkersEmployees(role.toString()) != null) {
                         workersPanel.add(roleLabel);
                         for (SEmployee employee : shifts[0].getShiftWorkersEmployees(role.toString())) {
                             requestsInRoleListModel.addElement(employee.getId());
@@ -426,7 +426,7 @@ public class ViewShiftsPanel extends AbstractTransportModulePanel {
                 for (Role role : Role.values()) {
                     JLabel roleLabel = new JLabel(role.toString());
                     DefaultListModel<String> requestsInRoleListModel = new DefaultListModel<>();
-                    if (shifts[1].getShiftRequestsEmployees(role.toString()) != null) {
+                    if (shifts[1].getShiftWorkersEmployees(role.toString()) != null) {
                         workersPanel.add(roleLabel);
                         for (SEmployee employee : shifts[1].getShiftWorkersEmployees(role.toString())) {
                             requestsInRoleListModel.addElement(employee.getId());

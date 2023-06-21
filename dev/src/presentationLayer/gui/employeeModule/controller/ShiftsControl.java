@@ -117,8 +117,8 @@ public class ShiftsControl extends AbstractControl {
         return "Create the week shifts successfully.";
     }
 
-    public String applyCancelCard(SShift shift, String productId) {
-        String json = employeesService.applyCancelCard(UserService.HR_MANAGER_USERNAME, Branch.HEADQUARTERS_ID, shift.getShiftDate(), shift.getShiftType(), productId);
+    public String applyCancelCard(String employeeId, SShift shift, String productId) {
+        String json = employeesService.applyCancelCard(employeeId, Branch.HEADQUARTERS_ID, shift.getShiftDate(), shift.getShiftType(), productId);
         try {
             Response response = Response.fromJsonWithValidation(json); // Throws an exception if an error has occurred.
         } catch (ErrorOccurredException e) {
@@ -127,13 +127,23 @@ public class ShiftsControl extends AbstractControl {
         return "Applied the cancel card successfully.";
     }
 
-    public String reportShiftActivity(SShift shift, String activity) {
-        String json = employeesService.reportShiftActivity(UserService.HR_MANAGER_USERNAME, Branch.HEADQUARTERS_ID, shift.getShiftDate(), shift.getShiftType(), activity);
+    public String reportShiftActivity(String employeeId, SShift shift, String activity) {
+        String json = employeesService.reportShiftActivity(employeeId, Branch.HEADQUARTERS_ID, shift.getShiftDate(), shift.getShiftType(), activity);
         try {
             Response response = Response.fromJsonWithValidation(json); // Throws an exception if an error has occurred.
         } catch (ErrorOccurredException e) {
             return e.getMessage();
         }
-        return "Applied the cancel card successfully.";
+        return "Reported the shift activity successfully.";
+    }
+
+    public String requestShift(String employeeId, SShift shift, String role) {
+        String json = employeesService.requestShift(employeeId, Branch.HEADQUARTERS_ID, shift.getShiftDate(), shift.getShiftType(), role);
+        try {
+            Response response = Response.fromJsonWithValidation(json); // Throws an exception if an error has occurred.
+        } catch (ErrorOccurredException e) {
+            return e.getMessage();
+        }
+        return "Requested the shift successfully.";
     }
 }

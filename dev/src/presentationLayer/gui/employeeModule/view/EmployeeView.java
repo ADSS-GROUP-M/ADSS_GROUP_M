@@ -9,10 +9,7 @@ import presentationLayer.gui.employeeModule.view.panels.employees.EmployeeCertif
 import presentationLayer.gui.employeeModule.view.panels.employees.EmployeeDetailsPanel;
 import presentationLayer.gui.employeeModule.view.panels.employees.RecruitEmployeePanel;
 import presentationLayer.gui.employeeModule.view.panels.employees.UpdateEmployeePanel;
-import presentationLayer.gui.employeeModule.view.panels.shifts.CancelCardPanel;
-import presentationLayer.gui.employeeModule.view.panels.shifts.CreateShiftsPanel;
-import presentationLayer.gui.employeeModule.view.panels.shifts.ShiftActivityPanel;
-import presentationLayer.gui.employeeModule.view.panels.shifts.ViewShiftsPanel;
+import presentationLayer.gui.employeeModule.view.panels.shifts.*;
 import presentationLayer.gui.employeeModule.view.panels.users.AuthorizeUserPanel;
 import presentationLayer.gui.plAbstracts.MainWindow;
 import presentationLayer.gui.plAbstracts.PanelManager;
@@ -48,14 +45,14 @@ public class EmployeeView extends MainWindow {
                 .addCategory("Shifts",
 //                        new Link("View Shifts", // + My shifts
 //                                () -> setCurrentPanel(new EmployeeShiftsPanel(shiftsControl))),
-//                        new Link("Request Shift",
-//                                () -> setCurrentPanel(new EmployeeShiftsPanel(shiftsControl))),
+                        new Link("Request Shift",
+                                () -> setCurrentPanel(new RequestShiftPanel(employeeId, shiftsControl, this))),
 //                        new Link("Cancel Shift Request",
 //                                () -> setCurrentPanel(new EmployeeShiftsPanel(shiftsControl))),
                         new Link("Report Shift Activity",
-                                () -> setCurrentPanel(new ShiftActivityPanel(shiftsControl, this))),
+                                () -> setCurrentPanel(new ShiftActivityPanel(employeeId, shiftsControl, this))),
                         new Link("Apply Cancel Card",
-                                () -> setCurrentPanel(new CancelCardPanel(shiftsControl, this)))
+                                () -> setCurrentPanel(new CancelCardPanel(employeeId, shiftsControl, this)))
                 )
                 .addCategory("Employee Details",
                         new Link("Show my details",

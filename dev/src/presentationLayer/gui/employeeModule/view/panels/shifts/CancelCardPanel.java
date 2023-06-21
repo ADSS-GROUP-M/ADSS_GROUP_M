@@ -31,8 +31,11 @@ public class CancelCardPanel extends AbstractTransportModulePanel {
     JRadioButton morningRadioButton, eveningRadioButton;
     ButtonGroup buttonGroup;
 
-    public CancelCardPanel(ShiftsControl control, EmployeeView employeeView) {
+    String employeeId;
+
+    public CancelCardPanel(String employeeId, ShiftsControl control, EmployeeView employeeView) {
         super(control);
+        this.employeeId = employeeId;
         this.employeeView = employeeView;
         init();
     }
@@ -204,9 +207,9 @@ public class CancelCardPanel extends AbstractTransportModulePanel {
     }
 
     private void showConfirmationDialog(SShift shift) {
-        String productId = JOptionPane.showInputDialog(newOpenPanel, "Please insert the cancelled product id:", "Confirmation", JOptionPane.YES_NO_OPTION);
+        String productId = JOptionPane.showInputDialog(newOpenPanel, "Please insert the cancelled product id:", "Confirmation", JOptionPane.PLAIN_MESSAGE);
         if (productId != null) {
-            String result = ((ShiftsControl) control).applyCancelCard(shift, productId);
+            String result = ((ShiftsControl) control).applyCancelCard(employeeId, shift, productId);
             if (result != null) {
                 JOptionPane.showMessageDialog(null, result);
             }
@@ -309,7 +312,7 @@ public class CancelCardPanel extends AbstractTransportModulePanel {
                 for (Role role : Role.values()) {
                     JLabel roleLabel = new JLabel(role.toString());
                     DefaultListModel<String> requestsInRoleListModel = new DefaultListModel<>();
-                    if (shifts[0].getShiftRequestsEmployees(role.toString()) != null) {
+                    if (shifts[0].getShiftWorkersEmployees(role.toString()) != null) {
                         workersPanel.add(roleLabel);
                         for (SEmployee employee : shifts[0].getShiftWorkersEmployees(role.toString())) {
                             requestsInRoleListModel.addElement(employee.getId());
@@ -417,7 +420,7 @@ public class CancelCardPanel extends AbstractTransportModulePanel {
                 for (Role role : Role.values()) {
                     JLabel roleLabel = new JLabel(role.toString());
                     DefaultListModel<String> requestsInRoleListModel = new DefaultListModel<>();
-                    if (shifts[1].getShiftRequestsEmployees(role.toString()) != null) {
+                    if (shifts[1].getShiftWorkersEmployees(role.toString()) != null) {
                         workersPanel.add(roleLabel);
                         for (SEmployee employee : shifts[1].getShiftWorkersEmployees(role.toString())) {
                             requestsInRoleListModel.addElement(employee.getId());
@@ -529,8 +532,8 @@ public class CancelCardPanel extends AbstractTransportModulePanel {
             @Override
             public void windowClosing(WindowEvent windowEvent) {
                 int month = calendar.get(Calendar.MONTH);
-                employeeView.setCurrentPanel(new CreateShiftsPanel((ShiftsControl) control));
-                employeeView.setCurrentPanel(new CancelCardPanel((ShiftsControl) control, employeeView));
+                employeeView.setCurrentPanel(new ShiftActivityPanel(employeeId, (ShiftsControl) control, employeeView));
+                employeeView.setCurrentPanel(new CancelCardPanel(employeeId, (ShiftsControl) control, employeeView));
                 calendar.set(Calendar.MONTH, month);
 //                displayMonth(calendar);
             }

@@ -338,11 +338,38 @@ public class AddTransportPanel extends AbstractTransportModulePanel {
                 return;
             }
             destinations_itemLists.remove(index);
-            DefaultListModel<Searchable> model = (DefaultListModel<Searchable>) destinationsList.getList().getModel();
             model.remove(index);
-
+            destinationsList.getList().setModel(model);
         });
 
+        moveUpButton.addActionListener(e -> {
+            int index = destinationsList.getList().getSelectedIndex();
+            if(index == -1 || index == 0){
+                return;
+            }
+            Pair<String, Integer> pair = destinations_itemLists.get(index);
+            destinations_itemLists.remove(index);
+            destinations_itemLists.add(index-1, pair);
+            Searchable removed = model.remove(index);
+            model.add(index-1, removed);
+//            model.add(index-1, new SearchableString("List id: %d | %s".formatted(pair.getValue(), pair.getKey())));
+            destinationsList.getList().setModel(model);
+            destinationsList.getList().setSelectedIndex(index-1);
+        });
+
+        moveDownButton.addActionListener(e -> {
+            int index = destinationsList.getList().getSelectedIndex();
+            if(index == -1 || index == destinations_itemLists.size()-1){
+                return;
+            }
+            Pair<String, Integer> pair = destinations_itemLists.get(index);
+            destinations_itemLists.remove(index);
+            destinations_itemLists.add(index+1, pair);
+            Searchable removed = model.remove(index);
+            model.add(index+1, removed);
+            destinationsList.getList().setModel(model);
+            destinationsList.getList().setSelectedIndex(index+1);
+        });
 
 
 

@@ -133,6 +133,12 @@ class ItemListsServiceIT {
         }
     }
 
+    @Test
+    void addEmptyList(){
+        ItemList list = new ItemList(new HashMap<>(), new HashMap<>());
+        assertSuccessValue(ils.addItemList(list.toJson()),false);
+    }
+
     private void assertDeepEquals(ItemList itemList1, ItemList itemList2) {
         assertEquals(itemList1.id(), itemList2.id());
         assertEquals(itemList1.load(), itemList2.load());

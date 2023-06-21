@@ -6,6 +6,7 @@ import utils.JsonUtils;
 import utils.Response;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class ItemListsManagement {
 
@@ -150,7 +151,7 @@ public class ItemListsManagement {
         cliData.readWord();
     }
 
-    private void itemEditor(HashMap<String,Integer> items) {
+    private void itemEditor(Map<String,Integer> items) {
         System.out.println("\nTo remove items from the list enter the item name and 0 in the quantity");
         System.out.println("To finish adding items, enter \"done!\" in the item name");
         while (true) {

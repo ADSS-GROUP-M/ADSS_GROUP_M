@@ -61,9 +61,16 @@ public class SQLExecutorImpl implements SQLExecutor {
     @Override
     public OfflineResultSet executeRead(String query) throws SQLException {
 
+        if(query == null || query.isBlank()){
+            if(inTransaction()){
+                rollback();
+            }
+            throw new SQLException("query is null or empty");
+        }
+
         query = cleanQuery(query);
 
-        if(transactionConnection != null && transactionConnection.isClosed() == false){
+        if(inTransaction()){
             return new OfflineResultSet(transactionConnection.createStatement().executeQuery(query));
         } else {
             try (Connection connection = DriverManager.getConnection(URL)) {
@@ -77,9 +84,16 @@ public class SQLExecutorImpl implements SQLExecutor {
     @Override
     public int executeWrite(String query) throws SQLException {
 
+        if(query == null || query.isBlank()){
+            if(inTransaction()){
+                rollback();
+            }
+            throw new SQLException("query is null or empty");
+        }
+
         query = cleanQuery(query);
 
-        if(transactionConnection != null && transactionConnection.isClosed() == false){
+        if(inTransaction()){
             try{
                 return transactionConnection.createStatement().executeUpdate(query);
             } catch (SQLException e) {
@@ -100,6 +114,10 @@ public class SQLExecutorImpl implements SQLExecutor {
                 }
             }
         }
+    }
+
+    private boolean inTransaction() throws SQLException {
+        return transactionConnection != null && transactionConnection.isClosed() == false;
     }
 
     @Override

@@ -6,9 +6,10 @@ import utils.JsonUtils;
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.Objects;
 
-public record ItemList (int id, HashMap<String, Integer> load,HashMap<String, Integer> unload) {
+public record ItemList (int id, Map<String, Integer> load, Map<String, Integer> unload) {
 
     /**
      * @param id new id of the transport
@@ -25,7 +26,7 @@ public record ItemList (int id, HashMap<String, Integer> load,HashMap<String, In
     /**
      * this constructor sets the id to be -1
      */
-    public ItemList(HashMap<String, Integer> load,HashMap<String, Integer> unload) {
+    public ItemList(Map<String, Integer> load,Map<String, Integer> unload) {
         this(
             -1,
             load,

@@ -73,10 +73,10 @@ public class ViewItemListPanel extends AbstractTransportModulePanel {
                 ObservableItemList ils = itemLists.get(index);
 
                 DefaultListModel<Searchable> unLoadModel = new DefaultListModel<>();
-                ils.unload.forEach((key, value) -> unLoadModel.addElement(new SearchableString("%s %s".formatted(value, key))));
+                ils.unload.forEach((key, value) -> unLoadModel.addElement(new SearchableString("%s - %s".formatted(value, key))));
 
                 DefaultListModel<Searchable> loadModel = new DefaultListModel<>();
-                ils.load.forEach((key, value) -> loadModel.addElement(new SearchableString("%s %s".formatted(value, key))));
+                ils.load.forEach((key, value) -> loadModel.addElement(new SearchableString("%s - %s".formatted(value, key))));
 
                 unLoadingList.getList().setModel(unLoadModel);
                 loadingList.getList().setModel(loadModel);

@@ -148,21 +148,19 @@ public class AddSitePanel extends AbstractTransportModulePanel {
     private void buttonClicked(){
         ObservableSite site =  new ObservableSite();
         site.subscribe(this);
+
         site.name = nameField.getText();
         site.address = addressField.getText();
         site.transportZone = zoneField.getText();
         site.phoneNumber = contactPhoneField.getText();
         site.contactName = contactNameField.getText();
-        if(branch.isSelected())
-        {
+        if(branch.isSelected()) {
             site.siteType = Site.SiteType.BRANCH;
         }
-        else if(logisticCenter.isSelected())
-        {
+        else if(logisticCenter.isSelected()) {
             site.siteType = Site.SiteType.LOGISTICAL_CENTER;
         }
-        else
-        {
+        else {
             site.siteType = Site.SiteType.SUPPLIER;
         }
         observers.forEach(observer -> observer.add(this, site));

@@ -210,6 +210,7 @@ public class UpdateTruckPanel extends AbstractTransportModulePanel {
                     truck.coolingCapacity = CoolingCapacity.valueOf("FROZEN");
                 }
                 observers.forEach(observer -> observer.update(this, truck));
+                return;
             }
         }
     }

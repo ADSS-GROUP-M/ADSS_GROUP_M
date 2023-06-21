@@ -25,8 +25,8 @@ public class Main {
 //        new MenuManager().run();
 //    }
 //
-//    @Test
-//    public void generate(){
-//        new DataGenerator().generateData();
-//    }
+    @Test
+    public void generate(){
+        new DataGenerator().generateData();
+    }
 }

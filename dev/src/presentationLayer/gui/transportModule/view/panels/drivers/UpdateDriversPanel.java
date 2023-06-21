@@ -142,6 +142,7 @@ public class UpdateDriversPanel extends AbstractTransportModulePanel {
                 driver.subscribe(this);
 
                 observers.forEach(observer -> observer.update(this, driver));
+                return;
             }
         }
     }

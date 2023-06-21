@@ -19,7 +19,7 @@ public class ItemListsService {
      */
     public String addItemList(String json){
         ItemList itemList = ItemList.fromJson(json);
-        Integer id = null;
+
         ItemList added;
         try {
               added = ilc.addItemList(itemList);

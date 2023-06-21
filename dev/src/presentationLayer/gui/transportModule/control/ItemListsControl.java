@@ -29,12 +29,14 @@ public class ItemListsControl extends AbstractControl {
         Response response;
         try {
             response = Response.fromJsonWithValidation(json);
-            itemList.message = response.message();
         } catch (ErrorOccurredException e) {
             itemList.errorOccurred = true;
             itemList.errorMessage = e.getMessage();
+            itemList.notifyObservers();
+            return;
         }
 
+        itemList.message = response.message();
         itemList.notifyObservers();
     }
 

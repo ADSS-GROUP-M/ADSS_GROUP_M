@@ -21,6 +21,8 @@ import presentationLayer.gui.transportModule.view.panels.trucks.AddTruckPanel;
 import presentationLayer.gui.transportModule.view.panels.trucks.UpdateTruckPanel;
 import presentationLayer.gui.transportModule.view.panels.trucks.ViewTrucksPanel;
 
+import java.util.function.Function;
+
 public class TransportView extends MainWindow {
 
     private Panel currentPanel;
@@ -54,7 +56,8 @@ public class TransportView extends MainWindow {
         return new QuickAccess()
         .addCategory("Transport Management",
                 new Link("View Transports",
-                        () -> setCurrentPanel(new ViewTransportsPanel(, transportsControl, sitesControl, driversControl,trucksControl,itemListsControl, ))),
+                        () -> setCurrentPanel(new ViewTransportsPanel((Panel p ) -> {setCurrentPanel(p);return null;},
+                                transportsControl, sitesControl, driversControl,trucksControl,itemListsControl))),
                 new Link("Add Transport",
                         () -> setCurrentPanel(new AddTransportPanel(transportsControl, sitesControl, driversControl,trucksControl,itemListsControl)))
         )

@@ -41,6 +41,7 @@ public class AddTransportPanel extends AbstractTransportModulePanel {
     private ObservableList<Searchable> driversList;
     private ObservableList<Searchable> trucksList;
     private ObservableList<Searchable> itemLists;
+    private DefaultListModel<Searchable> model;
 
     public AddTransportPanel(TransportsControl control,
                              SitesControl sitesControl,
@@ -53,6 +54,7 @@ public class AddTransportPanel extends AbstractTransportModulePanel {
         this.trucksControl = trucksControl;
         this.itemListsControl = itemListsControl;
         destinations_itemLists = new LinkedList<>();
+        model = new DefaultListModel<>();
         init();
     }
 
@@ -281,7 +283,6 @@ public class AddTransportPanel extends AbstractTransportModulePanel {
 
         addItemButton.addMouseListener(new MouseAdapter() {
 
-            DefaultListModel<Searchable> model = new DefaultListModel<>();
             @Override
             public void mouseClicked(MouseEvent e) {
                 String selectedDestination = destinations.getSelected();
@@ -323,8 +324,6 @@ public class AddTransportPanel extends AbstractTransportModulePanel {
             }
         });
 
-
-        ModelObserver o = this;
         submitButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -332,6 +331,21 @@ public class AddTransportPanel extends AbstractTransportModulePanel {
                 buttonClicked();
             }
         });
+
+        removeItemButton.addActionListener(e -> {
+            int index = destinationsList.getList().getSelectedIndex();
+            if(index == -1){
+                return;
+            }
+            destinations_itemLists.remove(index);
+            DefaultListModel<Searchable> model = (DefaultListModel<Searchable>) destinationsList.getList().getModel();
+            model.remove(index);
+
+        });
+
+
+
+
     }
 
     private void buttonClicked(){

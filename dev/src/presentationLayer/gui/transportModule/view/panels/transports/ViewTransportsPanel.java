@@ -108,7 +108,7 @@ public class ViewTransportsPanel extends AbstractTransportModulePanel {
                     return;
                 }
 
-                String s = o.toString().substring(5);
+                String s = o.toString();
                 for(Searchable s2 : transports){
                     if(s2.getLongDescription().equals(s)){
                         ObservableTransport t = (ObservableTransport) s2;
@@ -126,9 +126,6 @@ public class ViewTransportsPanel extends AbstractTransportModulePanel {
                 }
             }
         });
-
-
-
     }
 
 

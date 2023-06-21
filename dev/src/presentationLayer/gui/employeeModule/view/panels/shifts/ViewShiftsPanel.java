@@ -38,120 +38,23 @@ public class ViewShiftsPanel extends AbstractTransportModulePanel {
     }
 
     private void init() {
-        // TODO: Swap all this example implementation
         contentPanel.setLayout(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
-//        listModel = new DefaultListModel<>();
-//
-//        // Create the JList
-//        list = new JList<>(listModel);
-//        listPanel = new JScrollPane(list);
-//
-//        list.setBackground(new Color(0,0,0,0));
-//        listPanel.setBorder(new Border() {
-//            @Override
-//            public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
-//                Graphics2D g2 = (Graphics2D)g;
-//                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-//                g2.setColor(Colors.getContentPanelColor());
-//                g2.setStroke(new BasicStroke(1));
-////                g2.drawArc(0,height-25,25,25,180,90);
-//                g2.fillRect(0,0,10,height);
-//                g2.fillRect(0,height-10,width,10);
-//            }
-//
-//            @Override
-//            public Insets getBorderInsets(Component c) {
-//                return new Insets(0,20,20,20);
-//            }
-//
-//            @Override
-//            public boolean isBorderOpaque() {
-//                return false;
-//            }
-//        });
-//        list.setBorder(new EmptyBorder(0,20,20,20));
-//        listPanel.setBackground(new Color(0,0,0,0));
-//
-//        list.setCellRenderer(new DefaultListCellRenderer() {
-//            @Override
-//            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-//                Component renderer = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-//                renderer.setBackground(new Color(0,0,0,0));
-//                if(isSelected) {
-//                    renderer.setBackground(new Color(200,200,200,128));
-//                }
-//                panel.repaint();
-//                setBorder(new Border() {
-//                    @Override
-//                    public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
-//                        Graphics2D g2 = (Graphics2D) g;
-//                        g2.setStroke(new BasicStroke(1));
-//                        g2.setColor(new Color(200,200,200,100));
-//                        g2.drawLine(0,height-1, width,height-1);
-//                    }
-//
-//                    @Override
-//                    public Insets getBorderInsets(Component c) {
-//                        return new Insets(10,5,10,5);
-//                    }
-//
-//                    @Override
-//                    public boolean isBorderOpaque() {
-//                        return false;
-//                    }
-//                });
-//                return renderer;
-//            }
-//        });
-//
-//        list.addMouseListener(new MouseAdapter() {
-//            public void mouseClicked(MouseEvent e) {
-//                if (e.getClickCount() == 2) { // Double-click event
-//                    int selectedIndex = list.getSelectedIndex();
-//                    if (selectedIndex != -1) {
-//                        String selectedItem = listModel.getElementAt(selectedIndex);
-//
-//                        openNewWindow(selectedItem);
-//                    }
-//                }
-//            }
-//        });
-//
 
-//        innerPanel = new JPanel();
-//        innerPanel.setBackground(new Color(0, 0, 0, 0));
-
-//        innerPanel.add(listPanel);
-//
-//        addItem(s1.getShortDescription());
-//        addItem(s2.getShortDescription());
-//        addItem(s3.getShortDescription());
-//        addItem(s4.getShortDescription());
-//
-//        // Create the remove button
-//        //JButton removeButton = new JButton("Remove");
-//        //removeButton.setPreferredSize(new Dimension(100, 30));
-//        //innerPanel.add(removeButton,constraints);
-//        contentPanel.add(innerPanel,constraints);
-//      /*  removeButton.addActionListener(new ActionListener() {
-//            public void actionPerformed(ActionEvent e) {
-//                showConfirmationDialog();
-//            }
-//        });*/
-//         //Set up the confirmation dialog on window close
-//        addWindowListener(new WindowAdapter() {
-//            @Override
-//            public void windowClosing(WindowEvent e) {
-//                showConfirmationDialog();
-//            }
-//        });
+        JLabel headerLabel = new JLabel("Select the shift day to show:");
+        headerLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        headerLabel.setFont(new Font("Tahoma", Font.BOLD, 20));
+        constraints.gridx = 0;
+        constraints.gridy = 0;
+        constraints.gridwidth = 1;
+        constraints.anchor = GridBagConstraints.NORTH;
+        contentPanel.add(headerLabel, constraints);
 
         monthLabel = new JLabel("");
         monthLabel.setHorizontalAlignment(SwingConstants.CENTER);
         monthLabel.setFont(new Font("Tahoma", Font.BOLD, 20));
         constraints.gridx = 0;
-        constraints.gridy = 0;
+        constraints.gridy = 1;
         constraints.gridwidth = 1;
         constraints.anchor = GridBagConstraints.NORTH;
         contentPanel.add(monthLabel, constraints);
@@ -197,14 +100,14 @@ public class ViewShiftsPanel extends AbstractTransportModulePanel {
 
         JScrollPane scrollPane = new JScrollPane(calendarTable);
         constraints.gridx = 0;
-        constraints.gridy = 1;
+        constraints.gridy = 2;
         constraints.gridwidth = 1;
         constraints.anchor = GridBagConstraints.CENTER;
         contentPanel.add(scrollPane, constraints);
 
         JPanel buttonPanel = new JPanel(new FlowLayout());
         constraints.gridx = 0;
-        constraints.gridy = 2;
+        constraints.gridy = 3;
         constraints.gridwidth = 1;
         constraints.anchor = GridBagConstraints.SOUTH;
         contentPanel.add(buttonPanel, constraints);

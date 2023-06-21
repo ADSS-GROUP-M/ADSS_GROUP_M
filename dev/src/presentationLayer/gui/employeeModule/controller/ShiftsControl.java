@@ -110,4 +110,14 @@ public class ShiftsControl extends AbstractControl {
         }
         return "Approved the shift successfully.";
     }
+
+    public String createWeekShifts(LocalDate weekStart) {
+        String json = employeesService.createWeekShifts(UserService.HR_MANAGER_USERNAME, Branch.HEADQUARTERS_ID, weekStart);
+        try {
+            Response response = Response.fromJsonWithValidation(json); // Throws an exception if an error has occurred.
+        } catch (ErrorOccurredException e) {
+            return e.getMessage();
+        }
+        return "Create the week shifts successfully.";
+    }
 }

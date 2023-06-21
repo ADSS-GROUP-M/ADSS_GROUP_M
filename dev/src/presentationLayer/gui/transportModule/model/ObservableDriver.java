@@ -18,7 +18,7 @@ public class ObservableDriver extends AbstractObservableModel {
 
     @Override
     public boolean isMatch(String query) {
-        return id.contains(query);
+        return id.contains(query.trim());
     }
 
     @Override

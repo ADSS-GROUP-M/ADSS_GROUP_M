@@ -22,7 +22,7 @@ public class ObservableSite extends AbstractObservableModel {
 
     @Override
     public boolean isMatch(String query) {
-        return name.contains(query);
+        return name.contains(query.trim());
     }
 
     @Override

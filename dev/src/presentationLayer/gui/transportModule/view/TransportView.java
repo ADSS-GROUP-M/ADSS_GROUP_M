@@ -57,7 +57,7 @@ public class TransportView extends MainWindow {
                 new Link("View Transports",
                         () -> setCurrentPanel(new ViewTransportsPanel(transportsControl, sitesControl))),
                 new Link("Add Transport",
-                        () -> setCurrentPanel(new AddTransportPanel(transportsControl, sitesControl, driversControl,trucksControl))),
+                        () -> setCurrentPanel(new AddTransportPanel(transportsControl, sitesControl, driversControl,trucksControl,itemListsControl))),
                 new Link("Update Transport",
                         () -> setCurrentPanel(new UpdateTransportPanel(transportsControl)))
         )

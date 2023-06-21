@@ -202,10 +202,6 @@ public class CreateShiftsPanel extends AbstractTransportModulePanel {
         if (choice == JOptionPane.YES_OPTION) {
             String result = ((ShiftsControl)control).createWeekShifts(weekStart);
             JOptionPane.showMessageDialog(contentPanel, result);
-//            int month = calendar.get(Calendar.MONTH);
-//            hrManagerView.setCurrentPanel(new CreateShiftsPanel((ShiftsControl) control));
-//            hrManagerView.setCurrentPanel(new ViewShiftsPanel((ShiftsControl) control, hrManagerView));
-//            calendar.set(Calendar.MONTH, month);
         }
     }
 

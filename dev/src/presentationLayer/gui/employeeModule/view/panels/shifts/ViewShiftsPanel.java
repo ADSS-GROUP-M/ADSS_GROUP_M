@@ -203,15 +203,6 @@ public class ViewShiftsPanel extends AbstractTransportModulePanel {
         }
     }
 
-
-//    private void removeSelectedItems(int selectedIndex) {
-//            listModel.remove(selectedIndex);
-//    }
-//
-//    public void addItem(String item) {
-//        listModel.addElement(item);
-//    }
-//
     private void showConfirmationDialog(SShift shift) {
         int choice = JOptionPane.showConfirmDialog(newOpenPanel, "Are you sure you want to remove the selected shift?", "Confirmation", JOptionPane.YES_NO_OPTION);
         if (choice == JOptionPane.YES_OPTION) {
@@ -228,8 +219,6 @@ public class ViewShiftsPanel extends AbstractTransportModulePanel {
         newOpenWindow.setSize(900, 650);
         newOpenWindow.setLocationRelativeTo(contentPanel);
         newOpenWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
-        //newOpenWindow.setLayout(new GridBagLayout());
 
         newOpenWindow.getContentPane();
         newOpenPanel.setLayout(null);
@@ -272,7 +261,6 @@ public class ViewShiftsPanel extends AbstractTransportModulePanel {
                 morningShiftPanel.add(shiftDateTypeDescription);
 
                 // Needed Roles
-
                 JLabel neededRolesLabel = new JLabel("Needed Roles:");
                 neededRolesLabel.setFont(new Font("Arial", Font.BOLD, 20));
                 neededRolesLabel.setForeground(Colors.getForegroundColor());
@@ -286,7 +274,6 @@ public class ViewShiftsPanel extends AbstractTransportModulePanel {
                 morningShiftPanel.add(neededRolesList);
 
                 // Shift Requests
-
                 JLabel requestsLabel = new JLabel("Requests:");
                 requestsLabel.setFont(new Font("Arial", Font.BOLD, 20));
                 requestsLabel.setForeground(Colors.getForegroundColor());
@@ -308,7 +295,6 @@ public class ViewShiftsPanel extends AbstractTransportModulePanel {
                 morningShiftPanel.add(requestsPanel);
 
                 // Shift Workers
-
                 JLabel workersLabel = new JLabel("Workers:");
                 workersLabel.setFont(new Font("Arial", Font.BOLD, 20));
                 workersLabel.setForeground(Colors.getForegroundColor());
@@ -343,7 +329,6 @@ public class ViewShiftsPanel extends AbstractTransportModulePanel {
                 morningShiftPanel.add(cancelCartAppliesList);
 
                 // Shift Activities
-
                 JLabel shiftActivitiesLabel = new JLabel("Shift Activities:");
                 shiftActivitiesLabel.setFont(new Font("Arial", Font.BOLD, 20));
                 shiftActivitiesLabel.setForeground(Colors.getForegroundColor());
@@ -380,7 +365,6 @@ public class ViewShiftsPanel extends AbstractTransportModulePanel {
                 eveningShiftPanel.add(shiftDateTypeDescription);
 
                 // Needed Roles
-
                 JLabel neededRolesLabel = new JLabel("Needed Roles:");
                 neededRolesLabel.setFont(new Font("Arial", Font.BOLD, 20));
                 neededRolesLabel.setForeground(Colors.getForegroundColor());
@@ -394,7 +378,6 @@ public class ViewShiftsPanel extends AbstractTransportModulePanel {
                 eveningShiftPanel.add(neededRolesList);
 
                 // Shift Requests
-
                 JLabel requestsLabel = new JLabel("Requests:");
                 requestsLabel.setFont(new Font("Arial", Font.BOLD, 20));
                 requestsLabel.setForeground(Colors.getForegroundColor());
@@ -416,7 +399,6 @@ public class ViewShiftsPanel extends AbstractTransportModulePanel {
                 eveningShiftPanel.add(requestsPanel);
 
                 // Shift Workers
-
                 JLabel workersLabel = new JLabel("Workers:");
                 workersLabel.setFont(new Font("Arial", Font.BOLD, 20));
                 workersLabel.setForeground(Colors.getForegroundColor());
@@ -451,7 +433,6 @@ public class ViewShiftsPanel extends AbstractTransportModulePanel {
                 eveningShiftPanel.add(cancelCartAppliesList);
 
                 // Shift Activities
-
                 JLabel shiftActivitiesLabel = new JLabel("Shift Activities:");
                 shiftActivitiesLabel.setFont(new Font("Arial", Font.BOLD, 20));
                 shiftActivitiesLabel.setForeground(Colors.getForegroundColor());
@@ -488,10 +469,6 @@ public class ViewShiftsPanel extends AbstractTransportModulePanel {
 
             eveningRadioButton.setBounds(20,390,20,20);
 
-            //newOpenWindow.add(label);
-
-            //Create the remove button
-            //JPanel buttonPanel = new JPanel();
             JButton deleteButton = new JButton("Delete");
             deleteButton.setPreferredSize(new Dimension(100, 30));
             deleteButton.setBounds(550, 550, 100, 30);
@@ -524,15 +501,9 @@ public class ViewShiftsPanel extends AbstractTransportModulePanel {
 
             updateButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    // TODO: Open the update window
                     updateButtonClicked(shifts);
                 }
             });
-            //GridBagConstraints constraints = new GridBagConstraints();
-            //constraints.fill = GridBagConstraints.WEST;
-            //constraints.anchor = GridBagConstraints.PAGE_END;
-            //newOpenPanel.add(buttonPanel);
-            //buttonPanel.setLocation(0,20);
         }
         else if (dayShifts instanceof String) {
             JTextArea errorTextArea = new JTextArea("Error: \n" + dayShifts);

@@ -226,8 +226,6 @@ public class CancelShiftRequestPanel extends AbstractTransportModulePanel {
         newOpenWindow.setLocationRelativeTo(contentPanel);
         newOpenWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        //newOpenWindow.setLayout(new GridBagLayout());
-
         newOpenWindow.getContentPane();
         newOpenPanel.setLayout(null);
 
@@ -269,7 +267,6 @@ public class CancelShiftRequestPanel extends AbstractTransportModulePanel {
                 morningShiftPanel.add(shiftDateTypeDescription);
 
                 // Needed Roles
-
                 JLabel neededRolesLabel = new JLabel("Needed Roles:");
                 neededRolesLabel.setFont(new Font("Arial", Font.BOLD, 20));
                 neededRolesLabel.setForeground(Colors.getForegroundColor());
@@ -283,7 +280,6 @@ public class CancelShiftRequestPanel extends AbstractTransportModulePanel {
                 morningShiftPanel.add(neededRolesList);
 
                 // Shift Requests
-
                 JLabel requestsLabel = new JLabel("Requests:");
                 requestsLabel.setFont(new Font("Arial", Font.BOLD, 20));
                 requestsLabel.setForeground(Colors.getForegroundColor());
@@ -305,7 +301,6 @@ public class CancelShiftRequestPanel extends AbstractTransportModulePanel {
                 morningShiftPanel.add(requestsPanel);
 
                 // Shift Workers
-
                 JLabel workersLabel = new JLabel("Workers:");
                 workersLabel.setFont(new Font("Arial", Font.BOLD, 20));
                 workersLabel.setForeground(Colors.getForegroundColor());
@@ -340,7 +335,6 @@ public class CancelShiftRequestPanel extends AbstractTransportModulePanel {
                 morningShiftPanel.add(cancelCartAppliesList);
 
                 // Shift Activities
-
                 JLabel shiftActivitiesLabel = new JLabel("Shift Activities:");
                 shiftActivitiesLabel.setFont(new Font("Arial", Font.BOLD, 20));
                 shiftActivitiesLabel.setForeground(Colors.getForegroundColor());
@@ -377,7 +371,6 @@ public class CancelShiftRequestPanel extends AbstractTransportModulePanel {
                 eveningShiftPanel.add(shiftDateTypeDescription);
 
                 // Needed Roles
-
                 JLabel neededRolesLabel = new JLabel("Needed Roles:");
                 neededRolesLabel.setFont(new Font("Arial", Font.BOLD, 20));
                 neededRolesLabel.setForeground(Colors.getForegroundColor());
@@ -391,7 +384,6 @@ public class CancelShiftRequestPanel extends AbstractTransportModulePanel {
                 eveningShiftPanel.add(neededRolesList);
 
                 // Shift Requests
-
                 JLabel requestsLabel = new JLabel("Requests:");
                 requestsLabel.setFont(new Font("Arial", Font.BOLD, 20));
                 requestsLabel.setForeground(Colors.getForegroundColor());
@@ -413,7 +405,6 @@ public class CancelShiftRequestPanel extends AbstractTransportModulePanel {
                 eveningShiftPanel.add(requestsPanel);
 
                 // Shift Workers
-
                 JLabel workersLabel = new JLabel("Workers:");
                 workersLabel.setFont(new Font("Arial", Font.BOLD, 20));
                 workersLabel.setForeground(Colors.getForegroundColor());
@@ -448,7 +439,6 @@ public class CancelShiftRequestPanel extends AbstractTransportModulePanel {
                 eveningShiftPanel.add(cancelCartAppliesList);
 
                 // Shift Activities
-
                 JLabel shiftActivitiesLabel = new JLabel("Shift Activities:");
                 shiftActivitiesLabel.setFont(new Font("Arial", Font.BOLD, 20));
                 shiftActivitiesLabel.setForeground(Colors.getForegroundColor());
@@ -485,10 +475,6 @@ public class CancelShiftRequestPanel extends AbstractTransportModulePanel {
 
             eveningRadioButton.setBounds(20,390,20,20);
 
-            //newOpenWindow.add(label);
-
-            //Create the remove button
-            //JPanel buttonPanel = new JPanel();
             JButton cancelShiftRequestButton = new JButton("Cancel Shift Request");
             cancelShiftRequestButton.setPreferredSize(new Dimension(200, 30));
             cancelShiftRequestButton.setBounds(350, 550, 200, 30);

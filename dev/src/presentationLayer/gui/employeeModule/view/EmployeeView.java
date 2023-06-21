@@ -67,6 +67,6 @@ public class EmployeeView extends MainWindow {
         EmployeesControl employeesControl = factory.employeesControl();
         ShiftsControl shiftsControl = factory.shiftsControl();
 
-        MainWindow mainWindow = new EmployeeView(employeesControl, shiftsControl,"111");
+        MainWindow mainWindow = new EmployeeView(employeesControl, shiftsControl,"111"); // Example Employee
     }
 }

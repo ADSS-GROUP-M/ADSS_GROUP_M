@@ -275,7 +275,6 @@ public class EmployeeShiftsPanel extends AbstractTransportModulePanel {
                     morningShiftPanel.add(shiftDateTypeDescription);
 
                     // Needed Roles
-
                     JLabel neededRolesLabel = new JLabel("Needed Roles:");
                     neededRolesLabel.setFont(new Font("Arial", Font.BOLD, 20));
                     neededRolesLabel.setForeground(Colors.getForegroundColor());
@@ -289,7 +288,6 @@ public class EmployeeShiftsPanel extends AbstractTransportModulePanel {
                     morningShiftPanel.add(neededRolesList);
 
                     // Shift Requests
-
                     JLabel requestsLabel = new JLabel("Requests:");
                     requestsLabel.setFont(new Font("Arial", Font.BOLD, 20));
                     requestsLabel.setForeground(Colors.getForegroundColor());
@@ -311,7 +309,6 @@ public class EmployeeShiftsPanel extends AbstractTransportModulePanel {
                     morningShiftPanel.add(requestsPanel);
 
                     // Shift Workers
-
                     JLabel workersLabel = new JLabel("Workers:");
                     workersLabel.setFont(new Font("Arial", Font.BOLD, 20));
                     workersLabel.setForeground(Colors.getForegroundColor());
@@ -346,7 +343,6 @@ public class EmployeeShiftsPanel extends AbstractTransportModulePanel {
                     morningShiftPanel.add(cancelCartAppliesList);
 
                     // Shift Activities
-
                     JLabel shiftActivitiesLabel = new JLabel("Shift Activities:");
                     shiftActivitiesLabel.setFont(new Font("Arial", Font.BOLD, 20));
                     shiftActivitiesLabel.setForeground(Colors.getForegroundColor());
@@ -390,7 +386,6 @@ public class EmployeeShiftsPanel extends AbstractTransportModulePanel {
                     eveningShiftPanel.add(shiftDateTypeDescription);
 
                     // Needed Roles
-
                     JLabel neededRolesLabel = new JLabel("Needed Roles:");
                     neededRolesLabel.setFont(new Font("Arial", Font.BOLD, 20));
                     neededRolesLabel.setForeground(Colors.getForegroundColor());
@@ -404,7 +399,6 @@ public class EmployeeShiftsPanel extends AbstractTransportModulePanel {
                     eveningShiftPanel.add(neededRolesList);
 
                     // Shift Requests
-
                     JLabel requestsLabel = new JLabel("Requests:");
                     requestsLabel.setFont(new Font("Arial", Font.BOLD, 20));
                     requestsLabel.setForeground(Colors.getForegroundColor());
@@ -426,7 +420,6 @@ public class EmployeeShiftsPanel extends AbstractTransportModulePanel {
                     eveningShiftPanel.add(requestsPanel);
 
                     // Shift Workers
-
                     JLabel workersLabel = new JLabel("Workers:");
                     workersLabel.setFont(new Font("Arial", Font.BOLD, 20));
                     workersLabel.setForeground(Colors.getForegroundColor());
@@ -461,7 +454,6 @@ public class EmployeeShiftsPanel extends AbstractTransportModulePanel {
                     eveningShiftPanel.add(cancelCartAppliesList);
 
                     // Shift Activities
-
                     JLabel shiftActivitiesLabel = new JLabel("Shift Activities:");
                     shiftActivitiesLabel.setFont(new Font("Arial", Font.BOLD, 20));
                     shiftActivitiesLabel.setForeground(Colors.getForegroundColor());
@@ -562,7 +554,6 @@ public class EmployeeShiftsPanel extends AbstractTransportModulePanel {
                 morningShiftPanel.add(shiftDateTypeDescription);
 
                 // Needed Roles
-
                 JLabel neededRolesLabel = new JLabel("Needed Roles:");
                 neededRolesLabel.setFont(new Font("Arial", Font.BOLD, 20));
                 neededRolesLabel.setForeground(Colors.getForegroundColor());
@@ -576,7 +567,6 @@ public class EmployeeShiftsPanel extends AbstractTransportModulePanel {
                 morningShiftPanel.add(neededRolesList);
 
                 // Shift Requests
-
                 JLabel requestsLabel = new JLabel("Requests:");
                 requestsLabel.setFont(new Font("Arial", Font.BOLD, 20));
                 requestsLabel.setForeground(Colors.getForegroundColor());
@@ -598,7 +588,6 @@ public class EmployeeShiftsPanel extends AbstractTransportModulePanel {
                 morningShiftPanel.add(requestsPanel);
 
                 // Shift Workers
-
                 JLabel workersLabel = new JLabel("Workers:");
                 workersLabel.setFont(new Font("Arial", Font.BOLD, 20));
                 workersLabel.setForeground(Colors.getForegroundColor());
@@ -633,7 +622,6 @@ public class EmployeeShiftsPanel extends AbstractTransportModulePanel {
                 morningShiftPanel.add(cancelCartAppliesList);
 
                 // Shift Activities
-
                 JLabel shiftActivitiesLabel = new JLabel("Shift Activities:");
                 shiftActivitiesLabel.setFont(new Font("Arial", Font.BOLD, 20));
                 shiftActivitiesLabel.setForeground(Colors.getForegroundColor());
@@ -670,7 +658,6 @@ public class EmployeeShiftsPanel extends AbstractTransportModulePanel {
                 eveningShiftPanel.add(shiftDateTypeDescription);
 
                 // Needed Roles
-
                 JLabel neededRolesLabel = new JLabel("Needed Roles:");
                 neededRolesLabel.setFont(new Font("Arial", Font.BOLD, 20));
                 neededRolesLabel.setForeground(Colors.getForegroundColor());
@@ -684,7 +671,6 @@ public class EmployeeShiftsPanel extends AbstractTransportModulePanel {
                 eveningShiftPanel.add(neededRolesList);
 
                 // Shift Requests
-
                 JLabel requestsLabel = new JLabel("Requests:");
                 requestsLabel.setFont(new Font("Arial", Font.BOLD, 20));
                 requestsLabel.setForeground(Colors.getForegroundColor());
@@ -706,7 +692,6 @@ public class EmployeeShiftsPanel extends AbstractTransportModulePanel {
                 eveningShiftPanel.add(requestsPanel);
 
                 // Shift Workers
-
                 JLabel workersLabel = new JLabel("Workers:");
                 workersLabel.setFont(new Font("Arial", Font.BOLD, 20));
                 workersLabel.setForeground(Colors.getForegroundColor());
@@ -741,7 +726,6 @@ public class EmployeeShiftsPanel extends AbstractTransportModulePanel {
                 eveningShiftPanel.add(cancelCartAppliesList);
 
                 // Shift Activities
-
                 JLabel shiftActivitiesLabel = new JLabel("Shift Activities:");
                 shiftActivitiesLabel.setFont(new Font("Arial", Font.BOLD, 20));
                 shiftActivitiesLabel.setForeground(Colors.getForegroundColor());

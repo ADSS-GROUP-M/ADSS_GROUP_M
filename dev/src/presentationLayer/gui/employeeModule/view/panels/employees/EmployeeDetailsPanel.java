@@ -25,7 +25,6 @@ public class EmployeeDetailsPanel extends AbstractTransportModulePanel {
 
     private void init() {
         contentPanel.setSize(scrollPane.getSize());
-
         contentPanel.setLayout(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
 

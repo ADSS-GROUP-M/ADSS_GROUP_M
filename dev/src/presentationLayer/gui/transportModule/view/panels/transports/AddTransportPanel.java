@@ -44,6 +44,9 @@ public class AddTransportPanel extends AbstractTransportModulePanel {
     private ObservableList<Searchable> trucksList;
     private ObservableList<Searchable> itemLists;
     private DefaultListModel<Searchable> model;
+    private JPanel complexComponentsPanel;
+    private JPanel simpleComponentsPanel;
+    private SearchBox destinations;
 
     public AddTransportPanel(TransportsControl control,
                              SitesControl sitesControl,
@@ -105,7 +108,7 @@ public class AddTransportPanel extends AbstractTransportModulePanel {
 
         // ====================== SIMPLE COMPONENTS =============================
 
-        JPanel simpleComponentsPanel = new JPanel();
+        simpleComponentsPanel = new JPanel();
         simpleComponentsPanel.setLayout(new GridBagLayout());
         simpleComponentsPanel.setBackground(new Color(0,0,0,0));
 
@@ -213,7 +216,7 @@ public class AddTransportPanel extends AbstractTransportModulePanel {
 
         constraints = new GridBagConstraints();
 
-        JPanel complexComponentsPanel = new JPanel();
+        complexComponentsPanel = new JPanel();
         complexComponentsPanel.setLayout(new GridBagLayout());
         complexComponentsPanel.setBackground(new Color(0,0,0,0));
 
@@ -226,7 +229,7 @@ public class AddTransportPanel extends AbstractTransportModulePanel {
         complexComponentsPanel.add(destinationsLabel, constraints);
 
         Dimension boxFieldSize = new Dimension(700,30);
-        SearchBox destinations = new SearchBox(sitesList,"Select Destination",boxFieldSize, LONG, panel);
+        destinations = new SearchBox(sitesList,"Select Destination",boxFieldSize, LONG, panel);
         constraints.gridx = 1;
         constraints.gridy = 0;
         constraints.gridwidth = 6;
@@ -285,10 +288,10 @@ public class AddTransportPanel extends AbstractTransportModulePanel {
         constraints.insets = new Insets(0, 0, 50, 0);
         contentPanel.add(complexComponentsPanel,constraints);
 
-        this.destinationsList = new PrettyList(new ObservableList<>(),panel);
+        destinationsList = new PrettyList(new ObservableList<>(),panel);
         constraints.gridx = 0;
         constraints.gridy = 2;
-        contentPanel.add(this.destinationsList.getComponent(),constraints);
+        contentPanel.add(destinationsList.getComponent(),constraints);
 
 
         //Submit button

@@ -19,7 +19,7 @@ public class PanelManager implements UIElement {
         cardLayout = new CardLayout();
         container = new JPanel();
         container.setLayout(cardLayout);
-        container.setLocation((int)(MainWindow.screenSize.width*0.2), 0);
+        container.setLocation((int)(MainWindow.screenSize.width*0.25), 0);
         container.setBorder(new EmptyBorder(0,0,0,0));
         String name = startingPanel.getClass().getSimpleName();
         container.add(startingPanel.getComponent(),name);
@@ -56,8 +56,8 @@ public class PanelManager implements UIElement {
 
     @Override
     public void componentResized(Dimension newSize) {
-        container.setSize(new Dimension((int)(newSize.width*0.8)-10,newSize.height-20));
+        Dimension d = MainWindow.screenSize;
+        container.setSize(new Dimension((int)(d.width*0.75)-10,d.height-20));
         currentPanel.componentResized(newSize);
-//        container.validate();
     }
 }

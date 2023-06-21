@@ -1,20 +1,16 @@
 package presentationLayer.gui.employeeModule.controller;
 
 import businessLayer.employeeModule.Branch;
-import businessLayer.employeeModule.Shift;
 import com.google.gson.reflect.TypeToken;
-import domainObjects.transportModule.Truck;
 import exceptions.ErrorOccurredException;
 import presentationLayer.gui.employeeModule.model.ObservableShift;
 import presentationLayer.gui.plAbstracts.AbstractControl;
 import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
 import presentationLayer.gui.plAbstracts.interfaces.ObservableUIElement;
-import presentationLayer.gui.transportModule.model.ObservableTruck;
 import serviceLayer.employeeModule.Objects.SShift;
 import serviceLayer.employeeModule.Objects.SShiftType;
 import serviceLayer.employeeModule.Services.EmployeesService;
 import serviceLayer.employeeModule.Services.UserService;
-import serviceLayer.transportModule.ResourceManagementService;
 import utils.Response;
 
 import java.lang.reflect.Type;
@@ -119,5 +115,25 @@ public class ShiftsControl extends AbstractControl {
             return e.getMessage();
         }
         return "Create the week shifts successfully.";
+    }
+
+    public String applyCancelCard(SShift shift, String productId) {
+        String json = employeesService.applyCancelCard(UserService.HR_MANAGER_USERNAME, Branch.HEADQUARTERS_ID, shift.getShiftDate(), shift.getShiftType(), productId);
+        try {
+            Response response = Response.fromJsonWithValidation(json); // Throws an exception if an error has occurred.
+        } catch (ErrorOccurredException e) {
+            return e.getMessage();
+        }
+        return "Applied the cancel card successfully.";
+    }
+
+    public String reportShiftActivity(SShift shift, String activity) {
+        String json = employeesService.reportShiftActivity(UserService.HR_MANAGER_USERNAME, Branch.HEADQUARTERS_ID, shift.getShiftDate(), shift.getShiftType(), activity);
+        try {
+            Response response = Response.fromJsonWithValidation(json); // Throws an exception if an error has occurred.
+        } catch (ErrorOccurredException e) {
+            return e.getMessage();
+        }
+        return "Applied the cancel card successfully.";
     }
 }

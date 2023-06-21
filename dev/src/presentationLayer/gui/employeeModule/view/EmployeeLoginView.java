@@ -54,6 +54,7 @@ public class EmployeeLoginView {
             } else {
                 if ((boolean)result) {
                     MainWindow mainWindow = new EmployeeView(employeesControl, shiftsControl, usernameField.getText());
+                    frame.dispose();
                 } else {
                     JOptionPane.showMessageDialog(null, "An unexpected result has returned from the user service.");
                 }

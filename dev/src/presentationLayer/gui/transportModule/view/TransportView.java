@@ -8,6 +8,7 @@ import presentationLayer.gui.plUtils.QuickAccess;
 import presentationLayer.gui.transportModule.control.*;
 import presentationLayer.gui.transportModule.view.panels.drivers.UpdateDriversPanel;
 import presentationLayer.gui.transportModule.view.panels.drivers.ViewDriversPanel;
+import presentationLayer.gui.transportModule.view.panels.initialPanel;
 import presentationLayer.gui.transportModule.view.panels.itemsLists.AddItemListPanel;
 import presentationLayer.gui.transportModule.view.panels.itemsLists.UpdateItemListPanel;
 import presentationLayer.gui.transportModule.view.panels.itemsLists.ViewItemListPanel;
@@ -41,7 +42,7 @@ public class TransportView extends MainWindow {
         this.driversControl = driversControl;
         this.trucksControl = trucksControl;
         this.sitesControl = sitesControl;
-        currentPanel = new ViewTransportsPanel(transportsControl, sitesControl);
+        currentPanel = new initialPanel();
         panelManager = new PanelManager(currentPanel);
         super.addUIElement(panelManager);
         super.addUIElement(initQuickAccess());

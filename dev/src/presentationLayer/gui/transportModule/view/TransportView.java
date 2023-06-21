@@ -10,7 +10,6 @@ import presentationLayer.gui.transportModule.view.panels.drivers.UpdateDriversPa
 import presentationLayer.gui.transportModule.view.panels.drivers.ViewDriversPanel;
 import presentationLayer.gui.transportModule.view.panels.initialPanel;
 import presentationLayer.gui.transportModule.view.panels.itemsLists.AddItemListPanel;
-import presentationLayer.gui.transportModule.view.panels.itemsLists.UpdateItemListPanel;
 import presentationLayer.gui.transportModule.view.panels.itemsLists.ViewItemListPanel;
 import presentationLayer.gui.transportModule.view.panels.sites.AddSitePanel;
 import presentationLayer.gui.transportModule.view.panels.sites.UpdateSitePanel;
@@ -20,8 +19,6 @@ import presentationLayer.gui.transportModule.view.panels.transports.ViewTranspor
 import presentationLayer.gui.transportModule.view.panels.trucks.AddTruckPanel;
 import presentationLayer.gui.transportModule.view.panels.trucks.UpdateTruckPanel;
 import presentationLayer.gui.transportModule.view.panels.trucks.ViewTrucksPanel;
-
-import java.util.function.Function;
 
 public class TransportView extends MainWindow {
 
@@ -65,9 +62,7 @@ public class TransportView extends MainWindow {
                 new Link("View Item Lists",
                         () -> setCurrentPanel(new ViewItemListPanel(itemListsControl))),
                 new Link("Add Item List",
-                        () -> setCurrentPanel(new AddItemListPanel(itemListsControl))),
-                new Link("Update Item List",
-                        () -> setCurrentPanel(new UpdateItemListPanel(itemListsControl)))
+                        () -> setCurrentPanel(new AddItemListPanel(itemListsControl)))
         )
         .addCategory("Drivers Management",
                 new Link("View Drivers",

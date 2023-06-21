@@ -6,28 +6,44 @@ import presentationLayer.gui.plAbstracts.interfaces.Searchable;
 import presentationLayer.gui.plUtils.ObservableList;
 import presentationLayer.gui.plUtils.PrettyList;
 import presentationLayer.gui.plUtils.SearchableString;
-import presentationLayer.gui.transportModule.control.SitesControl;
-import presentationLayer.gui.transportModule.control.TransportsControl;
+import presentationLayer.gui.transportModule.control.*;
 import presentationLayer.gui.transportModule.model.ObservableSite;
 import presentationLayer.gui.transportModule.model.ObservableTransport;
+import presentationLayer.gui.plAbstracts.interfaces.Panel;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
 
 public class ViewTransportsPanel extends AbstractTransportModulePanel {
 
+    private final Function<Panel, Void> setActivePanel;
     private final SitesControl sitesControl;
+    private final DriversControl driversControl;
+    private final TrucksControl trucksControl;
+    private final ItemListsControl itemListsControl;
     private PrettyList transportsList;
     private PrettyList destinationsList;
     private ObservableList<Searchable> transports;
 
-    public ViewTransportsPanel(TransportsControl control, SitesControl sitesControl) {
+    public ViewTransportsPanel(Function<Panel, Void> setActivePanel,
+                               TransportsControl control,
+                               SitesControl sitesControl,
+                               DriversControl driversControl,
+                               TrucksControl trucksControl,
+                               ItemListsControl itemListsControl) {
         super(control);
+        this.setActivePanel = setActivePanel;
         this.sitesControl = sitesControl;
+        this.driversControl = driversControl;
+        this.trucksControl = trucksControl;
+        this.itemListsControl = itemListsControl;
         init();
     }
     @SuppressWarnings({"rawtypes", "unchecked"})
@@ -36,6 +52,7 @@ public class ViewTransportsPanel extends AbstractTransportModulePanel {
         ObservableList emptyTransportList = new ObservableList<>();
         control.getAll(this,emptyTransportList);
         transports = emptyTransportList;
+
         ObservableList<Searchable> destinations = new ObservableList<>();
 
         ObservableList emptySiteList = new ObservableList<>();
@@ -50,10 +67,11 @@ public class ViewTransportsPanel extends AbstractTransportModulePanel {
 
         JPanel buttonsPanel = new JPanel();
         buttonsPanel.setBackground(new Color(0, 0, 0, 0));
+        JButton updateButton = new JButton("Update");
         constraints.gridy = 0;
         constraints.gridx = 0;
         constraints.anchor = GridBagConstraints.WEST;
-
+        buttonsPanel.add(updateButton, constraints);
         contentPanel.add(buttonsPanel, constraints);
 
         constraints.anchor = GridBagConstraints.CENTER;
@@ -81,6 +99,36 @@ public class ViewTransportsPanel extends AbstractTransportModulePanel {
                 destinationsList.getList().setModel(model);
             }
         });
+        updateButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Object o = transportsList.getList().getSelectedValue();
+
+                if(o == null || o instanceof String s && s.trim().equals("No transports found") && s.trim().equals("")){
+                    return;
+                }
+
+                String s = o.toString().substring(5);
+                for(Searchable s2 : transports){
+                    if(s2.getLongDescription().equals(s)){
+                        ObservableTransport t = (ObservableTransport) s2;
+
+                        Panel upPanel = new UpdateTransportPanel(
+                                t,
+                                (TransportsControl) control,
+                                sitesControl,
+                                driversControl,
+                                trucksControl,
+                                itemListsControl
+                        );
+                        SwingUtilities.invokeLater(()->setActivePanel.apply(upPanel));
+                    }
+                }
+            }
+        });
+
+
+
     }
 
 

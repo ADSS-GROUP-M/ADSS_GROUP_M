@@ -27,7 +27,6 @@ public class AddTransportPanel extends AbstractTransportModulePanel {
     private final TrucksControl trucksControl;
     private final ItemListsControl itemListsControl;
     private PrettyList destinationsList;
-
     private List<Pair<String,Integer>> destinations_itemLists;
     private PrettyTextField year;
     private PrettyTextField month;

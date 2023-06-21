@@ -1,19 +1,16 @@
 package presentationLayer.gui.employeeModule.controller;
 
 import businessLayer.employeeModule.Branch;
-import businessLayer.employeeModule.Shift;
 import com.google.gson.reflect.TypeToken;
-import domainObjects.transportModule.Truck;
 import exceptions.ErrorOccurredException;
 import presentationLayer.gui.employeeModule.model.ObservableShift;
 import presentationLayer.gui.plAbstracts.AbstractControl;
 import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
 import presentationLayer.gui.plAbstracts.interfaces.ObservableUIElement;
-import presentationLayer.gui.transportModule.model.ObservableTruck;
 import serviceLayer.employeeModule.Objects.SShift;
+import serviceLayer.employeeModule.Objects.SShiftType;
 import serviceLayer.employeeModule.Services.EmployeesService;
 import serviceLayer.employeeModule.Services.UserService;
-import serviceLayer.transportModule.ResourceManagementService;
 import utils.Response;
 
 import java.lang.reflect.Type;
@@ -33,24 +30,7 @@ public class ShiftsControl extends AbstractControl {
 
     @Override
     public void add(ObservableUIElement observable, ObservableModel model) {
-
         ObservableShift shiftModel = (ObservableShift) model;
-
-//        Shift shift = new Truck(truckModel.id,
-//                truckModel.model,
-//                truckModel.baseWeight,
-//                truckModel.maxWeight,
-//                truckModel.coolingCapacity);
-//        String json = r(truck.toJson());
-//        Response response;
-//        try {
-//            response = Response.fromJsonWithValidation(json);
-//        } catch (ErrorOccurredException e) {
-//            throw new RuntimeException(e);
-//            //TODO: handle exception
-//        }
-
-//        truckModel.response = response.message();
         shiftModel.notifyObservers();
     }
 
@@ -78,5 +58,95 @@ public class ShiftsControl extends AbstractControl {
             return e.getMessage();
         }
         return null;
+    }
+
+    public String setShiftNeededAmount(LocalDate shiftDate, SShiftType shiftType, String role, int amount) {
+        String json = employeesService.setShiftNeededAmount(UserService.HR_MANAGER_USERNAME, Branch.HEADQUARTERS_ID, shiftDate, shiftType, role, amount);
+        try {
+            Response response = Response.fromJsonWithValidation(json); // Throws an exception if an error has occurred.
+        } catch (ErrorOccurredException e) {
+            return e.getMessage();
+        }
+        return "Updated the role needed amount successfully.";
+    }
+
+    public String setShiftWorkers(LocalDate shiftDate, SShiftType shiftType, String role, List<String> workerIds) {
+        String json = employeesService.setShiftEmployees(UserService.HR_MANAGER_USERNAME, Branch.HEADQUARTERS_ID, shiftDate, shiftType, role, workerIds);
+        try {
+            Response response = Response.fromJsonWithValidation(json); // Throws an exception if an error has occurred.
+        } catch (ErrorOccurredException e) {
+            return e.getMessage();
+        }
+        return "Updated the shift workers successfully.";
+    }
+
+    public String approveShift(LocalDate shiftDate, SShiftType shiftType) {
+        String json = employeesService.approveShift(UserService.HR_MANAGER_USERNAME, Branch.HEADQUARTERS_ID, shiftDate, shiftType);
+        try {
+            Response response = Response.fromJsonWithValidation(json); // Throws an exception if an error has occurred.
+        } catch (ErrorOccurredException e) {
+            return e.getMessage();
+        }
+        return "Approved the shift successfully.";
+    }
+
+    public String createWeekShifts(LocalDate weekStart) {
+        String json = employeesService.createWeekShifts(UserService.HR_MANAGER_USERNAME, Branch.HEADQUARTERS_ID, weekStart);
+        try {
+            Response response = Response.fromJsonWithValidation(json); // Throws an exception if an error has occurred.
+        } catch (ErrorOccurredException e) {
+            return e.getMessage();
+        }
+        return "Create the week shifts successfully.";
+    }
+
+    public String applyCancelCard(String employeeId, SShift shift, String productId) {
+        String json = employeesService.applyCancelCard(employeeId, Branch.HEADQUARTERS_ID, shift.getShiftDate(), shift.getShiftType(), productId);
+        try {
+            Response response = Response.fromJsonWithValidation(json); // Throws an exception if an error has occurred.
+        } catch (ErrorOccurredException e) {
+            return e.getMessage();
+        }
+        return "Applied the cancel card successfully.";
+    }
+
+    public String reportShiftActivity(String employeeId, SShift shift, String activity) {
+        String json = employeesService.reportShiftActivity(employeeId, Branch.HEADQUARTERS_ID, shift.getShiftDate(), shift.getShiftType(), activity);
+        try {
+            Response response = Response.fromJsonWithValidation(json); // Throws an exception if an error has occurred.
+        } catch (ErrorOccurredException e) {
+            return e.getMessage();
+        }
+        return "Reported the shift activity successfully.";
+    }
+
+    public String requestShift(String employeeId, SShift shift, String role) {
+        String json = employeesService.requestShift(employeeId, Branch.HEADQUARTERS_ID, shift.getShiftDate(), shift.getShiftType(), role);
+        try {
+            Response response = Response.fromJsonWithValidation(json); // Throws an exception if an error has occurred.
+        } catch (ErrorOccurredException e) {
+            return e.getMessage();
+        }
+        return "Requested the shift successfully.";
+    }
+
+    public String cancelShiftRequest(String employeeId, SShift shift, String role) {
+        String json = employeesService.cancelShiftRequest(employeeId, Branch.HEADQUARTERS_ID, shift.getShiftDate(), shift.getShiftType(), role);
+        try {
+            Response response = Response.fromJsonWithValidation(json); // Throws an exception if an error has occurred.
+        } catch (ErrorOccurredException e) {
+            return e.getMessage();
+        }
+        return "Cancelled the shift request successfully.";
+    }
+
+    public Object getEmployeeShifts(String employeeId) {
+        String json = employeesService.getEmployeeShifts(employeeId);
+        try {
+            Response response = Response.fromJsonWithValidation(json); // Throws an exception if an error has occurred.
+            return response.data(LIST_SSHIFT_ARRAY_TYPE);
+        } catch (ErrorOccurredException e) {
+            return e.getMessage();
+        }
     }
 }

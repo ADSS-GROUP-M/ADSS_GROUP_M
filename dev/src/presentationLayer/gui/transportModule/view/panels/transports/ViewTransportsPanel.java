@@ -15,17 +15,10 @@ import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.sun.java.accessibility.util.AWTEventMonitor.addWindowListener;
-
 public class ViewTransportsPanel extends AbstractTransportModulePanel {
-
 
     private final SitesControl sitesControl;
     private PrettyList transportsList;
@@ -60,34 +53,18 @@ public class ViewTransportsPanel extends AbstractTransportModulePanel {
         constraints.gridy = 0;
         constraints.gridx = 0;
         constraints.anchor = GridBagConstraints.WEST;
-        JButton removeButton = new JButton();
-        removeButton.setPreferredSize(new Dimension(30, 30));
-        buttonsPanel.add(removeButton);
-
-        removeButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                showConfirmationDialog();
-            }
-
-        });
 
         contentPanel.add(buttonsPanel, constraints);
-
 
         constraints.anchor = GridBagConstraints.CENTER;
         constraints.gridx = 0;
         constraints.gridy = 1;
 
-
-        //constraints.gridy = 0;
-//        constraints.anchor = GridBagConstraints.NORTH;
         transportsList = new PrettyList(transports,panel);
         contentPanel.add(transportsList.getComponent(),constraints);
 
         constraints.gridy = 2;
         constraints.ipady = 0;
-//        constraints.anchor = GridBagConstraints.SOUTH;
         destinationsList = new PrettyList(destinations,panel);
         contentPanel.add(destinationsList.getComponent(),constraints);
 
@@ -104,8 +81,6 @@ public class ViewTransportsPanel extends AbstractTransportModulePanel {
                 destinationsList.getList().setModel(model);
             }
         });
-
-
     }
 
 
@@ -124,30 +99,7 @@ public class ViewTransportsPanel extends AbstractTransportModulePanel {
     }
 
 
-
-    private void showConfirmationDialog() {
-        int[] selectedIndices = transportsList.getList().getSelectedIndices();
-        if (selectedIndices.length > 0) {
-            int choice = JOptionPane.showConfirmDialog(contentPanel, "Are you sure you want to remove the selected item?", "Confirmation", JOptionPane.YES_NO_OPTION);
-            if (choice == JOptionPane.YES_OPTION) {
-                transportsList.getListModel().remove(selectedIndices[0]);
-                updateListAfterRemove(selectedIndices[0]);
-                //destinationsList.getComponent().setVisible(false);
-
-
-            }
-        }
-    }
-
-
-    private void updateListAfterRemove(int selectedIndex){
-
-        control.remove(this, (ObservableModel) transports.remove(selectedIndex));
-    }
-
-
     @Override
     public void notify(ObservableModel observable) {
-
     }
 }

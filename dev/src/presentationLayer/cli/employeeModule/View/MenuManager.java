@@ -1,5 +1,10 @@
 package presentationLayer.cli.employeeModule.View;
 
+import org.junit.jupiter.api.Test;
+import presentationLayer.DataGenerator;
+
+import javax.xml.crypto.Data;
+
 public class MenuManager {
     private Menu menu;
     private static boolean finished;
@@ -22,5 +27,10 @@ public class MenuManager {
 
     public static void main(String[] args) {
         new MenuManager().run();
+    }
+
+    @Test
+    public void generateData() {
+        new DataGenerator().generateData();
     }
 }

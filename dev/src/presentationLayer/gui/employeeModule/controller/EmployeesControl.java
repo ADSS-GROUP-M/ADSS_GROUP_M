@@ -22,24 +22,7 @@ public class EmployeesControl extends AbstractControl {
 
     @Override
     public void add(ObservableUIElement observable, ObservableModel model) {
-
         ObservableEmployee employeeModel = (ObservableEmployee) model;
-
-//        Shift shift = new Truck(truckModel.id,
-//                truckModel.model,
-//                truckModel.baseWeight,
-//                truckModel.maxWeight,
-//                truckModel.coolingCapacity);
-//        String json = r(truck.toJson());
-//        Response response;
-//        try {
-//            response = Response.fromJsonWithValidation(json);
-//        } catch (ErrorOccurredException e) {
-//            throw new RuntimeException(e);
-//            //TODO: handle exception
-//        }
-
-//        truckModel.response = response.message();
         employeeModel.notifyObservers();
     }
 

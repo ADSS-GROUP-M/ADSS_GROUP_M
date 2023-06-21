@@ -20,24 +20,7 @@ public class UsersControl extends AbstractControl {
 
     @Override
     public void add(ObservableUIElement observable, ObservableModel model) {
-
         ObservableUser shiftModel = (ObservableUser) model;
-
-//        Shift shift = new Truck(truckModel.id,
-//                truckModel.model,
-//                truckModel.baseWeight,
-//                truckModel.maxWeight,
-//                truckModel.coolingCapacity);
-//        String json = r(truck.toJson());
-//        Response response;
-//        try {
-//            response = Response.fromJsonWithValidation(json);
-//        } catch (ErrorOccurredException e) {
-//            throw new RuntimeException(e);
-//            //TODO: handle exception
-//        }
-
-//        truckModel.response = response.message();
         shiftModel.notifyObservers();
     }
 
@@ -56,6 +39,16 @@ public class UsersControl extends AbstractControl {
         try {
             Response response = Response.fromJsonWithValidation(json); // Throws an exception if an error has occurred.
             return response.data(List.class);
+        } catch (ErrorOccurredException e) {
+            return e.getMessage();
+        }
+    }
+
+    public Object login(String username, String password) {
+        String json = userService.login(username,password);
+        try {
+            Response response = Response.fromJsonWithValidation(json); // Throws an exception if an error has occurred.
+            return response.success();
         } catch (ErrorOccurredException e) {
             return e.getMessage();
         }

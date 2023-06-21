@@ -11,6 +11,7 @@ import presentationLayer.gui.transportModule.model.*;
 
 import java.time.DateTimeException;
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
@@ -69,14 +70,32 @@ public class AddTransportPanel extends AbstractTransportModulePanel {
         ObservableList emptySiteList = new ObservableList<>();
         sitesControl.getAll(this,emptySiteList);
         sitesList = emptySiteList;
+        sitesList.sort(new Comparator<Searchable>() {
+            @Override
+            public int compare(Searchable o1, Searchable o2) {
+                return o1.getShortDescription().compareTo(o2.getShortDescription());
+            }
+        });
 
         ObservableList emptyDriversList = new ObservableList<>();
         driversControl.getAll(this,emptyDriversList);
         driversList = emptyDriversList;
+        driversList.sort(new Comparator<Searchable>() {
+            @Override
+            public int compare(Searchable o1, Searchable o2) {
+                return o1.getShortDescription().compareTo(o2.getShortDescription());
+            }
+        });
 
         ObservableList emptyTruckList = new ObservableList<>();
         trucksControl.getAll(this,emptyTruckList);
         trucksList = emptyTruckList;
+        trucksList.sort(new Comparator<Searchable>() {
+            @Override
+            public int compare(Searchable o1, Searchable o2) {
+                return o1.getShortDescription().compareTo(o2.getShortDescription());
+            }
+        });
 
         ObservableList emptyItemList = new ObservableList<>();
         itemListsControl.getAll(this,emptyItemList);

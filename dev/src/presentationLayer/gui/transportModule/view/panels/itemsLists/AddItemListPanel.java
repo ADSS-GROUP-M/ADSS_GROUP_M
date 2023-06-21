@@ -9,20 +9,26 @@ import presentationLayer.gui.transportModule.model.ObservableItemList;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.util.HashMap;
 import java.util.Map;
 
 public class AddItemListPanel extends AbstractTransportModulePanel {
 
+    public static final String DEFAULT_TEXT = "<Item name> <Quantity>";
     private JTextArea unloadingField;
     private JTextArea loadingField;
+    private boolean clearTextOnClick_Loading;
+    private boolean clearTextOnClick_Unloading;
 
     public AddItemListPanel(ItemListsControl control) {
         super(control);
+        clearTextOnClick_Loading = true;
+        clearTextOnClick_Unloading = true;
         init();
     }
     private void init() {
-
 
         contentPanel.setLayout(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
@@ -116,6 +122,50 @@ public class AddItemListPanel extends AbstractTransportModulePanel {
 
             control.add(this,model);
         });
+
+        unloadingField.setText(DEFAULT_TEXT);
+        loadingField.setText(DEFAULT_TEXT);
+
+
+        loadingField.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                if(clearTextOnClick_Loading) {
+                    loadingField.setText("");
+                    clearTextOnClick_Loading = false;
+                }
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                if(loadingField.getText().equals("")) {
+                    loadingField.setText(DEFAULT_TEXT);
+                    clearTextOnClick_Loading = true;
+                }
+            }
+        });
+
+        unloadingField.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                if(clearTextOnClick_Unloading) {
+                    unloadingField.setText("");
+                    clearTextOnClick_Unloading = false;
+                }
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                if(unloadingField.getText().equals("")) {
+                    unloadingField.setText(DEFAULT_TEXT);
+                    clearTextOnClick_Unloading = true;
+                }
+            }
+        });
+
+
+
+
         
     }
 

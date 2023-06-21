@@ -5,7 +5,6 @@ import businessLayer.employeeModule.Role;
 import presentationLayer.gui.employeeModule.controller.ShiftsControl;
 import presentationLayer.gui.employeeModule.view.HRManagerView;
 import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
-import presentationLayer.gui.plAbstracts.PanelManager;
 import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
 import presentationLayer.gui.plUtils.Colors;
 import serviceLayer.employeeModule.Objects.SEmployee;
@@ -283,8 +282,8 @@ public class ViewShiftsPanel extends AbstractTransportModulePanel {
             // Get current mouse position
             Point originalMousePos = MouseInfo.getPointerInfo().getLocation();
             // Calculate new click position
-            int offsetX = 0;
-            int offsetY = 100;
+            int offsetX = 160;
+            int offsetY = 0;
             int clickX = originalMousePos.x + offsetX;
             int clickY = originalMousePos.y + offsetY;
 
@@ -323,7 +322,7 @@ public class ViewShiftsPanel extends AbstractTransportModulePanel {
 
     private void openNewWindow(Object dayShifts) {
         newOpenWindow = new JFrame();
-        newOpenWindow.setSize(900, 950);
+        newOpenWindow.setSize(900, 650);
         newOpenWindow.setLocationRelativeTo(contentPanel);
         newOpenWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
@@ -342,11 +341,11 @@ public class ViewShiftsPanel extends AbstractTransportModulePanel {
             eveningShiftPanel.setBackground(new Color(255,255,255));
 
             JScrollPane morningShiftScrollPane = new JScrollPane(morningShiftPanel);
-            morningShiftScrollPane.setBounds(50, 50, 800, 350);
+            morningShiftScrollPane.setBounds(50, 50, 800, 200);
             morningShiftScrollPane.getVerticalScrollBar().setUnitIncrement(20);
             morningShiftScrollPane.getVerticalScrollBar().setBlockIncrement(100);
             JScrollPane eveningShiftScrollPane = new JScrollPane(eveningShiftPanel);
-            eveningShiftScrollPane.setBounds(50, 450, 800, 350);
+            eveningShiftScrollPane.setBounds(50, 300, 800, 200);
             eveningShiftScrollPane.getVerticalScrollBar().setUnitIncrement(20);
             eveningShiftScrollPane.getVerticalScrollBar().setBlockIncrement(100);
 
@@ -578,13 +577,13 @@ public class ViewShiftsPanel extends AbstractTransportModulePanel {
             buttonGroup.add(morningRadioButton);
             buttonGroup.add(eveningRadioButton);
 
-            morningRadioButton.setBounds(20,215,20,20);
+            morningRadioButton.setBounds(20,135,20,20);
 
             eveningShiftLabel.setFont(new Font("Arial", Font.BOLD, 20));
             eveningShiftLabel.setForeground(Colors.getForegroundColor());
-            eveningShiftLabel.setBounds(50, 450, 800, 350);
+            eveningShiftLabel.setBounds(50, 300, 800, 350);
 
-            eveningRadioButton.setBounds(20,615,20,20);
+            eveningRadioButton.setBounds(20,390,20,20);
 
             //newOpenWindow.add(label);
 
@@ -592,10 +591,10 @@ public class ViewShiftsPanel extends AbstractTransportModulePanel {
             //JPanel buttonPanel = new JPanel();
             JButton deleteButton = new JButton("Delete");
             deleteButton.setPreferredSize(new Dimension(100, 30));
-            deleteButton.setBounds(550, 850, 100, 30);
+            deleteButton.setBounds(550, 550, 100, 30);
             JButton updateButton = new JButton("Update");
             updateButton.setPreferredSize(new Dimension(100, 30));
-            updateButton.setBounds(100, 850, 100, 30);
+            updateButton.setBounds(100, 550, 100, 30);
 
             newOpenPanel.add(morningShiftScrollPane);
             newOpenPanel.add(eveningShiftScrollPane);
@@ -655,6 +654,7 @@ public class ViewShiftsPanel extends AbstractTransportModulePanel {
                 hrManagerView.setCurrentPanel(new CreateShiftsPanel((ShiftsControl) control));
                 hrManagerView.setCurrentPanel(new ViewShiftsPanel((ShiftsControl) control, hrManagerView));
                 calendar.set(Calendar.MONTH, month);
+//                displayMonth(calendar);
             }
         });
         newOpenWindow.setVisible(true);
@@ -668,54 +668,265 @@ public class ViewShiftsPanel extends AbstractTransportModulePanel {
         }
         else if (selectedOption.equals("Needed Roles")) {
             if (morningRadioButton.isSelected()) {
-                // Create an array of button text
-                String[] buttonText = { "Modify", "Add", "Remove" };
+                if (shifts[0] == null) {
+                    JOptionPane.showMessageDialog(null,"Cannot choose a non existent shift.");
+                } else {
+                    // Create an array of button text
+                    String[] buttonText = {"Modify", "Add", "Remove"};
 
-                // Set the custom button text
-                UIManager.put("OptionPane.yesButtonText", buttonText[0]);
-                UIManager.put("OptionPane.noButtonText", buttonText[1]);
-                UIManager.put("OptionPane.cancelButtonText", buttonText[2]);
-                // Show the option pane with custom button text
-                int choice = JOptionPane.showConfirmDialog(null, "Do you want to proceed?", "Confirmation", JOptionPane.YES_NO_CANCEL_OPTION);
-                UIManager.put("OptionPane.yesButtonText", null);
-                UIManager.put("OptionPane.noButtonText", null);
-                UIManager.put("OptionPane.cancelButtonText", null);
-                // Get the selected button index
-                if (choice == JOptionPane.YES_OPTION) { // Modify
-                    Map<String, Integer> neededRoles = shifts[0].getNeededRoles();
-                    List<String> neededRolesList = neededRoles.entrySet().stream().map(x -> x.getKey()).collect(Collectors.toList());
-                    String neededRoleSelection = (String) JOptionPane.showInputDialog(contentPanel, "Select Needed Role:", "Update Selection", JOptionPane.PLAIN_MESSAGE, null, neededRolesList.toArray(), neededRolesList.toArray()[0]);
-                    int numberSelection = Integer.parseInt((String)JOptionPane.showInputDialog(contentPanel, "Select Needed Amount:"));
-                    String result = ((ShiftsControl)control).setShiftNeededAmount(shifts[0].getShiftDate(), shifts[0].getShiftType(),neededRoleSelection, numberSelection);
-                    JOptionPane.showMessageDialog(contentPanel, result);
-                    int month = calendar.get(Calendar.MONTH);
-                    hrManagerView.setCurrentPanel(new CreateShiftsPanel((ShiftsControl)control));
-                    hrManagerView.setCurrentPanel(new ViewShiftsPanel((ShiftsControl)control,hrManagerView));
-                    calendar.set(Calendar.MONTH,month);
-                } else if (choice == JOptionPane.NO_OPTION) { // Add
-
-                } else if (choice == JOptionPane.CANCEL_OPTION || choice == JOptionPane.CLOSED_OPTION) { // Remove
-
+                    // Set the custom button text
+                    UIManager.put("OptionPane.yesButtonText", buttonText[0]);
+                    UIManager.put("OptionPane.noButtonText", buttonText[1]);
+                    UIManager.put("OptionPane.cancelButtonText", buttonText[2]);
+                    // Show the option pane with custom button text
+                    int choice = JOptionPane.showConfirmDialog(null, "Choose update option:", "Update Option", JOptionPane.YES_NO_CANCEL_OPTION);
+                    UIManager.put("OptionPane.yesButtonText", null);
+                    UIManager.put("OptionPane.noButtonText", null);
+                    UIManager.put("OptionPane.cancelButtonText", null);
+                    // Get the selected button index
+                    // Modify / Add / Remove
+                    if (choice == JOptionPane.YES_OPTION) { // Modify
+                        Map<String, Integer> neededRoles = shifts[0].getNeededRoles();
+                        List<String> neededRolesList = neededRoles.entrySet().stream().map(x -> x.getKey()).collect(Collectors.toList());
+                        String neededRoleSelection = (String) JOptionPane.showInputDialog(contentPanel, "Select Needed Role:", "Update Selection", JOptionPane.PLAIN_MESSAGE, null, neededRolesList.toArray(), neededRolesList.toArray()[0]);
+                        int numberSelection = Integer.parseInt((String) JOptionPane.showInputDialog(contentPanel, "Select Needed Amount:"));
+                        String result = ((ShiftsControl) control).setShiftNeededAmount(shifts[0].getShiftDate(), shifts[0].getShiftType(), neededRoleSelection, numberSelection);
+                        JOptionPane.showMessageDialog(contentPanel, result);
+                        int month = calendar.get(Calendar.MONTH);
+                        hrManagerView.setCurrentPanel(new CreateShiftsPanel((ShiftsControl) control));
+                        hrManagerView.setCurrentPanel(new ViewShiftsPanel((ShiftsControl) control, hrManagerView));
+                        calendar.set(Calendar.MONTH, month);
+//                        displayMonth(calendar);
+                    } else if (choice == JOptionPane.NO_OPTION) { // Add
+                        List<String> neededRolesList = Arrays.stream(Role.values()).map(Enum::toString).toList();
+                        String neededRoleSelection = (String) JOptionPane.showInputDialog(contentPanel, "Select Needed Role:", "Update Selection", JOptionPane.PLAIN_MESSAGE, null, neededRolesList.toArray(), neededRolesList.toArray()[0]);
+                        int numberSelection = Integer.parseInt((String) JOptionPane.showInputDialog(contentPanel, "Select Needed Amount:"));
+                        String result = ((ShiftsControl) control).setShiftNeededAmount(shifts[0].getShiftDate(), shifts[0].getShiftType(), neededRoleSelection, numberSelection);
+                        JOptionPane.showMessageDialog(contentPanel, result);
+                        int month = calendar.get(Calendar.MONTH);
+                        hrManagerView.setCurrentPanel(new CreateShiftsPanel((ShiftsControl) control));
+                        hrManagerView.setCurrentPanel(new ViewShiftsPanel((ShiftsControl) control, hrManagerView));
+                        calendar.set(Calendar.MONTH, month);
+//                        displayMonth(calendar);
+                    } else if (choice == JOptionPane.CANCEL_OPTION || choice == JOptionPane.CLOSED_OPTION) { // Remove
+                        List<String> neededRolesList = Arrays.stream(Role.values()).map(Enum::toString).toList();
+                        String neededRoleSelection = (String) JOptionPane.showInputDialog(contentPanel, "Select Needed Role:", "Update Selection", JOptionPane.PLAIN_MESSAGE, null, neededRolesList.toArray(), neededRolesList.toArray()[0]);
+                        String result = ((ShiftsControl) control).setShiftNeededAmount(shifts[0].getShiftDate(), shifts[0].getShiftType(), neededRoleSelection, 0);
+                        JOptionPane.showMessageDialog(contentPanel, result);
+                        int month = calendar.get(Calendar.MONTH);
+                        hrManagerView.setCurrentPanel(new CreateShiftsPanel((ShiftsControl) control));
+                        hrManagerView.setCurrentPanel(new ViewShiftsPanel((ShiftsControl) control, hrManagerView));
+                        calendar.set(Calendar.MONTH, month);
+//                        displayMonth(calendar);
+                    }
                 }
-
-
-
-
-
-
-                // Modify / Add / Remove
-
             } else if (eveningRadioButton.isSelected()) {
-                // TODO: implement
+                if (shifts[1] == null) {
+                    JOptionPane.showMessageDialog(null,"Cannot choose a non existent shift.");
+                } else {
+                    // Create an array of button text
+                    String[] buttonText = {"Modify", "Add", "Remove"};
+
+                    // Set the custom button text
+                    UIManager.put("OptionPane.yesButtonText", buttonText[0]);
+                    UIManager.put("OptionPane.noButtonText", buttonText[1]);
+                    UIManager.put("OptionPane.cancelButtonText", buttonText[2]);
+                    // Show the option pane with custom button text
+                    int choice = JOptionPane.showConfirmDialog(null, "Do you want to proceed?", "Confirmation", JOptionPane.YES_NO_CANCEL_OPTION);
+                    UIManager.put("OptionPane.yesButtonText", null);
+                    UIManager.put("OptionPane.noButtonText", null);
+                    UIManager.put("OptionPane.cancelButtonText", null);
+                    // Get the selected button index
+                    // Modify / Add / Remove
+                    if (choice == JOptionPane.YES_OPTION) { // Modify
+                        Map<String, Integer> neededRoles = shifts[1].getNeededRoles();
+                        List<String> neededRolesList = neededRoles.entrySet().stream().map(x -> x.getKey()).collect(Collectors.toList());
+                        String neededRoleSelection = (String) JOptionPane.showInputDialog(contentPanel, "Select Needed Role:", "Modify Selection", JOptionPane.PLAIN_MESSAGE, null, neededRolesList.toArray(), neededRolesList.toArray()[0]);
+                        int numberSelection = Integer.parseInt((String) JOptionPane.showInputDialog(contentPanel, "Select Needed Amount:"));
+                        String result = ((ShiftsControl) control).setShiftNeededAmount(shifts[1].getShiftDate(), shifts[1].getShiftType(), neededRoleSelection, numberSelection);
+                        JOptionPane.showMessageDialog(contentPanel, result);
+                        int month = calendar.get(Calendar.MONTH);
+                        hrManagerView.setCurrentPanel(new CreateShiftsPanel((ShiftsControl) control));
+                        hrManagerView.setCurrentPanel(new ViewShiftsPanel((ShiftsControl) control, hrManagerView));
+                        calendar.set(Calendar.MONTH, month);
+//                        displayMonth(calendar);
+                    } else if (choice == JOptionPane.NO_OPTION) { // Add
+                        List<String> neededRolesList = Arrays.stream(Role.values()).map(Enum::toString).toList();
+                        String neededRoleSelection = (String) JOptionPane.showInputDialog(contentPanel, "Select Needed Role:", "Add Selection", JOptionPane.PLAIN_MESSAGE, null, neededRolesList.toArray(), neededRolesList.toArray()[0]);
+                        int numberSelection = Integer.parseInt((String) JOptionPane.showInputDialog(contentPanel, "Select Needed Amount:"));
+                        String result = ((ShiftsControl) control).setShiftNeededAmount(shifts[1].getShiftDate(), shifts[1].getShiftType(), neededRoleSelection, numberSelection);
+                        JOptionPane.showMessageDialog(contentPanel, result);
+                        int month = calendar.get(Calendar.MONTH);
+                        hrManagerView.setCurrentPanel(new CreateShiftsPanel((ShiftsControl) control));
+                        hrManagerView.setCurrentPanel(new ViewShiftsPanel((ShiftsControl) control, hrManagerView));
+                        calendar.set(Calendar.MONTH, month);
+//                        displayMonth(calendar);
+                    } else if (choice == JOptionPane.CANCEL_OPTION || choice == JOptionPane.CLOSED_OPTION) { // Remove
+                        List<String> neededRolesList = Arrays.stream(Role.values()).map(Enum::toString).toList();
+                        String neededRoleSelection = (String) JOptionPane.showInputDialog(contentPanel, "Select Needed Role:", "Remove Selection", JOptionPane.PLAIN_MESSAGE, null, neededRolesList.toArray(), neededRolesList.toArray()[0]);
+                        String result = ((ShiftsControl) control).setShiftNeededAmount(shifts[1].getShiftDate(), shifts[1].getShiftType(), neededRoleSelection, 0);
+                        JOptionPane.showMessageDialog(contentPanel, result);
+                        int month = calendar.get(Calendar.MONTH);
+                        hrManagerView.setCurrentPanel(new CreateShiftsPanel((ShiftsControl) control));
+                        hrManagerView.setCurrentPanel(new ViewShiftsPanel((ShiftsControl) control, hrManagerView));
+                        calendar.set(Calendar.MONTH, month);
+//                        displayMonth(calendar);
+                    }
+                }
             } else {
                 JOptionPane.showMessageDialog(null,"Please choose one of the shifts.");
             }
         }
         else if (selectedOption.equals("Shift Workers")) {
+            if (morningRadioButton.isSelected()) {
+                if (shifts[0] == null) {
+                    JOptionPane.showMessageDialog(null,"Cannot choose a non existent shift.");
+                } else {
+                    // Create an array of button text
+                    String[] buttonText = {"Modify", "Add", "Remove"};
 
+                    // Set the custom button text
+                    UIManager.put("OptionPane.yesButtonText", buttonText[0]);
+                    UIManager.put("OptionPane.noButtonText", buttonText[1]);
+                    UIManager.put("OptionPane.cancelButtonText", buttonText[2]);
+                    // Show the option pane with custom button text
+                    int choice = JOptionPane.showConfirmDialog(null, "Do you want to proceed?", "Confirmation", JOptionPane.YES_NO_CANCEL_OPTION);
+                    UIManager.put("OptionPane.yesButtonText", null);
+                    UIManager.put("OptionPane.noButtonText", null);
+                    UIManager.put("OptionPane.cancelButtonText", null);
+                    // Get the selected button index
+                    // Modify / Add / Remove
+                    if (choice == JOptionPane.YES_OPTION) { // Modify
+                        List<String> rolesList = Arrays.stream(Role.values()).map(Enum::toString).toList();
+                        String roleSelection = (String) JOptionPane.showInputDialog(contentPanel, "Select Shift Role:", "Modify Selection", JOptionPane.PLAIN_MESSAGE, null, rolesList.toArray(), rolesList.toArray()[0]);
+                        List<String> requestingWorkerIds = shifts[0].getShiftRequestsEmployees(roleSelection).stream().map(SEmployee::getId).toList();
+                        String requestingWorkersString = String.join("\n", requestingWorkerIds);
+                        String requestingWorkersSelection = (String) JOptionPane.showInputDialog(contentPanel, "Select Shift Workers:\n" + requestingWorkersString);
+                        List<String> selectedWorkerIds = Arrays.asList(requestingWorkersSelection.split(" ", -1));
+                        String result = ((ShiftsControl) control).setShiftWorkers(shifts[0].getShiftDate(), shifts[0].getShiftType(), roleSelection, selectedWorkerIds);
+                        JOptionPane.showMessageDialog(contentPanel, result);
+                        int month = calendar.get(Calendar.MONTH);
+                        hrManagerView.setCurrentPanel(new CreateShiftsPanel((ShiftsControl) control));
+                        hrManagerView.setCurrentPanel(new ViewShiftsPanel((ShiftsControl) control, hrManagerView));
+                        calendar.set(Calendar.MONTH, month);
+//                        displayMonth(calendar);
+                    } else if (choice == JOptionPane.NO_OPTION) { // Add
+                        List<String> rolesList = Arrays.stream(Role.values()).map(Enum::toString).toList();
+                        String roleSelection = (String) JOptionPane.showInputDialog(contentPanel, "Select Shift Role:", "Add Selection", JOptionPane.PLAIN_MESSAGE, null, rolesList.toArray(), rolesList.toArray()[0]);
+                        List<String> requestingWorkerIds = shifts[0].getShiftRequestsEmployees(roleSelection).stream().map(SEmployee::getId).toList();
+                        String requestingWorkersString = String.join("\n", requestingWorkerIds);
+                        String requestingWorkersSelection = (String) JOptionPane.showInputDialog(contentPanel, "Select Shift Workers:\n" + requestingWorkersString);
+                        List<String> selectedWorkerIds = Arrays.asList(requestingWorkersSelection.split(" ", -1));
+                        String result = ((ShiftsControl) control).setShiftWorkers(shifts[0].getShiftDate(), shifts[0].getShiftType(), roleSelection, selectedWorkerIds);
+                        JOptionPane.showMessageDialog(contentPanel, result);
+                        int month = calendar.get(Calendar.MONTH);
+                        hrManagerView.setCurrentPanel(new CreateShiftsPanel((ShiftsControl) control));
+                        hrManagerView.setCurrentPanel(new ViewShiftsPanel((ShiftsControl) control, hrManagerView));
+                        calendar.set(Calendar.MONTH, month);
+//                        displayMonth(calendar);
+                    } else if (choice == JOptionPane.CANCEL_OPTION || choice == JOptionPane.CLOSED_OPTION) { // Remove
+                        List<String> rolesList = Arrays.stream(Role.values()).map(Enum::toString).toList();
+                        String roleSelection = (String) JOptionPane.showInputDialog(contentPanel, "Select Shift Role:", "Remove Selection", JOptionPane.PLAIN_MESSAGE, null, rolesList.toArray(), rolesList.toArray()[0]);
+                        String result = ((ShiftsControl) control).setShiftWorkers(shifts[0].getShiftDate(), shifts[0].getShiftType(), roleSelection, new ArrayList<String>());
+                        JOptionPane.showMessageDialog(contentPanel, result);
+                        int month = calendar.get(Calendar.MONTH);
+                        hrManagerView.setCurrentPanel(new CreateShiftsPanel((ShiftsControl) control));
+                        hrManagerView.setCurrentPanel(new ViewShiftsPanel((ShiftsControl) control, hrManagerView));
+                        calendar.set(Calendar.MONTH, month);
+//                        displayMonth(calendar);
+                    }
+                }
+            } else if (eveningRadioButton.isSelected()) {
+                if (shifts[1] == null) {
+                    JOptionPane.showMessageDialog(null,"Cannot choose a non existent shift.");
+                } else {
+                    // Create an array of button text
+                    String[] buttonText = {"Modify", "Add", "Remove"};
+
+                    // Set the custom button text
+                    UIManager.put("OptionPane.yesButtonText", buttonText[0]);
+                    UIManager.put("OptionPane.noButtonText", buttonText[1]);
+                    UIManager.put("OptionPane.cancelButtonText", buttonText[2]);
+                    // Show the option pane with custom button text
+                    int choice = JOptionPane.showConfirmDialog(null, "Choose update option:", "Update Option", JOptionPane.YES_NO_CANCEL_OPTION);
+                    UIManager.put("OptionPane.yesButtonText", null);
+                    UIManager.put("OptionPane.noButtonText", null);
+                    UIManager.put("OptionPane.cancelButtonText", null);
+                    // Get the selected button index
+                    // Modify / Add / Remove
+                    if (choice == JOptionPane.YES_OPTION) { // Modify
+                        List<String> rolesList = Arrays.stream(Role.values()).map(Enum::toString).toList();
+                        String roleSelection = (String) JOptionPane.showInputDialog(contentPanel, "Select Shift Role:", "Modify Selection", JOptionPane.PLAIN_MESSAGE, null, rolesList.toArray(), rolesList.toArray()[0]);
+                        List<String> requestingWorkerIds = shifts[1].getShiftRequestsEmployees(roleSelection).stream().map(SEmployee::getId).toList();
+                        String requestingWorkersString = String.join("\n", requestingWorkerIds);
+                        String requestingWorkersSelection = (String) JOptionPane.showInputDialog(contentPanel, "Select Shift Workers:\n" + requestingWorkersString);
+                        List<String> selectedWorkerIds = Arrays.asList(requestingWorkersSelection.split(" ", -1));
+                        String result = ((ShiftsControl) control).setShiftWorkers(shifts[1].getShiftDate(), shifts[1].getShiftType(), roleSelection, selectedWorkerIds);
+                        JOptionPane.showMessageDialog(contentPanel, result);
+                        int month = calendar.get(Calendar.MONTH);
+                        hrManagerView.setCurrentPanel(new CreateShiftsPanel((ShiftsControl) control));
+                        hrManagerView.setCurrentPanel(new ViewShiftsPanel((ShiftsControl) control, hrManagerView));
+                        calendar.set(Calendar.MONTH, month);
+//                        displayMonth(calendar);
+                    } else if (choice == JOptionPane.NO_OPTION) { // Add
+                        List<String> rolesList = Arrays.stream(Role.values()).map(Enum::toString).toList();
+                        String roleSelection = (String) JOptionPane.showInputDialog(contentPanel, "Select Shift Role:", "Add Selection", JOptionPane.PLAIN_MESSAGE, null, rolesList.toArray(), rolesList.toArray()[0]);
+                        List<String> requestingWorkerIds = shifts[1].getShiftRequestsEmployees(roleSelection).stream().map(SEmployee::getId).toList();
+                        String requestingWorkersString = String.join("\n", requestingWorkerIds);
+                        String requestingWorkersSelection = (String) JOptionPane.showInputDialog(contentPanel, "Select Shift Workers:\n" + requestingWorkersString);
+                        List<String> selectedWorkerIds = Arrays.asList(requestingWorkersSelection.split(" ", -1));
+                        String result = ((ShiftsControl) control).setShiftWorkers(shifts[1].getShiftDate(), shifts[1].getShiftType(), roleSelection, selectedWorkerIds);
+                        JOptionPane.showMessageDialog(contentPanel, result);
+                        int month = calendar.get(Calendar.MONTH);
+                        hrManagerView.setCurrentPanel(new CreateShiftsPanel((ShiftsControl) control));
+                        hrManagerView.setCurrentPanel(new ViewShiftsPanel((ShiftsControl) control, hrManagerView));
+                        calendar.set(Calendar.MONTH, month);
+//                        displayMonth(calendar);
+                    } else if (choice == JOptionPane.CANCEL_OPTION || choice == JOptionPane.CLOSED_OPTION) { // Remove
+                        List<String> rolesList = Arrays.stream(Role.values()).map(Enum::toString).toList();
+                        String roleSelection = (String) JOptionPane.showInputDialog(contentPanel, "Select Shift Role:", "Remove Selection", JOptionPane.PLAIN_MESSAGE, null, rolesList.toArray(), rolesList.toArray()[0]);
+                        String result = ((ShiftsControl) control).setShiftWorkers(shifts[1].getShiftDate(), shifts[1].getShiftType(), roleSelection, new ArrayList<String>());
+                        JOptionPane.showMessageDialog(contentPanel, result);
+                        int month = calendar.get(Calendar.MONTH);
+                        hrManagerView.setCurrentPanel(new CreateShiftsPanel((ShiftsControl) control));
+                        hrManagerView.setCurrentPanel(new ViewShiftsPanel((ShiftsControl) control, hrManagerView));
+                        calendar.set(Calendar.MONTH, month);
+//                        displayMonth(calendar);
+                    }
+                }
+            } else {
+                JOptionPane.showMessageDialog(null,"Please choose one of the shifts.");
+            }
         }
         else if (selectedOption.equals("Approve")) {
-
+            if (morningRadioButton.isSelected()) {
+                if (shifts[0] == null) {
+                    JOptionPane.showMessageDialog(null,"Cannot choose a non existent shift.");
+                } else {
+                    String result = ((ShiftsControl) control).approveShift(shifts[0].getShiftDate(), shifts[0].getShiftType());
+                    JOptionPane.showMessageDialog(contentPanel, result);
+                    int month = calendar.get(Calendar.MONTH);
+                    hrManagerView.setCurrentPanel(new CreateShiftsPanel((ShiftsControl) control));
+                    hrManagerView.setCurrentPanel(new ViewShiftsPanel((ShiftsControl) control, hrManagerView));
+                    calendar.set(Calendar.MONTH, month);
+//                    displayMonth(calendar);
+                }
+            } else if (eveningRadioButton.isSelected()) {
+                if (shifts[1] == null) {
+                    JOptionPane.showMessageDialog(null,"Cannot choose a non existent shift.");
+                }
+                else {
+                    String result = ((ShiftsControl) control).approveShift(shifts[1].getShiftDate(), shifts[0].getShiftType());
+                    JOptionPane.showMessageDialog(contentPanel, result);
+                    int month = calendar.get(Calendar.MONTH);
+                    hrManagerView.setCurrentPanel(new CreateShiftsPanel((ShiftsControl) control));
+                    hrManagerView.setCurrentPanel(new ViewShiftsPanel((ShiftsControl) control, hrManagerView));
+                    calendar.set(Calendar.MONTH, month);
+//                    displayMonth(calendar);
+                }
+            } else {
+                JOptionPane.showMessageDialog(null,"Please choose one of the shifts.");
+            }
         }
     }
 

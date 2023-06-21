@@ -91,4 +91,23 @@ public class ShiftsControl extends AbstractControl {
         return "Updated the role needed amount successfully.";
     }
 
+    public String setShiftWorkers(LocalDate shiftDate, SShiftType shiftType, String role, List<String> workerIds) {
+        String json = employeesService.setShiftEmployees(UserService.HR_MANAGER_USERNAME, Branch.HEADQUARTERS_ID, shiftDate, shiftType, role, workerIds);
+        try {
+            Response response = Response.fromJsonWithValidation(json); // Throws an exception if an error has occurred.
+        } catch (ErrorOccurredException e) {
+            return e.getMessage();
+        }
+        return "Updated the shift workers successfully.";
+    }
+
+    public String approveShift(LocalDate shiftDate, SShiftType shiftType) {
+        String json = employeesService.approveShift(UserService.HR_MANAGER_USERNAME, Branch.HEADQUARTERS_ID, shiftDate, shiftType);
+        try {
+            Response response = Response.fromJsonWithValidation(json); // Throws an exception if an error has occurred.
+        } catch (ErrorOccurredException e) {
+            return e.getMessage();
+        }
+        return "Approved the shift successfully.";
+    }
 }

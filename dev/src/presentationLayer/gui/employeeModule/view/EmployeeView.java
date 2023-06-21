@@ -44,11 +44,11 @@ public class EmployeeView extends MainWindow {
         return new QuickAccess()
                 .addCategory("Shifts",
 //                        new Link("View Shifts", // + My shifts
-//                                () -> setCurrentPanel(new EmployeeShiftsPanel(shiftsControl))),
+//                                () -> setCurrentPanel(new EmployeeShiftsPanel(employeeId, shiftsControl, this))),
                         new Link("Request Shift",
                                 () -> setCurrentPanel(new RequestShiftPanel(employeeId, shiftsControl, this))),
-//                        new Link("Cancel Shift Request",
-//                                () -> setCurrentPanel(new EmployeeShiftsPanel(shiftsControl))),
+                        new Link("Cancel Shift Request",
+                                () -> setCurrentPanel(new CancelShiftRequestPanel(employeeId, shiftsControl, this))),
                         new Link("Report Shift Activity",
                                 () -> setCurrentPanel(new ShiftActivityPanel(employeeId, shiftsControl, this))),
                         new Link("Apply Cancel Card",

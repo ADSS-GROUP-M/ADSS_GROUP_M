@@ -17,13 +17,10 @@ import java.awt.*;
 import java.awt.event.*;
 import java.text.DateFormatSymbols;
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.Map;
 import java.util.List;
+import java.util.*;
 
-public class RequestShiftPanel extends AbstractTransportModulePanel {
+public class CancelShiftRequestPanel extends AbstractTransportModulePanel {
     EmployeeView employeeView;
     JPanel newOpenPanel = new JPanel();
     JFrame newOpenWindow;
@@ -35,7 +32,7 @@ public class RequestShiftPanel extends AbstractTransportModulePanel {
 
     String employeeId;
 
-    public RequestShiftPanel(String employeeId, ShiftsControl control, EmployeeView employeeView) {
+    public CancelShiftRequestPanel(String employeeId, ShiftsControl control, EmployeeView employeeView) {
         super(control);
         this.employeeId = employeeId;
         this.employeeView = employeeView;
@@ -46,7 +43,7 @@ public class RequestShiftPanel extends AbstractTransportModulePanel {
         contentPanel.setLayout(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
 
-        JLabel headerLabel = new JLabel("Select the day of shift to request:");
+        JLabel headerLabel = new JLabel("Select the day of shift to cancel the request:");
         headerLabel.setHorizontalAlignment(SwingConstants.CENTER);
         headerLabel.setFont(new Font("Tahoma", Font.BOLD, 20));
         constraints.gridx = 0;
@@ -215,7 +212,7 @@ public class RequestShiftPanel extends AbstractTransportModulePanel {
             JOptionPane.showMessageDialog(null, "Invalid role", "Error", JOptionPane.ERROR_MESSAGE);
         }
         else {
-            String result = ((ShiftsControl) control).requestShift(employeeId, shift, selectedRole);
+            String result = ((ShiftsControl) control).cancelShiftRequest(employeeId, shift, selectedRole);
             if (result != null) {
                 JOptionPane.showMessageDialog(null, result);
             }
@@ -492,21 +489,21 @@ public class RequestShiftPanel extends AbstractTransportModulePanel {
 
             //Create the remove button
             //JPanel buttonPanel = new JPanel();
-            JButton requestShiftButton = new JButton("Request Shift");
-            requestShiftButton.setPreferredSize(new Dimension(200, 30));
-            requestShiftButton.setBounds(350, 550, 200, 30);
+            JButton cancelShiftRequestButton = new JButton("Cancel Shift Request");
+            cancelShiftRequestButton.setPreferredSize(new Dimension(200, 30));
+            cancelShiftRequestButton.setBounds(350, 550, 200, 30);
 
             newOpenPanel.add(morningShiftScrollPane);
             newOpenPanel.add(eveningShiftScrollPane);
             newOpenPanel.add(morningRadioButton);
             newOpenPanel.add(eveningRadioButton);
-            newOpenPanel.add(requestShiftButton);
+            newOpenPanel.add(cancelShiftRequestButton);
             newOpenPanel.revalidate();
             newOpenPanel.repaint();
             contentPanel.revalidate();
             contentPanel.repaint();
 
-            requestShiftButton.addActionListener(new ActionListener() {
+            cancelShiftRequestButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     if (morningRadioButton.isSelected()) {
                         showConfirmationDialog(shifts[0]);
@@ -539,7 +536,7 @@ public class RequestShiftPanel extends AbstractTransportModulePanel {
             public void windowClosing(WindowEvent windowEvent) {
                 int month = calendar.get(Calendar.MONTH);
                 employeeView.setCurrentPanel(new CancelCardPanel(employeeId, (ShiftsControl)control, employeeView));
-                employeeView.setCurrentPanel(new RequestShiftPanel(employeeId, (ShiftsControl) control, employeeView));
+                employeeView.setCurrentPanel(new CancelShiftRequestPanel(employeeId, (ShiftsControl) control, employeeView));
                 calendar.set(Calendar.MONTH, month);
 //                displayMonth(calendar);
             }

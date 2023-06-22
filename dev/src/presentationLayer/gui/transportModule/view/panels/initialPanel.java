@@ -8,43 +8,18 @@ import java.awt.*;
 
 public class initialPanel extends AbstractTransportModulePanel {
 
-    public static int font_size = 70;
-    private JLabel welcomeLabel;
-
     public initialPanel(){
         super(null);
-        init();
-    }
-
-    private void init(){
-
-        contentPanel.setLayout(new GridBagLayout());
-        GridBagConstraints constraints = new GridBagConstraints();
-
-        welcomeLabel = new JLabel("Welcome To The Transport Module!");
-        constraints.gridx = 0;
-        constraints.gridy = 1;
-        constraints.anchor = GridBagConstraints.NORTHWEST;
-        constraints.weighty = 1;
-        constraints.insets = new Insets(50, 5, 5, 5);
-        panel.add(welcomeLabel,constraints);
-        welcomeLabel.setForeground(new Color(255, 255, 255));
     }
 
     @Override
     protected void clearFields() {
-        
+        // do nothing
     }
 
     @Override
     public void componentResized(Dimension newSize) {
         super.componentResized(newSize);
-
-        Dimension preferredSize = panel.getPreferredSize();
-        font_size = (int) (preferredSize.width*0.05);
-        welcomeLabel.setFont(new Font("Serif", Font.PLAIN, font_size));
         panel.revalidate();
     }
-
-    
 }

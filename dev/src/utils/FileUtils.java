@@ -1,5 +1,7 @@
 package utils;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -36,6 +38,15 @@ public class FileUtils {
                 builder.append(scanner.next());
             }
             return builder.toString();
+        }
+    }
+
+    public static Image getImage(String fileName) throws IOException {
+        try (InputStream stream = FileUtils.class.getResourceAsStream("/"+fileName)) {
+            if(stream == null) {
+                throw new IOException("Resource %s not found".formatted(fileName));
+            }
+            return ImageIO.read(stream);
         }
     }
 }

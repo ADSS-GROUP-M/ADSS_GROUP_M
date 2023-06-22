@@ -1,5 +1,7 @@
 package presentationLayer.gui.plUtils;
 
+import utils.FileUtils;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -19,20 +21,19 @@ public class Colors {
     private static final Color orangeTransparentForeground = new Color(236, 119, 78,128);
     private static final Color orangeBackground = new Color(255, 245, 244, 255);
     private static final Color orangeContentPanel = new Color(255, 255, 255, 230);
-    private static final Image orangeImage = new ImageIcon("src/resources/orange_truck.jpg").getImage();
+    private static final String orangeImage = "orange_truck.jpg";
     // ================================= BLUE ================================== |
     private static final Color blueForeground = new Color(39, 103, 166, 255);
     private static final Color blueTransparentForeground = new Color(39, 103, 166, 128);
     private static final Color blueBackground = new Color(244, 250, 255, 255);
     private static final Color blueContentPanel = new Color(255, 255, 255, 230);
-    private static final Image blueImage = new ImageIcon("src/resources/blue_truck.jpg").getImage();
+    private static final String blueImage = "blue_truck.jpg";
     // ================================= HR ================================== |
     private static final Color hrForeground = new Color(39, 103, 166, 255);
     private static final Color hrTransparentForeground = new Color(39, 103, 166, 128);
     private static final Color hrBackground = new Color(244, 250, 255, 255);
     private static final Color hrContentPanel = new Color(255, 255, 255, 230);
-    private static final Image hrImage = new ImageIcon("src/resources/hr_background.jpg").getImage();
-
+    private static final String hrImage = "hr_background.jpg";
 
     public static Color getForegroundColor(){
         return switch(colorPalette){
@@ -59,11 +60,16 @@ public class Colors {
     }
 
     public static Image getBackgroundImage(){
-        return switch(colorPalette){
-            case orange -> orangeImage;
-            case blue -> blueImage;
-            case hr -> hrImage;
-        };
+
+        Image image = null;
+        try{
+            image = FileUtils.getImage(switch(colorPalette){
+                case orange -> orangeImage;
+                case blue -> blueImage;
+                case hr -> hrImage;
+            });
+        } catch(Exception ignored){}
+        return image;
     }
 
     public static Color getContentPanelColor(){

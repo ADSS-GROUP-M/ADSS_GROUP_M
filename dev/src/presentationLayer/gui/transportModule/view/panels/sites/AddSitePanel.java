@@ -5,6 +5,7 @@ import domainObjects.transportModule.Truck;
 import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
 import presentationLayer.gui.plAbstracts.interfaces.ModelObserver;
 import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
+import presentationLayer.gui.plUtils.PrettyButton;
 import presentationLayer.gui.plUtils.PrettyTextField;
 import presentationLayer.gui.transportModule.control.SitesControl;
 import presentationLayer.gui.transportModule.model.ObservableSite;
@@ -127,12 +128,12 @@ public class AddSitePanel extends AbstractTransportModulePanel {
         group.add(supplier);
 
         //Submit button
-        JButton submitButton = new JButton("Submit");
+        PrettyButton submitButton = new PrettyButton("Submit");
         constraints.gridx = 0;
         constraints.gridy = 7;
         constraints.gridwidth = 2;
         constraints.fill = GridBagConstraints.NONE;
-        constraints.anchor = GridBagConstraints.EAST;
+        constraints.anchor = GridBagConstraints.CENTER;
         contentPanel.add(submitButton, constraints);
 
         ModelObserver o = this;

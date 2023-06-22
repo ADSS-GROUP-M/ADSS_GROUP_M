@@ -3,6 +3,7 @@ package presentationLayer.gui.transportModule.view.panels.itemsLists;
 import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
 import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
 import presentationLayer.gui.plUtils.Colors;
+import presentationLayer.gui.plUtils.PrettyButton;
 import presentationLayer.gui.plUtils.PrettyScrollBar;
 import presentationLayer.gui.transportModule.control.ItemListsControl;
 import presentationLayer.gui.transportModule.model.ObservableItemList;
@@ -96,7 +97,7 @@ public class AddItemListPanel extends AbstractTransportModulePanel {
         contentPanel.add(areaScrollPane2, constraints);
 
 
-        JButton submitButton = new JButton("Submit");
+        PrettyButton submitButton = new PrettyButton("Submit");
         //submitButton.setFont(new Font("Serif", Font.PLAIN, 25));
         submitButton.setPreferredSize(new Dimension(100, 30));
         constraints.gridx = 0;

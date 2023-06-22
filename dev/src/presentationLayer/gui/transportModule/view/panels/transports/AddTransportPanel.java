@@ -254,24 +254,24 @@ public class AddTransportPanel extends AbstractTransportModulePanel {
         complexComponentsPanel.add(itemListField.getComponent(), constraints);
 
         constraints.insets = new Insets(10,10,0,0);
-        JButton addItemButton = new JButton("Add");
+        PrettyButton addItemButton = new PrettyButton("Add");
         constraints.gridx = 2;
         constraints.gridy = 1;
         complexComponentsPanel.add(addItemButton, constraints);
 
-        JButton removeItemButton = new JButton("Remove");
+        PrettyButton removeItemButton = new PrettyButton("Remove");
         constraints.gridx = 3;
         constraints.gridy = 1;
         constraints.insets = new Insets(10,10,0,100);
         complexComponentsPanel.add(removeItemButton, constraints);
 
         constraints.insets = new Insets(10,10,0,0);
-        JButton moveUpButton = new JButton("Move Up");
+        PrettyButton moveUpButton = new PrettyButton("Move Up");
         constraints.gridx = 4;
         constraints.gridy = 1;
         complexComponentsPanel.add(moveUpButton, constraints);
 
-        JButton moveDownButton = new JButton("Move Down");
+        PrettyButton moveDownButton = new PrettyButton("Move Down");
         constraints.gridx = 5;
         constraints.gridy = 1;
         complexComponentsPanel.add(moveDownButton, constraints);
@@ -302,7 +302,7 @@ public class AddTransportPanel extends AbstractTransportModulePanel {
 
 
         //Submit button
-        JButton submitButton = new JButton("Add Transport");
+        PrettyButton submitButton = new PrettyButton("Add Transport");
         constraints.gridx = 0;
         constraints.gridy = 3;
         constraints.weighty = 1;

@@ -4,6 +4,7 @@ import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
 import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
 import presentationLayer.gui.plAbstracts.interfaces.Searchable;
 import presentationLayer.gui.plUtils.ObservableList;
+import presentationLayer.gui.plUtils.PrettyButton;
 import presentationLayer.gui.plUtils.PrettyTextField;
 import presentationLayer.gui.plUtils.SearchBox;
 import presentationLayer.gui.transportModule.control.SitesControl;
@@ -25,7 +26,7 @@ public class UpdateSitePanel extends AbstractTransportModulePanel {
     private PrettyTextField contactNameField;
     private JLabel contactNumberLabel;
     private PrettyTextField contactNumberField;
-    private JButton submitButton;
+    private PrettyButton submitButton;
     private ObservableList emptySiteList;
     private ObservableList<Searchable> sitesList;
 
@@ -93,12 +94,12 @@ public class UpdateSitePanel extends AbstractTransportModulePanel {
         contentPanel.add(contactNumberField.getComponent(), constraints);
 
         //Submit button
-        submitButton = new JButton("Submit");
+        submitButton = new PrettyButton("Submit");
         constraints.gridx = 0;
         constraints.gridy = 4;
         constraints.gridwidth = 2;
         constraints.fill = GridBagConstraints.NONE;
-        constraints.anchor = GridBagConstraints.EAST;
+        constraints.anchor = GridBagConstraints.CENTER;
         contentPanel.add(submitButton, constraints);
 
         submitButton.addMouseListener(new MouseAdapter() {

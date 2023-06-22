@@ -5,6 +5,7 @@ import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
 import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
 import presentationLayer.gui.plAbstracts.interfaces.Searchable;
 import presentationLayer.gui.plUtils.ObservableList;
+import presentationLayer.gui.plUtils.PrettyButton;
 import presentationLayer.gui.plUtils.SearchBox;
 import presentationLayer.gui.plUtils.SearchableString;
 import presentationLayer.gui.transportModule.control.DriversControl;
@@ -28,7 +29,7 @@ public class UpdateDriversPanel extends AbstractTransportModulePanel {
     private SearchBox selectedDrivers;
     private JLabel licencesLabel;
     private SearchBox selectedLicence;
-    private JButton submitButton;
+    private PrettyButton submitButton;
 
     public UpdateDriversPanel(DriversControl control) {
         super(control);
@@ -91,7 +92,7 @@ public class UpdateDriversPanel extends AbstractTransportModulePanel {
         contentPanel.add(selectedLicence.getComponent(), constraints);
 
         //Submit button
-        submitButton = new JButton("Submit");
+        submitButton = new PrettyButton("Submit");
         constraints.gridx = 1;
         constraints.gridy = 3;
         constraints.gridwidth = 2;

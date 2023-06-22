@@ -4,6 +4,7 @@ import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
 import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
 import presentationLayer.gui.plAbstracts.interfaces.Searchable;
 import presentationLayer.gui.plUtils.ObservableList;
+import presentationLayer.gui.plUtils.PrettyButton;
 import presentationLayer.gui.plUtils.PrettyList;
 import presentationLayer.gui.plUtils.SearchableString;
 import presentationLayer.gui.transportModule.control.*;
@@ -67,7 +68,7 @@ public class ViewTransportsPanel extends AbstractTransportModulePanel {
 
         JPanel buttonsPanel = new JPanel();
         buttonsPanel.setBackground(new Color(0, 0, 0, 0));
-        JButton updateButton = new JButton("Update");
+        PrettyButton updateButton = new PrettyButton("Update");
         constraints.gridy = 0;
         constraints.gridx = 0;
         constraints.anchor = GridBagConstraints.WEST;

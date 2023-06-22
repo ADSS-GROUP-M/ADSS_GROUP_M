@@ -6,10 +6,7 @@ import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
 import presentationLayer.gui.plAbstracts.interfaces.ModelObserver;
 import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
 import presentationLayer.gui.plAbstracts.interfaces.Searchable;
-import presentationLayer.gui.plUtils.ObservableList;
-import presentationLayer.gui.plUtils.PrettyTextField;
-import presentationLayer.gui.plUtils.SearchBox;
-import presentationLayer.gui.plUtils.SearchableString;
+import presentationLayer.gui.plUtils.*;
 import presentationLayer.gui.transportModule.control.TrucksControl;
 import presentationLayer.gui.transportModule.model.ObservableSite;
 import presentationLayer.gui.transportModule.model.ObservableTruck;
@@ -134,12 +131,12 @@ public class UpdateTruckPanel extends AbstractTransportModulePanel {
         group.add(frozen);
 
         //Submit button
-        JButton submitButton = new JButton("Submit");
+        PrettyButton submitButton = new PrettyButton("Submit");
         constraints.gridx = 0;
         constraints.gridy = 5;
         constraints.gridwidth = 2;
         constraints.fill = GridBagConstraints.NONE;
-        constraints.anchor = GridBagConstraints.EAST;
+        constraints.anchor = GridBagConstraints.CENTER;
         contentPanel.add(submitButton, constraints);
 
         submitButton.addMouseListener(new MouseAdapter() {

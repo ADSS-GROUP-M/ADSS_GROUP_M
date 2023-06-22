@@ -10,7 +10,8 @@ public class Colors {
     public enum ColorPalette{
         orange,
         blue,
-        hr
+        hr,
+        storeManager
     }
 
 
@@ -32,6 +33,12 @@ public class Colors {
     private static final Color hrBackground = new Color(244, 250, 255, 255);
     private static final Color hrContentPanel = new Color(255, 255, 255, 230);
     private static final Image hrImage = new ImageIcon("src/resources/hr_background.jpg").getImage();
+    // ============================ Store Manager ============================ |
+    private static final Color storeManagerForeground = new Color(39, 103, 166, 255);
+    private static final Color storeManagerTransparentForeground = new Color(39, 103, 166, 128);
+    private static final Color storeManagerBackground = new Color(244, 250, 255, 255);
+    private static final Color storeManagerContentPanel = new Color(255, 255, 255, 230);
+    private static final Image storeManagerImage = new ImageIcon("src/resources/storemanager.jpg").getImage();
 
 
     public static Color getForegroundColor(){
@@ -39,6 +46,7 @@ public class Colors {
             case orange -> orangeForeground;
             case blue -> blueForeground;
             case hr -> hrForeground;
+            case storeManager -> storeManagerForeground;
         };
     }
 
@@ -47,6 +55,7 @@ public class Colors {
             case orange -> orangeTransparentForeground;
             case blue -> blueTransparentForeground;
             case hr -> hrTransparentForeground;
+            case storeManager -> storeManagerTransparentForeground;
         };
     }
 
@@ -55,6 +64,7 @@ public class Colors {
             case orange -> orangeBackground;
             case blue -> blueBackground;
             case hr -> hrBackground;
+            case storeManager -> storeManagerBackground;
         };
     }
 
@@ -63,6 +73,7 @@ public class Colors {
             case orange -> orangeImage;
             case blue -> blueImage;
             case hr -> hrImage;
+            case storeManager -> storeManagerImage;
         };
     }
 
@@ -71,6 +82,7 @@ public class Colors {
             case orange -> orangeContentPanel;
             case blue -> blueContentPanel;
             case hr -> hrContentPanel;
+            case storeManager -> storeManagerContentPanel;
         };
     }
 }

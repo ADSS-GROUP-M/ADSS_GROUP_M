@@ -12,10 +12,10 @@ public class PanelManager implements UIElement {
 
     private final CardLayout cardLayout;
     private final JPanel container;
-    private presentationLayer.gui.plAbstracts.interfaces.Panel currentPanel;
-    private final LinkedList<presentationLayer.gui.plAbstracts.interfaces.Panel> panelsHistory = new LinkedList<>();
+    private Panel currentPanel;
+    private final LinkedList<Panel> panelsHistory = new LinkedList<>();
 
-    public PanelManager(presentationLayer.gui.plAbstracts.interfaces.Panel startingPanel) {
+    public PanelManager(Panel startingPanel) {
         cardLayout = new CardLayout();
         container = new JPanel();
         container.setLayout(cardLayout);
@@ -56,8 +56,8 @@ public class PanelManager implements UIElement {
 
     @Override
     public void componentResized(Dimension newSize) {
-        Dimension d = MainWindow.screenSize;
-        container.setSize(new Dimension((int)(d.width*0.75)-10,d.height-20));
-        currentPanel.componentResized(newSize);
+        container.setSize(new Dimension((int)(newSize.width*0.75)-7,newSize.height-38));
+        currentPanel.componentResized(container.getSize());
+        container.revalidate();
     }
 }

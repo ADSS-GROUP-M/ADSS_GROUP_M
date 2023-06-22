@@ -17,7 +17,7 @@ import java.util.Set;
 
 public abstract class AbstractPanel implements Panel {
 
-    protected final JPanel panel;
+    protected final JPanelWithBackground panel;
     protected final Set<UIElementObserver> observers;
 
     protected AbstractPanel(){
@@ -40,7 +40,7 @@ public abstract class AbstractPanel implements Panel {
 
     public abstract Component getComponent();
     public void componentResized(Dimension newSize) {
-        panel.setPreferredSize(new Dimension((int)(newSize.width*0.8)-20,newSize.height-40));
+        panel.setPreferredSize(newSize);
     }
 
     @Override

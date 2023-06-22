@@ -274,8 +274,10 @@ public class AddTransportPanel extends AbstractTransportModulePanel {
         complexComponentsPanel.add(moveDownButton, constraints);
 
         // ================================= END OF COMPLEX COMPONENTS =================================
+
         constraints = new GridBagConstraints();
         constraints.anchor = GridBagConstraints.NORTH;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
 
         constraints.gridx = 0;
         constraints.gridy = 0;
@@ -394,9 +396,6 @@ public class AddTransportPanel extends AbstractTransportModulePanel {
             destinationsList.getList().setModel(model);
             destinationsList.getList().setSelectedIndex(index+1);
         });
-
-
-
     }
 
     private void buttonClicked(){
@@ -444,11 +443,9 @@ public class AddTransportPanel extends AbstractTransportModulePanel {
     @Override
     public void componentResized(Dimension newSize) {
         super.componentResized(newSize);
-        Dimension panelSize = panel.getPreferredSize();
-        Dimension contentPanelSize = new Dimension((int) (panelSize.width * 0.8), (int) (panelSize.height * 0.9));
+        Dimension contentPanelSize = new Dimension((int) (newSize.width * 0.8), (int) (newSize.height * 0.9));
         contentPanel.setPreferredSize(contentPanelSize);
         destinationsList.componentResized(new Dimension((int) (contentPanelSize.width*0.8), (int) (-150 + 2 *contentPanelSize.height/3.0)));
-
         panel.revalidate();
     }
 

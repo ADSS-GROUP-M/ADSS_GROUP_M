@@ -4,6 +4,8 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
+import static presentationLayer.gui.plAbstracts.MainWindow.screenSize;
+
 public abstract class ScrollablePanel extends AbstractPanel {
 
     protected final JScrollPane scrollPane;
@@ -23,6 +25,6 @@ public abstract class ScrollablePanel extends AbstractPanel {
     @Override
     public void componentResized(Dimension newSize) {
         super.componentResized(newSize);
-        scrollPane.setPreferredSize(panel.getPreferredSize());
+        scrollPane.setPreferredSize(newSize);
     }
 }

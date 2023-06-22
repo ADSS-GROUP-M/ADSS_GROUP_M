@@ -20,6 +20,7 @@ import java.util.List;
 public class ShiftsControl extends AbstractControl {
 
     public static final Type STRING_LIST_TYPE = new TypeToken<List<String>>(){}.getType();
+    public static final Type STRING_ARRAY_TYPE = new TypeToken<String[]>(){}.getType();
     private static final Type LIST_SSHIFT_ARRAY_TYPE = new TypeToken<List<SShift[]>>(){}.getType();
 
     private final EmployeesService employeesService;
@@ -34,8 +35,8 @@ public class ShiftsControl extends AbstractControl {
         shiftModel.notifyObservers();
     }
 
-    public Object getShifts(LocalDate day) {
-        String json = employeesService.getWeekShifts(UserService.HR_MANAGER_USERNAME, Branch.HEADQUARTERS_ID,day);
+    public Object getShifts(String branchId, LocalDate day) {
+        String json = employeesService.getWeekShifts(UserService.HR_MANAGER_USERNAME, branchId ,day);
         try {
             Response response = Response.fromJsonWithValidation(json); // Throws an exception if an error has occurred.
             List<SShift[]> weekShifts = response.data(LIST_SSHIFT_ARRAY_TYPE);
@@ -50,8 +51,8 @@ public class ShiftsControl extends AbstractControl {
         }
     }
 
-    public String deleteShift(SShift shift) {
-        String json = employeesService.deleteShift(UserService.HR_MANAGER_USERNAME,Branch.HEADQUARTERS_ID,shift.getShiftDate(),shift.getShiftType());
+    public String deleteShift(String branchId, SShift shift) {
+        String json = employeesService.deleteShift(UserService.HR_MANAGER_USERNAME,branchId,shift.getShiftDate(),shift.getShiftType());
         try {
             Response response = Response.fromJsonWithValidation(json); // Throws an exception if an error has occurred.
         } catch (ErrorOccurredException e) {
@@ -60,8 +61,8 @@ public class ShiftsControl extends AbstractControl {
         return null;
     }
 
-    public String setShiftNeededAmount(LocalDate shiftDate, SShiftType shiftType, String role, int amount) {
-        String json = employeesService.setShiftNeededAmount(UserService.HR_MANAGER_USERNAME, Branch.HEADQUARTERS_ID, shiftDate, shiftType, role, amount);
+    public String setShiftNeededAmount(String branchId, LocalDate shiftDate, SShiftType shiftType, String role, int amount) {
+        String json = employeesService.setShiftNeededAmount(UserService.HR_MANAGER_USERNAME, branchId, shiftDate, shiftType, role, amount);
         try {
             Response response = Response.fromJsonWithValidation(json); // Throws an exception if an error has occurred.
         } catch (ErrorOccurredException e) {
@@ -70,8 +71,8 @@ public class ShiftsControl extends AbstractControl {
         return "Updated the role needed amount successfully.";
     }
 
-    public String setShiftWorkers(LocalDate shiftDate, SShiftType shiftType, String role, List<String> workerIds) {
-        String json = employeesService.setShiftEmployees(UserService.HR_MANAGER_USERNAME, Branch.HEADQUARTERS_ID, shiftDate, shiftType, role, workerIds);
+    public String setShiftWorkers(String branchId, LocalDate shiftDate, SShiftType shiftType, String role, List<String> workerIds) {
+        String json = employeesService.setShiftEmployees(UserService.HR_MANAGER_USERNAME, branchId, shiftDate, shiftType, role, workerIds);
         try {
             Response response = Response.fromJsonWithValidation(json); // Throws an exception if an error has occurred.
         } catch (ErrorOccurredException e) {
@@ -80,8 +81,8 @@ public class ShiftsControl extends AbstractControl {
         return "Updated the shift workers successfully.";
     }
 
-    public String approveShift(LocalDate shiftDate, SShiftType shiftType) {
-        String json = employeesService.approveShift(UserService.HR_MANAGER_USERNAME, Branch.HEADQUARTERS_ID, shiftDate, shiftType);
+    public String approveShift(String branchId, LocalDate shiftDate, SShiftType shiftType) {
+        String json = employeesService.approveShift(UserService.HR_MANAGER_USERNAME, branchId, shiftDate, shiftType);
         try {
             Response response = Response.fromJsonWithValidation(json); // Throws an exception if an error has occurred.
         } catch (ErrorOccurredException e) {
@@ -90,8 +91,8 @@ public class ShiftsControl extends AbstractControl {
         return "Approved the shift successfully.";
     }
 
-    public String createWeekShifts(LocalDate weekStart) {
-        String json = employeesService.createWeekShifts(UserService.HR_MANAGER_USERNAME, Branch.HEADQUARTERS_ID, weekStart);
+    public String createWeekShifts(String branchId, LocalDate weekStart) {
+        String json = employeesService.createWeekShifts(UserService.HR_MANAGER_USERNAME, branchId, weekStart);
         try {
             Response response = Response.fromJsonWithValidation(json); // Throws an exception if an error has occurred.
         } catch (ErrorOccurredException e) {
@@ -100,8 +101,8 @@ public class ShiftsControl extends AbstractControl {
         return "Create the week shifts successfully.";
     }
 
-    public String applyCancelCard(String employeeId, SShift shift, String productId) {
-        String json = employeesService.applyCancelCard(employeeId, Branch.HEADQUARTERS_ID, shift.getShiftDate(), shift.getShiftType(), productId);
+    public String applyCancelCard(String employeeId, String branchId, SShift shift, String productId) {
+        String json = employeesService.applyCancelCard(employeeId, branchId, shift.getShiftDate(), shift.getShiftType(), productId);
         try {
             Response response = Response.fromJsonWithValidation(json); // Throws an exception if an error has occurred.
         } catch (ErrorOccurredException e) {
@@ -110,8 +111,8 @@ public class ShiftsControl extends AbstractControl {
         return "Applied the cancel card successfully.";
     }
 
-    public String reportShiftActivity(String employeeId, SShift shift, String activity) {
-        String json = employeesService.reportShiftActivity(employeeId, Branch.HEADQUARTERS_ID, shift.getShiftDate(), shift.getShiftType(), activity);
+    public String reportShiftActivity(String employeeId, String branchId, SShift shift, String activity) {
+        String json = employeesService.reportShiftActivity(employeeId, branchId, shift.getShiftDate(), shift.getShiftType(), activity);
         try {
             Response response = Response.fromJsonWithValidation(json); // Throws an exception if an error has occurred.
         } catch (ErrorOccurredException e) {
@@ -120,8 +121,8 @@ public class ShiftsControl extends AbstractControl {
         return "Reported the shift activity successfully.";
     }
 
-    public String requestShift(String employeeId, SShift shift, String role) {
-        String json = employeesService.requestShift(employeeId, Branch.HEADQUARTERS_ID, shift.getShiftDate(), shift.getShiftType(), role);
+    public String requestShift(String employeeId, String branchId, SShift shift, String role) {
+        String json = employeesService.requestShift(employeeId, branchId, shift.getShiftDate(), shift.getShiftType(), role);
         try {
             Response response = Response.fromJsonWithValidation(json); // Throws an exception if an error has occurred.
         } catch (ErrorOccurredException e) {
@@ -130,8 +131,8 @@ public class ShiftsControl extends AbstractControl {
         return "Requested the shift successfully.";
     }
 
-    public String cancelShiftRequest(String employeeId, SShift shift, String role) {
-        String json = employeesService.cancelShiftRequest(employeeId, Branch.HEADQUARTERS_ID, shift.getShiftDate(), shift.getShiftType(), role);
+    public String cancelShiftRequest(String employeeId, String branchId, SShift shift, String role) {
+        String json = employeesService.cancelShiftRequest(employeeId, branchId, shift.getShiftDate(), shift.getShiftType(), role);
         try {
             Response response = Response.fromJsonWithValidation(json); // Throws an exception if an error has occurred.
         } catch (ErrorOccurredException e) {
@@ -145,6 +146,16 @@ public class ShiftsControl extends AbstractControl {
         try {
             Response response = Response.fromJsonWithValidation(json); // Throws an exception if an error has occurred.
             return response.data(LIST_SSHIFT_ARRAY_TYPE);
+        } catch (ErrorOccurredException e) {
+            return e.getMessage();
+        }
+    }
+
+    public Object getBranchIds() {
+        String json = employeesService.getBranchIds();
+        try {
+            Response response = Response.fromJsonWithValidation(json); // Throws an exception if an error has occurred.
+            return response.data(STRING_ARRAY_TYPE);
         } catch (ErrorOccurredException e) {
             return e.getMessage();
         }

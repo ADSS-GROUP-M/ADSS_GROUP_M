@@ -2,10 +2,12 @@ package presentationLayer.gui.transportModule.view.panels.transports;
 
 import javafx.util.Pair;
 import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
+import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
 import presentationLayer.gui.plAbstracts.interfaces.Searchable;
 import presentationLayer.gui.plUtils.*;
 import presentationLayer.gui.transportModule.control.*;
 import presentationLayer.gui.transportModule.model.*;
+import presentationLayer.gui.plAbstracts.interfaces.Panel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,6 +18,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static presentationLayer.gui.plUtils.SearchBox.DescriptionType.LONG;
@@ -27,6 +30,7 @@ public class UpdateTransportPanel extends AbstractTransportModulePanel {
     private final DriversControl driversControl;
     private final TrucksControl trucksControl;
     private final ItemListsControl itemListsControl;
+    private final Function<Panel, Void> setActivePanel;
     private PrettyList destinationsList;
     private List<Pair<String,Integer>> destinations_itemLists;
     private PrettyTextField year;
@@ -52,13 +56,15 @@ public class UpdateTransportPanel extends AbstractTransportModulePanel {
                                 SitesControl sitesControl,
                                 DriversControl driversControl,
                                 TrucksControl trucksControl,
-                                ItemListsControl itemListsControl){
+                                ItemListsControl itemListsControl,
+                                Function<Panel, Void> setActivePanel){
         super(control);
         this.toEdit = toEdit;
         this.sitesControl = sitesControl;
         this.driversControl = driversControl;
         this.trucksControl = trucksControl;
         this.itemListsControl = itemListsControl;
+        this.setActivePanel = setActivePanel;
         destinations_itemLists = new LinkedList<>();
         model = new DefaultListModel<>();
         init();
@@ -449,11 +455,29 @@ public class UpdateTransportPanel extends AbstractTransportModulePanel {
     @Override
     public void componentResized(Dimension newSize) {
         super.componentResized(newSize);
+
+        if(newSize.width < 900){
+            newSize.width = 900;
+        }
+
+        if(newSize.height < 600){
+            newSize.height = 600;
+        }
+
         Dimension contentPanelSize = new Dimension((int) (newSize.width * 0.8), (int) (newSize.height * 0.9));
         contentPanel.setPreferredSize(contentPanelSize);
         destinationsList.componentResized(new Dimension((int) (contentPanelSize.width*0.8), (int) (contentPanelSize.height*0.3)));
 
         panel.revalidate();
+    }
+
+    @Override
+    public void notify(ObservableModel observable) {
+        super.notify(observable);
+        if(observable.errorOccurred() == false){
+            setActivePanel.apply(new ViewTransportsPanel(setActivePanel,
+                    (TransportsControl) control,sitesControl, driversControl, trucksControl, itemListsControl));
+        }
     }
 
     @Override

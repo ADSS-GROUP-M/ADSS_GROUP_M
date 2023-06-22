@@ -119,7 +119,8 @@ public class ViewTransportsPanel extends AbstractTransportModulePanel {
                                 sitesControl,
                                 driversControl,
                                 trucksControl,
-                                itemListsControl
+                                itemListsControl,
+                                setActivePanel
                         );
                         SwingUtilities.invokeLater(()->setActivePanel.apply(upPanel));
                     }

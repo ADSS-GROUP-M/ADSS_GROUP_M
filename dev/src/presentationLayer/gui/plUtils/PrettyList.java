@@ -75,7 +75,6 @@ public class PrettyList implements UIElement {
                 Component r = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 
                 setFont(Fonts.textBoxFont);
-
 //                int w = SwingUtilities.computeStringWidth(getFontMetrics(getFont()), value.toString());
                 r.setPreferredSize(new Dimension(value.toString().length()*8,50));
 
@@ -89,7 +88,7 @@ public class PrettyList implements UIElement {
                         Graphics2D g2 = (Graphics2D) g;
                         g2.setStroke(new BasicStroke(1));
                         g2.setColor(new Color(200, 200, 200, 100));
-                        g2.drawLine(0, height - 1, width, height - 1);
+                        g2.drawLine(1, height - 1, width-1, height - 1);
                     }
 
                     @Override

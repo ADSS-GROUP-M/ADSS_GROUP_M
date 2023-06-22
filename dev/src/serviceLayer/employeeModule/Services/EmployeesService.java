@@ -436,4 +436,13 @@ public class EmployeesService {
             return Response.getErrorResponse(e).toJson();
         }
     }
+
+    public String getBranchIds() {
+        try {
+            String[] branchIds = employeesController.getBranchIds();
+            return new Response(true, branchIds).toJson();
+        } catch (Exception e) {
+            return Response.getErrorResponse(e).toJson();
+        }
+    }
 }

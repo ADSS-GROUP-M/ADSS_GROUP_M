@@ -20,8 +20,8 @@ public class MainViewController implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == mainView.getSuppliersInfoB()){
             //go to supplier info page
+            new ManageSuppliersController(new ManageSuppliersView(mainView.manager), new SuppliersModel());
             mainView.dispose();
-            new ManageSuppliersController(new ManageSuppliersView(), new SuppliersModel());
         }
         else{
             //go to manage order page

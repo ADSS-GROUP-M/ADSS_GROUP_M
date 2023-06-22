@@ -12,10 +12,11 @@ public class MainView extends JFrame {
     private JButton suppliersInfoB;
     private JButton manageOrdersB;
     private JLabel welcomeLabel;
+    public boolean manager;
     public MainView(boolean manager){
-
+        this.manager = manager;
         //panel
-        jpanel = new BackgruondPanel("src/Fronend/PresentationLayer/SuppliersModule/GUI/ViewLayer/resource/supermarketMain.png");
+        jpanel = new BackgruondPanel("src/resources/supermarketMain.png");
         jpanel.setBounds(0,0, 850, 550);
         jpanel.setLayout(null);
         //buttons - suppliers info

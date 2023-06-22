@@ -43,9 +43,16 @@ public class AgreementDataMapper {
         return null;
     }
 
-    public Agreement insertAgreement(String bnNumber, List<Product> products, DeliveryAgreement deliveryAgreement) throws SQLException {
-        for (Product p : products)
-            supplierProductDataMapper.insert(bnNumber, p.getCatalogNumber(), p.getSuppliersCatalogNumber(), p.getNumberOfUnits(), p.getPrice());
+    public Agreement insertAgreement(String bnNumber, List<Product> products, DeliveryAgreement deliveryAgreement) throws SQLException, Exception {
+        for (Product p : products) {
+            try {
+                supplierProductDataMapper.insert(bnNumber, p.getCatalogNumber(), p.getSuppliersCatalogNumber(), p.getNumberOfUnits(), p.getPrice());
+            } catch (SQLException s) {
+                //remove all the products already
+                supplierProductDataMapper.delete(bnNumber);
+                throw new Exception("no such product with catalog number - " + p.getCatalogNumber());
+            }
+        }
         boolean byInvitation = deliveryAgreement instanceof DeliveryByInvitation;
         String days = byInvitation ? ((DeliveryByInvitation) deliveryAgreement).getNumberOfDays() + "" :
                 (((DeliveryFixedDays) deliveryAgreement).getDaysOfTheWeek()).stream().map(i -> String.valueOf(i)).collect(Collectors.joining(","));

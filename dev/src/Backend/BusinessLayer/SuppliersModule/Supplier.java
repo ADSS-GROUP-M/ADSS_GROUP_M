@@ -110,4 +110,15 @@ public class Supplier {
             return true;
         return false;
     }
+
+    public BankAccount getBankAccount() {
+        return bankAccount;
+    }
+
+    public List<String> getFields() {
+        return fields;
+    }
+
+    public String getPaymentMethod() {return paymentMethod;
+    }
 }

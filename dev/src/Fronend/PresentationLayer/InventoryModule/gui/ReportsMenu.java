@@ -136,4 +136,5 @@ public class ReportsMenu extends InventoryMainMenu {
 
         inputFrame.dispose();
     }
+
 }

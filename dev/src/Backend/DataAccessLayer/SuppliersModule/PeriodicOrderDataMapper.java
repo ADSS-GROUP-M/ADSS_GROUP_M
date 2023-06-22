@@ -125,4 +125,9 @@ public class PeriodicOrderDataMapper extends AbstractDataMapper {
         return (dayChosen + 7) - dayNow;
     }
 
+    public void delete(int orderId) throws SQLException {
+        sqlExecutor.executeWrite(String.format("DELETE FROM %s WHERE order_id = '%s'", tableName, orderId));
+        periodicOrderDetailsDataMapper.delete(orderId);
+    }
+
 }

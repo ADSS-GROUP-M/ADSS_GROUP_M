@@ -7,10 +7,8 @@ public class DeliveryFixedDays extends DeliveryAgreement{
     /***
      * a List that contains all the days the supplier arrives
      */
-    private List<Integer> daysOfTheWeek;
     public DeliveryFixedDays(boolean havaTransport, List<Integer> daysOfTheWeek) {
-        super(havaTransport);
-        this.daysOfTheWeek = daysOfTheWeek;
+        super(havaTransport, false, daysOfTheWeek, -1);
     }
 
     public void addDay(int day){

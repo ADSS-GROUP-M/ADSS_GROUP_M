@@ -332,4 +332,8 @@ public class ProductsMenu extends InventoryMainMenu{
 
         inputFrame.dispose();
     }
+
+    public static void main(String[] args) {
+        new ProductsMenu().run("branch1");
+    }
 }

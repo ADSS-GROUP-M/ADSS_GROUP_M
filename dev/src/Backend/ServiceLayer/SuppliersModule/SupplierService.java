@@ -28,7 +28,13 @@ public class SupplierService {
                               List<Product> productList, DeliveryAgreement deliveryAgreement) {
         try {
             supplierController.addSupplier(name,bnNumber,bankAccount,paymentMethod,fields, contactsInfo);
-            agreementController.addAgreement(bnNumber, productList, deliveryAgreement);
+            try {
+                agreementController.addAgreement(bnNumber, productList, deliveryAgreement);
+            }
+            catch (Exception e){
+                supplierController.removeSupplier(bnNumber);
+                throw e;
+            }
             return gson.toJson(new Response<>("new Supplier Registered!", false));
         }
         catch (Exception e){
@@ -154,6 +160,15 @@ public class SupplierService {
         }
         catch (Exception e){
             return gson.toJson(new Response<>(e.getMessage(), true));
+        }
+    }
+
+    public String getSupplier(String bnNumber){
+        try {
+            return gson.toJson(new Response<Supplier>(supplierController.getSupplier(bnNumber)));
+        }
+        catch (Exception e){
+            return gson.toJson(new Response<Supplier>(e.getMessage(), true));
         }
     }
 

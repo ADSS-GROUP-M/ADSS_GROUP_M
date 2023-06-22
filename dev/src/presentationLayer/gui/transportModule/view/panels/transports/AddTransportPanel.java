@@ -178,7 +178,7 @@ public class AddTransportPanel extends AbstractTransportModulePanel {
         dateTimePanel.add(minute.getComponent());
 
         constraints.gridx = 1;
-        constraints.insets = new Insets(0,0,0,60);
+        constraints.insets = new Insets(0,0,10,60);
         simpleComponentsPanel.add(dateTimePanel, constraints);
 
         JLabel weightLabel = new JLabel("Truck Weight:");
@@ -189,19 +189,19 @@ public class AddTransportPanel extends AbstractTransportModulePanel {
         weightField = new PrettyTextField(textFieldSize);
         constraints.gridx = 1;
         constraints.gridy = 1;
-        constraints.insets = new Insets(0,5,0,0);
+        constraints.insets = new Insets(0,5,10,0);
         simpleComponentsPanel.add(weightField.getComponent(), constraints);
 
         JLabel driversLabel = new JLabel("Driver:");
         constraints.gridx = 0;
         constraints.gridy = 2;
-        constraints.insets = new Insets(0,0,0,10);
+        constraints.insets = new Insets(0,0,10,10);
         simpleComponentsPanel.add(driversLabel, constraints);
 
         driverSearchBox = new SearchBox(driversList,"Select Driver",textFieldSize,LONG, panel);
         constraints.gridx = 1;
         constraints.gridy = 2;
-        constraints.insets = new Insets(0,5,0,0);
+        constraints.insets = new Insets(0,5,10,0);
         simpleComponentsPanel.add(driverSearchBox.getComponent(), constraints);
 
         JLabel trucksLabel = new JLabel("Truck:");
@@ -451,7 +451,7 @@ public class AddTransportPanel extends AbstractTransportModulePanel {
         super.componentResized(newSize);
         Dimension contentPanelSize = new Dimension((int) (newSize.width * 0.8), (int) (newSize.height * 0.9));
         contentPanel.setPreferredSize(contentPanelSize);
-        destinationsList.componentResized(new Dimension((int) (contentPanelSize.width*0.8), (int) (contentPanelSize.height*0.4)));
+        destinationsList.componentResized(new Dimension((int) (contentPanelSize.width*0.8), (int) (contentPanelSize.height*0.3)));
 
         panel.revalidate();
     }

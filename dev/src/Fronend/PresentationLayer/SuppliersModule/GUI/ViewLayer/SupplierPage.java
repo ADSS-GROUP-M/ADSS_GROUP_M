@@ -7,6 +7,7 @@ import Backend.ServiceLayer.SuppliersModule.BillOfQuantitiesService;
 import Backend.ServiceLayer.SuppliersModule.Response;
 import Fronend.PresentationLayer.ManagerWindowGUI;
 import Fronend.PresentationLayer.SuppliersModule.GUI.ControllersLayer.ManageSuppliersController;
+import Fronend.PresentationLayer.SuppliersModule.GUI.ModelLayer.SuppliersModel;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -107,8 +108,8 @@ public class SupplierPage extends JFrame {
         JButton back = new JButton("Back");
         back.setBounds(20, 450, 70, 20);
         back.addActionListener((ActionEvent e)->{
+            new ManageSuppliersController(new ManageSuppliersView(manager), new SuppliersModel());
             dispose();
-            new ManageSuppliersView(manager);
         });
         back.setFont(new Font("Comic Sans", Font.BOLD, 12));
         back.setFocusable(false);

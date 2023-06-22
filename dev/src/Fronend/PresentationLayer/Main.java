@@ -27,7 +27,7 @@ public class Main {
             }
             else if (UI.equals("CLI")) {
                 if(role.equals("StoreManager"))
-                    new ManagerWindowCLI();
+                    ManagerWindowCLI.run(args);
                 else if(role.equals("WarehouseMen"))
                     new InventoryMain().run();
                 else if (role.equals("SuppliersManager")) {

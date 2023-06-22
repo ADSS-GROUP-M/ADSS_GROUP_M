@@ -9,11 +9,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e454f93c-4ee8-4f4b-9a14-eaaf36aa303c" name="Changes" comment="commit for merge">
+    <list default="true" id="e454f93c-4ee8-4f4b-9a14-eaaf36aa303c" name="Changes" comment="fix">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/SuppliersModule/BillOfQuantitiesController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/BusinessLayer/SuppliersModule/BillOfQuantitiesController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/BusinessLayer/SuppliersModule/OrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/BusinessLayer/SuppliersModule/OrderController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/ServiceLayer/InventoryModule/StockService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/ServiceLayer/InventoryModule/StockService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/GUI/ControllersLayer/MainViewController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/GUI/ControllersLayer/MainViewController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/GUI/ControllersLayer/ManageSuppliersController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/GUI/ControllersLayer/ManageSuppliersController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/GUI/ViewLayer/MainView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/GUI/ViewLayer/MainView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/GUI/ViewLayer/ManageSuppliersView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/GUI/ViewLayer/ManageSuppliersView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/GUI/ViewLayer/SupplierPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/GUI/ViewLayer/SupplierPage.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -462,7 +464,14 @@
       <option name="project" value="LOCAL" />
       <updated>1687442006199</updated>
     </task>
-    <option name="localTasksCounter" value="34" />
+    <task id="LOCAL-00034" summary="fix">
+      <created>1687444696032</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1687444696032</updated>
+    </task>
+    <option name="localTasksCounter" value="35" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -519,7 +528,8 @@
     <MESSAGE value="added gui - use case of adding a supplier" />
     <MESSAGE value="added gui - use case of adding periodic order" />
     <MESSAGE value="commit for merge" />
-    <option name="LAST_COMMIT_MESSAGE" value="commit for merge" />
+    <MESSAGE value="fix" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -561,7 +571,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/GUI/ViewLayer/SupplierPage.java</url>
-          <line>131</line>
+          <line>144</line>
           <option name="timeStamp" value="160" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">

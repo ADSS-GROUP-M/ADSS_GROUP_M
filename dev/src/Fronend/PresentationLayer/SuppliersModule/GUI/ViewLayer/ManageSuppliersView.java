@@ -4,6 +4,7 @@ import Backend.BusinessLayer.SuppliersModule.Supplier;
 import Backend.ServiceLayer.SuppliersModule.Response;
 import Backend.ServiceLayer.SuppliersModule.SupplierService;
 import Fronend.PresentationLayer.SuppliersModule.GUI.ControllersLayer.ManageSuppliersController;
+import Fronend.PresentationLayer.SuppliersModule.GUI.SuppliersGUI;
 import com.google.gson.Gson;
 
 import javax.swing.*;
@@ -16,8 +17,12 @@ public class ManageSuppliersView extends JFrame {
     protected JButton searchB;
     protected JButton addSupplierButton;
 
+    public boolean manager;
 
-    public ManageSuppliersView() {
+
+    public ManageSuppliersView(boolean manager) {
+        this.manager = manager;
+
         //panel
         jpanel = new BackgruondPanel("src/Fronend/PresentationLayer/SuppliersModule/GUI/ViewLayer/resource/ManageSupplier.png");
         jpanel.setBounds(0,0, 850, 550);
@@ -76,17 +81,21 @@ public class ManageSuppliersView extends JFrame {
         });
         //add supplier button
         addSupplierButton = new JButton("Add Supplier");
-        addSupplierButton.setBounds(20, 450, 120, 30);
+        addSupplierButton.setBounds(100, 450, 120, 30);
         addSupplierButton.addActionListener((ActionEvent e) -> addSupplier());
 
-        JButton removeSupplier = new JButton("Remove Supplier");
-        removeSupplier.setBounds(150, 450, 150, 30);
-        removeSupplier.addActionListener((ActionEvent e)->{
-            removeSupplier();
+
+        JButton back = new JButton("Back");
+        back.setBounds(20, 450, 70, 30);
+        back.addActionListener((ActionEvent e)->{
+            dispose();
+            new SuppliersGUI(manager);
         });
+        back.setFont(new Font("Comic Sans", Font.BOLD, 12));
+        back.setFocusable(false);
+        jpanel.add(back);
 
 
-        jpanel.add(removeSupplier);
         jpanel.add(addSupplierButton);
         jpanel.add(searchSupplier);
         jpanel.add(searchB);
@@ -97,17 +106,6 @@ public class ManageSuppliersView extends JFrame {
         this.add(jpanel);
     }
 
-    private void removeSupplier() {
-        String bnNumber = JOptionPane.showInputDialog(this, "Enter bnNumber", "Remove Supplier", JOptionPane.PLAIN_MESSAGE);
-        SupplierService supplierService = new SupplierService();
-        Gson gson = new Gson();
-        Response r= gson.fromJson(supplierService.removeSupplier(bnNumber), Response.class);
-        if(r.errorOccurred())
-            JOptionPane.showMessageDialog(this, r.getError(), "Error", JOptionPane.PLAIN_MESSAGE);
-        else
-            JOptionPane.showMessageDialog(this, r.getMsg(), "Success", JOptionPane.PLAIN_MESSAGE);
-
-    }
 
     public void registerToSearchB(ActionListener actionListener){
         searchB.addActionListener(actionListener);

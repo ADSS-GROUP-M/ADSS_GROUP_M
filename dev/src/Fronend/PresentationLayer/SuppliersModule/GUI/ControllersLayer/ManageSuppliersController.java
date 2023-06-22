@@ -28,7 +28,7 @@ public class ManageSuppliersController implements ActionListener {
             else {
                 //manageSuppliersView.showSupplier(s);
                 manageSuppliersView.dispose();
-                SupplierPage sp = new SupplierPage();
+                SupplierPage sp = new SupplierPage(manageSuppliersView.manager);
                 sp.initPage(s, this);
             }
         }

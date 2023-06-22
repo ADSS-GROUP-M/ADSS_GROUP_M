@@ -5,6 +5,7 @@ import Backend.BusinessLayer.SuppliersModule.BillOfQuantities;
 import Backend.BusinessLayer.SuppliersModule.Supplier;
 import Backend.ServiceLayer.SuppliersModule.BillOfQuantitiesService;
 import Backend.ServiceLayer.SuppliersModule.Response;
+import Fronend.PresentationLayer.ManagerWindowGUI;
 import Fronend.PresentationLayer.SuppliersModule.GUI.ControllersLayer.ManageSuppliersController;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -29,7 +30,10 @@ public class SupplierPage extends JFrame {
     private JButton showBillButton;
     private BillOfQuantitiesService billOfQuantitiesService = new BillOfQuantitiesService();
 
-    public SupplierPage() {
+    public boolean manager;
+
+    public SupplierPage(boolean manager) {
+        this.manager = manager;
     }
 
     public void initPage(Supplier supplier, ManageSuppliersController manageSuppliersController) {
@@ -100,6 +104,15 @@ public class SupplierPage extends JFrame {
             new SupplierOrdersGUI(supplier.getBnNumber());
         });
 
+        JButton back = new JButton("Back");
+        back.setBounds(20, 450, 70, 20);
+        back.addActionListener((ActionEvent e)->{
+            dispose();
+            new ManageSuppliersView(manager);
+        });
+        back.setFont(new Font("Comic Sans", Font.BOLD, 12));
+        back.setFocusable(false);
+        jpanel.add(back);
         jpanel.add(picture);
         jpanel.add(name);
         jpanel.add(bnNumber);

@@ -185,10 +185,10 @@
     <list>
       <item itemvalue="Application.InventoryMain" />
       <item itemvalue="Application.Main" />
+      <item itemvalue="Application.InventoryMainMenu" />
       <item itemvalue="JUnit.Backend.BusinessLayer in dev" />
       <item itemvalue="JUnit.ReportTest.getShortageReport" />
       <item itemvalue="JUnit.ProductItemTest" />
-      <item itemvalue="Application.InventoryMainMenu" />
     </list>
     <recent_temporary>
       <list>

@@ -13,6 +13,7 @@ import presentationLayer.gui.employeeModule.controller.UsersControl;
 import presentationLayer.gui.employeeModule.view.EmployeeLoginView;
 import presentationLayer.gui.employeeModule.view.EmployeeView;
 import presentationLayer.gui.employeeModule.view.HRManagerView;
+import presentationLayer.gui.employeeModule.view.StoreManagerView;
 import presentationLayer.gui.transportModule.control.*;
 import presentationLayer.gui.transportModule.view.TransportView;
 import serviceLayer.ServiceFactory;
@@ -53,7 +54,7 @@ public class Main {
 
     }
 
-    private static void employee(boolean gui) {
+    public static void employee(boolean gui) {
         if(gui){
             ServiceFactory serviceFactory = new ServiceFactory();
             PresentationFactory factory = new PresentationFactory();
@@ -80,7 +81,11 @@ public class Main {
     }
 
     private static void storeManager(boolean gui) {
-
+        if (gui) {
+            new StoreManagerView();
+        } else {
+            System.out.println("Store manager view is not supported in the CLI, please choose the GUI parameter, or choose your needed CLI window.");
+        }
     }
 
     public static void transportModule(boolean gui){

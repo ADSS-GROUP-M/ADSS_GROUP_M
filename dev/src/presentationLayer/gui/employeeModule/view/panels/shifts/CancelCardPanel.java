@@ -7,6 +7,7 @@ import presentationLayer.gui.employeeModule.controller.ShiftsControl;
 import presentationLayer.gui.employeeModule.view.EmployeeView;
 import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
 import presentationLayer.gui.plUtils.Colors;
+import presentationLayer.gui.plUtils.PrettyButton;
 import serviceLayer.employeeModule.Objects.SEmployee;
 import serviceLayer.employeeModule.Objects.SShift;
 
@@ -94,13 +95,13 @@ public class CancelCardPanel extends AbstractTransportModulePanel {
         constraints.anchor = GridBagConstraints.SOUTH;
         contentPanel.add(buttonPanel, constraints);
 
-        JButton prevButton = new JButton("<<");
+        PrettyButton prevButton = new PrettyButton("<<");
         prevButton.addActionListener(e -> {
             displayPreviousMonth();
         });
         buttonPanel.add(prevButton);
 
-        JButton nextButton = new JButton(">>");
+        PrettyButton nextButton = new PrettyButton(">>");
         nextButton.addActionListener(e -> {
             displayNextMonth();
         });
@@ -494,7 +495,7 @@ public class CancelCardPanel extends AbstractTransportModulePanel {
 
             eveningRadioButton.setBounds(20,390,20,20);
 
-            JButton cancelCardButton = new JButton("Apply cancel card");
+            PrettyButton cancelCardButton = new PrettyButton("Apply cancel card");
             cancelCardButton.setPreferredSize(new Dimension(200, 30));
             cancelCardButton.setBounds(350, 550, 200, 30);
 

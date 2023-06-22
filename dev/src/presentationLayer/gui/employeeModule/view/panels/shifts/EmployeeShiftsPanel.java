@@ -7,6 +7,7 @@ import presentationLayer.gui.employeeModule.controller.ShiftsControl;
 import presentationLayer.gui.employeeModule.view.EmployeeView;
 import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
 import presentationLayer.gui.plUtils.Colors;
+import presentationLayer.gui.plUtils.PrettyButton;
 import serviceLayer.employeeModule.Objects.SEmployee;
 import serviceLayer.employeeModule.Objects.SShift;
 
@@ -93,13 +94,13 @@ public class EmployeeShiftsPanel extends AbstractTransportModulePanel {
         constraints.anchor = GridBagConstraints.SOUTH;
         contentPanel.add(buttonPanel, constraints);
 
-        JButton prevButton = new JButton("<<");
+        PrettyButton prevButton = new PrettyButton("<<");
         prevButton.addActionListener(e -> {
             displayPreviousMonth();
         });
         buttonPanel.add(prevButton);
 
-        JButton nextButton = new JButton(">>");
+        PrettyButton nextButton = new PrettyButton(">>");
         nextButton.addActionListener(e -> {
             displayNextMonth();
         });
@@ -149,7 +150,7 @@ public class EmployeeShiftsPanel extends AbstractTransportModulePanel {
 
         // Initialize "My Shifts" panel
 
-        JButton myShiftsButton = new JButton("My Shifts");
+        PrettyButton myShiftsButton = new PrettyButton("My Shifts");
         myShiftsButton.setPreferredSize(new Dimension(200, 30));
         myShiftsButton.setBounds(350, 550, 200, 30);
 

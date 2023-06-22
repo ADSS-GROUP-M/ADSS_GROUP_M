@@ -7,6 +7,7 @@ import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
 import presentationLayer.gui.plAbstracts.interfaces.ModelObserver;
 import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
 import presentationLayer.gui.plUtils.Fonts;
+import presentationLayer.gui.plUtils.PrettyButton;
 import presentationLayer.gui.plUtils.PrettyTextField;
 import serviceLayer.employeeModule.Objects.SEmployee;
 
@@ -19,7 +20,7 @@ public class UpdateEmployeePanel extends AbstractTransportModulePanel {
     JPanel newOpenPanel = new JPanel();
     JFrame newOpenWindow;
     PrettyTextField employeeIdField, nameField, bankNumberField, bankBranchField, salaryRateField, salaryBonusField, year, month, day, employmentConditionsField, employeeDetailsField;
-    JButton submitButton;
+    PrettyButton submitButton;
 
     public UpdateEmployeePanel(EmployeesControl control) {
         super(control);
@@ -50,7 +51,7 @@ public class UpdateEmployeePanel extends AbstractTransportModulePanel {
         contentPanel.add(employeeIdField.getComponent(), constraints);
 
         // Find Employee Button
-        JButton findEmployeeButton = new JButton("Find Employee");
+        PrettyButton findEmployeeButton = new PrettyButton("Find Employee");
         constraints.gridx = 2;
         constraints.gridy = 1;
         constraints.gridwidth = 2;
@@ -210,7 +211,7 @@ public class UpdateEmployeePanel extends AbstractTransportModulePanel {
         contentPanel.add(employeeDetailsField.getComponent(), constraints);
 
         //Submit button
-        submitButton = new JButton("Submit");
+        submitButton = new PrettyButton("Submit");
         constraints.gridx = 0;
         constraints.gridy = 10;
         constraints.gridwidth = 2;

@@ -8,10 +8,7 @@ import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
 import presentationLayer.gui.plAbstracts.interfaces.ModelObserver;
 import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
 import presentationLayer.gui.plAbstracts.interfaces.Searchable;
-import presentationLayer.gui.plUtils.Colors;
-import presentationLayer.gui.plUtils.ObservableList;
-import presentationLayer.gui.plUtils.PrettyList;
-import presentationLayer.gui.plUtils.PrettyTextField;
+import presentationLayer.gui.plUtils.*;
 import serviceLayer.employeeModule.Objects.SEmployee;
 
 import javax.swing.*;
@@ -23,7 +20,7 @@ public class EmployeeCertificationPanel extends AbstractTransportModulePanel {
     JFrame newOpenWindow;
     PrettyTextField employeeIdField;
     JList<String> roleField;
-    JButton certifyButton, uncertifyButton;
+    PrettyButton certifyButton, uncertifyButton;
     JTextArea rolesTextArea;
 
     public EmployeeCertificationPanel(EmployeesControl control) {
@@ -52,7 +49,7 @@ public class EmployeeCertificationPanel extends AbstractTransportModulePanel {
         contentPanel.add(employeeIdField.getComponent(), constraints);
 
         // Find Employee Button
-        JButton findEmployeeRolesButton = new JButton("Find Employee Roles");
+        PrettyButton findEmployeeRolesButton = new PrettyButton("Find Employee Roles");
         constraints.gridx = 2;
         constraints.gridy = 1;
         constraints.gridwidth = 1;
@@ -88,7 +85,7 @@ public class EmployeeCertificationPanel extends AbstractTransportModulePanel {
         contentPanel.add(roleField, constraints);
 
         //Certify button
-        certifyButton = new JButton("Certify");
+        certifyButton = new PrettyButton("Certify");
         certifyButton.setEnabled(false);
         constraints.gridx = 1;
         constraints.gridy = 3;
@@ -107,7 +104,7 @@ public class EmployeeCertificationPanel extends AbstractTransportModulePanel {
         });
 
         //Uncertify button
-        uncertifyButton = new JButton("Uncertify");
+        uncertifyButton = new PrettyButton("Uncertify");
         uncertifyButton.setEnabled(false);
         constraints.gridx = 1;
         constraints.gridy = 3;

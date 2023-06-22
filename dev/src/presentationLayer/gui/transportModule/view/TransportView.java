@@ -100,4 +100,9 @@ public class TransportView extends MainWindow {
         currentPanel.componentResized(panelManager.getComponent().getSize());
         super.container.revalidate();
     }
+
+    public static void main(String[] args) {
+
+
+    }
 }

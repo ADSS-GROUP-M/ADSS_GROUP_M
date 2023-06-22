@@ -22,7 +22,13 @@ public class BillOfQuantitiesController {
     }
 
     public boolean billOfQuantitiesExist(String bnNumber) throws SQLException, DalException {
-        return getBillOfQuantities(bnNumber) != null;
+        try {
+            getBillOfQuantities(bnNumber);
+            return true;
+        }
+        catch (Exception e){
+            return false;
+        }
     }
 
 

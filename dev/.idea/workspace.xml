@@ -11,14 +11,6 @@
   <component name="ChangeListManager">
     <list default="true" id="e454f93c-4ee8-4f4b-9a14-eaaf36aa303c" name="Changes" comment="jar">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/GUI/ControllersLayer/MainViewController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/GUI/ControllersLayer/MainViewController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/GUI/ViewLayer/MainView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/GUI/ViewLayer/MainView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/GUI/ViewLayer/SupplierPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/GUI/ViewLayer/SupplierPage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/GUI/ViewLayer/resource/ManageSupplier.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/resources/ManageSupplier.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/GUI/ViewLayer/resource/blankPerson.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/src/resources/blankPerson.jpeg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/GUI/ViewLayer/resource/blankPerson.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/resources/blankPerson.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/GUI/ViewLayer/resource/shoppingCart.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/resources/shoppingCart.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/GUI/ViewLayer/resource/supermarketMain.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/resources/supermarketMain.png" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -489,7 +481,14 @@
       <option name="project" value="LOCAL" />
       <updated>1687445752390</updated>
     </task>
-    <option name="localTasksCounter" value="37" />
+    <task id="LOCAL-00037" summary="jar">
+      <created>1687458389849</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1687458389849</updated>
+    </task>
+    <option name="localTasksCounter" value="38" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

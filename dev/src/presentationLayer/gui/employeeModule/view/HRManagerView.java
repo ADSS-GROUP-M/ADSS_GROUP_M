@@ -1,5 +1,6 @@
 package presentationLayer.gui.employeeModule.view;
 
+import presentationLayer.DataGenerator;
 import presentationLayer.PresentationFactory;
 import presentationLayer.gui.employeeModule.controller.EmployeesControl;
 import presentationLayer.gui.employeeModule.controller.ShiftsControl;
@@ -17,6 +18,8 @@ import presentationLayer.gui.plAbstracts.interfaces.Panel;
 import presentationLayer.gui.plUtils.Colors;
 import presentationLayer.gui.plUtils.Link;
 import presentationLayer.gui.plUtils.QuickAccess;
+
+import javax.swing.*;
 
 public class HRManagerView extends MainWindow {
 
@@ -58,7 +61,10 @@ public class HRManagerView extends MainWindow {
                 )
                 .addCategory("User Management",
                         new Link("Authorize User",
-                                () -> setCurrentPanel(new AuthorizeUserPanel(usersControl)))
+                                () -> setCurrentPanel(new AuthorizeUserPanel(usersControl))))
+                .addCategory("Data Generation",
+                        new Link("Generate Data",
+                                () -> JOptionPane.showMessageDialog(null,new DataGenerator().generateData()))
                 );
     }
 

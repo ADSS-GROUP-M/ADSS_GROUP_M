@@ -221,13 +221,7 @@ public class UpdateEmployeePanel extends AbstractTransportModulePanel {
         contentPanel.add(submitButton, constraints);
 
         ModelObserver o2 = this;
-        submitButton.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
-                submitButtonClicked();
-            }
-        });
+        submitButton.addActionListener(e -> submitButtonClicked());
     }
 
     @Override
@@ -240,8 +234,17 @@ public class UpdateEmployeePanel extends AbstractTransportModulePanel {
 //        employee.subscribe(this);
 //        observers.forEach(observer -> observer.add(this, employee));
         String employeeId = employeeIdField.getText();
-        double salaryRate = Double.parseDouble(salaryRateField.getText());
-        double salaryBonus = Double.parseDouble(salaryBonusField.getText());
+        double salaryRate;
+        double salaryBonus;
+
+        try{
+            salaryRate = Double.parseDouble(salaryRateField.getText());
+            salaryBonus = Double.parseDouble(salaryBonusField.getText());
+        } catch(NumberFormatException e){
+            JOptionPane.showMessageDialog(null, "Please enter a valid salary rate and bonus", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
         String bankDetails = bankNumberField.getText() + " " + bankBranchField.getText();
         String employmentConditions = employmentConditionsField.getText();
         String employeeDetails = employeeDetailsField.getText();

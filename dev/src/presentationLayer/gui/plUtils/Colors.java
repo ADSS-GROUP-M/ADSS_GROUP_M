@@ -40,7 +40,7 @@ public class Colors {
     private static final Color storeManagerTransparentForeground = new Color(39, 103, 166, 128);
     private static final Color storeManagerBackground = new Color(244, 250, 255, 255);
     private static final Color storeManagerContentPanel = new Color(255, 255, 255, 230);
-    private static final String storeManagerImage = "storemanager.jpg";
+    private static final String storeManagerImage = "store_manager.jpg";
 
     public static Color getForegroundColor(){
         return switch(colorPalette){

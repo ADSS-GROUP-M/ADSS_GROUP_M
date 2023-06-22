@@ -588,7 +588,13 @@ public class ViewShiftsPanel extends AbstractTransportModulePanel {
                         Map<String, Integer> neededRoles = shifts[0].getNeededRoles();
                         List<String> neededRolesList = neededRoles.entrySet().stream().map(x -> x.getKey()).collect(Collectors.toList());
                         String neededRoleSelection = (String) JOptionPane.showInputDialog(contentPanel, "Select Needed Role:", "Update Selection", JOptionPane.PLAIN_MESSAGE, null, neededRolesList.toArray(), neededRolesList.toArray()[0]);
-                        int numberSelection = Integer.parseInt((String) JOptionPane.showInputDialog(contentPanel, "Select Needed Amount:"));
+                        int numberSelection;
+                        try{
+                            numberSelection = Integer.parseInt((String) JOptionPane.showInputDialog(contentPanel, "Select Needed Amount:"));
+                        } catch(NumberFormatException e){
+                            JOptionPane.showMessageDialog(contentPanel, "Invalid amount given. Please enter a number.");
+                            return;
+                        }
                         String result = ((ShiftsControl) control).setShiftNeededAmount((String)branchIdComboBox.getSelectedItem(),shifts[0].getShiftDate(), shifts[0].getShiftType(), neededRoleSelection, numberSelection);
                         JOptionPane.showMessageDialog(contentPanel, result);
                         int month = calendar.get(Calendar.MONTH);
@@ -599,7 +605,15 @@ public class ViewShiftsPanel extends AbstractTransportModulePanel {
                     } else if (choice == JOptionPane.NO_OPTION) { // Add
                         List<String> neededRolesList = Arrays.stream(Role.values()).map(Enum::toString).toList();
                         String neededRoleSelection = (String) JOptionPane.showInputDialog(contentPanel, "Select Needed Role:", "Update Selection", JOptionPane.PLAIN_MESSAGE, null, neededRolesList.toArray(), neededRolesList.toArray()[0]);
-                        int numberSelection = Integer.parseInt((String) JOptionPane.showInputDialog(contentPanel, "Select Needed Amount:"));
+
+                        int numberSelection;
+                        try{
+                            numberSelection = Integer.parseInt((String) JOptionPane.showInputDialog(contentPanel, "Select Needed Amount:"));
+                        } catch(NumberFormatException e){
+                            JOptionPane.showMessageDialog(contentPanel, "Invalid amount given. Please enter a number.");
+                            return;
+                        }
+
                         String result = ((ShiftsControl) control).setShiftNeededAmount((String)branchIdComboBox.getSelectedItem(), shifts[0].getShiftDate(), shifts[0].getShiftType(), neededRoleSelection, numberSelection);
                         JOptionPane.showMessageDialog(contentPanel, result);
                         int month = calendar.get(Calendar.MONTH);
@@ -641,7 +655,13 @@ public class ViewShiftsPanel extends AbstractTransportModulePanel {
                         Map<String, Integer> neededRoles = shifts[1].getNeededRoles();
                         List<String> neededRolesList = neededRoles.entrySet().stream().map(x -> x.getKey()).collect(Collectors.toList());
                         String neededRoleSelection = (String) JOptionPane.showInputDialog(contentPanel, "Select Needed Role:", "Modify Selection", JOptionPane.PLAIN_MESSAGE, null, neededRolesList.toArray(), neededRolesList.toArray()[0]);
-                        int numberSelection = Integer.parseInt((String) JOptionPane.showInputDialog(contentPanel, "Select Needed Amount:"));
+                        int numberSelection;
+                        try{
+                            numberSelection = Integer.parseInt((String) JOptionPane.showInputDialog(contentPanel, "Select Needed Amount:"));
+                        } catch(NumberFormatException e){
+                            JOptionPane.showMessageDialog(contentPanel, "Invalid amount given. Please enter a number.");
+                            return;
+                        }
                         String result = ((ShiftsControl) control).setShiftNeededAmount((String)branchIdComboBox.getSelectedItem(), shifts[1].getShiftDate(), shifts[1].getShiftType(), neededRoleSelection, numberSelection);
                         JOptionPane.showMessageDialog(contentPanel, result);
                         int month = calendar.get(Calendar.MONTH);
@@ -652,7 +672,14 @@ public class ViewShiftsPanel extends AbstractTransportModulePanel {
                     } else if (choice == JOptionPane.NO_OPTION) { // Add
                         List<String> neededRolesList = Arrays.stream(Role.values()).map(Enum::toString).toList();
                         String neededRoleSelection = (String) JOptionPane.showInputDialog(contentPanel, "Select Needed Role:", "Add Selection", JOptionPane.PLAIN_MESSAGE, null, neededRolesList.toArray(), neededRolesList.toArray()[0]);
-                        int numberSelection = Integer.parseInt((String) JOptionPane.showInputDialog(contentPanel, "Select Needed Amount:"));
+                        int numberSelection;
+                        try{
+                            numberSelection = Integer.parseInt((String) JOptionPane.showInputDialog(contentPanel, "Select Needed Amount:"));
+                        } catch(NumberFormatException e){
+                            JOptionPane.showMessageDialog(contentPanel, "Invalid amount given. Please enter a number.");
+                            return;
+                        }
+
                         String result = ((ShiftsControl) control).setShiftNeededAmount((String)branchIdComboBox.getSelectedItem(), shifts[1].getShiftDate(), shifts[1].getShiftType(), neededRoleSelection, numberSelection);
                         JOptionPane.showMessageDialog(contentPanel, result);
                         int month = calendar.get(Calendar.MONTH);

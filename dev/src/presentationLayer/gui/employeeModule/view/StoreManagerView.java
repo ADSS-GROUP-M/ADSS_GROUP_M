@@ -1,5 +1,6 @@
 package presentationLayer.gui.employeeModule.view;
 
+import presentationLayer.DataGenerator;
 import presentationLayer.PresentationFactory;
 import presentationLayer.cli.employeeModule.Model.BackendController;
 import presentationLayer.cli.employeeModule.View.EmployeeMenu;
@@ -24,6 +25,8 @@ import presentationLayer.gui.transportModule.view.TransportView;
 import serviceLayer.ServiceFactory;
 import serviceLayer.employeeModule.Services.UserService;
 
+import javax.swing.*;
+
 public class StoreManagerView extends MainWindow {
 
     private Panel currentPanel;
@@ -45,7 +48,10 @@ public class StoreManagerView extends MainWindow {
                 .addCategory("Choose Page",
                         new Link("HR Manager", () -> hrManager()),
                         new Link("Transport Manager", () -> transportModule()),
-                        new Link("Employee Page", () -> employee())
+                        new Link("Employee Page", () -> employee()))
+                .addCategory("Data Generation",
+                        new Link("Generate Data",
+                                () -> JOptionPane.showMessageDialog(null,new DataGenerator().generateData()))
                 );
     }
 

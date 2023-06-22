@@ -1,5 +1,6 @@
 package presentationLayer.gui.transportModule.view;
 
+import presentationLayer.DataGenerator;
 import presentationLayer.gui.plAbstracts.MainWindow;
 import presentationLayer.gui.plAbstracts.PanelManager;
 import presentationLayer.gui.plAbstracts.interfaces.Panel;
@@ -20,6 +21,7 @@ import presentationLayer.gui.transportModule.view.panels.trucks.AddTruckPanel;
 import presentationLayer.gui.transportModule.view.panels.trucks.UpdateTruckPanel;
 import presentationLayer.gui.transportModule.view.panels.trucks.ViewTrucksPanel;
 
+import javax.swing.*;
 import java.util.function.Function;
 
 public class TransportView extends MainWindow {
@@ -90,7 +92,10 @@ public class TransportView extends MainWindow {
                 new Link("Add Site",
                         () -> setCurrentPanel(new AddSitePanel(sitesControl))),
                 new Link("Update Site",
-                        () -> setCurrentPanel(new UpdateSitePanel(sitesControl)))
+                        () -> setCurrentPanel(new UpdateSitePanel(sitesControl))))
+        .addCategory("Data Generation",
+                new Link("Generate Data",
+                        () -> JOptionPane.showMessageDialog(null,new DataGenerator().generateData()))
         );
     }
 

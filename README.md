@@ -12,7 +12,7 @@ Gal   - 211564265
 
 Max   - 208850529
 
-* For system usage instructions see [instructions](instructions.pdf)<br/>
+* For system usage instructions see [CLI instructions](CLI_instructions.pdf), [GUI instructions](GUI_instructions.pdf)<br/>
 * For system changes see [system changes](System_changes.pdf)
 
 ## External dependencies:

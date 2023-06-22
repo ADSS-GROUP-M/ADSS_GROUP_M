@@ -139,6 +139,7 @@ public class UpdateDriversPanel extends AbstractTransportModulePanel {
         for(Searchable d : driversList){
             if(d.getShortDescription().equals(selectedDrivers.getSelected())){
                 ObservableDriver driver = (ObservableDriver) d;
+                driver.licenseType = Driver.LicenseType.valueOf(selectedLicence.getSelected());
                 driver.subscribe(this);
 
                 observers.forEach(observer -> observer.update(this, driver));

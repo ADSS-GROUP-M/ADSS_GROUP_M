@@ -487,6 +487,8 @@ public class EmployeeShiftsPanel extends AbstractTransportModulePanel {
             }
             if (myShifts.size() == 0) {
                 JLabel emptyShiftsLabel = new JLabel("There are no shifts that have you assigned as a worker.");
+                emptyShiftsLabel.setFont(new Font("Arial", Font.BOLD, 20));
+                emptyShiftsLabel.setBounds(50, 50, 800, 100);
                 myShiftsPanel.add(emptyShiftsLabel);
             }
             myShiftsPanel.revalidate();

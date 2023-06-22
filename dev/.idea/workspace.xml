@@ -10,30 +10,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e454f93c-4ee8-4f4b-9a14-eaaf36aa303c" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/ManagerWindowCLI.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Test/Backend/BusinessLayer/BillOfQuantitiesTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/Backend/BusinessLayer/BillOfQuantitiesTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Test/Backend/BusinessLayer/CategoryTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/Backend/BusinessLayer/CategoryTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Test/Backend/BusinessLayer/IntegrationTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/Backend/BusinessLayer/IntegrationTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Test/Backend/BusinessLayer/ProductItemTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/Backend/BusinessLayer/ProductItemTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/ProductPairBranchDataMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/DataAccessLayer/InventoryModule/ProductPairBranchDataMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/InventoryModule/cli/InventoryProductsManu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/InventoryModule/cli/InventoryProductsManu.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/InventoryModule/gui/ProductsMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/InventoryModule/gui/ProductsMenu.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/ManagerWindowGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/ManagerWindowGUI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/DeliveryAgreements/DeliveryAgreement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/CLI/DeliveryAgreements/DeliveryAgreement.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/DeliveryAgreements/DeliveryByInvitation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/CLI/DeliveryAgreements/DeliveryByInvitation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/DeliveryAgreements/DeliveryFixedDays.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/CLI/DeliveryAgreements/DeliveryFixedDays.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/Discounts/CashDiscount.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/CLI/Discounts/Discounts/CashDiscount.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/Discounts/Discount.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/CLI/Discounts/Discounts/Discount.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/Discounts/PercentageDiscount.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/CLI/Discounts/Discounts/PercentageDiscount.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/GUI/GUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/GUI/SuppliersGUI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/GUI/ViewLayer/MainView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/GUI/ViewLayer/MainView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/Order.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/CLI/Order.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/Response.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/CLI/Response.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/SupplierMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/CLI/SupplierMain.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/UI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Fronend/PresentationLayer/SuppliersModule/CLI/UI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/super_lee.sqlite" beforeDir="false" afterPath="$PROJECT_DIR$/src/super_lee.sqlite" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Backend/ServiceLayer/InventoryModule/StockService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Backend/ServiceLayer/InventoryModule/StockService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

@@ -208,7 +208,7 @@ public class ProductsMenu extends InventoryMainMenu{
         JTextField catalogTextField = new JTextField(10);
 
         JLabel optionLabel = new JLabel("Choose details to update:");
-        JComboBox<String> optionComboBox = new JComboBox<>(new String[]{"name", "manufacturer", "store price"});
+        JComboBox<String> optionComboBox = new JComboBox<>(new String[]{"name", "manufacturer", "store price", "minimum number"});
 
         JLabel newValueLabel = new JLabel("New Value:");
         JTextField newValueTextField = new JTextField(10);
@@ -226,18 +226,32 @@ public class ProductsMenu extends InventoryMainMenu{
             String selectedOption = (String) optionComboBox.getSelectedItem();
             String newValue = newValueTextField.getText();
 
+            Response response;
             switch (selectedOption) {
-                case "name" -> stockService.updateProduct(newValue, catalogNum, null, -1, -1, branch);
-                case "manufacturer" -> stockService.updateProduct(null, catalogNum, newValue, -1, -1, branch);
-                case "store price" -> stockService.updateProduct(null, catalogNum, null, Integer.parseInt(newValue), -1, branch);
-                default -> {
+                case "name":
+                    response = stockService.updateProduct(newValue, catalogNum, null, -1, -1, branch);
+                    break;
+                case "manufacturer":
+                    response = stockService.updateProduct(null, catalogNum, newValue, -1, -1, branch);
+                    break;
+                case "store price":
+                    response = stockService.updateProduct(null, catalogNum, null, Integer.parseInt(newValue), -1, branch);
+                    break;
+                case "minimum number":
+                    response = stockService.updateProduct(null, catalogNum, null, -1, Integer.parseInt(newValue), branch);
+                    break;
+                default:
                     JOptionPane.showMessageDialog(inputFrame, "Invalid command", "Error", JOptionPane.ERROR_MESSAGE);
                     inputFrame.dispose();
                     return;
-                }
             }
 
-            JOptionPane.showMessageDialog(inputFrame, "Product updated successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
+            if (response.errorOccurred()) {
+                JOptionPane.showMessageDialog(inputFrame, response.getErrorMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(inputFrame, response.getReturnValue(), "Success", JOptionPane.INFORMATION_MESSAGE);
+            }
+
         }
 
         inputFrame.dispose();
@@ -273,32 +287,40 @@ public class ProductsMenu extends InventoryMainMenu{
             int optionIndex = optionComboBox.getSelectedIndex();
             String newValue = newValTextField.getText();
 
+            Response response = null;
             switch (optionIndex) {
                 case 0:
-                    stockService.updateProduct(Integer.parseInt(newValue), catalogNum, serialNum, -1, null, -1, -1, -1, null, branch);
+                    response = stockService.updateProduct(Integer.parseInt(newValue), catalogNum, serialNum, -1, null, -1, -1, -1, null, branch);
                     break;
                 case 1:
-                    stockService.updateProduct(-1, catalogNum, serialNum, Integer.parseInt(newValue), null, -1, -1, -1, null, branch);
+                    response = stockService.updateProduct(-1, catalogNum, serialNum, Integer.parseInt(newValue), null, -1, -1, -1, null, branch);
                     break;
                 case 2:
-                    stockService.updateProduct(-1, catalogNum, serialNum, -1, newValue, -1, -1, -1, null, branch);
+                    response = stockService.updateProduct(-1, catalogNum, serialNum, -1, newValue, -1, -1, -1, null, branch);
                     break;
                 case 3:
-                    stockService.updateProduct(-1, catalogNum, serialNum, -1, null, Double.parseDouble(newValue), -1, -1, null, branch);
+                    response = stockService.updateProduct(-1, catalogNum, serialNum, -1, null, Double.parseDouble(newValue), -1, -1, null, branch);
                     break;
                 case 4:
-                    stockService.updateProduct(-1, catalogNum, serialNum, -1, null, -1, Double.parseDouble(newValue), -1, null, branch);
+                    response = stockService.updateProduct(-1, catalogNum, serialNum, -1, null, -1, Double.parseDouble(newValue), -1, null, branch);
                     break;
                 case 5:
-                    stockService.updateProduct(-1, catalogNum, serialNum, -1, null, -1, -1, Integer.parseInt(newValue), null, branch);
+                    response = stockService.updateProduct(-1, catalogNum, serialNum, -1, null, -1, -1, Integer.parseInt(newValue), null, branch);
                     break;
                 case 6:
-                    stockService.updateProduct(-1, catalogNum, serialNum, -1, null, -1, -1, -1, newValue, branch);
+                    response = stockService.updateProduct(-1, catalogNum, serialNum, -1, null, -1, -1, -1, newValue, branch);
                     break;
                 default:
                     System.out.println("\nInvalid command");
                     break;
             }
+
+            if (response.errorOccurred()) {
+                JOptionPane.showMessageDialog(inputFrame, response.getErrorMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(inputFrame, response.getReturnValue(), "Success", JOptionPane.INFORMATION_MESSAGE);
+            }
+
         }
 
         inputFrame.dispose();

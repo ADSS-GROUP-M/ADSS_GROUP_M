@@ -95,8 +95,9 @@ public class InventoryProductsManu extends MainMenu {
         System.out.println("1. name (String)");
         System.out.println("2. manufacturer (String)");
         System.out.println("3. store price (double)");
-        System.out.println("4. Back to main manu");
-        System.out.println("5. Exit");
+        System.out.println("4. minimum number (double)");
+        System.out.println("5. Back to main manu");
+        System.out.println("6. Exit");
         int option = in.nextInt();
         in.nextLine();
         System.out.println("the new value is:");
@@ -105,8 +106,9 @@ public class InventoryProductsManu extends MainMenu {
             case 1 -> stockService.updateProduct(new_val, catalog_num, null, -1, -1, branch);
             case 2 -> stockService.updateProduct(null, catalog_num, new_val, -1,-1, branch);
             case 3 -> stockService.updateProduct(null, catalog_num, null, Integer.parseInt(new_val),-1,branch);
-            case 4 -> super.Menu();
-            case 5 -> System.exit(0);
+            case 4 -> stockService.updateProduct(null, catalog_num, null, -1, Integer.parseInt(new_val), branch);
+            case 5 -> super.Menu();
+            case 6 -> System.exit(0);
             default -> System.out.println("\nInvalid command");
         }
     }

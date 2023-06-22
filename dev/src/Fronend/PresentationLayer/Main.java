@@ -2,6 +2,7 @@ package Fronend.PresentationLayer;
 
 
 import Fronend.PresentationLayer.InventoryModule.cli.InventoryMain;
+import Fronend.PresentationLayer.InventoryModule.gui.InventoryMainMenu;
 import Fronend.PresentationLayer.SuppliersModule.CLI.SupplierMain;
 import Fronend.PresentationLayer.SuppliersModule.GUI.SuppliersGUI;
 
@@ -16,7 +17,7 @@ public class Main {
                 if(role.equals("StoreManager"))
                     new ManagerWindowGUI();
                 else if(role.equals("WarehouseMen")){
-                    //TODO: CALL THE MAIN GUI OF WAREHOUSEMEN
+                    InventoryMainMenu.main(new String[0]);
                 }
                 else if(role.equals("SuppliersManager")){
                     new SuppliersGUI(false);

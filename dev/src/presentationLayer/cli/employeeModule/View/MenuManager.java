@@ -14,6 +14,11 @@ public class MenuManager {
         menu = new LoginMenu();
     }
 
+    public MenuManager(Menu menu) {
+        finished = false;
+        this.menu = menu;
+    }
+
     public void run() {
         while (!finished) {
             menu = menu.run();

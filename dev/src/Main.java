@@ -7,6 +7,7 @@ import presentationLayer.gui.plAbstracts.MainWindow;
 import presentationLayer.gui.transportModule.control.*;
 import presentationLayer.gui.transportModule.view.TransportView;
 import serviceLayer.ServiceFactory;
+import serviceLayer.employeeModule.Services.UserService;
 
 @SuppressWarnings("NewClassNamingConvention")
 public class Main {
@@ -43,7 +44,7 @@ public class Main {
     }
 
     private static void employee(boolean gui) {
-
+        
     }
 
     private static void storeManager(boolean gui) {
@@ -65,6 +66,7 @@ public class Main {
         } else {
 
             ServiceFactory serviceFactory = new ServiceFactory();
+            serviceFactory.userService().login(UserService.TRANSPORT_MANAGER_USERNAME, "123");
             TransportCLI transportCLI = new TransportCLI(serviceFactory);
             MenuManager menuManager = new MenuManager(transportCLI);
             menuManager.run();

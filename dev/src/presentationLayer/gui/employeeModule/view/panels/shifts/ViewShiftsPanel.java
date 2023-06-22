@@ -1,11 +1,11 @@
 package presentationLayer.gui.employeeModule.view.panels.shifts;
 
 
+import businessLayer.employeeModule.Branch;
 import businessLayer.employeeModule.Role;
 import presentationLayer.gui.employeeModule.controller.ShiftsControl;
 import presentationLayer.gui.employeeModule.view.HRManagerView;
 import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
-import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
 import presentationLayer.gui.plUtils.Colors;
 import serviceLayer.employeeModule.Objects.SEmployee;
 import serviceLayer.employeeModule.Objects.SShift;
@@ -30,6 +30,7 @@ public class ViewShiftsPanel extends AbstractTransportModulePanel {
     Calendar calendar;
     JRadioButton morningRadioButton, eveningRadioButton;
     ButtonGroup buttonGroup;
+    JComboBox<String> branchIdComboBox;
 
     public ViewShiftsPanel(ShiftsControl control, HRManagerView hrManagerView) {
         super(control);
@@ -78,26 +79,6 @@ public class ViewShiftsPanel extends AbstractTransportModulePanel {
             }
         });
 
-        calendarTable.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                // Check for double-click event
-                if (e.getClickCount() == 2) {
-                    // Get the selected cell coordinates
-                    int row = calendarTable.getSelectedRow();
-                    int col = calendarTable.getSelectedColumn();
-
-                    // Get the day value from the selected cell
-                    int day = (int)calendarTable.getValueAt(row, col);
-                    if (newOpenWindow != null) {
-                        newOpenWindow.dispose();
-                        newOpenWindow = null;
-                    }
-                    openNewWindow(((ShiftsControl)control).getShifts(LocalDate.of(calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH) + 1, day)));
-                }
-            }
-        });
-
         JScrollPane scrollPane = new JScrollPane(calendarTable);
         constraints.gridx = 0;
         constraints.gridy = 2;
@@ -123,6 +104,44 @@ public class ViewShiftsPanel extends AbstractTransportModulePanel {
             displayNextMonth();
         });
         buttonPanel.add(nextButton);
+
+        Object branchIdsResult = ((ShiftsControl)control).getBranchIds();
+        if (branchIdsResult instanceof String) {
+            JOptionPane.showMessageDialog(null,branchIdsResult);
+        } else if (branchIdsResult instanceof String[]) {
+            JPanel branchIdPanel = new JPanel(new GridLayout(0,2));
+            JLabel branchIdLabel = new JLabel("Branch:");
+            branchIdPanel.add(branchIdLabel);
+
+            branchIdComboBox = new JComboBox<>((String[])branchIdsResult);
+            branchIdComboBox.setSelectedItem(Branch.HEADQUARTERS_ID);
+            constraints.gridx = 0;
+            constraints.gridy = 4;
+            constraints.gridwidth = 1;
+            constraints.anchor = GridBagConstraints.SOUTH;
+            branchIdPanel.add(branchIdComboBox);
+            contentPanel.add(branchIdPanel, constraints);
+        }
+
+        calendarTable.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                // Check for double-click event
+                if (e.getClickCount() == 2) {
+                    // Get the selected cell coordinates
+                    int row = calendarTable.getSelectedRow();
+                    int col = calendarTable.getSelectedColumn();
+
+                    // Get the day value from the selected cell
+                    int day = (int)calendarTable.getValueAt(row, col);
+                    if (newOpenWindow != null) {
+                        newOpenWindow.dispose();
+                        newOpenWindow = null;
+                    }
+                    openNewWindow(((ShiftsControl)control).getShifts((String)branchIdComboBox.getSelectedItem(), LocalDate.of(calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH) + 1, day)));
+                }
+            }
+        });
 
         // Initialize the calendar instance and display the current month's shifts
         calendar = new GregorianCalendar();
@@ -211,7 +230,7 @@ public class ViewShiftsPanel extends AbstractTransportModulePanel {
     private void showConfirmationDialog(SShift shift) {
         int choice = JOptionPane.showConfirmDialog(newOpenPanel, "Are you sure you want to remove the selected shift?", "Confirmation", JOptionPane.YES_NO_OPTION);
         if (choice == JOptionPane.YES_OPTION) {
-            String errorMessage = ((ShiftsControl)control).deleteShift(shift);
+            String errorMessage = ((ShiftsControl)control).deleteShift((String)branchIdComboBox.getSelectedItem(), shift);
             if (errorMessage != null) {
                 JOptionPane.showMessageDialog(null,errorMessage);
             }
@@ -569,7 +588,7 @@ public class ViewShiftsPanel extends AbstractTransportModulePanel {
                         List<String> neededRolesList = neededRoles.entrySet().stream().map(x -> x.getKey()).collect(Collectors.toList());
                         String neededRoleSelection = (String) JOptionPane.showInputDialog(contentPanel, "Select Needed Role:", "Update Selection", JOptionPane.PLAIN_MESSAGE, null, neededRolesList.toArray(), neededRolesList.toArray()[0]);
                         int numberSelection = Integer.parseInt((String) JOptionPane.showInputDialog(contentPanel, "Select Needed Amount:"));
-                        String result = ((ShiftsControl) control).setShiftNeededAmount(shifts[0].getShiftDate(), shifts[0].getShiftType(), neededRoleSelection, numberSelection);
+                        String result = ((ShiftsControl) control).setShiftNeededAmount((String)branchIdComboBox.getSelectedItem(),shifts[0].getShiftDate(), shifts[0].getShiftType(), neededRoleSelection, numberSelection);
                         JOptionPane.showMessageDialog(contentPanel, result);
                         int month = calendar.get(Calendar.MONTH);
                         hrManagerView.setCurrentPanel(new CreateShiftsPanel((ShiftsControl) control));
@@ -580,7 +599,7 @@ public class ViewShiftsPanel extends AbstractTransportModulePanel {
                         List<String> neededRolesList = Arrays.stream(Role.values()).map(Enum::toString).toList();
                         String neededRoleSelection = (String) JOptionPane.showInputDialog(contentPanel, "Select Needed Role:", "Update Selection", JOptionPane.PLAIN_MESSAGE, null, neededRolesList.toArray(), neededRolesList.toArray()[0]);
                         int numberSelection = Integer.parseInt((String) JOptionPane.showInputDialog(contentPanel, "Select Needed Amount:"));
-                        String result = ((ShiftsControl) control).setShiftNeededAmount(shifts[0].getShiftDate(), shifts[0].getShiftType(), neededRoleSelection, numberSelection);
+                        String result = ((ShiftsControl) control).setShiftNeededAmount((String)branchIdComboBox.getSelectedItem(), shifts[0].getShiftDate(), shifts[0].getShiftType(), neededRoleSelection, numberSelection);
                         JOptionPane.showMessageDialog(contentPanel, result);
                         int month = calendar.get(Calendar.MONTH);
                         hrManagerView.setCurrentPanel(new CreateShiftsPanel((ShiftsControl) control));
@@ -590,7 +609,7 @@ public class ViewShiftsPanel extends AbstractTransportModulePanel {
                     } else if (choice == JOptionPane.CANCEL_OPTION || choice == JOptionPane.CLOSED_OPTION) { // Remove
                         List<String> neededRolesList = Arrays.stream(Role.values()).map(Enum::toString).toList();
                         String neededRoleSelection = (String) JOptionPane.showInputDialog(contentPanel, "Select Needed Role:", "Update Selection", JOptionPane.PLAIN_MESSAGE, null, neededRolesList.toArray(), neededRolesList.toArray()[0]);
-                        String result = ((ShiftsControl) control).setShiftNeededAmount(shifts[0].getShiftDate(), shifts[0].getShiftType(), neededRoleSelection, 0);
+                        String result = ((ShiftsControl) control).setShiftNeededAmount((String)branchIdComboBox.getSelectedItem(), shifts[0].getShiftDate(), shifts[0].getShiftType(), neededRoleSelection, 0);
                         JOptionPane.showMessageDialog(contentPanel, result);
                         int month = calendar.get(Calendar.MONTH);
                         hrManagerView.setCurrentPanel(new CreateShiftsPanel((ShiftsControl) control));
@@ -622,7 +641,7 @@ public class ViewShiftsPanel extends AbstractTransportModulePanel {
                         List<String> neededRolesList = neededRoles.entrySet().stream().map(x -> x.getKey()).collect(Collectors.toList());
                         String neededRoleSelection = (String) JOptionPane.showInputDialog(contentPanel, "Select Needed Role:", "Modify Selection", JOptionPane.PLAIN_MESSAGE, null, neededRolesList.toArray(), neededRolesList.toArray()[0]);
                         int numberSelection = Integer.parseInt((String) JOptionPane.showInputDialog(contentPanel, "Select Needed Amount:"));
-                        String result = ((ShiftsControl) control).setShiftNeededAmount(shifts[1].getShiftDate(), shifts[1].getShiftType(), neededRoleSelection, numberSelection);
+                        String result = ((ShiftsControl) control).setShiftNeededAmount((String)branchIdComboBox.getSelectedItem(), shifts[1].getShiftDate(), shifts[1].getShiftType(), neededRoleSelection, numberSelection);
                         JOptionPane.showMessageDialog(contentPanel, result);
                         int month = calendar.get(Calendar.MONTH);
                         hrManagerView.setCurrentPanel(new CreateShiftsPanel((ShiftsControl) control));
@@ -633,7 +652,7 @@ public class ViewShiftsPanel extends AbstractTransportModulePanel {
                         List<String> neededRolesList = Arrays.stream(Role.values()).map(Enum::toString).toList();
                         String neededRoleSelection = (String) JOptionPane.showInputDialog(contentPanel, "Select Needed Role:", "Add Selection", JOptionPane.PLAIN_MESSAGE, null, neededRolesList.toArray(), neededRolesList.toArray()[0]);
                         int numberSelection = Integer.parseInt((String) JOptionPane.showInputDialog(contentPanel, "Select Needed Amount:"));
-                        String result = ((ShiftsControl) control).setShiftNeededAmount(shifts[1].getShiftDate(), shifts[1].getShiftType(), neededRoleSelection, numberSelection);
+                        String result = ((ShiftsControl) control).setShiftNeededAmount((String)branchIdComboBox.getSelectedItem(), shifts[1].getShiftDate(), shifts[1].getShiftType(), neededRoleSelection, numberSelection);
                         JOptionPane.showMessageDialog(contentPanel, result);
                         int month = calendar.get(Calendar.MONTH);
                         hrManagerView.setCurrentPanel(new CreateShiftsPanel((ShiftsControl) control));
@@ -643,7 +662,7 @@ public class ViewShiftsPanel extends AbstractTransportModulePanel {
                     } else if (choice == JOptionPane.CANCEL_OPTION || choice == JOptionPane.CLOSED_OPTION) { // Remove
                         List<String> neededRolesList = Arrays.stream(Role.values()).map(Enum::toString).toList();
                         String neededRoleSelection = (String) JOptionPane.showInputDialog(contentPanel, "Select Needed Role:", "Remove Selection", JOptionPane.PLAIN_MESSAGE, null, neededRolesList.toArray(), neededRolesList.toArray()[0]);
-                        String result = ((ShiftsControl) control).setShiftNeededAmount(shifts[1].getShiftDate(), shifts[1].getShiftType(), neededRoleSelection, 0);
+                        String result = ((ShiftsControl) control).setShiftNeededAmount((String)branchIdComboBox.getSelectedItem(), shifts[1].getShiftDate(), shifts[1].getShiftType(), neededRoleSelection, 0);
                         JOptionPane.showMessageDialog(contentPanel, result);
                         int month = calendar.get(Calendar.MONTH);
                         hrManagerView.setCurrentPanel(new CreateShiftsPanel((ShiftsControl) control));
@@ -682,7 +701,7 @@ public class ViewShiftsPanel extends AbstractTransportModulePanel {
                         String requestingWorkersString = String.join("\n", requestingWorkerIds);
                         String requestingWorkersSelection = (String) JOptionPane.showInputDialog(contentPanel, "Select Shift Workers:\n" + requestingWorkersString);
                         List<String> selectedWorkerIds = Arrays.asList(requestingWorkersSelection.split(" ", -1));
-                        String result = ((ShiftsControl) control).setShiftWorkers(shifts[0].getShiftDate(), shifts[0].getShiftType(), roleSelection, selectedWorkerIds);
+                        String result = ((ShiftsControl) control).setShiftWorkers((String)branchIdComboBox.getSelectedItem(), shifts[0].getShiftDate(), shifts[0].getShiftType(), roleSelection, selectedWorkerIds);
                         JOptionPane.showMessageDialog(contentPanel, result);
                         int month = calendar.get(Calendar.MONTH);
                         hrManagerView.setCurrentPanel(new CreateShiftsPanel((ShiftsControl) control));
@@ -696,7 +715,7 @@ public class ViewShiftsPanel extends AbstractTransportModulePanel {
                         String requestingWorkersString = String.join("\n", requestingWorkerIds);
                         String requestingWorkersSelection = (String) JOptionPane.showInputDialog(contentPanel, "Select Shift Workers:\n" + requestingWorkersString);
                         List<String> selectedWorkerIds = Arrays.asList(requestingWorkersSelection.split(" ", -1));
-                        String result = ((ShiftsControl) control).setShiftWorkers(shifts[0].getShiftDate(), shifts[0].getShiftType(), roleSelection, selectedWorkerIds);
+                        String result = ((ShiftsControl) control).setShiftWorkers((String)branchIdComboBox.getSelectedItem(), shifts[0].getShiftDate(), shifts[0].getShiftType(), roleSelection, selectedWorkerIds);
                         JOptionPane.showMessageDialog(contentPanel, result);
                         int month = calendar.get(Calendar.MONTH);
                         hrManagerView.setCurrentPanel(new CreateShiftsPanel((ShiftsControl) control));
@@ -706,7 +725,7 @@ public class ViewShiftsPanel extends AbstractTransportModulePanel {
                     } else if (choice == JOptionPane.CANCEL_OPTION || choice == JOptionPane.CLOSED_OPTION) { // Remove
                         List<String> rolesList = Arrays.stream(Role.values()).map(Enum::toString).toList();
                         String roleSelection = (String) JOptionPane.showInputDialog(contentPanel, "Select Shift Role:", "Remove Selection", JOptionPane.PLAIN_MESSAGE, null, rolesList.toArray(), rolesList.toArray()[0]);
-                        String result = ((ShiftsControl) control).setShiftWorkers(shifts[0].getShiftDate(), shifts[0].getShiftType(), roleSelection, new ArrayList<String>());
+                        String result = ((ShiftsControl) control).setShiftWorkers((String)branchIdComboBox.getSelectedItem(), shifts[0].getShiftDate(), shifts[0].getShiftType(), roleSelection, new ArrayList<String>());
                         JOptionPane.showMessageDialog(contentPanel, result);
                         int month = calendar.get(Calendar.MONTH);
                         hrManagerView.setCurrentPanel(new CreateShiftsPanel((ShiftsControl) control));
@@ -740,7 +759,7 @@ public class ViewShiftsPanel extends AbstractTransportModulePanel {
                         String requestingWorkersString = String.join("\n", requestingWorkerIds);
                         String requestingWorkersSelection = (String) JOptionPane.showInputDialog(contentPanel, "Select Shift Workers:\n" + requestingWorkersString);
                         List<String> selectedWorkerIds = Arrays.asList(requestingWorkersSelection.split(" ", -1));
-                        String result = ((ShiftsControl) control).setShiftWorkers(shifts[1].getShiftDate(), shifts[1].getShiftType(), roleSelection, selectedWorkerIds);
+                        String result = ((ShiftsControl) control).setShiftWorkers((String)branchIdComboBox.getSelectedItem(), shifts[1].getShiftDate(), shifts[1].getShiftType(), roleSelection, selectedWorkerIds);
                         JOptionPane.showMessageDialog(contentPanel, result);
                         int month = calendar.get(Calendar.MONTH);
                         hrManagerView.setCurrentPanel(new CreateShiftsPanel((ShiftsControl) control));
@@ -754,7 +773,7 @@ public class ViewShiftsPanel extends AbstractTransportModulePanel {
                         String requestingWorkersString = String.join("\n", requestingWorkerIds);
                         String requestingWorkersSelection = (String) JOptionPane.showInputDialog(contentPanel, "Select Shift Workers:\n" + requestingWorkersString);
                         List<String> selectedWorkerIds = Arrays.asList(requestingWorkersSelection.split(" ", -1));
-                        String result = ((ShiftsControl) control).setShiftWorkers(shifts[1].getShiftDate(), shifts[1].getShiftType(), roleSelection, selectedWorkerIds);
+                        String result = ((ShiftsControl) control).setShiftWorkers((String)branchIdComboBox.getSelectedItem(), shifts[1].getShiftDate(), shifts[1].getShiftType(), roleSelection, selectedWorkerIds);
                         JOptionPane.showMessageDialog(contentPanel, result);
                         int month = calendar.get(Calendar.MONTH);
                         hrManagerView.setCurrentPanel(new CreateShiftsPanel((ShiftsControl) control));
@@ -764,7 +783,7 @@ public class ViewShiftsPanel extends AbstractTransportModulePanel {
                     } else if (choice == JOptionPane.CANCEL_OPTION || choice == JOptionPane.CLOSED_OPTION) { // Remove
                         List<String> rolesList = Arrays.stream(Role.values()).map(Enum::toString).toList();
                         String roleSelection = (String) JOptionPane.showInputDialog(contentPanel, "Select Shift Role:", "Remove Selection", JOptionPane.PLAIN_MESSAGE, null, rolesList.toArray(), rolesList.toArray()[0]);
-                        String result = ((ShiftsControl) control).setShiftWorkers(shifts[1].getShiftDate(), shifts[1].getShiftType(), roleSelection, new ArrayList<String>());
+                        String result = ((ShiftsControl) control).setShiftWorkers((String)branchIdComboBox.getSelectedItem(), shifts[1].getShiftDate(), shifts[1].getShiftType(), roleSelection, new ArrayList<String>());
                         JOptionPane.showMessageDialog(contentPanel, result);
                         int month = calendar.get(Calendar.MONTH);
                         hrManagerView.setCurrentPanel(new CreateShiftsPanel((ShiftsControl) control));
@@ -782,7 +801,7 @@ public class ViewShiftsPanel extends AbstractTransportModulePanel {
                 if (shifts[0] == null) {
                     JOptionPane.showMessageDialog(null,"Cannot choose a non existent shift.");
                 } else {
-                    String result = ((ShiftsControl) control).approveShift(shifts[0].getShiftDate(), shifts[0].getShiftType());
+                    String result = ((ShiftsControl) control).approveShift((String)branchIdComboBox.getSelectedItem(), shifts[0].getShiftDate(), shifts[0].getShiftType());
                     JOptionPane.showMessageDialog(contentPanel, result);
                     int month = calendar.get(Calendar.MONTH);
                     hrManagerView.setCurrentPanel(new CreateShiftsPanel((ShiftsControl) control));
@@ -795,7 +814,7 @@ public class ViewShiftsPanel extends AbstractTransportModulePanel {
                     JOptionPane.showMessageDialog(null,"Cannot choose a non existent shift.");
                 }
                 else {
-                    String result = ((ShiftsControl) control).approveShift(shifts[1].getShiftDate(), shifts[0].getShiftType());
+                    String result = ((ShiftsControl) control).approveShift((String)branchIdComboBox.getSelectedItem(), shifts[1].getShiftDate(), shifts[0].getShiftType());
                     JOptionPane.showMessageDialog(contentPanel, result);
                     int month = calendar.get(Calendar.MONTH);
                     hrManagerView.setCurrentPanel(new CreateShiftsPanel((ShiftsControl) control));

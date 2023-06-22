@@ -1,11 +1,11 @@
 package presentationLayer.gui.employeeModule.view.panels.shifts;
 
 
+import businessLayer.employeeModule.Branch;
 import businessLayer.employeeModule.Role;
 import presentationLayer.gui.employeeModule.controller.ShiftsControl;
 import presentationLayer.gui.employeeModule.view.EmployeeView;
 import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
-import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
 import presentationLayer.gui.plUtils.Colors;
 import serviceLayer.employeeModule.Objects.SEmployee;
 import serviceLayer.employeeModule.Objects.SShift;
@@ -30,6 +30,7 @@ public class ShiftActivityPanel extends AbstractTransportModulePanel {
     Calendar calendar;
     JRadioButton morningRadioButton, eveningRadioButton;
     ButtonGroup buttonGroup;
+    JComboBox<String> branchIdComboBox;
 
     String employeeId;
 
@@ -81,26 +82,6 @@ public class ShiftActivityPanel extends AbstractTransportModulePanel {
             }
         });
 
-        calendarTable.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                // Check for double-click event
-                if (e.getClickCount() == 2) {
-                    // Get the selected cell coordinates
-                    int row = calendarTable.getSelectedRow();
-                    int col = calendarTable.getSelectedColumn();
-
-                    // Get the day value from the selected cell
-                    int day = (int)calendarTable.getValueAt(row, col);
-                    if (newOpenWindow != null) {
-                        newOpenWindow.dispose();
-                        newOpenWindow = null;
-                    }
-                    openNewWindow(((ShiftsControl)control).getShifts(LocalDate.of(calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH) + 1, day)));
-                }
-            }
-        });
-
         JScrollPane scrollPane = new JScrollPane(calendarTable);
         constraints.gridx = 0;
         constraints.gridy = 2;
@@ -126,6 +107,44 @@ public class ShiftActivityPanel extends AbstractTransportModulePanel {
             displayNextMonth();
         });
         buttonPanel.add(nextButton);
+
+        Object branchIdsResult = ((ShiftsControl)control).getBranchIds();
+        if (branchIdsResult instanceof String) {
+            JOptionPane.showMessageDialog(null,branchIdsResult);
+        } else if (branchIdsResult instanceof String[]) {
+            JPanel branchIdPanel = new JPanel(new GridLayout(0,2));
+            JLabel branchIdLabel = new JLabel("Branch:");
+            branchIdPanel.add(branchIdLabel);
+
+            branchIdComboBox = new JComboBox<>((String[])branchIdsResult);
+            branchIdComboBox.setSelectedItem(Branch.HEADQUARTERS_ID);
+            constraints.gridx = 0;
+            constraints.gridy = 4;
+            constraints.gridwidth = 1;
+            constraints.anchor = GridBagConstraints.SOUTH;
+            branchIdPanel.add(branchIdComboBox);
+            contentPanel.add(branchIdPanel, constraints);
+        }
+
+        calendarTable.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                // Check for double-click event
+                if (e.getClickCount() == 2) {
+                    // Get the selected cell coordinates
+                    int row = calendarTable.getSelectedRow();
+                    int col = calendarTable.getSelectedColumn();
+
+                    // Get the day value from the selected cell
+                    int day = (int)calendarTable.getValueAt(row, col);
+                    if (newOpenWindow != null) {
+                        newOpenWindow.dispose();
+                        newOpenWindow = null;
+                    }
+                    openNewWindow(((ShiftsControl)control).getShifts((String)branchIdComboBox.getSelectedItem() ,LocalDate.of(calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH) + 1, day)));
+                }
+            }
+        });
 
         // Initialize the calendar instance and display the current month's shifts
         calendar = new GregorianCalendar();
@@ -214,7 +233,7 @@ public class ShiftActivityPanel extends AbstractTransportModulePanel {
     private void showConfirmationDialog(SShift shift) {
         String activity = JOptionPane.showInputDialog(newOpenPanel, "Please insert the shift activity to report:", "Confirmation", JOptionPane.PLAIN_MESSAGE);
         if (activity != null) {
-            String result = ((ShiftsControl) control).reportShiftActivity(employeeId, shift, activity);
+            String result = ((ShiftsControl) control).reportShiftActivity(employeeId, (String)branchIdComboBox.getSelectedItem(), shift, activity);
             if (result != null) {
                 JOptionPane.showMessageDialog(null, result);
             }

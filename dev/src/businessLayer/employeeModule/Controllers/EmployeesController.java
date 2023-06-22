@@ -197,4 +197,13 @@ public class EmployeesController {
             throw new EmployeeException("There is no available storekeeper at the given date in this branch.");
         }
     }
+
+    public String[] getBranchIds() throws EmployeeException{
+        try {
+            List<Branch> branches = branchesDAO.selectAll();
+            return branches.stream().map(Branch::name).sorted().toList().toArray(new String[0]);
+        } catch (DalException e) {
+            throw new EmployeeException(e.getMessage(),e);
+        }
+    }
 }

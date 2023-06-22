@@ -1,5 +1,6 @@
 package Fronend.PresentationLayer;
 
+import Fronend.PresentationLayer.InventoryModule.gui.InventoryMainMenu;
 import Fronend.PresentationLayer.SuppliersModule.GUI.SuppliersGUI;
 import Fronend.PresentationLayer.SuppliersModule.GUI.ViewLayer.BackgruondPanel;
 
@@ -38,7 +39,7 @@ public class ManagerWindowGUI extends JFrame {
         inventoryGUIButton.setFocusable(false);
         inventoryGUIButton.addActionListener((ActionEvent e)->{
             dispose();
-            //TODO: CALL TO MAIN GUI OF INVENTORY
+            InventoryMainMenu.main(new String[0]);
         });
         jpanel.add(suppliersGUIButton);
         jpanel.add(inventoryGUIButton);

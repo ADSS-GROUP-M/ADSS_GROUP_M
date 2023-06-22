@@ -449,6 +449,15 @@ public class UpdateTransportPanel extends AbstractTransportModulePanel {
     @Override
     public void componentResized(Dimension newSize) {
         super.componentResized(newSize);
+
+        if(newSize.width < 900){
+            newSize.width = 900;
+        }
+
+        if(newSize.height < 600){
+            newSize.height = 600;
+        }
+
         Dimension contentPanelSize = new Dimension((int) (newSize.width * 0.8), (int) (newSize.height * 0.9));
         contentPanel.setPreferredSize(contentPanelSize);
         destinationsList.componentResized(new Dimension((int) (contentPanelSize.width*0.8), (int) (contentPanelSize.height*0.3)));

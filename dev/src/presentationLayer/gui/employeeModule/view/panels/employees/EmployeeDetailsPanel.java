@@ -2,8 +2,7 @@ package presentationLayer.gui.employeeModule.view.panels.employees;
 
 
 import presentationLayer.gui.employeeModule.controller.EmployeesControl;
-import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
-import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
+import presentationLayer.gui.plAbstracts.AbstractModulePanel;
 import presentationLayer.gui.plUtils.Fonts;
 import presentationLayer.gui.plUtils.PrettyTextField;
 import serviceLayer.employeeModule.Objects.SEmployee;
@@ -12,7 +11,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.time.LocalDate;
 
-public class EmployeeDetailsPanel extends AbstractTransportModulePanel {
+public class EmployeeDetailsPanel extends AbstractModulePanel {
     JTextArea nameField, employeeIdField, bankNumberField, bankBranchField, salaryRateField, salaryBonusField, employmentConditionsField, employeeDetailsField;
     PrettyTextField year, month, day;
     String employeeId;

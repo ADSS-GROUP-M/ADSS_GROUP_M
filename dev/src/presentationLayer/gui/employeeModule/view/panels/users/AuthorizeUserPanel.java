@@ -3,10 +3,8 @@ package presentationLayer.gui.employeeModule.view.panels.users;
 
 import businessLayer.employeeModule.Authorization;
 import presentationLayer.gui.employeeModule.controller.UsersControl;
-import presentationLayer.gui.employeeModule.model.ObservableUser;
-import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
+import presentationLayer.gui.plAbstracts.AbstractModulePanel;
 import presentationLayer.gui.plAbstracts.interfaces.ModelObserver;
-import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
 import presentationLayer.gui.plUtils.Colors;
 import presentationLayer.gui.plUtils.PrettyButton;
 import presentationLayer.gui.plUtils.PrettyTextField;
@@ -16,9 +14,8 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
-public class AuthorizeUserPanel extends AbstractTransportModulePanel {
+public class AuthorizeUserPanel extends AbstractModulePanel {
     JPanel newOpenPanel = new JPanel();
     JFrame newOpenWindow;
     PrettyTextField usernameField;

@@ -2,10 +2,8 @@ package presentationLayer.gui.employeeModule.view.panels.employees;
 
 
 import presentationLayer.gui.employeeModule.controller.EmployeesControl;
-import presentationLayer.gui.employeeModule.model.ObservableEmployee;
-import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
+import presentationLayer.gui.plAbstracts.AbstractModulePanel;
 import presentationLayer.gui.plAbstracts.interfaces.ModelObserver;
-import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
 import presentationLayer.gui.plUtils.Fonts;
 import presentationLayer.gui.plUtils.PrettyButton;
 import presentationLayer.gui.plUtils.PrettyTextField;
@@ -16,7 +14,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.time.LocalDate;
 
-public class UpdateEmployeePanel extends AbstractTransportModulePanel {
+public class UpdateEmployeePanel extends AbstractModulePanel {
     JPanel newOpenPanel = new JPanel();
     JFrame newOpenWindow;
     PrettyTextField employeeIdField, nameField, bankNumberField, bankBranchField, salaryRateField, salaryBonusField, year, month, day, employmentConditionsField, employeeDetailsField;

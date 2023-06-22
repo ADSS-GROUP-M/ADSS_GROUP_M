@@ -3,9 +3,8 @@ package presentationLayer.gui.employeeModule.view.panels.employees;
 
 import presentationLayer.gui.employeeModule.controller.EmployeesControl;
 import presentationLayer.gui.employeeModule.model.ObservableEmployee;
-import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
+import presentationLayer.gui.plAbstracts.AbstractModulePanel;
 import presentationLayer.gui.plAbstracts.interfaces.ModelObserver;
-import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
 import presentationLayer.gui.plUtils.*;
 import utils.DateUtils;
 
@@ -15,7 +14,7 @@ import java.awt.event.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 
-public class RecruitEmployeePanel extends AbstractTransportModulePanel {
+public class RecruitEmployeePanel extends AbstractModulePanel {
     JPanel newOpenPanel = new JPanel();
     JFrame newOpenWindow;
     PrettyTextField nameField, branchIdField, employeeIdField, bankNumberField, bankBranchField, salaryRateField, year, month, day, employmentConditionsField, employeeDetailsField;

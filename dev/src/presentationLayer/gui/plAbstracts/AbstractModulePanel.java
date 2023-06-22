@@ -10,12 +10,12 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public abstract class AbstractTransportModulePanel extends ScrollablePanel implements ModelObserver {
+public abstract class AbstractModulePanel extends ScrollablePanel implements ModelObserver {
 
     protected ContentPanel contentPanel;
     protected AbstractControl control;
 
-    protected AbstractTransportModulePanel(AbstractControl control) {
+    protected AbstractModulePanel(AbstractControl control) {
         super();
         this.control = control;
         subscribe(control);

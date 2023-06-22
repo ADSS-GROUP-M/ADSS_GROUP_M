@@ -1,14 +1,9 @@
 package presentationLayer.gui.transportModule.view.panels.trucks;
 
 import domainObjects.transportModule.Truck;
-import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
-import presentationLayer.gui.plAbstracts.interfaces.ModelObserver;
-import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
-import presentationLayer.gui.plAbstracts.interfaces.Searchable;
+import presentationLayer.gui.plAbstracts.AbstractModulePanel;
 import presentationLayer.gui.plUtils.PrettyButton;
 import presentationLayer.gui.plUtils.PrettyTextField;
-import presentationLayer.gui.plUtils.SearchBox;
-import presentationLayer.gui.plUtils.SearchableString;
 import presentationLayer.gui.transportModule.control.TrucksControl;
 import presentationLayer.gui.transportModule.model.ObservableTruck;
 
@@ -16,9 +11,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.List;
 
-public class AddTruckPanel extends AbstractTransportModulePanel {
+public class AddTruckPanel extends AbstractModulePanel {
     private JLabel idLabel;
     private PrettyTextField idField;
     private JLabel modelLabel;

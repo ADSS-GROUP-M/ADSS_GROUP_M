@@ -1,12 +1,10 @@
 package presentationLayer.gui.transportModule.view.panels;
 
-import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
-import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
+import presentationLayer.gui.plAbstracts.AbstractModulePanel;
 
-import javax.swing.*;
 import java.awt.*;
 
-public class initialPanel extends AbstractTransportModulePanel {
+public class initialPanel extends AbstractModulePanel {
 
     public initialPanel(){
         super(null);

@@ -4,7 +4,7 @@ package presentationLayer.gui.employeeModule.view.panels.shifts;
 import businessLayer.employeeModule.Branch;
 import presentationLayer.gui.employeeModule.controller.ShiftsControl;
 import presentationLayer.gui.employeeModule.view.HRManagerView;
-import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
+import presentationLayer.gui.plAbstracts.AbstractModulePanel;
 import presentationLayer.gui.plUtils.PrettyButton;
 
 import javax.swing.*;
@@ -19,7 +19,7 @@ import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-public class CreateShiftsPanel extends AbstractTransportModulePanel {
+public class CreateShiftsPanel extends AbstractModulePanel {
     HRManagerView hrManagerView;
     JPanel newOpenPanel = new JPanel();
     JFrame newOpenWindow;

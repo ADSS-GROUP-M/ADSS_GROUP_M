@@ -1,7 +1,6 @@
 package presentationLayer.gui.transportModule.view.panels.trucks;
 
-import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
-import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
+import presentationLayer.gui.plAbstracts.AbstractModulePanel;
 import presentationLayer.gui.plAbstracts.interfaces.Searchable;
 import presentationLayer.gui.plUtils.*;
 import presentationLayer.gui.transportModule.control.TrucksControl;
@@ -9,7 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Comparator;
 
-public class ViewTrucksPanel extends AbstractTransportModulePanel {
+public class ViewTrucksPanel extends AbstractModulePanel {
     private PrettyList truckList;
     private ObservableList<Searchable> trucks;
 

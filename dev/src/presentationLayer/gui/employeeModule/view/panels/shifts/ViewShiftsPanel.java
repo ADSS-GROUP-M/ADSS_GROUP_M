@@ -5,7 +5,7 @@ import businessLayer.employeeModule.Branch;
 import businessLayer.employeeModule.Role;
 import presentationLayer.gui.employeeModule.controller.ShiftsControl;
 import presentationLayer.gui.employeeModule.view.HRManagerView;
-import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
+import presentationLayer.gui.plAbstracts.AbstractModulePanel;
 import presentationLayer.gui.plUtils.Colors;
 import presentationLayer.gui.plUtils.PrettyButton;
 import serviceLayer.employeeModule.Objects.SEmployee;
@@ -22,7 +22,7 @@ import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ViewShiftsPanel extends AbstractTransportModulePanel {
+public class ViewShiftsPanel extends AbstractModulePanel {
     HRManagerView hrManagerView;
     JPanel newOpenPanel = new JPanel();
     JFrame newOpenWindow;

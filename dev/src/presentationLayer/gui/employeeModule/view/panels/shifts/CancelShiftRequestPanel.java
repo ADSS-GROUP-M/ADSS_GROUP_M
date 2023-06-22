@@ -5,7 +5,7 @@ import businessLayer.employeeModule.Branch;
 import businessLayer.employeeModule.Role;
 import presentationLayer.gui.employeeModule.controller.ShiftsControl;
 import presentationLayer.gui.employeeModule.view.EmployeeView;
-import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
+import presentationLayer.gui.plAbstracts.AbstractModulePanel;
 import presentationLayer.gui.plUtils.Colors;
 import presentationLayer.gui.plUtils.PrettyButton;
 import serviceLayer.employeeModule.Objects.SEmployee;
@@ -21,7 +21,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.*;
 
-public class CancelShiftRequestPanel extends AbstractTransportModulePanel {
+public class CancelShiftRequestPanel extends AbstractModulePanel {
     EmployeeView employeeView;
     JPanel newOpenPanel = new JPanel();
     JFrame newOpenWindow;

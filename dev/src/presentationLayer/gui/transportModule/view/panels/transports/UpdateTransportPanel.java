@@ -1,7 +1,7 @@
 package presentationLayer.gui.transportModule.view.panels.transports;
 
 import javafx.util.Pair;
-import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
+import presentationLayer.gui.plAbstracts.AbstractModulePanel;
 import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
 import presentationLayer.gui.plAbstracts.interfaces.Searchable;
 import presentationLayer.gui.plUtils.*;
@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 
 import static presentationLayer.gui.plUtils.SearchBox.DescriptionType.LONG;
 
-public class UpdateTransportPanel extends AbstractTransportModulePanel {
+public class UpdateTransportPanel extends AbstractModulePanel {
     private final ObservableTransport toEdit;
     private final SitesControl sitesControl;
 

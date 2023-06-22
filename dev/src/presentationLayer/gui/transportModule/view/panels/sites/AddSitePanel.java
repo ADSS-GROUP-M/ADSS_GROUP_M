@@ -1,22 +1,20 @@
 package presentationLayer.gui.transportModule.view.panels.sites;
 
 import domainObjects.transportModule.Site;
-import domainObjects.transportModule.Truck;
-import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
+import presentationLayer.gui.plAbstracts.AbstractModulePanel;
 import presentationLayer.gui.plAbstracts.interfaces.ModelObserver;
 import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
 import presentationLayer.gui.plUtils.PrettyButton;
 import presentationLayer.gui.plUtils.PrettyTextField;
 import presentationLayer.gui.transportModule.control.SitesControl;
 import presentationLayer.gui.transportModule.model.ObservableSite;
-import presentationLayer.gui.transportModule.model.ObservableTruck;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class AddSitePanel extends AbstractTransportModulePanel {
+public class AddSitePanel extends AbstractModulePanel {
     private JLabel nameLabel;
     private PrettyTextField nameField;
     private JLabel addressLabel;

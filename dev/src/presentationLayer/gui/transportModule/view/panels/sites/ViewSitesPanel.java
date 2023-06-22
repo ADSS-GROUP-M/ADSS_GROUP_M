@@ -1,19 +1,16 @@
 package presentationLayer.gui.transportModule.view.panels.sites;
 
-import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
+import presentationLayer.gui.plAbstracts.AbstractModulePanel;
 import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
 import presentationLayer.gui.plAbstracts.interfaces.Searchable;
 import presentationLayer.gui.plUtils.ObservableList;
 import presentationLayer.gui.plUtils.PrettyList;
 import presentationLayer.gui.transportModule.control.SitesControl;
 
-import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Comparator;
 
-public class ViewSitesPanel extends AbstractTransportModulePanel {
+public class ViewSitesPanel extends AbstractModulePanel {
     private PrettyList sitesList;
 
 

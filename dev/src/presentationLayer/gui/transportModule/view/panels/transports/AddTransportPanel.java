@@ -1,9 +1,7 @@
 package presentationLayer.gui.transportModule.view.panels.transports;
 
 import javafx.util.Pair;
-import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
-import presentationLayer.gui.plAbstracts.interfaces.ModelObserver;
-import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
+import presentationLayer.gui.plAbstracts.AbstractModulePanel;
 import presentationLayer.gui.plAbstracts.interfaces.Searchable;
 import presentationLayer.gui.plUtils.*;
 import presentationLayer.gui.transportModule.control.*;
@@ -23,7 +21,7 @@ import java.util.LinkedList;
 
 import static presentationLayer.gui.plUtils.SearchBox.DescriptionType.*;
 
-public class AddTransportPanel extends AbstractTransportModulePanel {
+public class AddTransportPanel extends AbstractModulePanel {
     private final SitesControl sitesControl;
     private final DriversControl driversControl;
     private final TrucksControl trucksControl;

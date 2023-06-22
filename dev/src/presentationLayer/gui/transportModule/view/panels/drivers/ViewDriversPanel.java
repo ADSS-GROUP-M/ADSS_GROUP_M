@@ -1,26 +1,15 @@
 package presentationLayer.gui.transportModule.view.panels.drivers;
 
-import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
-import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
+import presentationLayer.gui.plAbstracts.AbstractModulePanel;
 import presentationLayer.gui.plAbstracts.interfaces.Searchable;
 import presentationLayer.gui.plUtils.ObservableList;
 import presentationLayer.gui.plUtils.PrettyList;
 import presentationLayer.gui.transportModule.control.DriversControl;
-import presentationLayer.gui.transportModule.control.TrucksControl;
 
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import javax.swing.plaf.basic.BasicButtonUI;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.util.Comparator;
 
-import static com.sun.java.accessibility.util.AWTEventMonitor.addWindowListener;
-
-public class ViewDriversPanel extends AbstractTransportModulePanel {
+public class ViewDriversPanel extends AbstractModulePanel {
 
     private PrettyList driverList;
     private ObservableList emptyDriverList;

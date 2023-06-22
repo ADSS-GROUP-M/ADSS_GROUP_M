@@ -51,7 +51,7 @@ public class EmployeeView extends MainWindow {
                 )
                 .addCategory("Employee Details",
                         new Link("Show my details",
-                                () -> setCurrentPanel(new EmployeeDetailsPanel(employeeId, employeesControl)))
+                                () ->  setCurrentPanel(new EmployeeDetailsPanel(employeeId, employeesControl)))
                 );
     }
 

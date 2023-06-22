@@ -1,8 +1,7 @@
 package presentationLayer.gui.transportModule.view.panels.drivers;
 
 import domainObjects.transportModule.Driver;
-import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
-import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
+import presentationLayer.gui.plAbstracts.AbstractModulePanel;
 import presentationLayer.gui.plAbstracts.interfaces.Searchable;
 import presentationLayer.gui.plUtils.ObservableList;
 import presentationLayer.gui.plUtils.PrettyButton;
@@ -21,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class UpdateDriversPanel extends AbstractTransportModulePanel {
+public class UpdateDriversPanel extends AbstractModulePanel {
 
     private ObservableList emptyDriverList;
     private ObservableList<Searchable> driversList;

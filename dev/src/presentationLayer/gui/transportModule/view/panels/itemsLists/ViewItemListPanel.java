@@ -1,7 +1,6 @@
 package presentationLayer.gui.transportModule.view.panels.itemsLists;
 
-import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
-import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
+import presentationLayer.gui.plAbstracts.AbstractModulePanel;
 import presentationLayer.gui.plAbstracts.interfaces.Searchable;
 import presentationLayer.gui.plUtils.ObservableList;
 import presentationLayer.gui.plUtils.PrettyList;
@@ -17,7 +16,7 @@ import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class ViewItemListPanel extends AbstractTransportModulePanel {
+public class ViewItemListPanel extends AbstractModulePanel {
     private SearchBox idsBox;
     private PrettyList unLoadingList;
     private PrettyList loadingList;

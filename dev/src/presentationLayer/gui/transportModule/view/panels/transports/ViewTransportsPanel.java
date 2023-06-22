@@ -1,6 +1,6 @@
 package presentationLayer.gui.transportModule.view.panels.transports;
 
-import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
+import presentationLayer.gui.plAbstracts.AbstractModulePanel;
 import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
 import presentationLayer.gui.plAbstracts.interfaces.Searchable;
 import presentationLayer.gui.plUtils.ObservableList;
@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-public class ViewTransportsPanel extends AbstractTransportModulePanel {
+public class ViewTransportsPanel extends AbstractModulePanel {
 
     private final Function<Panel, Void> setActivePanel;
     private final SitesControl sitesControl;

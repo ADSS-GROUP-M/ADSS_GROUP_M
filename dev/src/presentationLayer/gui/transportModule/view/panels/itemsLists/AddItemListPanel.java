@@ -1,7 +1,6 @@
 package presentationLayer.gui.transportModule.view.panels.itemsLists;
 
-import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
-import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
+import presentationLayer.gui.plAbstracts.AbstractModulePanel;
 import presentationLayer.gui.plUtils.Colors;
 import presentationLayer.gui.plUtils.PrettyButton;
 import presentationLayer.gui.plUtils.PrettyScrollBar;
@@ -15,7 +14,7 @@ import java.awt.event.FocusEvent;
 import java.util.HashMap;
 import java.util.Map;
 
-public class AddItemListPanel extends AbstractTransportModulePanel {
+public class AddItemListPanel extends AbstractModulePanel {
 
     public static final String DEFAULT_TEXT = "<Item name> <Quantity>";
     private JTextArea unloadingField;

@@ -3,11 +3,8 @@ package presentationLayer.gui.employeeModule.view.panels.employees;
 
 import businessLayer.employeeModule.Role;
 import presentationLayer.gui.employeeModule.controller.EmployeesControl;
-import presentationLayer.gui.employeeModule.model.ObservableEmployee;
-import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
+import presentationLayer.gui.plAbstracts.AbstractModulePanel;
 import presentationLayer.gui.plAbstracts.interfaces.ModelObserver;
-import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
-import presentationLayer.gui.plAbstracts.interfaces.Searchable;
 import presentationLayer.gui.plUtils.*;
 import serviceLayer.employeeModule.Objects.SEmployee;
 
@@ -15,7 +12,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class EmployeeCertificationPanel extends AbstractTransportModulePanel {
+public class EmployeeCertificationPanel extends AbstractModulePanel {
     JPanel newOpenPanel = new JPanel();
     JFrame newOpenWindow;
     PrettyTextField employeeIdField;

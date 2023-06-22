@@ -5,7 +5,7 @@ import businessLayer.employeeModule.Branch;
 import businessLayer.employeeModule.Role;
 import presentationLayer.gui.employeeModule.controller.ShiftsControl;
 import presentationLayer.gui.employeeModule.view.EmployeeView;
-import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
+import presentationLayer.gui.plAbstracts.AbstractModulePanel;
 import presentationLayer.gui.plUtils.Colors;
 import presentationLayer.gui.plUtils.PrettyButton;
 import serviceLayer.employeeModule.Objects.SEmployee;
@@ -22,7 +22,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Map;
 
-public class ShiftActivityPanel extends AbstractTransportModulePanel {
+public class ShiftActivityPanel extends AbstractModulePanel {
     EmployeeView employeeView;
     JPanel newOpenPanel = new JPanel();
     JFrame newOpenWindow;

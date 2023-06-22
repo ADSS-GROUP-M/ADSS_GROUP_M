@@ -1,14 +1,10 @@
 package presentationLayer.gui.transportModule.view.panels.trucks;
 
-import domainObjects.transportModule.Truck;
 import domainObjects.transportModule.Truck.CoolingCapacity;
-import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
-import presentationLayer.gui.plAbstracts.interfaces.ModelObserver;
-import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
+import presentationLayer.gui.plAbstracts.AbstractModulePanel;
 import presentationLayer.gui.plAbstracts.interfaces.Searchable;
 import presentationLayer.gui.plUtils.*;
 import presentationLayer.gui.transportModule.control.TrucksControl;
-import presentationLayer.gui.transportModule.model.ObservableSite;
 import presentationLayer.gui.transportModule.model.ObservableTruck;
 
 import javax.swing.*;
@@ -19,9 +15,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
 
-public class UpdateTruckPanel extends AbstractTransportModulePanel {
+public class UpdateTruckPanel extends AbstractModulePanel {
     private JLabel trucksLabel;
     private SearchBox selectedTruck;
     private JLabel baseLabel;

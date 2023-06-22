@@ -58,7 +58,7 @@ public class EmployeeView extends MainWindow {
     public void setCurrentPanel(Panel panel) {
         panelManager.setPanel(panel);
         currentPanel = panel;
-        currentPanel.componentResized(super.container.getSize());
+        currentPanel.componentResized(panelManager.getComponent().getSize());
         super.container.revalidate();
     }
 

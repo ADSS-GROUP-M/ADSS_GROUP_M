@@ -118,9 +118,9 @@ public class SupplierDataMapper extends AbstractDataMapper {
     }
 
     public void removeSupplier(String bnNumber) throws SQLException {
-        sqlExecutor.executeWrite(String.format("DELETE FROM %s WHERE bn_number = '%s'", tableName, bnNumber));
         fieldsDataMapper.delete(bnNumber);
         contactsInfoDataMapper.delete(bnNumber);
         suppliers.remove(bnNumber);
+        sqlExecutor.executeWrite(String.format("DELETE FROM %s WHERE bn_number = '%s'", tableName, bnNumber));
     }
 }

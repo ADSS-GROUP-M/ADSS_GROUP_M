@@ -12,7 +12,7 @@ public class StockService {
     ProductController productController;
     DiscountController discountController;
     CategoryController categoryController;
-    public final String ALERT = "\n Alert! Product catalog number: %s is going to be out of stock soon!This product has been automatically ordered.%n";
+    public final String ALERT = "\n Alert! Product catalog number: %s is going to be out of stock soon! This product has been automatically ordered.%n";
 
     public StockService() {
         productController = ProductController.ProductController();

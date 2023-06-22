@@ -1660,8 +1660,10 @@ field</ColNames>
       <DataType>INTEGER|0s</DataType>
       <Position>2</Position>
     </column>
-    <foreign-key id="570" parent="512" name="number_of_order_counter_suppliers_null_fk">
+    <foreign-key id="570" parent="512">
       <ColNames>bn_number</ColNames>
+      <OnDelete>cascade</OnDelete>
+      <OnUpdate>cascade</OnUpdate>
       <RefColNames>bn_number</RefColNames>
       <RefTableName>suppliers</RefTableName>
     </foreign-key>
@@ -1676,7 +1678,7 @@ field</ColNames>
       <UnderlyingIndexName>sqlite_autoindex_number_of_order_counter_1</UnderlyingIndexName>
     </key>
     <check id="573" parent="513" name="check_name">
-      <Predicate>amount_before_total = 0 or amount_before_total = 1</Predicate>
+      <Predicate>&quot;amount_before_total&quot; = 0 OR &quot;amount_before_total&quot; = 1</Predicate>
     </check>
     <column id="574" parent="513" name="bn_number">
       <DataType>varchar(20)|0s</DataType>
@@ -1686,8 +1688,10 @@ field</ColNames>
       <DataType>INTEGER|0s</DataType>
       <Position>2</Position>
     </column>
-    <foreign-key id="576" parent="513" name="order_of_discounts_suppliers_null_fk">
+    <foreign-key id="576" parent="513">
       <ColNames>bn_number</ColNames>
+      <OnDelete>cascade</OnDelete>
+      <OnUpdate>cascade</OnUpdate>
       <RefColNames>bn_number</RefColNames>
       <RefTableName>suppliers</RefTableName>
     </foreign-key>
@@ -1757,11 +1761,15 @@ order_id</ColNames>
     </column>
     <foreign-key id="590" parent="515">
       <ColNames>order_id</ColNames>
+      <OnDelete>cascade</OnDelete>
+      <OnUpdate>cascade</OnUpdate>
       <RefColNames>order_id</RefColNames>
       <RefTableName>periodic_order_details</RefTableName>
     </foreign-key>
     <foreign-key id="591" parent="515">
       <ColNames>catalog_number</ColNames>
+      <OnDelete>cascade</OnDelete>
+      <OnUpdate>cascade</OnUpdate>
       <RefColNames>catalog_number</RefColNames>
       <RefTableName>products</RefTableName>
     </foreign-key>
@@ -1795,6 +1803,8 @@ catalog_number</ColNames>
     </column>
     <foreign-key id="598" parent="516">
       <ColNames>bn_number</ColNames>
+      <OnDelete>cascade</OnDelete>
+      <OnUpdate>cascade</OnUpdate>
       <RefColNames>bn_number</RefColNames>
       <RefTableName>suppliers</RefTableName>
     </foreign-key>

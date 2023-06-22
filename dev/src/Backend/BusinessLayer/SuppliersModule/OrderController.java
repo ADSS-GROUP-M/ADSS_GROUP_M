@@ -375,10 +375,16 @@ public class OrderController {
             double supplierProductPrice = agreementController.getProduct(supplier.getBnNumber(), catalogNumber).getPrice();
             double shortestProductPrice = agreementController.getProduct(supplierShortest.getBnNumber(), catalogNumber).getPrice();
             if(quantityCanSupplyShortest >= quantity && quantityCanSupplySupplier >= quantity) {
-                double supplierProductPriceAfterDiscount = billOfQuantitiesController.getProductPriceAfterDiscount(supplier.getBnNumber(), catalogNumber, quantity, supplierProductPrice * quantity);
-                double shortestProductPriceAfterDiscount = billOfQuantitiesController.getProductPriceAfterDiscount(supplierShortest.getBnNumber(), catalogNumber, quantity, shortestProductPrice * quantity);
-                if(oneProductOrder)
-                    supplierCheaper = billOfQuantitiesController.getPriceAfterDiscounts(supplier.getBnNumber(), quantity, supplierProductPriceAfterDiscount) < billOfQuantitiesController.getPriceAfterDiscounts(supplierShortest.getBnNumber(), quantity, shortestProductPriceAfterDiscount);
+                double supplierProductPriceAfterDiscount = supplierProductPrice * quantity;
+                if(billOfQuantitiesController.billOfQuantitiesExist(supplier.getBnNumber()))
+                    supplierProductPriceAfterDiscount = billOfQuantitiesController.getProductPriceAfterDiscount(supplier.getBnNumber(), catalogNumber, quantity, supplierProductPrice * quantity);
+                double shortestProductPriceAfterDiscount = shortestProductPrice * quantity;
+                if(billOfQuantitiesController.billOfQuantitiesExist(supplierShortest.getBnNumber()))
+                    shortestProductPriceAfterDiscount = billOfQuantitiesController.getProductPriceAfterDiscount(supplierShortest.getBnNumber(), catalogNumber, quantity, shortestProductPrice * quantity);
+                if(oneProductOrder) {
+                    if (billOfQuantitiesController.billOfQuantitiesExist(supplier.getBnNumber()))
+                        supplierCheaper = billOfQuantitiesController.getPriceAfterDiscounts(supplier.getBnNumber(), quantity, supplierProductPriceAfterDiscount) < billOfQuantitiesController.getPriceAfterDiscounts(supplierShortest.getBnNumber(), quantity, shortestProductPriceAfterDiscount);
+                }
                 else
                     supplierCheaper = supplierProductPriceAfterDiscount < shortestProductPriceAfterDiscount;
             }

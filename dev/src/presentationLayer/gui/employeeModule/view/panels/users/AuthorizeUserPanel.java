@@ -8,6 +8,7 @@ import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
 import presentationLayer.gui.plAbstracts.interfaces.ModelObserver;
 import presentationLayer.gui.plAbstracts.interfaces.ObservableModel;
 import presentationLayer.gui.plUtils.Colors;
+import presentationLayer.gui.plUtils.PrettyButton;
 import presentationLayer.gui.plUtils.PrettyTextField;
 
 import javax.swing.*;
@@ -23,7 +24,7 @@ public class AuthorizeUserPanel extends AbstractTransportModulePanel {
     PrettyTextField usernameField;
     JList<String> authorizationField;
     JTextArea authorizationsTextArea;
-    JButton authorizeButton;
+    PrettyButton authorizeButton;
 
     public AuthorizeUserPanel(UsersControl control) {
         super(control);
@@ -51,7 +52,7 @@ public class AuthorizeUserPanel extends AbstractTransportModulePanel {
         contentPanel.add(usernameField.getComponent(), constraints);
 
         // Find Employee Button
-        JButton findUserAuthorizationsButton = new JButton("Find User Authorizations");
+        PrettyButton findUserAuthorizationsButton = new PrettyButton("Find User Authorizations");
         constraints.gridx = 2;
         constraints.gridy = 1;
         constraints.gridwidth = 1;
@@ -88,7 +89,7 @@ public class AuthorizeUserPanel extends AbstractTransportModulePanel {
         contentPanel.add(authorizationField, constraints);
 
         //Authorize button
-        authorizeButton = new JButton("Authorize");
+        authorizeButton = new PrettyButton("Authorize");
         authorizeButton.setEnabled(false);
         constraints.gridx = 1;
         constraints.gridy = 3;

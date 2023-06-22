@@ -181,7 +181,7 @@ public class RecruitEmployeePanel extends AbstractTransportModulePanel {
         contentPanel.add(employeeDetailsField.getComponent(), constraints);
 
         //Submit button
-        JButton submitButton = new JButton("Submit");
+        PrettyButton submitButton = new PrettyButton("Submit");
         constraints.gridx = 0;
         constraints.gridy = 10;
         constraints.gridwidth = 2;

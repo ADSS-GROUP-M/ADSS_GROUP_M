@@ -5,6 +5,7 @@ import businessLayer.employeeModule.Branch;
 import presentationLayer.gui.employeeModule.controller.ShiftsControl;
 import presentationLayer.gui.employeeModule.view.HRManagerView;
 import presentationLayer.gui.plAbstracts.AbstractTransportModulePanel;
+import presentationLayer.gui.plUtils.PrettyButton;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -87,13 +88,13 @@ public class CreateShiftsPanel extends AbstractTransportModulePanel {
         constraints.anchor = GridBagConstraints.SOUTH;
         contentPanel.add(buttonPanel, constraints);
 
-        JButton prevButton = new JButton("<<");
+        PrettyButton prevButton = new PrettyButton("<<");
         prevButton.addActionListener(e -> {
             displayPreviousMonth();
         });
         buttonPanel.add(prevButton);
 
-        JButton nextButton = new JButton(">>");
+        PrettyButton nextButton = new PrettyButton(">>");
         nextButton.addActionListener(e -> {
             displayNextMonth();
         });

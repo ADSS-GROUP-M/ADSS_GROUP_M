@@ -5,6 +5,7 @@ import presentationLayer.gui.employeeModule.controller.EmployeesControl;
 import presentationLayer.gui.employeeModule.controller.ShiftsControl;
 import presentationLayer.gui.employeeModule.controller.UsersControl;
 import presentationLayer.gui.plAbstracts.MainWindow;
+import presentationLayer.gui.plUtils.PrettyButton;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -46,7 +47,7 @@ public class EmployeeLoginView {
         constraints.gridy = 1;
         panel.add(passwordField, constraints);
 
-        JButton loginButton = new JButton("Login");
+        PrettyButton loginButton = new PrettyButton("Login");
         loginButton.addActionListener(e -> {
             PresentationFactory factory = new PresentationFactory();
             EmployeesControl employeesControl = factory.employeesControl();

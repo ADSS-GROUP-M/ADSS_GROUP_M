@@ -98,7 +98,7 @@ public class SupplierController {
     }
 
     public void setPaymentMethod(String bnNumber, String paymentMethod) throws SQLException, DalException {
-        if(!paymentMethod.equals("Net") || !paymentMethod.equals("Net 30 EOM ") || !paymentMethod.equals("Net 60 EOM"))
+        if(!paymentMethod.equals("Net") && !paymentMethod.equals("Net 30 EOM ") && !paymentMethod.equals("Net 60 EOM"))
             throw new RuntimeException("invalid payment method");
         Supplier supplier = getSupplier(bnNumber);
         supplierDataMapper.updatePaymentMethod(bnNumber, paymentMethod);

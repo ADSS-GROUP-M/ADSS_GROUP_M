@@ -9,4 +9,8 @@ public class SuppliersGUI {
         MainViewController mainViewController = new MainViewController(mainView);
     }
 
+    public static void main(String[] args) {
+        new SuppliersGUI(true);
+    }
+
 }
